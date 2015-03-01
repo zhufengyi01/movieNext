@@ -14,7 +14,8 @@
 //导入HUD框架
 //#import "SVProgressHUD.h"
 //导入友盟
-#import  "User.h"
+//#import  "User.h"
+#import "UserDataCenter.h"
 #import "UMSocial.h"
 //导入友盟微信
 #import "UMSocialWechatHandler.h"
@@ -36,31 +37,31 @@
     // Override point for customization after application launch.
     NSDictionary  *userInfo=[[NSUserDefaults  standardUserDefaults] objectForKey:kUserKey];
     NSLog(@"app delegate  userInfo  =====%@",userInfo);
-    User  *user=[User shareInstance];
+    UserDataCenter  *userCenter=[UserDataCenter shareInstance];
     if (userInfo) {  //用户已经登陆
         if ([userInfo objectForKey:@"id"]) {
-            //  user.user_id=[userInfo objectForKey:@"id"];
+             userCenter.user_id=[userInfo objectForKey:@"id"];
         }
-        if ([userInfo objectForKey:@""]) {
-            //   user.username=[userInfo objectForKey:@"username"];
+        if ([userInfo objectForKey:@"username"]) {
+               userCenter.username=[userInfo objectForKey:@"username"];
         }
         if ([userInfo objectForKey:@"level"]) {
-            // user.is_admin =[userInfo objectForKey:@"level"];
+             userCenter.is_admin =[userInfo objectForKey:@"level"];
         }
         if ([userInfo objectForKey:@"logo"]) {
-            //user.avatar =[userInfo objectForKey:@"logo"];
+            userCenter.avatar =[userInfo objectForKey:@"logo"];
         }
         if ([userInfo objectForKey:@"wallpaper"]) {
-            //user.wallpaper=[userInfo objectForKey:@"wallpaper"];
+            userCenter.wallpaper=[userInfo objectForKey:@"wallpaper"];
         }
         if ([userInfo objectForKey:@"brief"]) {
-            //user.signature=[userInfo objectForKey:@"brief"];
+            userCenter.signature=[userInfo objectForKey:@"brief"];
         }
         if ([userInfo objectForKey:@"update_time"]) {
-            //user.update_time=[userInfo objectForKey:@"update_time"];
+            userCenter.update_time=[userInfo objectForKey:@"update_time"];
         }
         if ([userInfo  objectForKey:@"bind_type"]) {
-            //user.user_bind_type=[userInfo objectForKey:@"bind_type"];
+            userCenter.user_bind_type=[userInfo objectForKey:@"bind_type"];
         }
         self.window.rootViewController =[CustmoTabBarController new];
         

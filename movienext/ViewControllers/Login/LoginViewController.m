@@ -13,11 +13,12 @@
 #import "MASConstraintMaker.h"
 #import "CustmoTabBarController.h"
 #import "Constant.h"
-#import "User.h"       //用户模型
+//#import "User.h"       //用户模型
 #import "UMSocial.h"
 #import "UMSocialControllerService.h"
 #import "AFNetworking.h"
 #import "Function.h"
+#import "UserDataCenter.h"
 
 #define kSegueLoginToIndex @"LoginToIndex"
 
@@ -138,11 +139,19 @@
                     [manager POST:[NSString stringWithFormat:@"%@/user/login", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
                         NSLog(@"登陆完成后的     JSON: %@", responseObject);
                         NSDictionary *detail    = [responseObject objectForKey:@"detail"];
-                        
                         if (![detail isEqual:@""]) {
-                            User * user = [[User alloc] initWithDictionary:detail];
-                            [Function saveUser:user];
-                            //GetAppDelegate().user = user;
+                            UserDataCenter  *userCenter=[UserDataCenter shareInstance];
+                            if([detail objectForKey:@"id"])
+                            {
+                            userCenter.user_id=[detail objectForKey:@"id"];
+                            }
+                            userCenter.username=[detail objectForKey:@"username"];
+                            userCenter.avatar =[detail objectForKey:@"logo"];
+                            userCenter.wallpaper=[detail objectForKey:@"wallpaper"];
+                            userCenter.signature=[detail objectForKey:@"brief"];
+                            userCenter.update_time=[detail objectForKey:@"update_time"];
+                            userCenter.user_bind_type=[detail objectForKey:@"bind_type"];
+                            [Function saveUser:userCenter];
                             window.rootViewController=[CustmoTabBarController new];
                         }
                     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {

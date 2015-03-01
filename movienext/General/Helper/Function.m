@@ -9,6 +9,7 @@
 #import "Function.h"
 //导入用户模型
 #import "User.h"
+#import "UserDataCenter.h"
 //导入微博模型
 #import "Weibo.h"
 //导入标签模型
@@ -21,7 +22,7 @@
 
 @implementation Function
 
-+ (void) saveUser:(User *)user
++ (void) saveUser:(UserDataCenter *)user
 {
     NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
                           user.user_id, @"id",
