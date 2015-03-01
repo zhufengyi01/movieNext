@@ -22,6 +22,7 @@
 		000B09151AA2EB8C00B8D13A /* tabbar_icon_movie@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 000B09071AA2EB8C00B8D13A /* tabbar_icon_movie@2x.png */; };
 		000B09161AA2EB8C00B8D13A /* tabbar_icon_noti@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 000B09081AA2EB8C00B8D13A /* tabbar_icon_noti@2x.png */; };
 		000B09171AA2EB8C00B8D13A /* tabbar_icon_noti@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 000B09091AA2EB8C00B8D13A /* tabbar_icon_noti@3x.png */; };
+		000B091A1AA2F40E00B8D13A /* UserDataCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 000B09191AA2F40E00B8D13A /* UserDataCenter.m */; };
 		00AA53091AA2C3F4004096F8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 00AA53081AA2C3F4004096F8 /* main.m */; };
 		00AA530C1AA2C3F4004096F8 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 00AA530B1AA2C3F4004096F8 /* AppDelegate.m */; };
 		00AA530F1AA2C3F4004096F8 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00AA530E1AA2C3F4004096F8 /* ViewController.m */; };
@@ -155,6 +156,8 @@
 		000B09071AA2EB8C00B8D13A /* tabbar_icon_movie@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tabbar_icon_movie@2x.png"; sourceTree = "<group>"; };
 		000B09081AA2EB8C00B8D13A /* tabbar_icon_noti@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tabbar_icon_noti@2x.png"; sourceTree = "<group>"; };
 		000B09091AA2EB8C00B8D13A /* tabbar_icon_noti@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tabbar_icon_noti@3x.png"; sourceTree = "<group>"; };
+		000B09181AA2F40E00B8D13A /* UserDataCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserDataCenter.h; sourceTree = "<group>"; };
+		000B09191AA2F40E00B8D13A /* UserDataCenter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserDataCenter.m; sourceTree = "<group>"; };
 		00AA53031AA2C3F4004096F8 /* movienext.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = movienext.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		00AA53071AA2C3F4004096F8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00AA53081AA2C3F4004096F8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -851,6 +854,8 @@
 				00AA53F71AA2C525004096F8 /* User.m */,
 				00AA53F81AA2C525004096F8 /* Weibo.h */,
 				00AA53F91AA2C525004096F8 /* Weibo.m */,
+				000B09181AA2F40E00B8D13A /* UserDataCenter.h */,
+				000B09191AA2F40E00B8D13A /* UserDataCenter.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1061,6 +1066,7 @@
 				00AA54281AA2C525004096F8 /* MKAnnotationView+WebCache.m in Sources */,
 				00AA541D1AA2C525004096F8 /* CustmoTabBarController.m in Sources */,
 				00AA540C1AA2C525004096F8 /* BaseTableViewController.m in Sources */,
+				000B091A1AA2F40E00B8D13A /* UserDataCenter.m in Sources */,
 				00AA54341AA2C525004096F8 /* UIImage+WebP.m in Sources */,
 				00AA54271AA2C525004096F8 /* View+MASAdditions.m in Sources */,
 				00AA542A1AA2C525004096F8 /* SDImageCache.m in Sources */,

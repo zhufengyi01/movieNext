@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "UserDataCenter.h"
 #import <UIKit/UIKit.h>
 
 @class User;
@@ -30,7 +31,7 @@ float getHeightByWidthAndHeight(float width, float height){
  *
  *  @param user 当前登录成功的用户对象
  */
-+ (void) saveUser:(User *)user;
++ (void) saveUser:(UserDataCenter *)user;
 
 /**
  *  注销用户

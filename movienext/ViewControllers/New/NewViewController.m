@@ -9,7 +9,7 @@
 #import "NewViewController.h"
 #import "AppDelegate.h"
 #import "Constant.h"
-#import  "User.h"
+#import  "UserDataCenter.h"
 @interface NewViewController ()
 {
     AppDelegate  *appdelegate;
@@ -24,8 +24,8 @@
     // Do any additional setup after loading the view.
     self.view.backgroundColor =[UIColor redColor];
     appdelegate =(AppDelegate *)[[UIApplication sharedApplication]delegate ];
-  //  User  *userInfo=  [User shareInstance];
-   // NSLog(@"-------登陆成功  user=======%@ ",      userInfo.user_id);
+    UserDataCenter  *userInfo=  [UserDataCenter shareInstance];
+   NSLog(@"-------登陆成功  user=======%@ ",  userInfo.username);
 }
 
 - (void)didReceiveMemoryWarning {
