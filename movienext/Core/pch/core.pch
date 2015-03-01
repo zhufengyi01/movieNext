@@ -1,0 +1,23 @@
+//
+//  core.pch
+//  movienext
+//
+//  Created by 杜承玖 on 14/12/4.
+//  Copyright (c) 2014年 redianying. All rights reserved.
+//
+
+#ifndef movienext_core_pch
+#define movienext_core_pch
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+
+#ifdef DEBUG
+#define LOG(...) NSLog(__VA_ARGS__);
+#else
+#define LOG(...);
+#endif
+
+#define kAppTintColor [UIColor colorWithRed:0.0/255.0 green:146.0/255.0 blue:255.0/255.0 alpha:1]
+
+#endif
