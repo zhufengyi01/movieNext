@@ -1,43 +1,52 @@
 //
-//  MyViewController.m
+//  SettingViewController.m
 //  movienext
 //
-//  Created by 风之翼 on 15/2/27.
+//  Created by 风之翼 on 15/3/1.
 //  Copyright (c) 2015年 redianying. All rights reserved.
 //
 
-#import "MyViewController.h"
-#import "Constant.h"
 #import "SettingViewController.h"
-@interface MyViewController ()
+#import "Constant.h"
+
+@interface SettingViewController ()
 
 @end
 
-@implementation MyViewController
+@implementation SettingViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.view.backgroundColor=[UIColor yellowColor];
-    [self createNavigation];
+    self.navigationController.navigationItem.title=@"设置";
+    self.view.backgroundColor=View_BackGround;
+    [self createUI];
+    [self createOutLogin];
+    
 }
--(void)createNavigation
+-(void)createUI
 {
-    self.navigationController.navigationItem.title=@"我的";
+ 
+    
+    
+}
+-(void)createOutLogin
+{
+ 
     UIButton  *button=[UIButton buttonWithType:UIButtonTypeCustom];
     //[button setTitle:@"设置" forState:UIControlStateNormal];
     [button setBackgroundImage:[UIImage imageNamed:@"setting.png"] forState:UIControlStateNormal];
-    button.frame=CGRectMake(kDeviceWidth-30, 10, 18, 18);
-    [button addTarget:self action:@selector(GotoSettingClick:) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem  *barButton=[[UIBarButtonItem alloc]initWithCustomView:button];
-    self.navigationItem.rightBarButtonItem=barButton;
-}
--(void)GotoSettingClick:(UIButton  *) button
-{
-    
-    [self.navigationController pushViewController:[SettingViewController new] animated:YES];
+    button.frame=CGRectMake(50, 360, kDeviceWidth-200, 30);
+    [button addTarget:self action:@selector(OutLoginClick:) forControlEvents:UIControlEventTouchUpInside];
+
 }
 
+
+//退出登录
+-(void)OutLoginClick:(UIButton *)button
+{
+    
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

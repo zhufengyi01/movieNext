@@ -2,7 +2,7 @@
 //  RootViewController.m
 //  movienext
 //
-//  Created by 风之翼 on 15/2/27.
+//  Created by 风之翼 on 15/3/1.
 //  Copyright (c) 2015年 redianying. All rights reserved.
 //
 
@@ -13,10 +13,7 @@
 @end
 
 @implementation RootViewController
--(void)viewWillAppear:(BOOL)animated
-{
-    self.tabBarController.tabBar.hidden=YES;
-}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.

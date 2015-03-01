@@ -1,5 +1,5 @@
 //
-//  RootViewController.h
+//  SettingViewController.h
 //  movienext
 //
 //  Created by 风之翼 on 15/3/1.
@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface RootViewController : UIViewController
+@interface SettingViewController : UIViewController
 
 @end

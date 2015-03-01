@@ -35,6 +35,8 @@
 #define SSOSinRedirectURL  @"http://sns.whalecloud.com/sina2/callback"
 
 #define kAppTintColor [UIColor colorWithRed:0.0/255.0 green:146.0/255.0 blue:255.0/255.0 alpha:1]
+#define View_BackGround [UIColor colorWithRed:247.0/255 green:247.0/255 blue:247.0/255 alpha:1]
+
 #define GetAppDelegate()   ((AppDelegate*)[[UIApplication sharedApplication] delegate])
 
 
