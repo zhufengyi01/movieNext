@@ -37,7 +37,7 @@
     Zanlable.textColor=VGray_color;
     [self.contentView addSubview:Zanlable];
     
-    dateLable=[ZCControl createLabelWithFrame:CGRectMake(75, 60, 120, 0) Font:16 Text:@"时间"];
+    dateLable=[ZCControl createLabelWithFrame:CGRectMake(75, 40, 120, 0) Font:16 Text:@"时间"];
     dateLable.textColor=VGray_color;
     dateLable.textAlignment=NSTextAlignmentLeft;
     [self.contentView addSubview:dateLable];
@@ -51,6 +51,7 @@
 {
     if ([dict objectForKey:@"avatar"]) {
     [logoButton sd_setBackgroundImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", kUrlAvatar, [dict objectForKey:@"avatar"] ]] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"loading_image_all.png"]];
+        logoButton.tag=index;
     }
     if ([dict objectForKey:@"stageinfo"]) {
         
@@ -76,7 +77,7 @@
 
 -(void)dealHeadClick:(UIButton  *)button
 {
-    
+    NSLog(@" logo  but  click");
 }
 - (void)awakeFromNib {
     // Initialization code

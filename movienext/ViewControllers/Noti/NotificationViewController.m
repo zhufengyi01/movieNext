@@ -21,6 +21,7 @@
 #import "LoadingView.h"
 #import "UserDataCenter.h"
 #import "ZCControl.h"
+#import "MJRefresh.h"
 @interface NotificationViewController ()<UITableViewDataSource,UITableViewDelegate>
 {
     LoadingView   *loadView;
@@ -40,7 +41,6 @@
     titleLable.textColor=VBlue_color;
     titleLable.font=[UIFont boldSystemFontOfSize:16];
     titleLable.textAlignment=NSTextAlignmentCenter;
-   // self.navigationController.navigationItem.titleView=titleLable;
     self.navigationItem.titleView=titleLable;
     [self creatLoadView];
     [self initData];
@@ -66,8 +66,52 @@
     _myTableView.dataSource=self;
     _myTableView.separatorInset=UIEdgeInsetsMake(0, -110, 0, 0);
     [self.view addSubview:_myTableView];
-    
+    //集成mjrefresh
+    [self setupRefresh];
+    /**
+     *  集成刷新控件
+     */
 }
+-(void)setupRefresh
+{
+        // 1.下拉刷新(进入刷新状态就会调用self的headerRereshing)
+        [_myTableView addHeaderWithTarget:self action:@selector(headerRereshing)];
+    //  #warning 自动刷新(一进入程序就下拉刷新)
+        [_myTableView headerBeginRefreshing];
+        // 2.上拉加载更多(进入刷新状态就会调用self的footerRereshing)
+        [_myTableView addFooterWithTarget:self action:@selector(footerRereshing)];
+}
+#pragma mark 开始进入刷新状态
+- (void)headerRereshing
+{
+    page=0;
+    [self requestData];
+    // 2.2秒后刷新表格UI
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        // 刷新表格
+        [_myTableView reloadData];
+        // (最好在刷新表格后调用)调用endRefreshing可以结束刷新状态
+        [_myTableView headerEndRefreshing];
+      
+    });
+}
+
+- (void)footerRereshing
+{
+    page++;
+    [self  requestData];
+    // 2.2秒后刷新表格UI
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        // 刷新表格
+        [_myTableView reloadData];
+        
+        // (最好在刷新表格后调用)调用endRefreshing可以结束刷新状态
+        [_myTableView footerEndRefreshing];
+    });
+}
+
+
+
 -(void)requestData
 {
     UserDataCenter *userCenter=[UserDataCenter shareInstance];
@@ -91,6 +135,7 @@
 
     
 }
+#pragma mark ----  UITableViewDelegate
 -(NSInteger )tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (tableView==_myTableView) {
@@ -118,6 +163,12 @@
     }
     return cell;
 }
+-(void)dealHeadClick:(UIButton  *)button
+{
+    
+    
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
