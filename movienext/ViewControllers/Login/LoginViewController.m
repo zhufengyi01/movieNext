@@ -75,7 +75,7 @@
     [self.view addSubview:qqButton];
     
     UIButton  *weiboButton=[UIButton buttonWithType:UIButtonTypeCustom];
-    weiboButton.frame=CGRectMake(50, 340, 220, 40);
+    weiboButton.frame=CGRectMake(50, kDeviceHeight-160, kDeviceWidth-100, 40);
     [weiboButton setBackgroundImage:[UIImage imageNamed:@"bg_weibo@2x.png"] forState:UIControlStateNormal];
     [weiboButton setBackgroundImage:[UIImage imageNamed:@"bg_weibo_h@2x.png"] forState:UIControlStateHighlighted];
     [weiboButton addTarget:self action:@selector(dealloginClick:) forControlEvents:UIControlEventTouchUpInside];

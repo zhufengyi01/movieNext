@@ -9,6 +9,9 @@
 #import "CustomTabBar.h"
 #define BUTTON_COUNT 4
 #define BUTTON_START_TAG 1000
+#define  TabSelectColor   [UIColor colorWithRed:0/255 green:146.0/255 blue:255.0/255 alpha:1]
+#define  TabNorColor      [UIColor colorWithRed:127.0/255 green:127.0/255 blue:139.0/255 alpha:1]
+
 
 @interface CustomTabBar ()
 {
@@ -55,6 +58,7 @@
         
         UILabel  *lable=[[UILabel alloc]initWithFrame:CGRectMake(button.frame.origin.x, m_frame.size.height-15, button.frame.size.width, 15)];
         lable.font=[UIFont systemFontOfSize:11];
+        lable.textColor=TabNorColor;
         lable.textAlignment=NSTextAlignmentCenter;
         lable.tag=2000+i;
         lable.text=titleArray[i];
@@ -103,7 +107,7 @@
         [btn setImage:normalImage forState:UIControlStateNormal];
 
         UILabel  *lable=(UILabel *)[self viewWithTag:2000+i] ;
-        lable.textColor=[UIColor grayColor];
+        lable.textColor=TabSelectColor;
         
     }
     

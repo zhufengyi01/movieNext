@@ -123,6 +123,11 @@
 		000B09E11AA3029800B8D13A /* Weibo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 000B09801AA3029800B8D13A /* Weibo@2x.png */; };
 		000B09E21AA3029800B8D13A /* Weibo@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 000B09811AA3029800B8D13A /* Weibo@3x.png */; };
 		000B09E41AA30CB900B8D13A /* loginoutbackgroundcolor.png in Resources */ = {isa = PBXBuildFile; fileRef = 000B09E31AA30CB900B8D13A /* loginoutbackgroundcolor.png */; };
+		00572C801AA4003D0041D451 /* loading_image_all.png in Resources */ = {isa = PBXBuildFile; fileRef = 00572C7F1AA4003D0041D451 /* loading_image_all.png */; };
+		00572C841AA405F50041D451 /* loading_roll_image.png in Resources */ = {isa = PBXBuildFile; fileRef = 00572C811AA405F50041D451 /* loading_roll_image.png */; };
+		00572C851AA405F50041D451 /* loading_roll_image@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 00572C821AA405F50041D451 /* loading_roll_image@2x.png */; };
+		00572C861AA405F50041D451 /* loading_roll_image@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 00572C831AA405F50041D451 /* loading_roll_image@3x.png */; };
+		00572C881AA414570041D451 /* tabbar_backgroud_color.png in Resources */ = {isa = PBXBuildFile; fileRef = 00572C871AA414570041D451 /* tabbar_backgroud_color.png */; };
 		00AA53091AA2C3F4004096F8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 00AA53081AA2C3F4004096F8 /* main.m */; };
 		00AA530C1AA2C3F4004096F8 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 00AA530B1AA2C3F4004096F8 /* AppDelegate.m */; };
 		00AA530F1AA2C3F4004096F8 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00AA530E1AA2C3F4004096F8 /* ViewController.m */; };
@@ -227,6 +232,9 @@
 		00AA546A1AA2C5C9004096F8 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00AA54691AA2C5C9004096F8 /* CoreGraphics.framework */; };
 		00AA546D1AA2D597004096F8 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00AA546C1AA2D597004096F8 /* SystemConfiguration.framework */; };
 		00AA546F1AA2D5B0004096F8 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00AA546E1AA2D5B0004096F8 /* Security.framework */; };
+		00CAC3CA1AA31A3F008208E9 /* LoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 00CAC3C91AA31A3F008208E9 /* LoadingView.m */; };
+		00E3581E1AA3DCD000577239 /* NotificationTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E3581D1AA3DCD000577239 /* NotificationTableViewCell.m */; };
+		00E358211AA3E13E00577239 /* ZCControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E358201AA3E13E00577239 /* ZCControl.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -360,6 +368,11 @@
 		000B09801AA3029800B8D13A /* Weibo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Weibo@2x.png"; sourceTree = "<group>"; };
 		000B09811AA3029800B8D13A /* Weibo@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Weibo@3x.png"; sourceTree = "<group>"; };
 		000B09E31AA30CB900B8D13A /* loginoutbackgroundcolor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loginoutbackgroundcolor.png; sourceTree = "<group>"; };
+		00572C7F1AA4003D0041D451 /* loading_image_all.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loading_image_all.png; sourceTree = "<group>"; };
+		00572C811AA405F50041D451 /* loading_roll_image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loading_roll_image.png; sourceTree = "<group>"; };
+		00572C821AA405F50041D451 /* loading_roll_image@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "loading_roll_image@2x.png"; sourceTree = "<group>"; };
+		00572C831AA405F50041D451 /* loading_roll_image@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "loading_roll_image@3x.png"; sourceTree = "<group>"; };
+		00572C871AA414570041D451 /* tabbar_backgroud_color.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tabbar_backgroud_color.png; path = ../tabbar_backgroud_color.png; sourceTree = "<group>"; };
 		00AA53031AA2C3F4004096F8 /* movienext.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = movienext.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		00AA53071AA2C3F4004096F8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00AA53081AA2C3F4004096F8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -570,6 +583,12 @@
 		00AA54691AA2C5C9004096F8 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		00AA546C1AA2D597004096F8 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		00AA546E1AA2D5B0004096F8 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		00CAC3C81AA31A3F008208E9 /* LoadingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadingView.h; sourceTree = "<group>"; };
+		00CAC3C91AA31A3F008208E9 /* LoadingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoadingView.m; sourceTree = "<group>"; };
+		00E3581C1AA3DCD000577239 /* NotificationTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationTableViewCell.h; sourceTree = "<group>"; };
+		00E3581D1AA3DCD000577239 /* NotificationTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationTableViewCell.m; sourceTree = "<group>"; };
+		00E3581F1AA3E13E00577239 /* ZCControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZCControl.h; sourceTree = "<group>"; };
+		00E358201AA3E13E00577239 /* ZCControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZCControl.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -615,7 +634,12 @@
 		000B08FB1AA2EB8C00B8D13A /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				00572C871AA414570041D451 /* tabbar_backgroud_color.png */,
+				00572C811AA405F50041D451 /* loading_roll_image.png */,
+				00572C821AA405F50041D451 /* loading_roll_image@2x.png */,
+				00572C831AA405F50041D451 /* loading_roll_image@3x.png */,
 				000B09E31AA30CB900B8D13A /* loginoutbackgroundcolor.png */,
+				00572C7F1AA4003D0041D451 /* loading_image_all.png */,
 				000B09211AA3029800B8D13A /* add.png */,
 				000B09221AA3029800B8D13A /* add@2x.png */,
 				000B09231AA3029800B8D13A /* add@3x.png */,
@@ -873,6 +897,8 @@
 		00AA53491AA2C525004096F8 /* CustomUI */ = {
 			isa = PBXGroup;
 			children = (
+				00E3581F1AA3E13E00577239 /* ZCControl.h */,
+				00E358201AA3E13E00577239 /* ZCControl.m */,
 			);
 			path = CustomUI;
 			sourceTree = "<group>";
@@ -886,6 +912,8 @@
 				00AA534E1AA2C525004096F8 /* Function.m */,
 				00AA534F1AA2C525004096F8 /* NSDateFunction.h */,
 				00AA53501AA2C525004096F8 /* NSDateFunction.m */,
+				00CAC3C81AA31A3F008208E9 /* LoadingView.h */,
+				00CAC3C91AA31A3F008208E9 /* LoadingView.m */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -1208,6 +1236,8 @@
 			children = (
 				00AA54051AA2C525004096F8 /* NotificationViewController.h */,
 				00AA54061AA2C525004096F8 /* NotificationViewController.m */,
+				00E3581C1AA3DCD000577239 /* NotificationTableViewCell.h */,
+				00E3581D1AA3DCD000577239 /* NotificationTableViewCell.m */,
 			);
 			path = Noti;
 			sourceTree = "<group>";
@@ -1311,6 +1341,7 @@
 				000B09921AA3029800B8D13A /* kind_swtich@2x.png in Resources */,
 				000B09A01AA3029800B8D13A /* login_button_qq.png in Resources */,
 				000B09161AA2EB8C00B8D13A /* tabbar_icon_noti@2x.png in Resources */,
+				00572C881AA414570041D451 /* tabbar_backgroud_color.png in Resources */,
 				000B09851AA3029800B8D13A /* feed_tab_butten.png in Resources */,
 				000B09991AA3029800B8D13A /* liked@3x.png in Resources */,
 				00AA54461AA2C525004096F8 /* UMShareEditViewController.xib in Resources */,
@@ -1337,6 +1368,7 @@
 				00AA53121AA2C3F4004096F8 /* Main.storyboard in Resources */,
 				000B09AB1AA3029800B8D13A /* logo_first screem@3x.png in Resources */,
 				000B090C1AA2EB8C00B8D13A /* bg_weibo@2x.png in Resources */,
+				00572C851AA405F50041D451 /* loading_roll_image@2x.png in Resources */,
 				000B09891AA3029800B8D13A /* feed_tab_butten@2x.png in Resources */,
 				000B09B11AA3029800B8D13A /* me_tab_butten@3x.png in Resources */,
 				000B09BC1AA3029800B8D13A /* notice_tab_butten（gray）.png in Resources */,
@@ -1385,6 +1417,7 @@
 				000B09941AA3029800B8D13A /* like.png in Resources */,
 				000B09BF1AA3029800B8D13A /* notice_tab_butten@2x.png in Resources */,
 				000B09B51AA3029800B8D13A /* movie_tab_butten.png in Resources */,
+				00572C801AA4003D0041D451 /* loading_image_all.png in Resources */,
 				000B099F1AA3029800B8D13A /* login_button_qq －in@3x.png in Resources */,
 				000B09CD1AA3029800B8D13A /* single_switch.png in Resources */,
 				000B09A41AA3029800B8D13A /* login_button_sina －in@2x.png in Resources */,
@@ -1404,6 +1437,7 @@
 				000B09821AA3029800B8D13A /* add.png in Resources */,
 				000B09C91AA3029800B8D13A /* screen_shot share@3x.png in Resources */,
 				000B09101AA2EB8C00B8D13A /* sologan@3x.png in Resources */,
+				00572C841AA405F50041D451 /* loading_roll_image.png in Resources */,
 				000B09AE1AA3029800B8D13A /* me_tab_butten（gray）@2x.png in Resources */,
 				000B09911AA3029800B8D13A /* kind_swtich.png in Resources */,
 				000B09981AA3029800B8D13A /* liked@2x.png in Resources */,
@@ -1418,6 +1452,7 @@
 				000B090E1AA2EB8C00B8D13A /* logo@2x.png in Resources */,
 				000B09931AA3029800B8D13A /* kind_swtich@3x.png in Resources */,
 				000B09831AA3029800B8D13A /* add@2x.png in Resources */,
+				00572C861AA405F50041D451 /* loading_roll_image@3x.png in Resources */,
 				00AA544A1AA2C525004096F8 /* UMSShareListController.xib in Resources */,
 				000B099B1AA3029800B8D13A /* login out@2x.png in Resources */,
 				000B09B81AA3029800B8D13A /* movie_tab_butten（gray）@3x.png in Resources */,
@@ -1465,6 +1500,7 @@
 				00AA54171AA2C525004096F8 /* AFNetworkReachabilityManager.m in Sources */,
 				00AA545F1AA2C526004096F8 /* NewViewController.m in Sources */,
 				00AA530F1AA2C3F4004096F8 /* ViewController.m in Sources */,
+				00E3581E1AA3DCD000577239 /* NotificationTableViewCell.m in Sources */,
 				00AA54281AA2C525004096F8 /* MKAnnotationView+WebCache.m in Sources */,
 				00AA541D1AA2C525004096F8 /* CustmoTabBarController.m in Sources */,
 				00AA540C1AA2C525004096F8 /* BaseTableViewController.m in Sources */,
@@ -1487,6 +1523,7 @@
 				00AA54521AA2C526004096F8 /* Comment.m in Sources */,
 				00AA54241AA2C525004096F8 /* MASViewConstraint.m in Sources */,
 				00AA54321AA2C525004096F8 /* UIImage+GIF.m in Sources */,
+				00E358211AA3E13E00577239 /* ZCControl.m in Sources */,
 				00AA542B1AA2C525004096F8 /* SDWebImageCompat.m in Sources */,
 				00AA545A1AA2C526004096F8 /* Topic.m in Sources */,
 				00AA54111AA2C525004096F8 /* DoubanService.m in Sources */,
@@ -1521,6 +1558,7 @@
 				00AA541E1AA2C525004096F8 /* CustomTabBar.m in Sources */,
 				000B08FA1AA2EA1800B8D13A /* MovieViewController.m in Sources */,
 				00AA54291AA2C525004096F8 /* NSData+ImageContentType.m in Sources */,
+				00CAC3CA1AA31A3F008208E9 /* LoadingView.m in Sources */,
 				00AA541F1AA2C525004096F8 /* MASCompositeConstraint.m in Sources */,
 				00AA54141AA2C525004096F8 /* AFHTTPRequestOperation.m in Sources */,
 				00AA54231AA2C525004096F8 /* MASViewAttribute.m in Sources */,
