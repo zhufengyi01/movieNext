@@ -30,7 +30,7 @@
 //导入电影页的视图
 #import "LoadingView.h"
 #import "SearchmovieTableViewCell.h"
-@interface MovieSearchViewController ()<UISearchBarDelegate,UITableViewDataSource,UITableViewDelegate>
+@interface MovieSearchViewController ()<UISearchBarDelegate,UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate>
 {
     LoadingView   *loadView;
     UITableView   *_myTableView;
@@ -120,7 +120,7 @@
 //表格的行高度
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
    if (tableView==_myTableView) {
-    return 100;
+    return 90;
     }
     return 0;
 }
@@ -173,6 +173,10 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    [search resignFirstResponder];
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
