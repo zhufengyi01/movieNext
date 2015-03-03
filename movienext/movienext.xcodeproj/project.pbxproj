@@ -36,8 +36,8 @@
 		000B098A1AA3029800B8D13A /* feed_tab_butten@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 000B09291AA3029800B8D13A /* feed_tab_butten@3x.png */; };
 		000B098B1AA3029800B8D13A /* icon@76.png in Resources */ = {isa = PBXBuildFile; fileRef = 000B092A1AA3029800B8D13A /* icon@76.png */; };
 		000B098C1AA3029800B8D13A /* icon@152.png in Resources */ = {isa = PBXBuildFile; fileRef = 000B092B1AA3029800B8D13A /* icon@152.png */; };
-		000B098D1AA3029800B8D13A /* icon120@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 000B092C1AA3029800B8D13A /* icon120@2x.png */; };
-		000B098E1AA3029800B8D13A /* icon180@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 000B092D1AA3029800B8D13A /* icon180@3x.png */; };
+		000B098D1AA3029800B8D13A /* icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 000B092C1AA3029800B8D13A /* icon@2x.png */; };
+		000B098E1AA3029800B8D13A /* icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 000B092D1AA3029800B8D13A /* icon@3x.png */; };
 		000B098F1AA3029800B8D13A /* iosiPhone5&5s尺寸标注.png in Resources */ = {isa = PBXBuildFile; fileRef = 000B092E1AA3029800B8D13A /* iosiPhone5&5s尺寸标注.png */; };
 		000B09901AA3029800B8D13A /* iOSiPhone6&6plus标注.png in Resources */ = {isa = PBXBuildFile; fileRef = 000B092F1AA3029800B8D13A /* iOSiPhone6&6plus标注.png */; };
 		000B09911AA3029800B8D13A /* kind_swtich.png in Resources */ = {isa = PBXBuildFile; fileRef = 000B09301AA3029800B8D13A /* kind_swtich.png */; };
@@ -292,8 +292,8 @@
 		000B09291AA3029800B8D13A /* feed_tab_butten@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "feed_tab_butten@3x.png"; sourceTree = "<group>"; };
 		000B092A1AA3029800B8D13A /* icon@76.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon@76.png"; sourceTree = "<group>"; };
 		000B092B1AA3029800B8D13A /* icon@152.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon@152.png"; sourceTree = "<group>"; };
-		000B092C1AA3029800B8D13A /* icon120@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon120@2x.png"; sourceTree = "<group>"; };
-		000B092D1AA3029800B8D13A /* icon180@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon180@3x.png"; sourceTree = "<group>"; };
+		000B092C1AA3029800B8D13A /* icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon@2x.png"; sourceTree = "<group>"; };
+		000B092D1AA3029800B8D13A /* icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon@3x.png"; sourceTree = "<group>"; };
 		000B092E1AA3029800B8D13A /* iosiPhone5&5s尺寸标注.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iosiPhone5&5s尺寸标注.png"; sourceTree = "<group>"; };
 		000B092F1AA3029800B8D13A /* iOSiPhone6&6plus标注.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iOSiPhone6&6plus标注.png"; sourceTree = "<group>"; };
 		000B09301AA3029800B8D13A /* kind_swtich.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kind_swtich.png; sourceTree = "<group>"; };
@@ -687,8 +687,8 @@
 				000B09291AA3029800B8D13A /* feed_tab_butten@3x.png */,
 				000B092A1AA3029800B8D13A /* icon@76.png */,
 				000B092B1AA3029800B8D13A /* icon@152.png */,
-				000B092C1AA3029800B8D13A /* icon120@2x.png */,
-				000B092D1AA3029800B8D13A /* icon180@3x.png */,
+				000B092C1AA3029800B8D13A /* icon@2x.png */,
+				000B092D1AA3029800B8D13A /* icon@3x.png */,
 				000B092E1AA3029800B8D13A /* iosiPhone5&5s尺寸标注.png */,
 				000B092F1AA3029800B8D13A /* iOSiPhone6&6plus标注.png */,
 				000B09301AA3029800B8D13A /* kind_swtich.png */,
@@ -1431,7 +1431,7 @@
 				000B098C1AA3029800B8D13A /* icon@152.png in Resources */,
 				00AA54441AA2C525004096F8 /* UMSCommentInputController.xib in Resources */,
 				000B09BD1AA3029800B8D13A /* notice_tab_butten（gray）@2x.png in Resources */,
-				000B098E1AA3029800B8D13A /* icon180@3x.png in Resources */,
+				000B098E1AA3029800B8D13A /* icon@3x.png in Resources */,
 				000B09151AA2EB8C00B8D13A /* tabbar_icon_movie@2x.png in Resources */,
 				000B09C41AA3029800B8D13A /* Qzone.png in Resources */,
 				000B09B41AA3029800B8D13A /* Moments@3x.png in Resources */,
@@ -1514,7 +1514,7 @@
 				000B09911AA3029800B8D13A /* kind_swtich.png in Resources */,
 				000B09981AA3029800B8D13A /* liked@2x.png in Resources */,
 				00AA53141AA2C3F4004096F8 /* Images.xcassets in Resources */,
-				000B098D1AA3029800B8D13A /* icon120@2x.png in Resources */,
+				000B098D1AA3029800B8D13A /* icon@2x.png in Resources */,
 				000B09D31AA3029800B8D13A /* slogan.png in Resources */,
 				000B09DF1AA3029800B8D13A /* Wechat@3x.png in Resources */,
 				000B090B1AA2EB8C00B8D13A /* bg_qq_h@2x.png in Resources */,
@@ -1782,7 +1782,6 @@
 		00AA53271AA2C3F4004096F8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_STRICT_OBJC_MSGSEND = NO;
@@ -1801,13 +1800,13 @@
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
 		00AA53281AA2C3F4004096F8 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_STRICT_OBJC_MSGSEND = NO;
@@ -1826,6 +1825,7 @@
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
