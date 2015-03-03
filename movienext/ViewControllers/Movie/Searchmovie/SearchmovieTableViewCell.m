@@ -22,10 +22,10 @@
 }
 -(void)createUI
 {
-    leftImage =[[UIImageView alloc]initWithFrame:CGRectMake(10, 10,45,80)];
+    leftImage =[[UIImageView alloc]initWithFrame:CGRectMake(10, 10,50,70)];
     [self.contentView addSubview:leftImage];
     
-    titleLable=[ZCControl createLabelWithFrame:CGRectMake(leftImage.frame.origin.x+leftImage.frame.size.width+10,10, (kDeviceWidth-30)/3, 120) Font:14 Text:@"电影描述"];
+    titleLable=[ZCControl createLabelWithFrame:CGRectMake(leftImage.frame.origin.x+leftImage.frame.size.width+10,10, kDeviceWidth, 20) Font:14 Text:@"电影描述"];
     [self.contentView addSubview:titleLable];
 
 }

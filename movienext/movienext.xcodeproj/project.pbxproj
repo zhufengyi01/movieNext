@@ -130,6 +130,7 @@
 		00572C8A1AA4299C0041D451 /* tabbar_backgroud_color.png in Resources */ = {isa = PBXBuildFile; fileRef = 00572C891AA4299C0041D451 /* tabbar_backgroud_color.png */; };
 		00572CBF1AA4430E0041D451 /* MovieSearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00572CBE1AA4430E0041D451 /* MovieSearchViewController.m */; };
 		00572CC21AA44FBE0041D451 /* MovieCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00572CC11AA44FBE0041D451 /* MovieCollectionViewCell.m */; };
+		005AFB5A1AA5F41900D80CFB /* CommonStageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 005AFB591AA5F41900D80CFB /* CommonStageCell.m */; };
 		006739531AA491250087C240 /* MJRefresh.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 006739431AA491250087C240 /* MJRefresh.bundle */; };
 		006739541AA491250087C240 /* MJRefreshBaseView.m in Sources */ = {isa = PBXBuildFile; fileRef = 006739461AA491250087C240 /* MJRefreshBaseView.m */; };
 		006739551AA491250087C240 /* MJRefreshConst.m in Sources */ = {isa = PBXBuildFile; fileRef = 006739481AA491250087C240 /* MJRefreshConst.m */; };
@@ -388,6 +389,8 @@
 		00572CBE1AA4430E0041D451 /* MovieSearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MovieSearchViewController.m; path = ../MovieSearchViewController.m; sourceTree = "<group>"; };
 		00572CC01AA44FBE0041D451 /* MovieCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MovieCollectionViewCell.h; sourceTree = "<group>"; };
 		00572CC11AA44FBE0041D451 /* MovieCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MovieCollectionViewCell.m; sourceTree = "<group>"; };
+		005AFB581AA5F41900D80CFB /* CommonStageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonStageCell.h; sourceTree = "<group>"; };
+		005AFB591AA5F41900D80CFB /* CommonStageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonStageCell.m; sourceTree = "<group>"; };
 		006739431AA491250087C240 /* MJRefresh.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = MJRefresh.bundle; sourceTree = "<group>"; };
 		006739441AA491250087C240 /* MJRefresh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJRefresh.h; sourceTree = "<group>"; };
 		006739451AA491250087C240 /* MJRefreshBaseView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJRefreshBaseView.h; sourceTree = "<group>"; };
@@ -1269,6 +1272,8 @@
 				00AA53FE1AA2C525004096F8 /* Mine */,
 				00AA54011AA2C525004096F8 /* New */,
 				00AA54041AA2C525004096F8 /* Noti */,
+				005AFB581AA5F41900D80CFB /* CommonStageCell.h */,
+				005AFB591AA5F41900D80CFB /* CommonStageCell.m */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -1579,6 +1584,7 @@
 				00AA541D1AA2C525004096F8 /* CustmoTabBarController.m in Sources */,
 				00AA540C1AA2C525004096F8 /* BaseTableViewController.m in Sources */,
 				000B091A1AA2F40E00B8D13A /* UserDataCenter.m in Sources */,
+				005AFB5A1AA5F41900D80CFB /* CommonStageCell.m in Sources */,
 				00AA54341AA2C525004096F8 /* UIImage+WebP.m in Sources */,
 				006739551AA491250087C240 /* MJRefreshConst.m in Sources */,
 				00AA54271AA2C525004096F8 /* View+MASAdditions.m in Sources */,
