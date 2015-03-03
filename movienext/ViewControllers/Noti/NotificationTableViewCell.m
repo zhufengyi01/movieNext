@@ -37,7 +37,7 @@
     Zanlable.textColor=VGray_color;
     [self.contentView addSubview:Zanlable];
     
-    dateLable=[ZCControl createLabelWithFrame:CGRectMake(75, 40, 120, 0) Font:16 Text:@"时间"];
+    dateLable=[ZCControl createLabelWithFrame:CGRectMake(75, 40, 120, 20) Font:16 Text:@"时间"];
     dateLable.textColor=VGray_color;
     dateLable.textAlignment=NSTextAlignmentLeft;
     [self.contentView addSubview:dateLable];
@@ -55,7 +55,7 @@
     }
     if ([dict objectForKey:@"stageinfo"]) {
         
-    [stageImage sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@w340h340",kUrlStage,[[dict objectForKey:@"stageinfo"]  objectForKey:@"stage"]]] placeholderImage:[UIImage imageNamed:@"loading_image_all.png"] options:SDWebImageRetryFailed];
+    [stageImage sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w340h340",kUrlStage,[[dict objectForKey:@"stageinfo"]  objectForKey:@"stage"]]] placeholderImage:[UIImage imageNamed:@"loading_image_all.png"] options:SDWebImageRetryFailed];
     }
     if ([dict objectForKey:@"username"]) {
         titleLable.text =[NSString stringWithFormat:@"%@",[dict objectForKey:@"username"]];
