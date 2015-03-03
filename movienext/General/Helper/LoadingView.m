@@ -33,11 +33,10 @@
     [self addSubview:view];
     isanimal=YES;
     angle=10;
-    
     imageView=[[UIImageView alloc]initWithFrame:CGRectMake((m_frame.size.width-30)/2, (m_frame.size.height-30)/2, 30, 30)];
     imageView.image=[UIImage imageNamed:@"loading_roll_image.png"];
     [self addSubview:imageView];
-    
+    [self startAnimation];
     
     
 }

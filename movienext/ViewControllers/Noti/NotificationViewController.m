@@ -42,9 +42,10 @@
     titleLable.font=[UIFont boldSystemFontOfSize:16];
     titleLable.textAlignment=NSTextAlignmentCenter;
     self.navigationItem.titleView=titleLable;
-    [self creatLoadView];
+   
     [self initData];
     [self initUI];
+     [self creatLoadView];
     [self requestData];
     
 }
@@ -61,7 +62,7 @@
 }
 -(void)initUI
 {
-    _myTableView =[[UITableView alloc]initWithFrame:CGRectMake(0, kHeightNavigation,kDeviceWidth, kDeviceHeight-kHeightNavigation-kHeigthTabBar)];
+    _myTableView =[[UITableView alloc]initWithFrame:CGRectMake(0, 0,kDeviceWidth, kDeviceHeight)];
     _myTableView.delegate=self;
     _myTableView.dataSource=self;
     _myTableView.separatorInset=UIEdgeInsetsMake(0, -110, 0, 0);
@@ -92,7 +93,6 @@
         [_myTableView reloadData];
         // (最好在刷新表格后调用)调用endRefreshing可以结束刷新状态
         [_myTableView headerEndRefreshing];
-      
     });
 }
 
@@ -126,7 +126,7 @@
             _dataArray=[[NSMutableArray alloc]init];
         }
         [_dataArray addObjectsFromArray:[responseObject objectForKey:@"detail"]];
-        NSLog(@"=-=======dataArray =====%@",_dataArray);
+       // NSLog(@"=-=======dataArray =====%@",_dataArray);
         [_myTableView reloadData];
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -163,6 +163,7 @@
     }
     return cell;
 }
+//这个方法
 -(void)dealHeadClick:(UIButton  *)button
 {
     

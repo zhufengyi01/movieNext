@@ -8,6 +8,7 @@
 
 #import "MyViewController.h"
 #import "Constant.h"
+#import "ZCControl.h"
 #import "SettingViewController.h"
 @interface MyViewController ()
 
@@ -19,6 +20,12 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.view.backgroundColor=[UIColor yellowColor];
+    UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:@"我的"];
+    titleLable.textColor=VBlue_color;
+    titleLable.font=[UIFont boldSystemFontOfSize:16];
+    titleLable.textAlignment=NSTextAlignmentCenter;
+    self.navigationItem.titleView=titleLable;
+
     [self createNavigation];
 }
 -(void)createNavigation
