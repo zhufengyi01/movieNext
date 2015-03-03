@@ -31,11 +31,12 @@
 }
 -(void)setCellValue:(NSDictionary *) dict;
 {
-    if ([dict objectForKey:@""]) {
-        
+    if ([dict objectForKey:@"smallimage"]) {
+        NSURL *urlString=[NSURL URLWithString:  [NSString stringWithFormat:@"%@",[dict objectForKey:@"smallimage"]]];
+        [leftImage sd_setImageWithURL:urlString placeholderImage:[UIImage imageNamed:@"loading_image_all.png"]];
     }
     if ([dict  objectForKey:@"title"]) {
-        
+        titleLable.text=[NSString stringWithFormat:@"%@",[dict objectForKey:@"title"]];
     }
 }
 - (void)awakeFromNib {

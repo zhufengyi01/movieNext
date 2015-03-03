@@ -44,12 +44,13 @@
 }
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"title = %@, origin_title = %@, average = %@, doubanid = %@, subtype = %@",
+    return [NSString stringWithFormat:@"title = %@, origin_title = %@, average = %@, doubanid = %@, subtype = %@ smallimage = %@",
             _title,
             _originalTitle,
             _average,
             _doubanId,
-            _subtype];
+            _subtype,
+            _smallImage];
 }
 
 @end

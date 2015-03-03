@@ -142,7 +142,9 @@
         cell.selectionStyle = UITableViewCellSelectionStyleGray;
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
-    //cell setCellValue:<#(NSDictionary *)#>
+    if (_dataArray.count > indexPath.row) {
+     [cell setCellValue:[_dataArray  objectAtIndex:(long)indexPath.row]];
+    }
     NSLog(@"======== cell for row  =====%@",[_dataArray  objectAtIndex:indexPath.row]);
     
     return cell;

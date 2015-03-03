@@ -36,10 +36,10 @@ static DoubanService * doubanService = nil;
         NSString *movieName = [responseString substringWithRange:[b rangeAtIndex:3]];
         NSString *smallImage = [responseString substringWithRange:[b rangeAtIndex:2]];
         
-        DoubanInfo * di = [[DoubanInfo alloc] init];
-        di.doubanId     = doubanId;
-        di.title        = movieName;
-        di.smallImage   = smallImage;
+        NSMutableDictionary *di = [NSMutableDictionary dictionary];
+        [di setValue:doubanId forKey:@"doubanId"];
+        [di setValue:movieName forKey:@"title"];
+        [di setValue:smallImage forKey:@"smallimage"];
       
         [doubanInfos addObject:di];
     }
