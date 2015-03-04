@@ -7,11 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "MarkView.h"
 typedef NS_ENUM(NSInteger, NSPageSourceType)
 {
     NSPageSourceTypeMainHotController =0,
     NSPageSourceTypeMainNewController=1,
+    NSPageSourceTypeMovieViewController=3,
     
 };
 @interface CommonStageCell : UITableViewCell

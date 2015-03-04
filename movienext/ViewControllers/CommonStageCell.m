@@ -114,7 +114,10 @@
           _MovieImageView.frame=CGRectMake(0,y, kDeviceWidth, (ImgeHight/ImageWith)*kDeviceWidth);
        [_MovieImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w640",kUrlStage,[dict objectForKey:@"stage"]]] placeholderImage:[UIImage imageNamed:@"loading_image_all.png"]];
      }
-   
+    if ([dict objectForKey:@"movie_name"]) {  //电影名字，这里设置title 偏移
+        [leftButtomButton setTitle:[dict objectForKey:@"movie_name"] forState:UIControlStateNormal];
+    }
+
     if (_pageType  ==NSPageSourceTypeMainHotController) {  //热门
          BgView0.frame=CGRectMake(0, 0, 0, 0);
         BgView0.hidden=YES;
@@ -133,19 +136,8 @@
         if ([dict objectForKey:@"stage"]) {
             [MovieLogoImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w100h100",kUrlMoviePoster,[dict objectForKey:@"movie_poster"]]] placeholderImage:[ UIImage imageNamed:@"loading_image_all.png"]];
         }
-<<<<<<< HEAD
-        
-        }
-=======
+    }
         NSLog(@"my dict = %@", dict);
-
-    }
-
-    if ([dict  objectForKey:@"movie_name"]) {  //电影名字，这里设置title 偏移
-        [leftButtomButton setTitle:[dict objectForKey:@"movie_name"] forState:UIControlStateNormal];
-    }
-    
->>>>>>> bc3decf1d27b68bd4b2ee864551440d1317e1a8f
 
 }
 -(void)dealMovieButtonClick:(UIButton  *) button{

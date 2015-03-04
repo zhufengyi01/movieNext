@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		000500471AA70ABF00691DF4 /* tag_like_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 000500441AA70ABF00691DF4 /* tag_like_icon.png */; };
+		000500481AA70ABF00691DF4 /* tag_like_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 000500451AA70ABF00691DF4 /* tag_like_icon@2x.png */; };
+		000500491AA70ABF00691DF4 /* tag_like_icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 000500461AA70ABF00691DF4 /* tag_like_icon@3x.png */; };
 		000B08FA1AA2EA1800B8D13A /* MovieViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 000B08F91AA2EA1800B8D13A /* MovieViewController.m */; };
 		000B090A1AA2EB8C00B8D13A /* bg_qq@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 000B08FC1AA2EB8C00B8D13A /* bg_qq@2x.png */; };
 		000B090B1AA2EB8C00B8D13A /* bg_qq_h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 000B08FD1AA2EB8C00B8D13A /* bg_qq_h@2x.png */; };
@@ -264,6 +267,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		000500441AA70ABF00691DF4 /* tag_like_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tag_like_icon.png; sourceTree = "<group>"; };
+		000500451AA70ABF00691DF4 /* tag_like_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tag_like_icon@2x.png"; sourceTree = "<group>"; };
+		000500461AA70ABF00691DF4 /* tag_like_icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tag_like_icon@3x.png"; sourceTree = "<group>"; };
 		000B08F81AA2EA1800B8D13A /* MovieViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MovieViewController.h; sourceTree = "<group>"; };
 		000B08F91AA2EA1800B8D13A /* MovieViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MovieViewController.m; sourceTree = "<group>"; };
 		000B08FC1AA2EB8C00B8D13A /* bg_qq@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bg_qq@2x.png"; sourceTree = "<group>"; };
@@ -682,6 +688,9 @@
 		000B08FB1AA2EB8C00B8D13A /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				000500441AA70ABF00691DF4 /* tag_like_icon.png */,
+				000500451AA70ABF00691DF4 /* tag_like_icon@2x.png */,
+				000500461AA70ABF00691DF4 /* tag_like_icon@3x.png */,
 				009A27B61AA6DBDA0001690C /* movie_icon_backgroud_color.png */,
 				009A27B71AA6DBDA0001690C /* movie_icon_backgroud_color@2x.png */,
 				009A27B81AA6DBDA0001690C /* movie_icon_backgroud_color@3x.png */,
@@ -1430,6 +1439,7 @@
 			files = (
 				000B09921AA3029800B8D13A /* kind_swtich@2x.png in Resources */,
 				000B09A01AA3029800B8D13A /* login_button_qq.png in Resources */,
+				000500481AA70ABF00691DF4 /* tag_like_icon@2x.png in Resources */,
 				000B09161AA2EB8C00B8D13A /* tabbar_icon_noti@2x.png in Resources */,
 				00572C8A1AA4299C0041D451 /* tabbar_backgroud_color.png in Resources */,
 				000B09851AA3029800B8D13A /* feed_tab_butten.png in Resources */,
@@ -1441,6 +1451,7 @@
 				000B09AA1AA3029800B8D13A /* logo_first screem@2x.png in Resources */,
 				000B09841AA3029800B8D13A /* add@3x.png in Resources */,
 				000B09D81AA3029800B8D13A /* three switch@2x.png in Resources */,
+				000500491AA70ABF00691DF4 /* tag_like_icon@3x.png in Resources */,
 				000B09D61AA3029800B8D13A /* tag-like@3x.png in Resources */,
 				000B09171AA2EB8C00B8D13A /* tabbar_icon_noti@3x.png in Resources */,
 				000B098F1AA3029800B8D13A /* iosiPhone5&5s尺寸标注.png in Resources */,
@@ -1520,6 +1531,7 @@
 				000B099E1AA3029800B8D13A /* login_button_qq －in@2x.png in Resources */,
 				00AA54411AA2C525004096F8 /* UMSocialLocalizable.strings in Resources */,
 				000B09BE1AA3029800B8D13A /* notice_tab_butten（gray）@3x.png in Resources */,
+				000500471AA70ABF00691DF4 /* tag_like_icon.png in Resources */,
 				000B09A91AA3029800B8D13A /* logo_first screem.png in Resources */,
 				000B09B21AA3029800B8D13A /* Moments.png in Resources */,
 				000B09A11AA3029800B8D13A /* login_button_qq@2x.png in Resources */,
