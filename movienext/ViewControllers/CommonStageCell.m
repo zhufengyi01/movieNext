@@ -134,11 +134,7 @@
             [MovieLogoImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w100h100",kUrlMoviePoster,[dict objectForKey:@""]]] placeholderImage:[ UIImage imageNamed:@"loading_image_all.png"]];
         }
         
-
-        
-    }
-
-    
+        }
 
 }
 -(void)dealMovieButtonClick:(UIButton  *) button{
