@@ -71,7 +71,7 @@
 }
 -(void)initUI
 {
-    _myTableView =[[UITableView alloc]initWithFrame:CGRectMake(0, 0,kDeviceWidth, kDeviceHeight)];
+    _myTableView =[[UITableView alloc]initWithFrame:CGRectMake(0, 0,kDeviceWidth, kDeviceHeight-kHeightNavigation)];
     _myTableView.delegate=self;
     _myTableView.dataSource=self;
     _myTableView.separatorInset=UIEdgeInsetsMake(0, -110, 0, 0);
@@ -170,6 +170,7 @@
 }
 -(void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
 {
+    
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 

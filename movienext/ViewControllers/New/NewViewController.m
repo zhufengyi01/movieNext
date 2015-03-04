@@ -194,7 +194,7 @@
             }
             }
             NSLog(@"============  hight  for  row  =====%f",hight);
-            return hight;
+            return hight+10;
         }
     }
     else if (segment.selectedSegmentIndex==1)
@@ -219,7 +219,7 @@
             }
             NSLog(@"============  hight  for  row  =====%f",hight);
 
-            return hight;
+            return hight+10;
 
         }
     }
