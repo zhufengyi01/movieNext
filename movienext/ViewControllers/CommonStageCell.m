@@ -71,9 +71,12 @@
     
     //leftButtomButton =[ZCControl createButtonWithFrame:CGRectMake(10,8,100,30) ImageName:@"movie_icon_backgroud_color.png" Target:self.superview Action:@selector(dealMovieButtonClick:) Title:@"sd"];
     leftButtomButton=[UIButton buttonWithType:UIButtonTypeCustom];
-    leftButtomButton.frame=CGRectMake(10, 8, 100, 30);
+    leftButtomButton.frame=CGRectMake(10, 8, 140, 30);
     [leftButtomButton setBackgroundImage:[[UIImage imageNamed:@"movie_icon_backgroud_color.png"]stretchableImageWithLeftCapWidth:10 topCapHeight:10] forState:UIControlStateNormal];
     [leftButtomButton addTarget:self action:@selector(dealMovieButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    [leftButtomButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [leftButtomButton setTitleEdgeInsets:UIEdgeInsetsMake(0, 30, 0, 0)];
+    leftButtomButton.titleLabel.font = [UIFont systemFontOfSize:12];
     [BgView2 addSubview:leftButtomButton];
     
     MovieLogoImageView=[[UIImageView alloc]initWithFrame:CGRectMake(0,0,30, 30)];
@@ -118,11 +121,8 @@
         BgView1.frame=CGRectMake(0, 0, kDeviceWidth, hight);
         BgView2.frame=CGRectMake(0, kDeviceWidth, kDeviceWidth, 45);
         if ([dict objectForKey:@"stage"]) {
-            [MovieLogoImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w100h100",kUrlMoviePoster,[dict objectForKey:@""]]] placeholderImage:[ UIImage imageNamed:@"loading_image_all.png"]];
+            [MovieLogoImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w100h100",kUrlMoviePoster,[dict objectForKey:@"movie_poster"]]] placeholderImage:[ UIImage imageNamed:@"loading_image_all.png"]];
         }
-    }
-    if ([dict  objectForKey:@"movie_name"]) {  //电影名字，这里设置title 偏移
-        [leftButtomButton setTitle:[dict objectForKey:@"movie_name"] forState:UIControlStateNormal];
     }
     else if(_pageType==NSPageSourceTypeMainNewController)  //最新
     {
@@ -131,13 +131,15 @@
         BgView1.frame=CGRectMake(0, 45, kDeviceWidth, hight);
         BgView2.frame=CGRectMake(0, kDeviceWidth+45, kDeviceWidth, 45);
         if ([dict objectForKey:@"stage"]) {
-            [MovieLogoImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w100h100",kUrlMoviePoster,[dict objectForKey:@""]]] placeholderImage:[ UIImage imageNamed:@"loading_image_all.png"]];
+            [MovieLogoImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w100h100",kUrlMoviePoster,[dict objectForKey:@"movie_poster"]]] placeholderImage:[ UIImage imageNamed:@"loading_image_all.png"]];
         }
-        
+        NSLog(@"my dict = %@", dict);
 
-        
     }
 
+    if ([dict  objectForKey:@"movie_name"]) {  //电影名字，这里设置title 偏移
+        [leftButtomButton setTitle:[dict objectForKey:@"movie_name"] forState:UIControlStateNormal];
+    }
     
 
 }
