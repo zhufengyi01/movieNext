@@ -140,6 +140,9 @@
 		006739591AA491250087C240 /* UIScrollView+MJRefresh.m in Sources */ = {isa = PBXBuildFile; fileRef = 006739501AA491250087C240 /* UIScrollView+MJRefresh.m */; };
 		0067395A1AA491250087C240 /* UIView+MJExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 006739521AA491250087C240 /* UIView+MJExtension.m */; };
 		0067395E1AA49F560087C240 /* SearchmovieTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0067395D1AA49F560087C240 /* SearchmovieTableViewCell.m */; };
+		009A27B91AA6DBDA0001690C /* movie_icon_backgroud_color.png in Resources */ = {isa = PBXBuildFile; fileRef = 009A27B61AA6DBDA0001690C /* movie_icon_backgroud_color.png */; };
+		009A27BA1AA6DBDA0001690C /* movie_icon_backgroud_color@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 009A27B71AA6DBDA0001690C /* movie_icon_backgroud_color@2x.png */; };
+		009A27BB1AA6DBDA0001690C /* movie_icon_backgroud_color@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 009A27B81AA6DBDA0001690C /* movie_icon_backgroud_color@3x.png */; };
 		00AA53091AA2C3F4004096F8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 00AA53081AA2C3F4004096F8 /* main.m */; };
 		00AA530C1AA2C3F4004096F8 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 00AA530B1AA2C3F4004096F8 /* AppDelegate.m */; };
 		00AA530F1AA2C3F4004096F8 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00AA530E1AA2C3F4004096F8 /* ViewController.m */; };
@@ -409,6 +412,9 @@
 		006739521AA491250087C240 /* UIView+MJExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+MJExtension.m"; sourceTree = "<group>"; };
 		0067395C1AA49F560087C240 /* SearchmovieTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchmovieTableViewCell.h; sourceTree = "<group>"; };
 		0067395D1AA49F560087C240 /* SearchmovieTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchmovieTableViewCell.m; sourceTree = "<group>"; };
+		009A27B61AA6DBDA0001690C /* movie_icon_backgroud_color.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = movie_icon_backgroud_color.png; sourceTree = "<group>"; };
+		009A27B71AA6DBDA0001690C /* movie_icon_backgroud_color@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "movie_icon_backgroud_color@2x.png"; sourceTree = "<group>"; };
+		009A27B81AA6DBDA0001690C /* movie_icon_backgroud_color@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "movie_icon_backgroud_color@3x.png"; sourceTree = "<group>"; };
 		00AA53031AA2C3F4004096F8 /* movienext.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = movienext.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		00AA53071AA2C3F4004096F8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00AA53081AA2C3F4004096F8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -673,6 +679,9 @@
 		000B08FB1AA2EB8C00B8D13A /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				009A27B61AA6DBDA0001690C /* movie_icon_backgroud_color.png */,
+				009A27B71AA6DBDA0001690C /* movie_icon_backgroud_color@2x.png */,
+				009A27B81AA6DBDA0001690C /* movie_icon_backgroud_color@3x.png */,
 				00572C811AA405F50041D451 /* loading_roll_image.png */,
 				00572C891AA4299C0041D451 /* tabbar_backgroud_color.png */,
 				00572C821AA405F50041D451 /* loading_roll_image@2x.png */,
@@ -1463,6 +1472,7 @@
 				000B09B61AA3029800B8D13A /* movie_tab_butten（gray）.png in Resources */,
 				000B099C1AA3029800B8D13A /* login out@3x.png in Resources */,
 				00AA544F1AA2C526004096F8 /* TencentOpenApi_IOS_Bundle.bundle in Resources */,
+				009A27BA1AA6DBDA0001690C /* movie_icon_backgroud_color@2x.png in Resources */,
 				000B09D91AA3029800B8D13A /* three switch@3x.png in Resources */,
 				00AA54481AA2C525004096F8 /* UMSLoginViewController.xib in Resources */,
 				000B09D21AA3029800B8D13A /* single_switch@3x.png in Resources */,
@@ -1472,7 +1482,9 @@
 				000B09131AA2EB8C00B8D13A /* tabbar_icon_mine@2x.png in Resources */,
 				000B09861AA3029800B8D13A /* feed_tab_butten（gray).png in Resources */,
 				000B09CF1AA3029800B8D13A /* single_switch(gray)@2x.png in Resources */,
+				009A27B91AA6DBDA0001690C /* movie_icon_backgroud_color.png in Resources */,
 				000B09B01AA3029800B8D13A /* me_tab_butten@2x.png in Resources */,
+				009A27BB1AA6DBDA0001690C /* movie_icon_backgroud_color@3x.png in Resources */,
 				00AA54471AA2C525004096F8 /* UMShareEditViewControlleriPad.xib in Resources */,
 				000B09D41AA3029800B8D13A /* slogan@2x.png in Resources */,
 				000B09A81AA3029800B8D13A /* login_button_sina@3x.png in Resources */,

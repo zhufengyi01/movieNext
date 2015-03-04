@@ -97,7 +97,7 @@
 }
 -(void)createNewView
 {
-    _NewMoviewTableView=[[UITableView alloc]initWithFrame:CGRectMake(0,0, kDeviceWidth, kDeviceHeight)];
+    _NewMoviewTableView=[[UITableView alloc]initWithFrame:CGRectMake(0,kHeightNavigation, kDeviceWidth, kDeviceHeight)];
     _NewMoviewTableView.delegate=self;
     _NewMoviewTableView.dataSource=self;
     _NewMoviewTableView.hidden=YES;
@@ -118,10 +118,10 @@
     UserDataCenter  *userCenter=[UserDataCenter shareInstance];
     NSDictionary *parameters = @{@"user_id":@"18", @"page":[NSString stringWithFormat:@"%d",page]};
     NSString * section;
-    if (segment.selectedSegmentIndex==0) {  // 最新
+    if (segment.selectedSegmentIndex==1) {  // 最新
         section=@"movieStage/listRecently";
     }
-    else if(segment.selectedSegmentIndex==1) //热门
+    else if(segment.selectedSegmentIndex==0) //热门
     {
         section= @"hot/list";
     }
@@ -176,13 +176,51 @@
 -(CGFloat )tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     if (segment.selectedSegmentIndex==0) {
         if (tableView==_HotMoVieTableView) {
-            return 200;
+            float hight;
+            if (_hotDataArray.count>indexPath.row) {
+                
+
+            float  h=   [[[[_hotDataArray  objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] objectForKey:@"h"] floatValue];
+            float w=   [[[[_hotDataArray  objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] objectForKey:@"w"] floatValue];
+            if (w==0||h==0) {
+                 hight= kDeviceWidth+45;
+            }
+             if (w>h) {
+                hight= kDeviceWidth+45;
+            }
+            else if(h>w)
+            {
+                 hight=  (h/w) *kDeviceWidth;
+            }
+            }
+            NSLog(@"============  hight  for  row  =====%f",hight);
+            return hight;
         }
     }
     else if (segment.selectedSegmentIndex==1)
     {
         if (tableView==_NewMoviewTableView) {
-            return 200;
+            float hight;
+            if (_newDataArray.count>indexPath.row) {
+            
+          //  return 200;
+            float  h=   [[[[_newDataArray  objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] objectForKey:@"h"] floatValue];
+            float w=   [[[[_newDataArray  objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] objectForKey:@"w"] floatValue];
+            if (w==0||h==0) {
+                hight= kDeviceWidth+90;
+            }
+            if (w>h) {
+                hight= kDeviceWidth+90;
+            }
+            else if(h>w)
+            {
+                hight=  (h/w) *kDeviceWidth+90;
+            }
+            }
+            NSLog(@"============  hight  for  row  =====%f",hight);
+
+            return hight;
+
         }
     }
     return 200.0f;
@@ -196,10 +234,13 @@
         if (!cell) {
             cell=[[CommonStageCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
             cell.selectionStyle=UITableViewCellSelectionStyleNone;
+            cell.backgroundColor=View_BackGround;
         }
 
         if (_hotDataArray.count>indexPath.row) {
-        [cell setCellValue:[[_hotDataArray  objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"]];
+            cell.pageType=NSPageSourceTypeMainHotController;
+        //[cell setCellValue:[[_hotDataArray  objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"]];
+            [cell setCellValue:[[_hotDataArray objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] indexPath:indexPath.row];
         }
         return cell;
     }
@@ -210,14 +251,32 @@
         if (!cell) {
             cell=[[CommonStageCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
             cell.selectionStyle=UITableViewCellSelectionStyleNone;
+            cell.backgroundColor=View_BackGround;
+            
         }
         if (_newDataArray.count>indexPath.row) {
-        [cell setCellValue:[[_newDataArray objectAtIndex:indexPath.row ] objectForKey:@"stageinfo"]];
+            cell.pageType=NSPageSourceTypeMainNewController;
+         //[cell setCellValue:[[_newDataArray objectAtIndex:indexPath.row ] objectForKey:@"stageinfo"]];
+            [cell setCellValue:[[_newDataArray objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"]indexPath:indexPath.row];
         }
         return  cell;
     }
     //cell.textLabel.text=@"1212";
     return nil;
+    
+}
+
+#pragma  mark  =====ButtonClick 
+
+-(void)dealMovieButtonClick:(UIButton  *) button{
+    
+}
+-(void)ScreenButtonClick:(UIButton  *) button
+{
+    
+}
+-(void)addMarkButtonClick:(UIButton  *) button
+{
     
 }
 
