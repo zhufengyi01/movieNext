@@ -51,3 +51,7 @@
 4. 友盟登录了之后使用afnetworking请求api, 进行跳转
 
 
+
+## problem
+AFNetworking 有的时候请求了不执行回调, 可能是超时了, 或者是什么错误, 就是请求失败了
+首页两个tableview的头部frame位置不一样
