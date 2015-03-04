@@ -42,7 +42,7 @@
     [self initData];
     [self createHotView];
     [self createNewView];
-    //[self creatLoadView];
+    [self creatLoadView];
     [self requestData];
     
     
@@ -73,16 +73,15 @@
       {
           _NewMoviewTableView.hidden=YES;
           _HotMoVieTableView.hidden=NO;
-          if (_newDataArray.count==0) {
+          if (_hotDataArray.count==0) {
               [self requestData];
           }
-          
       }
      else if(seg.selectedSegmentIndex==1)
      {
         _HotMoVieTableView.hidden=YES;
          _NewMoviewTableView.hidden=NO;
-         if (_hotDataArray.count==0) {
+         if (_newDataArray.count==0) {
              [self requestData];
          }
      }
@@ -129,13 +128,14 @@
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     //    [manager POST:[NSString stringWithFormat:@"%@/movieStage/listRecently", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
     [manager POST:[NSString stringWithFormat:@"%@/%@", kApiBaseUrl, section] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [loadView stopAnimation];
+        loadView.hidden=YES;
         NSMutableArray  *Detailarray=[responseObject objectForKey:@"detail"];
         if (segment.selectedSegmentIndex==0) {
             if (_hotDataArray ==nil) {
                 _hotDataArray=[[NSMutableArray alloc]init];
             }
-            NSLog(@"最新数据 JSON: %@", responseObject);
-
+            NSLog(@"热门数据 JSON: %@", responseObject);
             [_hotDataArray addObjectsFromArray:Detailarray];
             [_HotMoVieTableView reloadData];
 
@@ -145,8 +145,7 @@
             if (_newDataArray==nil) {
                 _newDataArray=[[NSMutableArray alloc]init];
             }
-            NSLog(@"热门数据 JSON: %@", responseObject);
-
+            NSLog(@"最新数据 JSON: %@", responseObject);
             [_newDataArray addObjectsFromArray:Detailarray];
             [_NewMoviewTableView reloadData];
         }
@@ -161,14 +160,14 @@
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (segment.selectedSegmentIndex==0) {
-        if (tableView==_NewMoviewTableView) {
+        if (tableView==_HotMoVieTableView) {
            
             return  10;
         }
     }
     else if (segment.selectedSegmentIndex==1)
     {
-        if (tableView==_HotMoVieTableView) {
+        if (tableView==_NewMoviewTableView) {
             return 10;
         }
     }
@@ -176,13 +175,13 @@
 }
 -(CGFloat )tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     if (segment.selectedSegmentIndex==0) {
-        if (tableView==_NewMoviewTableView) {
+        if (tableView==_HotMoVieTableView) {
             return 200;
         }
     }
     else if (segment.selectedSegmentIndex==1)
     {
-        if (tableView==_HotMoVieTableView) {
+        if (tableView==_NewMoviewTableView) {
             return 200;
         }
     }
@@ -191,26 +190,34 @@
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 
-    static NSString *cellID=@"CELL";
-    CommonStageCell  *cell= (CommonStageCell *)[tableView dequeueReusableCellWithIdentifier:cellID];
-    if (!cell) {
-        cell=[[CommonStageCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
-        cell.selectionStyle=UITableViewCellSelectionStyleNone;
-    }
     if  (segment.selectedSegmentIndex==0) {
+        static NSString *cellID=@"CELL1";
+        CommonStageCell  *cell= (CommonStageCell *)[tableView dequeueReusableCellWithIdentifier:cellID];
+        if (!cell) {
+            cell=[[CommonStageCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+            cell.selectionStyle=UITableViewCellSelectionStyleNone;
+        }
+
         if (_hotDataArray.count>indexPath.row) {
         [cell setCellValue:[[_hotDataArray  objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"]];
-            NSLog(@"======cell for  row  =======%@",[[_hotDataArray  objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"]);
         }
+        return cell;
     }
     else if (segment.selectedSegmentIndex==1)
     {
+        static NSString *cellID=@"CELL2";
+        CommonStageCell  *cell= (CommonStageCell *)[tableView dequeueReusableCellWithIdentifier:cellID];
+        if (!cell) {
+            cell=[[CommonStageCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+            cell.selectionStyle=UITableViewCellSelectionStyleNone;
+        }
         if (_newDataArray.count>indexPath.row) {
         [cell setCellValue:[[_newDataArray objectAtIndex:indexPath.row ] objectForKey:@"stageinfo"]];
         }
+        return  cell;
     }
-    cell.textLabel.text=@"1212";
-    return cell;
+    //cell.textLabel.text=@"1212";
+    return nil;
     
 }
 

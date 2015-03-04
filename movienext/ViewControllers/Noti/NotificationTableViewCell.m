@@ -37,7 +37,7 @@
     Zanlable.textColor=VGray_color;
     [self.contentView addSubview:Zanlable];
     
-    dateLable=[ZCControl createLabelWithFrame:CGRectMake(75, 40, 120, 20) Font:16 Text:@"时间"];
+    dateLable=[ZCControl createLabelWithFrame:CGRectMake(75, 50, 120, 20) Font:16 Text:@"时间"];
     dateLable.textColor=VGray_color;
     dateLable.textAlignment=NSTextAlignmentLeft;
     [self.contentView addSubview:dateLable];
@@ -63,7 +63,7 @@
     }
     
     NSString  *nameStr=[dict objectForKey:@"username"];
-    CGSize  Namesize =[nameStr boundingRectWithSize:CGSizeMake(kDeviceWidth-100-110, MAXFLOAT) options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes:[NSDictionary dictionaryWithObject:titleLable.font forKey:NSFontAttributeName] context:nil].size;
+    CGSize  Namesize =[nameStr boundingRectWithSize:CGSizeMake(kDeviceWidth-100-50, MAXFLOAT) options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes:[NSDictionary dictionaryWithObject:titleLable.font forKey:NSFontAttributeName] context:nil].size;
     titleLable.frame=CGRectMake(titleLable.frame.origin.x, titleLable.frame.origin.y, titleLable.frame.size.width, Namesize.height);
     Zanlable.frame=CGRectMake(titleLable.frame.origin.x+Namesize.width+10, Zanlable.frame.origin.y, 40, 20);
     if ([dict objectForKey:@"create_time"]) {
