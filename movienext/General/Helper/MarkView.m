@@ -20,7 +20,7 @@
 -(void)createUI
 {
     //左视图
-    _LeftImageView =[[UIImageView alloc]initWithFrame:CGRectMake(0, 0,15, 15)];
+    _LeftImageView =[[UIImageView alloc]initWithFrame:CGRectMake(0, 0,20, 20)];
     _LeftImageView.layer.borderWidth=0.5;
     _LeftImageView.layer.cornerRadius=3;
     _LeftImageView.layer.masksToBounds=YES;
@@ -28,7 +28,7 @@
     [self addSubview:_LeftImageView];
     
     //右视图
-    rightView=[[UIView alloc]initWithFrame:CGRectMake(18, 0,200,30)];
+    rightView=[[UIView alloc]initWithFrame:CGRectMake(23, 0,200,30)];
     rightView.backgroundColor=[[UIColor blackColor] colorWithAlphaComponent:0.5];
     rightView.layer.cornerRadius=3;
     rightView.layer.masksToBounds=YES;
@@ -41,6 +41,7 @@
     
     ZanImageView=[ZCControl createImageViewWithFrame:CGRectMake(TitleLable.frame.size.width, 0, 11,11) ImageName:@""];
     [rightView addSubview:TitleLable];
+    
     _ZanNumLable=[ZCControl createLabelWithFrame:CGRectMake(TitleLable.frame.size.width, 0, 15, 15) Font:12 Text:@"15"];
     _ZanNumLable.textColor=[UIColor whiteColor];
     [rightView addSubview:_ZanNumLable];

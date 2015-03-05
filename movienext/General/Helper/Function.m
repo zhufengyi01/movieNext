@@ -261,5 +261,23 @@
     string = [string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet ]];
     return string;
 }
+//计算字符串高度
+
+-(CGFloat)heightWithString:(NSString *)string width:(CGFloat)width  fontsize:(CGFloat)fontsize
+{
+    
+    CGRect Rect=[string boundingRectWithSize:CGSizeMake(width, 0) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:fontsize]} context:nil];
+    
+    //float imageSmallHight=0;
+    return Rect.size.height;
+}
++(CGFloat)widthWithString:(NSString *)string hight:(CGFloat)hight  fontsize:(CGFloat)fontsize;
+{
+    CGRect Rect=[string boundingRectWithSize:CGSizeMake(hight, 0) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:fontsize]} context:nil];
+    
+    //float imageSmallHight=0;
+    return Rect.size.width;
+}
+
 
 @end

@@ -32,7 +32,8 @@ typedef NS_ENUM(NSInteger, NSPageSourceType)
     UILabel   *UserNameLable;
     UILabel   *TimeLable;
     UIButton  *ZanButton;
-    MarkView *markView ;   //字幕标签视图
+    //MarkView *markView ;   //字幕标签视
+    NSMutableArray   *_MarkMuatableArray;
  }
 @property (nonatomic,strong ) NSMutableArray   *WeibosArray;   //小标签的数组，在多个标签的时候使用这个
 @property (nonatomic,strong )NSDictionary      *weiboDict;     //只有一个标签的时候传递这个参数
