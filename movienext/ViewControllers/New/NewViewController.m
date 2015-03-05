@@ -176,6 +176,7 @@
     }
     return 0;
 }
+
 -(CGFloat )tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     if (segment.selectedSegmentIndex==0) {
         if (tableView==_HotMoVieTableView) {

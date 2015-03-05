@@ -147,36 +147,40 @@
         }
         
         for ( int i=0;i<_WeibosArray.count ; i++) {
-            //获取每个mark 坐标
-           
+        
             MarkView *markView=[[MarkView alloc]initWithFrame:CGRectMake(10, 10, 100, 30)];
+
+#warning 暂时设为YES
+            markView.clipsToBounds = YES;
+            
             markView.tag=1000+i;
            [BgView1 addSubview:markView];
                     
             NSDictionary  *weibodict=[NSDictionary dictionaryWithDictionary:[_WeibosArray  objectAtIndex:i]];
-            
             float  x=[[weibodict objectForKey:@"x"]floatValue ];
             float  y=[[weibodict objectForKey:@"y"]floatValue ];
             NSLog(@" ==== =mark  view  ===%f  ==== mark view =====%f",x,y);
             NSString  *weiboTitleString=[weibodict  objectForKey:@"topic"];
             NSLog(@"weibo dict ======%@",weibodict);
-            //计算markview的宽高
-          CGSize Msize=[weiboTitleString sizeWithFont:markView.TitleLable.font constrainedToSize:CGSizeMake(200, MAXFLOAT)];
-            //宽度<200
-           if (Msize.width<kDeviceWidth/2) {
-                markView.frame=CGRectMake((x*kDeviceWidth)/100-Msize.width, (y*kDeviceWidth)/100+(Msize.height/2), Msize.width+30, Msize.height);
-            }
-          else {
-                markView.frame=CGRectMake((x*kDeviceWidth)/100-Msize.width, (y*kDeviceWidth)/100+(Msize.height/2),kDeviceWidth/2,Msize.height);
-            }
-            markView.TitleLable.frame=CGRectMake(0,0, Msize.width ,Msize.height);
-            NSLog(@"================ weiboTitleString  ======%@ ",weiboTitleString);
-            markView.TitleLable.text=weiboTitleString;
             
+            
+            
+            //计算markview的宽高
+            CGSize  Msize=[weiboTitleString boundingRectWithSize:CGSizeMake(kDeviceWidth/2,MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:markView.TitleLable.font forKey:NSFontAttributeName] context:nil].size;
+        
+            NSLog(@"size= %f %f", Msize.width, Msize.height);
+            
+            //宽度<200
+        //   if (Msize.width<kDeviceWidth/2) {
+                markView.frame=CGRectMake((x*kDeviceWidth)/100-Msize.width, (y*kDeviceWidth)/100+(Msize.height/2), Msize.width+50, Msize.height+15);
+          //  }
+          //else {
+            //    markView.frame=CGRectMake((x*kDeviceWidth)/100-Msize.width, (y*kDeviceWidth)/100+(Msize.height/2),kDeviceWidth/2,Msize.height);
+            //}
+            markView.TitleLable.text=weiboTitleString;            
             ///显示标签的头像
             [ markView.LeftImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kUrlAvatar,[weibodict objectForKey:@"avatar"]]]];
             
-            markView.TitleLable.backgroundColor=[[UIColor blackColor ]colorWithAlphaComponent:0.5];
             if ([[weibodict  objectForKey:@"ups"] intValue]>0) {
                 CGRect   mFrame=markView.frame;
                 mFrame.size.width=mFrame.size.width+10;

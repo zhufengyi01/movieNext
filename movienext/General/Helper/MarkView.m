@@ -35,17 +35,27 @@
     [self addSubview:_rightView];
     
     //标题，点赞的view
-    TitleLable=[ZCControl createLabelWithFrame:CGRectMake(0,0, 120, 30) Font:12 Text:@"标题"];
+    _TitleLable=[ZCControl createLabelWithFrame:CGRectMake(0,0, 120, 30) Font:12 Text:@"标题"];
     //TitleLable.backgroundColor=[UIColor whiteColor];
-    TitleLable.textColor=[UIColor whiteColor];
-    [_rightView addSubview:TitleLable];
+    _TitleLable.textColor=[UIColor whiteColor];
+    [_rightView addSubview:_TitleLable];
     
-    ZanImageView=[ZCControl createImageViewWithFrame:CGRectMake(TitleLable.frame.size.width, 0, 11,11) ImageName:@"tag_like_icon.png"];
-    [_rightView addSubview:TitleLable];
+    _ZanImageView=[ZCControl createImageViewWithFrame:CGRectMake(_TitleLable.frame.size.width+3, 0, 11,11) ImageName:@"tag_like_icon.png"];
+    [_rightView addSubview:_ZanImageView];
     
-    _ZanNumLable=[ZCControl createLabelWithFrame:CGRectMake(TitleLable.frame.size.width, 0, 15, 15) Font:12 Text:@"15"];
+    _ZanNumLable=[ZCControl createLabelWithFrame:CGRectMake(_TitleLable.frame.size.width+10, 0, 15, 15) Font:12 Text:@"15"];
     _ZanNumLable.textColor=[UIColor whiteColor];
     [_rightView addSubview:_ZanNumLable];
+}
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    _TitleLable.frame=CGRectMake(0,0,self.frame.size.width-20, self.frame.size.height-5);
+    _ZanImageView.frame=CGRectMake(_TitleLable.frame.origin.x+_TitleLable.frame.size.width+2, 3,11,11 );
+    _ZanNumLable.frame=CGRectMake(_ZanImageView.frame.origin.x+_ZanImageView.frame.size.width+2, 3, 15, 15);
+      
+    
+    //设置子view的frame
 }
 
 /*
