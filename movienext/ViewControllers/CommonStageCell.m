@@ -18,7 +18,7 @@
         m_frame=self.frame;
        // NSLog(@"=========打印cell 的frame ====%f");
         // 初始化放置标签的数组，每次创建的时候讲markview 添加到这个数组中
-        _MarkMuatableArray =[[NSMutableArray alloc]init];
+       // _MarkMuatableArray =[[NSMutableArray alloc]init];
         [self CreateUI];
     }
     return self;
@@ -153,32 +153,31 @@
             markView.tag=1000+i;
            [BgView1 addSubview:markView];
             
-            
-            if (_MarkMuatableArray==nil) {
-                _MarkMuatableArray =[[NSMutableArray alloc]init];
-            }
-            [_MarkMuatableArray addObject:markView];
+//            if (_MarkMuatableArray==nil) {
+//                _MarkMuatableArray =[[NSMutableArray alloc]init];
+//            }
+//            [_MarkMuatableArray addObject:markView];
             
             NSDictionary  *weibodict=[NSDictionary dictionaryWithDictionary:[_WeibosArray  objectAtIndex:i]];
             
-            float  x=([[weibodict objectForKey:@"x"]floatValue ]*kDeviceWidth)/100;
-            float  y=([[weibodict objectForKey:@"y"]floatValue ]*kDeviceWidth)/100;
+            float  x=[[weibodict objectForKey:@"x"]floatValue ];
+            float  y=[[weibodict objectForKey:@"y"]floatValue ];
             NSLog(@" ==== =mark  view  ===%f  ==== mark view =====%f",x,y);
             NSString  *weiboTitleString=[weibodict  objectForKey:@"topic"];
             NSLog(@"weibo dict ======%@",weibodict);
             //计算markview的宽高
-          //CGRect  Msize=[weiboTitleString boundingRectWithSize:CGSizeMake(200, MAXFLOAT) options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes:[NSDictionary dictionaryWithObject:markView.TitleLable.font forKey:NSFontAttributeName]  context:nil].size;
-            //CGSize  MSzie=CGSizeMake(200, 30);
-           // CGSize Msize=[weiboTitleString sizeWithFont:markView.TitleLable.font constrainedToSize:CGSizeMake(200, MAXFLOAT)];
-            
+          CGSize Msize=[weiboTitleString sizeWithFont:markView.TitleLable.font constrainedToSize:CGSizeMake(200, MAXFLOAT)];
             //宽度<200
            if (Msize.width<kDeviceWidth/2) {
-                markView.frame=CGRectMake(x-80, y, Msize.width+30, Msize.height);
+                markView.frame=CGRectMake((x*kDeviceWidth)/100-Msize.width, (y*kDeviceWidth)/100+(Msize.height/2), Msize.width+30, Msize.height);
             }
           else {
-                markView.frame=CGRectMake(x-80, y,kDeviceWidth/2,Msize.height);
+                markView.frame=CGRectMake((x*kDeviceWidth)/100-Msize.width, (y*kDeviceWidth)/100+(Msize.height/2),kDeviceWidth/2,Msize.height);
             }
+            markView.TitleLable.frame=CGRectMake(0,0, Msize.width ,Msize.height);
+            NSLog(@"================ weiboTitleString  ======%@ ",weiboTitleString);
             markView.TitleLable.text=weiboTitleString;
+            
             ///显示标签的头像
             [ markView.LeftImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kUrlAvatar,[weibodict objectForKey:@"avatar"]]]];
             
@@ -205,6 +204,19 @@
         if ([dict objectForKey:@"stage"]) {
             [MovieLogoImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w100h100",kUrlMoviePoster,[dict objectForKey:@"movie_poster"]]] placeholderImage:[ UIImage imageNamed:@"loading_image_all.png"]];
         }
+        
+        //遍历bgview1，删除bgview 的子视图
+        for (UIView  *Mview in  BgView1.subviews) {
+            if ([Mview isKindOfClass:[MarkView class]]) {
+                [Mview  removeFromSuperview];
+            }
+            
+        }
+        float  x=[[_weiboDict objectForKey:@"x"]floatValue ];
+        float  y=[[_weiboDict objectForKey:@"y"]floatValue ];
+
+
+        
     }
 
 }

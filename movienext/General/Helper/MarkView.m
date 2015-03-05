@@ -35,11 +35,12 @@
     [self addSubview:rightView];
     
     //标题，点赞的view
-    TitleLable=[ZCControl createLabelWithFrame:CGRectMake(0,0, 120, 30) Font:12 Text:@"我是标题"];
-    TitleLable.backgroundColor=[UIColor whiteColor];
+    TitleLable=[ZCControl createLabelWithFrame:CGRectMake(0,0, 120, 30) Font:12 Text:@"标题"];
+    //TitleLable.backgroundColor=[UIColor whiteColor];
+    TitleLable.textColor=[UIColor whiteColor];
     [rightView addSubview:TitleLable];
     
-    ZanImageView=[ZCControl createImageViewWithFrame:CGRectMake(TitleLable.frame.size.width, 0, 11,11) ImageName:@""];
+    ZanImageView=[ZCControl createImageViewWithFrame:CGRectMake(TitleLable.frame.size.width, 0, 11,11) ImageName:@"tag_like_icon.png"];
     [rightView addSubview:TitleLable];
     
     _ZanNumLable=[ZCControl createLabelWithFrame:CGRectMake(TitleLable.frame.size.width, 0, 15, 15) Font:12 Text:@"15"];
