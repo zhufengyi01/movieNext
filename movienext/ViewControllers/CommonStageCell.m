@@ -62,18 +62,8 @@
     if (_pageType==NSPageSourceTypeMainHotController) {  //热门
         //循环创建view
         for ( int i=0;i<_WeibosArray.count ; i++) {
-            //获取每个mark 坐标
-            NSDictionary  *weibodict=[NSDictionary dictionaryWithDictionary:[_WeibosArray  objectAtIndex:i]];
-            float  x=[[weibodict objectForKey:@"x"]floatValue ];
-            float  y=[[weibodict objectForKey:@"y"]floatValue ];
-         
-          MarkView  *markView = [[MarkView alloc]initWithFrame:CGRectMake(x, y,100,30)];
-            NSString  *weiboTitleString=[weibodict  objectForKey:@"topic"];
-            
-           // CGRect  MSzie=[weiboTitleString boundingRectWithSize:CGSizeMake(kDeviceWidth/2, MAXFLOAT) options::(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes::[NSDictionary dictionaryWithObject:CpriceLable.font forKey:NSFontAttributeName]  context:nil].size;
+           markView = [[MarkView alloc]initWithFrame:CGRectMake(0, 0,100,30)];
                 [ self addSubview:markView];
-            
-                //[ markView.LeftImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",[_WeibosA
         }
     
     }
@@ -134,6 +124,7 @@
     if ([dict  objectForKey:@"movie_name"]) {  //电影名字，这里设置title 偏移
         [leftButtomButton setTitle:[dict objectForKey:@"movie_name"] forState:UIControlStateNormal];
     }
+    
    
     if (_pageType  ==NSPageSourceTypeMainHotController) {  //热门
          BgView0.frame=CGRectMake(0, 0, 0, 0);
@@ -143,6 +134,44 @@
         if ([dict objectForKey:@"stage"]) {
             [MovieLogoImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w100h100",kUrlMoviePoster,[dict objectForKey:@"movie_poster"]]] placeholderImage:[ UIImage imageNamed:@"loading_image_all.png"]];
         }
+        
+        for ( int i=0;i<_WeibosArray.count ; i++) {
+            //获取每个mark 坐标
+            NSDictionary  *weibodict=[NSDictionary dictionaryWithDictionary:[_WeibosArray  objectAtIndex:i]];
+            float  x=[[weibodict objectForKey:@"x"]floatValue ];
+            float  y=[[weibodict objectForKey:@"y"]floatValue ];
+            
+            markView = [[MarkView alloc]initWithFrame:CGRectMake(x, y,100,30)];
+            [ self addSubview:markView];
+            NSString  *weiboTitleString=[weibodict  objectForKey:@"topic"];
+            NSLog(@"weibo dict ======%@",weibodict);
+            //计算markview的宽高
+            CGSize MSzie=[weiboTitleString boundingRectWithSize:CGSizeMake(kDeviceWidth/2, MAXFLOAT) options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes:[NSDictionary dictionaryWithObject:markView.TitleLable.font forKey:NSFontAttributeName]  context:nil].size;
+           // CGSize  MSzie=CGSizeMake(200, 30);
+            //宽度<200
+            if (MSzie.width<kDeviceWidth/2) {
+                markView.frame=CGRectMake(x, y, MSzie.width+30, MSzie.height);
+            }
+          else {
+                markView.frame=CGRectMake(x, y,kDeviceWidth/2,MSzie.height);
+ 
+            }
+            markView.TitleLable.text=[weibodict objectForKey:@"topic"];
+        ///显示标签的头像
+            [ markView.LeftImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kUrlAvatar,[weibodict objectForKey:@"avatar"]]]];
+            markView.TitleLable.text=weiboTitleString;
+            if ([[weibodict  objectForKey:@"ups"] intValue]>0) {
+                CGRect   mFrame=markView.frame;
+                mFrame.size.width=mFrame.size.width+10;
+                markView.frame=mFrame;
+                markView.ZanNumLable.text=[weibodict objectForKey:@"ups"];
+            }
+            else{
+                markView.ZanNumLable.hidden=YES;
+            }
+        }
+
+        
     }
     else if(_pageType==NSPageSourceTypeMainNewController)  //最新
     {
