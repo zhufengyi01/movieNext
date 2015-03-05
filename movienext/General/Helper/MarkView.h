@@ -14,12 +14,13 @@
 @interface MarkView : UIView
 {
     CGRect  m_frame;
-    UIView  *rightView;  //又视图
+    //UIView  *rightView;  //又视图
     UILabel  *TitleLable;
     UIImageView  *ZanImageView;
 }
 
 @property (nonatomic,strong) UIImageView  *LeftImageView;
+@property(nonatomic,strong)UIView    *rightView;  //又视图.包含titlelable 和赞的图片，赞的个数。
 @property (nonatomic,strong) UILabel      *TitleLable;
 @property (nonatomic,strong) UILabel      *ZanNumLable;
 @property (nonatomic,assign) id <MarkViewDelegate> delegate;

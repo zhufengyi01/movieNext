@@ -149,15 +149,10 @@
         for ( int i=0;i<_WeibosArray.count ; i++) {
             //获取每个mark 坐标
            
-            MarkView *markView=[[MarkView alloc]init];
+            MarkView *markView=[[MarkView alloc]initWithFrame:CGRectMake(10, 10, 100, 30)];
             markView.tag=1000+i;
            [BgView1 addSubview:markView];
-            
-//            if (_MarkMuatableArray==nil) {
-//                _MarkMuatableArray =[[NSMutableArray alloc]init];
-//            }
-//            [_MarkMuatableArray addObject:markView];
-            
+                    
             NSDictionary  *weibodict=[NSDictionary dictionaryWithDictionary:[_WeibosArray  objectAtIndex:i]];
             
             float  x=[[weibodict objectForKey:@"x"]floatValue ];
@@ -204,18 +199,49 @@
         if ([dict objectForKey:@"stage"]) {
             [MovieLogoImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w100h100",kUrlMoviePoster,[dict objectForKey:@"movie_poster"]]] placeholderImage:[ UIImage imageNamed:@"loading_image_all.png"]];
         }
-        
+        float  x=[[_weiboDict objectForKey:@"x"]floatValue ];
+        float  y=[[_weiboDict objectForKey:@"y"]floatValue ];
         //遍历bgview1，删除bgview 的子视图
         for (UIView  *Mview in  BgView1.subviews) {
             if ([Mview isKindOfClass:[MarkView class]]) {
                 [Mview  removeFromSuperview];
             }
-            
         }
-        float  x=[[_weiboDict objectForKey:@"x"]floatValue ];
-        float  y=[[_weiboDict objectForKey:@"y"]floatValue ];
+        //  创建静态标签
+        MarkView *markView=[[MarkView alloc]initWithFrame:CGRectMake(10, 10, 100, 30)];
+       // markView.TitleLable.frame=CGRectMake(0,0, Msize.width ,Msize.height);
+         markView.rightView.layer.borderWidth=1;
+        markView.rightView.layer.borderColor=VBlue_color.CGColor;
 
-
+        [BgView1 addSubview:markView];
+       
+        NSString  *weiboTitleString=[_weiboDict objectForKey:@"topic"];
+        CGSize Msize=[weiboTitleString sizeWithFont:markView.TitleLable.font constrainedToSize:CGSizeMake(200, MAXFLOAT)];
+        //宽度屏幕1/2
+        if (Msize.width<kDeviceWidth/2) {
+            markView.frame=CGRectMake((x*kDeviceWidth)/100-Msize.width, (y*kDeviceWidth)/100-(Msize.height/2), Msize.width+30, Msize.height);
+        }
+        else {
+            markView.frame=CGRectMake((x*kDeviceWidth)/100-Msize.width, (y*kDeviceWidth)/100-(Msize.height/2),kDeviceWidth/2,Msize.height);
+        }
+        
+        NSLog(@"================ weiboTitleString  ======%@ ",weiboTitleString);
+        NSLog(@"  mark  view  x ======%f   mark  view   y====%f",markView.frame.origin.x,markView.frame.origin.y);
+        markView.TitleLable.text=weiboTitleString;
+        
+        ///显示标签的头像
+        [ markView.LeftImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kUrlAvatar,[_weiboDict objectForKey:@"avatar"]]]];
+        
+        markView.TitleLable.backgroundColor=[[UIColor blackColor ]colorWithAlphaComponent:0.5];
+        if ([[_weiboDict  objectForKey:@"ups"] intValue]>0) {
+            CGRect   mFrame=markView.frame;
+            mFrame.size.width=mFrame.size.width+10;
+            markView.frame=mFrame;
+            markView.ZanNumLable.text=[_weiboDict objectForKey:@"ups"];
+        }
+        else{
+            markView.ZanNumLable.hidden=YES;
+        }
         
     }
 

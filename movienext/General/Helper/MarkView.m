@@ -28,24 +28,24 @@
     [self addSubview:_LeftImageView];
     
     //右视图
-    rightView=[[UIView alloc]initWithFrame:CGRectMake(23, 0,200,30)];
-    rightView.backgroundColor=[[UIColor blackColor] colorWithAlphaComponent:0.5];
-    rightView.layer.cornerRadius=3;
-    rightView.layer.masksToBounds=YES;
-    [self addSubview:rightView];
+    _rightView=[[UIView alloc]initWithFrame:CGRectMake(23, 0,200,30)];
+    _rightView.backgroundColor=[[UIColor blackColor] colorWithAlphaComponent:0.7];
+    _rightView.layer.cornerRadius=3;
+    _rightView.layer.masksToBounds=YES;
+    [self addSubview:_rightView];
     
     //标题，点赞的view
     TitleLable=[ZCControl createLabelWithFrame:CGRectMake(0,0, 120, 30) Font:12 Text:@"标题"];
     //TitleLable.backgroundColor=[UIColor whiteColor];
     TitleLable.textColor=[UIColor whiteColor];
-    [rightView addSubview:TitleLable];
+    [_rightView addSubview:TitleLable];
     
     ZanImageView=[ZCControl createImageViewWithFrame:CGRectMake(TitleLable.frame.size.width, 0, 11,11) ImageName:@"tag_like_icon.png"];
-    [rightView addSubview:TitleLable];
+    [_rightView addSubview:TitleLable];
     
     _ZanNumLable=[ZCControl createLabelWithFrame:CGRectMake(TitleLable.frame.size.width, 0, 15, 15) Font:12 Text:@"15"];
     _ZanNumLable.textColor=[UIColor whiteColor];
-    [rightView addSubview:_ZanNumLable];
+    [_rightView addSubview:_ZanNumLable];
 }
 
 /*
