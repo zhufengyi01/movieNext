@@ -44,9 +44,8 @@
     _ZanNumLable=[ZCControl createLabelWithFrame:CGRectMake(TitleLable.frame.size.width, 0, 15, 15) Font:12 Text:@"15"];
     _ZanNumLable.textColor=[UIColor whiteColor];
     [rightView addSubview:_ZanNumLable];
-    
-    
 }
+
 /*
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.

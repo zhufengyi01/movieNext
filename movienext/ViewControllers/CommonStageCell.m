@@ -10,6 +10,7 @@
 #import "Constant.h"
 #import "UIImageView+WebCache.h"
 #import "ZCControl.h"
+#import "MarkView.h"
 @implementation CommonStageCell
 -(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
@@ -48,9 +49,6 @@
     ZanButton.layer.cornerRadius=2;
     [ZanButton setBackgroundImage:[UIImage imageNamed:@"liked.png"] forState:UIControlStateSelected];
     [BgView0 addSubview:ZanButton];
-
-
-    
 }
 -(void)CreateTopView
 {
@@ -61,6 +59,24 @@
     _MovieImageView =[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, 200)];
     [BgView1 addSubview:_MovieImageView];
     
+    if (_pageType==NSPageSourceTypeMainHotController) {  //热门
+        //循环创建view
+        for ( int i=0;i<_WeibosArray.count ; i++) {
+            //获取每个mark 坐标
+            NSDictionary  *weibodict=[NSDictionary dictionaryWithDictionary:[_WeibosArray  objectAtIndex:i]];
+            float  x=[[weibodict objectForKey:@"x"]floatValue ];
+            float  y=[[weibodict objectForKey:@"y"]floatValue ];
+         
+          MarkView  *markView = [[MarkView alloc]initWithFrame:CGRectMake(x, y,100,30)];
+            NSString  *weiboTitleString=[weibodict  objectForKey:@"topic"];
+            
+           // CGRect  MSzie=[weiboTitleString boundingRectWithSize:CGSizeMake(kDeviceWidth/2, MAXFLOAT) options::(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes::[NSDictionary dictionaryWithObject:CpriceLable.font forKey:NSFontAttributeName]  context:nil].size;
+                [ self addSubview:markView];
+            
+                //[ markView.LeftImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",[_WeibosA
+        }
+    
+    }
     
 }
 -(void)createButtonView
@@ -80,15 +96,16 @@
     [BgView2 addSubview:leftButtomButton];
     
     MovieLogoImageView=[[UIImageView alloc]initWithFrame:CGRectMake(0,0,30, 30)];
-    MovieLogoImageView.layer.cornerRadius=3;
+    MovieLogoImageView.layer.cornerRadius=5;
     [leftButtomButton addSubview:MovieLogoImageView];
     
     
-    ScreenButton =[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-150,8,65,30) ImageName:@"screen_shot share.png" Target:self.superview Action:@selector(ScreenButtonClick:) Title:@""];
+    ScreenButton =[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-150,10,60,25) ImageName:@"screen_shot share.png" Target:self.superview Action:@selector(ScreenButtonClick:) Title:@""];
     [BgView2 addSubview:ScreenButton];
     
-    addMarkButton =[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-75,8,65,30) ImageName:@"add.png" Target:self.superview Action:@selector(addMarkButtonClick:) Title:@""];
+    addMarkButton =[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-75,10,60,25) ImageName:@"add.png" Target:self.superview Action:@selector(addMarkButtonClick:) Title:@""];
     [BgView2 addSubview:addMarkButton];
+    
     
 }
 - (void)awakeFromNib {
@@ -114,10 +131,10 @@
           _MovieImageView.frame=CGRectMake(0,y, kDeviceWidth, (ImgeHight/ImageWith)*kDeviceWidth);
        [_MovieImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w640",kUrlStage,[dict objectForKey:@"stage"]]] placeholderImage:[UIImage imageNamed:@"loading_image_all.png"]];
      }
-    if ([dict objectForKey:@"movie_name"]) {  //电影名字，这里设置title 偏移
+    if ([dict  objectForKey:@"movie_name"]) {  //电影名字，这里设置title 偏移
         [leftButtomButton setTitle:[dict objectForKey:@"movie_name"] forState:UIControlStateNormal];
     }
-
+   
     if (_pageType  ==NSPageSourceTypeMainHotController) {  //热门
          BgView0.frame=CGRectMake(0, 0, 0, 0);
         BgView0.hidden=YES;
@@ -137,9 +154,9 @@
             [MovieLogoImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w100h100",kUrlMoviePoster,[dict objectForKey:@"movie_poster"]]] placeholderImage:[ UIImage imageNamed:@"loading_image_all.png"]];
         }
     }
-        NSLog(@"my dict = %@", dict);
 
 }
+
 -(void)dealMovieButtonClick:(UIButton  *) button{
     
 }

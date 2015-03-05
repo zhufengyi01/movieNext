@@ -73,6 +73,7 @@
       {
           _NewMoviewTableView.hidden=YES;
           _HotMoVieTableView.hidden=NO;
+          [_HotMoVieTableView reloadData];
           if (_hotDataArray.count==0) {
               [self requestData];
           }
@@ -81,6 +82,8 @@
      {
         _HotMoVieTableView.hidden=YES;
          _NewMoviewTableView.hidden=NO;
+         [_NewMoviewTableView reloadData];
+         
          if (_newDataArray.count==0) {
              [self requestData];
          }
@@ -119,7 +122,7 @@
     NSDictionary *parameters = @{@"user_id":@"18", @"page":[NSString stringWithFormat:@"%d",page]};
     NSString * section;
     if (segment.selectedSegmentIndex==1) {  // 最新
-        section=@"movieStage/listRecently";
+        section=@"weibo/listRecently";
     }
     else if(segment.selectedSegmentIndex==0) //热门
     {
@@ -162,13 +165,13 @@
     if (segment.selectedSegmentIndex==0) {
         if (tableView==_HotMoVieTableView) {
            
-            return  10;
+            return _hotDataArray.count;
         }
     }
     else if (segment.selectedSegmentIndex==1)
     {
         if (tableView==_NewMoviewTableView) {
-            return 10;
+            return _newDataArray.count;
         }
     }
     return 0;
@@ -214,7 +217,7 @@
             }
             else if(h>w)
             {
-                hight=  (h/w) *kDeviceWidth+90;
+                hight=  (h/w)*kDeviceWidth+90;
             }
             }
             NSLog(@"============  hight  for  row  =====%f",hight);
@@ -236,10 +239,11 @@
             cell.selectionStyle=UITableViewCellSelectionStyleNone;
             cell.backgroundColor=View_BackGround;
         }
-
+     
         if (_hotDataArray.count>indexPath.row) {
             cell.pageType=NSPageSourceTypeMainHotController;
-        //[cell setCellValue:[[_hotDataArray  objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"]];
+            //小闪动标签的数组
+            cell.WeibosArray=[[_hotDataArray objectAtIndex:indexPath.row]  objectForKey:@"weibos"];
             [cell setCellValue:[[_hotDataArray objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] indexPath:indexPath.row];
         }
         return cell;
@@ -252,11 +256,10 @@
             cell=[[CommonStageCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
             cell.selectionStyle=UITableViewCellSelectionStyleNone;
             cell.backgroundColor=View_BackGround;
-            
         }
         if (_newDataArray.count>indexPath.row) {
             cell.pageType=NSPageSourceTypeMainNewController;
-         //[cell setCellValue:[[_newDataArray objectAtIndex:indexPath.row ] objectForKey:@"stageinfo"]];
+            cell.weiboDict =[[_newDataArray  objectAtIndex:indexPath.row]  objectForKey:@"weibo"];
             [cell setCellValue:[[_newDataArray objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"]indexPath:indexPath.row];
         }
         return  cell;

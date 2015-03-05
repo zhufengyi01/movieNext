@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 @protocol MarkViewDelegate <NSObject>
-   -(void)MarkViewClick;
+ -(void)MarkViewClick;
 @end
 
 @interface MarkView : UIView
