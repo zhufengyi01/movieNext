@@ -46,7 +46,7 @@
     _ZanImageView=[ZCControl createImageViewWithFrame:CGRectMake(0, 0, 0,0) ImageName:@"tag_like_icon.png"];
     [_rightView addSubview:_ZanImageView];
     
-    _ZanNumLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 0,0) Font:12 Text:@"15"];
+    _ZanNumLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 0,0) Font:12 Text:@""];
     _ZanNumLable.textColor=[UIColor whiteColor];
     [_rightView addSubview:_ZanNumLable];
 }
@@ -58,13 +58,15 @@
     //右视图
     _rightView.frame=CGRectMake(23, 0,self.frame.size.width-23 , self.frame.size.height);
 //    标题
-    _TitleLable.frame=CGRectMake(0,0,_rightView.frame.size.width-20, self.frame.size.height);
+    CGSize Tsize=[_TitleLable.text boundingRectWithSize:CGSizeMake(kDeviceWidth/2,MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:_TitleLable.font forKey:NSFontAttributeName] context:nil].size;
+    _TitleLable.frame=CGRectMake(5,0,Tsize.width, self.frame.size.height);
+    NSLog(@"==========title label ============%@",_TitleLable.text);
+    
     //  赞的图片
-    _ZanImageView.frame=CGRectMake(_TitleLable.frame.size.width, (self.frame.size.height-11)/2,11,11 );
+    _ZanImageView.frame=CGRectMake(_TitleLable.frame.origin.x + _TitleLable.frame.size.width + 5, (self.frame.size.height-11)/2,11,11 );
     //赞的数量
     NSLog(@"==========zanLableText ============%@",_ZanNumLable.text);
     CGSize  Msize=[_ZanNumLable.text boundingRectWithSize:CGSizeMake(kDeviceWidth/2,MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:_ZanNumLable.font forKey:NSFontAttributeName] context:nil].size;
-    
     
     int zanWidth = [_ZanNumLable.text intValue]>0 ? Msize.width: 0;
     _ZanNumLable.frame=CGRectMake(_ZanImageView.frame.origin.x+_ZanImageView.frame.size.width+2, _ZanImageView.frame.origin.y, zanWidth, 15);

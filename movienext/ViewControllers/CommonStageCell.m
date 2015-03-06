@@ -174,21 +174,21 @@
             float  Uwidth=[UpString floatValue]==0?0:Usize.width;
             //宽度=字的宽度+左头像图片的宽度＋赞图片的宽度＋赞数量的宽度+中间两个空格2+2
             //位置=
-                markView.frame=CGRectMake((x*kDeviceWidth)/100-Msize.width, (y*kDeviceWidth)/100+(Msize.height/2), Msize.width+23+Uwidth+2+2+15+15, Msize.height+15);
+            float markViewWidth = Msize.width+23+Uwidth+5+5+11+5;
+            float markViewHeight = Msize.height+15;
+            float markViewX = (x*kDeviceWidth)/100-markViewWidth;
+            markViewX = MIN(MAX(markViewX, 0.0f), kDeviceWidth-markViewWidth);
+            
+            float markViewY = (y*kDeviceWidth)/100+(Msize.height/2);
+            markViewY = MIN(MAX(markViewY, markViewHeight/2), kDeviceWidth-markViewHeight);
+            
+            markView.frame=CGRectMake(markViewX, markViewY, markViewWidth, markViewHeight);
           
             markView.TitleLable.text=weiboTitleString;
             ///显示标签的头像
             [ markView.LeftImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kUrlAvatar,[weibodict objectForKey:@"avatar"]]]];
             
-            if ([[weibodict  objectForKey:@"ups"] intValue]>0) {
-                CGRect   mFrame=markView.frame;
-                mFrame.size.width=mFrame.size.width+10;
-                markView.frame=mFrame;
-                markView.ZanNumLable.text=[weibodict objectForKey:@"ups"];
-            }
-            else{
-                markView.ZanNumLable.hidden=YES;
-            }
+            markView.ZanNumLable.text=[weibodict objectForKey:@"ups"];
         }
 
         
