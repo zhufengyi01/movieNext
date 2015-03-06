@@ -1,24 +1,22 @@
 //
-//  RootViewController.m
+//  MovieDetailViewController.m
 //  movienext
 //
-//  Created by 风之翼 on 15/3/1.
+//  Created by 风之翼 on 15/3/6.
 //  Copyright (c) 2015年 redianying. All rights reserved.
 //
 
-#import "RootViewController.h"
-#import "Constant.h"
+#import "MovieDetailViewController.h"
 
-@interface RootViewController ()
+@interface MovieDetailViewController ()
 
 @end
 
-@implementation RootViewController
+@implementation MovieDetailViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.view.backgroundColor=View_BackGround;
 }
 
 - (void)didReceiveMemoryWarning {

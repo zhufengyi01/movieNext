@@ -1,24 +1,22 @@
 //
-//  RootViewController.m
+//  AddSubtitleViewController.m
 //  movienext
 //
-//  Created by 风之翼 on 15/3/1.
+//  Created by 风之翼 on 15/3/6.
 //  Copyright (c) 2015年 redianying. All rights reserved.
 //
 
-#import "RootViewController.h"
-#import "Constant.h"
+#import "AddSubtitleViewController.h"
 
-@interface RootViewController ()
+@interface AddSubtitleViewController ()
 
 @end
 
-@implementation RootViewController
+@implementation AddSubtitleViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.view.backgroundColor=View_BackGround;
 }
 
 - (void)didReceiveMemoryWarning {
