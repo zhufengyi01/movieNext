@@ -30,6 +30,7 @@
 }
 
 - (void)createUI {
+    self.backgroundColor = [UIColor redColor];
     _MovieImageView =[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, 200)];
     [self addSubview:_MovieImageView];
 }
@@ -61,6 +62,7 @@
         for ( int i=0;i<_WeibosArray.count ; i++) {
         
             MarkView *markView=[[MarkView alloc]initWithFrame:CGRectMake(10, 10, 100, 30)];
+            markView.alpha = 0;
 
 #warning 暂时设为YES
             //markView.clipsToBounds = YES;
@@ -106,6 +108,92 @@
             markView.ZanNumLable.text=[weibodict objectForKey:@"ups"];
             markView.isAnimation = YES;
         }
+}
+
+#pragma  mark ----执行动画的开始和结束
+//放大动画
+- (void)scaleAnimation {
+    [UIView beginAnimations:@"beingBig" context:nil];
+    [UIView setAnimationCurve:UIViewAnimationCurveEaseIn];
+    [UIView setAnimationDuration:0.15];
+    [UIView setAnimationDelegate:self];
+    [UIView setAnimationDidStopSelector:@selector(scaleFinish)];
+    [self scaleAnimationFunc];
+    [UIView commitAnimations];
+}
+//放大动画的实现
+- (void)scaleAnimationFunc {
+    for (UIView *v in self.subviews) {
+        if ([v isKindOfClass:[MarkView class]]) {
+            MarkView *mv = (MarkView *)v;
+            mv.alpha = 1.0;
+            mv.hidden = NO;
+        
+            // 设定为缩放
+            CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"transform.scale"];
+            // 动画选项设定
+            animation.duration = 0.15; // 动画持续时间
+            animation.repeatCount = 1; // 重复次数
+            animation.autoreverses = YES; // 动画结束时执行逆动画
+            // 缩放倍数
+            animation.fromValue = [NSNumber numberWithFloat:1.0]; // 开始时的倍率
+            animation.toValue = [NSNumber numberWithFloat:1.05]; // 结束时的倍率
+            // 添加动画
+            [mv.layer addAnimation:animation forKey:@"scale-layer"];
+        }
+    }
+}
+//放大结束动画
+- (void)scaleFinish {
+    [UIView beginAnimations:@"disappear" context:nil];
+    [UIView setAnimationCurve:UIViewAnimationCurveLinear];
+    [UIView setAnimationDuration:0.2];
+    [UIView setAnimationDelay:0.6];
+    [self scaleFinishFunc];
+    [UIView commitAnimations];
+}
+//放大结束动画的实现
+- (void)scaleFinishFunc {
+    for (UIView *v in self.subviews) {
+        if ([v isKindOfClass:[MarkView class]]) {
+            MarkView *mv = (MarkView *)v;
+            [mv startAnimation];
+            mv.alpha = 0.0;
+        }
+        //mv.hidden = YES;
+    }
+    
+    _timer = [NSTimer scheduledTimerWithTimeInterval:kTimeOffset target:self selector:@selector(showAnimation) userInfo:nil repeats:YES];
+}
+
+//开始执行动画, 动画入口
+- (void)startAnimation {
+    //开始动画之后0.5秒再开始动画
+    [self performSelector:@selector(scaleAnimation) withObject:nil afterDelay:0.5];
+}
+
+//循环显示气泡动画
+- (void)showAnimation {
+    NSLog(@"index = %d", currentMarkIndex);
+    
+    if (currentMarkIndex <= self.subviews.count-1) {
+        UIView *v = self.subviews[currentMarkIndex];
+        if ([v isKindOfClass:[MarkView class]]) {
+            MarkView *mv = (MarkView *)v;
+            [mv startAnimation];
+        }
+    }
+    
+    currentMarkIndex ++;
+    
+    if (currentMarkIndex > MAX(self.subviews.count, 10) ) {
+        currentMarkIndex = 0;
+    }
+}
+
+//停止动画
+- (void)stopAnimation {
+    [_timer invalidate];
 }
 
 @end

@@ -37,9 +37,7 @@
     [self addSubview:_rightView];
     
     //标题，点赞的view
-    _TitleLable=[ZCControl createLabelWithFrame:CGRectMake(0,0, 0,0) Font:12 Text:@"标题"];
-   // _TitleLable.backgroundColor=[UIColor whiteColor];
-    //_TitleLable.textColor=[UIColor redColor];
+    _TitleLable=[ZCControl createLabelWithFrame:CGRectMake(0,0, 0,0) Font:12 Text:@""];
     _TitleLable.textColor=[UIColor whiteColor];
     [_rightView addSubview:_TitleLable];
     
@@ -53,17 +51,21 @@
 
 - (void)layoutSubviews {
     [super layoutSubviews];
+    
     //头像
     _LeftImageView.frame=CGRectMake(0, 0,20, 20);
+    
     //右视图
     _rightView.frame=CGRectMake(23, 0,self.frame.size.width-23 , self.frame.size.height);
-//    标题
+    
+    //标题
     CGSize Tsize=[_TitleLable.text boundingRectWithSize:CGSizeMake(kDeviceWidth/2,MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:_TitleLable.font forKey:NSFontAttributeName] context:nil].size;
     _TitleLable.frame=CGRectMake(5,0,Tsize.width, self.frame.size.height);
     NSLog(@"==========title label ============%@",_TitleLable.text);
     
-    //  赞的图片
+    //赞的图片
     _ZanImageView.frame=CGRectMake(_TitleLable.frame.origin.x + _TitleLable.frame.size.width + 5, (self.frame.size.height-11)/2,11,11 );
+    
     //赞的数量
     NSLog(@"==========zanLableText ============%@",_ZanNumLable.text);
     CGSize  Msize=[_ZanNumLable.text boundingRectWithSize:CGSizeMake(kDeviceWidth/2,MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:_ZanNumLable.font forKey:NSFontAttributeName] context:nil].size;
@@ -77,23 +79,21 @@
 //子视图本身的动画
 -(void)startAnimation
 {
- 
-    
-  if (self.isAnimation==YES) {  //可以动
-      [UIView animateWithDuration:kShowTimeOffset delay:0 options:UIViewAnimationOptionCurveEaseIn animations:^{
-          self.alpha=1.0;
+    if (self.isAnimation==YES) {  //可以动
+        [UIView animateWithDuration:kShowTimeOffset delay:0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+            self.alpha=1.0;
         } completion:^(BOOL finished) {
+            //淡入之后过5秒再调用淡出动画
             [self performSelector:@selector(easeOut) withObject:nil afterDelay:kStaticTimeOffset];
         }];
-  }
-    
+    }
 }
 
+//淡出动画
 - (void)easeOut {
     [UIView animateWithDuration:kHidenTimeOffset delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
         self.alpha=0;
     } completion:^(BOOL finished) {
-        //self.alpha=1;
     }];
 }
 

@@ -274,8 +274,9 @@
 {
     if (segment.selectedSegmentIndex==0) {
         if (tableView==_HotMoVieTableView) {
-            CommonStageCell *stageCell = (CommonStageCell *)[tableView cellForRowAtIndexPath:indexPath];
-            [stageCell startAnimation];
+            //CommonStageCell *commonStageCell = (CommonStageCell *)[tableView cellForRowAtIndexPath:indexPath];
+            CommonStageCell *commonStageCell = (CommonStageCell *)cell;
+            [commonStageCell.BgView1 startAnimation];
         }
         
     }
@@ -294,8 +295,8 @@
     
     if (segment.selectedSegmentIndex==0) {
         if (tableView==_HotMoVieTableView) {
-            //CommonStageCell *cell = (CommonStageCell *)[tableView cellForRowAtIndexPath:indexPath];
-            //[cell stopAnimation];
+            CommonStageCell *cell = (CommonStageCell *)[tableView cellForRowAtIndexPath:indexPath];
+            [cell.BgView1 stopAnimation];
         }
         
     }

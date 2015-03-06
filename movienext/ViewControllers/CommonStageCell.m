@@ -55,9 +55,9 @@
 
 -(void)CreateTopView
 {
-    BgView1=[[StageView alloc]initWithFrame:CGRectMake(0, 45, kDeviceWidth, 200)];
-    BgView1.backgroundColor=[UIColor blackColor];
-    [self.contentView addSubview:BgView1];
+    _BgView1=[[StageView alloc]initWithFrame:CGRectMake(0, 45, kDeviceWidth, 200)];
+    _BgView1.backgroundColor=[UIColor blackColor];
+    [self.contentView addSubview:_BgView1];
     
     /*
     _MovieImageView =[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, 200)];
@@ -101,15 +101,15 @@
 -(void)setCellValue:(NSDictionary  *) dict indexPath:(NSInteger) row;
 {
     if (_weiboDict) {
-        BgView1.weiboDict = _weiboDict;
+        _BgView1.weiboDict = _weiboDict;
     }
     
     if (_WeibosArray) {
-        BgView1.WeibosArray = _WeibosArray;
+        _BgView1.WeibosArray = _WeibosArray;
     }
     
-    [BgView1 setStageValue:dict];
-    /*
+    [_BgView1 setStageValue:dict];
+    
     float  ImageWith=[[dict objectForKey:@"w"]  floatValue];
     float  ImgeHight=[[dict objectForKey:@"h"]  floatValue];
     float hight=0;
@@ -120,7 +120,6 @@
     {
         hight=  (ImgeHight/ImageWith) *kDeviceWidth;
     }
-     */
     
    
     /*
@@ -139,7 +138,7 @@
     if (_pageType  ==NSPageSourceTypeMainHotController) {  //热门
          BgView0.frame=CGRectMake(0, 0, 0, 0);
         BgView0.hidden=YES;
-        //BgView1.frame=CGRectMake(0, 0, kDeviceWidth, hight);
+        _BgView1.frame=CGRectMake(0, 0, kDeviceWidth, hight);
         BgView2.frame=CGRectMake(0, kDeviceWidth, kDeviceWidth, 45);
         if ([dict objectForKey:@"stage"]) {
             [MovieLogoImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w100h100",kUrlMoviePoster,[dict objectForKey:@"movie_poster"]]] placeholderImage:[ UIImage imageNamed:@"loading_image_all.png"]];
@@ -294,34 +293,6 @@
 {
     
 }
-#pragma  mark ----执行动画的开始和结束
-
-- (void)startAnimation {
-    _timer = [NSTimer scheduledTimerWithTimeInterval:0.7 target:self selector:@selector(showAnimation) userInfo:nil repeats:YES];
-}
-
-- (void)showAnimation {
-    NSLog(@"index = %d", currentMarkIndex);
-    
-    if (currentMarkIndex <= BgView1.subviews.count-1) {
-        UIView *v = BgView1.subviews[currentMarkIndex];
-        if ([v isKindOfClass:[MarkView class]]) {
-            MarkView *mv = (MarkView *)v;
-            [mv startAnimation];
-        }
-    }
-    
-    currentMarkIndex ++;
-    
-    if (currentMarkIndex > MAX(BgView1.subviews.count, 10) ) {
-        currentMarkIndex = 0;
-    }
-}
-
-- (void)stopAnimation {
-    [_timer invalidate];
-}
-
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
