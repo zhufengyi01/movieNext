@@ -9,6 +9,7 @@
 #import "MarkView.h"
 #import "ZCControl.h"
 
+#import "Constant.h"
 @implementation MarkView
 -(instancetype)initWithFrame:(CGRect)frame{
     if (self=[super initWithFrame:frame]) {
@@ -28,32 +29,45 @@
     [self addSubview:_LeftImageView];
     
     //右视图
-    _rightView=[[UIView alloc]initWithFrame:CGRectMake(23, 0,200,30)];
+    _rightView=[[UIView alloc]initWithFrame:CGRectMake(0, 0,0,0)];
     _rightView.backgroundColor=[[UIColor blackColor] colorWithAlphaComponent:0.7];
     _rightView.layer.cornerRadius=3;
+    _rightView.contentMode=UIViewContentModeTop;  //设置内容上对齐方式
     _rightView.layer.masksToBounds=YES;
     [self addSubview:_rightView];
     
     //标题，点赞的view
-    _TitleLable=[ZCControl createLabelWithFrame:CGRectMake(0,0, 120, 30) Font:12 Text:@"标题"];
-    //TitleLable.backgroundColor=[UIColor whiteColor];
+    _TitleLable=[ZCControl createLabelWithFrame:CGRectMake(0,0, 0,0) Font:12 Text:@"标题"];
+   // _TitleLable.backgroundColor=[UIColor whiteColor];
+    //_TitleLable.textColor=[UIColor redColor];
     _TitleLable.textColor=[UIColor whiteColor];
     [_rightView addSubview:_TitleLable];
     
-    _ZanImageView=[ZCControl createImageViewWithFrame:CGRectMake(_TitleLable.frame.size.width+3, 0, 11,11) ImageName:@"tag_like_icon.png"];
+    _ZanImageView=[ZCControl createImageViewWithFrame:CGRectMake(0, 0, 0,0) ImageName:@"tag_like_icon.png"];
     [_rightView addSubview:_ZanImageView];
     
-    _ZanNumLable=[ZCControl createLabelWithFrame:CGRectMake(_TitleLable.frame.size.width+10, 0, 15, 15) Font:12 Text:@"15"];
+    _ZanNumLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 0,0) Font:12 Text:@"15"];
     _ZanNumLable.textColor=[UIColor whiteColor];
     [_rightView addSubview:_ZanNumLable];
 }
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    _TitleLable.frame=CGRectMake(0,0,self.frame.size.width-20, self.frame.size.height-5);
-    _ZanImageView.frame=CGRectMake(_TitleLable.frame.origin.x+_TitleLable.frame.size.width+2, 3,11,11 );
-    _ZanNumLable.frame=CGRectMake(_ZanImageView.frame.origin.x+_ZanImageView.frame.size.width+2, 3, 15, 15);
-      
+    //头像
+    _LeftImageView.frame=CGRectMake(0, 0,20, 20);
+    //右视图
+    _rightView.frame=CGRectMake(23, 0,self.frame.size.width-23 , self.frame.size.height);
+//    标题
+    _TitleLable.frame=CGRectMake(0,0,_rightView.frame.size.width-20, self.frame.size.height);
+    //  赞的图片
+    _ZanImageView.frame=CGRectMake(_TitleLable.frame.size.width, (self.frame.size.height-11)/2,11,11 );
+    //赞的数量
+    NSLog(@"==========zanLableText ============%@",_ZanNumLable.text);
+    CGSize  Msize=[_ZanNumLable.text boundingRectWithSize:CGSizeMake(kDeviceWidth/2,MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:_ZanNumLable.font forKey:NSFontAttributeName] context:nil].size;
+    
+    
+    int zanWidth = [_ZanNumLable.text intValue]>0 ? Msize.width: 0;
+    _ZanNumLable.frame=CGRectMake(_ZanImageView.frame.origin.x+_ZanImageView.frame.size.width+2, _ZanImageView.frame.origin.y, zanWidth, 15);
     
     //设置子view的frame
 }

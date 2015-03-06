@@ -128,7 +128,7 @@
         [leftButtomButton setTitle:[dict objectForKey:@"movie_name"] forState:UIControlStateNormal];
     }
     
-   
+#pragma  mark  热门cell
     if (_pageType  ==NSPageSourceTypeMainHotController) {  //热门
          BgView0.frame=CGRectMake(0, 0, 0, 0);
         BgView0.hidden=YES;
@@ -143,16 +143,13 @@
             if ([Mview isKindOfClass:[MarkView class]]) {
                 [Mview  removeFromSuperview];
             }
-            
         }
-        
         for ( int i=0;i<_WeibosArray.count ; i++) {
         
             MarkView *markView=[[MarkView alloc]initWithFrame:CGRectMake(10, 10, 100, 30)];
 
 #warning 暂时设为YES
-            markView.clipsToBounds = YES;
-            
+            //markView.clipsToBounds = YES;
             markView.tag=1000+i;
            [BgView1 addSubview:markView];
                     
@@ -161,23 +158,25 @@
             float  y=[[weibodict objectForKey:@"y"]floatValue ];
             NSLog(@" ==== =mark  view  ===%f  ==== mark view =====%f",x,y);
             NSString  *weiboTitleString=[weibodict  objectForKey:@"topic"];
+            NSString  *UpString=[weibodict objectForKey:@"ups"];
             NSLog(@"weibo dict ======%@",weibodict);
             
             
             
-            //计算markview的宽高
+            //计算标题的size
             CGSize  Msize=[weiboTitleString boundingRectWithSize:CGSizeMake(kDeviceWidth/2,MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:markView.TitleLable.font forKey:NSFontAttributeName] context:nil].size;
+            // 计算赞数量的size
+            CGSize Usize=[UpString boundingRectWithSize:CGSizeMake(40,MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:markView.ZanNumLable.font forKey:NSFontAttributeName] context:nil].size;
+          
         
             NSLog(@"size= %f %f", Msize.width, Msize.height);
-            
-            //宽度<200
-        //   if (Msize.width<kDeviceWidth/2) {
-                markView.frame=CGRectMake((x*kDeviceWidth)/100-Msize.width, (y*kDeviceWidth)/100+(Msize.height/2), Msize.width+50, Msize.height+15);
-          //  }
-          //else {
-            //    markView.frame=CGRectMake((x*kDeviceWidth)/100-Msize.width, (y*kDeviceWidth)/100+(Msize.height/2),kDeviceWidth/2,Msize.height);
-            //}
-            markView.TitleLable.text=weiboTitleString;            
+            //计算赞数量的长度
+            float  Uwidth=[UpString floatValue]==0?0:Usize.width;
+            //宽度=字的宽度+左头像图片的宽度＋赞图片的宽度＋赞数量的宽度+中间两个空格2+2
+            //位置=
+                markView.frame=CGRectMake((x*kDeviceWidth)/100-Msize.width, (y*kDeviceWidth)/100+(Msize.height/2), Msize.width+23+Uwidth+2+2+15+15, Msize.height+15);
+          
+            markView.TitleLable.text=weiboTitleString;
             ///显示标签的头像
             [ markView.LeftImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kUrlAvatar,[weibodict objectForKey:@"avatar"]]]];
             
@@ -194,6 +193,7 @@
 
         
     }
+#pragma mark 最新cell
     else if(_pageType==NSPageSourceTypeMainNewController)  //最新
     {
         BgView0.hidden=NO;
@@ -220,24 +220,22 @@
         [BgView1 addSubview:markView];
        
         NSString  *weiboTitleString=[_weiboDict objectForKey:@"topic"];
-        CGSize Msize=[weiboTitleString sizeWithFont:markView.TitleLable.font constrainedToSize:CGSizeMake(200, MAXFLOAT)];
+        NSString  *ZanStriing=[_weiboDict objectForKey:@"ups"];
         //宽度屏幕1/2
+        CGSize  Msize=[weiboTitleString boundingRectWithSize:CGSizeMake(kDeviceWidth/2,MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:markView.TitleLable.font forKey:NSFontAttributeName] context:nil].size;
         if (Msize.width<kDeviceWidth/2) {
-            markView.frame=CGRectMake((x*kDeviceWidth)/100-Msize.width, (y*kDeviceWidth)/100-(Msize.height/2), Msize.width+30, Msize.height);
+            markView.frame=CGRectMake((x*kDeviceWidth)/100-Msize.width, (y*kDeviceWidth)/100-(Msize.height/2), Msize.width+30, Msize.height+10);
         }
         else {
-            markView.frame=CGRectMake((x*kDeviceWidth)/100-Msize.width, (y*kDeviceWidth)/100-(Msize.height/2),kDeviceWidth/2,Msize.height);
+            markView.frame=CGRectMake((x*kDeviceWidth)/100-Msize.width, (y*kDeviceWidth)/100-(Msize.height/2),kDeviceWidth/2,Msize.height+10);
         }
         
-        NSLog(@"================ weiboTitleString  ======%@ ",weiboTitleString);
-        NSLog(@"  mark  view  x ======%f   mark  view   y====%f",markView.frame.origin.x,markView.frame.origin.y);
+         NSLog(@"  mark  view  x ======%f   mark  view   y====%f",markView.frame.origin.x,markView.frame.origin.y);
         markView.TitleLable.text=weiboTitleString;
         
         ///显示标签的头像
         [ markView.LeftImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kUrlAvatar,[_weiboDict objectForKey:@"avatar"]]]];
-        
-        markView.TitleLable.backgroundColor=[[UIColor blackColor ]colorWithAlphaComponent:0.5];
-        if ([[_weiboDict  objectForKey:@"ups"] intValue]>0) {
+                if ([[_weiboDict  objectForKey:@"ups"] intValue]>0) {
             CGRect   mFrame=markView.frame;
             mFrame.size.width=mFrame.size.width+10;
             markView.frame=mFrame;
