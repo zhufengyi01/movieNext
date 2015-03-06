@@ -98,7 +98,7 @@ float getHeightByWidthAndHeight(float width, float height){
 + (NSString *)getNoSpace:(NSString *)string;
 + (NSString *)getNoNewLine:(NSString *)string;
 //计算字符串高度
-+(CGFloat)heightWithString:(NSString *)string width:(CGFloat)width  fontsize:(CGFloat)fontsize;
+//+(CGFloat)heightWithString:(NSString *)string width:(CGFloat)width  fontsize:(CGFloat)fontsize;
 //计算字符串的长度
 +(CGFloat)widthWithString:(NSString *)string hight:(CGFloat)hight  fontsize:(CGFloat)fontsize;
 

@@ -63,16 +63,16 @@
     if ( _weiboDict ) {
         MarkView *markView = [self createMarkViewWithDict:_weiboDict andIndex:2000];
         markView.alpha = 1.0;
+        markView.isAnimation = NO;
        [self addSubview:markView];
     }
     
     for ( int i=0;i<_WeibosArray.count ; i++) {
         NSDictionary  *weibodict=[NSDictionary dictionaryWithDictionary:[_WeibosArray  objectAtIndex:i]];
         MarkView *markView = [self createMarkViewWithDict:weibodict andIndex:i];
-        markView.isAnimation = NO;
+        markView.isAnimation = YES;
        [self addSubview:markView];
     }
-    
 }
 
 - (MarkView *) createMarkViewWithDict:(NSDictionary *)weibodict andIndex:(NSInteger)index{

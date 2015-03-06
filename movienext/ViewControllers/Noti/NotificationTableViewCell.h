@@ -10,11 +10,11 @@
 
 @interface NotificationTableViewCell : UITableViewCell
 {
-    UIButton  *logoButton;  ///头像
+    UIButton    *logoButton;  ///头像
     UILabel     *titleLable;  //标题
     UILabel     *dateLable;   //时间
     UIImageView   *stageImage;   // 剧情图片
-    UILabel   *Zanlable;
+    UILabel     *Zanlable;
 }
 -(void)setValueforCell:(NSDictionary  *) dict index: (NSInteger )index;
 @end
