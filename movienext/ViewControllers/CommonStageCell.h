@@ -37,7 +37,20 @@ typedef NS_ENUM(NSInteger, NSPageSourceType)
  }
 @property (nonatomic,strong ) NSMutableArray   *WeibosArray;   //小标签的数组，在多个标签的时候使用这个
 @property (nonatomic,strong )NSDictionary      *weiboDict;     //只有一个标签的时候传递这个参数
--(void)setCellValue:(NSDictionary  *) dict indexPath:(NSInteger) row;
 @property (nonatomic,assign) NSPageSourceType   pageType;
+@property (nonatomic, strong) NSTimer * timer;
+
+-(void)setCellValue:(NSDictionary  *) dict indexPath:(NSInteger) row;
+
+/**
+ *  开始动画
+ */
+- (void)startAnimation; //在celldisplay执行的方法
+
+/**
+ *  结束动画
+ */
+- (void)stopAnimation;   //在cellenddisplay 执行的方法
+
 
 @end
