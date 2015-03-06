@@ -78,22 +78,20 @@
 -(void)startAnimation
 {
  
-    //_timer=[NSTimer scheduledTimerWithTimeInterval:kShowTimeOffset target:self selector:@selector(showAndHiden:) userInfo:nil repeats:YES];
     
   if (self.isAnimation==YES) {  //可以动
-      [UIView animateWithDuration:kShowTimeOffset delay:0.1 options:UIViewAnimationOptionCurveEaseIn animations:^{
+      [UIView animateWithDuration:kShowTimeOffset delay:0 options:UIViewAnimationOptionCurveEaseIn animations:^{
           self.alpha=1.0;
         } completion:^(BOOL finished) {
-        
-
+            [self performSelector:@selector(easeOut) withObject:nil afterDelay:kStaticTimeOffset];
         }];
   }
     
 }
 
 - (void)easeOut {
-    [UIView animateWithDuration:kHidenTimeOffset delay:0.1 options:UIViewAnimationOptionCurveEaseOut animations:^{
-        self.alpha=0.1;
+    [UIView animateWithDuration:kHidenTimeOffset delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+        self.alpha=0;
     } completion:^(BOOL finished) {
         //self.alpha=1;
     }];

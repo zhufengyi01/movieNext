@@ -272,13 +272,14 @@
 //开始现实cell 的时候执行这个方法，执行动画
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (segment.selected==0) {
+    if (segment.selectedSegmentIndex==0) {
         if (tableView==_HotMoVieTableView) {
-            
+            CommonStageCell *stageCell = (CommonStageCell *)[tableView cellForRowAtIndexPath:indexPath];
+            [stageCell startAnimation];
         }
         
     }
-    else if (segment.selected==1)
+    else if (segment.selectedSegmentIndex==1)
     {
         if (tableView==_NewMoviewTableView) {
             
@@ -291,13 +292,14 @@
 -(void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
-    if (segment.selected==0) {
+    if (segment.selectedSegmentIndex==0) {
         if (tableView==_HotMoVieTableView) {
-            
+            //CommonStageCell *cell = (CommonStageCell *)[tableView cellForRowAtIndexPath:indexPath];
+            //[cell stopAnimation];
         }
         
     }
-    else if (segment.selected==1)
+    else if (segment.selectedSegmentIndex==1)
     {
         if (tableView==_NewMoviewTableView) {
             

@@ -8,7 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #define kShowTimeOffset 0.7  // 淡入时间
-#define kHidenTimeOffset 5.7  //淡出时间
+#define kStaticTimeOffset 5.7  //静态显示时间
+#define kHidenTimeOffset 0.7  //淡出时间
 @protocol MarkViewDelegate <NSObject>
  -(void)MarkViewClick;
 @end
@@ -28,7 +29,6 @@
 @property(nonatomic,strong )UIImageView  *ZanImageView;
 @property (nonatomic,assign) id <MarkViewDelegate> delegate;
 @property(nonatomic,assign) BOOL isAnimation;   //是否是可以动的动画
-@property (nonatomic,strong) NSTimer *timer;
 //markview 自身的动画
 -(void)startAnimation;
 @end
