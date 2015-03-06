@@ -60,7 +60,7 @@
     NSArray *segmentedArray = [[NSArray alloc] initWithObjects:@"热门", @"最新", nil];
 
     segment = [[UISegmentedControl alloc] initWithItems:segmentedArray];
-    segment.frame = CGRectMake(0, 0, kDeviceWidth, 25);
+    segment.frame = CGRectMake(kDeviceWidth/4, 0, kDeviceWidth/2, 30);
     segment.selectedSegmentIndex = 0;
     segment.backgroundColor = [UIColor clearColor];
     segment.tintColor = kAppTintColor;
