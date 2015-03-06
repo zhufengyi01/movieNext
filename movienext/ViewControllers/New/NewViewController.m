@@ -269,8 +269,45 @@
     return nil;
     
 }
+//开始现实cell 的时候执行这个方法，执行动画
+-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (segment.selected==0) {
+        if (tableView==_HotMoVieTableView) {
+            
+        }
+        
+    }
+    else if (segment.selected==1)
+    {
+        if (tableView==_NewMoviewTableView) {
+            
+        }
+        
+    }
+    
+}
+//结束显示cell的时候执行这个方法
+-(void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    
+    if (segment.selected==0) {
+        if (tableView==_HotMoVieTableView) {
+            
+        }
+        
+    }
+    else if (segment.selected==1)
+    {
+        if (tableView==_NewMoviewTableView) {
+            
+        }
+        
+    }
+}
 
-#pragma  mark  =====ButtonClick 
+
+#pragma  mark  =====ButtonClick
 
 -(void)dealMovieButtonClick:(UIButton  *) button{
     

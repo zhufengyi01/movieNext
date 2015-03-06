@@ -260,7 +260,9 @@
     }
 
 }
-
+#pragma mark ---
+#pragma mark ------下方按钮点击事件
+#pragma mark ------
 -(void)dealMovieButtonClick:(UIButton  *) button{
     
 }
@@ -276,6 +278,85 @@
 {
     
 }
+#pragma  mark ----执行动画的开始和结束
+-(void)startAnimation
+{
+    [UIView beginAnimations:@"beingBig" context:nil];
+    [UIView setAnimationCurve:UIViewAnimationCurveEaseIn];  //
+    [UIView setAnimationDuration:0.15];
+     [UIView setAnimationDidStopSelector:@selector(beingDisappear)];
+    // Make the animatable changes.
+    [self showAllMarkAndBig];
+    // Commit the changes and perform the animation.
+    [UIView commitAnimations];
+    
+}
+/**
+ *  弹出动画, 渐出
+ */
+/*- (void)beingDisappear {
+    [UIView beginAnimations:@"disappear" context:nil];
+    [UIView setAnimationCurve:UIViewAnimationCurveLinear];
+    [UIView setAnimationDuration:0.2];
+    [UIView setAnimationDelay:0.6];
+    [self hideAllMark];
+    [UIView commitAnimations];
+}
+/**
+ *  所有的标签隐藏
+ */
+/*- (void)hideAllMark {
+    for (UIView  *mv in BgView1.subviews) {
+        mv.alpha = 0.0;
+        //mv.hidden = YES;
+    }
+    
+    CGFloat delay = 0.7f;
+    //开始计时器
+    _timer = [NSTimer scheduledTimerWithTimeInterval:delay target:self selector:@selector(startShow) userInfo:nil repeats:YES];
+}*/
+
+
+
+
+//结束动画
+-(void)stopAnimation
+{
+ 
+}
+
+
+
+
+
+/**
+ *  显示所有的标签并执行放大动画
+ */
+- (void)showAllMarkAndBig {
+    
+    for (UIView  *mark  in BgView1.subviews ) {
+        if ([mark isKindOfClass:[MarkView class]]) {
+        
+        mark.alpha = 1.0;
+        mark.hidden = NO;
+        // 设定为缩放
+        CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"transform.scale"];
+        
+        // 动画选项设定
+        animation.duration = 0.15; // 动画持续时间
+        animation.repeatCount = 1; // 重复次数
+        animation.autoreverses = YES; // 动画结束时执行逆动画
+        // 缩放倍数
+        animation.fromValue = [NSNumber numberWithFloat:1.0]; // 开始时的倍率
+        animation.toValue = [NSNumber numberWithFloat:1.05]; // 结束时的倍率
+        // 添加动画
+        [mark.layer addAnimation:animation forKey:@"scale-layer"];
+        }
+    }
+}
+
+
+
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
