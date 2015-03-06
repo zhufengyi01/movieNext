@@ -180,6 +180,7 @@
             markViewX = MIN(MAX(markViewX, 0.0f), kDeviceWidth-markViewWidth);
             
             float markViewY = (y*kDeviceWidth)/100+(Msize.height/2);
+#warning    kDeviceWidth 目前计算的是正方形的，当图片高度>屏幕的宽度的实际，需要使用图片的高度
             markViewY = MIN(MAX(markViewY, markViewHeight/2), kDeviceWidth-markViewHeight);
             
             markView.frame=CGRectMake(markViewX, markViewY, markViewWidth, markViewHeight);
@@ -189,6 +190,7 @@
             [ markView.LeftImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kUrlAvatar,[weibodict objectForKey:@"avatar"]]]];
             
             markView.ZanNumLable.text=[weibodict objectForKey:@"ups"];
+      
         }
 
         
@@ -216,34 +218,44 @@
        // markView.TitleLable.frame=CGRectMake(0,0, Msize.width ,Msize.height);
          markView.rightView.layer.borderWidth=1;
         markView.rightView.layer.borderColor=VBlue_color.CGColor;
-
         [BgView1 addSubview:markView];
+        
        
         NSString  *weiboTitleString=[_weiboDict objectForKey:@"topic"];
-        NSString  *ZanStriing=[_weiboDict objectForKey:@"ups"];
+        NSString  *UpString=[_weiboDict objectForKey:@"ups"];
         //宽度屏幕1/2
         CGSize  Msize=[weiboTitleString boundingRectWithSize:CGSizeMake(kDeviceWidth/2,MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:markView.TitleLable.font forKey:NSFontAttributeName] context:nil].size;
-        if (Msize.width<kDeviceWidth/2) {
-            markView.frame=CGRectMake((x*kDeviceWidth)/100-Msize.width, (y*kDeviceWidth)/100-(Msize.height/2), Msize.width+30, Msize.height+10);
-        }
-        else {
-            markView.frame=CGRectMake((x*kDeviceWidth)/100-Msize.width, (y*kDeviceWidth)/100-(Msize.height/2),kDeviceWidth/2,Msize.height+10);
-        }
         
-         NSLog(@"  mark  view  x ======%f   mark  view   y====%f",markView.frame.origin.x,markView.frame.origin.y);
+        // 计算赞数量的size
+        CGSize Usize=[UpString boundingRectWithSize:CGSizeMake(40,MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:markView.ZanNumLable.font forKey:NSFontAttributeName] context:nil].size;
+        
+        
+        NSLog(@"size= %f %f", Msize.width, Msize.height);
+        //计算赞数量的长度
+        float  Uwidth=[UpString floatValue]==0?0:Usize.width;
+        //宽度=字的宽度+左头像图片的宽度＋赞图片的宽度＋赞数量的宽度+中间两个空格2+2
+        //位置=
+        float markViewWidth = Msize.width+23+Uwidth+5+5+11+5;
+        float markViewHeight = Msize.height+15;
+        float markViewX = (x*kDeviceWidth)/100-markViewWidth;
+        markViewX = MIN(MAX(markViewX, 0.0f), kDeviceWidth-markViewWidth);
+        
+        float markViewY = (y*kDeviceWidth)/100+(Msize.height/2);
+#warning    kDeviceWidth 目前计算的是正方形的，当图片高度>屏幕的宽度的实际，需要使用图片的高度
+        markViewY = MIN(MAX(markViewY, markViewHeight/2), kDeviceWidth-markViewHeight);
+        
+        markView.frame=CGRectMake(markViewX, markViewY, markViewWidth, markViewHeight);
+        
         markView.TitleLable.text=weiboTitleString;
-        
         ///显示标签的头像
         [ markView.LeftImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kUrlAvatar,[_weiboDict objectForKey:@"avatar"]]]];
-                if ([[_weiboDict  objectForKey:@"ups"] intValue]>0) {
-            CGRect   mFrame=markView.frame;
-            mFrame.size.width=mFrame.size.width+10;
-            markView.frame=mFrame;
-            markView.ZanNumLable.text=[_weiboDict objectForKey:@"ups"];
-        }
-        else{
-            markView.ZanNumLable.hidden=YES;
-        }
+        
+        markView.ZanNumLable.text=[_weiboDict objectForKey:@"ups"];
+        
+
+        
+        
+        
         
     }
 
