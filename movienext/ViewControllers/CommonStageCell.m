@@ -211,14 +211,14 @@
 #pragma mark 最新cell
     else if(_pageType==NSPageSourceTypeMainNewController)  //最新
     {
-        /*
         BgView0.hidden=NO;
         BgView0.frame=CGRectMake(0, 0, kDeviceWidth, 45);
-        BgView1.frame=CGRectMake(0, 45, kDeviceWidth, hight);
+        _BgView1.frame=CGRectMake(0, 45, kDeviceWidth, hight);
         BgView2.frame=CGRectMake(0, kDeviceWidth+45, kDeviceWidth, 45);
         if ([dict objectForKey:@"stage"]) {
             [MovieLogoImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w100h100",kUrlMoviePoster,[dict objectForKey:@"movie_poster"]]] placeholderImage:[ UIImage imageNamed:@"loading_image_all.png"]];
         }
+        /*
         float  x=[[_weiboDict objectForKey:@"x"]floatValue ];
         float  y=[[_weiboDict objectForKey:@"y"]floatValue ];
         //遍历bgview1，删除bgview 的子视图

@@ -274,7 +274,6 @@
 {
     if (segment.selectedSegmentIndex==0) {
         if (tableView==_HotMoVieTableView) {
-            //CommonStageCell *commonStageCell = (CommonStageCell *)[tableView cellForRowAtIndexPath:indexPath];
             CommonStageCell *commonStageCell = (CommonStageCell *)cell;
             [commonStageCell.BgView1 startAnimation];
         }
@@ -287,7 +286,6 @@
         }
         
     }
-    
 }
 //结束显示cell的时候执行这个方法
 -(void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -295,8 +293,10 @@
     
     if (segment.selectedSegmentIndex==0) {
         if (tableView==_HotMoVieTableView) {
-            CommonStageCell *cell = (CommonStageCell *)[tableView cellForRowAtIndexPath:indexPath];
-            [cell.BgView1 stopAnimation];
+#warning 为什么这里用上面的那句代码就不行
+            //CommonStageCell *commonStageCell = (CommonStageCell *)[tableView cellForRowAtIndexPath:indexPath];
+            CommonStageCell *commonStageCell = (CommonStageCell *)cell;
+            [commonStageCell.BgView1 stopAnimation];
         }
         
     }

@@ -36,6 +36,7 @@
 }
 
 - (void)setStageValue:(NSDictionary *)dict {
+    //先移除所有的Mark视图
     for (UIView  *Mview in  self.subviews) {
         if ([Mview isKindOfClass:[MarkView class]]) {
             [Mview  removeFromSuperview];
@@ -59,17 +60,28 @@
        [_MovieImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w640",kUrlStage,[dict objectForKey:@"stage"]]] placeholderImage:[UIImage imageNamed:@"loading_image_all.png"]];
      }
     
-        for ( int i=0;i<_WeibosArray.count ; i++) {
-        
+    if ( _weiboDict ) {
+        MarkView *markView = [self createMarkViewWithDict:_weiboDict andIndex:2000];
+        markView.alpha = 1.0;
+       [self addSubview:markView];
+    }
+    
+    for ( int i=0;i<_WeibosArray.count ; i++) {
+        NSDictionary  *weibodict=[NSDictionary dictionaryWithDictionary:[_WeibosArray  objectAtIndex:i]];
+        MarkView *markView = [self createMarkViewWithDict:weibodict andIndex:i];
+        markView.isAnimation = NO;
+       [self addSubview:markView];
+    }
+    
+}
+
+- (MarkView *) createMarkViewWithDict:(NSDictionary *)weibodict andIndex:(NSInteger)index{
             MarkView *markView=[[MarkView alloc]initWithFrame:CGRectMake(10, 10, 100, 30)];
             markView.alpha = 0;
-
 #warning 暂时设为YES
             //markView.clipsToBounds = YES;
-            markView.tag=1000+i;
-           [self addSubview:markView];
-                    
-            NSDictionary  *weibodict=[NSDictionary dictionaryWithDictionary:[_WeibosArray  objectAtIndex:i]];
+            markView.tag=1000+index;
+            
             float  x=[[weibodict objectForKey:@"x"]floatValue ];
             float  y=[[weibodict objectForKey:@"y"]floatValue ];
             NSLog(@" ==== =mark  view  ===%f  ==== mark view =====%f",x,y);
@@ -77,14 +89,11 @@
             NSString  *UpString=[weibodict objectForKey:@"ups"];
             NSLog(@"weibo dict ======%@",weibodict);
             
-            
-            
             //计算标题的size
             CGSize  Msize=[weiboTitleString boundingRectWithSize:CGSizeMake(kDeviceWidth/2,MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:markView.TitleLable.font forKey:NSFontAttributeName] context:nil].size;
             // 计算赞数量的size
             CGSize Usize=[UpString boundingRectWithSize:CGSizeMake(40,MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:markView.ZanNumLable.font forKey:NSFontAttributeName] context:nil].size;
           
-        
             NSLog(@"size= %f %f", Msize.width, Msize.height);
             //计算赞数量的长度
             float  Uwidth=[UpString floatValue]==0?0:Usize.width;
@@ -107,7 +116,7 @@
             
             markView.ZanNumLable.text=[weibodict objectForKey:@"ups"];
             markView.isAnimation = YES;
-        }
+    return markView;
 }
 
 #pragma  mark ----执行动画的开始和结束
