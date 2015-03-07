@@ -14,9 +14,9 @@
     UIImageView   *_MovieImageView;
     NSInteger currentMarkIndex;
 }
-@property (nonatomic,strong ) NSMutableArray   *WeibosArray;   //小标签的数组，在多个标签的时候使用这个
-@property (nonatomic,strong )NSDictionary      *weiboDict;     //只有一个标签的时候传递这个参数
-@property (nonatomic, strong) NSTimer * timer;
+@property (nonatomic,strong ) NSMutableArray    *WeibosArray;   //小标签的数组，在多个标签的时候使用这个
+@property (nonatomic,strong ) NSDictionary      *weiboDict;     //只有一个标签的时候传递这个参数
+@property (nonatomic, strong) NSTimer           *timer;
 
 - (void)setStageValue:(NSDictionary *)stageDict;
 

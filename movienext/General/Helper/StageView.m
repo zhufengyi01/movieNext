@@ -63,16 +63,16 @@
     if ( _weiboDict ) {
         MarkView *markView = [self createMarkViewWithDict:_weiboDict andIndex:2000];
         markView.alpha = 1.0;
+        markView.isAnimation = NO;
        [self addSubview:markView];
     }
     
     for ( int i=0;i<_WeibosArray.count ; i++) {
         NSDictionary  *weibodict=[NSDictionary dictionaryWithDictionary:[_WeibosArray  objectAtIndex:i]];
         MarkView *markView = [self createMarkViewWithDict:weibodict andIndex:i];
-        markView.isAnimation = NO;
+        markView.isAnimation = YES;
        [self addSubview:markView];
     }
-    
 }
 
 - (MarkView *) createMarkViewWithDict:(NSDictionary *)weibodict andIndex:(NSInteger)index{
@@ -123,60 +123,41 @@
 #pragma  mark ----执行动画的开始和结束
 //2.放大动画
 - (void)scaleAnimation {
-    [UIView beginAnimations:@"beingBig" context:nil];
-    [UIView setAnimationCurve:UIViewAnimationCurveEaseIn];
-    [UIView setAnimationDuration:0.15];
-    [UIView setAnimationDelegate:self];
-    [UIView setAnimationDidStopSelector:@selector(scaleFinish)];
-    [self scaleAnimationFunc];
-    [UIView commitAnimations];
-}
-
-
-
-//3.放大动画的实现
-- (void)scaleAnimationFunc {
-    for (UIView *v in self.subviews) {
-        if ([v isKindOfClass:[MarkView class]]) {
-            MarkView *mv = (MarkView *)v;
-            mv.alpha = 1.0;
-            mv.hidden = NO;
-        
-            // 设定为缩放
-            CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"transform.scale"];
-            // 动画选项设定
-            animation.duration = 0.15; // 动画持续时间
-            animation.repeatCount = 1; // 重复次数
-            animation.autoreverses = YES; // 动画结束时执行逆动画
-            // 缩放倍数
-            animation.fromValue = [NSNumber numberWithFloat:1.0]; // 开始时的倍率
-            animation.toValue = [NSNumber numberWithFloat:1.05]; // 结束时的倍率
-            // 添加动画
-            [mv.layer addAnimation:animation forKey:@"scale-layer"];
+       //放大动画
+    [UIView animateWithDuration:0.5 animations:^{
+        for (UIView *v in self.subviews) {
+            if ([v isKindOfClass:[MarkView class]]) {
+                MarkView *mv = (MarkView *)v;
+                mv.alpha = 1.0;
+                mv.hidden = NO;
+            
+                // 设定为缩放
+                CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"transform.scale"];
+                // 动画选项设定
+                animation.duration = 0.15; // 动画持续时间
+                animation.repeatCount = 1; // 重复次数
+                animation.autoreverses = YES; // 动画结束时执行逆动画
+                // 缩放倍数
+                animation.fromValue = [NSNumber numberWithFloat:1.0]; // 开始时的倍率
+                animation.toValue = [NSNumber numberWithFloat:1.05]; // 结束时的倍率
+                // 添加动画
+                [mv.layer addAnimation:animation forKey:@"scale-layer"];
+            }
         }
-    }
-}
-//4.放大结束动画
-- (void)scaleFinish {
-    [UIView beginAnimations:@"disappear" context:nil];
-    [UIView setAnimationCurve:UIViewAnimationCurveLinear];
-    [UIView setAnimationDuration:0.2];
-    [UIView setAnimationDelay:0.6];
-    [self scaleFinishFunc];
-    [UIView commitAnimations];
-}
-//5.放大结束动画的实现
-- (void)scaleFinishFunc {
-    for (UIView *v in self.subviews) {
-        if ([v isKindOfClass:[MarkView class]]) {
-            MarkView *mv = (MarkView *)v;
-            [mv startAnimation];
-            mv.alpha = 0.0;
-        }
-        //mv.hidden = YES;
-    }
-    
-    _timer = [NSTimer scheduledTimerWithTimeInterval:kTimeOffset target:self selector:@selector(showAnimation) userInfo:nil repeats:YES];
+    } completion:^(BOOL finished) {
+        //结束放大动画, 同时开始循环显示动画
+        [UIView animateWithDuration:0.2 delay:0.6 options:UIViewAnimationOptionCurveLinear animations:^{
+            for (UIView *v in self.subviews) {
+                if ([v isKindOfClass:[MarkView class]]) {
+                    MarkView *mv = (MarkView *)v;
+                    [mv startAnimation];
+                    mv.alpha = 0.0;
+                }
+                //mv.hidden = YES;
+            }
+            _timer = [NSTimer scheduledTimerWithTimeInterval:kTimeOffset target:self selector:@selector(showAnimation) userInfo:nil repeats:YES];
+        } completion:nil];
+    }];
 }
 
 

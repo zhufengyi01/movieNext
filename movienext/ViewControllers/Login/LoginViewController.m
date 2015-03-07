@@ -70,6 +70,7 @@
     qqButton.frame=CGRectMake(50, kDeviceHeight-220, kDeviceWidth-100, 40);
     [qqButton setBackgroundImage:[UIImage imageNamed:@"login_button_qq －in.png"] forState:UIControlStateNormal];
     [qqButton setBackgroundImage:[UIImage imageNamed:@"login_button_qq.png"] forState:UIControlStateHighlighted];
+ 
     [qqButton addTarget:self action:@selector(dealloginClick:) forControlEvents:UIControlEventTouchUpInside];
     qqButton.tag=1000;
     [self.view addSubview:qqButton];

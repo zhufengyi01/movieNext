@@ -9,6 +9,8 @@
 #import "CommonStageCell.h"
 #import "Constant.h"
 #import "UIImageView+WebCache.h"
+#import "UIButton+WebCache.h"
+#import "Function.h"
 #import "ZCControl.h"
 #import "MarkView.h"
 @implementation CommonStageCell
@@ -143,70 +145,6 @@
         if ([dict objectForKey:@"stage"]) {
             [MovieLogoImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w100h100",kUrlMoviePoster,[dict objectForKey:@"movie_poster"]]] placeholderImage:[ UIImage imageNamed:@"loading_image_all.png"]];
         }
-        
-     //遍历bgview1，删除bgview 的子视图
-        /*
-        for (UIView  *Mview in  BgView1.subviews) {
-            if ([Mview isKindOfClass:[MarkView class]]) {
-                [Mview  removeFromSuperview];
-            }
-        }
-         */
-        
-        /*
-        for ( int i=0;i<_WeibosArray.count ; i++) {
-        
-            MarkView *markView=[[MarkView alloc]initWithFrame:CGRectMake(10, 10, 100, 30)];
-
-#warning 暂时设为YES
-            //markView.clipsToBounds = YES;
-            markView.tag=1000+i;
-           [BgView1 addSubview:markView];
-                    
-            NSDictionary  *weibodict=[NSDictionary dictionaryWithDictionary:[_WeibosArray  objectAtIndex:i]];
-            float  x=[[weibodict objectForKey:@"x"]floatValue ];
-            float  y=[[weibodict objectForKey:@"y"]floatValue ];
-            NSLog(@" ==== =mark  view  ===%f  ==== mark view =====%f",x,y);
-            NSString  *weiboTitleString=[weibodict  objectForKey:@"topic"];
-            NSString  *UpString=[weibodict objectForKey:@"ups"];
-            NSLog(@"weibo dict ======%@",weibodict);
-            
-            
-            
-            //计算标题的size
-            CGSize  Msize=[weiboTitleString boundingRectWithSize:CGSizeMake(kDeviceWidth/2,MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:markView.TitleLable.font forKey:NSFontAttributeName] context:nil].size;
-            // 计算赞数量的size
-            CGSize Usize=[UpString boundingRectWithSize:CGSizeMake(40,MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:markView.ZanNumLable.font forKey:NSFontAttributeName] context:nil].size;
-          
-        
-            NSLog(@"size= %f %f", Msize.width, Msize.height);
-            //计算赞数量的长度
-            float  Uwidth=[UpString floatValue]==0?0:Usize.width;
-            //宽度=字的宽度+左头像图片的宽度＋赞图片的宽度＋赞数量的宽度+中间两个空格2+2
-            //位置=
-            float markViewWidth = Msize.width+23+Uwidth+5+5+11+5;
-            float markViewHeight = Msize.height+15;
-            float markViewX = (x*kDeviceWidth)/100-markViewWidth;
-            markViewX = MIN(MAX(markViewX, 0.0f), kDeviceWidth-markViewWidth);
-            
-            float markViewY = (y*kDeviceWidth)/100+(Msize.height/2);
-#warning    kDeviceWidth 目前计算的是正方形的，当图片高度>屏幕的宽度的实际，需要使用图片的高度
-            markViewY = MIN(MAX(markViewY, markViewHeight/2), kDeviceWidth-markViewHeight);
-            
-            markView.frame=CGRectMake(markViewX, markViewY, markViewWidth, markViewHeight);
-          
-            markView.TitleLable.text=weiboTitleString;
-            ///显示标签的头像
-            [ markView.LeftImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kUrlAvatar,[weibodict objectForKey:@"avatar"]]]];
-            
-            markView.ZanNumLable.text=[weibodict objectForKey:@"ups"];
-            markView.isAnimation = YES;
-            
-      
-        }
-         */
-
-        
     }
 #pragma mark 最新cell
     else if(_pageType==NSPageSourceTypeMainNewController)  //最新
@@ -218,59 +156,10 @@
         if ([dict objectForKey:@"stage"]) {
             [MovieLogoImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w100h100",kUrlMoviePoster,[dict objectForKey:@"movie_poster"]]] placeholderImage:[ UIImage imageNamed:@"loading_image_all.png"]];
         }
-        /*
-        float  x=[[_weiboDict objectForKey:@"x"]floatValue ];
-        float  y=[[_weiboDict objectForKey:@"y"]floatValue ];
-        //遍历bgview1，删除bgview 的子视图
-        for (UIView  *Mview in  BgView1.subviews) {
-            if ([Mview isKindOfClass:[MarkView class]]) {
-                [Mview  removeFromSuperview];
-            }
-        }
-        //  创建静态标签
-        MarkView *markView=[[MarkView alloc]initWithFrame:CGRectMake(10, 10, 100, 30)];
-       // markView.TitleLable.frame=CGRectMake(0,0, Msize.width ,Msize.height);
-         markView.rightView.layer.borderWidth=1;
-        markView.rightView.layer.borderColor=VBlue_color.CGColor;
-        [BgView1 addSubview:markView];
         
-       
-        NSString  *weiboTitleString=[_weiboDict objectForKey:@"topic"];
-        NSString  *UpString=[_weiboDict objectForKey:@"ups"];
-        //宽度屏幕1/2
-        CGSize  Msize=[weiboTitleString boundingRectWithSize:CGSizeMake(kDeviceWidth/2,MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:markView.TitleLable.font forKey:NSFontAttributeName] context:nil].size;
-        
-        // 计算赞数量的size
-        CGSize Usize=[UpString boundingRectWithSize:CGSizeMake(40,MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:markView.ZanNumLable.font forKey:NSFontAttributeName] context:nil].size;
-        
-        
-        NSLog(@"size= %f %f", Msize.width, Msize.height);
-        //计算赞数量的长度
-        float  Uwidth=[UpString floatValue]==0?0:Usize.width;
-        //宽度=字的宽度+左头像图片的宽度＋赞图片的宽度＋赞数量的宽度+中间两个空格2+2
-        //位置=
-        float markViewWidth = Msize.width+23+Uwidth+5+5+11+5;
-        float markViewHeight = Msize.height+15;
-        float markViewX = (x*kDeviceWidth)/100-markViewWidth;
-        markViewX = MIN(MAX(markViewX, 0.0f), kDeviceWidth-markViewWidth);
-        
-        float markViewY = (y*kDeviceWidth)/100+(Msize.height/2);
-#warning    kDeviceWidth 目前计算的是正方形的，当图片高度>屏幕的宽度的实际，需要使用图片的高度
-        markViewY = MIN(MAX(markViewY, markViewHeight/2), kDeviceWidth-markViewHeight);
-        
-        markView.frame=CGRectMake(markViewX, markViewY, markViewWidth, markViewHeight);
-        
-        markView.TitleLable.text=weiboTitleString;
-        ///显示标签的头像
-        [ markView.LeftImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kUrlAvatar,[_weiboDict objectForKey:@"avatar"]]]];
-        
-        markView.ZanNumLable.text=[_weiboDict objectForKey:@"ups"];
-        */
-
-        
-        
-        
-        
+        [UserLogoButton sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!thumb", kUrlAvatar, [_weiboDict objectForKey:@"avatar"]]] forState:UIControlStateNormal];
+        UserNameLable.text = [_weiboDict objectForKey:@"username"];
+        TimeLable.text = [Function friendlyTime:[_weiboDict objectForKey:@"create_time"]];
     }
 
 }

@@ -24,9 +24,9 @@
 #import "MJRefresh.h"
 @interface NotificationViewController ()<UITableViewDataSource,UITableViewDelegate>
 {
-    LoadingView   *loadView;
-    UITableView   *_myTableView;
-    NSMutableArray    *_dataArray;
+    LoadingView         *loadView;
+    UITableView         *_myTableView;
+    NSMutableArray      *_dataArray;
     int page;
 }
 @end

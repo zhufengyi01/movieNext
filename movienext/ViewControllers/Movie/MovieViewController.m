@@ -29,11 +29,10 @@
 //#import  "SearchMovieViewController.h"
 @interface MovieViewController ()<UISearchBarDelegate,UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout>
 {
-    UICollectionView   *_myConllectionView;
-    LoadingView   *loadView;
-    NSMutableArray    *_dataArray;
+    UICollectionView    *_myConllectionView;
+    LoadingView         *loadView;
+    NSMutableArray      *_dataArray;
     int page;
-
 }
 
 @end
