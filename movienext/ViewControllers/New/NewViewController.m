@@ -182,8 +182,6 @@
         if (tableView==_HotMoVieTableView) {
             float hight;
             if (_hotDataArray.count>indexPath.row) {
-                
-
             float  h=   [[[[_hotDataArray  objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] objectForKey:@"h"] floatValue];
             float w=   [[[[_hotDataArray  objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] objectForKey:@"w"] floatValue];
             if (w==0||h==0) {

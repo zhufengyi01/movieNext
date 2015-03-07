@@ -11,7 +11,7 @@
 #import "Constant.h"
 #import "UIImageView+WebCache.h"
 
-@implementation StageView
+@implementation StageView 
 
 /*
 // Only override drawRect: if you perform custom drawing.
@@ -76,6 +76,7 @@
 }
 
 - (MarkView *) createMarkViewWithDict:(NSDictionary *)weibodict andIndex:(NSInteger)index{
+    
             MarkView *markView=[[MarkView alloc]initWithFrame:CGRectMake(10, 10, 100, 30)];
             markView.alpha = 0;
 #warning 暂时设为YES
@@ -120,7 +121,7 @@
 }
 
 #pragma  mark ----执行动画的开始和结束
-//放大动画
+//2.放大动画
 - (void)scaleAnimation {
     [UIView beginAnimations:@"beingBig" context:nil];
     [UIView setAnimationCurve:UIViewAnimationCurveEaseIn];
@@ -130,7 +131,10 @@
     [self scaleAnimationFunc];
     [UIView commitAnimations];
 }
-//放大动画的实现
+
+
+
+//3.放大动画的实现
 - (void)scaleAnimationFunc {
     for (UIView *v in self.subviews) {
         if ([v isKindOfClass:[MarkView class]]) {
@@ -152,7 +156,7 @@
         }
     }
 }
-//放大结束动画
+//4.放大结束动画
 - (void)scaleFinish {
     [UIView beginAnimations:@"disappear" context:nil];
     [UIView setAnimationCurve:UIViewAnimationCurveLinear];
@@ -161,7 +165,7 @@
     [self scaleFinishFunc];
     [UIView commitAnimations];
 }
-//放大结束动画的实现
+//5.放大结束动画的实现
 - (void)scaleFinishFunc {
     for (UIView *v in self.subviews) {
         if ([v isKindOfClass:[MarkView class]]) {
@@ -175,34 +179,38 @@
     _timer = [NSTimer scheduledTimerWithTimeInterval:kTimeOffset target:self selector:@selector(showAnimation) userInfo:nil repeats:YES];
 }
 
-//开始执行动画, 动画入口
+
+
+//1.开始执行动画, 动画入口
 - (void)startAnimation {
     //开始动画之后0.5秒再开始动画
     [self performSelector:@selector(scaleAnimation) withObject:nil afterDelay:0.5];
 }
 
-//循环显示气泡动画
+//6.循环显示气泡动画
 - (void)showAnimation {
-    NSLog(@"index = %d", currentMarkIndex);
+    NSLog(@"index = %ld", currentMarkIndex);
     
     if (currentMarkIndex <= self.subviews.count-1) {
         UIView *v = self.subviews[currentMarkIndex];
         if ([v isKindOfClass:[MarkView class]]) {
             MarkView *mv = (MarkView *)v;
+            //markview 本身的方法
             [mv startAnimation];
         }
     }
     
     currentMarkIndex ++;
-    
+    //执行完成一轮动画之后，实行，重新再动第一个执行
     if (currentMarkIndex > MAX(self.subviews.count, 10) ) {
         currentMarkIndex = 0;
     }
 }
 
-//停止动画
+//7.停止动画
 - (void)stopAnimation {
     [_timer invalidate];
+    
 }
 
 @end

@@ -39,6 +39,7 @@
     UIBarButtonItem  *barButton=[[UIBarButtonItem alloc]initWithCustomView:button];
     self.navigationItem.rightBarButtonItem=barButton;
 }
+
 -(void)GotoSettingClick:(UIButton  *) button
 {
     

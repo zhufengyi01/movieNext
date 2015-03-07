@@ -42,8 +42,8 @@
 
 - (void)setMemory
 {
-    self.m_arrNormal = [NSArray arrayWithObjects:@"tabbar_icon_index@2x.png", @"tabbar_icon_movie@2x.png", @"tabbar_icon_noti@2x.png", @"tabbar_icon_mine@2x.png", nil];
-    self.m_arrSelected = [NSArray arrayWithObjects:@"tabbar_icon_index@2x.png", @"abbar_icon_movie@2x.png", @"tabbar_icon_noti@2x.png", @"tabbar_icon_mine@2x.png", nil];
+    self.m_arrNormal = [NSArray arrayWithObjects:@"feed_tab_butten（gray).png", @"movie_tab_butten（gray）.png", @"notice_tab_butten（gray）.png", @"me_tab_butten（gray）.png", nil];
+    self.m_arrSelected = [NSArray arrayWithObjects:@"feed_tab_butten.png", @"movie_tab_butten.png", @"notice_tab_butten.png", @"me_tab_butten.png", nil];
     titleArray=@[@"最新",@"电影",@"消息",@"我的"];
     
 }

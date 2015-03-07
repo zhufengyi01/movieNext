@@ -24,6 +24,7 @@
 #import "MJRefresh.h"
 #import "MovieSearchViewController.h"
 #import "MovieCollectionViewCell.h"
+#import "MovieDetailViewController.h"
 
 //#import  "SearchMovieViewController.h"
 @interface MovieViewController ()<UISearchBarDelegate,UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout>
@@ -194,7 +195,11 @@
     int movieNameHeight = 20;
     return CGSizeMake( width, width*1.5 + movieNameMarginTop + movieNameHeight);
 }
-
+-(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSLog(@"=====点击了那个cell ===%ld",indexPath.row);
+    [self.navigationController pushViewController:[MovieDetailViewController new] animated:YES];
+}
 
 
 #pragma  mark  ------

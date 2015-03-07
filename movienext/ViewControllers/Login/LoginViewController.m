@@ -68,16 +68,16 @@
     
     UIButton  *qqButton=[UIButton buttonWithType:UIButtonTypeCustom];
     qqButton.frame=CGRectMake(50, kDeviceHeight-220, kDeviceWidth-100, 40);
-    [qqButton setBackgroundImage:[UIImage imageNamed:@"bg_qq@2x.png"] forState:UIControlStateNormal];
-    [qqButton setBackgroundImage:[UIImage imageNamed:@"bg_qq_h@2x.png"] forState:UIControlStateHighlighted];
+    [qqButton setBackgroundImage:[UIImage imageNamed:@"login_button_qq －in.png"] forState:UIControlStateNormal];
+    [qqButton setBackgroundImage:[UIImage imageNamed:@"login_button_qq.png"] forState:UIControlStateHighlighted];
     [qqButton addTarget:self action:@selector(dealloginClick:) forControlEvents:UIControlEventTouchUpInside];
     qqButton.tag=1000;
     [self.view addSubview:qqButton];
     
     UIButton  *weiboButton=[UIButton buttonWithType:UIButtonTypeCustom];
     weiboButton.frame=CGRectMake(50, kDeviceHeight-160, kDeviceWidth-100, 40);
-    [weiboButton setBackgroundImage:[UIImage imageNamed:@"bg_weibo@2x.png"] forState:UIControlStateNormal];
-    [weiboButton setBackgroundImage:[UIImage imageNamed:@"bg_weibo_h@2x.png"] forState:UIControlStateHighlighted];
+    [weiboButton setBackgroundImage:[UIImage imageNamed:@"login_button_sina －in.png"] forState:UIControlStateNormal];
+    [weiboButton setBackgroundImage:[UIImage imageNamed:@"login_button_sina.png"] forState:UIControlStateHighlighted];
     [weiboButton addTarget:self action:@selector(dealloginClick:) forControlEvents:UIControlEventTouchUpInside];
     weiboButton.tag=1001;
 
