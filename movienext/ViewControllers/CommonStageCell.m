@@ -49,7 +49,7 @@
     TimeLable.textColor=VGray_color;
     [BgView0 addSubview:TimeLable];
     
-    ZanButton =[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-70, 10, 40, 25) ImageName:@"like.png" Target:self.superview Action:@selector(UserLogoButtonClick:) Title:@""];
+    ZanButton =[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-70, 10, 50, 25) ImageName:@"like.png" Target:self.superview Action:@selector(ZanButtonClick:) Title:@""];
     ZanButton.layer.cornerRadius=2;
     [ZanButton setBackgroundImage:[UIImage imageNamed:@"liked.png"] forState:UIControlStateSelected];
     [BgView0 addSubview:ZanButton];
@@ -78,7 +78,7 @@
     leftButtomButton=[UIButton buttonWithType:UIButtonTypeCustom];
     leftButtomButton.frame=CGRectMake(10, 8, 140, 30);
     [leftButtomButton setBackgroundImage:[[UIImage imageNamed:@"movie_icon_backgroud_color.png"]stretchableImageWithLeftCapWidth:10 topCapHeight:10] forState:UIControlStateNormal];
-    [leftButtomButton addTarget:self action:@selector(dealMovieButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    [leftButtomButton addTarget:self.superview action:@selector(dealMovieButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     [leftButtomButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [leftButtomButton setTitleEdgeInsets:UIEdgeInsetsMake(0, 30, 0, 0)];
     leftButtomButton.titleLabel.font = [UIFont systemFontOfSize:12];
@@ -110,6 +110,11 @@
         _BgView1.WeibosArray = _WeibosArray;
     }
     
+    leftButtomButton.tag=1000+row;
+    ScreenButton.tag=2000+row;
+    addMarkButton.tag=3000+row;
+    UserLogoButton.tag=4000+row;
+    ZanButton.tag=5000+row;
     [_BgView1 setStageValue:dict];
     
     float  ImageWith=[[dict objectForKey:@"w"]  floatValue];
@@ -179,6 +184,10 @@
     
 }
 -(void)UserLogoButtonClick:(UIButton *) button
+{
+    
+}
+-(void)ZanButtonClick:(UIButton *)button
 {
     
 }

@@ -31,6 +31,7 @@
 -(void)createNavigation
 {
     self.navigationController.navigationItem.title=@"我的";
+    
     UIButton  *button=[UIButton buttonWithType:UIButtonTypeCustom];
     //[button setTitle:@"设置" forState:UIControlStateNormal];
     [button setBackgroundImage:[UIImage imageNamed:@"setting.png"] forState:UIControlStateNormal];

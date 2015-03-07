@@ -137,6 +137,9 @@
         //[_myTableView footerEndRefreshing];
     });
 }
+#pragma  mark  ---
+#pragma  mark  ----RequestData
+#pragma  mark  ---
 -(void)requestData
 {
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];

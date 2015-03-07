@@ -253,6 +253,9 @@
 		00AA546A1AA2C5C9004096F8 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00AA54691AA2C5C9004096F8 /* CoreGraphics.framework */; };
 		00AA546D1AA2D597004096F8 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00AA546C1AA2D597004096F8 /* SystemConfiguration.framework */; };
 		00AA546F1AA2D5B0004096F8 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00AA546E1AA2D5B0004096F8 /* Security.framework */; };
+		00ABFC711AAAAB2200980824 /* BigImageCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00ABFC701AAAAB2200980824 /* BigImageCollectionViewCell.m */; };
+		00ABFC741AAAAB3F00980824 /* SmallImageCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00ABFC731AAAAB3F00980824 /* SmallImageCollectionViewCell.m */; };
+		00ABFC7A1AAACDF800980824 /* MovieHeadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 00ABFC791AAACDF800980824 /* MovieHeadView.m */; };
 		00CAC3CA1AA31A3F008208E9 /* LoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 00CAC3C91AA31A3F008208E9 /* LoadingView.m */; };
 		00E3581E1AA3DCD000577239 /* NotificationTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E3581D1AA3DCD000577239 /* NotificationTableViewCell.m */; };
 		00E358211AA3E13E00577239 /* ZCControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E358201AA3E13E00577239 /* ZCControl.m */; };
@@ -404,8 +407,8 @@
 		00572CC11AA44FBE0041D451 /* MovieCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MovieCollectionViewCell.m; sourceTree = "<group>"; };
 		005AFB581AA5F41900D80CFB /* CommonStageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonStageCell.h; sourceTree = "<group>"; };
 		005AFB591AA5F41900D80CFB /* CommonStageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonStageCell.m; sourceTree = "<group>"; };
-		005C5B411AA9622100208782 /* MovieDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MovieDetailViewController.h; sourceTree = "<group>"; };
-		005C5B421AA9622100208782 /* MovieDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MovieDetailViewController.m; sourceTree = "<group>"; };
+		005C5B411AA9622100208782 /* MovieDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MovieDetailViewController.h; path = ViewControllers/MovieDetailViewController.h; sourceTree = SOURCE_ROOT; };
+		005C5B421AA9622100208782 /* MovieDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MovieDetailViewController.m; path = ViewControllers/MovieDetailViewController.m; sourceTree = SOURCE_ROOT; };
 		005C5B441AA9629900208782 /* AddSubtitleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddSubtitleViewController.h; sourceTree = "<group>"; };
 		005C5B451AA9629900208782 /* AddSubtitleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddSubtitleViewController.m; sourceTree = "<group>"; };
 		006739431AA491250087C240 /* MJRefresh.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = MJRefresh.bundle; sourceTree = "<group>"; };
@@ -641,6 +644,12 @@
 		00AA54691AA2C5C9004096F8 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		00AA546C1AA2D597004096F8 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		00AA546E1AA2D5B0004096F8 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		00ABFC6F1AAAAB2200980824 /* BigImageCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BigImageCollectionViewCell.h; sourceTree = "<group>"; };
+		00ABFC701AAAAB2200980824 /* BigImageCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BigImageCollectionViewCell.m; sourceTree = "<group>"; };
+		00ABFC721AAAAB3F00980824 /* SmallImageCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SmallImageCollectionViewCell.h; sourceTree = "<group>"; };
+		00ABFC731AAAAB3F00980824 /* SmallImageCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SmallImageCollectionViewCell.m; sourceTree = "<group>"; };
+		00ABFC781AAACDF800980824 /* MovieHeadView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MovieHeadView.h; sourceTree = "<group>"; };
+		00ABFC791AAACDF800980824 /* MovieHeadView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MovieHeadView.m; sourceTree = "<group>"; };
 		00CAC3C81AA31A3F008208E9 /* LoadingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadingView.h; sourceTree = "<group>"; };
 		00CAC3C91AA31A3F008208E9 /* LoadingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoadingView.m; sourceTree = "<group>"; };
 		00E3581C1AA3DCD000577239 /* NotificationTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationTableViewCell.h; sourceTree = "<group>"; };
@@ -685,6 +694,7 @@
 		000B08F71AA2EA1800B8D13A /* Movie */ = {
 			isa = PBXGroup;
 			children = (
+				00ABFC6E1AAAA78100980824 /* MovieDetail */,
 				0067395B1AA49F260087C240 /* Searchmovie */,
 				000B08F81AA2EA1800B8D13A /* MovieViewController.h */,
 				000B08F91AA2EA1800B8D13A /* MovieViewController.m */,
@@ -1308,8 +1318,6 @@
 				00AA54041AA2C525004096F8 /* Noti */,
 				005AFB581AA5F41900D80CFB /* CommonStageCell.h */,
 				005AFB591AA5F41900D80CFB /* CommonStageCell.m */,
-				005C5B411AA9622100208782 /* MovieDetailViewController.h */,
-				005C5B421AA9622100208782 /* MovieDetailViewController.m */,
 				005C5B441AA9629900208782 /* AddSubtitleViewController.h */,
 				005C5B451AA9629900208782 /* AddSubtitleViewController.m */,
 			);
@@ -1368,6 +1376,21 @@
 				00AA54611AA2C5A0004096F8 /* libz.dylib */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		00ABFC6E1AAAA78100980824 /* MovieDetail */ = {
+			isa = PBXGroup;
+			children = (
+				005C5B411AA9622100208782 /* MovieDetailViewController.h */,
+				005C5B421AA9622100208782 /* MovieDetailViewController.m */,
+				00ABFC6F1AAAAB2200980824 /* BigImageCollectionViewCell.h */,
+				00ABFC701AAAAB2200980824 /* BigImageCollectionViewCell.m */,
+				00ABFC721AAAAB3F00980824 /* SmallImageCollectionViewCell.h */,
+				00ABFC731AAAAB3F00980824 /* SmallImageCollectionViewCell.m */,
+				00ABFC781AAACDF800980824 /* MovieHeadView.h */,
+				00ABFC791AAACDF800980824 /* MovieHeadView.m */,
+			);
+			name = MovieDetail;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1652,8 +1675,10 @@
 				00AA54321AA2C525004096F8 /* UIImage+GIF.m in Sources */,
 				00E358211AA3E13E00577239 /* ZCControl.m in Sources */,
 				00AA542B1AA2C525004096F8 /* SDWebImageCompat.m in Sources */,
+				00ABFC711AAAAB2200980824 /* BigImageCollectionViewCell.m in Sources */,
 				00AA545A1AA2C526004096F8 /* Topic.m in Sources */,
 				00AA54111AA2C525004096F8 /* DoubanService.m in Sources */,
+				00ABFC741AAAAB3F00980824 /* SmallImageCollectionViewCell.m in Sources */,
 				00AA540A1AA2C525004096F8 /* BasePageViewController.m in Sources */,
 				00AA540D1AA2C525004096F8 /* BaseTextField.m in Sources */,
 				00AA545B1AA2C526004096F8 /* User.m in Sources */,
@@ -1693,6 +1718,7 @@
 				00CAC3CA1AA31A3F008208E9 /* LoadingView.m in Sources */,
 				006739541AA491250087C240 /* MJRefreshBaseView.m in Sources */,
 				00AA541F1AA2C525004096F8 /* MASCompositeConstraint.m in Sources */,
+				00ABFC7A1AAACDF800980824 /* MovieHeadView.m in Sources */,
 				00AA54141AA2C525004096F8 /* AFHTTPRequestOperation.m in Sources */,
 				00AA54231AA2C525004096F8 /* MASViewAttribute.m in Sources */,
 				00AA54591AA2C526004096F8 /* Stage.m in Sources */,

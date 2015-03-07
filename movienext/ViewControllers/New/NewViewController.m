@@ -310,17 +310,36 @@
 
 #pragma  mark  =====ButtonClick
 
+//点击左下角的电影按钮
 -(void)dealMovieButtonClick:(UIButton  *) button{
-    
+    NSLog(@" ==dealMovieButtonClick  ====%ld",button.tag);
 }
+//分享
 -(void)ScreenButtonClick:(UIButton  *) button
 {
-    
+    NSLog(@" ==ScreenButtonClick  ====%ld",button.tag);
+
 }
+//点击增加弹幕
 -(void)addMarkButtonClick:(UIButton  *) button
 {
-    
+    NSLog(@" ==addMarkButtonClick  ====%ld",button.tag);
+   
+
 }
+//点击头像
+-(void)UserLogoButtonClick:(UIButton *) button
+{
+    NSLog(@" ==UserLogoButtonClick  ====%ld",button.tag);
+
+}
+//点赞
+-(void)ZanButtonClick:(UIButton *)button
+{
+    NSLog(@" ==ZanButtonClick  ====%ld",button.tag);
+
+}
+
 
 
 - (void)didReceiveMemoryWarning {

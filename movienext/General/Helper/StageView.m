@@ -170,7 +170,7 @@
 
 //6.循环显示气泡动画
 - (void)showAnimation {
-    NSLog(@"index = %ld", currentMarkIndex);
+    //NSLog(@"index = %ld", currentMarkIndex);
     
     if (currentMarkIndex <= self.subviews.count-1) {
         UIView *v = self.subviews[currentMarkIndex];
