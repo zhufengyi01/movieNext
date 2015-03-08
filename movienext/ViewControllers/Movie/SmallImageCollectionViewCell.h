@@ -9,6 +9,9 @@
 #import <UIKit/UIKit.h>
 
 @interface SmallImageCollectionViewCell : UICollectionViewCell
-@property(strong,nonatomic)UIImageView *imageV;
+{
+    CGRect   m_frame;
+}
+@property(strong,nonatomic)UIImageView *imageView;
 @property(strong,nonatomic)UILabel *titleLab;
 @end

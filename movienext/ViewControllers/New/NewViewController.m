@@ -65,9 +65,8 @@
 #pragma  mark  -------CreatUI;
 -(void)creatNavigation
 {
-    
+    [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color.png"] forBarMetrics:UIBarMetricsDefault];
     NSArray *segmentedArray = [[NSArray alloc] initWithObjects:@"热门", @"最新", nil];
-
     segment = [[UISegmentedControl alloc] initWithItems:segmentedArray];
     segment.frame = CGRectMake(kDeviceWidth/4, 0, kDeviceWidth/2, 30);
     segment.selectedSegmentIndex = 0;
@@ -109,7 +108,7 @@
 }
 -(void)createNewView
 {
-    _NewMoviewTableView=[[UITableView alloc]initWithFrame:CGRectMake(0,kHeightNavigation, kDeviceWidth, kDeviceHeight)];
+    _NewMoviewTableView=[[UITableView alloc]initWithFrame:CGRectMake(0,0, kDeviceWidth, kDeviceHeight)];
     _NewMoviewTableView.delegate=self;
     _NewMoviewTableView.dataSource=self;
     _NewMoviewTableView.hidden=YES;
@@ -172,7 +171,6 @@
 {
     if (segment.selectedSegmentIndex==0) {
         if (tableView==_HotMoVieTableView) {
-           
             return _hotDataArray.count;
         }
     }
