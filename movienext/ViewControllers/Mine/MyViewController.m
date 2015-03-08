@@ -13,7 +13,9 @@
 #import "UserDataCenter.h"
 #import "AFNetworking.h"
 #import "CommonStageCell.h"
+#import "UserDataCenter.h"
 #import "SettingViewController.h"
+#import "UIImageView+WebCache.h"
 @interface MyViewController ()<UITableViewDataSource, UITableViewDelegate>
 {
     UISegmentedControl *segment;
@@ -26,7 +28,9 @@
     UIImageView *ivAvatar;//头像
     UILabel *lblUsername;//用户名
     UILabel *lblCount;//统计信息
+    UILabel *lblZanCout;
     UILabel *lblBrief;//简介
+    UserDataCenter  *userCenter;
 }
 @end
 
@@ -42,6 +46,7 @@
     self.view.backgroundColor=[UIColor yellowColor];
     UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:@"我的"];
     titleLable.textColor=VBlue_color;
+    
     titleLable.font=[UIFont boldSystemFontOfSize:16];
     titleLable.textAlignment=NSTextAlignmentCenter;
     self.navigationItem.titleView=titleLable;
@@ -81,43 +86,91 @@
     [self.view addSubview:_tableView];
     
     
+    userCenter=[UserDataCenter shareInstance];
+    
+    int BodyConut=[userCenter.product_count intValue];
+    int  ZanCount= [userCenter.like_count  intValue];
+
+    NSString  *signature=[NSString stringWithFormat:@"%@",userCenter.signature];
+    if (signature==nil) {
+        signature=@"";
+    }
+    NSLog(@"   ==========用户信息===body count %d   zanCount ===%d   signatuer ===%@",BodyConut,ZanCount,signature);
+    
+
+    
     UIView *viewHeader = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, 130)];
-    viewHeader.backgroundColor = [UIColor greenColor];
+    viewHeader.backgroundColor =View_BackGround;
     
     int ivAvatarWidth = 50;
     ivAvatar = [[UIImageView alloc] initWithFrame:CGRectMake(25, 20, ivAvatarWidth, ivAvatarWidth)];
     ivAvatar.layer.cornerRadius = ivAvatarWidth * 0.5;
     ivAvatar.layer.masksToBounds = YES;
-    ivAvatar.backgroundColor = [UIColor redColor];
+   // ivAvatar.backgroundColor = [UIColor redColor];
+    
+
+   // ivAvatar.image=[UIImage imageNamed:[]];
+    [ivAvatar sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!thumb",kUrlAvatar,userCenter.avatar]] placeholderImage:[UIImage imageNamed:@"loading_image_all.png"]];
+
     [viewHeader addSubview:ivAvatar];
     
-    lblUsername = [[UILabel alloc] initWithFrame:CGRectMake(85, 25, 200, 20)];
+    lblUsername = [[UILabel alloc] initWithFrame:CGRectMake(ivAvatar.frame.origin.x+ivAvatar.frame.size.width+10, ivAvatar.frame.origin.y, 200, 20)];
     lblUsername.font = [UIFont systemFontOfSize:15];
-    lblUsername.textColor = [UIColor grayColor];
-    lblUsername.backgroundColor = [UIColor blueColor];
+    lblUsername.textColor = VBlue_color;
+    //lblUsername.backgroundColor = [UIColor blueColor];
+    lblUsername.text=[NSString stringWithFormat:@"%@",userCenter.username];
     [viewHeader addSubview:lblUsername];
     
-    lblCount = [[UILabel alloc] initWithFrame:CGRectMake(85, 45, 200, 20)];
-    lblCount.font = [UIFont systemFontOfSize:10];
-    lblCount.textColor = [UIColor grayColor];
-    lblCount.backgroundColor = [UIColor purpleColor];
+    UILabel  *lbl1=[ZCControl createLabelWithFrame:CGRectMake(lblUsername.frame.origin.x,lblUsername.frame.origin.y+lblUsername.frame.size.height+10, 40, 20) Font:14 Text:@"内容"];
+    lbl1.textColor=VBlue_color;
+    [viewHeader addSubview:lbl1];
+    
+    //内容的数量
+    lblCount = [[UILabel alloc] initWithFrame:CGRectMake(lbl1.frame.origin.x+lbl1.frame.size.width, lblUsername.frame.origin.y+lblUsername.frame.size.height+10, 60, 20)];
+    lblCount.font = [UIFont systemFontOfSize:14];
+    lblCount.text=[NSString stringWithFormat:@"%d",BodyConut];//BodyConut;]
+    lblCount.textColor = VGray_color;
+    //lblCount.backgroundColor = [UIColor purpleColor];
     [viewHeader addSubview:lblCount];
     
-    lblBrief = [[UILabel alloc] initWithFrame:CGRectMake(ivAvatar.frame.origin.x, 70, kDeviceWidth-50, 20)];
+    
+    UILabel  *lbl2=[ZCControl createLabelWithFrame:CGRectMake(lblCount.frame.origin.x+lblCount.frame.size.width+10,lblUsername.frame.origin.y+lblUsername.frame.size.height+10, 40, 20) Font:14 Text:@"赞"];
+    lbl2.textColor=VBlue_color;
+    [viewHeader addSubview:lbl2];
+
+    //赞的数量
+    lblZanCout = [[UILabel alloc] initWithFrame:CGRectMake(lbl2.frame.origin.x+lbl2.frame.size.height+10,lblCount.frame.origin.y , 50, 20)];
+    lblZanCout.font = [UIFont systemFontOfSize:14];
+    lblZanCout.textColor = VGray_color;
+    lblZanCout.text=[NSString stringWithFormat:@"%d",ZanCount];
+    
+    //lblZanCout.backgroundColor = [UIColor purpleColor];
+    [viewHeader addSubview:lblZanCout];
+    
+   //简介
+    lblBrief = [[UILabel alloc] initWithFrame:CGRectMake(ivAvatar.frame.origin.x+ivAvatar.frame.size.width+10,lblCount.frame.origin.y+lblCount.frame.size.height+10, kDeviceWidth-ivAvatar.frame.origin.x-ivAvatar.frame.size.width-20, 20)];
     lblBrief.font = [UIFont systemFontOfSize:12];
-    lblBrief.textColor = [UIColor grayColor];
-    lblBrief.backgroundColor = [UIColor orangeColor];
-    [viewHeader addSubview:lblBrief];
+    CGSize  Msize= [signature boundingRectWithSize:CGSizeMake(kDeviceWidth-80, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:lblBrief.font forKey:NSFontAttributeName] context:nil].size;
+    lblBrief.textColor = VGray_color;
+   // lblBrief.backgroundColor = [UIColor orangeColor];
+    lblBrief.text=signature;
+    lblBrief.frame=CGRectMake(ivAvatar.frame.origin.x+ivAvatar.frame.size.width+10,lblCount.frame.origin.y+lblCount.frame.size.height+10, kDeviceWidth-ivAvatar.frame.origin.x-ivAvatar.frame.size.width-20, Msize.height);
+      [viewHeader addSubview:lblBrief];
+    
+    
+    
     
     NSArray *segmentedArray = [[NSArray alloc] initWithObjects:@"添加", @"赞", nil];
-
     segment = [[UISegmentedControl alloc] initWithItems:segmentedArray];
-    segment.frame = CGRectMake(kDeviceWidth/4, 95, kDeviceWidth/2, 30);
+    segment.frame = CGRectMake(kDeviceWidth/4, lblBrief.frame.origin.y+lblBrief.frame.size.height+10, kDeviceWidth/2, 30);
     segment.selectedSegmentIndex = 0;
     segment.backgroundColor = [UIColor clearColor];
     segment.tintColor = kAppTintColor;
     [segment addTarget:self action:@selector(segmentClick:) forControlEvents:UIControlEventValueChanged];
     [viewHeader addSubview:segment];
+    
+    viewHeader.frame=CGRectMake(0, 0, kDeviceWidth,segment.frame.origin.y+segment.frame.size.height+10);
+
     [_tableView setTableHeaderView:viewHeader];
 }
 
@@ -150,6 +203,7 @@
 #pragma  mark ------  DataRequest 
 #pragma  mark ----
 - (void)requestData{
+#warning  这里需要替换用户id
     UserDataCenter  *userCenter=[UserDataCenter shareInstance];
     NSDictionary *parameters = @{@"user_id":@"18", @"page":[NSString stringWithFormat:@"%d",page], @"author_id":@"54"};
     NSString * section;
@@ -170,7 +224,7 @@
             if (_addedDataArray ==nil) {
                 _addedDataArray=[[NSMutableArray alloc]init];
             }
-            NSLog(@"用户添加的数据 JSON: %@", responseObject);
+            //NSLog(@"用户添加的数据 JSON: %@", responseObject);
             [_addedDataArray addObjectsFromArray:Detailarray];
             [_tableView reloadData];
 
@@ -180,7 +234,7 @@
             if (_upedDataArray==nil) {
                 _upedDataArray=[[NSMutableArray alloc]init];
             }
-            NSLog(@"用户赞过的数据 JSON: %@", responseObject);
+           /// NSLog(@"用户赞过的数据 JSON: %@", responseObject);
             [_upedDataArray addObjectsFromArray:Detailarray];
             [_tableView reloadData];
         }
