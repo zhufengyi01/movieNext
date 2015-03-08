@@ -259,6 +259,7 @@
 		00CAC3CA1AA31A3F008208E9 /* LoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 00CAC3C91AA31A3F008208E9 /* LoadingView.m */; };
 		00E3581E1AA3DCD000577239 /* NotificationTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E3581D1AA3DCD000577239 /* NotificationTableViewCell.m */; };
 		00E358211AA3E13E00577239 /* ZCControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E358201AA3E13E00577239 /* ZCControl.m */; };
+		00E609FA1AABE52500E2F53B /* DAKeyboardControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E609F91AABE52500E2F53B /* DAKeyboardControl.m */; };
 		4076AF011AA9B0D2006DC466 /* StageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4076AF001AA9B0D2006DC466 /* StageView.m */; };
 /* End PBXBuildFile section */
 
@@ -656,6 +657,8 @@
 		00E3581D1AA3DCD000577239 /* NotificationTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationTableViewCell.m; sourceTree = "<group>"; };
 		00E3581F1AA3E13E00577239 /* ZCControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZCControl.h; sourceTree = "<group>"; };
 		00E358201AA3E13E00577239 /* ZCControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZCControl.m; sourceTree = "<group>"; };
+		00E609F81AABE52500E2F53B /* DAKeyboardControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DAKeyboardControl.h; sourceTree = "<group>"; };
+		00E609F91AABE52500E2F53B /* DAKeyboardControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DAKeyboardControl.m; sourceTree = "<group>"; };
 		4076AEFF1AA9B0D2006DC466 /* StageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StageView.h; sourceTree = "<group>"; };
 		4076AF001AA9B0D2006DC466 /* StageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StageView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -1038,6 +1041,7 @@
 		00AA53511AA2C525004096F8 /* Libs */ = {
 			isa = PBXGroup;
 			children = (
+				00E609F71AABE52500E2F53B /* DAKeyboardControl */,
 				006739421AA491250087C240 /* MJRefresh */,
 				00AA53521AA2C525004096F8 /* AFNetworking */,
 				00AA53661AA2C525004096F8 /* CreatQuickUI */,
@@ -1393,6 +1397,15 @@
 			name = MovieDetail;
 			sourceTree = "<group>";
 		};
+		00E609F71AABE52500E2F53B /* DAKeyboardControl */ = {
+			isa = PBXGroup;
+			children = (
+				00E609F81AABE52500E2F53B /* DAKeyboardControl.h */,
+				00E609F91AABE52500E2F53B /* DAKeyboardControl.m */,
+			);
+			path = DAKeyboardControl;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1661,6 +1674,7 @@
 				00AA540E1AA2C525004096F8 /* BaseViewController.m in Sources */,
 				00AA543B1AA2C525004096F8 /* UIAlertView+AFNetworking.m in Sources */,
 				00AA530C1AA2C3F4004096F8 /* AppDelegate.m in Sources */,
+				00E609FA1AABE52500E2F53B /* DAKeyboardControl.m in Sources */,
 				00AA54181AA2C525004096F8 /* AFSecurityPolicy.m in Sources */,
 				00AA54331AA2C525004096F8 /* UIImage+MultiFormat.m in Sources */,
 				00AA54541AA2C526004096F8 /* Feed.m in Sources */,

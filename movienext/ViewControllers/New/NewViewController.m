@@ -16,7 +16,11 @@
 #import "MJRefresh.h"
 #import "AFNetworking.h"
 #import "CommonStageCell.h"
+<<<<<<< HEAD
+#import "AddSubtitleViewController.h"
+=======
 #import "UMSocial.h"
+>>>>>>> a8506f9499113dd1bf4c4d6ce079dddca617f324
 @interface NewViewController ()<UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate>
 {
     AppDelegate  *appdelegate;
@@ -340,7 +344,9 @@
 -(void)addMarkButtonClick:(UIButton  *) button
 {
     NSLog(@" ==addMarkButtonClick  ====%ld",button.tag);
-   
+    AddSubtitleViewController  *AddMarkVC=[[AddSubtitleViewController alloc]init];
+    [self.navigationController pushViewController:AddMarkVC animated:NO];
+   //[self presentViewController:AddMarkVC animated:NO completion:nil]
 
 }
 //点击头像
