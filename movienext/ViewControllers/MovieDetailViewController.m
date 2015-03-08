@@ -72,7 +72,7 @@
     //layout.minimumInteritemSpacing=10; //cell之间左右的
    // layout.minimumLineSpacing=10;      //cell上下间隔
     //layout.itemSize=CGSizeMake(80,140);  //cell的大小
-    layout.sectionInset=UIEdgeInsetsMake(60, 10, 10, 10); //整个偏移量 上左下右
+    layout.sectionInset=UIEdgeInsetsMake(10, 10, 10, 10); //整个偏移量 上左下右
     [layout setHeaderReferenceSize:CGSizeMake(_myConllectionView.frame.size.width, kDeviceHeight/3)];
     
     _myConllectionView =[[UICollectionView alloc]initWithFrame:CGRectMake(0, 0,kDeviceWidth, kDeviceHeight) collectionViewLayout:layout];
@@ -166,7 +166,7 @@
         //定制头部视图的内容
         MovieHeadView *headerV = (MovieHeadView *)[collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"headerView" forIndexPath:indexPath];
         headerV.delegate=self;
-        headerV.backgroundColor = [UIColor redColor];
+        headerV.backgroundColor = [UIColor yellowColor];
         //headerV.titleLab.text = @"头部视图";
         reusableView = headerV;
     }
@@ -176,29 +176,42 @@
 // 设置每个item的尺寸
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
     if (bigModel==YES) {
-    
-    return CGSizeMake(kDeviceHeight,400);
+      
+        float hight;
+        if (_dataArray.count>indexPath.row) {
+            float  h=   [[[[_dataArray  objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] objectForKey:@"h"] floatValue];
+            float w=   [[[[_dataArray  objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] objectForKey:@"w"] floatValue];
+            if (w==0||h==0) {
+                hight= kDeviceWidth+90;
+            }
+            if (w>h) {
+                hight= kDeviceWidth+90;
+            }
+            else if(h>w)
+            {
+                hight=  (h/w) *kDeviceWidth+90;
+            }
+        }
+        NSLog(@"============  hight  for  row  =====%f",hight);
+        return CGSizeMake(kDeviceHeight,hight+10);
     }
     else
     {
-        int width = ((kDeviceWidth-4*12)/3);
-        int movieNameMarginTop = 10;
-        int movieNameHeight = 20;
-        return CGSizeMake( width, width*1.5 + movieNameMarginTop + movieNameHeight);
+        return CGSizeMake(( kDeviceWidth-20-10)/3,(kDeviceWidth-20-10)/3);
 
     }
     return CGSizeMake(0, 0);
 }
 // 设置头部视图的尺寸
--(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section
+/*-(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section
 {
     if (collectionView==_myConllectionView) {
-        if (section==0) {
+      //  if (section==0) {
         return CGSizeMake(kDeviceWidth,kDeviceWidth/3);
-        }
+        //}
     }
     return CGSizeMake(0, 0);
-}
+}*/
 #pragma  mark
 #pragma  mark   -----MovieHeaderViewDelegate
 #pragma  mark   ---

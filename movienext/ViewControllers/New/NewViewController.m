@@ -63,9 +63,8 @@
 #pragma  mark  -------CreatUI;
 -(void)creatNavigation
 {
-    
+    [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color.png"] forBarMetrics:UIBarMetricsDefault];
     NSArray *segmentedArray = [[NSArray alloc] initWithObjects:@"热门", @"最新", nil];
-
     segment = [[UISegmentedControl alloc] initWithItems:segmentedArray];
     segment.frame = CGRectMake(kDeviceWidth/4, 0, kDeviceWidth/2, 30);
     segment.selectedSegmentIndex = 0;
@@ -101,6 +100,18 @@
     //_HotMoVieTableView.separatorStyle=UITableViewCellSeparatorStyleNone;
     [self.view addSubview:_HotMoVieTableView];
 }
+<<<<<<< HEAD
+=======
+-(void)createNewView
+{
+    _NewMoviewTableView=[[UITableView alloc]initWithFrame:CGRectMake(0,0, kDeviceWidth, kDeviceHeight)];
+    _NewMoviewTableView.delegate=self;
+    _NewMoviewTableView.dataSource=self;
+    _NewMoviewTableView.hidden=YES;
+    //_HotMoVieTableView.separatorStyle=UITableViewCellSeparatorStyleNone;
+    [self.view addSubview:_NewMoviewTableView];
+}
+>>>>>>> f82c47560642123b3258109e78cc7ae245406161
 -(void)creatLoadView
 {
     loadView =[[LoadingView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight)];
@@ -156,7 +167,13 @@
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (segment.selectedSegmentIndex==0) {
+<<<<<<< HEAD
         return _hotDataArray.count;
+=======
+        if (tableView==_HotMoVieTableView) {
+            return _hotDataArray.count;
+        }
+>>>>>>> f82c47560642123b3258109e78cc7ae245406161
     }
     else if (segment.selectedSegmentIndex==1)
     {

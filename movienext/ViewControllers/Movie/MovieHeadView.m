@@ -14,6 +14,7 @@
 -(instancetype)initWithFrame:(CGRect)frame
 {
     if (self= [super initWithFrame:frame]) {
+        m_frame=frame;
         [self createUI];
     }
     return self;
@@ -33,12 +34,12 @@
     performerLable=[ZCControl createLabelWithFrame:CGRectMake(0, 60, 100, 30) Font:12 Text:@"演员"];
     [self addSubview:performerLable];
     
-    UIButton  *btn1=[ZCControl createButtonWithFrame:CGRectMake(0, 100, kDeviceWidth/2, 35) ImageName:nil Target:self Action:@selector(dealChangeModelClick:) Title:@"大图"];
+    UIButton  *btn1=[ZCControl createButtonWithFrame:CGRectMake(0, kDeviceHeight/3-45, kDeviceWidth/2, 45) ImageName:@"bg_qq_h@2x.png" Target:self Action:@selector(dealChangeModelClick:) Title:@"大图"];
     btn1.backgroundColor = [UIColor greenColor];
     btn1.tag=1000;
     [self addSubview:btn1];
     
-    UIButton  *btn2=[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth/2, 100, kDeviceWidth/2, 35) ImageName:nil Target:self Action:@selector(dealChangeModelClick:) Title:@"小图"];
+    UIButton  *btn2=[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth/2, kDeviceHeight/3- 45, kDeviceWidth/2, 45) ImageName:@"bg_qq_h@2x.png" Target:self Action:@selector(dealChangeModelClick:) Title:@"小图"];
     btn2.backgroundColor = [UIColor blueColor];
     btn2.tag=1001;
     [self addSubview:btn2];
