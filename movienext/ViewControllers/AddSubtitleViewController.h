@@ -7,7 +7,10 @@
 //
 
 #import "RootViewController.h"
+#import "StageView.h"
 
 @interface AddSubtitleViewController : RootViewController
+
+@property (nonatomic, strong) StageView *stageView;
 
 @end
