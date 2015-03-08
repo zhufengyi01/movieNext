@@ -23,6 +23,7 @@
 {
     movieLogoImageView  =[[UIImageView alloc]initWithFrame:CGRectMake(30, 30, 40, 60)];
     [self addSubview:movieLogoImageView];
+    
     titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0,100 ,30) Font:16 Text:@"电影标题"];
     
     [self addSubview:titleLable];

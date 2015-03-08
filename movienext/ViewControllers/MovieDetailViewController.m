@@ -72,13 +72,20 @@
     //layout.minimumInteritemSpacing=10; //cell之间左右的
    // layout.minimumLineSpacing=10;      //cell上下间隔
     //layout.itemSize=CGSizeMake(80,140);  //cell的大小
-    layout.sectionInset=UIEdgeInsetsMake(10, 10, 10, 10); //整个偏移量 上左下右
+    if(bigModel==YES)
+    {
+        layout.sectionInset=UIEdgeInsetsMake(10, 0, 10, 0);
+    }
+    else{
+    layout.sectionInset=UIEdgeInsetsMake(10,10, 10, 10); //整个偏移量 上左下右
+    }
     [layout setHeaderReferenceSize:CGSizeMake(_myConllectionView.frame.size.width, kDeviceHeight/3)];
     
     _myConllectionView =[[UICollectionView alloc]initWithFrame:CGRectMake(0, 0,kDeviceWidth, kDeviceHeight) collectionViewLayout:layout];
     _myConllectionView.backgroundColor=View_BackGround;
     //注册大图模式
     [_myConllectionView registerClass:[BigImageCollectionViewCell class] forCellWithReuseIdentifier:@"bigcell"];
+    
     //注册小图模式
     [_myConllectionView registerClass:[SmallImageCollectionViewCell class] forCellWithReuseIdentifier:@"smallcell"];
     // 注册头部视图
@@ -99,6 +106,8 @@
 #pragma  mark  ---
 -(void)requestData
 {
+#warning  这里需要写参数
+    
     NSDictionary *parameter = @{@"movie_id": @"859357", @"start_id":@"0", @"user_id": @"18"};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:[NSString stringWithFormat:@"%@/movieStage/list", kApiBaseUrl] parameters:parameter success:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -110,7 +119,7 @@
             _dataArray=[[NSMutableArray alloc]init];
         }
         [_dataArray addObjectsFromArray:[responseObject objectForKey:@"detail"]];
-        NSLog(@"=-=======dataArray =====%@",_dataArray);
+        NSLog(@"=-=======dataArray 电影详细页面的数组 是=====%@",_dataArray);
         [_myConllectionView reloadData];
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -142,12 +151,13 @@
     //在这里先将内容给清除一下, 然后再加载新的, 添加完内容之后先动画, 在cell消失的时候做清理工作
     NSDictionary *dict = [_dataArray objectAtIndex:(indexPath.row)];
     if (bigModel ==YES) {
-        CommonStageCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"bigcell" forIndexPath:indexPath];
-            //cell.pageType=NSPageSourceTypeMainHotController;
-        //小闪动标签的数组
-       // cell.WeibosArray=[[_dataArray objectAtIndex:indexPath.row]  objectForKey:@"weibos"];
+        BigImageCollectionViewCell *cell = (BigImageCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"bigcell" forIndexPath:indexPath];
+    if (_dataArray.count>indexPath.row) {
+       //cell.pageType=NSPageSourceTypeMyAddedViewController;
+      //  小闪动标签的数组
+        //cell.WeibosArray=[[_dataArray objectAtIndex:indexPath.row]  objectForKey:@"weibos"];
         //[cell setCellValue:[[_dataArray objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] indexPath:indexPath.row];
-        
+        }
         cell.backgroundColor = [UIColor redColor];
         return cell;
     } else {
@@ -155,6 +165,8 @@
         cell.backgroundColor = [UIColor blackColor];
         return cell;
     }
+    
+    return nil;
 }
 
 //设置头尾部内容
@@ -202,6 +214,32 @@
     }
     return CGSizeMake(0, 0);
 }
+
+-(UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
+{
+    if (bigModel==NO) {
+        return UIEdgeInsetsMake(10, 10, 10, 10);
+    }
+    return UIEdgeInsetsMake(0, 0, 0, 0);
+}
+//左右间距
+-(CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
+{
+    if (bigModel==YES) {
+        return 0;
+    }
+    return 5;
+}
+//上下
+-(CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section
+{
+    if (bigModel==YES) {
+        return 10;
+    }
+    return 5;
+
+}
+
 // 设置头部视图的尺寸
 /*-(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section
 {

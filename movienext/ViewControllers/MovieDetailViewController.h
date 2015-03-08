@@ -9,5 +9,13 @@
 #import "RootViewController.h"
 
 @interface MovieDetailViewController : RootViewController
+{
+        
+}
+// 属性，提供向外的接口，外部只要获得当前类，就可以获得他的属性和方法
+@property (nonatomic,strong) NSString  *movieId;
+@property(nonatomic,strong) NSString  *douban_Id;
+
+//viod  返回类型
 
 @end

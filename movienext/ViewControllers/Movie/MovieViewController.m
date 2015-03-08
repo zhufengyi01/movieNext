@@ -25,6 +25,8 @@
 #import "MovieSearchViewController.h"
 #import "MovieCollectionViewCell.h"
 #import "MovieDetailViewController.h"
+#warning  等下要删掉
+#import "MovieDetailViewController.h"
 
 //#import  "SearchMovieViewController.h"
 @interface MovieViewController ()<UISearchBarDelegate,UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout>
@@ -55,8 +57,7 @@
     [self initUI];
     [self creatLoadView];
     [self requestData];
-
-    
+       
 }
 -(void)createNavigation
 {
