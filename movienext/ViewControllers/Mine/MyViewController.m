@@ -95,7 +95,7 @@
     if (signature==nil) {
         signature=@"";
     }
-    NSLog(@"   ==========用户信息===body count %d   zanCount ===%d   signatuer ===%@",BodyConut,ZanCount,signature);
+    NSLog(@"   ==========用户信息===body count %d   zanCount ===%d   signatuer ===%@,头像 =====%@",BodyConut,ZanCount,signature,    userCenter.avatar);
     
 
     
