@@ -181,14 +181,11 @@
         if ([v isKindOfClass:[MarkView class]]) {
             MarkView *mv = (MarkView *)v;
             [mv startAnimation];
-            NSLog(@"dong qi lai = %ld", (long)currentMarkIndex);
         }
     }
-    NSLog(@" ----- self.identifier = %@ current mark index = %ld", self, (long)currentMarkIndex);
     currentMarkIndex ++;
     //执行完成一轮动画之后，实行，重新再动第一个执行
     if (currentMarkIndex > MAX(self.subviews.count, 13) ) {
-        NSLog(@" ====== self.identifier = %@ current mark index = %ld", self, (long)currentMarkIndex);
         currentMarkIndex = 0;
     }
 }
