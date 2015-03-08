@@ -37,15 +37,18 @@
     BgView0 =[[UIView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, 0)];
     BgView0.backgroundColor=[UIColor whiteColor];
     [self.contentView addSubview:BgView0];
-    UserLogoButton =[ZCControl createButtonWithFrame:CGRectMake(10, 6, 25, 25) ImageName:nil Target:self.superview Action:@selector(UserLogoButtonClick:) Title:@"头像"];
+    
+    UserLogoButton =[ZCControl createButtonWithFrame:CGRectMake(10, 8, 25, 25) ImageName:nil Target:self.superview Action:@selector(UserLogoButtonClick:) Title:@"头像"];
     UserLogoButton.layer.cornerRadius=2;
+    UserLogoButton.layer.masksToBounds = YES;
     [BgView0 addSubview:UserLogoButton];
     
-    UserNameLable =[ZCControl createLabelWithFrame:CGRectMake(35, 5, 140, 20) Font:14 Text:@"名字"];
+    UserNameLable =[ZCControl createLabelWithFrame:CGRectMake(UserLogoButton.frame.origin.x + UserLogoButton.frame.size.width + 3, 5, 180, 15) Font:14 Text:@"名字"];
     UserNameLable.textColor=VGray_color;
+    UserNameLable.numberOfLines = 1;
     [BgView0 addSubview:UserNameLable];
     
-    TimeLable =[ZCControl createLabelWithFrame:CGRectMake(35, 25, 140, 20) Font:12 Text:@"时间"];
+    TimeLable =[ZCControl createLabelWithFrame:CGRectMake(UserNameLable.frame.origin.x, 20, 140, 15) Font:12 Text:@"时间"];
     TimeLable.textColor=VGray_color;
     [BgView0 addSubview:TimeLable];
     
@@ -75,17 +78,19 @@
     [self.contentView addSubview:BgView2];
     
     //leftButtomButton =[ZCControl createButtonWithFrame:CGRectMake(10,8,100,30) ImageName:@"movie_icon_backgroud_color.png" Target:self.superview Action:@selector(dealMovieButtonClick:) Title:@"sd"];
+    
     leftButtomButton=[UIButton buttonWithType:UIButtonTypeCustom];
-    leftButtomButton.frame=CGRectMake(10, 8, 140, 30);
+    leftButtomButton.frame=CGRectMake(10, 8, 150, 30);
     [leftButtomButton setBackgroundImage:[[UIImage imageNamed:@"movie_icon_backgroud_color.png"]stretchableImageWithLeftCapWidth:10 topCapHeight:10] forState:UIControlStateNormal];
     [leftButtomButton addTarget:self.superview action:@selector(dealMovieButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-    [leftButtomButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [leftButtomButton setTitleColor:VGray_color forState:UIControlStateNormal];
     [leftButtomButton setTitleEdgeInsets:UIEdgeInsetsMake(0, 30, 0, 0)];
     leftButtomButton.titleLabel.font = [UIFont systemFontOfSize:12];
     [BgView2 addSubview:leftButtomButton];
     
     MovieLogoImageView=[[UIImageView alloc]initWithFrame:CGRectMake(0,0,30, 30)];
     MovieLogoImageView.layer.cornerRadius=5;
+    MovieLogoImageView.layer.masksToBounds = YES;
     [leftButtomButton addSubview:MovieLogoImageView];
     
     
@@ -167,7 +172,12 @@
         UserNameLable.text = [_weiboDict objectForKey:@"username"];
         TimeLable.text = [Function friendlyTime:[_weiboDict objectForKey:@"create_time"]];
     }
+}
 
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    
+    
 }
 
 #pragma mark ---
