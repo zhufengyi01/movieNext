@@ -125,7 +125,7 @@
     float  ImgeHight=[[dict objectForKey:@"h"]  floatValue];
     float hight=0;
     if (ImageWith>ImgeHight) {
-        hight= kDeviceWidth;
+        hight= kDeviceWidth;  // 计算的事bgview1的高度
     }
     else if(ImgeHight>ImageWith)
     {
@@ -139,7 +139,7 @@
         float   y=(hight-(ImgeHight/ImageWith)*kDeviceWidth)/2;
           _MovieImageView.frame=CGRectMake(0,y, kDeviceWidth, (ImgeHight/ImageWith)*kDeviceWidth);
        [_MovieImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w640",kUrlStage,[dict objectForKey:@"stage"]]] placeholderImage:[UIImage imageNamed:@"loading_image_all.png"]];
-     }
+     }／／
      */
     if ([dict  objectForKey:@"movie_name"]) {  //电影名字，这里设置title 偏移
         [leftButtomButton setTitle:[dict objectForKey:@"movie_name"] forState:UIControlStateNormal];
@@ -162,7 +162,7 @@
         BgView0.hidden=NO;
         BgView0.frame=CGRectMake(0, 0, kDeviceWidth, 45);
         _BgView1.frame=CGRectMake(0, 45, kDeviceWidth, hight);
-        BgView2.frame=CGRectMake(0, kDeviceWidth+45, kDeviceWidth, 45);
+        BgView2.frame=CGRectMake(0, hight+45,kDeviceWidth,45);
         if ([dict objectForKey:@"stage"]) {
             [MovieLogoImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w100h100",kUrlMoviePoster,[dict objectForKey:@"movie_poster"]]] placeholderImage:[ UIImage imageNamed:@"loading_image_all.png"]];
         }

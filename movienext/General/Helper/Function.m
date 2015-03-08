@@ -24,22 +24,17 @@
 
 + (void) saveUser:(UserDataCenter *)user
 {
-    //NSLog(@"user = %@", user);
-    NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
-                          user.user_id, @"id",
-                          user.username , @"username",
-                          user.is_admin, @"level",
-                          user.avatar, @"avatar",
-                          user.signature, @"brief",
-                          user.update_time, @"update_time",
-                          user.user_bind_type, @"bind_type",
-                          nil];
+
+    NSDictionary *dict = @{
+                           @"id":user.user_id,
+                           @"username":user.username,
+                           @"level":user.is_admin,
+                           @"avatar":user.avatar,
+                           @"brief":user.signature,
+                           @"update_time":user.update_time,
+                           @"bind_type":user.user_bind_type
+                           };
     
-
-
- //   NSLog(@"save user dict = %@ , user. is_admin, user.avatar = %@, user.signature = %@", dict, [dict objectForKey:@"avatar"], [dict valueForKey:@"brief"]);
-
-
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:kUserKey];
     [[NSUserDefaults standardUserDefaults] setObject:dict forKey:kUserKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
