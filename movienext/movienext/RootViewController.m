@@ -16,12 +16,13 @@
 @implementation RootViewController
 -(void)viewWillAppear:(BOOL)animated
 {
-   // self.tabBarController.tabBar.hidden=YES;
+    self.tabBarController.tabBar.hidden=YES;
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-   // self.view.backgroundColor=View_BackGround;
+ //   self.view.backgroundColor=View_BackGround;
+   // self.view.backgroundColor=[UIColor redColor];
 }
 
 - (void)didReceiveMemoryWarning {

@@ -8,18 +8,20 @@
 
 #import "AddSubtitleViewController.h"
 #import "Constant.h"
+#import "DAKeyboardControl.h"
 #import "UIImageView+WebCache.h"
 #import "ZCControl.h"
 @interface AddSubtitleViewController ()<UITextFieldDelegate>
 {
     UIToolbar  *_toolBar;
-    UITextField  *_inputText;
+    UITextField  *_textField;
 }
 @end
 
 @implementation AddSubtitleViewController
 -(void)viewWillAppear:(BOOL)animated
 {
+    self.tabBarController.tabBar.hidden=YES;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
 }
 -(void)keyboardWillShow:(NSNotification *) noti
@@ -67,7 +69,7 @@
 }
 -(void)createUI
 {
-    _toolBar=[[UIToolbar alloc]initWithFrame:CGRectMake(0,70, kDeviceHeight, 40)];
+   /* _toolBar=[[UIToolbar alloc]initWithFrame:CGRectMake(0,70, kDeviceHeight, 40)];
      _toolBar.barTintColor=[UIColor redColor];   //背景颜色
      _toolBar.tintColor=[UIColor blackColor];  //内容颜色
 
@@ -81,9 +83,28 @@
     [_toolBar addSubview:publishBtn];
     
     [_inputText becomeFirstResponder];
-    [self.view addSubview:_toolBar];
+    [_inputText becomeFirstResponder];
+    //[self.view addSubview:_toolBar];
     
-  //   _inputText.inputAccessoryView=_toolBar;
+   //  _inputText.inputAccessoryView=_toolBar;
+    
+    [self.view addKeyboardPanningWithFrameBasedActionHandler:^(CGRect keyboardFrameInView, BOOL opening, BOOL closing) {
+    
+         Try not to call "self" inside this block (retain cycle).
+         But if you do, make sure to remove DAKeyboardControl
+         when you are done with the view controller by calling:
+         [self.view removeKeyboardControl];
+    
+        
+        CGRect toolBarFrame = _toolBar.frame;
+        toolBarFrame.origin.y = keyboardFrameInView.origin.y - toolBarFrame.size.height;
+        _toolBar.frame = toolBarFrame;
+    } constraintBasedActionHandler:nil];*/
+
+    
+    
+    
+    
 
     
 }

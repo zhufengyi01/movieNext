@@ -16,11 +16,11 @@
 #import "MJRefresh.h"
 #import "AFNetworking.h"
 #import "CommonStageCell.h"
-<<<<<<< HEAD
+
 #import "AddSubtitleViewController.h"
-=======
+
 #import "UMSocial.h"
->>>>>>> a8506f9499113dd1bf4c4d6ce079dddca617f324
+//>>>>>>> a8506f9499113dd1bf4c4d6ce079dddca617f324
 @interface NewViewController ()<UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate>
 {
     AppDelegate  *appdelegate;
@@ -35,6 +35,10 @@
 @end
 
 @implementation NewViewController
+-(void)viewWillAppear:(BOOL)animated
+{
+    self.tabBarController.tabBar.hidden=NO;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];

@@ -260,6 +260,8 @@
 		00E3581E1AA3DCD000577239 /* NotificationTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E3581D1AA3DCD000577239 /* NotificationTableViewCell.m */; };
 		00E358211AA3E13E00577239 /* ZCControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E358201AA3E13E00577239 /* ZCControl.m */; };
 		00E609FA1AABE52500E2F53B /* DAKeyboardControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E609F91AABE52500E2F53B /* DAKeyboardControl.m */; };
+		00E609FC1AABF1AC00E2F53B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00E609FB1AABF1AC00E2F53B /* UIKit.framework */; };
+		00E609FE1AABF1B900E2F53B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00E609FD1AABF1B900E2F53B /* Foundation.framework */; };
 		4076AF011AA9B0D2006DC466 /* StageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4076AF001AA9B0D2006DC466 /* StageView.m */; };
 /* End PBXBuildFile section */
 
@@ -659,6 +661,8 @@
 		00E358201AA3E13E00577239 /* ZCControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZCControl.m; sourceTree = "<group>"; };
 		00E609F81AABE52500E2F53B /* DAKeyboardControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DAKeyboardControl.h; sourceTree = "<group>"; };
 		00E609F91AABE52500E2F53B /* DAKeyboardControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DAKeyboardControl.m; sourceTree = "<group>"; };
+		00E609FB1AABF1AC00E2F53B /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		00E609FD1AABF1B900E2F53B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4076AEFF1AA9B0D2006DC466 /* StageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StageView.h; sourceTree = "<group>"; };
 		4076AF001AA9B0D2006DC466 /* StageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StageView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -668,6 +672,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				00E609FE1AABF1B900E2F53B /* Foundation.framework in Frameworks */,
+				00E609FC1AABF1AC00E2F53B /* UIKit.framework in Frameworks */,
 				00AA544E1AA2C526004096F8 /* TencentOpenAPI.framework in Frameworks */,
 				00AA546F1AA2D5B0004096F8 /* Security.framework in Frameworks */,
 				00AA546D1AA2D597004096F8 /* SystemConfiguration.framework in Frameworks */,
@@ -1371,6 +1377,8 @@
 		00AA546B1AA2C630004096F8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				00E609FD1AABF1B900E2F53B /* Foundation.framework */,
+				00E609FB1AABF1AC00E2F53B /* UIKit.framework */,
 				00AA546E1AA2D5B0004096F8 /* Security.framework */,
 				00AA546C1AA2D597004096F8 /* SystemConfiguration.framework */,
 				00AA54691AA2C5C9004096F8 /* CoreGraphics.framework */,
