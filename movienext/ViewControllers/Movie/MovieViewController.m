@@ -183,7 +183,7 @@
 {
     //在这里先将内容给清除一下, 然后再加载新的, 添加完内容之后先动画, 在cell消失的时候做清理工作
     MovieCollectionViewCell    *cell=(MovieCollectionViewCell*)[collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
-    NSLog(@"   圣诞节可视电话首都华盛顿老师=======index.item  %d --- index.row  ==%d",indexPath.item,indexPath.row);
+    NSLog(@"   圣诞节可视电话首都华盛顿老师=======index.item  %ld --- index.row  ==%ld",indexPath.item,indexPath.row);
     if (_dataArray.count > indexPath.row) {
      [cell setValueforCell:[_dataArray  objectAtIndex:(long)indexPath.row]];
      //cell.backgroundColor=[UIColor whiteColor];
@@ -200,7 +200,8 @@
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     NSLog(@"=====点击了那个cell ===%ld",indexPath.row);
-    [self.navigationController pushViewController:[MovieDetailViewController new] animated:YES];
+    [self hidesBottomBarWhenPushed];
+   [self.navigationController pushViewController:[MovieDetailViewController new] animated:YES];
 }
 
 
