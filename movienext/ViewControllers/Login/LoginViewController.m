@@ -152,6 +152,7 @@
                             userCenter.signature=[detail objectForKey:@"brief"];
                             userCenter.update_time=[detail objectForKey:@"update_time"];
                             userCenter.user_bind_type=[detail objectForKey:@"bind_type"];
+                            
                             [Function saveUser:userCenter];
                             window.rootViewController=[CustmoTabBarController new];
                         }

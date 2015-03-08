@@ -24,18 +24,19 @@
 
 + (void) saveUser:(UserDataCenter *)user
 {
-    NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
-                          user.user_id, @"id",
-                          user.username, @"username",
-                          user.is_admin, @"level",
-                          user.avatar, @"logo",
-                          user.wallpaper, @"wallpaper",
-                          user.signature, @"brief",
-                          user.update_time, @"update_time",
-                          user.user_bind_type, @"bind_type",
+ /*  NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
+                         user.user_id:@"id",
+                         user.username: @"username",
+                         user.is_admin: @"level",
+                         user.avatar: @"logo",
+                         user.wallpaper: @"wallpaper",
+                         user.signature: @"brief",
+                         user.update_time: @"update_time",
+                         user.user_bind_type: @"bind_type",
                           nil];
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:kUserKey];
-    [[NSUserDefaults standardUserDefaults] setObject:dict forKey:kUserKey];
+   */
+    //[[NSUserDefaults standardUserDefaults] removeObjectForKey:kUserKey];
+   // [[NSUserDefaults standardUserDefaults] setObject:dict forKey:kUserKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 

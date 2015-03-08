@@ -7,7 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-
+@protocol MovieHeadViewDelegate <NSObject>
+-(void)ChangeCollectionModel:(NSInteger ) index;
+@end
 @interface MovieHeadView : UICollectionReusableView
 {
     UIImageView  *movieLogoImageView;
@@ -16,5 +18,5 @@
     UILabel      *performerLable;
 }
 -(void)setCollectionHeaderValue:(NSDictionary *) dict;
-
+@property (nonatomic,assign) id <MovieHeadViewDelegate> delegate;
 @end

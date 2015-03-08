@@ -24,13 +24,13 @@
 #import "BigImageCollectionViewCell.h"
 #import "SmallImageCollectionViewCell.h"
 #import "MovieHeadView.h"
-@interface MovieDetailViewController ()<UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UICollectionViewDelegate>
+#import "CommonStageCell.h"
+@interface MovieDetailViewController ()<UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UICollectionViewDelegate,MovieHeadViewDelegate>
 {
     UICollectionView    *_myConllectionView;
     UICollectionViewFlowLayout    *layout;
     LoadingView         *loadView;
     NSMutableArray      *_dataArray;
-
     BOOL bigModel;
 }
 
@@ -50,10 +50,18 @@
 }
 -(void)createNavigation
 {
-    self.navigationController.navigationItem.title=@"电影";
+    UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:@"电影详细"];
+    titleLable.textColor=VBlue_color;
+    
+    titleLable.font=[UIFont boldSystemFontOfSize:16];
+    titleLable.textAlignment=NSTextAlignmentCenter;
+    self.navigationItem.titleView=titleLable;
+
+    
 }
 -(void)initData
 {
+    bigModel=YES;
     _dataArray =[[NSMutableArray alloc]init];
     
 }
@@ -61,13 +69,13 @@
 {
  
     layout=[[UICollectionViewFlowLayout alloc]init];
-    layout.minimumInteritemSpacing=10; //cell之间左右的
-    layout.minimumLineSpacing=10;      //cell上下间隔
+    //layout.minimumInteritemSpacing=10; //cell之间左右的
+   // layout.minimumLineSpacing=10;      //cell上下间隔
     //layout.itemSize=CGSizeMake(80,140);  //cell的大小
-    layout.sectionInset=UIEdgeInsetsMake(20, 10, 10, 10); //整个偏移量 上左下右
-    [layout setHeaderReferenceSize:CGSizeMake(_myConllectionView.frame.size.width, 150)];
+    layout.sectionInset=UIEdgeInsetsMake(60, 10, 10, 10); //整个偏移量 上左下右
+    [layout setHeaderReferenceSize:CGSizeMake(_myConllectionView.frame.size.width, kDeviceHeight/3)];
     
-    _myConllectionView =[[UICollectionView alloc]initWithFrame:CGRectMake(0, 30,kDeviceWidth, kDeviceHeight-30-kHeightNavigation-kHeigthTabBar) collectionViewLayout:layout];
+    _myConllectionView =[[UICollectionView alloc]initWithFrame:CGRectMake(0, 0,kDeviceWidth, kDeviceHeight) collectionViewLayout:layout];
     _myConllectionView.backgroundColor=View_BackGround;
     //注册大图模式
     [_myConllectionView registerClass:[BigImageCollectionViewCell class] forCellWithReuseIdentifier:@"bigcell"];
@@ -133,21 +141,18 @@
 {
     //在这里先将内容给清除一下, 然后再加载新的, 添加完内容之后先动画, 在cell消失的时候做清理工作
     NSDictionary *dict = [_dataArray objectAtIndex:(indexPath.row)];
-    if ( bigModel ) {
-        BigImageCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"bigcell" forIndexPath:indexPath];
-        cell.backgroundColor = [UIColor blackColor];
-        /*
-        cell.stageView.bigModel = bigModel;
-        cell.stageView.feed = data;
-        [cell.stageView performSelector:@selector(startAnimation) withObject:nil afterDelay:1];
-         */
+    if (bigModel ==YES) {
+        CommonStageCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"bigcell" forIndexPath:indexPath];
+            //cell.pageType=NSPageSourceTypeMainHotController;
+        //小闪动标签的数组
+       // cell.WeibosArray=[[_dataArray objectAtIndex:indexPath.row]  objectForKey:@"weibos"];
+        //[cell setCellValue:[[_dataArray objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] indexPath:indexPath.row];
+        
+        cell.backgroundColor = [UIColor redColor];
         return cell;
     } else {
         SmallImageCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"smallcell" forIndexPath:indexPath];
         cell.backgroundColor = [UIColor blackColor];
-        //[cell.ivStage sd_setImageWithURL:[NSURL URLWithString: [NSString stringWithFormat:@"%@%@!w340h340", kUrlStage, data.stage.stage]]];
-        //cell.lblMarks.text = data.stage.marks;
-        //cell.lblMarks.hidden = [data.stage.marks intValue] <= 0;
         return cell;
     }
 }
@@ -160,6 +165,7 @@
     if (kind == UICollectionElementKindSectionHeader) {
         //定制头部视图的内容
         MovieHeadView *headerV = (MovieHeadView *)[collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"headerView" forIndexPath:indexPath];
+        headerV.delegate=self;
         headerV.backgroundColor = [UIColor redColor];
         //headerV.titleLab.text = @"头部视图";
         reusableView = headerV;
@@ -169,10 +175,19 @@
 
 // 设置每个item的尺寸
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
-    int width = ((kDeviceWidth-4*12)/3);
-    int movieNameMarginTop = 10;
-    int movieNameHeight = 20;
-    return CGSizeMake( width, width*1.5 + movieNameMarginTop + movieNameHeight);
+    if (bigModel==YES) {
+    
+    return CGSizeMake(kDeviceHeight,400);
+    }
+    else
+    {
+        int width = ((kDeviceWidth-4*12)/3);
+        int movieNameMarginTop = 10;
+        int movieNameHeight = 20;
+        return CGSizeMake( width, width*1.5 + movieNameMarginTop + movieNameHeight);
+
+    }
+    return CGSizeMake(0, 0);
 }
 // 设置头部视图的尺寸
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section
@@ -184,8 +199,26 @@
     }
     return CGSizeMake(0, 0);
 }
-
-
+#pragma  mark
+#pragma  mark   -----MovieHeaderViewDelegate
+#pragma  mark   ---
+-(void)ChangeCollectionModel:(NSInteger )index
+{
+    if (index==1000) {
+        //点击了大图模式
+        NSLog(@"/点击了大图模式");
+        bigModel=YES;
+        [_myConllectionView reloadData];
+    }
+    else if (index==1001)
+    {
+        //点击了小图模式
+        
+        NSLog(@"/点击了小图模式");
+        bigModel=NO;
+        [_myConllectionView reloadData];
+    }
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }

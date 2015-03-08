@@ -12,11 +12,11 @@
 
 typedef NS_ENUM(NSInteger, NSPageSourceType)
 {
-    NSPageSourceTypeMainHotController =0,
-    NSPageSourceTypeMainNewController=1,
-    NSPageSourceTypeMovieViewController=3,
-    NSPageSourceTypeMyAddedViewController=4,
-    NSPageSourceTypeMyupedViewController=5,
+    NSPageSourceTypeMainHotController =0,   //首页的热门cell
+    NSPageSourceTypeMainNewController=1,    //首页的最新cell
+    NSPageSourceTypeMovieViewController=3,   //电影详细的cell
+    NSPageSourceTypeMyAddedViewController=4,   //添加弹幕的cell
+    NSPageSourceTypeMyupedViewController=5,    //我的个人中心的cell
     
 };
 @interface CommonStageCell : UITableViewCell

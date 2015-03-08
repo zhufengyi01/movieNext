@@ -114,7 +114,6 @@
     if (_WeibosArray) {
         _BgView1.WeibosArray = _WeibosArray;
     }
-    
     leftButtomButton.tag=1000+row;
     ScreenButton.tag=2000+row;
     addMarkButton.tag=3000+row;

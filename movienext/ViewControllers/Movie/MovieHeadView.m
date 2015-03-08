@@ -33,13 +33,14 @@
     performerLable=[ZCControl createLabelWithFrame:CGRectMake(0, 60, 100, 30) Font:12 Text:@"演员"];
     [self addSubview:performerLable];
     
-    UIButton  *btn1=[ZCControl createButtonWithFrame:CGRectMake(0, 100, kDeviceWidth/2, 35) ImageName:nil Target:self Action:@selector(dealClick:) Title:@"大图"];
+    UIButton  *btn1=[ZCControl createButtonWithFrame:CGRectMake(0, 100, kDeviceWidth/2, 35) ImageName:nil Target:self Action:@selector(dealChangeModelClick:) Title:@"大图"];
     btn1.backgroundColor = [UIColor greenColor];
     btn1.tag=1000;
     [self addSubview:btn1];
     
-    UIButton  *btn2=[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth/2, 100, kDeviceWidth/2, 35) ImageName:nil Target:self Action:@selector(dealClick:) Title:@"小图"];
+    UIButton  *btn2=[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth/2, 100, kDeviceWidth/2, 35) ImageName:nil Target:self Action:@selector(dealChangeModelClick:) Title:@"小图"];
     btn2.backgroundColor = [UIColor blueColor];
+    btn2.tag=1001;
     [self addSubview:btn2];
 
     
@@ -48,16 +49,21 @@
 {
     
 }
--(void)dealClick:(UIButton *) button
+-(void)dealChangeModelClick:(UIButton *) button
 {
-    if (button.tag==1000) {
-        //切换大图
-    }
-     else if(button.tag==1001)
-     {
-         //切换小图
-     }
+//    if (button.tag==1000) {
+//        //切换大图
+//        
+//    }
+//     else if(button.tag==1001)
+//     {
+//         //切换小图
+//     }
     
+    if (self.delegate&& [self.delegate respondsToSelector:@selector(ChangeCollectionModel:)]) {
+        [self.delegate ChangeCollectionModel:button.tag];
+    }
+
 }
 //自动布局self.view的子类
 -(void)layoutSubviews
