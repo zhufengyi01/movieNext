@@ -326,7 +326,7 @@
 -(void)ScreenButtonClick:(UIButton  *) button
 {
     NSLog(@" ==ScreenButtonClick  ====%ld",button.tag);
-    CommonStageCell *cell = (CommonStageCell *)(button.superview.superview.superview.class);
+    CommonStageCell *cell = (CommonStageCell *)(button.superview.superview.superview);
     
     UIGraphicsBeginImageContextWithOptions(_HotMoVieTableView.bounds.size, YES, [UIScreen mainScreen].scale);
     [cell.BgView1 drawViewHierarchyInRect:cell.BgView1.bounds afterScreenUpdates:YES];
@@ -349,6 +349,8 @@
 {
     NSLog(@" ==addMarkButtonClick  ====%ld",button.tag);
     AddSubtitleViewController  *AddMarkVC=[[AddSubtitleViewController alloc]init];
+    CommonStageCell *cell = (CommonStageCell *)button.superview.superview.superview;
+    AddMarkVC.stageView = cell.BgView1;
     [self.navigationController pushViewController:AddMarkVC animated:NO];
    //[self presentViewController:AddMarkVC animated:NO completion:nil]
 

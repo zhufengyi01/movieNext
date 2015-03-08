@@ -35,11 +35,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-      // Do any additional setup after loading the view.
     [self createNavigation];
-    //[self createUI];
+    [self createUI];
 
-    }
+}
 -(void)createNavigation
 {
     UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:@"发布弹幕"];
@@ -69,6 +68,8 @@
 }
 -(void)createUI
 {
+    
+    [self.view addSubview:_stageView];
    /* _toolBar=[[UIToolbar alloc]initWithFrame:CGRectMake(0,70, kDeviceHeight, 40)];
      _toolBar.barTintColor=[UIColor redColor];   //背景颜色
      _toolBar.tintColor=[UIColor blackColor];  //内容颜色
