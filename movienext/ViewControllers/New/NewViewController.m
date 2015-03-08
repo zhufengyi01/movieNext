@@ -26,7 +26,6 @@
     AppDelegate  *appdelegate;
     UISegmentedControl *segment;
     UITableView   *_HotMoVieTableView;
-    UITableView   *_NewMoviewTableView;
     LoadingView   *loadView;
     NSMutableArray    *_hotDataArray;
     NSMutableArray    *_newDataArray;
@@ -50,7 +49,6 @@
     [self creatNavigation];
     [self initData];
     [self createHotView];
-    [self createNewView];
     [self creatLoadView];
     [self requestData];
     
@@ -79,8 +77,6 @@
 {
       if(seg.selectedSegmentIndex==0)
       {
-          _NewMoviewTableView.hidden=YES;
-          _HotMoVieTableView.hidden=NO;
           [_HotMoVieTableView reloadData];
           if (_hotDataArray.count==0) {
               [self requestData];
@@ -88,9 +84,7 @@
       }
      else if(seg.selectedSegmentIndex==1)
      {
-        _HotMoVieTableView.hidden=YES;
-         _NewMoviewTableView.hidden=NO;
-         [_NewMoviewTableView reloadData];
+         [_HotMoVieTableView reloadData];
          
          if (_newDataArray.count==0) {
              [self requestData];
@@ -105,15 +99,6 @@
     _HotMoVieTableView.dataSource=self;
     //_HotMoVieTableView.separatorStyle=UITableViewCellSeparatorStyleNone;
     [self.view addSubview:_HotMoVieTableView];
-}
--(void)createNewView
-{
-    _NewMoviewTableView=[[UITableView alloc]initWithFrame:CGRectMake(0,0, kDeviceWidth, kDeviceHeight)];
-    _NewMoviewTableView.delegate=self;
-    _NewMoviewTableView.dataSource=self;
-    _NewMoviewTableView.hidden=YES;
-    //_HotMoVieTableView.separatorStyle=UITableViewCellSeparatorStyleNone;
-    [self.view addSubview:_NewMoviewTableView];
 }
 -(void)creatLoadView
 {
@@ -157,7 +142,7 @@
             }
             NSLog(@"最新数据 JSON: %@", responseObject);
             [_newDataArray addObjectsFromArray:Detailarray];
-            [_NewMoviewTableView reloadData];
+            [_HotMoVieTableView reloadData];
         }
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -170,48 +155,39 @@
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (segment.selectedSegmentIndex==0) {
-        if (tableView==_HotMoVieTableView) {
-            return _hotDataArray.count;
-        }
+        return _hotDataArray.count;
     }
     else if (segment.selectedSegmentIndex==1)
     {
-        if (tableView==_NewMoviewTableView) {
-            return _newDataArray.count;
-        }
+        return _newDataArray.count;
     }
     return 0;
 }
 
 -(CGFloat )tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     if (segment.selectedSegmentIndex==0) {
-        if (tableView==_HotMoVieTableView) {
-            float hight;
-            if (_hotDataArray.count>indexPath.row) {
-            float  h=   [[[[_hotDataArray  objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] objectForKey:@"h"] floatValue];
-            float w=   [[[[_hotDataArray  objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] objectForKey:@"w"] floatValue];
-            if (w==0||h==0) {
-                 hight= kDeviceWidth+45;
-            }
-             if (w>h) {
-                hight= kDeviceWidth+45;
-            }
-            else if(h>w)
-            {
-                 hight=  (h/w) *kDeviceWidth;
-            }
-            }
-            NSLog(@"============  hight  for  row  =====%f",hight);
-            return hight+10;
+        float hight;
+        if (_hotDataArray.count>indexPath.row) {
+        float  h=   [[[[_hotDataArray  objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] objectForKey:@"h"] floatValue];
+        float w=   [[[[_hotDataArray  objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] objectForKey:@"w"] floatValue];
+        if (w==0||h==0) {
+             hight= kDeviceWidth+45;
         }
+         if (w>h) {
+            hight= kDeviceWidth+45;
+        }
+        else if(h>w)
+        {
+             hight=  (h/w) *kDeviceWidth;
+        }
+        }
+        NSLog(@"============  hight  for  row  =====%f",hight);
+        return hight+10;
     }
     else if (segment.selectedSegmentIndex==1)
     {
-        if (tableView==_NewMoviewTableView) {
-            float hight;
-            if (_newDataArray.count>indexPath.row) {
-            
-          //  return 200;
+        float hight;
+        if (_newDataArray.count>indexPath.row) {
             float  h=   [[[[_newDataArray  objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] objectForKey:@"h"] floatValue];
             float w=   [[[[_newDataArray  objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] objectForKey:@"w"] floatValue];
             if (w==0||h==0) {
@@ -224,27 +200,25 @@
             {
                 hight=  (h/w)*kDeviceWidth+90;
             }
-            }
-            NSLog(@"============  hight  for  row  =====%f",hight);
-
-            return hight+10;
-
         }
+        NSLog(@"============  hight  for  row  =====%f",hight);
+
+        return hight+10;
     }
     return 200.0f;
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-
+    
+    static NSString *cellID=@"CELL1";
+    CommonStageCell  *cell= (CommonStageCell *)[tableView dequeueReusableCellWithIdentifier:cellID];
+    if (!cell) {
+        cell=[[CommonStageCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+        cell.selectionStyle=UITableViewCellSelectionStyleNone;
+        cell.backgroundColor=View_BackGround;
+    }
+    
     if  (segment.selectedSegmentIndex==0) {
-        static NSString *cellID=@"CELL1";
-        CommonStageCell  *cell= (CommonStageCell *)[tableView dequeueReusableCellWithIdentifier:cellID];
-        if (!cell) {
-            cell=[[CommonStageCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
-            cell.selectionStyle=UITableViewCellSelectionStyleNone;
-            cell.backgroundColor=View_BackGround;
-        }
-     
         if (_hotDataArray.count>indexPath.row) {
             cell.pageType=NSPageSourceTypeMainHotController;
             //小闪动标签的数组
@@ -255,13 +229,6 @@
     }
     else if (segment.selectedSegmentIndex==1)
     {
-        static NSString *cellID=@"CELL2";
-        CommonStageCell  *cell= (CommonStageCell *)[tableView dequeueReusableCellWithIdentifier:cellID];
-        if (!cell) {
-            cell=[[CommonStageCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
-            cell.selectionStyle=UITableViewCellSelectionStyleNone;
-            cell.backgroundColor=View_BackGround;
-        }
         if (_newDataArray.count>indexPath.row) {
             cell.pageType=NSPageSourceTypeMainNewController;
             cell.weiboDict =[[_newDataArray  objectAtIndex:indexPath.row]  objectForKey:@"weibo"];
@@ -269,7 +236,6 @@
         }
         return  cell;
     }
-    //cell.textLabel.text=@"1212";
     return nil;
     
 }
@@ -277,17 +243,11 @@
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (segment.selectedSegmentIndex==0) {
-        if (tableView==_HotMoVieTableView) {
-            CommonStageCell *commonStageCell = (CommonStageCell *)cell;
-            [commonStageCell.BgView1 startAnimation];
-        }
-        
+        CommonStageCell *commonStageCell = (CommonStageCell *)cell;
+        [commonStageCell.BgView1 startAnimation];
     }
     else if (segment.selectedSegmentIndex==1)
     {
-        if (tableView==_NewMoviewTableView) {
-            
-        }
         
     }
 }
@@ -296,19 +256,13 @@
 {
     
     if (segment.selectedSegmentIndex==0) {
-        if (tableView==_HotMoVieTableView) {
 #warning 为什么这里用上面的那句代码就不行
-            //CommonStageCell *commonStageCell = (CommonStageCell *)[tableView cellForRowAtIndexPath:indexPath];
-            CommonStageCell *commonStageCell = (CommonStageCell *)cell;
-            [commonStageCell.BgView1 stopAnimation];
-        }
-        
+        //CommonStageCell *commonStageCell = (CommonStageCell *)[tableView cellForRowAtIndexPath:indexPath];
+        CommonStageCell *commonStageCell = (CommonStageCell *)cell;
+        [commonStageCell.BgView1 stopAnimation];
     }
     else if (segment.selectedSegmentIndex==1)
     {
-        if (tableView==_NewMoviewTableView) {
-            
-        }
         
     }
 }
