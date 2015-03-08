@@ -147,7 +147,7 @@
                             userCenter.user_id=[detail objectForKey:@"id"];
                             }
                             userCenter.username=[detail objectForKey:@"username"];
-                            userCenter.avatar =[detail objectForKey:@"logo"];
+                            userCenter.avatar =[detail objectForKey:@"avatar"];
                             userCenter.wallpaper=[detail objectForKey:@"wallpaper"];
                             userCenter.signature=[detail objectForKey:@"brief"];
                             userCenter.update_time=[detail objectForKey:@"update_time"];

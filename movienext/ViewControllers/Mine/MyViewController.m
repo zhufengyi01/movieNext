@@ -110,7 +110,8 @@
     
 
    // ivAvatar.image=[UIImage imageNamed:[]];
-    [ivAvatar sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!thumb",kUrlAvatar,userCenter.avatar]] placeholderImage:[UIImage imageNamed:@"loading_image_all.png"]];
+    [ivAvatar sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@!thumb",kUrlAvatar,userCenter.avatar]] placeholderImage:[UIImage imageNamed:@"loading_image_all.png"]];
+    NSLog(@"avatar url = %@/%@!thumb", kUrlAvatar, userCenter.avatar );
 
     [viewHeader addSubview:ivAvatar];
     
@@ -156,9 +157,6 @@
     lblBrief.text=signature;
     lblBrief.frame=CGRectMake(ivAvatar.frame.origin.x+ivAvatar.frame.size.width+10,lblCount.frame.origin.y+lblCount.frame.size.height+10, kDeviceWidth-ivAvatar.frame.origin.x-ivAvatar.frame.size.width-20, Msize.height);
       [viewHeader addSubview:lblBrief];
-    
-    
-    
     
     NSArray *segmentedArray = [[NSArray alloc] initWithObjects:@"添加", @"赞", nil];
     segment = [[UISegmentedControl alloc] initWithItems:segmentedArray];

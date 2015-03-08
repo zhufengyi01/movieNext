@@ -28,7 +28,7 @@
                           user.user_id, @"id",
                           user.username, @"username",
                           user.is_admin, @"level",
-                          user.avatar, @"logo",
+                          user.avatar, @"avatar",
                           user.wallpaper, @"wallpaper",
                           user.signature, @"brief",
                           user.update_time, @"update_time",
