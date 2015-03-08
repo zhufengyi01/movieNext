@@ -120,7 +120,6 @@
 {
     loadView =[[LoadingView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight)];
     [self.view addSubview:loadView];
-    
 }
 
 #pragma  mark -----
@@ -327,7 +326,7 @@
 -(void)ScreenButtonClick:(UIButton  *) button
 {
     NSLog(@" ==ScreenButtonClick  ====%ld",button.tag);
-    CommonStageCell *cell = (CommonStageCell *)(button.superview.superview.superview);
+    CommonStageCell *cell = (CommonStageCell *)(button.superview.superview.superview.class);
     
     UIGraphicsBeginImageContextWithOptions(_HotMoVieTableView.bounds.size, YES, [UIScreen mainScreen].scale);
     [cell.BgView1 drawViewHierarchyInRect:cell.BgView1.bounds afterScreenUpdates:YES];
