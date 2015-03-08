@@ -31,7 +31,7 @@
     LoadingView         *loadView;
     NSMutableArray      *_dataArray;
 
-    
+    BOOL bigModel;
 }
 
 @end
@@ -44,7 +44,7 @@
     [self createNavigation];
     [self initData];
     [self initUI];
-   // [self creatLoadView];
+    [self creatLoadView];
     [self requestData];
 
 }
@@ -65,6 +65,7 @@
     layout.minimumLineSpacing=10;      //cell上下间隔
     //layout.itemSize=CGSizeMake(80,140);  //cell的大小
     layout.sectionInset=UIEdgeInsetsMake(20, 10, 10, 10); //整个偏移量 上左下右
+    [layout setHeaderReferenceSize:CGSizeMake(_myConllectionView.frame.size.width, 150)];
     
     _myConllectionView =[[UICollectionView alloc]initWithFrame:CGRectMake(0, 30,kDeviceWidth, kDeviceHeight-30-kHeightNavigation-kHeigthTabBar) collectionViewLayout:layout];
     _myConllectionView.backgroundColor=View_BackGround;
@@ -73,13 +74,11 @@
     //注册小图模式
     [_myConllectionView registerClass:[SmallImageCollectionViewCell class] forCellWithReuseIdentifier:@"smallcell"];
     // 注册头部视图
-    //[_myConllectionView registerClass:[MovieHeadView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"headerView"];
+    [_myConllectionView registerClass:[MovieHeadView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"headerView"];
     _myConllectionView.delegate=self;
     _myConllectionView.dataSource=self;
     
     [self.view addSubview:_myConllectionView];
-    
-    
 }
 -(void)creatLoadView
 {
@@ -92,9 +91,10 @@
 #pragma  mark  ---
 -(void)requestData
 {
+    NSDictionary *parameter = @{@"movie_id": @"859357", @"start_id":@"0", @"user_id": @"18"};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager POST:[NSString stringWithFormat:@"%@/feed/list", kApiBaseUrl] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"  电影首页数据JSON: %@", responseObject);
+    [manager POST:[NSString stringWithFormat:@"%@/movieStage/list", kApiBaseUrl] parameters:parameter success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"  电影详情页面数据JSON: %@", responseObject);
         [loadView stopAnimation];
         [loadView removeFromSuperview];
         
@@ -121,51 +121,58 @@
     return 0;
 }
 
-
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
     if (collectionView==_myConllectionView) {
-        //return _dataArray.count;
-    
+        return _dataArray.count;
     }
     return 0;
 }
 
-/*- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    //在这里先将内容给清除一下, 然后再加载新的, 添加完内容之后先动画, 在cell消失的时候做清理工作
+    NSDictionary *dict = [_dataArray objectAtIndex:(indexPath.row)];
+    if ( bigModel ) {
+        BigImageCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"bigcell" forIndexPath:indexPath];
+        cell.backgroundColor = [UIColor blackColor];
+        /*
+        cell.stageView.bigModel = bigModel;
+        cell.stageView.feed = data;
+        [cell.stageView performSelector:@selector(startAnimation) withObject:nil afterDelay:1];
+         */
+        return cell;
+    } else {
+        SmallImageCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"smallcell" forIndexPath:indexPath];
+        cell.backgroundColor = [UIColor blackColor];
+        //[cell.ivStage sd_setImageWithURL:[NSURL URLWithString: [NSString stringWithFormat:@"%@%@!w340h340", kUrlStage, data.stage.stage]]];
+        //cell.lblMarks.text = data.stage.marks;
+        //cell.lblMarks.hidden = [data.stage.marks intValue] <= 0;
+        return cell;
+    }
+}
 
-   
+//设置头尾部内容
+-(UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
+{
+    UICollectionReusableView *reusableView = nil;
     
-}*/
-
-/*-(UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
-{
-      MovieHeadView    *headerView;
-    if (collectionView ==_myConllectionView) {
-       
-    if (kind == UICollectionElementKindSectionHeader){
-        
-        if ([kind isEqual:UICollectionElementKindSectionHeader]) {
-            if (indexPath.section==0) {
-            
-            headerView  =(MovieHeadView *)[collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"headerView" forIndexPath:indexPath];
-            }
-
-        }
+    if (kind == UICollectionElementKindSectionHeader) {
+        //定制头部视图的内容
+        MovieHeadView *headerV = (MovieHeadView *)[collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"headerView" forIndexPath:indexPath];
+        headerV.backgroundColor = [UIColor redColor];
+        //headerV.titleLab.text = @"头部视图";
+        reusableView = headerV;
     }
-    }
-    return headerView;
+    return reusableView;
+}
 
-}*/
 // 设置每个item的尺寸
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
     int width = ((kDeviceWidth-4*12)/3);
     int movieNameMarginTop = 10;
     int movieNameHeight = 20;
     return CGSizeMake( width, width*1.5 + movieNameMarginTop + movieNameHeight);
-     
-   
-    
 }
 // 设置头部视图的尺寸
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section
@@ -179,20 +186,7 @@
 }
 
 
-
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
-
 @end

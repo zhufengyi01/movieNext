@@ -10,4 +10,26 @@
 
 @implementation SmallImageCollectionViewCell
 
+
+-(instancetype)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        [self createUI];
+    }
+    return self;
+}
+
+- (void)createUI {
+    //定义CELL单元格内容
+    _imageV = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 100, 100)];
+    _imageV.backgroundColor = [UIColor clearColor];
+    [self addSubview:_imageV];
+    
+    _titleLab = [[UILabel alloc]initWithFrame:CGRectMake(80, 80, 20, 20)];
+    _titleLab.backgroundColor = [UIColor blackColor];
+    _titleLab.textAlignment = NSTextAlignmentCenter;
+    [self addSubview:_titleLab];
+}
+
 @end
