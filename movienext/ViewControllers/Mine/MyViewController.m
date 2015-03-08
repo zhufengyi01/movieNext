@@ -206,46 +206,45 @@
 
 -(CGFloat )tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     if (segment.selectedSegmentIndex==0) {
-            float hight;
-            if (_addedDataArray.count>indexPath.row) {
-            float  h=   [[[[_addedDataArray  objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] objectForKey:@"h"] floatValue];
-            float w=   [[[[_addedDataArray  objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] objectForKey:@"w"] floatValue];
-            if (w==0||h==0) {
-                 hight= kDeviceWidth+45;
-            }
-             if (w>h) {
-                hight= kDeviceWidth+45;
-            }
-            else if(h>w)
-            {
-                 hight=  (h/w) *kDeviceWidth;
-            }
-            }
-            NSLog(@"============  hight  for  row  =====%f",hight);
-            return hight+10;
+        float hight;
+        if (_addedDataArray.count>indexPath.row) {
+        float  h=   [[[[_addedDataArray  objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] objectForKey:@"h"] floatValue];
+        float w=   [[[[_addedDataArray  objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] objectForKey:@"w"] floatValue];
+        if (w==0||h==0) {
+             hight= kDeviceWidth+90;
+        }
+         if (w>h) {
+            hight= kDeviceWidth+90;
+        }
+        else if(h>w)
+        {
+             hight=  (h/w) *kDeviceWidth+90;
+        }
+        }
+        NSLog(@"============  hight  for  row  =====%f",hight);
+        return hight+10;
     }
     else if (segment.selectedSegmentIndex==1)
     {
-            float hight;
-            if (_upedDataArray.count>indexPath.row) {
-            
-          //  return 200;
-            float  h=   [[[[_upedDataArray  objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] objectForKey:@"h"] floatValue];
-            float w=   [[[[_upedDataArray  objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] objectForKey:@"w"] floatValue];
-            if (w==0||h==0) {
-                hight= kDeviceWidth+90;
-            }
-            if (w>h) {
-                hight= kDeviceWidth+90;
-            }
-            else if(h>w)
-            {
-                hight=  (h/w)*kDeviceWidth+90;
-            }
-            }
-            NSLog(@"============  hight  for  row  =====%f",hight);
+        float hight;
+        if (_upedDataArray.count>indexPath.row) {
+        
+        float  h=   [[[[_upedDataArray  objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] objectForKey:@"h"] floatValue];
+        float w=   [[[[_upedDataArray  objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] objectForKey:@"w"] floatValue];
+        if (w==0||h==0) {
+            hight= kDeviceWidth+90;
+        }
+        if (w>h) {
+            hight= kDeviceWidth+90;
+        }
+        else if(h>w)
+        {
+            hight=  (h/w)*kDeviceWidth+90;
+        }
+        }
+        NSLog(@"============  hight  for  row  =====%f",hight);
 
-            return hight+10;
+        return hight+10;
     }
     return 200.0f;
 }
@@ -262,9 +261,9 @@
         }
      
         if (_addedDataArray.count>indexPath.row) {
-            cell.pageType=NSPageSourceTypeMainHotController;
+            cell.pageType=NSPageSourceTypeMyAddedViewController;
             //小闪动标签的数组
-            cell.WeibosArray=[[_addedDataArray objectAtIndex:indexPath.row]  objectForKey:@"weibos"];
+            cell.weiboDict=[[_addedDataArray objectAtIndex:indexPath.row]  objectForKey:@"weibo"];
             [cell setCellValue:[[_addedDataArray objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] indexPath:indexPath.row];
         }
         return cell;

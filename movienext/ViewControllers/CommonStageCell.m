@@ -153,7 +153,7 @@
         _BgView1.isAnimation = YES;
     }
 #pragma mark 最新cell
-    else if(_pageType==NSPageSourceTypeMainNewController)  //最新
+    else if(_pageType==NSPageSourceTypeMainNewController || _pageType==NSPageSourceTypeMyAddedViewController || _pageType==NSPageSourceTypeMyupedViewController)  //最新
     {
         BgView0.hidden=NO;
         BgView0.frame=CGRectMake(0, 0, kDeviceWidth, 45);

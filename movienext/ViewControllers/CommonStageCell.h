@@ -15,6 +15,8 @@ typedef NS_ENUM(NSInteger, NSPageSourceType)
     NSPageSourceTypeMainHotController =0,
     NSPageSourceTypeMainNewController=1,
     NSPageSourceTypeMovieViewController=3,
+    NSPageSourceTypeMyAddedViewController=4,
+    NSPageSourceTypeMyupedViewController=5,
     
 };
 @interface CommonStageCell : UITableViewCell
