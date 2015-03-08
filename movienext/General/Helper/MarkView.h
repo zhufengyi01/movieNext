@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #define kShowTimeOffset 0.7  // 淡入时间
 #define kStaticTimeOffset 5.7  //静态显示时间
-#define kHidenTimeOffset 0.7  //淡出时间
+#define kHidenTimeOffset 1.0  //淡出时间
 
 @protocol MarkViewDelegate <NSObject>
  -(void)MarkViewClick;

@@ -150,11 +150,11 @@
             for (UIView *v in self.subviews) {
                 if ([v isKindOfClass:[MarkView class]]) {
                     MarkView *mv = (MarkView *)v;
-                    [mv startAnimation];
                     mv.alpha = 0.0;
                 }
                 //mv.hidden = YES;
             }
+            
             _timer = [NSTimer scheduledTimerWithTimeInterval:kTimeOffset target:self selector:@selector(showAnimation) userInfo:nil repeats:YES];
         } completion:nil];
     }];
@@ -172,18 +172,23 @@
 - (void)showAnimation {
     //NSLog(@"index = %ld", currentMarkIndex);
     
+    if (!_isAnimation) {
+        return;
+    }
+    
     if (currentMarkIndex <= self.subviews.count-1) {
         UIView *v = self.subviews[currentMarkIndex];
         if ([v isKindOfClass:[MarkView class]]) {
             MarkView *mv = (MarkView *)v;
-            //markview 本身的方法
             [mv startAnimation];
+            NSLog(@"dong qi lai = %ld", (long)currentMarkIndex);
         }
     }
-    
+    NSLog(@" ----- self.identifier = %@ current mark index = %ld", self, (long)currentMarkIndex);
     currentMarkIndex ++;
     //执行完成一轮动画之后，实行，重新再动第一个执行
-    if (currentMarkIndex > MAX(self.subviews.count, 10) ) {
+    if (currentMarkIndex > MAX(self.subviews.count, 13) ) {
+        NSLog(@" ====== self.identifier = %@ current mark index = %ld", self, (long)currentMarkIndex);
         currentMarkIndex = 0;
     }
 }
@@ -191,7 +196,6 @@
 //7.停止动画
 - (void)stopAnimation {
     [_timer invalidate];
-    
 }
 
 @end

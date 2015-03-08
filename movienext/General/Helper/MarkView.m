@@ -91,10 +91,12 @@
 
 //淡出动画
 - (void)easeOut {
-    [UIView animateWithDuration:kHidenTimeOffset delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
-        self.alpha=0;
-    } completion:^(BOOL finished) {
-    }];
+    if ( self.isAnimation==YES ) {
+        [UIView animateWithDuration:kHidenTimeOffset delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+            self.alpha=0;
+        } completion:^(BOOL finished) {
+        }];
+    }
 }
 
 /*
