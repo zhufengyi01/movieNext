@@ -73,7 +73,14 @@
     int zanWidth = [_ZanNumLable.text intValue]>0 ? Msize.width: 0;
     _ZanNumLable.frame=CGRectMake(_ZanImageView.frame.origin.x+_ZanImageView.frame.size.width+2, _ZanImageView.frame.origin.y, zanWidth, 15);
     
-    //设置子view的frame
+    //如果是静态的, 则将边框描一下
+    if (!_isAnimation) {
+        _LeftImageView.layer.borderColor = kAppTintColor.CGColor;
+        _LeftImageView.layer.borderWidth = 1;
+        
+        _rightView.layer.borderColor = kAppTintColor.CGColor;
+        _rightView.layer.borderWidth = 1;
+    }
 }
 
 //子视图本身的动画
@@ -91,10 +98,12 @@
 
 //淡出动画
 - (void)easeOut {
-    [UIView animateWithDuration:kHidenTimeOffset delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
-        self.alpha=0;
-    } completion:^(BOOL finished) {
-    }];
+    if ( self.isAnimation==YES ) {
+        [UIView animateWithDuration:kHidenTimeOffset delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+            self.alpha=0;
+        } completion:^(BOOL finished) {
+        }];
+    }
 }
 
 /*

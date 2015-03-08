@@ -150,6 +150,7 @@
         if ([dict objectForKey:@"stage"]) {
             [MovieLogoImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w100h100",kUrlMoviePoster,[dict objectForKey:@"movie_poster"]]] placeholderImage:[ UIImage imageNamed:@"loading_image_all.png"]];
         }
+        _BgView1.isAnimation = YES;
     }
 #pragma mark 最新cell
     else if(_pageType==NSPageSourceTypeMainNewController)  //最新

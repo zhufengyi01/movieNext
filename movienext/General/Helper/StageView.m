@@ -101,13 +101,13 @@
             //宽度=字的宽度+左头像图片的宽度＋赞图片的宽度＋赞数量的宽度+中间两个空格2+2
             //位置=
             float markViewWidth = Msize.width+23+Uwidth+5+5+11+5;
-            float markViewHeight = Msize.height+15;
+            float markViewHeight = Msize.height+6;
             float markViewX = (x*kDeviceWidth)/100-markViewWidth;
-            markViewX = MIN(MAX(markViewX, 0.0f), kDeviceWidth-markViewWidth);
+            markViewX = MIN(MAX(markViewX, 1.0f), kDeviceWidth-markViewWidth-1);
             
             float markViewY = (y*kDeviceWidth)/100+(Msize.height/2);
 #warning    kDeviceWidth 目前计算的是正方形的，当图片高度>屏幕的宽度的实际，需要使用图片的高度
-            markViewY = MIN(MAX(markViewY, markViewHeight/2), kDeviceWidth-markViewHeight);
+            markViewY = MIN(MAX(markViewY, 1.0f), kDeviceWidth-markViewHeight-1);
             
             markView.frame=CGRectMake(markViewX, markViewY, markViewWidth, markViewHeight);
           
@@ -150,11 +150,11 @@
             for (UIView *v in self.subviews) {
                 if ([v isKindOfClass:[MarkView class]]) {
                     MarkView *mv = (MarkView *)v;
-                    [mv startAnimation];
                     mv.alpha = 0.0;
                 }
                 //mv.hidden = YES;
             }
+            
             _timer = [NSTimer scheduledTimerWithTimeInterval:kTimeOffset target:self selector:@selector(showAnimation) userInfo:nil repeats:YES];
         } completion:nil];
     }];
@@ -172,18 +172,20 @@
 - (void)showAnimation {
     //NSLog(@"index = %ld", currentMarkIndex);
     
+    if (!_isAnimation) {
+        return;
+    }
+    
     if (currentMarkIndex <= self.subviews.count-1) {
         UIView *v = self.subviews[currentMarkIndex];
         if ([v isKindOfClass:[MarkView class]]) {
             MarkView *mv = (MarkView *)v;
-            //markview 本身的方法
             [mv startAnimation];
         }
     }
-    
     currentMarkIndex ++;
     //执行完成一轮动画之后，实行，重新再动第一个执行
-    if (currentMarkIndex > MAX(self.subviews.count, 10) ) {
+    if (currentMarkIndex > MAX(self.subviews.count, 13) ) {
         currentMarkIndex = 0;
     }
 }
@@ -191,7 +193,6 @@
 //7.停止动画
 - (void)stopAnimation {
     [_timer invalidate];
-    
 }
 
 @end

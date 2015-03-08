@@ -16,7 +16,11 @@
 #import "MJRefresh.h"
 #import "AFNetworking.h"
 #import "CommonStageCell.h"
+<<<<<<< HEAD
 #import "AddSubtitleViewController.h"
+=======
+#import "UMSocial.h"
+>>>>>>> a8506f9499113dd1bf4c4d6ce079dddca617f324
 @interface NewViewController ()<UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate>
 {
     AppDelegate  *appdelegate;
@@ -319,7 +323,23 @@
 -(void)ScreenButtonClick:(UIButton  *) button
 {
     NSLog(@" ==ScreenButtonClick  ====%ld",button.tag);
-
+    CommonStageCell *cell = (CommonStageCell *)(button.superview.superview.superview);
+    
+    UIGraphicsBeginImageContextWithOptions(_HotMoVieTableView.bounds.size, YES, [UIScreen mainScreen].scale);
+    [cell.BgView1 drawViewHierarchyInRect:cell.BgView1.bounds afterScreenUpdates:YES];
+    
+    // old style [self.layer renderInContext:UIGraphicsGetCurrentContext()];
+    
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
+    [UMSocialSnsService presentSnsIconSheetView:self
+                                         appKey:kUmengKey
+                                      shareText:@"index share image"
+                                     shareImage: image
+                                shareToSnsNames:[NSArray arrayWithObjects: UMShareToWechatSession, UMShareToWechatTimeline, UMShareToQzone, UMShareToSina, nil]
+                                       delegate:nil];
 }
 //点击增加弹幕
 -(void)addMarkButtonClick:(UIButton  *) button

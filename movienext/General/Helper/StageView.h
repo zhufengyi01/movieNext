@@ -17,6 +17,7 @@
 @property (nonatomic,strong ) NSMutableArray    *WeibosArray;   //小标签的数组，在多个标签的时候使用这个
 @property (nonatomic,strong ) NSDictionary      *weiboDict;     //只有一个标签的时候传递这个参数
 @property (nonatomic, strong) NSTimer           *timer;
+@property (nonatomic,assign) BOOL isAnimation;   //子视图是否是可以动的动画
 
 - (void)setStageValue:(NSDictionary *)stageDict;
 
