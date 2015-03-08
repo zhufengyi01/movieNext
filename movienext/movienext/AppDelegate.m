@@ -51,9 +51,6 @@
         if ([userInfo objectForKey:@"avatar"]) {
             userCenter.avatar =[userInfo objectForKey:@"avatar"];
         }
-        if ([userInfo objectForKey:@"wallpaper"]) {
-            userCenter.wallpaper=[userInfo objectForKey:@"wallpaper"];
-        }
         if ([userInfo objectForKey:@"brief"]) {
             userCenter.signature=[userInfo objectForKey:@"brief"];
         }

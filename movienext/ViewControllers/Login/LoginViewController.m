@@ -144,14 +144,16 @@
                             UserDataCenter  *userCenter=[UserDataCenter shareInstance];
                             if([detail objectForKey:@"id"])
                             {
-                            userCenter.user_id=[detail objectForKey:@"id"];
+                                userCenter.user_id=[detail objectForKey:@"id"];
                             }
                             userCenter.username=[detail objectForKey:@"username"];
                             userCenter.avatar =[detail objectForKey:@"avatar"];
-                            userCenter.wallpaper=[detail objectForKey:@"wallpaper"];
+                            userCenter.is_admin =[detail objectForKey:@"level"];
+                            userCenter.verified=[detail objectForKey:@"verified"];
                             userCenter.signature=[detail objectForKey:@"brief"];
                             userCenter.update_time=[detail objectForKey:@"update_time"];
                             userCenter.user_bind_type=[detail objectForKey:@"bind_type"];
+                            NSLog(@"usercenter.avatar = %@", userCenter.avatar);
                             [Function saveUser:userCenter];
                             window.rootViewController=[CustmoTabBarController new];
                         }

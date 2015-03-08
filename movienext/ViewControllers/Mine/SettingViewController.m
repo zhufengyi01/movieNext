@@ -63,7 +63,6 @@
     userCenter.user_id=nil;
     userCenter.username=nil;
     userCenter.avatar =nil;
-    userCenter.wallpaper=nil;
     userCenter.signature=nil;
     userCenter.update_time=nil;
     userCenter.user_bind_type=nil;
