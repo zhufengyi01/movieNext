@@ -35,8 +35,13 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    //[self createUI];
     [self createNavigation];
-    [self createUI];
+    
+    stageView = [[StageView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceWidth)];
+    NSLog(@"stagedict = %@", _stageDict);
+    [stageView setStageValue:_stageDict];
+    [self.view addSubview:stageView];
 
 }
 -(void)createNavigation
@@ -69,7 +74,7 @@
 -(void)createUI
 {
     
-    [self.view addSubview:_stageView];
+    
    /* _toolBar=[[UIToolbar alloc]initWithFrame:CGRectMake(0,70, kDeviceHeight, 40)];
      _toolBar.barTintColor=[UIColor redColor];   //背景颜色
      _toolBar.tintColor=[UIColor blackColor];  //内容颜色

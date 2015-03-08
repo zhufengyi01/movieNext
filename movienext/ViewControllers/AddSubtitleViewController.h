@@ -10,7 +10,10 @@
 #import "StageView.h"
 
 @interface AddSubtitleViewController : RootViewController
+{
+    StageView *stageView;
+}
+@property (nonatomic, strong) NSDictionary *stageDict;
 
-@property (nonatomic, strong) StageView *stageView;
 
 @end

@@ -22,8 +22,6 @@
 @property (nonatomic, strong) NSString * username;
 /** 是否为管理员 1-管理员 0-普通用户 */
 @property (nonatomic, strong) NSString * is_admin;
-/** 用户页面壁纸图片文件名 */
-@property (nonatomic, strong) NSString * wallpaper;
 /** 更新时间 */
 @property (nonatomic, strong) NSString * update_time;
 /** 用户签名 */

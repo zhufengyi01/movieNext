@@ -13,7 +13,7 @@
 - (id)initWithDictionary:(NSDictionary *)dict
 {
     self = [super init];
-    if(self){
+    if (self) {
         if (dict && [dict isKindOfClass:[NSDictionary class]]) {
             _weibo_id           = [dict objectForKey:@"id"];
             _topic              = [dict objectForKey:@"topic"];
@@ -21,8 +21,8 @@
             _comments           = [dict objectForKey:@"comments"];
             _uped               = [dict objectForKey:@"uped"];
             _create_time        = [dict objectForKey:@"create_time"];
-            _x            = [dict objectForKey:@"x"];
-            _y            = [dict objectForKey:@"y"];
+            _x                  = [dict objectForKey:@"x"];
+            _y                  = [dict objectForKey:@"y"];
             _user_id            = [dict objectForKey:@"user_id"];
             _username            = [dict objectForKey:@"username"];
             _avatar            = [dict objectForKey:@"avatar"];
@@ -31,7 +31,6 @@
     }
     return self;
 }
-
 
 
 @end

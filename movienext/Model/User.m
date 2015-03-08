@@ -45,7 +45,7 @@ static User   *manager=nil;
                            @"id":_user_id,
                            @"username":_username,
                            @"level":_is_admin,
-                           @"logo":_avatar,
+                           @"avatar":_avatar,
                            @"verified":_verified,
                            @"brief": _signature,
                            @"bind_type":_user_bind_type,

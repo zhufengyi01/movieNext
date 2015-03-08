@@ -24,22 +24,27 @@
 
 + (void) saveUser:(UserDataCenter *)user
 {
- /*  NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
-                         user.user_id:@"id",
-                         user.username: @"username",
-                         user.is_admin: @"level",
-                         user.avatar: @"logo",
-                         user.wallpaper: @"wallpaper",
-                         user.signature: @"brief",
-                         user.update_time: @"update_time",
-                         user.user_bind_type: @"bind_type",
+    //NSLog(@"user = %@", user);
+    NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
+                          user.user_id, @"id",
+                          user.username , @"username",
+                          user.is_admin, @"level",
+                          user.avatar, @"avatar",
+                          user.signature, @"brief",
+                          user.update_time, @"update_time",
+                          user.user_bind_type, @"bind_type",
                           nil];
-   */
-    //[[NSUserDefaults standardUserDefaults] removeObjectForKey:kUserKey];
-   // [[NSUserDefaults standardUserDefaults] setObject:dict forKey:kUserKey];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-}
+    
 
+
+ //   NSLog(@"save user dict = %@ , user. is_admin, user.avatar = %@, user.signature = %@", dict, [dict objectForKey:@"avatar"], [dict valueForKey:@"brief"]);
+
+
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:kUserKey];
+    [[NSUserDefaults standardUserDefaults] setObject:dict forKey:kUserKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+}
 + (void) logoutUser {
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:kUserKey];
     [[NSUserDefaults standardUserDefaults] synchronize];

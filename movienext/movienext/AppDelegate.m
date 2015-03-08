@@ -48,11 +48,8 @@
         if ([userInfo objectForKey:@"level"]) {
              userCenter.is_admin =[userInfo objectForKey:@"level"];
         }
-        if ([userInfo objectForKey:@"logo"]) {
-            userCenter.avatar =[userInfo objectForKey:@"logo"];
-        }
-        if ([userInfo objectForKey:@"wallpaper"]) {
-            userCenter.wallpaper=[userInfo objectForKey:@"wallpaper"];
+        if ([userInfo objectForKey:@"avatar"]) {
+            userCenter.avatar =[userInfo objectForKey:@"avatar"];
         }
         if ([userInfo objectForKey:@"brief"]) {
             userCenter.signature=[userInfo objectForKey:@"brief"];

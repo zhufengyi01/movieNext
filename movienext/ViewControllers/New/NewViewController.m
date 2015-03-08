@@ -349,8 +349,11 @@
 {
     NSLog(@" ==addMarkButtonClick  ====%ld",button.tag);
     AddSubtitleViewController  *AddMarkVC=[[AddSubtitleViewController alloc]init];
-    CommonStageCell *cell = (CommonStageCell *)button.superview.superview.superview;
-    AddMarkVC.stageView = cell.BgView1;
+    //CommonStageCell *cell = (CommonStageCell *)button.superview.superview.superview;
+    NSDictionary *dict = [_hotDataArray objectAtIndex:button.tag-3000];
+    AddMarkVC.stageDict = [dict valueForKey:@"stageinfo"];
+    NSLog(@"dict = %@", dict);
+    NSLog(@"dict.stageinfo = %@", [dict valueForKey:@"stageinfo"]);
     [self.navigationController pushViewController:AddMarkVC animated:NO];
    //[self presentViewController:AddMarkVC animated:NO completion:nil]
 
