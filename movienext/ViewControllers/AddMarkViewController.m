@@ -1,47 +1,35 @@
 //
-//  AddSubtitleViewController.m
+//  AddMarkViewController.m
 //  movienext
 //
-//  Created by 风之翼 on 15/3/6.
+//  Created by 风之翼 on 15/3/9.
 //  Copyright (c) 2015年 redianying. All rights reserved.
 //
 
-#import "AddSubtitleViewController.h"
-#import "Constant.h"
-#import "DAKeyboardControl.h"
-#import "UIImageView+WebCache.h"
+#import "AddMarkViewController.h"
 #import "ZCControl.h"
-@interface AddSubtitleViewController ()<UITextFieldDelegate>
+#import "Constant.h"
+@interface AddMarkViewController ()
 {
     UIToolbar  *_toolBar;
-    UITextField  *_textField;
-    NSDictionary  *stageDict;
+    UITextField  *_inputText;
+    NSDictionary  *_myDict;
 }
 @end
 
-@implementation AddSubtitleViewController
--(void)viewWillAppear:(BOOL)animated
-{
-    self.tabBarController.tabBar.hidden=YES;
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-}
--(void)keyboardWillShow:(NSNotification *) noti
-{
-    
-}
--(void)loadView
-{
-}
-
+@implementation AddMarkViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    stageDict =[NSDictionary dictionaryWithDictionary:_stageDict];
-    
+    // Do any additional setup after loading the view.
+    _myDict =[NSDictionary dictionaryWithDictionary:_stageDict];
     [self createNavigation];
+    //键盘将要显示
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+     //键盘将要隐藏
+    [[NSNotificationCenter defaultCenter ]addObserver:self selector:@selector(keyboardWillHiden:) name:UIKeyboardWillHideNotification object:nil];
     [self createStageView];
-    //[self createUI];
-
+    [self createButtomView];
 }
 -(void)createNavigation
 {
@@ -51,7 +39,7 @@
     titleLable.textAlignment=NSTextAlignmentCenter;
     self.navigationItem.titleView=titleLable;
     
-  
+    
     UIButton  *leftBtn= [UIButton buttonWithType:UIButtonTypeSystem];
     leftBtn.frame=CGRectMake(0, 0, 40, 30);
     [leftBtn setTitleColor:VGray_color forState:UIControlStateNormal];
@@ -68,57 +56,44 @@
     [RighttBtn setTitleColor:VGray_color forState:UIControlStateNormal];
     [RighttBtn setTitle:@"发布" forState:UIControlStateNormal];
     self.navigationItem.rightBarButtonItem=[[UIBarButtonItem alloc]initWithCustomView:RighttBtn];
+    
 
-    
-    
 }
 -(void)createStageView
 {
     stageView = [[StageView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceWidth)];
-    NSLog(@" 在 添加弹幕页面的   stagedict = %@", stageDict);
-  //   [stageView setStageValue:_stageDict];
+    NSLog(@" 在 添加弹幕页面的   stagedict = %@",_myDict);
+       [stageView setStageValue:_stageDict];
     [self.view addSubview:stageView];
-
+    
 }
--(void)createUI
+
+-(void)createButtomView
 {
     
     
-   /* _toolBar=[[UIToolbar alloc]initWithFrame:CGRectMake(0,70, kDeviceHeight, 40)];
+     _toolBar=[[UIToolbar alloc]initWithFrame:CGRectMake(0,70, kDeviceHeight, 40)];
      _toolBar.barTintColor=[UIColor redColor];   //背景颜色
      _toolBar.tintColor=[UIColor blackColor];  //内容颜色
-
-    _inputText= [[UITextField alloc]initWithFrame:CGRectMake(10,10, kDeviceWidth-60,30)];
-    _inputText.layer.cornerRadius=4;
-    _inputText.layer.borderWidth=1;
-    _inputText.layer.borderColor=VBlue_color.CGColor;
-    [_toolBar addSubview:_inputText];
-    
-    UIButton  *publishBtn=[ZCControl createButtonWithFrame:CGRectMake(kDeviceHeight-50, 10, 40, 28) ImageName:@"loginoutbackgroundcolor.png" Target:self Action:@selector(dealNavClick:) Title:@"发布"];
-    [_toolBar addSubview:publishBtn];
-    
-    [_inputText becomeFirstResponder];
-    [_inputText becomeFirstResponder];
-    //[self.view addSubview:_toolBar];
-    
-   //  _inputText.inputAccessoryView=_toolBar;
-    
-    [self.view addKeyboardPanningWithFrameBasedActionHandler:^(CGRect keyboardFrameInView, BOOL opening, BOOL closing) {
-    
-         Try not to call "self" inside this block (retain cycle).
-         But if you do, make sure to remove DAKeyboardControl
-         when you are done with the view controller by calling:
-         [self.view removeKeyboardControl];
-    
-        
-        CGRect toolBarFrame = _toolBar.frame;
-        toolBarFrame.origin.y = keyboardFrameInView.origin.y - toolBarFrame.size.height;
-        _toolBar.frame = toolBarFrame;
-    } constraintBasedActionHandler:nil];*/
-
-
+     
+     _inputText= [[UITextField alloc]initWithFrame:CGRectMake(10,10, kDeviceWidth-60,30)];
+     _inputText.layer.cornerRadius=4;
+     _inputText.layer.borderWidth=1;
+     _inputText.layer.borderColor=VBlue_color.CGColor;
+     [_toolBar addSubview:_inputText];
+     
+     UIButton  *publishBtn=[ZCControl createButtonWithFrame:CGRectMake(kDeviceHeight-50, 10, 40, 28) ImageName:@"loginoutbackgroundcolor.png" Target:self Action:@selector(dealNavClick:) Title:@"发布"];
+     [_toolBar addSubview:publishBtn];
+     
+     [_inputText becomeFirstResponder];
+     [_inputText becomeFirstResponder];
+     //[self.view addSubview:_toolBar];
+     
+     //  _inputText.inputAccessoryView=_toolBar;
     
 }
+
+
 -(void)dealNavClick:(UIButton *) button
 {
     
@@ -128,10 +103,10 @@
         [self.navigationController popViewControllerAnimated:NO];
         //[_inputText becomeFirstResponder];
     }
-    else if (button.tag==101) 
+    else if (button.tag==101)
     {
         NSLog(@" =========执行发布的方法");
-
+        
         //执行发布的方法
     }
     else if (button.tag==99)
@@ -140,6 +115,18 @@
         NSLog(@" =========点击确定按钮");
     }
 }
+
+
+#pragma mark 键盘的通知事件
+-(void)keyboardWillShow:(NSNotification * )  notification
+{
+    
+}
+-(void)keyboardWillHiden:(NSNotification *) notification
+{
+    
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

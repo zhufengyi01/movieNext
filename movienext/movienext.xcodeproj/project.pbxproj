@@ -145,6 +145,7 @@
 		006739591AA491250087C240 /* UIScrollView+MJRefresh.m in Sources */ = {isa = PBXBuildFile; fileRef = 006739501AA491250087C240 /* UIScrollView+MJRefresh.m */; };
 		0067395A1AA491250087C240 /* UIView+MJExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 006739521AA491250087C240 /* UIView+MJExtension.m */; };
 		0067395E1AA49F560087C240 /* SearchmovieTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0067395D1AA49F560087C240 /* SearchmovieTableViewCell.m */; };
+		007427321AAD3F3B0034047D /* AddMarkViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 007427311AAD3F3B0034047D /* AddMarkViewController.m */; };
 		009A27B91AA6DBDA0001690C /* movie_icon_backgroud_color.png in Resources */ = {isa = PBXBuildFile; fileRef = 009A27B61AA6DBDA0001690C /* movie_icon_backgroud_color.png */; };
 		009A27BA1AA6DBDA0001690C /* movie_icon_backgroud_color@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 009A27B71AA6DBDA0001690C /* movie_icon_backgroud_color@2x.png */; };
 		009A27BB1AA6DBDA0001690C /* movie_icon_backgroud_color@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 009A27B81AA6DBDA0001690C /* movie_icon_backgroud_color@3x.png */; };
@@ -432,6 +433,8 @@
 		006739521AA491250087C240 /* UIView+MJExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+MJExtension.m"; sourceTree = "<group>"; };
 		0067395C1AA49F560087C240 /* SearchmovieTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchmovieTableViewCell.h; sourceTree = "<group>"; };
 		0067395D1AA49F560087C240 /* SearchmovieTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchmovieTableViewCell.m; sourceTree = "<group>"; };
+		007427301AAD3F3B0034047D /* AddMarkViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddMarkViewController.h; sourceTree = "<group>"; };
+		007427311AAD3F3B0034047D /* AddMarkViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddMarkViewController.m; sourceTree = "<group>"; };
 		009A27B61AA6DBDA0001690C /* movie_icon_backgroud_color.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = movie_icon_backgroud_color.png; sourceTree = "<group>"; };
 		009A27B71AA6DBDA0001690C /* movie_icon_backgroud_color@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "movie_icon_backgroud_color@2x.png"; sourceTree = "<group>"; };
 		009A27B81AA6DBDA0001690C /* movie_icon_backgroud_color@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "movie_icon_backgroud_color@3x.png"; sourceTree = "<group>"; };
@@ -1330,6 +1333,8 @@
 				005AFB591AA5F41900D80CFB /* CommonStageCell.m */,
 				005C5B441AA9629900208782 /* AddSubtitleViewController.h */,
 				005C5B451AA9629900208782 /* AddSubtitleViewController.m */,
+				007427301AAD3F3B0034047D /* AddMarkViewController.h */,
+				007427311AAD3F3B0034047D /* AddMarkViewController.m */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -1704,6 +1709,7 @@
 				00AA540A1AA2C525004096F8 /* BasePageViewController.m in Sources */,
 				00AA540D1AA2C525004096F8 /* BaseTextField.m in Sources */,
 				00AA545B1AA2C526004096F8 /* User.m in Sources */,
+				007427321AAD3F3B0034047D /* AddMarkViewController.m in Sources */,
 				00AA54601AA2C526004096F8 /* NotificationViewController.m in Sources */,
 				00AA543C1AA2C525004096F8 /* UIButton+AFNetworking.m in Sources */,
 				00AA54151AA2C525004096F8 /* AFHTTPRequestOperationManager.m in Sources */,

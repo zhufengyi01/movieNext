@@ -16,6 +16,7 @@
 #import "MJRefresh.h"
 #import "AFNetworking.h"
 #import "CommonStageCell.h"
+#import "AddMarkViewController.h"
 
 #import "AddSubtitleViewController.h"
 
@@ -300,11 +301,11 @@
 -(void)addMarkButtonClick:(UIButton  *) button
 {
     NSLog(@" ==addMarkButtonClick  ====%ld",button.tag);
-    AddSubtitleViewController  *AddMarkVC=[[AddSubtitleViewController alloc]init];
+    AddMarkViewController  *AddMarkVC=[[AddMarkViewController alloc]init];
     //CommonStageCell *cell = (CommonStageCell *)button.superview.superview.superview;
     NSDictionary *dict = [_hotDataArray objectAtIndex:button.tag-3000];
     AddMarkVC.stageDict = [dict valueForKey:@"stageinfo"];
-    NSLog(@"dict = %@", dict);
+    //NSLog(@"dict = %@", dict);
     NSLog(@"dict.stageinfo = %@", [dict valueForKey:@"stageinfo"]);
     [self.navigationController pushViewController:AddMarkVC animated:NO];
    //[self presentViewController:AddMarkVC animated:NO completion:nil]

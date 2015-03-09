@@ -36,6 +36,10 @@
     [self addSubview:performerLable];
     
     UIButton  *btn1=[ZCControl createButtonWithFrame:CGRectMake(0, kDeviceHeight/3-45, kDeviceWidth/2, 45) ImageName:@"bg_qq_h@2x.png" Target:self Action:@selector(dealChangeModelClick:) Title:@"大图"];
+   // UIButton *btn1=[UIButton buttonWithType:UIButtonTypeCustom];
+    //btn1.frame=CGRectMake(0, kDeviceWidth/3-45, kDeviceWidth/2, 45);
+    //[btn1 setImage:[UIImage imageNamed:@"single_switch(gray).png"] forState:UIControlStateNormal];
+    //[btn1 setImage:[UIImage imageNamed:@"single_switch.png"] forState:UIControlStateSelected];
     btn1.backgroundColor = [UIColor greenColor];
     btn1.tag=1000;
     [self addSubview:btn1];

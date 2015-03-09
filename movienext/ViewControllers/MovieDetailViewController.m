@@ -286,15 +286,16 @@
 #pragma  mark
 #pragma  mark   -----MovieHeaderViewDelegate
 #pragma  mark   ---
--(void)ChangeCollectionModel:(NSInteger )index
+-(void)ChangeCollectionModel:(NSInteger  )index
 {
-    if (index==1000) {
-        //点击了大图模式
+    if (index==1000)
+    {///&&button.selected==YES) {
+        //点击了大图模模式
         NSLog(@"/点击了大图模式");
         bigModel=YES;
         [_myConllectionView reloadData];
     }
-    else if (index==1001)
+    else if (index==1001)///&&button.selected==YES)
     {
         //点击了小图模式
         
