@@ -35,13 +35,13 @@
     performerLable=[ZCControl createLabelWithFrame:CGRectMake(0, 60, 100, 30) Font:12 Text:@"演员"];
     [self addSubview:performerLable];
     
-    UIButton  *btn1=[ZCControl createButtonWithFrame:CGRectMake(0, kDeviceHeight/3-45, kDeviceWidth/2, 45) ImageName:@"bg_qq_h@2x.png" Target:self Action:@selector(dealChangeModelClick:) Title:@"大图"];
-    btn1.backgroundColor = [UIColor greenColor];
+    UIButton  *btn1=[ZCControl createButtonWithFrame:CGRectMake(0, kDeviceHeight/3-45, kDeviceWidth/2, 45) ImageName:@"" Target:self Action:@selector(dealChangeModelClick:) Title:@""];
+    [btn1 setImage:[UIImage imageNamed:@"single_switch@2x"] forState:UIControlStateNormal];
     btn1.tag=1000;
     [self addSubview:btn1];
     
-    UIButton  *btn2=[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth/2, kDeviceHeight/3- 45, kDeviceWidth/2, 45) ImageName:@"bg_qq_h@2x.png" Target:self Action:@selector(dealChangeModelClick:) Title:@"小图"];
-    btn2.backgroundColor = [UIColor blueColor];
+    UIButton  *btn2=[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth/2, kDeviceHeight/3- 45, kDeviceWidth/2, 45) ImageName:@"" Target:self Action:@selector(dealChangeModelClick:) Title:@""];
+    [btn2 setImage:[UIImage imageNamed:@"three switch@2x"] forState:UIControlStateNormal];
     btn2.tag=1001;
     [self addSubview:btn2];
 
