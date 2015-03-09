@@ -12,11 +12,13 @@
 @end
 @interface MovieHeadView : UICollectionReusableView
 {
+    UIImageView  *bgImageView;
     UIImageView  *movieLogoImageView;
     UILabel      *titleLable;
     UILabel      *derectorLable;
     UILabel      *performerLable;
     CGRect       m_frame;
+    
 }
 -(void)setCollectionHeaderValue:(NSDictionary *) dict;
 @property (nonatomic,assign) id <MovieHeadViewDelegate> delegate;

@@ -145,6 +145,9 @@
 		0067395A1AA491250087C240 /* UIView+MJExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 006739521AA491250087C240 /* UIView+MJExtension.m */; };
 		0067395E1AA49F560087C240 /* SearchmovieTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0067395D1AA49F560087C240 /* SearchmovieTableViewCell.m */; };
 		007427321AAD3F3B0034047D /* AddMarkViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 007427311AAD3F3B0034047D /* AddMarkViewController.m */; };
+		0074273B1AADAB9B0034047D /* UIImage+Blur.m in Sources */ = {isa = PBXBuildFile; fileRef = 007427351AADAB9B0034047D /* UIImage+Blur.m */; };
+		0074273C1AADAB9B0034047D /* UIImage+ImageWithColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 007427371AADAB9B0034047D /* UIImage+ImageWithColor.m */; };
+		0074273D1AADAB9B0034047D /* UIImage+Screenshot.m in Sources */ = {isa = PBXBuildFile; fileRef = 007427391AADAB9B0034047D /* UIImage+Screenshot.m */; };
 		009A27B91AA6DBDA0001690C /* movie_icon_backgroud_color.png in Resources */ = {isa = PBXBuildFile; fileRef = 009A27B61AA6DBDA0001690C /* movie_icon_backgroud_color.png */; };
 		009A27BA1AA6DBDA0001690C /* movie_icon_backgroud_color@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 009A27B71AA6DBDA0001690C /* movie_icon_backgroud_color@2x.png */; };
 		009A27BB1AA6DBDA0001690C /* movie_icon_backgroud_color@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 009A27B81AA6DBDA0001690C /* movie_icon_backgroud_color@3x.png */; };
@@ -431,6 +434,13 @@
 		0067395D1AA49F560087C240 /* SearchmovieTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchmovieTableViewCell.m; sourceTree = "<group>"; };
 		007427301AAD3F3B0034047D /* AddMarkViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddMarkViewController.h; sourceTree = "<group>"; };
 		007427311AAD3F3B0034047D /* AddMarkViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddMarkViewController.m; sourceTree = "<group>"; };
+		007427341AADAB9B0034047D /* UIImage+Blur.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Blur.h"; sourceTree = "<group>"; };
+		007427351AADAB9B0034047D /* UIImage+Blur.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Blur.m"; sourceTree = "<group>"; };
+		007427361AADAB9B0034047D /* UIImage+ImageWithColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImageWithColor.h"; sourceTree = "<group>"; };
+		007427371AADAB9B0034047D /* UIImage+ImageWithColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageWithColor.m"; sourceTree = "<group>"; };
+		007427381AADAB9B0034047D /* UIImage+Screenshot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Screenshot.h"; sourceTree = "<group>"; };
+		007427391AADAB9B0034047D /* UIImage+Screenshot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Screenshot.m"; sourceTree = "<group>"; };
+		0074273A1AADAB9B0034047D /* UIImage-Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage-Helpers.h"; sourceTree = "<group>"; };
 		009A27B61AA6DBDA0001690C /* movie_icon_backgroud_color.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = movie_icon_backgroud_color.png; sourceTree = "<group>"; };
 		009A27B71AA6DBDA0001690C /* movie_icon_backgroud_color@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "movie_icon_backgroud_color@2x.png"; sourceTree = "<group>"; };
 		009A27B81AA6DBDA0001690C /* movie_icon_backgroud_color@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "movie_icon_backgroud_color@3x.png"; sourceTree = "<group>"; };
@@ -874,6 +884,20 @@
 			path = Searchmovie;
 			sourceTree = "<group>";
 		};
+		007427331AADAB9B0034047D /* UIImage-Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				007427341AADAB9B0034047D /* UIImage+Blur.h */,
+				007427351AADAB9B0034047D /* UIImage+Blur.m */,
+				007427361AADAB9B0034047D /* UIImage+ImageWithColor.h */,
+				007427371AADAB9B0034047D /* UIImage+ImageWithColor.m */,
+				007427381AADAB9B0034047D /* UIImage+Screenshot.h */,
+				007427391AADAB9B0034047D /* UIImage+Screenshot.m */,
+				0074273A1AADAB9B0034047D /* UIImage-Helpers.h */,
+			);
+			path = "UIImage-Helpers";
+			sourceTree = "<group>";
+		};
 		00AA52FA1AA2C3F4004096F8 = {
 			isa = PBXGroup;
 			children = (
@@ -1044,6 +1068,7 @@
 		00AA53511AA2C525004096F8 /* Libs */ = {
 			isa = PBXGroup;
 			children = (
+				007427331AADAB9B0034047D /* UIImage-Helpers */,
 				006739421AA491250087C240 /* MJRefresh */,
 				00AA53521AA2C525004096F8 /* AFNetworking */,
 				00AA53661AA2C525004096F8 /* CreatQuickUI */,
@@ -1680,6 +1705,7 @@
 				00AA54521AA2C526004096F8 /* Comment.m in Sources */,
 				00AA54241AA2C525004096F8 /* MASViewConstraint.m in Sources */,
 				00AA54321AA2C525004096F8 /* UIImage+GIF.m in Sources */,
+				0074273B1AADAB9B0034047D /* UIImage+Blur.m in Sources */,
 				00E358211AA3E13E00577239 /* ZCControl.m in Sources */,
 				00AA542B1AA2C525004096F8 /* SDWebImageCompat.m in Sources */,
 				00ABFC711AAAAB2200980824 /* BigImageCollectionViewCell.m in Sources */,
@@ -1698,6 +1724,7 @@
 				00AA54101AA2C525004096F8 /* NSString+Additions.m in Sources */,
 				00AA54581AA2C526004096F8 /* NotiComment.m in Sources */,
 				00AA54121AA2C525004096F8 /* Function.m in Sources */,
+				0074273C1AADAB9B0034047D /* UIImage+ImageWithColor.m in Sources */,
 				006739581AA491250087C240 /* UIScrollView+MJExtension.m in Sources */,
 				00AA543D1AA2C525004096F8 /* UIImageView+AFNetworking.m in Sources */,
 				00AA54071AA2C525004096F8 /* BaseButton.m in Sources */,
@@ -1709,6 +1736,7 @@
 				00AA543A1AA2C525004096F8 /* UIActivityIndicatorView+AFNetworking.m in Sources */,
 				00AA545E1AA2C526004096F8 /* MyViewController.m in Sources */,
 				00AA54221AA2C525004096F8 /* MASLayoutConstraint.m in Sources */,
+				0074273D1AADAB9B0034047D /* UIImage+Screenshot.m in Sources */,
 				00AA54091AA2C525004096F8 /* BaseLabel.m in Sources */,
 				00AA54081AA2C525004096F8 /* BaseCollectionViewController.m in Sources */,
 				00AA54361AA2C525004096F8 /* UIImageView+WebCache.m in Sources */,

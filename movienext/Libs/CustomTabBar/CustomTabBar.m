@@ -9,8 +9,10 @@
 #import "CustomTabBar.h"
 #define BUTTON_COUNT 4
 #define BUTTON_START_TAG 1000
-#define  TabSelectColor   [UIColor colorWithRed:0/255 green:146.0/255 blue:255.0/255 alpha:1]
-#define  TabNorColor      [UIColor colorWithRed:127.0/255 green:127.0/255 blue:139.0/255 alpha:1]
+//在这里调选中的状态的字体颜色
+#define  TabSelectColor   [UIColor colorWithRed:0.0/255 green:146.0/255 blue:255.0/255 alpha:1]
+//以后在这里调整正常字体的颜色
+#define  TabNorColor      [UIColor colorWithRed:175.0/255 green:180.0/255 blue:201.0/255 alpha:1]
 
 
 @interface CustomTabBar ()
@@ -59,6 +61,7 @@
         UILabel  *lable=[[UILabel alloc]initWithFrame:CGRectMake(button.frame.origin.x, m_frame.size.height-15, button.frame.size.width, 15)];
         lable.font=[UIFont systemFontOfSize:11];
         lable.textColor=TabNorColor;
+       
         lable.textAlignment=NSTextAlignmentCenter;
         lable.tag=2000+i;
         lable.text=titleArray[i];
@@ -71,13 +74,13 @@
         
         if (i == 0) {
             [button setImage:selectedImage forState:UIControlStateNormal];
-            lable.textColor=[UIColor blueColor];
-
+            lable.textColor=TabSelectColor;
         } else {
              [button setImage:normalImage forState:UIControlStateNormal];
 
         }
-        [button setImageEdgeInsets:UIEdgeInsetsMake(8, 25, 15, 25)];
+        //要想调整图片的大小和位置都可以这么调
+        [button setImageEdgeInsets:UIEdgeInsetsMake(4, 25, 15, 25)];
         [button addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:button];
     }
@@ -107,7 +110,7 @@
         [btn setImage:normalImage forState:UIControlStateNormal];
 
         UILabel  *lable=(UILabel *)[self viewWithTag:2000+i] ;
-        lable.textColor=TabSelectColor;
+        lable.textColor=TabNorColor;
         
     }
     
@@ -117,7 +120,7 @@
     [button setImage:selectedImage forState:UIControlStateNormal];
     //[button setImageEdgeInsets:UIEdgeInsetsMake(8, 25, 15, 25)];
     UILabel  *label=(UILabel *)[self viewWithTag:button.tag+1000];
-    label.textColor=[UIColor blueColor];
+    label.textColor=TabSelectColor;
     
     
     

@@ -39,7 +39,7 @@
 -(void)createButtonView
 {
     BgView2=[[UIView alloc]initWithFrame:CGRectMake(0, kDeviceWidth, kDeviceWidth, 45)];
-    BgView2.backgroundColor=[UIColor whiteColor];
+    BgView2.backgroundColor=View_ToolBar;
     [self.contentView addSubview:BgView2];
     
     

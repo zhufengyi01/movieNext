@@ -96,7 +96,7 @@
     _HotMoVieTableView=[[UITableView alloc]initWithFrame:CGRectMake(0,0, kDeviceWidth, kDeviceHeight)];
     _HotMoVieTableView.delegate=self;
     _HotMoVieTableView.dataSource=self;
-    //_HotMoVieTableView.separatorStyle=UITableViewCellSeparatorStyleNone;
+    _HotMoVieTableView.separatorStyle=UITableViewCellSeparatorStyleNone;
     [self.view addSubview:_HotMoVieTableView];
 }
 -(void)creatLoadView

@@ -27,6 +27,7 @@
     
     TitleLable=[ZCControl createLabelWithFrame:CGRectMake(0, LogoImage.frame.origin.y+LogoImage.frame.size.height, LogoImage.frame.size.width, 30) Font:14 Text:@"电影描述"];
     TitleLable.textAlignment=NSTextAlignmentCenter;
+    TitleLable.textColor=VGray_color;
     [self.contentView addSubview:TitleLable];
 }
 -(void)setValueforCell:(NSDictionary  *) dict;

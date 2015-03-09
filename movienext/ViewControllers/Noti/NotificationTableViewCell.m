@@ -24,10 +24,12 @@
 }
 -(void)createUI
 {
-    logoButton =[ZCControl createButtonWithFrame:CGRectMake(15, 15, 50, 50) ImageName:@"" Target:self.superview Action:@selector(dealHeadClick:) Title:@""];
+    logoButton =[ZCControl createButtonWithFrame:CGRectMake(15, 15, 30, 30) ImageName:@"" Target:self.superview Action:@selector(dealHeadClick:) Title:@""];
+    logoButton.layer.cornerRadius=8;
+    logoButton.clipsToBounds=YES;
     [self.contentView addSubview:logoButton];
     
-    titleLable =[ZCControl createLabelWithFrame:CGRectMake(75, 10, kDeviceWidth-100-110, 30) Font:16 Text:@""];
+    titleLable =[ZCControl createLabelWithFrame:CGRectMake(55, 10, kDeviceWidth-100-110, 30) Font:16 Text:@""];
     titleLable.textColor=VBlue_color;
     titleLable.numberOfLines=0;
     titleLable.textAlignment=NSTextAlignmentLeft;
@@ -37,12 +39,14 @@
     Zanlable.textColor=VGray_color;
     [self.contentView addSubview:Zanlable];
     
-    dateLable=[ZCControl createLabelWithFrame:CGRectMake(75, 50, 120, 20) Font:16 Text:@"时间"];
+    dateLable=[ZCControl createLabelWithFrame:CGRectMake(55, 35, 120, 20) Font:16 Text:@"时间"];
     dateLable.textColor=VGray_color;
     dateLable.textAlignment=NSTextAlignmentLeft;
     [self.contentView addSubview:dateLable];
     
-   stageImage =[ZCControl createImageViewWithFrame:CGRectMake(kDeviceWidth-75, 5, 70, 70) ImageName:nil];
+   stageImage =[ZCControl createImageViewWithFrame:CGRectMake(kDeviceWidth-55, 5, 50, 50) ImageName:nil];
+    stageImage.layer.cornerRadius=8;
+    stageImage.clipsToBounds=YES;
     [self.contentView addSubview:stageImage];
 
 }

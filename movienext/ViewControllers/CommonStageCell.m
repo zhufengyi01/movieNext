@@ -52,7 +52,7 @@
     TimeLable.textColor=VGray_color;
     [BgView0 addSubview:TimeLable];
     
-    ZanButton =[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-70, 10, 50, 25) ImageName:@"like.png" Target:self.superview Action:@selector(ZanButtonClick:) Title:@""];
+    ZanButton =[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-70, 10, 45, 25) ImageName:@"like.png" Target:self.superview Action:@selector(ZanButtonClick:) Title:@""];
     ZanButton.layer.cornerRadius=2;
     [ZanButton setBackgroundImage:[UIImage imageNamed:@"liked.png"] forState:UIControlStateSelected];
     [BgView0 addSubview:ZanButton];
@@ -74,7 +74,8 @@
 -(void)createButtonView
 {
     BgView2=[[UIView alloc]initWithFrame:CGRectMake(0, kDeviceWidth, kDeviceWidth, 45)];
-    BgView2.backgroundColor=[UIColor whiteColor];
+    //改变toolar 的颜色
+    BgView2.backgroundColor=View_ToolBar;
     [self.contentView addSubview:BgView2];
     
     //leftButtomButton =[ZCControl createButtonWithFrame:CGRectMake(10,8,100,30) ImageName:@"movie_icon_backgroud_color.png" Target:self.superview Action:@selector(dealMovieButtonClick:) Title:@"sd"];
@@ -85,7 +86,7 @@
     [leftButtomButton addTarget:self.superview action:@selector(dealMovieButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     [leftButtomButton setTitleColor:VGray_color forState:UIControlStateNormal];
     [leftButtomButton setTitleEdgeInsets:UIEdgeInsetsMake(0, 30, 0, 0)];
-    leftButtomButton.titleLabel.font = [UIFont systemFontOfSize:12];
+    leftButtomButton.titleLabel.font = [UIFont systemFontOfSize:13];
     [BgView2 addSubview:leftButtomButton];
     
     MovieLogoImageView=[[UIImageView alloc]initWithFrame:CGRectMake(0,0,30, 30)];
@@ -94,10 +95,10 @@
     [leftButtomButton addSubview:MovieLogoImageView];
     
     
-    ScreenButton =[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-150,10,60,25) ImageName:@"screen_shot share.png" Target:self.superview Action:@selector(ScreenButtonClick:) Title:@""];
+    ScreenButton =[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-140,10,60,25) ImageName:@"screen_shot share.png" Target:self.superview Action:@selector(ScreenButtonClick:) Title:@""];
     [BgView2 addSubview:ScreenButton];
     
-    addMarkButton =[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-75,10,60,25) ImageName:@"add.png" Target:self.superview Action:@selector(addMarkButtonClick:) Title:@""];
+    addMarkButton =[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-70,10,60,25) ImageName:@"add.png" Target:self.superview Action:@selector(addMarkButtonClick:) Title:@""];
     [BgView2 addSubview:addMarkButton];
     
     
