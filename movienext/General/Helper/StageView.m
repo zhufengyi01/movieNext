@@ -59,13 +59,14 @@
           _MovieImageView.frame=CGRectMake(0,y, kDeviceWidth, (ImgeHight/ImageWith)*kDeviceWidth);
        [_MovieImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w640",kUrlStage,[dict objectForKey:@"stage"]]] placeholderImage:[UIImage imageNamed:@"loading_image_all.png"]];
      }
-    
+#pragma  mark  是静态的, 气泡是不动的
     if ( _weiboDict ) {
         MarkView *markView = [self createMarkViewWithDict:_weiboDict andIndex:2000];
         markView.alpha = 1.0;
         markView.isAnimation = NO;
        [self addSubview:markView];
     }
+#pragma  mark  有很多气泡，气泡循环播放
     
     for ( int i=0;i<_WeibosArray.count ; i++) {
         NSDictionary  *weibodict=[NSDictionary dictionaryWithDictionary:[_WeibosArray  objectAtIndex:i]];
@@ -85,7 +86,7 @@
             
             float  x=[[weibodict objectForKey:@"x"]floatValue ];
             float  y=[[weibodict objectForKey:@"y"]floatValue ];
-            NSLog(@" ==== =mark  view  ===%f  ==== mark view =====%f",x,y);
+             //NSLog(@" ==== =mark  view  ===%f  ==== mark view =====%f",x,y);
             NSString  *weiboTitleString=[weibodict  objectForKey:@"topic"];
             NSString  *UpString=[weibodict objectForKey:@"ups"];
           //  NSLog(@"weibo dict ======%@",weibodict);

@@ -45,6 +45,7 @@
     [self initData];
     [self initUI];
     [self creatLoadView];
+    [self requestMovieInfoData];
     [self requestData];
 
 }
@@ -102,8 +103,28 @@
     
 }
 
+
 #pragma  mark  ----RequestData
 #pragma  mark  ---
+
+//根据电影id 请求电影的详细信息
+-(void)requestMovieInfoData
+{
+    if (!_movieId || _movieId<=0) {
+        return;
+    }
+    NSDictionary *parameter = @{@"movie_id": _movieId};
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    [manager POST:[NSString stringWithFormat:@"%@/movie/info", kApiBaseUrl] parameters:parameter success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"  电影详情页面的电影信息数据JSON: %@", responseObject);
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+    
+
+}
+
 -(void)requestData
 {
 #warning  这里需要写参数

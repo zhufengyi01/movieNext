@@ -135,7 +135,6 @@
 		00572CC21AA44FBE0041D451 /* MovieCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00572CC11AA44FBE0041D451 /* MovieCollectionViewCell.m */; };
 		005AFB5A1AA5F41900D80CFB /* CommonStageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 005AFB591AA5F41900D80CFB /* CommonStageCell.m */; };
 		005C5B431AA9622100208782 /* MovieDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 005C5B421AA9622100208782 /* MovieDetailViewController.m */; };
-		005C5B461AA9629900208782 /* AddSubtitleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 005C5B451AA9629900208782 /* AddSubtitleViewController.m */; };
 		006739531AA491250087C240 /* MJRefresh.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 006739431AA491250087C240 /* MJRefresh.bundle */; };
 		006739541AA491250087C240 /* MJRefreshBaseView.m in Sources */ = {isa = PBXBuildFile; fileRef = 006739461AA491250087C240 /* MJRefreshBaseView.m */; };
 		006739551AA491250087C240 /* MJRefreshConst.m in Sources */ = {isa = PBXBuildFile; fileRef = 006739481AA491250087C240 /* MJRefreshConst.m */; };
@@ -260,7 +259,6 @@
 		00CAC3CA1AA31A3F008208E9 /* LoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 00CAC3C91AA31A3F008208E9 /* LoadingView.m */; };
 		00E3581E1AA3DCD000577239 /* NotificationTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E3581D1AA3DCD000577239 /* NotificationTableViewCell.m */; };
 		00E358211AA3E13E00577239 /* ZCControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E358201AA3E13E00577239 /* ZCControl.m */; };
-		00E609FA1AABE52500E2F53B /* DAKeyboardControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E609F91AABE52500E2F53B /* DAKeyboardControl.m */; };
 		00E609FC1AABF1AC00E2F53B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00E609FB1AABF1AC00E2F53B /* UIKit.framework */; };
 		00E609FE1AABF1B900E2F53B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00E609FD1AABF1B900E2F53B /* Foundation.framework */; };
 		4076AF011AA9B0D2006DC466 /* StageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4076AF001AA9B0D2006DC466 /* StageView.m */; };
@@ -413,8 +411,6 @@
 		005AFB591AA5F41900D80CFB /* CommonStageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonStageCell.m; sourceTree = "<group>"; };
 		005C5B411AA9622100208782 /* MovieDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MovieDetailViewController.h; path = ViewControllers/MovieDetailViewController.h; sourceTree = SOURCE_ROOT; };
 		005C5B421AA9622100208782 /* MovieDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MovieDetailViewController.m; path = ViewControllers/MovieDetailViewController.m; sourceTree = SOURCE_ROOT; };
-		005C5B441AA9629900208782 /* AddSubtitleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddSubtitleViewController.h; sourceTree = "<group>"; };
-		005C5B451AA9629900208782 /* AddSubtitleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddSubtitleViewController.m; sourceTree = "<group>"; };
 		006739431AA491250087C240 /* MJRefresh.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = MJRefresh.bundle; sourceTree = "<group>"; };
 		006739441AA491250087C240 /* MJRefresh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJRefresh.h; sourceTree = "<group>"; };
 		006739451AA491250087C240 /* MJRefreshBaseView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJRefreshBaseView.h; sourceTree = "<group>"; };
@@ -662,8 +658,6 @@
 		00E3581D1AA3DCD000577239 /* NotificationTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationTableViewCell.m; sourceTree = "<group>"; };
 		00E3581F1AA3E13E00577239 /* ZCControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZCControl.h; sourceTree = "<group>"; };
 		00E358201AA3E13E00577239 /* ZCControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZCControl.m; sourceTree = "<group>"; };
-		00E609F81AABE52500E2F53B /* DAKeyboardControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DAKeyboardControl.h; sourceTree = "<group>"; };
-		00E609F91AABE52500E2F53B /* DAKeyboardControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DAKeyboardControl.m; sourceTree = "<group>"; };
 		00E609FB1AABF1AC00E2F53B /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		00E609FD1AABF1B900E2F53B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4076AEFF1AA9B0D2006DC466 /* StageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StageView.h; sourceTree = "<group>"; };
@@ -1050,7 +1044,6 @@
 		00AA53511AA2C525004096F8 /* Libs */ = {
 			isa = PBXGroup;
 			children = (
-				00E609F71AABE52500E2F53B /* DAKeyboardControl */,
 				006739421AA491250087C240 /* MJRefresh */,
 				00AA53521AA2C525004096F8 /* AFNetworking */,
 				00AA53661AA2C525004096F8 /* CreatQuickUI */,
@@ -1331,8 +1324,6 @@
 				00AA54041AA2C525004096F8 /* Noti */,
 				005AFB581AA5F41900D80CFB /* CommonStageCell.h */,
 				005AFB591AA5F41900D80CFB /* CommonStageCell.m */,
-				005C5B441AA9629900208782 /* AddSubtitleViewController.h */,
-				005C5B451AA9629900208782 /* AddSubtitleViewController.m */,
 				007427301AAD3F3B0034047D /* AddMarkViewController.h */,
 				007427311AAD3F3B0034047D /* AddMarkViewController.m */,
 			);
@@ -1408,15 +1399,6 @@
 				00ABFC791AAACDF800980824 /* MovieHeadView.m */,
 			);
 			name = MovieDetail;
-			sourceTree = "<group>";
-		};
-		00E609F71AABE52500E2F53B /* DAKeyboardControl */ = {
-			isa = PBXGroup;
-			children = (
-				00E609F81AABE52500E2F53B /* DAKeyboardControl.h */,
-				00E609F91AABE52500E2F53B /* DAKeyboardControl.m */,
-			);
-			path = DAKeyboardControl;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1682,12 +1664,10 @@
 				00AA54341AA2C525004096F8 /* UIImage+WebP.m in Sources */,
 				006739551AA491250087C240 /* MJRefreshConst.m in Sources */,
 				00AA54271AA2C525004096F8 /* View+MASAdditions.m in Sources */,
-				005C5B461AA9629900208782 /* AddSubtitleViewController.m in Sources */,
 				00AA542A1AA2C525004096F8 /* SDImageCache.m in Sources */,
 				00AA540E1AA2C525004096F8 /* BaseViewController.m in Sources */,
 				00AA543B1AA2C525004096F8 /* UIAlertView+AFNetworking.m in Sources */,
 				00AA530C1AA2C3F4004096F8 /* AppDelegate.m in Sources */,
-				00E609FA1AABE52500E2F53B /* DAKeyboardControl.m in Sources */,
 				00AA54181AA2C525004096F8 /* AFSecurityPolicy.m in Sources */,
 				00AA54331AA2C525004096F8 /* UIImage+MultiFormat.m in Sources */,
 				00AA54541AA2C526004096F8 /* Feed.m in Sources */,

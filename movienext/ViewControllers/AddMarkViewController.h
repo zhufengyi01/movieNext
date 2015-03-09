@@ -8,6 +8,7 @@
 
 #import "RootViewController.h"
 #import "StageView.h"
+#import "MarkView.h"
 
 @interface AddMarkViewController : RootViewController
 {

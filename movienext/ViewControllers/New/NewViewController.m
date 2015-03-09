@@ -19,8 +19,6 @@
 #import "AddMarkViewController.h"
 #import "MovieDetailViewController.h"
 
-#import "AddSubtitleViewController.h"
-
 #import "UMSocial.h"
 @interface NewViewController ()<UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate>
 {

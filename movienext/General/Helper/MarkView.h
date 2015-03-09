@@ -18,6 +18,12 @@
 @interface MarkView : UIView
 {
     CGRect  m_frame;
+   // UIImageView    *_LeftImageView;
+   // UIView         *_rightView;
+  //  UILabel        *_TitleLable;
+   // UILabel        *_ZanNumLable;
+   // UIImageView    *_ZanImageView;
+    
 }
 
 @property (nonatomic,strong) UIImageView    *LeftImageView;

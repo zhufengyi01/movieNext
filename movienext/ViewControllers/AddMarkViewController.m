@@ -9,11 +9,17 @@
 #import "AddMarkViewController.h"
 #import "ZCControl.h"
 #import "Constant.h"
+#import "UserDataCenter.h"
+#import "UIImageView+WebCache.h"
+#import "AFNetworking.h"
 @interface AddMarkViewController ()<UITextFieldDelegate>
 {
     UIToolbar  *_toolBar;
     UITextField  *_inputText;
     NSDictionary  *_myDict;
+    MarkView  *_myMarkView;
+    NSString    *X;
+    NSString    *Y;
 }
 @end
 
@@ -111,6 +117,7 @@
     else if (button.tag==101)
     {
         NSLog(@" =========执行确定发布的方法");
+        [self  PublicRuqest];
         
         
         //执行发布的方法
@@ -119,11 +126,89 @@
     {
         //点击确定按钮
         NSLog(@" =========点击发布到屏幕");
+        [self  PushlicInScreen];
         
     }
 }
+//把markview 添加到屏幕
+-(void)PushlicInScreen
+{
+    //清楚原来添加的弹幕
+    for (UIView *view in stageView.subviews) {
+        if ([view isKindOfClass:[MarkView class]]) {
+            [view removeFromSuperview];
+        }
+    }
+    
+    _myMarkView =[[MarkView alloc]initWithFrame:CGRectMake(100,140 , 100, 20)];
+   //  _myMarkView.backgroundColor=[UIColor redColor];
+    ///显示标签的头像
+    UserDataCenter  * userCenter=[UserDataCenter shareInstance];
+    [ _myMarkView.LeftImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kUrlAvatar,    userCenter.avatar]]];
+    NSLog(@ "  add mark   view   头像没有显示  出来  ＝＝==%@",userCenter.avatar);
+    _myMarkView.TitleLable.text=[_inputText text];
+    [stageView addSubview:_myMarkView];
+    
+    
+    NSString   *inputString=_inputText.text;
+     CGSize  Msize= [inputString  boundingRectWithSize:CGSizeMake(kDeviceWidth/2, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:_myMarkView.TitleLable.font forKey:NSFontAttributeName] context:nil].size;
+    
+    //宽度=字的宽度+左头像图片的宽度＋赞图片的宽度＋赞数量的宽度+中间两个空格2+2
+    //位置=
+    float markViewWidth = Msize.width+23+5+5+11+5;
+    float markViewHeight = Msize.height+6;
+    _myMarkView.frame=CGRectMake((kDeviceWidth-markViewWidth)/2, stageView.frame.size.height/2, markViewWidth, markViewHeight);
+    
+    //在标签上添加一个手势
+     UIPanGestureRecognizer   *pan=[[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(handelPan:)];
+    [_myMarkView addGestureRecognizer:pan];
 
+}
 
+-(void)handelPan:(UIPanGestureRecognizer*)gestureRecognizer{
+   //获取平移手势对象在stageView的位置点，并将这个点作为self.aView的center,这样就实现了拖动的效果
+    CGPoint curPoint = [gestureRecognizer locationInView:stageView];
+    float x=((curPoint.x)/kDeviceWidth)*100;  //获取在stagview 上的x
+    float y=((curPoint.y)/kDeviceWidth)*100;   //获取在stageview 上的y
+         NSString   *inputString=_inputText.text;
+     CGSize  Msize= [inputString  boundingRectWithSize:CGSizeMake(kDeviceWidth/2, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:_myMarkView.TitleLable.font forKey:NSFontAttributeName] context:nil].size;
+
+    float markViewWidth = Msize.width+23+5+5+11+5;
+    float markViewHeight = Msize.height+6;
+    float markViewX = (x*kDeviceWidth)/100-markViewWidth;
+    markViewX = MIN(MAX(markViewX, 1.0f), kDeviceWidth-markViewWidth-1);
+    
+    float markViewY = (y*kDeviceWidth)/100+(Msize.height/2);
+#warning    kDeviceWidth 目前计算的是正方形的，当图片高度>屏幕的宽度的实际，需要使用图片的高度
+    markViewY = MIN(MAX(markViewY, 1.0f), kDeviceWidth-markViewHeight-1);
+    //获得上传x，y的坐标点，坐标点是右中点的位置
+    //X=markViewX+markViewWidth;
+    //Y=markViewY+(markViewHeight)/2;
+    X =[NSString stringWithFormat:@"%f",((markViewX+markViewWidth)/kDeviceWidth)*100];
+    Y=[NSString stringWithFormat:@"%f",((markViewY+(markViewHeight/2))/kDeviceHeight)*100];
+    _myMarkView.frame=CGRectMake(markViewX, markViewY, markViewWidth, markViewHeight);
+  //  _myMarkView.center=CGPointMake(markViewX, markViewY);
+
+}
+# pragma  mark  发布数据请求
+//确定发布
+-(void)PublicRuqest
+{
+ 
+    UserDataCenter  *userCenter=[UserDataCenter shareInstance];
+    NSDictionary *parameter = @{@"user_id": userCenter.user_id,@"topic_name":[_inputText text],@"stage_id":[_myDict  objectForKey:@"id"],@"x":X,@"y":Y};
+
+    NSLog(@"==parameter====%@",parameter);
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    [manager POST:[NSString stringWithFormat:@"%@/weibo/create", kApiBaseUrl] parameters:parameter success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"  添加弹幕发布请求    JSON: %@", responseObject);
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+    
+}
+//发布弹幕请求
 #pragma mark 键盘的通知事件
 -(void)keyboardWillShow:(NSNotification * )  notification
 {
