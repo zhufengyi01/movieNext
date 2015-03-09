@@ -109,6 +109,9 @@
 #warning  这里需要写参数
     
     //NSDictionary *parameter = @{@"movie_id": @"859357", @"start_id":@"0", @"user_id": @"18"};
+    if (!_movieId || _movieId<=0) {
+        return;
+    }
     NSDictionary *parameter = @{@"movie_id": _movieId, @"start_id":@"0", @"user_id": @"18"};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:[NSString stringWithFormat:@"%@/movieStage/list", kApiBaseUrl] parameters:parameter success:^(AFHTTPRequestOperation *operation, id responseObject) {

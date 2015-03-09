@@ -16,6 +16,7 @@
 #import "MJRefresh.h"
 #import "AFNetworking.h"
 #import "CommonStageCell.h"
+#import "MovieDetailViewController.h"
 
 #import "AddSubtitleViewController.h"
 
@@ -273,6 +274,12 @@
 //点击左下角的电影按钮
 -(void)dealMovieButtonClick:(UIButton  *) button{
     NSLog(@" ==dealMovieButtonClick  ====%ld",button.tag);
+    
+    MovieDetailViewController *vc =  [MovieDetailViewController new];
+    NSDictionary *dict = segment.selectedSegmentIndex==0 ? [_hotDataArray objectAtIndex:button.tag-1000] : [_newDataArray objectAtIndex:button.tag-1000];
+    NSLog(@"dict = %@", dict);
+    vc.movieId = [[dict objectForKey:@"stageinfo"] objectForKey:@"movie_id"];
+   [self.navigationController pushViewController:vc animated:YES];
 }
 //分享
 -(void)ScreenButtonClick:(UIButton  *) button
