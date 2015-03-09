@@ -77,7 +77,7 @@
         layout.sectionInset=UIEdgeInsetsMake(10, 0, 10, 0);
     }
     else{
-    layout.sectionInset=UIEdgeInsetsMake(10,10, 10, 10); //整个偏移量 上左下右
+        layout.sectionInset=UIEdgeInsetsMake(10,10, 10, 10); //整个偏移量 上左下右
     }
     [layout setHeaderReferenceSize:CGSizeMake(_myConllectionView.frame.size.width, kDeviceHeight/3)];
     
@@ -108,7 +108,11 @@
 {
 #warning  这里需要写参数
     
-    NSDictionary *parameter = @{@"movie_id": @"859357", @"start_id":@"0", @"user_id": @"18"};
+    //NSDictionary *parameter = @{@"movie_id": @"859357", @"start_id":@"0", @"user_id": @"18"};
+    if (!_movieId || _movieId<=0) {
+        return;
+    }
+    NSDictionary *parameter = @{@"movie_id": _movieId, @"start_id":@"0", @"user_id": @"18"};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:[NSString stringWithFormat:@"%@/movieStage/list", kApiBaseUrl] parameters:parameter success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"  电影详情页面数据JSON: %@", responseObject);
@@ -153,19 +157,20 @@
     NSDictionary *dict = [_dataArray objectAtIndex:(indexPath.row)];
     if (bigModel ==YES) {
         BigImageCollectionViewCell *cell = (BigImageCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"bigcell" forIndexPath:indexPath];
-    if (_dataArray.count>indexPath.row) {
-       //cell.pageType=NSPageSourceTypeMyAddedViewController;
-      //  小闪动标签的数组
-        cell.WeibosArray=[[_dataArray objectAtIndex:indexPath.row]  objectForKey:@"weibos"];
-        [cell setCellValue:[[_dataArray objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] indexPath:indexPath.row];
+        if (_dataArray.count>indexPath.row) {
+           //cell.pageType=NSPageSourceTypeMyAddedViewController;
+          //  小闪动标签的数组
+            cell.WeibosArray=[[_dataArray objectAtIndex:indexPath.row]  objectForKey:@"weibos"];
+            [cell setCellValue:[[_dataArray objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] indexPath:indexPath.row];
         }
+        [cell.StageView performSelector:@selector(startAnimation) withObject:nil afterDelay:1];
         cell.backgroundColor = [UIColor redColor];
         return cell;
     } else {
         SmallImageCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"smallcell" forIndexPath:indexPath];
         cell.backgroundColor = [UIColor redColor];
         
-        //[cell.imageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kUrlStage,[[dict  objectForKey:@"stageinfo"]  objectForKey:@"stage"]]] placeholderImage:[UIImage imageNamed:@"loading_image_all.png"]];
+        [cell.imageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w340h340",kUrlStage,[[dict  objectForKey:@"stageinfo"]  objectForKey:@"stage"]]] placeholderImage:[UIImage imageNamed:@"loading_image_all.png"]];
         if ([[dict objectForKey:@"stageinfo"] objectForKey:@"marks"]) {
             cell.titleLab.text=[NSString stringWithFormat:@"%@",  [[dict objectForKey:@"stageinfo"] objectForKey:@"marks"]];
 
@@ -262,10 +267,18 @@
 {
     //结束显示cell
     if (bigModel==YES) {
-     
+        UICollectionViewCell * stageCell = cell;
+        if ( [stageCell isKindOfClass:[BigImageCollectionViewCell class]] ) {
+            BigImageCollectionViewCell *bigcell = (BigImageCollectionViewCell *)stageCell;
+            if ( [bigcell.StageView respondsToSelector:@selector(stopAnimation)] ) {
+                [bigcell.StageView stopAnimation];
+            }
+        }
     }
     
+    
 }
+
 - (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if (bigModel ==YES) {

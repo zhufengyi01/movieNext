@@ -9,7 +9,7 @@
 #import "AddMarkViewController.h"
 #import "ZCControl.h"
 #import "Constant.h"
-@interface AddMarkViewController ()
+@interface AddMarkViewController ()<UITextFieldDelegate>
 {
     UIToolbar  *_toolBar;
     UITextField  *_inputText;
@@ -54,7 +54,7 @@
     [RighttBtn addTarget:self action:@selector(dealNavClick:) forControlEvents:UIControlEventTouchUpInside];
     RighttBtn.tag=101;
     [RighttBtn setTitleColor:VGray_color forState:UIControlStateNormal];
-    [RighttBtn setTitle:@"发布" forState:UIControlStateNormal];
+    [RighttBtn setTitle:@"确定" forState:UIControlStateNormal];
     self.navigationItem.rightBarButtonItem=[[UIBarButtonItem alloc]initWithCustomView:RighttBtn];
     
 
@@ -63,7 +63,7 @@
 {
     stageView = [[StageView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceWidth)];
     NSLog(@" 在 添加弹幕页面的   stagedict = %@",_myDict);
-       [stageView setStageValue:_stageDict];
+    [stageView setStageValue:_stageDict];
     [self.view addSubview:stageView];
     
 }
@@ -72,24 +72,29 @@
 {
     
     
-     _toolBar=[[UIToolbar alloc]initWithFrame:CGRectMake(0,70, kDeviceHeight, 40)];
-     _toolBar.barTintColor=[UIColor redColor];   //背景颜色
-     _toolBar.tintColor=[UIColor blackColor];  //内容颜色
+     _toolBar=[[UIToolbar alloc]initWithFrame:CGRectMake(0,kDeviceHeight-40-kHeightNavigation, kDeviceHeight, 40)];
+     //_toolBar.barTintColor=[UIColor redColor];   //背景颜色
+   // [self.navigat setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color.png"] forBarMetrics:UIBarMetricsDefault];
+    [_toolBar setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color.png"] forToolbarPosition:UIBarPositionAny barMetrics:UIBarMetricsDefault];
+     _toolBar.tintColor=VGray_color;  //内容颜色
      
-     _inputText= [[UITextField alloc]initWithFrame:CGRectMake(10,10, kDeviceWidth-60,30)];
+     _inputText= [[UITextField alloc]initWithFrame:CGRectMake(10,5, kDeviceWidth-80,30)];
      _inputText.layer.cornerRadius=4;
      _inputText.layer.borderWidth=1;
-     _inputText.layer.borderColor=VBlue_color.CGColor;
+    _inputText.delegate=self;
+     _inputText.layer.borderColor=VLight_GrayColor.CGColor;
      [_toolBar addSubview:_inputText];
      
-     UIButton  *publishBtn=[ZCControl createButtonWithFrame:CGRectMake(kDeviceHeight-50, 10, 40, 28) ImageName:@"loginoutbackgroundcolor.png" Target:self Action:@selector(dealNavClick:) Title:@"发布"];
+     UIButton  *publishBtn=[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-60, 5, 50, 28) ImageName:@"loginoutbackgroundcolor.png" Target:self Action:@selector(dealNavClick:) Title:@"发布"];
+    
+    publishBtn.titleLabel.font=[UIFont systemFontOfSize:14];
+    publishBtn.layer.cornerRadius=4;
+    publishBtn.tag=99;
+    publishBtn.clipsToBounds=YES;
      [_toolBar addSubview:publishBtn];
-     
      [_inputText becomeFirstResponder];
-     [_inputText becomeFirstResponder];
-     //[self.view addSubview:_toolBar];
-     
-     //  _inputText.inputAccessoryView=_toolBar;
+    [self.view addSubview:_toolBar];
+    
     
 }
 
@@ -105,14 +110,16 @@
     }
     else if (button.tag==101)
     {
-        NSLog(@" =========执行发布的方法");
+        NSLog(@" =========执行确定发布的方法");
+        
         
         //执行发布的方法
     }
     else if (button.tag==99)
     {
         //点击确定按钮
-        NSLog(@" =========点击确定按钮");
+        NSLog(@" =========点击发布到屏幕");
+        
     }
 }
 
@@ -120,13 +127,37 @@
 #pragma mark 键盘的通知事件
 -(void)keyboardWillShow:(NSNotification * )  notification
 {
-    
+    [UIView  animateWithDuration:1.0 animations:^{
+        CGRect  tframe=_toolBar.frame;
+        tframe.origin.y=kDeviceHeight-216-35-kHeightNavigation-40;
+        _toolBar.frame=tframe;
+    } completion:^(BOOL finished) {
+        
+    }];
 }
 -(void)keyboardWillHiden:(NSNotification *) notification
 {
     
+    [UIView  animateWithDuration:1.0 animations:^{
+        CGRect  tframe=_toolBar.frame;
+        tframe.origin.y=kDeviceHeight-40-kHeightNavigation;
+        _toolBar.frame=tframe;
+    } completion:^(BOOL finished) {
+        
+    }];
+
 }
 
+#pragma  mark  ---textfieldDelegate
+-(BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [_inputText resignFirstResponder];
+    return YES;
+}
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [_inputText resignFirstResponder];
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
