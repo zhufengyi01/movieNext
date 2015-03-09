@@ -113,7 +113,7 @@
     if (!_movieId || _movieId<=0) {
         return;
     }
-    NSDictionary *parameter = @{@"movie_id": _movieId};
+    NSDictionary *parameter = @{@"id": _movieId};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:[NSString stringWithFormat:@"%@/movie/info", kApiBaseUrl] parameters:parameter success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"  电影详情页面的电影信息数据JSON: %@", responseObject);
