@@ -31,6 +31,7 @@
     UICollectionViewFlowLayout    *layout;
     LoadingView         *loadView;
     NSMutableArray      *_dataArray;
+    NSMutableDictionary       *_MovieDict;
     BOOL bigModel;
 }
 
@@ -63,6 +64,7 @@
 -(void)initData
 {
     bigModel=YES;
+    _MovieDict=[[NSMutableDictionary alloc]init];
     _dataArray =[[NSMutableArray alloc]init];
     
 }
@@ -113,10 +115,14 @@
     if (!_movieId || _movieId<=0) {
         return;
     }
-    NSDictionary *parameter = @{@"movie_id": _movieId};
+    NSDictionary *parameter = @{@"id": _movieId};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:[NSString stringWithFormat:@"%@/movie/info", kApiBaseUrl] parameters:parameter success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"  电影详情页面的电影信息数据JSON: %@", responseObject);
+        if (_MovieDict ==nil) {
+            _MovieDict=[[NSMutableDictionary alloc]init];
+        }
+        _MovieDict =[NSMutableDictionary dictionaryWithDictionary:[responseObject  objectForKey:@"detail"]];
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
@@ -136,7 +142,7 @@
     NSDictionary *parameter = @{@"movie_id": _movieId, @"start_id":@"0", @"user_id": @"18"};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:[NSString stringWithFormat:@"%@/movieStage/list", kApiBaseUrl] parameters:parameter success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"  电影详情页面数据JSON: %@", responseObject);
+     ///   NSLog(@"  电影详情页面数据JSON: %@", responseObject);
         [loadView stopAnimation];
         [loadView removeFromSuperview];
         
@@ -220,7 +226,10 @@
         //定制头部视图的内容
         MovieHeadView *headerV = (MovieHeadView *)[collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"headerView" forIndexPath:indexPath];
         headerV.delegate=self;
-        headerV.backgroundColor = [UIColor yellowColor];
+        headerV.backgroundColor =View_BackGround;// [UIColor yellowColor];
+        if (_MovieDict) {
+        [headerV setCollectionHeaderValue:_MovieDict];
+        }
         //headerV.titleLab.text = @"头部视图";
         reusableView = headerV;
     }
@@ -320,22 +329,43 @@
 #pragma  mark
 #pragma  mark   -----MovieHeaderViewDelegate
 #pragma  mark   ---
--(void)ChangeCollectionModel:(NSInteger  )index
+-(void)ChangeCollectionModel:(UIButton *  )button
 {
-    if (index==1000)
-    {///&&button.selected==YES) {
-        //点击了大图模模式
+    if (button.tag==1000)
+    {        //点击了大图模模式
         NSLog(@"/点击了大图模式");
         bigModel=YES;
-        [_myConllectionView reloadData];
+
+        if (button.selected==YES) {
+            button.selected=NO;
+        }
+        else if (button.selected==NO)
+        {
+            button.selected=YES;
+            [_myConllectionView reloadData];
+        }
+     
+        UIButton *btn2=(UIButton *)[button.superview viewWithTag:1001];
+        btn2.selected=NO;
+
     }
-    else if (index==1001)///&&button.selected==YES)
+    else if (button.tag==1001)///&&button.selected==YES)
     {
         //点击了小图模式
-        
+         bigModel=NO;
         NSLog(@"/点击了小图模式");
-        bigModel=NO;
-        [_myConllectionView reloadData];
+        if (button.selected==YES) {
+            button.selected=NO;
+        }
+        else if (button.selected==NO)
+        {
+            button.selected=YES;
+            [_myConllectionView reloadData];
+        }
+     
+        UIButton *btn1=(UIButton *)[button.superview viewWithTag:1000];
+        btn1.selected=NO;
+        
     }
 }
 //点击cell分享和添加弹幕

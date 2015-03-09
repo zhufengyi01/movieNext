@@ -12,7 +12,7 @@
 #import "UserDataCenter.h"
 #import "UIImageView+WebCache.h"
 #import "AFNetworking.h"
-@interface AddMarkViewController ()<UITextFieldDelegate>
+@interface AddMarkViewController ()<UITextFieldDelegate,UIAlertViewDelegate>
 {
     UIToolbar  *_toolBar;
     UITextField  *_inputText;
@@ -144,7 +144,7 @@
    //  _myMarkView.backgroundColor=[UIColor redColor];
     ///显示标签的头像
     UserDataCenter  * userCenter=[UserDataCenter shareInstance];
-    [ _myMarkView.LeftImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kUrlAvatar,    userCenter.avatar]]];
+    [ _myMarkView.LeftImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@!thumb",kUrlAvatar,    userCenter.avatar]]];
     NSLog(@ "  add mark   view   头像没有显示  出来  ＝＝==%@",userCenter.avatar);
     _myMarkView.TitleLable.text=[_inputText text];
     [stageView addSubview:_myMarkView];
@@ -158,7 +158,9 @@
     float markViewWidth = Msize.width+23+5+5+11+5;
     float markViewHeight = Msize.height+6;
     _myMarkView.frame=CGRectMake((kDeviceWidth-markViewWidth)/2, stageView.frame.size.height/2, markViewWidth, markViewHeight);
-    
+    X =[NSString stringWithFormat:@"%f",((_myMarkView.frame.origin.x+_myMarkView.frame.size.width)/kDeviceWidth)*100];
+    Y=[NSString stringWithFormat:@"%f",((_myMarkView.frame.origin.y+(markViewHeight/2))/kDeviceHeight)*100];
+
     //在标签上添加一个手势
      UIPanGestureRecognizer   *pan=[[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(handelPan:)];
     [_myMarkView addGestureRecognizer:pan];
@@ -194,7 +196,7 @@
 //确定发布
 -(void)PublicRuqest
 {
- 
+
     UserDataCenter  *userCenter=[UserDataCenter shareInstance];
     NSDictionary *parameter = @{@"user_id": userCenter.user_id,@"topic_name":[_inputText text],@"stage_id":[_myDict  objectForKey:@"id"],@"x":X,@"y":Y};
 
@@ -202,6 +204,10 @@
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:[NSString stringWithFormat:@"%@/weibo/create", kApiBaseUrl] parameters:parameter success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"  添加弹幕发布请求    JSON: %@", responseObject);
+        if ([responseObject  objectForKey:@"detail"]) {
+            UIAlertView  *Al=[[UIAlertView alloc]initWithTitle:@"发布成功" message:@"恭喜你发布成功" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            [Al show];
+        }
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
@@ -248,6 +254,11 @@
     // Dispose of any resources that can be recreated.
 }
 
+#pragma  mark  ----UIAlertViewdelegate  ---
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
 /*
 #pragma mark - Navigation
 

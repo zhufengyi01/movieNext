@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 @protocol MovieHeadViewDelegate <NSObject>
--(void)ChangeCollectionModel:(NSInteger ) index;
+-(void)ChangeCollectionModel:(UIButton  *) button;
 @end
 @interface MovieHeadView : UICollectionReusableView
 {
