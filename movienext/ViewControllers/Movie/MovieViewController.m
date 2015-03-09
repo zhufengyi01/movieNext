@@ -206,7 +206,14 @@
 {
     NSLog(@"=====点击了那个cell ===%ld",indexPath.row);
     [self hidesBottomBarWhenPushed];
-   [self.navigationController pushViewController:[MovieDetailViewController new] animated:YES];
+    
+    MovieDetailViewController *vc =  [MovieDetailViewController new];
+    MovieCollectionViewCell    *cell=(MovieCollectionViewCell*)[collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
+    if (_dataArray.count > indexPath.row) {
+         NSDictionary *dict = [_dataArray  objectAtIndex:(long)indexPath.row];
+        vc.movieId = [dict objectForKey:@"movie_id"];
+    }
+   [self.navigationController pushViewController:vc animated:YES];
 }
 
 
