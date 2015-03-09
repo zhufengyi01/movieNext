@@ -53,15 +53,6 @@
 }
 -(void)dealChangeModelClick:(UIButton *) button
 {
-//    if (button.tag==1000) {
-//        //切换大图
-//        
-//    }
-//     else if(button.tag==1001)
-//     {
-//         //切换小图
-//     }
-    
     if (self.delegate&& [self.delegate respondsToSelector:@selector(ChangeCollectionModel:)]) {
         [self.delegate ChangeCollectionModel:button.tag];
     }

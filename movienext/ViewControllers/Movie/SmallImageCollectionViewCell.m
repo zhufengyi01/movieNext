@@ -24,13 +24,14 @@
 - (void)createUI {
     //定义CELL单元格内容
     _imageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, m_frame.size.width, m_frame.size.height)];
+    //_imageView.image=[UIImage imageNamed:@"loading_image_all"];
     _imageView.backgroundColor = [UIColor clearColor];
     [self addSubview:_imageView];
     
-    _titleLab = [[UILabel alloc]initWithFrame:CGRectMake(80, 80, 20, 20)];
+    _titleLab = [[UILabel alloc]initWithFrame:CGRectMake(m_frame.size.width-40, m_frame.size.height-20, 40, 20)];
     //_titleLab.backgroundColor = [UIColor blackColor];
     _titleLab.text=@"1212";
-    _titleLab.textAlignment = NSTextAlignmentCenter;
+    _titleLab.textAlignment = NSTextAlignmentRight;
     [self addSubview:_titleLab];
 }
 

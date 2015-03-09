@@ -7,18 +7,109 @@
 //
 
 #import "BigImageCollectionViewCell.h"
-
+#import "Constant.h"
+#import "UIImageView+WebCache.h"
+//#import "UIButton+WebCache.h"
+#import "Function.h"
+#import "ZCControl.h"
 @implementation BigImageCollectionViewCell
 -(instancetype)initWithFrame:(CGRect)frame
 {
-    if (self = [super initWithFrame:frame]) {
-        [self createUI];
+    if (self =[super initWithFrame:frame]) {
+        m_frame=frame;
+        [self CreateUI];
     }
     return self;
+}
+-(void)CreateUI
+{
+    self.backgroundColor =[UIColor blackColor];
+    [self CreateTopView];
+    [self createButtonView];
+
+}
+-(void)CreateTopView
+{
+    _StageView=[[StageView alloc]initWithFrame:CGRectMake(0, 45, kDeviceWidth, 200)];
+    _StageView.backgroundColor=[UIColor blackColor];
+    [self.contentView addSubview:_StageView];
     
 }
--(void)createUI
+
+-(void)createButtonView
+{
+    BgView2=[[UIView alloc]initWithFrame:CGRectMake(0, kDeviceWidth, kDeviceWidth, 45)];
+    BgView2.backgroundColor=[UIColor whiteColor];
+    [self.contentView addSubview:BgView2];
+    
+    
+    ScreenButton =[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-150,10,60,25) ImageName:@"screen_shot share.png" Target:self.superview Action:@selector(ScreenButtonClick:) Title:@""];
+    [BgView2 addSubview:ScreenButton];
+    
+    addMarkButton =[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-75,10,60,25) ImageName:@"add.png" Target:self.superview Action:@selector(addMarkButtonClick:) Title:@""];
+    [BgView2 addSubview:addMarkButton];
+    
+    
+}
+- (void)awakeFromNib {
+    // Initialization code
+}
+-(void)setCellValue:(NSDictionary  *) dict indexPath:(NSInteger) row;
+{
+    if (_weiboDict) {
+        _StageView.weiboDict = _weiboDict;
+    }
+    
+    if (_WeibosArray) {
+        _StageView.WeibosArray = _WeibosArray;
+    }
+    ScreenButton.tag=2000+row;  //截屏分享
+    addMarkButton.tag=3000+row;   //添加弹幕
+    [_StageView setStageValue:dict];
+    
+    float  ImageWith=[[dict objectForKey:@"w"]  floatValue];
+    float  ImgeHight=[[dict objectForKey:@"h"]  floatValue];
+    float hight=0;
+    if (ImageWith>ImgeHight) {
+        hight= kDeviceWidth;  // 计算的事bgview1的高度
+    }
+    else if(ImgeHight>ImageWith)
+    {
+        hight=  (ImgeHight/ImageWith) *kDeviceWidth;
+    }
+        _StageView.frame=CGRectMake(0, 0, kDeviceWidth, hight);
+        BgView2.frame=CGRectMake(0, hight, kDeviceWidth, 45);
+        _StageView.isAnimation = YES;
+    
+    
+    }
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    
+    
+}
+
+#pragma mark ---
+#pragma mark ------下方按钮点击事件
+#pragma mark ------
+-(void)dealMovieButtonClick:(UIButton  *) button{
+    
+}
+-(void)ScreenButtonClick:(UIButton  *) button
 {
     
 }
+-(void)addMarkButtonClick:(UIButton  *) button
+{
+    
+}
+-(void)UserLogoButtonClick:(UIButton *) button
+{
+    
+}
+-(void)ZanButtonClick:(UIButton *)button
+{
+    
+}
+
 @end

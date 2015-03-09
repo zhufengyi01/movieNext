@@ -12,11 +12,11 @@
 
 typedef NS_ENUM(NSInteger, NSPageSourceType)
 {
-    NSPageSourceTypeMainHotController =0,   //首页的热门cell
-    NSPageSourceTypeMainNewController=1,    //首页的最新cell
-    NSPageSourceTypeMovieViewController=3,   //电影详细的cell
-    NSPageSourceTypeMyAddedViewController=4,   //添加弹幕的cell
-    NSPageSourceTypeMyupedViewController=5,    //我的个人中心的cell
+    NSPageSourceTypeMainHotController =0,
+    NSPageSourceTypeMainNewController=1,
+    NSPageSourceTypeMovieViewController=3,
+    NSPageSourceTypeMyAddedViewController=4,
+    NSPageSourceTypeMyupedViewController=5,
     
 };
 @interface CommonStageCell : UITableViewCell
@@ -38,6 +38,7 @@ typedef NS_ENUM(NSInteger, NSPageSourceType)
  }
 @property (nonatomic,strong) StageView          *BgView1;   //放图片和弹幕的黑色背景图
 @property (nonatomic,strong) NSMutableArray     *WeibosArray;   //小标签的数组，在多个标签的时候使用这个
+
 @property (nonatomic,strong) NSDictionary       *weiboDict;     //只有一个标签的时候传递这个参数
 @property (nonatomic,assign) NSPageSourceType   pageType;
 

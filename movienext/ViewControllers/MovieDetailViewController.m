@@ -128,7 +128,8 @@
     
 }
 
-#pragma mark - UICollectionViewDataSource
+#pragma  mark
+#pragma mark - UICollectionViewDataSource ----
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
@@ -155,19 +156,34 @@
     if (_dataArray.count>indexPath.row) {
        //cell.pageType=NSPageSourceTypeMyAddedViewController;
       //  小闪动标签的数组
-        //cell.WeibosArray=[[_dataArray objectAtIndex:indexPath.row]  objectForKey:@"weibos"];
-        //[cell setCellValue:[[_dataArray objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] indexPath:indexPath.row];
+        cell.WeibosArray=[[_dataArray objectAtIndex:indexPath.row]  objectForKey:@"weibos"];
+        [cell setCellValue:[[_dataArray objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] indexPath:indexPath.row];
         }
         cell.backgroundColor = [UIColor redColor];
         return cell;
     } else {
         SmallImageCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"smallcell" forIndexPath:indexPath];
-        cell.backgroundColor = [UIColor blackColor];
+        cell.backgroundColor = [UIColor redColor];
+        
+        //[cell.imageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kUrlStage,[[dict  objectForKey:@"stageinfo"]  objectForKey:@"stage"]]] placeholderImage:[UIImage imageNamed:@"loading_image_all.png"]];
+        if ([[dict objectForKey:@"stageinfo"] objectForKey:@"marks"]) {
+            cell.titleLab.text=[NSString stringWithFormat:@"%@",  [[dict objectForKey:@"stageinfo"] objectForKey:@"marks"]];
+
+        }
+        
         return cell;
     }
     
     return nil;
 }
+//点击小图模式的时候，跳转到大图模式
+-(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (bigModel==NO&&collectionView==_myConllectionView) {
+     
+    }
+}
+
 
 //设置头尾部内容
 -(UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
@@ -184,6 +200,9 @@
     }
     return reusableView;
 }
+#pragma  mark ----
+#pragma  mark -----UICollectionViewLayoutDelegate
+#pragma  mark ----
 
 // 设置每个item的尺寸
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
@@ -194,22 +213,22 @@
             float  h=   [[[[_dataArray  objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] objectForKey:@"h"] floatValue];
             float w=   [[[[_dataArray  objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] objectForKey:@"w"] floatValue];
             if (w==0||h==0) {
-                hight= kDeviceWidth+90;
+                hight= kDeviceWidth+45;
             }
             if (w>h) {
-                hight= kDeviceWidth+90;
+                hight= kDeviceWidth+45;
             }
             else if(h>w)
             {
-                hight=  (h/w) *kDeviceWidth+90;
+                hight=  (h/w) *kDeviceWidth+45;
             }
         }
         NSLog(@"============  hight  for  row  =====%f",hight);
-        return CGSizeMake(kDeviceHeight,hight+10);
+        return CGSizeMake(kDeviceWidth,hight);
     }
     else
     {
-        return CGSizeMake(( kDeviceWidth-20-10)/3,(kDeviceWidth-20-10)/3);
+        return CGSizeMake(( kDeviceWidth-20)/3,(kDeviceWidth-20-10)/3);
 
     }
     return CGSizeMake(0, 0);
@@ -218,7 +237,7 @@
 -(UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
 {
     if (bigModel==NO) {
-        return UIEdgeInsetsMake(10, 10, 10, 10);
+        return UIEdgeInsetsMake(5, 5, 5, 5);
     }
     return UIEdgeInsetsMake(0, 0, 0, 0);
 }
@@ -237,7 +256,21 @@
         return 10;
     }
     return 5;
-
+}
+//collectionview 即将显示collectionview
+-(void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    //结束显示cell
+    if (bigModel==YES) {
+     
+    }
+    
+}
+- (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (bigModel ==YES) {
+        
+    }
 }
 
 // 设置头部视图的尺寸
@@ -270,6 +303,17 @@
         [_myConllectionView reloadData];
     }
 }
+//点击cell分享和添加弹幕
+-(void)ScreenButtonClick:(UIButton  *) button
+{
+    
+    
+}
+-(void)addMarkButtonClick:(UIButton  *) button
+{
+    
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }

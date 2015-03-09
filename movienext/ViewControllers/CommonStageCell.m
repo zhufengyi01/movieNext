@@ -12,7 +12,7 @@
 #import "UIButton+WebCache.h"
 #import "Function.h"
 #import "ZCControl.h"
-#import "MarkView.h"
+//#import "MarkView.h"
 @implementation CommonStageCell
 -(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {

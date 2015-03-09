@@ -88,7 +88,7 @@
             NSLog(@" ==== =mark  view  ===%f  ==== mark view =====%f",x,y);
             NSString  *weiboTitleString=[weibodict  objectForKey:@"topic"];
             NSString  *UpString=[weibodict objectForKey:@"ups"];
-            NSLog(@"weibo dict ======%@",weibodict);
+          //  NSLog(@"weibo dict ======%@",weibodict);
             
             //计算标题的size
             CGSize  Msize=[weiboTitleString boundingRectWithSize:CGSizeMake(kDeviceWidth/2,MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:markView.TitleLable.font forKey:NSFontAttributeName] context:nil].size;
