@@ -37,6 +37,8 @@
     // Override point for customization after application launch.
     NSDictionary  *userInfo=[[NSUserDefaults  standardUserDefaults] objectForKey:kUserKey];
     NSLog(@"app delegate  userInfo  =====%@",userInfo);
+    self.window.rootViewController =[CustmoTabBarController new];
+
     UserDataCenter  *userCenter=[UserDataCenter shareInstance];
    if (userInfo) {  //用户已经登陆
         if ([userInfo objectForKey:@"id"]) {
@@ -60,13 +62,12 @@
         if ([userInfo  objectForKey:@"bind_type"]) {
             userCenter.user_bind_type=[userInfo objectForKey:@"bind_type"];
         }
-        self.window.rootViewController =[CustmoTabBarController new];
-        
+       
     }
-    else {
+  //  else {
         //用户没有登陆
-        self.window.rootViewController=[LoginViewController new];
-    }
+    //    self.window.rootViewController=[LoginViewController new];
+    //}
     self.window.backgroundColor=[UIColor whiteColor];
     //初始化友盟组件
     [self initUmeng];

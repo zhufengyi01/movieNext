@@ -37,6 +37,8 @@
 @implementation MyViewController
 -(void)viewWillAppear:(BOOL)animated
 {
+    self.navigationController.navigationBar.hidden=NO;
+
     self.tabBarController.tabBar.hidden=NO;
 }
 

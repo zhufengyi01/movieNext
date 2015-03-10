@@ -8,7 +8,10 @@
 
 #import <UIKit/UIKit.h>
 @protocol MovieHeadViewDelegate <NSObject>
+//改变显示大图和小图的状态
+//button.tag==1000 大图  button.tag==1000 小图
 -(void)ChangeCollectionModel:(UIButton  *) button;
+-(void)backClick;
 @end
 @interface MovieHeadView : UICollectionReusableView
 {

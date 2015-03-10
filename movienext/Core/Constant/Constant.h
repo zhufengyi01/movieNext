@@ -55,6 +55,8 @@
 
 #define GetAppDelegate()   ((AppDelegate*)[[UIApplication sharedApplication] delegate])
 
+//动画定义
+#define  kTimeInterval  0.7   //  气泡和气泡之间动画出现的时间间隔
 
 #define kUserKey @"userinfo"  ///用户信息
 

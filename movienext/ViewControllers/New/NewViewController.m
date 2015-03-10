@@ -18,7 +18,7 @@
 #import "CommonStageCell.h"
 #import "AddMarkViewController.h"
 #import "MovieDetailViewController.h"
-
+//友盟分享
 #import "UMSocial.h"
 @interface NewViewController ()<UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate>
 {
@@ -35,6 +35,8 @@
 @implementation NewViewController
 -(void)viewWillAppear:(BOOL)animated
 {
+    self.navigationController.navigationBar.hidden=NO;
+
     self.tabBarController.tabBar.hidden=NO;
 }
 
@@ -229,8 +231,11 @@
     else if (segment.selectedSegmentIndex==1)
     {
         if (_newDataArray.count>indexPath.row) {
+            //配置cell的类型。
             cell.pageType=NSPageSourceTypeMainNewController;
+            //根据类型配置cell的气泡数据
             cell.weiboDict =[[_newDataArray  objectAtIndex:indexPath.row]  objectForKey:@"weibo"];
+            //配置stage的数据
             [cell setCellValue:[[_newDataArray objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"]indexPath:indexPath.row];
         }
         return  cell;
@@ -243,7 +248,7 @@
 {
     if (segment.selectedSegmentIndex==0) {
         CommonStageCell *commonStageCell = (CommonStageCell *)cell;
-        [commonStageCell.BgView1 startAnimation];
+        [commonStageCell.stageView startAnimation];
     }
     else if (segment.selectedSegmentIndex==1)
     {
@@ -258,7 +263,7 @@
 #warning 为什么这里用上面的那句代码就不行
         //CommonStageCell *commonStageCell = (CommonStageCell *)[tableView cellForRowAtIndexPath:indexPath];
         CommonStageCell *commonStageCell = (CommonStageCell *)cell;
-        [commonStageCell.BgView1 stopAnimation];
+        [commonStageCell.stageView stopAnimation];
     }
     else if (segment.selectedSegmentIndex==1)
     {
@@ -286,7 +291,7 @@
     CommonStageCell *cell = (CommonStageCell *)(button.superview.superview.superview);
     
     UIGraphicsBeginImageContextWithOptions(_HotMoVieTableView.bounds.size, YES, [UIScreen mainScreen].scale);
-    [cell.BgView1 drawViewHierarchyInRect:cell.BgView1.bounds afterScreenUpdates:YES];
+    [cell.stageView drawViewHierarchyInRect:cell.stageView.bounds afterScreenUpdates:YES];
     
     // old style [self.layer renderInContext:UIGraphicsGetCurrentContext()];
     

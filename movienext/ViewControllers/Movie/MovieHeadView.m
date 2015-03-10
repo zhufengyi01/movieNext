@@ -26,9 +26,20 @@
     //放置所有控件的view
      bgImageView=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight/3)];
     bgImageView.userInteractionEnabled=YES;
+   // bgImageView.image =[UIImage imageNamed:@"loading_image_all"];
     [self addSubview:bgImageView];
     
-    movieLogoImageView  =[[UIImageView alloc]initWithFrame:CGRectMake(20, 20, 50, 70)];
+    
+    UIButton  *leftBtn= [UIButton buttonWithType:UIButtonTypeSystem];
+    leftBtn.frame=CGRectMake(0, 20, 60, 36);
+    [leftBtn addTarget:self action:@selector(dealBackClick:) forControlEvents:UIControlEventTouchUpInside];
+    [leftBtn setImage:[UIImage imageNamed:@"Back_Icon.png"] forState:UIControlStateNormal];
+    //leftBtn.imageEdgeInsets=UIEdgeInsetsMake(<#CGFloat top#>, <#CGFloat left#>, <#CGFloat bottom#>, <#CGFloat right#>)
+    [bgImageView addSubview:leftBtn];
+
+    
+    
+    movieLogoImageView  =[[UIImageView alloc]initWithFrame:CGRectMake(40, 40, 50, 70)];
     
     [bgImageView addSubview:movieLogoImageView];
     
@@ -37,15 +48,16 @@
     [bgImageView addSubview:titleLable];
     
     //导演
-    derectorLable=[ZCControl createLabelWithFrame:CGRectMake(movieLogoImageView.frame.origin.x+movieLogoImageView.frame.size.width+10,titleLable.frame.origin.y+titleLable.frame.size.height+5,kDeviceWidth-30-10-30,50) Font:12 Text:@"导演"];
+    derectorLable=[ZCControl createLabelWithFrame:CGRectMake(movieLogoImageView.frame.origin.x+movieLogoImageView.frame.size.width+10,titleLable.frame.origin.y+titleLable.frame.size.height+5,kDeviceWidth-30-10-30,20) Font:12 Text:@"导演"];
     derectorLable.numberOfLines=2;
     [bgImageView addSubview:titleLable];
     //演员
-    performerLable=[ZCControl createLabelWithFrame:CGRectMake(movieLogoImageView.frame.origin.x+10+movieLogoImageView.frame.size.width, derectorLable.frame.origin.y+derectorLable.frame.size.height+5, 100, 30) Font:12 Text:@"演员"];
+    performerLable=[ZCControl createLabelWithFrame:CGRectMake(movieLogoImageView.frame.origin.x+10+movieLogoImageView.frame.size.width, derectorLable.frame.origin.y+derectorLable.frame.size.height+5, kDeviceWidth-movieLogoImageView.frame.origin.x+movieLogoImageView.frame.size.width+10, 40) Font:12 Text:@"演员"];
+    performerLable.numberOfLines=2;
     [bgImageView addSubview:performerLable];
     
     UIView  *btnBg =[[UIView  alloc] initWithFrame:CGRectMake(0, kDeviceHeight/3-45, kDeviceWidth, 45)];
-    btnBg.backgroundColor=[[UIColor blackColor]colorWithAlphaComponent:0.7];
+    btnBg.backgroundColor=[[UIColor blackColor]colorWithAlphaComponent:0.4];
     [bgImageView addSubview:btnBg];
     
     
@@ -77,12 +89,18 @@
     
     [movieLogoImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kUrlMoviePoster,[dict objectForKey:@"logo"]]] placeholderImage:[UIImage imageNamed:@"loading_image_all"]];
     //设置头部的北京图片
+    // jpeg quality image data
+    float quality = 0.00001f;
+    // intensity of blurred
+    float blurred = 0.9f;  //这个参数控制透明度
 
-    //UIImage  *bgHeadImage=[movieLogoImageView.image blurredImage:0.7];
-   // bgImageView.image=bgHeadImage;
+    NSData  *imageData=UIImageJPEGRepresentation(movieLogoImageView.image, quality);
+     UIImage *blurredImage=[[UIImage imageWithData:imageData] blurredImage:blurred];
+     bgImageView.image = blurredImage;
     
     titleLable.text=[NSString stringWithFormat:@"%@",[dict objectForKey:@"name"]];
     derectorLable.text=[NSString stringWithFormat:@"导演 :%@",[dict objectForKey:@"director"]];
+    NSLog(@"导演 ＝＝＝＝＝＝＝xianshi ＝＝%@",[dict objectForKey:@"director"]);
     performerLable.text=[NSString stringWithFormat:@"演员:%@",[dict objectForKey:@"other_name"]];
     
     
@@ -94,6 +112,17 @@
     }
 
 }
+
+//返回按钮的实现
+-(void)dealBackClick:(UIButton *) button
+{
+ //   [self.navigationController popViewControllerAnimated:YES];
+    if (self.delegate&&[self.delegate respondsToSelector:@selector(backClick)]) {
+        [self.delegate backClick];
+    }
+    
+}
+
 //自动布局self.view的子类
 -(void)layoutSubviews
 {

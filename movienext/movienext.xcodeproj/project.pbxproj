@@ -135,6 +135,7 @@
 		00572CC21AA44FBE0041D451 /* MovieCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00572CC11AA44FBE0041D451 /* MovieCollectionViewCell.m */; };
 		005AFB5A1AA5F41900D80CFB /* CommonStageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 005AFB591AA5F41900D80CFB /* CommonStageCell.m */; };
 		005C5B431AA9622100208782 /* MovieDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 005C5B421AA9622100208782 /* MovieDetailViewController.m */; };
+		006727591AAEC37600DE817D /* Back_Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 006727581AAEC37600DE817D /* Back_Icon.png */; };
 		006739531AA491250087C240 /* MJRefresh.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 006739431AA491250087C240 /* MJRefresh.bundle */; };
 		006739541AA491250087C240 /* MJRefreshBaseView.m in Sources */ = {isa = PBXBuildFile; fileRef = 006739461AA491250087C240 /* MJRefreshBaseView.m */; };
 		006739551AA491250087C240 /* MJRefreshConst.m in Sources */ = {isa = PBXBuildFile; fileRef = 006739481AA491250087C240 /* MJRefreshConst.m */; };
@@ -414,6 +415,7 @@
 		005AFB591AA5F41900D80CFB /* CommonStageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonStageCell.m; sourceTree = "<group>"; };
 		005C5B411AA9622100208782 /* MovieDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MovieDetailViewController.h; path = ViewControllers/MovieDetailViewController.h; sourceTree = SOURCE_ROOT; };
 		005C5B421AA9622100208782 /* MovieDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MovieDetailViewController.m; path = ViewControllers/MovieDetailViewController.m; sourceTree = SOURCE_ROOT; };
+		006727581AAEC37600DE817D /* Back_Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Back_Icon.png; sourceTree = "<group>"; };
 		006739431AA491250087C240 /* MJRefresh.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = MJRefresh.bundle; sourceTree = "<group>"; };
 		006739441AA491250087C240 /* MJRefresh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJRefresh.h; sourceTree = "<group>"; };
 		006739451AA491250087C240 /* MJRefreshBaseView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJRefreshBaseView.h; sourceTree = "<group>"; };
@@ -723,6 +725,7 @@
 		000B08FB1AA2EB8C00B8D13A /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				006727581AAEC37600DE817D /* Back_Icon.png */,
 				000500441AA70ABF00691DF4 /* tag_like_icon.png */,
 				000500451AA70ABF00691DF4 /* tag_like_icon@2x.png */,
 				000500461AA70ABF00691DF4 /* tag_like_icon@3x.png */,
@@ -1556,6 +1559,7 @@
 				00AA54431AA2C525004096F8 /* UMSCommentDetailController.xib in Resources */,
 				000B09DE1AA3029800B8D13A /* Wechat@2x.png in Resources */,
 				000B09E41AA30CB900B8D13A /* loginoutbackgroundcolor.png in Resources */,
+				006727591AAEC37600DE817D /* Back_Icon.png in Resources */,
 				000B09B61AA3029800B8D13A /* movie_tab_butten（gray）.png in Resources */,
 				000B099C1AA3029800B8D13A /* login out@3x.png in Resources */,
 				00AA544F1AA2C526004096F8 /* TencentOpenApi_IOS_Bundle.bundle in Resources */,

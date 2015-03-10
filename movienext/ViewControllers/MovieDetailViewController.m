@@ -25,6 +25,9 @@
 #import "SmallImageCollectionViewCell.h"
 #import "MovieHeadView.h"
 #import "CommonStageCell.h"
+#import "UMSocial.h"
+#import "AddMarkViewController.h"
+
 @interface MovieDetailViewController ()<UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UICollectionViewDelegate,MovieHeadViewDelegate>
 {
     UICollectionView    *_myConllectionView;
@@ -38,7 +41,12 @@
 @end
 
 @implementation MovieDetailViewController
-
+-(void)viewWillAppear:(BOOL)animated
+{
+    self.tabBarController.tabBar.hidden=YES;
+    self.navigationController.navigationBar.hidden=YES;
+  
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -52,12 +60,21 @@
 }
 -(void)createNavigation
 {
-    UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:@"电影详细"];
-    titleLable.textColor=VBlue_color;
+   // UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:@"电影详细"];
+    //titleLable.textColor=VBlue_color;
     
-    titleLable.font=[UIFont boldSystemFontOfSize:16];
-    titleLable.textAlignment=NSTextAlignmentCenter;
-    self.navigationItem.titleView=titleLable;
+   // titleLable.font=[UIFont boldSystemFontOfSize:16];
+    //titleLable.textAlignment=NSTextAlignmentCenter;
+    //self.navigationItem.titleView=titleLable;
+//    UIButton  *leftBtn= [UIButton buttonWithType:UIButtonTypeSystem];
+//    leftBtn.frame=CGRectMake(0, 30, 60, 36);
+//    [leftBtn setTitleColor:VGray_color forState:UIControlStateNormal];
+//    [leftBtn setTitle:@"取消" forState:UIControlStateNormal];
+//    [leftBtn addTarget:self action:@selector(dealBackClick:) forControlEvents:UIControlEventTouchUpInside];
+//    [leftBtn setImage:[UIImage imageNamed:@"Back Icon"] forState:UIControlStateNormal];
+//    [self.view addSubview:leftBtn];
+
+    
 
     
 }
@@ -84,7 +101,7 @@
     }
     [layout setHeaderReferenceSize:CGSizeMake(_myConllectionView.frame.size.width, kDeviceHeight/3)];
     
-    _myConllectionView =[[UICollectionView alloc]initWithFrame:CGRectMake(0, 0,kDeviceWidth, kDeviceHeight) collectionViewLayout:layout];
+    _myConllectionView =[[UICollectionView alloc]initWithFrame:CGRectMake(0, -20,kDeviceWidth, kDeviceHeight+20) collectionViewLayout:layout];
     _myConllectionView.backgroundColor=View_BackGround;
     //注册大图模式
     [_myConllectionView registerClass:[BigImageCollectionViewCell class] forCellWithReuseIdentifier:@"bigcell"];
@@ -226,10 +243,11 @@
         //定制头部视图的内容
         MovieHeadView *headerV = (MovieHeadView *)[collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"headerView" forIndexPath:indexPath];
         headerV.delegate=self;
-        headerV.backgroundColor =View_BackGround;// [UIColor yellowColor];
+        ///headerV.backgroundColor =View_BackGround;// [UIColor yellowColor];
         if (_MovieDict) {
         [headerV setCollectionHeaderValue:_MovieDict];
         }
+        
         //headerV.titleLab.text = @"头部视图";
         reusableView = headerV;
     }
@@ -336,10 +354,7 @@
         NSLog(@"/点击了大图模式");
         bigModel=YES;
 
-        if (button.selected==YES) {
-            button.selected=NO;
-        }
-        else if (button.selected==NO)
+          if (button.selected==NO)
         {
             button.selected=YES;
             [_myConllectionView reloadData];
@@ -354,10 +369,7 @@
         //点击了小图模式
          bigModel=NO;
         NSLog(@"/点击了小图模式");
-        if (button.selected==YES) {
-            button.selected=NO;
-        }
-        else if (button.selected==NO)
+          if (button.selected==NO)
         {
             button.selected=YES;
             [_myConllectionView reloadData];
@@ -368,16 +380,50 @@
         
     }
 }
-//点击cell分享和添加弹幕
+
+-(void)backClick
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+//分享
 -(void)ScreenButtonClick:(UIButton  *) button
 {
+    NSLog(@" ==ScreenButtonClick  ====%d",button.tag);
+    CommonStageCell *cell = (CommonStageCell *)(button.superview.superview);
     
+    UIGraphicsBeginImageContextWithOptions(_myConllectionView.bounds.size, YES, [UIScreen mainScreen].scale);
+    [cell.stageView drawViewHierarchyInRect:cell.stageView.bounds afterScreenUpdates:YES];
     
+    // old style [self.layer renderInContext:UIGraphicsGetCurrentContext()];
+    
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
+    [UMSocialSnsService presentSnsIconSheetView:self
+                                         appKey:kUmengKey
+                                      shareText:@"index share image"
+                                     shareImage: image
+                                shareToSnsNames:[NSArray arrayWithObjects: UMShareToWechatSession, UMShareToWechatTimeline, UMShareToQzone, UMShareToSina, nil]
+                                       delegate:nil];
 }
+//点击增加弹幕
 -(void)addMarkButtonClick:(UIButton  *) button
 {
+    NSLog(@" ==addMarkButtonClick  ====%d",button.tag);
+    AddMarkViewController  *AddMarkVC=[[AddMarkViewController alloc]init];
+    //CommonStageCell *cell = (CommonStageCell *)button.superview.superview.superview;
+    NSDictionary *dict = [_dataArray objectAtIndex:button.tag-3000];
+    AddMarkVC.stageDict = [dict valueForKey:@"stageinfo"];
+    //NSLog(@"dict = %@", dict);
+    NSLog(@"dict.stageinfo = %@", [dict valueForKey:@"stageinfo"]);
+    [self.navigationController pushViewController:AddMarkVC animated:NO];
+    //[self presentViewController:AddMarkVC animated:NO completion:nil]
     
 }
+
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

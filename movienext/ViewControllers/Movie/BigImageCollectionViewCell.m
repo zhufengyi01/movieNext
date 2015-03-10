@@ -103,13 +103,5 @@
 {
     
 }
--(void)UserLogoButtonClick:(UIButton *) button
-{
-    
-}
--(void)ZanButtonClick:(UIButton *)button
-{
-    
-}
 
 @end

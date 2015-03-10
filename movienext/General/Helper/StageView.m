@@ -29,12 +29,13 @@
     return self;
 }
 
+#pragma  mark 创建基本ui
 - (void)createUI {
     self.backgroundColor = [UIColor blackColor];
     _MovieImageView =[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, 200)];
     [self addSubview:_MovieImageView];
 }
-
+#pragma mark    设置stageview的值  ，主要是给stagview 添加markview  和添加一张图片
 - (void)setStageValue:(NSDictionary *)dict {
     //先移除所有的Mark视图
     for (UIView  *Mview in  self.subviews) {
@@ -46,10 +47,8 @@
     float  ImageWith=[[dict objectForKey:@"w"]  floatValue];
     float  ImgeHight=[[dict objectForKey:@"h"]  floatValue];
     float hight=0;
-    if (ImageWith>ImgeHight) {
-        hight= kDeviceWidth;
-    }
-    else if(ImgeHight>ImageWith)
+     hight= kDeviceWidth;
+     if(ImgeHight>ImageWith)
     {
         hight=  (ImgeHight/ImageWith) *kDeviceWidth;
     }
@@ -63,6 +62,7 @@
     if ( _weiboDict ) {
         MarkView *markView = [self createMarkViewWithDict:_weiboDict andIndex:2000];
         markView.alpha = 1.0;
+        //设置是否markview 不可以动画
         markView.isAnimation = NO;
        [self addSubview:markView];
     }
@@ -71,17 +71,16 @@
     for ( int i=0;i<_WeibosArray.count ; i++) {
         NSDictionary  *weibodict=[NSDictionary dictionaryWithDictionary:[_WeibosArray  objectAtIndex:i]];
         MarkView *markView = [self createMarkViewWithDict:weibodict andIndex:i];
+        // 设置markview 可以动画
         markView.isAnimation = YES;
        [self addSubview:markView];
     }
 }
-
+#pragma mark 内部创建气泡的方法
 - (MarkView *) createMarkViewWithDict:(NSDictionary *)weibodict andIndex:(NSInteger)index{
     
             MarkView *markView=[[MarkView alloc]initWithFrame:CGRectMake(10, 10, 100, 30)];
             markView.alpha = 0;
-#warning 暂时设为YES
-            //markView.clipsToBounds = YES;
             markView.tag=1000+index;
             
             float  x=[[weibodict objectForKey:@"x"]floatValue ];
@@ -89,8 +88,7 @@
              //NSLog(@" ==== =mark  view  ===%f  ==== mark view =====%f",x,y);
             NSString  *weiboTitleString=[weibodict  objectForKey:@"topic"];
             NSString  *UpString=[weibodict objectForKey:@"ups"];
-          //  NSLog(@"weibo dict ======%@",weibodict);
-            
+    
             //计算标题的size
             CGSize  Msize=[weiboTitleString boundingRectWithSize:CGSizeMake(kDeviceWidth/2,MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:markView.TitleLable.font forKey:NSFontAttributeName] context:nil].size;
             // 计算赞数量的size
@@ -100,7 +98,6 @@
             //计算赞数量的长度
             float  Uwidth=[UpString floatValue]==0?0:Usize.width;
             //宽度=字的宽度+左头像图片的宽度＋赞图片的宽度＋赞数量的宽度+中间两个空格2+2
-            //位置=
             float markViewWidth = Msize.width+23+Uwidth+5+5+11+5;
             float markViewHeight = Msize.height+6;
             float markViewX = (x*kDeviceWidth)/100-markViewWidth;
@@ -109,29 +106,29 @@
             float markViewY = (y*kDeviceWidth)/100+(Msize.height/2);
 #warning    kDeviceWidth 目前计算的是正方形的，当图片高度>屏幕的宽度的实际，需要使用图片的高度
             markViewY = MIN(MAX(markViewY, 1.0f), kDeviceWidth-markViewHeight-1);
-            
+#pragma mark 设置气泡的大小和位置
             markView.frame=CGRectMake(markViewX, markViewY, markViewWidth, markViewHeight);
-          
+#pragma mark 设置标签的内容
             markView.TitleLable.text=weiboTitleString;
             ///显示标签的头像
             [ markView.LeftImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kUrlAvatar,[weibodict objectForKey:@"avatar"]]]];
-            
             markView.ZanNumLable.text=[weibodict objectForKey:@"ups"];
-            markView.isAnimation = YES;
+           // markView.isAnimation = YES;
     return markView;
 }
 
+#pragma mark  ------
 #pragma  mark ----执行动画的开始和结束
+#pragma  mark ------
 //2.放大动画
 - (void)scaleAnimation {
-       //放大动画
+       //执行放大动画
     [UIView animateWithDuration:0.5 animations:^{
         for (UIView *v in self.subviews) {
             if ([v isKindOfClass:[MarkView class]]) {
                 MarkView *mv = (MarkView *)v;
                 mv.alpha = 1.0;
                 mv.hidden = NO;
-            
                 // 设定为缩放
                 CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"transform.scale"];
                 // 动画选项设定
@@ -148,6 +145,7 @@
     } completion:^(BOOL finished) {
         //结束放大动画, 同时开始循环显示动画
         [UIView animateWithDuration:0.2 delay:0.6 options:UIViewAnimationOptionCurveLinear animations:^{
+            // 先把所有的气泡的透明度都设置成了 0
             for (UIView *v in self.subviews) {
                 if ([v isKindOfClass:[MarkView class]]) {
                     MarkView *mv = (MarkView *)v;
@@ -155,8 +153,8 @@
                 }
                 //mv.hidden = YES;
             }
-            
-            _timer = [NSTimer scheduledTimerWithTimeInterval:kTimeOffset target:self selector:@selector(showAnimation) userInfo:nil repeats:YES];
+            //每隔kTimeInterval时间显示一个动画
+            _timer = [NSTimer scheduledTimerWithTimeInterval:kTimeInterval target:self selector:@selector( CircleshowAnimation) userInfo:nil repeats:YES];
         } completion:nil];
     }];
 }
@@ -170,7 +168,7 @@
 }
 
 //6.循环显示气泡动画
-- (void)showAnimation {
+- (void)CircleshowAnimation {
     //NSLog(@"index = %ld", currentMarkIndex);
     
     if (!_isAnimation) {
