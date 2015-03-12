@@ -38,6 +38,8 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     self.navigationController.navigationBar.hidden=NO;
+    self.navigationController.navigationBar.alpha=1;
+    self.navigationController.navigationBar.translucent=NO;
 
     self.tabBarController.tabBar.hidden=NO;
 }

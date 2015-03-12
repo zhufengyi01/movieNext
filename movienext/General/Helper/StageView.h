@@ -9,13 +9,15 @@
 #import <UIKit/UIKit.h>
 #import "MarkView.h"
 @protocol StageViewDelegate <NSObject>
--(void)StageViewHandClickMark:(NSDictionary  *) weiboDict withmarkView:(id) markView;
+//把信息又返回，给controller
+-(void)StageViewHandClickMark:(NSDictionary  *) weiboDict withmarkView:(id) markView StageInfoDict:(NSDictionary *)stageInfoDict;
 @end
 @interface StageView : UIView  <MarkViewDelegate>   // 遵守
 {
     UIImageView   *_MovieImageView;
     NSInteger currentMarkIndex;
     NSTimer *_timer;
+    NSDictionary   *stageInfoDict;
 }
 @property (nonatomic,strong ) NSMutableArray    *WeibosArray;   //小标签的数组，在多个标签的时候使用这个
 @property (nonatomic,strong ) NSDictionary      *weiboDict;     //只有一个标签的时候传递这个参数

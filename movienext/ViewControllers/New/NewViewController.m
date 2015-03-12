@@ -31,6 +31,7 @@
     NSMutableArray    *_newDataArray;
     int page;
     ButtomToolView *_toolBar;
+    MarkView       *_mymarkView;
 }
 @end
 
@@ -38,7 +39,9 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     self.navigationController.navigationBar.hidden=NO;
-
+//    self.navigationController.navigationBar.alpha=1;
+//    self.navigationController.navigationBar.translucent=NO;
+//
     self.tabBarController.tabBar.hidden=NO;
 }
 
@@ -110,21 +113,58 @@
     [self.view addSubview:loadView];
 }
 
+//创建底部的视图
 -(void)createToolBar
 
 {
-    _toolBar=[[ButtomToolView alloc]initWithFrame:CGRectMake(0,kDeviceHeight,kDeviceWidth, 45)];
+    _toolBar=[[ButtomToolView alloc]initWithFrame:CGRectMake(0,0,kDeviceWidth,kDeviceHeight)];
     _toolBar.delegete=self;
-    [self.view addSubview:_toolBar];
+   // [self.view addSubview:_toolBar];
     
 
 }
 #pragma  mark -----
 #pragma  mark ------  DataRequest 
 #pragma  mark ----
-- (void)requestData{
+//微博点赞请求
+-(void)LikeRequstData:(NSDictionary  *) upDict StageInfo :(NSDictionary *) stageInfoDict
+{
+    
     UserDataCenter  *userCenter=[UserDataCenter shareInstance];
-    NSDictionary *parameters = @{@"user_id":@"18", @"page":[NSString stringWithFormat:@"%d",page]};
+    NSString  *weiboId=[upDict objectForKey:@"id"];
+    NSString  *stageId=[stageInfoDict objectForKey:@"id"];
+    NSString  *movieId=[stageInfoDict objectForKey:@"movie_id"];
+    NSString  *movieName=[stageInfoDict objectForKey:@"movie_name"];
+    NSString  *userId=userCenter.user_id;
+    NSString  *autorId=[upDict objectForKey:@"user_id"];
+    NSString  *uped;
+    if ([[upDict objectForKey:@"uped"]  intValue]==0) {
+        uped =[NSString stringWithFormat:@"%d",1];
+    }
+    else
+    {
+        uped =[NSString stringWithFormat:@"%d",0];
+    }
+    
+    NSDictionary *parameters = @{@"weibo_id":weiboId, @"stage_id":stageId,@"movie_id":movieId,@"movie_name":movieName,@"user_id":userId,@"author_id":autorId,@"operation":uped};
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    [manager POST:[NSString stringWithFormat:@"%@/weiboUp/up", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if ([[responseObject  objectForKey:@"return_code"]  intValue]==10000) {
+            NSLog(@"点赞成功========%@",responseObject);
+            //_mymarkView.ZanNumLable
+            [_toolBar SetZanButtonSelected];
+
+         }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+
+}
+- (void)requestData{
+  #warning  暂时设置为18
+    UserDataCenter  *userCenter=[UserDataCenter shareInstance];
+    NSDictionary *parameters = @{@"user_id":userCenter.user_id, @"page":[NSString stringWithFormat:@"%d",page]};
     NSString * section;
     if (segment.selectedSegmentIndex==1) {  // 最新
         section=@"weibo/listRecently";
@@ -143,7 +183,7 @@
             if (_hotDataArray ==nil) {
                 _hotDataArray=[[NSMutableArray alloc]init];
             }
-            //NSLog(@"热门数据 JSON: %@", responseObject);
+            NSLog(@"热门数据 JSON: %@", responseObject);
             [_hotDataArray addObjectsFromArray:Detailarray];
             [_HotMoVieTableView reloadData];
 
@@ -237,6 +277,7 @@
             cell.pageType=NSPageSourceTypeMainHotController;
             //小闪动标签的数组
             cell.WeibosArray=[[_hotDataArray objectAtIndex:indexPath.row]  objectForKey:@"weibos"];
+            cell.weiboDict=nil;
             [cell setCellValue:[[_hotDataArray objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] indexPath:indexPath.row];
             //遵守stagview的协议，点击事件在controller里面响应
             cell.stageView.delegate=self;
@@ -307,6 +348,8 @@
 {
     NSLog(@" ==ScreenButtonClick  ====%d",button.tag);
     //获取cell
+#pragma mark 暂时把sharetext设置成null
+
     CommonStageCell *cell = (CommonStageCell *)(button.superview.superview.superview);
     
     UIGraphicsBeginImageContextWithOptions(_HotMoVieTableView.bounds.size, YES, [UIScreen mainScreen].scale);
@@ -354,56 +397,56 @@
 #pragma mark  -----
 #pragma mark  ---StaegViewDelegate
 #pragma mark  ----
--(void)StageViewHandClickMark:(NSDictionary *)weiboDict withmarkView:(id)markView
+-(void)StageViewHandClickMark:(NSDictionary *)weiboDict withmarkView:(id)markView StageInfoDict:(NSDictionary *)stageInfoDict
 {
+
     NSLog(@"在new view controller  里面响应了这个方法 weibo dict  ====%@",    weiboDict) ;
     ///执行buttonview 弹出
     //获取markview的指针
     MarkView   *mv=(MarkView *)markView;
+    //把当前的markview 给存储在了controller 里面
+    _mymarkView=mv;
     if (mv.isSelected==YES) {  //当前已经选中的状态
-        //已经选中的话，推出下面的工具栏
-         NSLog(@"出现工具栏");
-        //[self SetToolBarValueWithDict:weiboDict isSelect:YES];
-        [self SetToolBarValueWithDict:weiboDict markView:markView isSelect:YES];
+        //设置工具栏的值，并且，弹出工具栏
+         // NSLog(@"出现工具栏,   ======stageinfo =====%@",stageInfoDict);
+        [self SetToolBarValueWithDict:weiboDict markView:markView isSelect:YES StageInfo:stageInfoDict];
     }
     else if(mv.isSelected==NO)
     {
         NSLog(@"隐藏工具栏工具栏");
-        //[self SetToolBarValueWithDict:weiboDict isSelect:NO];
-        [self SetToolBarValueWithDict:weiboDict markView:markView isSelect:NO];
+        [self SetToolBarValueWithDict:weiboDict markView:markView isSelect:NO StageInfo:stageInfoDict];
         
     }
     
 }
--(void)SetToolBarValueWithDict:(NSDictionary  *)weiboDict markView:(id) markView isSelect:(BOOL ) isselect
+#pragma mark  ----- toolbar 上面的按钮，执行给toolbar 赋值，显示，弹出工具栏
+-(void)SetToolBarValueWithDict:(NSDictionary  *)weiboDict markView:(id) markView isSelect:(BOOL ) isselect StageInfo:(NSDictionary *) stageInfo
 {
    //先对它赋值，然后让他弹出到界面
     if (isselect==YES) {
-        NSLog(@" 执行了出现工具栏的方法");
-     //   [_toolBar setToolBarValue:weiboDict];
-        [_toolBar setToolBarValue:weiboDict :markView];
-        //隐藏
-        [UIView  animateWithDuration:0.6 animations:^{
-            CGRect  tframe=_toolBar.frame;
-            tframe.origin.y=kDeviceHeight-kHeigthTabBar-kHeightNavigation-45;
-            _toolBar.frame=tframe;
-        } completion:^(BOOL finished) {
-            
-        }];
+        NSLog(@" new viewController SetToolBarValueWithDict  执行了出现工具栏的方法");
+        
+        //设置工具栏的值
+        [_toolBar setToolBarValue:weiboDict :markView WithStageInfo:stageInfo];
+        //把工具栏添加到当前视图
+        self.tabBarController.tabBar.hidden=YES;
+        [self.view addSubview:_toolBar];
+        //弹出工具栏
+        [_toolBar ShowButtomView];
+        
     }
     else if (isselect==NO)
     {
         //隐藏toolbar
         NSLog(@" 执行了隐藏工具栏的方法");
-
-        [UIView  animateWithDuration:0.6 animations:^{
-            CGRect  tframe=_toolBar.frame;
-            tframe.origin.y=kDeviceHeight;
-            _toolBar.frame=tframe;
-        } completion:^(BOOL finished) {
-            
-        }];
-
+        self.tabBarController.tabBar.hidden=NO;
+        //隐藏工具栏
+        if (_toolBar) {
+        
+        [_toolBar HidenButtomView];
+        //从父视图中除掉工具栏
+        [_toolBar removeFromSuperview];
+        }
     }
     
     
@@ -411,18 +454,21 @@
 #pragma mark   ------
 #pragma mark   -------- ButtomToolViewDelegate
 #pragma  mark  -------
-
--(void)ToolViewHandClick:(UIButton *)button :(MarkView *)markView weiboDict:(NSDictionary *)weiboDict
+-(void)ToolViewHandClick:(UIButton *)button :(MarkView *)markView weiboDict:(NSDictionary *)weiboDict StageInfo:(NSDictionary *)stageInfoDict
+//-(void)ToolViewHandClick:(UIButton *)button :(MarkView *)markView weiboDict:(NSDictionary *)weiboDict
 {
     if (button.tag==10000) {
         ///点击了头像//进入个人页面
-        NSLog(@"点击头像  微博dict  ＝====%@",weiboDict);
+        NSLog(@"点击头像  微博dict  ＝====%@ ======出现的stageinfo  ＝＝＝＝＝＝%@",weiboDict,stageInfoDict);
       
         
     }
+#pragma mark     -----------分享
     else if (button.tag==10001)
     {
         //点击了分享
+        //分享文字
+        NSString  *shareText=[weiboDict objectForKey:@"topic"];
         NSLog(@" 点击了分享按钮");
         CommonStageCell *cell = (CommonStageCell *)(markView.superview.superview.superview);
         
@@ -437,48 +483,43 @@
         [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
         [UMSocialSnsService presentSnsIconSheetView:self
                                              appKey:kUmengKey
-                                          shareText:@"index share image"
+                                          shareText:shareText
                                          shareImage: image
                                     shareToSnsNames:[NSArray arrayWithObjects: UMShareToWechatSession, UMShareToWechatTimeline, UMShareToQzone, UMShareToSina, nil]
                                            delegate:nil];
     }
-
-        
+#pragma mark  ----------点赞--------------
     else  if(button.tag==10002)
     {
         //点击了赞
-        NSLog(@"点赞");
+        NSLog(@" 点赞  微博dict  ＝====%@",weiboDict);
         //获取赞的数量
-        
+        //点赞执行这个方法
+        [self LikeRequstData:weiboDict StageInfo:stageInfoDict];
+        //点赞成功后，要把赞设置为
         
     }
 
     
 }
-/*-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+#pragma mark  -----
+#pragma mark  -------隐藏工具栏的方法
+#pragma mark  -------
+//点击屏幕，隐藏工具栏
+
+-(void)topViewTouchBengan
 {
-    NSLog(@" 执行了隐藏工具栏的方法");
-    
-    [UIView  animateWithDuration:0.6 animations:^{
-        CGRect  tframe=_toolBar.frame;
-        tframe.origin.y=kDeviceHeight;
-        _toolBar.frame=tframe;
-    } completion:^(BOOL finished) {
+    NSLog(@"controller touchbegan  中 执行了隐藏工具栏的方法");
+    //取消当前的选中的那个气泡
+    [_mymarkView CancelMarksetSelect];
+    self.tabBarController.tabBar.hidden=NO;
+    if (_toolBar) {
+        [_toolBar HidenButtomView];
+        [_toolBar performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.5];
+        //[_toolBar removeFromSuperview];
         
-    }];
-}*/
-//滚动过的时候退出toolbar
--(void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
-    NSLog(@" 执行了隐藏工具栏的方法");
-    
-    [UIView  animateWithDuration:0.6 animations:^{
-        CGRect  tframe=_toolBar.frame;
-        tframe.origin.y=kDeviceHeight;
-        _toolBar.frame=tframe;
-    } completion:^(BOOL finished) {
-        
-    }];
+    }
+
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

@@ -37,6 +37,8 @@
 }
 #pragma mark    设置stageview的值  ，主要是给stagview 添加markview  和添加一张图片
 - (void)setStageValue:(NSDictionary *)dict {
+    //这里把值赋给了stageinfo了，用于把stageinfo 方向传递给了controller
+    stageInfoDict=dict;
     //先移除所有的Mark视图
     for (UIView  *Mview in  self.subviews) {
         if ([Mview isKindOfClass:[MarkView class]]) {
@@ -216,11 +218,12 @@
     }
     MarkView  *mav=(MarkView *) markView;
     mav.isSelected=YES;*/
-    
-    
        NSLog(@"点击了 stageview 的微博操作");
-       if (self.delegate &&[self.delegate respondsToSelector:@selector(StageViewHandClickMark:withmarkView:)]) {
-        [self.delegate StageViewHandClickMark:weiboDict withmarkView:markView];
+       //if (self.delegate &&[self.delegate respondsToSelector:@selector(StageViewHandClickMark:withmarkView:)]) {
+        //[self.delegate StageViewHandClickMark:weiboDict withmarkView:markView];
+    //}
+    if (self.delegate &&[self.delegate respondsToSelector:@selector(StageViewHandClickMark:withmarkView:StageInfoDict:)]) {
+        [self.delegate StageViewHandClickMark:weiboDict withmarkView:markView StageInfoDict:stageInfoDict];
     }
 
 }

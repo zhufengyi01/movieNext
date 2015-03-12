@@ -35,7 +35,9 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     self.navigationController.navigationBar.hidden=NO;
-
+//    self.navigationController.navigationBar.alpha=1;
+//    self.navigationController.navigationBar.translucent=NO;
+//
     self.tabBarController.tabBar.hidden=NO;
 }
 
@@ -70,10 +72,10 @@
 }
 -(void)initUI
 {
-    _myTableView =[[UITableView alloc]initWithFrame:CGRectMake(0, 0,kDeviceWidth, kDeviceHeight)];
+    _myTableView =[[UITableView alloc]initWithFrame:CGRectMake(0, 0,kDeviceWidth, kDeviceHeight-kHeightNavigation)];
     _myTableView.delegate=self;
     _myTableView.dataSource=self;
-    _myTableView.separatorInset=UIEdgeInsetsMake(0, -110, 0, 0);
+    //_myTableView.separatorInset=UIEdgeInsetsMake(0, -110, 0, 0);
     [self.view addSubview:_myTableView];
     //集成mjrefresh
     [self setupRefresh];

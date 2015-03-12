@@ -43,6 +43,7 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     self.navigationController.navigationBar.hidden=NO;
+    self.navigationController.navigationBar.alpha=1;
     self.tabBarController.tabBar.hidden=NO;
 }
 
@@ -66,6 +67,12 @@
     UISearchBar  *search=[[UISearchBar alloc]initWithFrame:CGRectMake(20, 10, kDeviceWidth-40, 28)];
     search.placeholder=@"搜索电影";
     search.delegate=self;
+    //search.barStyle=UIBarStyleDefault;
+    //search.barTintColor=VBlue_color;
+    //search.alpha=0.3;
+     search.backgroundColor=[UIColor clearColor];
+//    [[search.subviews objectAtIndex:0]removeFromSuperview];
+    
     self.navigationItem.titleView=search;
     
 }

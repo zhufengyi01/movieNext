@@ -24,13 +24,13 @@
 -(void)createUI
 {
     //放置所有控件的view
-     bgImageView=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight/3)];
+     bgImageView=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth,(kDeviceWidth/3+20+64+50))];
     bgImageView.userInteractionEnabled=YES;
    // bgImageView.image =[UIImage imageNamed:@"loading_image_all"];
     [self addSubview:bgImageView];
     
     
-    UIButton  *leftBtn= [UIButton buttonWithType:UIButtonTypeSystem];
+   /* UIButton  *leftBtn= [UIButton buttonWithType:UIButtonTypeSystem];
     leftBtn.frame=CGRectMake(0, 70, 60, 36);
     [leftBtn addTarget:self action:@selector(dealBackClick:) forControlEvents:UIControlEventTouchUpInside];
     [leftBtn setTitle:@"返回" forState:UIControlStateNormal];
@@ -38,10 +38,10 @@
     [leftBtn setImage:[UIImage imageNamed:@"Back__Icon.png"] forState:UIControlStateNormal];
     //leftBtn.imageEdgeInsets=UIEdgeInsetsMake(<#CGFloat top#>, <#CGFloat left#>, <#CGFloat bottom#>, <#CGFloat right#>)
     [bgImageView addSubview:leftBtn];
-
+*/
     
     
-    movieLogoImageView  =[[UIImageView alloc]initWithFrame:CGRectMake(40, 40, 50, 70)];
+    movieLogoImageView  =[[UIImageView alloc]initWithFrame:CGRectMake(20, 64+20, 50, 70)];
     
     [bgImageView addSubview:movieLogoImageView];
     
@@ -50,16 +50,18 @@
     [bgImageView addSubview:titleLable];
     
     //导演
-    derectorLable=[ZCControl createLabelWithFrame:CGRectMake(movieLogoImageView.frame.origin.x+movieLogoImageView.frame.size.width,titleLable.frame.origin.y+titleLable.frame.size.height+5,kDeviceWidth-30-10-30,20) Font:12 Text:@"导演"];
+    derectorLable=[ZCControl createLabelWithFrame:CGRectMake(movieLogoImageView.frame.origin.x+movieLogoImageView.frame.size.width+10,titleLable.frame.origin.y+titleLable.frame.size.height+5,kDeviceWidth-30-10-30,20) Font:12 Text:@"导演"];
     derectorLable.numberOfLines=2;
     [bgImageView addSubview:derectorLable];
     //演员
-    performerLable=[ZCControl createLabelWithFrame:CGRectMake(movieLogoImageView.frame.origin.x+10+movieLogoImageView.frame.size.width, derectorLable.frame.origin.y+derectorLable.frame.size.height, kDeviceWidth-movieLogoImageView.frame.origin.x+movieLogoImageView.frame.size.width-10-10, 40) Font:12 Text:@"演员"];
+    performerLable=[ZCControl createLabelWithFrame:CGRectMake(movieLogoImageView.frame.origin.x+10+movieLogoImageView.frame.size.width, derectorLable.frame.origin.y+derectorLable.frame.size.height, kDeviceWidth-movieLogoImageView.frame.origin.x-movieLogoImageView.frame.size.width-10-10, 40) Font:12 Text:@"演员"];
     performerLable.numberOfLines=2;
     [bgImageView addSubview:performerLable];
     
-    UIView  *btnBg =[[UIView  alloc] initWithFrame:CGRectMake(0, kDeviceHeight/3-45, kDeviceWidth, 45)];
-    btnBg.backgroundColor=[[UIColor blackColor]colorWithAlphaComponent:0.4];
+    //下面的点击
+    
+    UIView  *btnBg =[[UIView  alloc] initWithFrame:CGRectMake(0, kDeviceHeight/3-45+44+5, kDeviceWidth, 45)];
+    btnBg.backgroundColor=[[UIColor blackColor]colorWithAlphaComponent:0.2];
     [bgImageView addSubview:btnBg];
     
     

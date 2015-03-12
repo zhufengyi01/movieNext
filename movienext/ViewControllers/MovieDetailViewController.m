@@ -44,9 +44,9 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     self.tabBarController.tabBar.hidden=YES;
-    self.navigationController.navigationBar.hidden=YES;
+    self.navigationController.navigationBar.hidden=NO;
     //下面透明度的设置，效果是设置了导航条的高度的多少倍，不是透明度多少
-    //self.navigationController.navigationBar.alpha=0.5;
+    self.navigationController.navigationBar.alpha=0.4;
   
 }
 - (void)viewDidLoad {
@@ -99,11 +99,12 @@
         layout.sectionInset=UIEdgeInsetsMake(10, 0, 10, 0);
     }
     else{
-        layout.sectionInset=UIEdgeInsetsMake(10,10, 10, 10); //整个偏移量 上左下右
+        layout.sectionInset=UIEdgeInsetsMake(20,10, 10, 10); //整个偏移量 上左下右
     }
-    [layout setHeaderReferenceSize:CGSizeMake(_myConllectionView.frame.size.width, kDeviceHeight/3)];
+    //kDeviceHeight/3-45+44
+    [layout setHeaderReferenceSize:CGSizeMake(_myConllectionView.frame.size.width, kDeviceHeight/3+44)];
     
-    _myConllectionView =[[UICollectionView alloc]initWithFrame:CGRectMake(0, -20,kDeviceWidth, kDeviceHeight+20+kHeigthTabBar) collectionViewLayout:layout];
+    _myConllectionView =[[UICollectionView alloc]initWithFrame:CGRectMake(0, -64,kDeviceWidth, kDeviceHeight+20+kHeigthTabBar) collectionViewLayout:layout];
     _myConllectionView.backgroundColor=View_BackGround;
     //注册大图模式
     [_myConllectionView registerClass:[BigImageCollectionViewCell class] forCellWithReuseIdentifier:@"bigcell"];
@@ -292,7 +293,7 @@
 -(UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
 {
     if (bigModel==NO) {
-        return UIEdgeInsetsMake(5, 5, 5, 5);
+        return UIEdgeInsetsMake(15, 5, 5, 5);
     }
     return UIEdgeInsetsMake(0, 0, 0, 0);
 }
