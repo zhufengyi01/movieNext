@@ -31,9 +31,11 @@
     
     
     UIButton  *leftBtn= [UIButton buttonWithType:UIButtonTypeSystem];
-    leftBtn.frame=CGRectMake(0, 20, 60, 36);
+    leftBtn.frame=CGRectMake(0, 70, 60, 36);
     [leftBtn addTarget:self action:@selector(dealBackClick:) forControlEvents:UIControlEventTouchUpInside];
-    [leftBtn setImage:[UIImage imageNamed:@"Back_Icon.png"] forState:UIControlStateNormal];
+    [leftBtn setTitle:@"返回" forState:UIControlStateNormal];
+    [leftBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [leftBtn setImage:[UIImage imageNamed:@"Back__Icon.png"] forState:UIControlStateNormal];
     //leftBtn.imageEdgeInsets=UIEdgeInsetsMake(<#CGFloat top#>, <#CGFloat left#>, <#CGFloat bottom#>, <#CGFloat right#>)
     [bgImageView addSubview:leftBtn];
 
@@ -48,11 +50,11 @@
     [bgImageView addSubview:titleLable];
     
     //导演
-    derectorLable=[ZCControl createLabelWithFrame:CGRectMake(movieLogoImageView.frame.origin.x+movieLogoImageView.frame.size.width+10,titleLable.frame.origin.y+titleLable.frame.size.height+5,kDeviceWidth-30-10-30,20) Font:12 Text:@"导演"];
+    derectorLable=[ZCControl createLabelWithFrame:CGRectMake(movieLogoImageView.frame.origin.x+movieLogoImageView.frame.size.width,titleLable.frame.origin.y+titleLable.frame.size.height+5,kDeviceWidth-30-10-30,20) Font:12 Text:@"导演"];
     derectorLable.numberOfLines=2;
-    [bgImageView addSubview:titleLable];
+    [bgImageView addSubview:derectorLable];
     //演员
-    performerLable=[ZCControl createLabelWithFrame:CGRectMake(movieLogoImageView.frame.origin.x+10+movieLogoImageView.frame.size.width, derectorLable.frame.origin.y+derectorLable.frame.size.height+5, kDeviceWidth-movieLogoImageView.frame.origin.x+movieLogoImageView.frame.size.width+10, 40) Font:12 Text:@"演员"];
+    performerLable=[ZCControl createLabelWithFrame:CGRectMake(movieLogoImageView.frame.origin.x+10+movieLogoImageView.frame.size.width, derectorLable.frame.origin.y+derectorLable.frame.size.height, kDeviceWidth-movieLogoImageView.frame.origin.x+movieLogoImageView.frame.size.width-10-10, 40) Font:12 Text:@"演员"];
     performerLable.numberOfLines=2;
     [bgImageView addSubview:performerLable];
     

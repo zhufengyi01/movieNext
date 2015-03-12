@@ -57,7 +57,18 @@
 
 //动画定义
 #define  kTimeInterval  0.7   //  气泡和气泡之间动画出现的时间间隔
+#define kStaticTimeOffset  5.7  //动画的停留时间
+#define kShowTimeOffset 0.7  // 淡入时间
+#define kHidenTimeOffset 1.0  //淡出时间
+
 
 #define kUserKey @"userinfo"  ///用户信息
+
+
+//weibo  MarkView大小控制
+//坐标图片的大小控制
+
+//右边字体的大小控制
+#define MarkTextFont  14
 
 #endif

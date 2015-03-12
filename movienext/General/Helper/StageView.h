@@ -7,7 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-@interface StageView : UIView
+#import "MarkView.h"
+@protocol StageViewDelegate <NSObject>
+-(void)StageViewHandClickMark:(NSDictionary  *) weiboDict withmarkView:(id) markView;
+@end
+@interface StageView : UIView  <MarkViewDelegate>   // 遵守
 {
     UIImageView   *_MovieImageView;
     NSInteger currentMarkIndex;
@@ -22,6 +26,7 @@
 - (void)setStageValue:(NSDictionary *)stageDict;
 
 
+@property (nonatomic,assign )id <StageViewDelegate> delegate;
 /**
  *  开始动画
  */

@@ -18,9 +18,10 @@
 #import "CommonStageCell.h"
 #import "AddMarkViewController.h"
 #import "MovieDetailViewController.h"
+
 //友盟分享
 #import "UMSocial.h"
-@interface NewViewController ()<UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate>
+@interface NewViewController ()<UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UIScrollViewDelegate>
 {
     AppDelegate  *appdelegate;
     UISegmentedControl *segment;
@@ -29,6 +30,7 @@
     NSMutableArray    *_hotDataArray;
     NSMutableArray    *_newDataArray;
     int page;
+    ButtomToolView *_toolBar;
 }
 @end
 
@@ -52,6 +54,7 @@
     [self createHotView];
     [self creatLoadView];
     [self requestData];
+    [self createToolBar];
     
     
 }
@@ -107,6 +110,15 @@
     [self.view addSubview:loadView];
 }
 
+-(void)createToolBar
+
+{
+    _toolBar=[[ButtomToolView alloc]initWithFrame:CGRectMake(0,kDeviceHeight,kDeviceWidth, 45)];
+    _toolBar.delegete=self;
+    [self.view addSubview:_toolBar];
+    
+
+}
 #pragma  mark -----
 #pragma  mark ------  DataRequest 
 #pragma  mark ----
@@ -131,7 +143,7 @@
             if (_hotDataArray ==nil) {
                 _hotDataArray=[[NSMutableArray alloc]init];
             }
-            NSLog(@"热门数据 JSON: %@", responseObject);
+            //NSLog(@"热门数据 JSON: %@", responseObject);
             [_hotDataArray addObjectsFromArray:Detailarray];
             [_HotMoVieTableView reloadData];
 
@@ -141,7 +153,7 @@
             if (_newDataArray==nil) {
                 _newDataArray=[[NSMutableArray alloc]init];
             }
-            NSLog(@"最新数据 JSON: %@", responseObject);
+            ///NSLog(@"最新数据 JSON: %@", responseObject);
             [_newDataArray addObjectsFromArray:Detailarray];
             [_HotMoVieTableView reloadData];
         }
@@ -182,7 +194,7 @@
              hight=  (h/w) *kDeviceWidth;
         }
         }
-        NSLog(@"============  hight  for  row  =====%f",hight);
+       // NSLog(@"============  hight  for  row  =====%f",hight);
         return hight+10;
     }
     else if (segment.selectedSegmentIndex==1)
@@ -202,7 +214,8 @@
                 hight=  (h/w)*kDeviceWidth+90;
             }
         }
-        NSLog(@"============  hight  for  row  =====%f",hight);
+      //
+        //NSLog(@"============  hight  for  row  =====%f",hight);
 
         return hight+10;
     }
@@ -225,6 +238,8 @@
             //小闪动标签的数组
             cell.WeibosArray=[[_hotDataArray objectAtIndex:indexPath.row]  objectForKey:@"weibos"];
             [cell setCellValue:[[_hotDataArray objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] indexPath:indexPath.row];
+            //遵守stagview的协议，点击事件在controller里面响应
+            cell.stageView.delegate=self;
         }
         return cell;
     }
@@ -237,6 +252,9 @@
             cell.weiboDict =[[_newDataArray  objectAtIndex:indexPath.row]  objectForKey:@"weibo"];
             //配置stage的数据
             [cell setCellValue:[[_newDataArray objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"]indexPath:indexPath.row];
+            //遵守了stageview的协议，点击事件在这里执行
+            cell.stageView.delegate=self;
+            
         }
         return  cell;
     }
@@ -276,7 +294,7 @@
 
 //点击左下角的电影按钮
 -(void)dealMovieButtonClick:(UIButton  *) button{
-    NSLog(@" ==dealMovieButtonClick  ====%ld",button.tag);
+    NSLog(@" ==dealMovieButtonClick  ====%d",button.tag);
     
     MovieDetailViewController *vc =  [MovieDetailViewController new];
     NSDictionary *dict = segment.selectedSegmentIndex==0 ? [_hotDataArray objectAtIndex:button.tag-1000] : [_newDataArray objectAtIndex:button.tag-1000];
@@ -287,7 +305,8 @@
 //分享
 -(void)ScreenButtonClick:(UIButton  *) button
 {
-    NSLog(@" ==ScreenButtonClick  ====%ld",button.tag);
+    NSLog(@" ==ScreenButtonClick  ====%d",button.tag);
+    //获取cell
     CommonStageCell *cell = (CommonStageCell *)(button.superview.superview.superview);
     
     UIGraphicsBeginImageContextWithOptions(_HotMoVieTableView.bounds.size, YES, [UIScreen mainScreen].scale);
@@ -332,9 +351,135 @@
     NSLog(@" ==ZanButtonClick  ====%ld",button.tag);
 
 }
+#pragma mark  -----
+#pragma mark  ---StaegViewDelegate
+#pragma mark  ----
+-(void)StageViewHandClickMark:(NSDictionary *)weiboDict withmarkView:(id)markView
+{
+    NSLog(@"在new view controller  里面响应了这个方法 weibo dict  ====%@",    weiboDict) ;
+    ///执行buttonview 弹出
+    //获取markview的指针
+    MarkView   *mv=(MarkView *)markView;
+    if (mv.isSelected==YES) {  //当前已经选中的状态
+        //已经选中的话，推出下面的工具栏
+         NSLog(@"出现工具栏");
+        //[self SetToolBarValueWithDict:weiboDict isSelect:YES];
+        [self SetToolBarValueWithDict:weiboDict markView:markView isSelect:YES];
+    }
+    else if(mv.isSelected==NO)
+    {
+        NSLog(@"隐藏工具栏工具栏");
+        //[self SetToolBarValueWithDict:weiboDict isSelect:NO];
+        [self SetToolBarValueWithDict:weiboDict markView:markView isSelect:NO];
+        
+    }
+    
+}
+-(void)SetToolBarValueWithDict:(NSDictionary  *)weiboDict markView:(id) markView isSelect:(BOOL ) isselect
+{
+   //先对它赋值，然后让他弹出到界面
+    if (isselect==YES) {
+        NSLog(@" 执行了出现工具栏的方法");
+     //   [_toolBar setToolBarValue:weiboDict];
+        [_toolBar setToolBarValue:weiboDict :markView];
+        //隐藏
+        [UIView  animateWithDuration:0.6 animations:^{
+            CGRect  tframe=_toolBar.frame;
+            tframe.origin.y=kDeviceHeight-kHeigthTabBar-kHeightNavigation-45;
+            _toolBar.frame=tframe;
+        } completion:^(BOOL finished) {
+            
+        }];
+    }
+    else if (isselect==NO)
+    {
+        //隐藏toolbar
+        NSLog(@" 执行了隐藏工具栏的方法");
 
+        [UIView  animateWithDuration:0.6 animations:^{
+            CGRect  tframe=_toolBar.frame;
+            tframe.origin.y=kDeviceHeight;
+            _toolBar.frame=tframe;
+        } completion:^(BOOL finished) {
+            
+        }];
 
+    }
+    
+    
+}
+#pragma mark   ------
+#pragma mark   -------- ButtomToolViewDelegate
+#pragma  mark  -------
 
+-(void)ToolViewHandClick:(UIButton *)button :(MarkView *)markView weiboDict:(NSDictionary *)weiboDict
+{
+    if (button.tag==10000) {
+        ///点击了头像//进入个人页面
+        NSLog(@"点击头像  微博dict  ＝====%@",weiboDict);
+      
+        
+    }
+    else if (button.tag==10001)
+    {
+        //点击了分享
+        NSLog(@" 点击了分享按钮");
+        CommonStageCell *cell = (CommonStageCell *)(markView.superview.superview.superview);
+        
+        UIGraphicsBeginImageContextWithOptions(_HotMoVieTableView.bounds.size, YES, [UIScreen mainScreen].scale);
+        [cell.stageView drawViewHierarchyInRect:cell.stageView.bounds afterScreenUpdates:YES];
+        
+        // old style [self.layer renderInContext:UIGraphicsGetCurrentContext()];
+        
+        UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        
+        [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
+        [UMSocialSnsService presentSnsIconSheetView:self
+                                             appKey:kUmengKey
+                                          shareText:@"index share image"
+                                         shareImage: image
+                                    shareToSnsNames:[NSArray arrayWithObjects: UMShareToWechatSession, UMShareToWechatTimeline, UMShareToQzone, UMShareToSina, nil]
+                                           delegate:nil];
+    }
+
+        
+    else  if(button.tag==10002)
+    {
+        //点击了赞
+        NSLog(@"点赞");
+        //获取赞的数量
+        
+        
+    }
+
+    
+}
+/*-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    NSLog(@" 执行了隐藏工具栏的方法");
+    
+    [UIView  animateWithDuration:0.6 animations:^{
+        CGRect  tframe=_toolBar.frame;
+        tframe.origin.y=kDeviceHeight;
+        _toolBar.frame=tframe;
+    } completion:^(BOOL finished) {
+        
+    }];
+}*/
+//滚动过的时候退出toolbar
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    NSLog(@" 执行了隐藏工具栏的方法");
+    
+    [UIView  animateWithDuration:0.6 animations:^{
+        CGRect  tframe=_toolBar.frame;
+        tframe.origin.y=kDeviceHeight;
+        _toolBar.frame=tframe;
+    } completion:^(BOOL finished) {
+        
+    }];
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

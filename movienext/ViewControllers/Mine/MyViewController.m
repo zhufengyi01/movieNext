@@ -16,7 +16,7 @@
 #import "UserDataCenter.h"
 #import "SettingViewController.h"
 #import "UIImageView+WebCache.h"
-@interface MyViewController ()<UITableViewDataSource, UITableViewDelegate>
+@interface MyViewController ()<UITableViewDataSource, UITableViewDelegate,StageViewDelegate,MarkViewDelegate>
 {
     UISegmentedControl *segment;
     UITableView   *_tableView;
@@ -83,7 +83,8 @@
 
 -(void)createTableView
 {
-    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight-kHeightNavigation-kHeigthTabBar)];
+    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight-kHeightNavigation)];
+    _tableView.separatorStyle=UITableViewCellSeparatorStyleNone;
     _tableView.delegate = self;
     _tableView.dataSource = self;
     [self.view addSubview:_tableView];
@@ -98,7 +99,7 @@
     if (signature==nil) {
         signature=@"";
     }
-    NSLog(@"   ==========用户信息===body count %d   zanCount ===%d   signatuer ===%@,头像 =====%@",BodyConut,ZanCount,signature,    userCenter.avatar);
+   /// NSLog(@"   ==========用户信息===body count %d   zanCount ===%d   signatuer ===%@,头像 =====%@",BodyConut,ZanCount,signature,    userCenter.avatar);
     
 
     
@@ -349,6 +350,13 @@
     [self.navigationController pushViewController:[SettingViewController new] animated:YES];
 }
 
+#pragma mark   ---
+#pragma mark   ----stageViewDelegate   --
+#pragma mark    ---
+-(void)StageViewHandClickMark:(NSDictionary *)weiboDict withStageView:(id)stageView
+{
+    NSLog(@"点击了一个标签，标签的内容为   =====%@",weiboDict);
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

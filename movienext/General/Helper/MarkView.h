@@ -7,23 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
-#define kShowTimeOffset 0.7  // 淡入时间
-#define kStaticTimeOffset 5.7  //静态显示时间
-#define kHidenTimeOffset 1.0  //淡出时间
 
 @protocol MarkViewDelegate <NSObject>
- -(void)MarkViewClick;
+//标签的点击事件，对stageview 提供接口，传递微博对象
+-(void)MarkViewClick:(NSDictionary  *) weiboDict withMarkView:(id) markView;
 @end
 
 @interface MarkView : UIView
 {
     CGRect  m_frame;
-   // UIImageView    *_LeftImageView;
-   // UIView         *_rightView;
-  //  UILabel        *_TitleLable;
-   // UILabel        *_ZanNumLable;
-   // UIImageView    *_ZanImageView;
-    
 }
 
 @property (nonatomic,strong) UIImageView    *LeftImageView;
@@ -31,6 +23,12 @@
 @property (nonatomic,strong) UILabel        *TitleLable;
 @property (nonatomic,strong) UILabel        *ZanNumLable;
 @property (nonatomic,strong) UIImageView    *ZanImageView;
+//点击的状态
+@property (nonatomic,assign) BOOL  isSelected;   // 是否被选中
+
+//从stagview传递过来的微博字典对象，这个对象中包含微博的详细信息
+@property (nonatomic,strong)NSDictionary  *weiboDict;
+
 @property (nonatomic,assign) id <MarkViewDelegate> delegate;
 @property (nonatomic,assign) BOOL isAnimation;   //是否是可以动的动画
 //markview 自身的动画

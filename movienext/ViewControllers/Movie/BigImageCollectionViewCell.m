@@ -77,24 +77,19 @@
     {
         hight=  (ImgeHight/ImageWith) *kDeviceWidth;
     }
-        _StageView.frame=CGRectMake(0, 0, kDeviceWidth, hight);
-        BgView2.frame=CGRectMake(0, hight, kDeviceWidth, 45);
-        _StageView.isAnimation = YES;
+    _StageView.frame=CGRectMake(0, 0, kDeviceWidth, hight);
+    BgView2.frame=CGRectMake(0, hight, kDeviceWidth, 45);
+    _StageView.isAnimation = YES;
     
-    
-    }
+}
 - (void)layoutSubviews {
     [super layoutSubviews];
-    
     
 }
 
 #pragma mark ---
 #pragma mark ------下方按钮点击事件
 #pragma mark ------
--(void)dealMovieButtonClick:(UIButton  *) button{
-    
-}
 -(void)ScreenButtonClick:(UIButton  *) button
 {
     

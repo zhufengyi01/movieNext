@@ -7,7 +7,7 @@
 //
 
 #import "StageView.h"
-#import "MarkView.h"
+//#import "MarkView.h"
 #import "Constant.h"
 #import "UIImageView+WebCache.h"
 
@@ -64,6 +64,10 @@
         markView.alpha = 1.0;
         //设置是否markview 不可以动画
         markView.isAnimation = NO;
+        //设置单条微博的参数信息
+        markView.weiboDict=_weiboDict;
+       //遵守markView 的协议
+        markView.delegate=self;
        [self addSubview:markView];
     }
 #pragma  mark  有很多气泡，气泡循环播放
@@ -73,6 +77,11 @@
         MarkView *markView = [self createMarkViewWithDict:weibodict andIndex:i];
         // 设置markview 可以动画
         markView.isAnimation = YES;
+        //设置单条微博的参数信息
+        markView.weiboDict=weibodict;
+        //遵守markView 的协议
+        markView.delegate=self;
+
        [self addSubview:markView];
     }
 }
@@ -94,7 +103,7 @@
             // 计算赞数量的size
             CGSize Usize=[UpString boundingRectWithSize:CGSizeMake(40,MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:markView.ZanNumLable.font forKey:NSFontAttributeName] context:nil].size;
           
-            NSLog(@"size= %f %f", Msize.width, Msize.height);
+           // NSLog(@"size= %f %f", Msize.width, Msize.height);
             //计算赞数量的长度
             float  Uwidth=[UpString floatValue]==0?0:Usize.width;
             //宽度=字的宽度+左头像图片的宽度＋赞图片的宽度＋赞数量的宽度+中间两个空格2+2
@@ -143,7 +152,7 @@
             }
         }
     } completion:^(BOOL finished) {
-        //结束放大动画, 同时开始循环显示动画
+        //，放大动画执行完成后，结束放大动画, 同时开始循环显示动画
         [UIView animateWithDuration:0.2 delay:0.6 options:UIViewAnimationOptionCurveLinear animations:^{
             // 先把所有的气泡的透明度都设置成了 0
             for (UIView *v in self.subviews) {
@@ -151,8 +160,7 @@
                     MarkView *mv = (MarkView *)v;
                     mv.alpha = 0.0;
                 }
-                //mv.hidden = YES;
-            }
+                            }
             //每隔kTimeInterval时间显示一个动画
             _timer = [NSTimer scheduledTimerWithTimeInterval:kTimeInterval target:self selector:@selector( CircleshowAnimation) userInfo:nil repeats:YES];
         } completion:nil];
@@ -193,5 +201,29 @@
 - (void)stopAnimation {
     [_timer invalidate];
 }
+#pragma mark  ----
+#pragma mark   ---markViewDelegate 
+#pragma  mark -----
+//实现markview 的代理
+-(void)MarkViewClick:(NSDictionary *)weiboDict withMarkView:(id)markView
+{
+    /*
+    for (UIView  *view in  self.subviews ) {
+        if ([view isKindOfClass:[MarkView class]]) {
+            MarkView *mv=(MarkView *)view;
+            mv.isSelected=NO;
+        }
+    }
+    MarkView  *mav=(MarkView *) markView;
+    mav.isSelected=YES;*/
+    
+    
+       NSLog(@"点击了 stageview 的微博操作");
+       if (self.delegate &&[self.delegate respondsToSelector:@selector(StageViewHandClickMark:withmarkView:)]) {
+        [self.delegate StageViewHandClickMark:weiboDict withmarkView:markView];
+    }
+
+}
+
 
 @end

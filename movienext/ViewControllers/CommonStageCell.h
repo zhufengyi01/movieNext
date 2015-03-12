@@ -19,7 +19,7 @@ typedef NS_ENUM(NSInteger, NSPageSourceType)
     NSPageSourceTypeMyupedViewController=5,
     
 };
-@interface CommonStageCell : UITableViewCell
+@interface CommonStageCell : UITableViewCell <StageViewDelegate>
 {
     CGRect        m_frame;
     UIView        *BgView0;   //最新顶上的view
@@ -36,7 +36,6 @@ typedef NS_ENUM(NSInteger, NSPageSourceType)
     UIImageView   *MovieLogoImageView;  // 电影的小图片
     UIButton      *ScreenButton;
     UIButton      *addMarkButton;
-    
     
 
  }

@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "MarkView.h"
+#import "ButtomToolView.h"
 @interface NewViewController : UIViewController
 
 @end

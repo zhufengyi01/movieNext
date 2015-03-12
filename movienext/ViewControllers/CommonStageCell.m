@@ -56,7 +56,7 @@
     TimeLable.textColor=VGray_color;
     [BgView0 addSubview:TimeLable];
     
-    ZanButton =[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-70, 10, 45, 25) ImageName:@"like.png" Target:self.superview Action:@selector(ZanButtonClick:) Title:@""];
+    ZanButton =[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-55, 10, 45, 25) ImageName:@"like.png" Target:self.superview Action:@selector(ZanButtonClick:) Title:@""];
     ZanButton.layer.cornerRadius=2;
     [ZanButton setBackgroundImage:[UIImage imageNamed:@"liked.png"] forState:UIControlStateSelected];
     [BgView0 addSubview:ZanButton];
@@ -66,6 +66,7 @@
 {
     _stageView=[[StageView alloc]initWithFrame:CGRectMake(0, 45, kDeviceWidth, 200)];
     _stageView.backgroundColor=[UIColor blackColor];
+    _stageView.delegate=self;
     [self.contentView addSubview:_stageView];
     
     /*
@@ -202,7 +203,13 @@
 {
     
 }
+#pragma mark   --
+#pragma mark   --StageViewDelegate
+#pragma mark   ---
+//-(void)StageViewHandClickMark:(NSDictionary *)weiboDict withStageView:(id)stageView
+//{
 
+//}
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
 

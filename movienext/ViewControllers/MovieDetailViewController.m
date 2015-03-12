@@ -45,6 +45,8 @@
 {
     self.tabBarController.tabBar.hidden=YES;
     self.navigationController.navigationBar.hidden=YES;
+    //下面透明度的设置，效果是设置了导航条的高度的多少倍，不是透明度多少
+    //self.navigationController.navigationBar.alpha=0.5;
   
 }
 - (void)viewDidLoad {
@@ -101,7 +103,7 @@
     }
     [layout setHeaderReferenceSize:CGSizeMake(_myConllectionView.frame.size.width, kDeviceHeight/3)];
     
-    _myConllectionView =[[UICollectionView alloc]initWithFrame:CGRectMake(0, -20,kDeviceWidth, kDeviceHeight+20) collectionViewLayout:layout];
+    _myConllectionView =[[UICollectionView alloc]initWithFrame:CGRectMake(0, -20,kDeviceWidth, kDeviceHeight+20+kHeigthTabBar) collectionViewLayout:layout];
     _myConllectionView.backgroundColor=View_BackGround;
     //注册大图模式
     [_myConllectionView registerClass:[BigImageCollectionViewCell class] forCellWithReuseIdentifier:@"bigcell"];
@@ -207,12 +209,12 @@
             cell.WeibosArray=[[_dataArray objectAtIndex:indexPath.row]  objectForKey:@"weibos"];
             [cell setCellValue:[[_dataArray objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] indexPath:indexPath.row];
         }
-        [cell.StageView performSelector:@selector(startAnimation) withObject:nil afterDelay:1];
-        cell.backgroundColor = [UIColor redColor];
+          [cell.StageView performSelector:@selector(startAnimation) withObject:nil afterDelay:1];
+        //cell.backgroundColor = [UIColor redColor];
         return cell;
     } else {
         SmallImageCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"smallcell" forIndexPath:indexPath];
-        cell.backgroundColor = [UIColor redColor];
+        //cell.backgroundColor = [UIColor redColor];
         
         [cell.imageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w340h340",kUrlStage,[[dict  objectForKey:@"stageinfo"]  objectForKey:@"stage"]]] placeholderImage:[UIImage imageNamed:@"loading_image_all.png"]];
         if ([[dict objectForKey:@"stageinfo"] objectForKey:@"marks"]) {
@@ -243,7 +245,7 @@
         //定制头部视图的内容
         MovieHeadView *headerV = (MovieHeadView *)[collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"headerView" forIndexPath:indexPath];
         headerV.delegate=self;
-        ///headerV.backgroundColor =View_BackGround;// [UIColor yellowColor];
+     
         if (_MovieDict) {
         [headerV setCollectionHeaderValue:_MovieDict];
         }
@@ -330,6 +332,15 @@
 - (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if (bigModel ==YES) {
+       // UICollectionViewCell * stageCell = cell;
+        if (collectionView==_myConllectionView) {
+            BigImageCollectionViewCell *bigcell = (BigImageCollectionViewCell *)cell;
+            if ( [bigcell.StageView respondsToSelector:@selector(startAnimating)] ) {
+              //  [bigcell.StageView performSelector:@selector(startAnimation) withObject:nil afterDelay:1];
+            }
+        }
+
+
         
     }
 }
@@ -389,12 +400,13 @@
 //分享
 -(void)ScreenButtonClick:(UIButton  *) button
 {
+    
     NSLog(@" ==ScreenButtonClick  ====%d",button.tag);
-    CommonStageCell *cell = (CommonStageCell *)(button.superview.superview);
+    BigImageCollectionViewCell *cell = (BigImageCollectionViewCell *)(button.superview.superview.superview);
     
     UIGraphicsBeginImageContextWithOptions(_myConllectionView.bounds.size, YES, [UIScreen mainScreen].scale);
-    [cell.stageView drawViewHierarchyInRect:cell.stageView.bounds afterScreenUpdates:YES];
-    
+#warning  这个方法有误
+    [cell.StageView drawViewHierarchyInRect:cell.StageView.bounds afterScreenUpdates:YES];
     // old style [self.layer renderInContext:UIGraphicsGetCurrentContext()];
     
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();

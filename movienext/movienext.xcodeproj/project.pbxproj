@@ -126,6 +126,8 @@
 		000B09E11AA3029800B8D13A /* Weibo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 000B09801AA3029800B8D13A /* Weibo@2x.png */; };
 		000B09E21AA3029800B8D13A /* Weibo@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 000B09811AA3029800B8D13A /* Weibo@3x.png */; };
 		000B09E41AA30CB900B8D13A /* loginoutbackgroundcolor.png in Resources */ = {isa = PBXBuildFile; fileRef = 000B09E31AA30CB900B8D13A /* loginoutbackgroundcolor.png */; };
+		004DD1E51AAFDD0F00394A9D /* Back__Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 004DD1E41AAFDD0F00394A9D /* Back__Icon.png */; };
+		004DD1E81AB028B000394A9D /* ButtomToolView.m in Sources */ = {isa = PBXBuildFile; fileRef = 004DD1E71AB028B000394A9D /* ButtomToolView.m */; };
 		00572C801AA4003D0041D451 /* loading_image_all.png in Resources */ = {isa = PBXBuildFile; fileRef = 00572C7F1AA4003D0041D451 /* loading_image_all.png */; };
 		00572C841AA405F50041D451 /* loading_roll_image.png in Resources */ = {isa = PBXBuildFile; fileRef = 00572C811AA405F50041D451 /* loading_roll_image.png */; };
 		00572C851AA405F50041D451 /* loading_roll_image@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 00572C821AA405F50041D451 /* loading_roll_image@2x.png */; };
@@ -135,7 +137,6 @@
 		00572CC21AA44FBE0041D451 /* MovieCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00572CC11AA44FBE0041D451 /* MovieCollectionViewCell.m */; };
 		005AFB5A1AA5F41900D80CFB /* CommonStageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 005AFB591AA5F41900D80CFB /* CommonStageCell.m */; };
 		005C5B431AA9622100208782 /* MovieDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 005C5B421AA9622100208782 /* MovieDetailViewController.m */; };
-		006727591AAEC37600DE817D /* Back_Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 006727581AAEC37600DE817D /* Back_Icon.png */; };
 		006739531AA491250087C240 /* MJRefresh.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 006739431AA491250087C240 /* MJRefresh.bundle */; };
 		006739541AA491250087C240 /* MJRefreshBaseView.m in Sources */ = {isa = PBXBuildFile; fileRef = 006739461AA491250087C240 /* MJRefreshBaseView.m */; };
 		006739551AA491250087C240 /* MJRefreshConst.m in Sources */ = {isa = PBXBuildFile; fileRef = 006739481AA491250087C240 /* MJRefreshConst.m */; };
@@ -402,6 +403,9 @@
 		000B09801AA3029800B8D13A /* Weibo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Weibo@2x.png"; sourceTree = "<group>"; };
 		000B09811AA3029800B8D13A /* Weibo@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Weibo@3x.png"; sourceTree = "<group>"; };
 		000B09E31AA30CB900B8D13A /* loginoutbackgroundcolor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loginoutbackgroundcolor.png; sourceTree = "<group>"; };
+		004DD1E41AAFDD0F00394A9D /* Back__Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Back__Icon.png; sourceTree = "<group>"; };
+		004DD1E61AB028B000394A9D /* ButtomToolView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ButtomToolView.h; sourceTree = "<group>"; };
+		004DD1E71AB028B000394A9D /* ButtomToolView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ButtomToolView.m; sourceTree = "<group>"; };
 		00572C7F1AA4003D0041D451 /* loading_image_all.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loading_image_all.png; sourceTree = "<group>"; };
 		00572C811AA405F50041D451 /* loading_roll_image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loading_roll_image.png; sourceTree = "<group>"; };
 		00572C821AA405F50041D451 /* loading_roll_image@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "loading_roll_image@2x.png"; sourceTree = "<group>"; };
@@ -415,7 +419,6 @@
 		005AFB591AA5F41900D80CFB /* CommonStageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonStageCell.m; sourceTree = "<group>"; };
 		005C5B411AA9622100208782 /* MovieDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MovieDetailViewController.h; path = ViewControllers/MovieDetailViewController.h; sourceTree = SOURCE_ROOT; };
 		005C5B421AA9622100208782 /* MovieDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MovieDetailViewController.m; path = ViewControllers/MovieDetailViewController.m; sourceTree = SOURCE_ROOT; };
-		006727581AAEC37600DE817D /* Back_Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Back_Icon.png; sourceTree = "<group>"; };
 		006739431AA491250087C240 /* MJRefresh.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = MJRefresh.bundle; sourceTree = "<group>"; };
 		006739441AA491250087C240 /* MJRefresh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJRefresh.h; sourceTree = "<group>"; };
 		006739451AA491250087C240 /* MJRefreshBaseView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJRefreshBaseView.h; sourceTree = "<group>"; };
@@ -725,7 +728,7 @@
 		000B08FB1AA2EB8C00B8D13A /* Images */ = {
 			isa = PBXGroup;
 			children = (
-				006727581AAEC37600DE817D /* Back_Icon.png */,
+				004DD1E41AAFDD0F00394A9D /* Back__Icon.png */,
 				000500441AA70ABF00691DF4 /* tag_like_icon.png */,
 				000500451AA70ABF00691DF4 /* tag_like_icon@2x.png */,
 				000500461AA70ABF00691DF4 /* tag_like_icon@3x.png */,
@@ -1064,6 +1067,8 @@
 				009A27BD1AA6F7520001690C /* MarkView.m */,
 				4076AEFF1AA9B0D2006DC466 /* StageView.h */,
 				4076AF001AA9B0D2006DC466 /* StageView.m */,
+				004DD1E61AB028B000394A9D /* ButtomToolView.h */,
+				004DD1E71AB028B000394A9D /* ButtomToolView.m */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -1559,7 +1564,6 @@
 				00AA54431AA2C525004096F8 /* UMSCommentDetailController.xib in Resources */,
 				000B09DE1AA3029800B8D13A /* Wechat@2x.png in Resources */,
 				000B09E41AA30CB900B8D13A /* loginoutbackgroundcolor.png in Resources */,
-				006727591AAEC37600DE817D /* Back_Icon.png in Resources */,
 				000B09B61AA3029800B8D13A /* movie_tab_butten（gray）.png in Resources */,
 				000B099C1AA3029800B8D13A /* login out@3x.png in Resources */,
 				00AA544F1AA2C526004096F8 /* TencentOpenApi_IOS_Bundle.bundle in Resources */,
@@ -1592,6 +1596,7 @@
 				000B09D71AA3029800B8D13A /* three switch.png in Resources */,
 				000B09C31AA3029800B8D13A /* personal_page_icon@3x.png in Resources */,
 				000B09BA1AA3029800B8D13A /* movie_tab_butten@3x.png in Resources */,
+				004DD1E51AAFDD0F00394A9D /* Back__Icon.png in Resources */,
 				000B09C51AA3029800B8D13A /* Qzone@2x.png in Resources */,
 				00AA53171AA2C3F4004096F8 /* LaunchScreen.xib in Resources */,
 				000B09941AA3029800B8D13A /* like.png in Resources */,
@@ -1677,6 +1682,7 @@
 				00AA543F1AA2C525004096F8 /* UIRefreshControl+AFNetworking.m in Sources */,
 				00AA542F1AA2C525004096F8 /* SDWebImageManager.m in Sources */,
 				00AA541C1AA2C525004096F8 /* AFURLSessionManager.m in Sources */,
+				004DD1E81AB028B000394A9D /* ButtomToolView.m in Sources */,
 				00AA54191AA2C525004096F8 /* AFURLConnectionOperation.m in Sources */,
 				00AA54131AA2C525004096F8 /* NSDateFunction.m in Sources */,
 				00AA54161AA2C525004096F8 /* AFHTTPSessionManager.m in Sources */,
