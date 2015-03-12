@@ -36,6 +36,7 @@
     //底部的弹出视图
     UIView   *buttomView;
     NSDictionary  *stageInfo;
+    int  zanNum;
 }
 #pragma mark  ------外部方法
 //设置buttomview 的值

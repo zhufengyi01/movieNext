@@ -39,7 +39,7 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     self.navigationController.navigationBar.hidden=NO;
-//    self.navigationController.navigationBar.alpha=1;
+  self.navigationController.navigationBar.alpha=1;
 //    self.navigationController.navigationBar.translucent=NO;
 //
     self.tabBarController.tabBar.hidden=NO;
@@ -460,7 +460,6 @@
     if (button.tag==10000) {
         ///点击了头像//进入个人页面
         NSLog(@"点击头像  微博dict  ＝====%@ ======出现的stageinfo  ＝＝＝＝＝＝%@",weiboDict,stageInfoDict);
-      
         
     }
 #pragma mark     -----------分享
@@ -495,6 +494,8 @@
         NSLog(@" 点赞  微博dict  ＝====%@",weiboDict);
         //获取赞的数量
         //点赞执行这个方法
+        //int   zanNum=[[weiboDict objectForKey:@"ups"]  intValue];
+        //_mymarkView.ZanNumLable.text=[NSString stringWithFormat:@"%d",zanNum+1];
         [self LikeRequstData:weiboDict StageInfo:stageInfoDict];
         //点赞成功后，要把赞设置为
         
@@ -515,8 +516,8 @@
     self.tabBarController.tabBar.hidden=NO;
     if (_toolBar) {
         [_toolBar HidenButtomView];
-        [_toolBar performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.5];
-        //[_toolBar removeFromSuperview];
+       //  [_toolBar performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.5];
+        [_toolBar removeFromSuperview];
         
     }
 

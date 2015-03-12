@@ -12,7 +12,6 @@
 //标签的点击事件，对stageview 提供接口，传递微博对象
 -(void)MarkViewClick:(NSDictionary  *) weiboDict withMarkView:(id) markView;
 @end
-
 @interface MarkView : UIView
 {
     CGRect  m_frame;
