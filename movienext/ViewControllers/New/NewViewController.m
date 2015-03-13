@@ -522,7 +522,7 @@
             //先匹配stageid
             int  stageId;
             int  weiboId=[[weiboDict  objectForKey:@"id"]  intValue];
-            if([stageInfoDict  objectForKey:@"id"])
+           /* if([stageInfoDict  objectForKey:@"id"])
             {
                 stageId= [[stageInfoDict  objectForKey:@"id"] intValue];
                
@@ -552,7 +552,7 @@
                     
                 }
                 
-            }
+            }*/
             
             
         }else if(segment.selectedSegmentIndex==1)
