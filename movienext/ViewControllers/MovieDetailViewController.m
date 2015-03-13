@@ -252,7 +252,7 @@
         }
         
         //headerV.titleLab.text = @"头部视图";
-        reusableView = headerV;
+        reusableView = headerV;        
     }
     return reusableView;
 }

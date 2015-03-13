@@ -44,7 +44,7 @@
 }
 -(void)creatUI
 {
-    UILabel  *TitleLable=[[UILabel alloc] init];//initWithFrame:CGRectMake(100, 150, 100, 80)]
+   /* UILabel  *TitleLable=[[UILabel alloc] init];//initWithFrame:CGRectMake(100, 150, 100, 80)]
     TitleLable.frame=CGRectMake((kDeviceWidth-100)/2, 60, 100, 80);
     TitleLable.text=@"影记";
     TitleLable.textColor=[UIColor redColor];
@@ -59,13 +59,19 @@
       //  make.centerX.equalTo(self.view.mas_centerX);  //水平居中
 
     //}];
-
+    
     UILabel  *DetailTitleLable=[[UILabel alloc]initWithFrame:CGRectMake((kDeviceWidth-100)/2, 100, 100, 60)];
     DetailTitleLable.text=@"看完电影上影记";
     DetailTitleLable.textColor=[UIColor redColor];
     DetailTitleLable.textAlignment=NSTextAlignmentCenter;
     DetailTitleLable.font=[UIFont boldSystemFontOfSize:14];
     [self.view addSubview:DetailTitleLable];
+    */
+    
+    UIImageView   *logoImageView=[[UIImageView alloc]initWithFrame:CGRectMake((kDeviceWidth-180)/2, 125, 180, 125)];
+    logoImageView.image=[UIImage imageNamed:@"first_screen_slogan.png"];
+    [self.view addSubview:logoImageView];
+    
     
     UIButton  *qqButton=[UIButton buttonWithType:UIButtonTypeCustom];
     qqButton.frame=CGRectMake(50, kDeviceHeight-220, kDeviceWidth-100, 40);
@@ -74,12 +80,12 @@
  
     [qqButton addTarget:self action:@selector(dealloginClick:) forControlEvents:UIControlEventTouchUpInside];
     qqButton.tag=1000;
-    [self.view addSubview:qqButton];
+    //[self.view addSubview:qqButton];
     
     UIButton  *weiboButton=[UIButton buttonWithType:UIButtonTypeCustom];
     weiboButton.frame=CGRectMake(50, kDeviceHeight-160, kDeviceWidth-100, 40);
-    [weiboButton setBackgroundImage:[UIImage imageNamed:@"login_button_sina －in.png"] forState:UIControlStateNormal];
-    [weiboButton setBackgroundImage:[UIImage imageNamed:@"login_button_sina.png"] forState:UIControlStateHighlighted];
+    [weiboButton setBackgroundImage:[UIImage imageNamed:@"login_button_sina.png"] forState:UIControlStateNormal];
+    [weiboButton setBackgroundImage:[UIImage imageNamed:@"login_button_sina －in.png"] forState:UIControlStateHighlighted];
     [weiboButton addTarget:self action:@selector(dealloginClick:) forControlEvents:UIControlEventTouchUpInside];
     weiboButton.tag=1001;
 
@@ -88,10 +94,10 @@
     
     
     UIButton  *weiChateButton=[UIButton buttonWithType:UIButtonTypeCustom];
-    weiChateButton.frame=CGRectMake(50, kDeviceHeight-100, kDeviceWidth-100, 40);
-    [weiChateButton setBackgroundImage:[UIImage imageNamed:@"login_button_sina －in.png"] forState:UIControlStateNormal];
-    [weiChateButton setBackgroundImage:[UIImage imageNamed:@"login_button_sina.png"] forState:UIControlStateHighlighted];
-    [weiChateButton setTitle:@"登陆" forState:UIControlStateNormal];
+    weiChateButton.frame=CGRectMake(50, kDeviceHeight-110, kDeviceWidth-100, 40);
+    [weiChateButton setBackgroundImage:[UIImage imageNamed:@"login_button_wechat.png"] forState:UIControlStateNormal];
+    [weiChateButton setBackgroundImage:[UIImage imageNamed:@"login_button_wechat_press.png"] forState:UIControlStateHighlighted];
+    //[weiChateButton setTitle:@"登陆" forState:UIControlStateNormal];
     [weiChateButton addTarget:self action:@selector(dealloginClick:) forControlEvents:UIControlEventTouchUpInside];
     weiChateButton.tag=1002;
     

@@ -164,6 +164,9 @@
                 }
                             }
             //每隔kTimeInterval时间显示一个动画
+            if (_timer) {
+                [_timer invalidate];
+            }
             _timer = [NSTimer scheduledTimerWithTimeInterval:kTimeInterval target:self selector:@selector( CircleshowAnimation) userInfo:nil repeats:YES];
         } completion:nil];
     }];
@@ -201,7 +204,9 @@
 
 //7.停止动画
 - (void)stopAnimation {
+    
     [_timer invalidate];
+    _timer=nil;
 }
 #pragma mark  ----
 #pragma mark   ---markViewDelegate 

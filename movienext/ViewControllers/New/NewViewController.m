@@ -463,7 +463,6 @@
 #pragma mark   -------- ButtomToolViewDelegate
 #pragma  mark  -------
 -(void)ToolViewHandClick:(UIButton *)button :(MarkView *)markView weiboDict:(NSDictionary *)weiboDict StageInfo:(NSDictionary *)stageInfoDict
-//-(void)ToolViewHandClick:(UIButton *)button :(MarkView *)markView weiboDict:(NSDictionary *)weiboDict
 {
     if (button.tag==10000) {
         ///点击了头像//进入个人页面
@@ -500,20 +499,22 @@
     {
         //改变赞的状态
         [_toolBar SetZanButtonSelected];
+        //把weibodict 复制给了_weiboDict
+        NSMutableDictionary   *_weiboDict=weiboDict;
 
         //点击了赞
-        NSLog(@" 点赞  微博dict  ＝====%@",weiboDict);
-        if ([[weiboDict  objectForKey:@"uped"]  intValue]==0) {///没有赞的话
-            [weiboDict setValue:@"1" forKey:@"uped"];
+        NSLog(@" 点赞  微博dict  ＝====%@",_weiboDict);
+        if ([[_weiboDict  objectForKey:@"uped"]  intValue]==0) {///没有赞的话
+            [_weiboDict setValue:@"1" forKey:@"uped"];
             int ups=[[weiboDict objectForKey:@"ups"] intValue];
             ups =ups+1;
-            [weiboDict setValue:[NSString stringWithFormat:@"%d",ups] forKey:@"ups"];
+            [_weiboDict setValue:[NSString stringWithFormat:@"%d",ups] forKey:@"ups"];
         }
         else  {
-            [weiboDict setValue:@"0" forKey:@"uped"];
-            int ups=[[weiboDict objectForKey:@"ups"] intValue];
+            [_weiboDict setValue:@"0" forKey:@"uped"];
+            int ups=[[_weiboDict objectForKey:@"ups"] intValue];
             ups =ups-1;
-            [weiboDict setValue:[NSString stringWithFormat:@"%d",ups] forKey:@"ups"];
+            [_weiboDict setValue:[NSString stringWithFormat:@"%d",ups] forKey:@"ups"];
         }
         //获取赞的数量
         //点赞执行这个方法
@@ -521,8 +522,8 @@
         if (segment.selectedSegmentIndex==0) {
             //先匹配stageid
             int  stageId;
-            int  weiboId=[[weiboDict  objectForKey:@"id"]  intValue];
-           /* if([stageInfoDict  objectForKey:@"id"])
+            int  weiboId=[[_weiboDict  objectForKey:@"id"]  intValue];
+            if([stageInfoDict  objectForKey:@"id"])
             {
                 stageId= [[stageInfoDict  objectForKey:@"id"] intValue];
                
@@ -538,12 +539,13 @@
                             //weibo id == weiboId
                             if ([[[weibosArray  objectAtIndex:j] objectForKey:@"id"]  intValue]==weiboId) {
                                 
+                              //  _hotDataArray
                              //   if ([[weiboDict objectForKey:@"uped"] intValue]==0) {
                                     // 替代了字典里面一个数据,
 #warning   替代整个weibo的字典
                                //     [[[weibosArray  objectAtIndex:j] objectForKey:@"uped"] setObject:@"1" forKey:@"id"];
                                 //替代原来的数组
-                                [weibosArray replaceObjectAtIndex:j withObject:weiboDict];
+                                //[weibosArray replaceObjectAtIndex:j withObject:weiboDict];
                             
                             }
                         }
@@ -552,7 +554,7 @@
                     
                 }
                 
-            }*/
+            }
             
             
         }else if(segment.selectedSegmentIndex==1)

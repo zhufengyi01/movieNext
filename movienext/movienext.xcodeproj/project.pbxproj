@@ -52,9 +52,6 @@
 		000B09971AA3029800B8D13A /* liked.png in Resources */ = {isa = PBXBuildFile; fileRef = 000B09361AA3029800B8D13A /* liked.png */; };
 		000B09981AA3029800B8D13A /* liked@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 000B09371AA3029800B8D13A /* liked@2x.png */; };
 		000B09991AA3029800B8D13A /* liked@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 000B09381AA3029800B8D13A /* liked@3x.png */; };
-		000B099A1AA3029800B8D13A /* login out.png in Resources */ = {isa = PBXBuildFile; fileRef = 000B09391AA3029800B8D13A /* login out.png */; };
-		000B099B1AA3029800B8D13A /* login out@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 000B093A1AA3029800B8D13A /* login out@2x.png */; };
-		000B099C1AA3029800B8D13A /* login out@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 000B093B1AA3029800B8D13A /* login out@3x.png */; };
 		000B099D1AA3029800B8D13A /* login_button_qq －in.png in Resources */ = {isa = PBXBuildFile; fileRef = 000B093C1AA3029800B8D13A /* login_button_qq －in.png */; };
 		000B099E1AA3029800B8D13A /* login_button_qq －in@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 000B093D1AA3029800B8D13A /* login_button_qq －in@2x.png */; };
 		000B099F1AA3029800B8D13A /* login_button_qq －in@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 000B093E1AA3029800B8D13A /* login_button_qq －in@3x.png */; };
@@ -144,6 +141,12 @@
 		003E75011AB1A29F0080F7A8 /* ic_menu_person_default@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 003E74E61AB1A29F0080F7A8 /* ic_menu_person_default@3x.png */; };
 		003E75031AB1A29F0080F7A8 /* ic_menu_share_default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 003E74E81AB1A29F0080F7A8 /* ic_menu_share_default@2x.png */; };
 		003E75041AB1A29F0080F7A8 /* ic_menu_share_default@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 003E74E91AB1A29F0080F7A8 /* ic_menu_share_default@3x.png */; };
+		0043E9641AB2DAF500209C3A /* login_button_wechat_press.png in Resources */ = {isa = PBXBuildFile; fileRef = 0043E95E1AB2DAF500209C3A /* login_button_wechat_press.png */; };
+		0043E9651AB2DAF500209C3A /* login_button_wechat_press@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0043E95F1AB2DAF500209C3A /* login_button_wechat_press@2x.png */; };
+		0043E9661AB2DAF500209C3A /* login_button_wechat_press@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0043E9601AB2DAF500209C3A /* login_button_wechat_press@3x.png */; };
+		0043E9671AB2DAF500209C3A /* login_button_wechat.png in Resources */ = {isa = PBXBuildFile; fileRef = 0043E9611AB2DAF500209C3A /* login_button_wechat.png */; };
+		0043E9681AB2DAF500209C3A /* login_button_wechat@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0043E9621AB2DAF500209C3A /* login_button_wechat@2x.png */; };
+		0043E9691AB2DAF500209C3A /* login_button_wechat@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0043E9631AB2DAF500209C3A /* login_button_wechat@3x.png */; };
 		004DD1E51AAFDD0F00394A9D /* Back__Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 004DD1E41AAFDD0F00394A9D /* Back__Icon.png */; };
 		004DD1E81AB028B000394A9D /* ButtomToolView.m in Sources */ = {isa = PBXBuildFile; fileRef = 004DD1E71AB028B000394A9D /* ButtomToolView.m */; };
 		00572C801AA4003D0041D451 /* loading_image_all.png in Resources */ = {isa = PBXBuildFile; fileRef = 00572C7F1AA4003D0041D451 /* loading_image_all.png */; };
@@ -353,9 +356,6 @@
 		000B09361AA3029800B8D13A /* liked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = liked.png; sourceTree = "<group>"; };
 		000B09371AA3029800B8D13A /* liked@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "liked@2x.png"; sourceTree = "<group>"; };
 		000B09381AA3029800B8D13A /* liked@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "liked@3x.png"; sourceTree = "<group>"; };
-		000B09391AA3029800B8D13A /* login out.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login out.png"; sourceTree = "<group>"; };
-		000B093A1AA3029800B8D13A /* login out@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login out@2x.png"; sourceTree = "<group>"; };
-		000B093B1AA3029800B8D13A /* login out@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login out@3x.png"; sourceTree = "<group>"; };
 		000B093C1AA3029800B8D13A /* login_button_qq －in.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_button_qq －in.png"; sourceTree = "<group>"; };
 		000B093D1AA3029800B8D13A /* login_button_qq －in@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_button_qq －in@2x.png"; sourceTree = "<group>"; };
 		000B093E1AA3029800B8D13A /* login_button_qq －in@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_button_qq －in@3x.png"; sourceTree = "<group>"; };
@@ -445,6 +445,12 @@
 		003E74E61AB1A29F0080F7A8 /* ic_menu_person_default@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_menu_person_default@3x.png"; sourceTree = "<group>"; };
 		003E74E81AB1A29F0080F7A8 /* ic_menu_share_default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_menu_share_default@2x.png"; sourceTree = "<group>"; };
 		003E74E91AB1A29F0080F7A8 /* ic_menu_share_default@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_menu_share_default@3x.png"; sourceTree = "<group>"; };
+		0043E95E1AB2DAF500209C3A /* login_button_wechat_press.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = login_button_wechat_press.png; sourceTree = "<group>"; };
+		0043E95F1AB2DAF500209C3A /* login_button_wechat_press@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_button_wechat_press@2x.png"; sourceTree = "<group>"; };
+		0043E9601AB2DAF500209C3A /* login_button_wechat_press@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_button_wechat_press@3x.png"; sourceTree = "<group>"; };
+		0043E9611AB2DAF500209C3A /* login_button_wechat.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = login_button_wechat.png; sourceTree = "<group>"; };
+		0043E9621AB2DAF500209C3A /* login_button_wechat@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_button_wechat@2x.png"; sourceTree = "<group>"; };
+		0043E9631AB2DAF500209C3A /* login_button_wechat@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_button_wechat@3x.png"; sourceTree = "<group>"; };
 		004DD1E41AAFDD0F00394A9D /* Back__Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Back__Icon.png; sourceTree = "<group>"; };
 		004DD1E61AB028B000394A9D /* ButtomToolView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ButtomToolView.h; sourceTree = "<group>"; };
 		004DD1E71AB028B000394A9D /* ButtomToolView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ButtomToolView.m; sourceTree = "<group>"; };
@@ -776,6 +782,12 @@
 		000B08FB1AA2EB8C00B8D13A /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				0043E95E1AB2DAF500209C3A /* login_button_wechat_press.png */,
+				0043E95F1AB2DAF500209C3A /* login_button_wechat_press@2x.png */,
+				0043E9601AB2DAF500209C3A /* login_button_wechat_press@3x.png */,
+				0043E9611AB2DAF500209C3A /* login_button_wechat.png */,
+				0043E9621AB2DAF500209C3A /* login_button_wechat@2x.png */,
+				0043E9631AB2DAF500209C3A /* login_button_wechat@3x.png */,
 				409390491AB2D2C700FABA50 /* first_screen_slogan@2x.png */,
 				4093904A1AB2D2C700FABA50 /* first_screen_slogan@3x.png */,
 				4093904B1AB2D2C700FABA50 /* first_screen_slogan.png */,
@@ -837,9 +849,6 @@
 				000B09361AA3029800B8D13A /* liked.png */,
 				000B09371AA3029800B8D13A /* liked@2x.png */,
 				000B09381AA3029800B8D13A /* liked@3x.png */,
-				000B09391AA3029800B8D13A /* login out.png */,
-				000B093A1AA3029800B8D13A /* login out@2x.png */,
-				000B093B1AA3029800B8D13A /* login out@3x.png */,
 				000B093C1AA3029800B8D13A /* login_button_qq －in.png */,
 				000B093D1AA3029800B8D13A /* login_button_qq －in@2x.png */,
 				000B093E1AA3029800B8D13A /* login_button_qq －in@3x.png */,
@@ -1592,6 +1601,7 @@
 				000B09A01AA3029800B8D13A /* login_button_qq.png in Resources */,
 				000500481AA70ABF00691DF4 /* tag_like_icon@2x.png in Resources */,
 				000B09161AA2EB8C00B8D13A /* tabbar_icon_noti@2x.png in Resources */,
+				0043E9661AB2DAF500209C3A /* login_button_wechat_press@3x.png in Resources */,
 				00572C8A1AA4299C0041D451 /* tabbar_backgroud_color.png in Resources */,
 				000B09851AA3029800B8D13A /* feed_tab_butten.png in Resources */,
 				000B09991AA3029800B8D13A /* liked@3x.png in Resources */,
@@ -1627,6 +1637,7 @@
 				00572C851AA405F50041D451 /* loading_roll_image@2x.png in Resources */,
 				000B09891AA3029800B8D13A /* feed_tab_butten@2x.png in Resources */,
 				003E74EC1AB1A29F0080F7A8 /* btn_add_default@3x.png in Resources */,
+				0043E9691AB2DAF500209C3A /* login_button_wechat@3x.png in Resources */,
 				000B09B11AA3029800B8D13A /* me_tab_butten@3x.png in Resources */,
 				000B09BC1AA3029800B8D13A /* notice_tab_butten（gray）.png in Resources */,
 				000B09CB1AA3029800B8D13A /* setting@2x.png in Resources */,
@@ -1647,8 +1658,8 @@
 				003E74FB1AB1A29F0080F7A8 /* btn_share_select@3x.png in Resources */,
 				409390481AB2C15A00FABA50 /* tab_switch@3x.png in Resources */,
 				000B09B61AA3029800B8D13A /* movie_tab_butten（gray）.png in Resources */,
-				000B099C1AA3029800B8D13A /* login out@3x.png in Resources */,
 				00AA544F1AA2C526004096F8 /* TencentOpenApi_IOS_Bundle.bundle in Resources */,
+				0043E9681AB2DAF500209C3A /* login_button_wechat@2x.png in Resources */,
 				009A27BA1AA6DBDA0001690C /* movie_icon_backgroud_color@2x.png in Resources */,
 				000B09D91AA3029800B8D13A /* three switch@3x.png in Resources */,
 				00AA54481AA2C525004096F8 /* UMSLoginViewController.xib in Resources */,
@@ -1679,6 +1690,7 @@
 				003E75011AB1A29F0080F7A8 /* ic_menu_person_default@3x.png in Resources */,
 				000B09D71AA3029800B8D13A /* three switch.png in Resources */,
 				000B09C31AA3029800B8D13A /* personal_page_icon@3x.png in Resources */,
+				0043E9671AB2DAF500209C3A /* login_button_wechat.png in Resources */,
 				000B09BA1AA3029800B8D13A /* movie_tab_butten@3x.png in Resources */,
 				004DD1E51AAFDD0F00394A9D /* Back__Icon.png in Resources */,
 				000B09C51AA3029800B8D13A /* Qzone@2x.png in Resources */,
@@ -1725,8 +1737,10 @@
 				000B090B1AA2EB8C00B8D13A /* bg_qq_h@2x.png in Resources */,
 				00AA54491AA2C525004096F8 /* UMSnsAccountViewController.xib in Resources */,
 				000B09AC1AA3029800B8D13A /* me_tab_butten.png in Resources */,
+				0043E9651AB2DAF500209C3A /* login_button_wechat_press@2x.png in Resources */,
 				003E74EF1AB1A29F0080F7A8 /* btn_add_select@3x.png in Resources */,
 				000B09871AA3029800B8D13A /* feed_tab_butten（gray）@2x.png in Resources */,
+				0043E9641AB2DAF500209C3A /* login_button_wechat_press.png in Resources */,
 				003E74FA1AB1A29F0080F7A8 /* btn_share_select@2x.png in Resources */,
 				000B090E1AA2EB8C00B8D13A /* logo@2x.png in Resources */,
 				000B09931AA3029800B8D13A /* kind_swtich@3x.png in Resources */,
@@ -1735,9 +1749,7 @@
 				000B09831AA3029800B8D13A /* add@2x.png in Resources */,
 				00572C861AA405F50041D451 /* loading_roll_image@3x.png in Resources */,
 				00AA544A1AA2C525004096F8 /* UMSShareListController.xib in Resources */,
-				000B099B1AA3029800B8D13A /* login out@2x.png in Resources */,
 				000B09B81AA3029800B8D13A /* movie_tab_butten（gray）@3x.png in Resources */,
-				000B099A1AA3029800B8D13A /* login out.png in Resources */,
 				000B09951AA3029800B8D13A /* like@2x.png in Resources */,
 				000B09DC1AA3029800B8D13A /* three_swtich(gray)@3x.png in Resources */,
 				000B09C01AA3029800B8D13A /* notice_tab_butten@3x.png in Resources */,
@@ -2004,8 +2016,8 @@
 		00AA53271AA2C3F4004096F8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer: Wenliang Zhao (TCW76CZZEC)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Wenliang Zhao (TCW76CZZEC)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_STRICT_OBJC_MSGSEND = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2030,8 +2042,8 @@
 		00AA53281AA2C3F4004096F8 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer: Wenliang Zhao (TCW76CZZEC)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Wenliang Zhao (TCW76CZZEC)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_STRICT_OBJC_MSGSEND = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

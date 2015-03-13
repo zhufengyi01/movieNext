@@ -91,17 +91,20 @@
 {
     NSLog(@ "在头部设置的信息  =====%@",dict);
     
-    [movieLogoImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kUrlMoviePoster,[dict objectForKey:@"logo"]]] placeholderImage:[UIImage imageNamed:@"loading_image_all"]];
-    //设置头部的北京图片
-    // jpeg quality image data
-    float quality = 0.00001f;
-    // intensity of blurred
-    float blurred = 0.9f;  //这个参数控制透明度
-
-    NSData  *imageData=UIImageJPEGRepresentation(movieLogoImageView.image, quality);
-     UIImage *blurredImage=[[UIImage imageWithData:imageData] blurredImage:blurred];
-     bgImageView.image = blurredImage;
+    //[movieLogoImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kUrlMoviePoster,[dict objectForKey:@"logo"]]] placeholderImage:[UIImage imageNamed:@"loading_image_all"]];
     
+    [movieLogoImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kUrlMoviePoster,[dict objectForKey:@"logo"]]] placeholderImage:[UIImage imageNamed:@"loading_image_all"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+        //设置头部的北京图片
+        // jpeg quality image data
+        float quality = 0.00001f;
+        // intensity of blurred
+        float blurred = 0.9f;  //这个参数控制透明度
+        
+        NSData  *imageData=UIImageJPEGRepresentation(movieLogoImageView.image, quality);
+        UIImage *blurredImage=[[UIImage imageWithData:imageData] blurredImage:blurred];
+        bgImageView.image = blurredImage;
+    }];
+  
     titleLable.text=[NSString stringWithFormat:@"%@",[dict objectForKey:@"name"]];
     derectorLable.text=[NSString stringWithFormat:@"导演 :%@",[dict objectForKey:@"director"]];
     NSLog(@"导演 ＝＝＝＝＝＝＝xianshi ＝＝%@",[dict objectForKey:@"director"]);
