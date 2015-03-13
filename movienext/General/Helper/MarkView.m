@@ -25,7 +25,7 @@
     self.isSelected=NO;
     //左视图
     _LeftImageView =[[UIImageView alloc]initWithFrame:CGRectMake(0, 0,20, 20)];
-    _LeftImageView.layer.borderWidth=0.5;
+    _LeftImageView.layer.borderWidth=1;
     _LeftImageView.layer.cornerRadius=3;
     _LeftImageView.layer.masksToBounds=YES;
     _LeftImageView.layer.borderColor=[[UIColor whiteColor] CGColor];
@@ -61,7 +61,7 @@
     [super layoutSubviews];
     
     //头像
-    _LeftImageView.frame=CGRectMake(0, 0,20, 20);
+    _LeftImageView.frame=CGRectMake(0, 0, 23, 23);
     
     //右视图
     _rightView.frame=CGRectMake(23, 0,self.frame.size.width-23 , self.frame.size.height);

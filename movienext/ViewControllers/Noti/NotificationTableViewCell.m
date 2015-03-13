@@ -24,22 +24,22 @@
 }
 -(void)createUI
 {
-    logoButton =[ZCControl createButtonWithFrame:CGRectMake(15, 15, 30, 30) ImageName:@"" Target:self.superview Action:@selector(dealHeadClick:) Title:@""];
+    logoButton =[ZCControl createButtonWithFrame:CGRectMake(15, 10, 30, 30) ImageName:@"" Target:self.superview Action:@selector(dealHeadClick:) Title:@""];
     logoButton.layer.cornerRadius=8;
     logoButton.clipsToBounds=YES;
     [self.contentView addSubview:logoButton];
     
-    titleLable =[ZCControl createLabelWithFrame:CGRectMake(55, 10, kDeviceWidth-100-110, 30) Font:16 Text:@""];
+    titleLable =[ZCControl createLabelWithFrame:CGRectMake(55, 10, kDeviceWidth-100-110, 30) Font:14 Text:@""];
     titleLable.textColor=VBlue_color;
     titleLable.numberOfLines=0;
     titleLable.textAlignment=NSTextAlignmentLeft;
     [self.contentView addSubview:titleLable];
     
-    Zanlable=[ZCControl createLabelWithFrame:CGRectMake(0, 10, 0, 0) Font:16 Text:@"赞了你"];
+    Zanlable=[ZCControl createLabelWithFrame:CGRectMake(0, 10, 0, 0) Font:14 Text:@"赞了你"];
     Zanlable.textColor=VGray_color;
     [self.contentView addSubview:Zanlable];
     
-    dateLable=[ZCControl createLabelWithFrame:CGRectMake(55, 35, 120, 20) Font:16 Text:@"时间"];
+    dateLable=[ZCControl createLabelWithFrame:CGRectMake(55, 25, 120, 20) Font:12 Text:@"时间"];
     dateLable.textColor=VGray_color;
     dateLable.textAlignment=NSTextAlignmentLeft;
     [self.contentView addSubview:dateLable];
@@ -50,6 +50,13 @@
     [self.contentView addSubview:stageImage];
 
 }
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    
+        
+}
+
 -(void)setValueforCell:(NSDictionary  *) dict index: (NSInteger )index;
 
 {
@@ -68,8 +75,8 @@
     
     NSString  *nameStr=[dict objectForKey:@"username"];
     CGSize  Namesize =[nameStr boundingRectWithSize:CGSizeMake(kDeviceWidth-100-50, MAXFLOAT) options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes:[NSDictionary dictionaryWithObject:titleLable.font forKey:NSFontAttributeName] context:nil].size;
-    titleLable.frame=CGRectMake(titleLable.frame.origin.x, titleLable.frame.origin.y, titleLable.frame.size.width, Namesize.height);
-    Zanlable.frame=CGRectMake(titleLable.frame.origin.x+Namesize.width+10, Zanlable.frame.origin.y, 40, 20);
+    titleLable.frame=CGRectMake(titleLable.frame.origin.x, titleLable.frame.origin.y, Namesize.width, Namesize.height);
+    Zanlable.frame=CGRectMake(titleLable.frame.origin.x+Namesize.width+10, Zanlable.frame.origin.y, 60, 20);
     if ([dict objectForKey:@"create_time"]) {
         NSString  *dateStr=[Function friendlyTime:[dict objectForKey:@"create_time"]];
         dateLable.text=dateStr;

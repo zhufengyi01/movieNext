@@ -164,16 +164,23 @@
     lblBrief.frame=CGRectMake(ivAvatar.frame.origin.x+ivAvatar.frame.size.width+10,lblCount.frame.origin.y+lblCount.frame.size.height+10, kDeviceWidth-ivAvatar.frame.origin.x-ivAvatar.frame.size.width-20, Msize.height);
       [viewHeader addSubview:lblBrief];
     
-    NSArray *segmentedArray = [[NSArray alloc] initWithObjects:@"添加", @"赞", nil];
+    NSArray *segmentedArray = [[NSArray alloc] initWithObjects:@"添加", @"被赞", nil];
     segment = [[UISegmentedControl alloc] initWithItems:segmentedArray];
-    segment.frame = CGRectMake(kDeviceWidth/4, lblBrief.frame.origin.y+lblBrief.frame.size.height+10, kDeviceWidth/2, 30);
+    segment.frame = CGRectMake(0, lblBrief.frame.origin.y+lblBrief.frame.size.height+10, kDeviceWidth, 30);
     segment.selectedSegmentIndex = 0;
-    segment.backgroundColor = [UIColor clearColor];
     segment.tintColor = kAppTintColor;
+    segment.backgroundColor = [UIColor clearColor];
+    
+    NSDictionary* selectedTextAttributes = @{NSFontAttributeName:[UIFont boldSystemFontOfSize:14]
+                                             };
+    [segment setTitleTextAttributes:selectedTextAttributes forState:UIControlStateSelected];
+    NSDictionary* unselectedTextAttributes = @{NSFontAttributeName:[UIFont boldSystemFontOfSize:14]
+                                               };
+    [segment setTitleTextAttributes:unselectedTextAttributes forState:UIControlStateNormal];
     [segment addTarget:self action:@selector(segmentClick:) forControlEvents:UIControlEventValueChanged];
     [viewHeader addSubview:segment];
     
-    viewHeader.frame=CGRectMake(0, 0, kDeviceWidth,segment.frame.origin.y+segment.frame.size.height+10);
+    viewHeader.frame=CGRectMake(0, 0, kDeviceWidth,segment.frame.origin.y+segment.frame.size.height);
 
     [_tableView setTableHeaderView:viewHeader];
 }

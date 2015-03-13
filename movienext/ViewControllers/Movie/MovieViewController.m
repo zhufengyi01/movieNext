@@ -67,8 +67,9 @@
     UISearchBar  *search=[[UISearchBar alloc]initWithFrame:CGRectMake(20, 10, kDeviceWidth-40, 28)];
     search.placeholder=@"搜索电影";
     search.delegate=self;
+    search.searchBarStyle = UISearchBarStyleMinimal;
     //search.barStyle=UIBarStyleDefault;
-    //search.barTintColor=VBlue_color;
+    //search.barTintColor=VGray_color;
     //search.alpha=0.3;
      search.backgroundColor=[UIColor clearColor];
 //    [[search.subviews objectAtIndex:0]removeFromSuperview];
@@ -79,9 +80,8 @@
 -(void)createSegmentView
 {
     UIImageView   *TopImageView=[[UIImageView alloc]initWithFrame:CGRectMake(0,0, kDeviceWidth, 30)];
-    TopImageView.image=[UIImage imageNamed:@"kind_swtich.png"];
+    TopImageView.image=[UIImage imageNamed:@"tab_switch.png"];
     [self.view addSubview:TopImageView];
-    
 }
 -(void)creatLoadView
 {
@@ -101,7 +101,7 @@
     layout.minimumInteritemSpacing=10; //cell之间左右的
     layout.minimumLineSpacing=10;      //cell上下间隔
     //layout.itemSize=CGSizeMake(80,140);  //cell的大小
-    layout.sectionInset=UIEdgeInsetsMake(20, 10, 10, 10); //整个偏移量 上左下右
+    layout.sectionInset=UIEdgeInsetsMake(10, 10, 10, 10); //整个偏移量 上左下右
     
     _myConllectionView =[[UICollectionView alloc]initWithFrame:CGRectMake(0, 30,kDeviceWidth, kDeviceHeight-30-kHeightNavigation-kHeigthTabBar) collectionViewLayout:layout];
     _myConllectionView.backgroundColor=View_BackGround;
