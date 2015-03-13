@@ -103,8 +103,6 @@
     }
    /// NSLog(@"   ==========用户信息===body count %d   zanCount ===%d   signatuer ===%@,头像 =====%@",BodyConut,ZanCount,signature,    userCenter.avatar);
     
-
-    
     UIView *viewHeader = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, 130)];
     viewHeader.backgroundColor =View_BackGround;
     
@@ -216,7 +214,10 @@
 - (void)requestData{
 #warning  这里需要替换用户id
     UserDataCenter  *userCenter=[UserDataCenter shareInstance];
-    NSDictionary *parameters = @{@"user_id":@"18", @"page":[NSString stringWithFormat:@"%d",page], @"author_id":@"54"};
+    if ( !_user_id ) {
+        _user_id = userCenter.user_id;
+    }
+    NSDictionary *parameters = @{@"user_id":_user_id, @"page":[NSString stringWithFormat:@"%d",page], @"author_id":@"54"};
     NSString * section;
     if (segment.selectedSegmentIndex==1) {  // 赞过的
         section=@"weibo/upedListByUserId";

@@ -16,6 +16,7 @@
 //导入App delegate
 #import "AppDelegate.h"
 #import "NotificationTableViewCell.h"
+#import "MyViewController.h"
 //导入功能类
 #import "Function.h"
 #import "LoadingView.h"
@@ -176,7 +177,13 @@
 //这个方法
 -(void)dealHeadClick:(UIButton  *)button
 {
-    
+    NSLog(@"button.tag = %ld", button.tag);
+    MyViewController  *myVC=[[MyViewController alloc]init];
+    NSDictionary *dict = [_dataArray objectAtIndex:button.tag-6000];
+    myVC.user_id = [dict valueForKey:@"user_id"];
+    NSLog(@"dict = %@", dict);
+    NSLog(@"dict.user_id = %@", [dict valueForKey:@"user_id"]);
+    [self.navigationController pushViewController:myVC animated:NO];
     
 }
 
