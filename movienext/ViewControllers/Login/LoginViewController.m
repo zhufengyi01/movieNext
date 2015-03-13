@@ -19,6 +19,7 @@
 #import "AFNetworking.h"
 #import "Function.h"
 #import "UserDataCenter.h"
+#import "UMSocialWechatHandler.h"
 
 #define kSegueLoginToIndex @"LoginToIndex"
 
@@ -84,6 +85,19 @@
 
     [self.view addSubview:weiboButton];
     
+    
+    
+    UIButton  *weiChateButton=[UIButton buttonWithType:UIButtonTypeCustom];
+    weiChateButton.frame=CGRectMake(50, kDeviceHeight-100, kDeviceWidth-100, 40);
+    [weiChateButton setBackgroundImage:[UIImage imageNamed:@"login_button_sina －in.png"] forState:UIControlStateNormal];
+    [weiChateButton setBackgroundImage:[UIImage imageNamed:@"login_button_sina.png"] forState:UIControlStateHighlighted];
+    [weiChateButton setTitle:@"登陆" forState:UIControlStateNormal];
+    [weiChateButton addTarget:self action:@selector(dealloginClick:) forControlEvents:UIControlEventTouchUpInside];
+    weiChateButton.tag=1002;
+    
+    [self.view addSubview:weiChateButton];
+
+    
 }
 -(void)dealloginClick:(UIButton *) btn
 {
@@ -102,6 +116,11 @@
 
         [self loginSocialPlatformWithName];
     }
+    else if (btn.tag==1002)
+    {
+        ssoName=UMShareToWechatSession;
+        [self loginSocialPlatformWithName];
+    }
 }
 /**
  *  用SOS登录
@@ -115,26 +134,44 @@
         if (response.responseCode == UMSResponseCodeSuccess) {
             [[UMSocialDataService defaultDataService] requestSnsInformation:ssoName completion:^(UMSocialResponseEntity *response) {
                 if (response.responseCode == UMSResponseCodeSuccess) {
+                    NSLog(@"====  weixxin  =response ======%@",[response valueForKey:@"data"]);
                     NSDictionary *data = [response valueForKey:@"data"];
                     NSString * uid            = [data valueForKey:@"uid"];
+
                     NSString *description    = [data valueForKey:@"description"];
                     NSString *profile_image_url = [data valueForKey:@"profile_image_url"];
                     NSString *screen_name    = [data valueForKey:@"screen_name"];
                     NSString *access_token   = [data valueForKey:@"access_token"];
-                    
                     NSString *gender = [[data valueForKeyPath:@"gender"] isKindOfClass:[NSString class]] ? [data valueForKey:@"gender"] : [[data valueForKey:@"gender"] stringValue];
                     gender = [gender isEqualToString:@"男"] ? @"1" : ([gender isEqualToString:@"女"] ? @"0" : gender);
                     NSString *verified = [data valueForKeyPath:@"verified"];
+                     if ([ssoName isEqualToString:UMShareToWechatSession]) {
+                       uid =[data valueForKey:@"openid"];
+                         
+                    }
+
+                    
                     
                     NSMutableDictionary * parameters = [NSMutableDictionary dictionaryWithCapacity:0];
                     [parameters setObject:screen_name ? screen_name : @""  forKey:@"username"];
                     [parameters setObject:uid ? uid : @"" forKey:@"weiboId"];
+                    if ([ssoName isEqualToString:UMShareToWechatSession]) {
+                        [parameters setObject:[data objectForKey:@"openid"] forKey:@"weiboId"];
+                    }
                     [parameters setObject:profile_image_url ? profile_image_url : @"" forKey:@"profile_image_url"];
                     [parameters setObject:access_token ? access_token : @"" forKey:@"accessToKen"];
+                    if (![ssoName isEqualToString:UMShareToWechatSession]) {
                     [parameters setObject:description forKey:@"description"];
+                    }
                     [parameters setObject:ssoName forKey:@"bindtype"];
                     [parameters setObject:gender forKey:@"gender"];
-                    [parameters setObject:verified forKey:@"verified"];
+                    if (![ssoName isEqualToString:UMShareToWechatSession]) {
+                        [parameters setObject:verified forKey:@"verified"];
+
+                    }
+                    
+                    NSLog(@"打印参数=== weixin =======%@",parameters);
+                    
                     
                     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
                     [manager POST:[NSString stringWithFormat:@"%@/user/login", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {

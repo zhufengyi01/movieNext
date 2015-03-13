@@ -515,7 +515,6 @@
             ups =ups-1;
             [weiboDict setValue:[NSString stringWithFormat:@"%d",ups] forKey:@"ups"];
         }
-        
         //获取赞的数量
         //点赞执行这个方法
         //先去改变数组的内容
@@ -560,14 +559,10 @@
         {
             
         }
-        
-        
+    
         //发送到服务器
         [self LikeRequstData:weiboDict StageInfo:stageInfoDict];
         //点赞成功后，要把赞设置为
-        
-        
-        
     }
 
     

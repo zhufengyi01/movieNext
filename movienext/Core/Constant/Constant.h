@@ -61,10 +61,10 @@
 #define kShowTimeOffset 0.7  // 淡入时间
 #define kHidenTimeOffset 1.0  //淡出时间
 
-
 #define kUserKey @"userinfo"  ///用户信息
 
-
+#define  kWeiChatKey  wxf2ee2163c0aceaa0
+#define  kWeiChatSecret ce1e16a6fa8b594e614eda18903cd22c
 //weibo  MarkView大小控制
 //坐标图片的大小控制
 
