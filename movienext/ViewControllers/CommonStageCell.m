@@ -85,7 +85,7 @@
     
     
     leftButtomButton=[UIButton buttonWithType:UIButtonTypeCustom];
-    leftButtomButton.frame=CGRectMake(10, 8, 100, 30);
+    leftButtomButton.frame=CGRectMake(10, 10, 100, 26);
     [leftButtomButton setBackgroundImage:[[UIImage imageNamed:@"movie_icon_backgroud_color.png"]stretchableImageWithLeftCapWidth:10 topCapHeight:10] forState:UIControlStateNormal];
     [leftButtomButton addTarget:self.superview action:@selector(dealMovieButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     [leftButtomButton setTitleColor:VGray_color forState:UIControlStateNormal];
@@ -93,16 +93,18 @@
     leftButtomButton.titleLabel.font = [UIFont systemFontOfSize:13];
     [BgView2 addSubview:leftButtomButton];
     
-    MovieLogoImageView=[[UIImageView alloc]initWithFrame:CGRectMake(0,0,30, 30)];
+    MovieLogoImageView=[[UIImageView alloc]initWithFrame:CGRectMake(0,0,30, 26)];
     MovieLogoImageView.layer.cornerRadius=5;
     MovieLogoImageView.layer.masksToBounds = YES;
     [leftButtomButton addSubview:MovieLogoImageView];
     
     
-    ScreenButton =[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-140,10,60,25) ImageName:@"screen_shot share.png" Target:self.superview Action:@selector(ScreenButtonClick:) Title:@""];
+    ScreenButton =[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-140,10,60,26) ImageName:@"btn_share_default.png" Target:self.superview Action:@selector(ScreenButtonClick:) Title:@""];
+    [ScreenButton setBackgroundImage:[UIImage imageNamed:@"btn_share_select.png"] forState:UIControlStateHighlighted];
     [BgView2 addSubview:ScreenButton];
     
-    addMarkButton =[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-70,10,60,25) ImageName:@"add.png" Target:self.superview Action:@selector(addMarkButtonClick:) Title:@""];
+    addMarkButton =[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-70,10,60,26) ImageName:@"btn_add_default.png" Target:self.superview Action:@selector(addMarkButtonClick:) Title:@""];
+    [addMarkButton setBackgroundImage:[UIImage imageNamed:@"btn_add_select.png"] forState:UIControlStateHighlighted];
     [BgView2 addSubview:addMarkButton];
     
     
@@ -128,7 +130,6 @@
      if (_WeibosArray.count>0) {
          _stageView.WeibosArray = _WeibosArray;
      }
-    
     
     [_stageView setStageValue:dict];
     //这里计算hight 图片的高度，主要是为了计算toolbar 的y轴坐标，真实赋值是在stageview

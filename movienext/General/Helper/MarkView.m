@@ -23,9 +23,6 @@
     self.userInteractionEnabled=YES;
     //默认最开始没有选中
     self.isSelected=NO;
-
-    
-    
     //左视图
     _LeftImageView =[[UIImageView alloc]initWithFrame:CGRectMake(0, 0,20, 20)];
     _LeftImageView.layer.borderWidth=0.5;
@@ -100,7 +97,7 @@
         [UIView animateWithDuration:kShowTimeOffset delay:0 options:UIViewAnimationOptionCurveEaseIn animations:^{
             self.alpha=1.0;
         } completion:^(BOOL finished) {
-            //淡入之后过5秒再调用淡出动画
+            //淡入之后过5.7秒再调用淡出动画
             [self performSelector:@selector(easeOut) withObject:nil afterDelay:kStaticTimeOffset];
         }];
     }
@@ -119,29 +116,25 @@
 #pragma mark 处理气泡的点击事件
 -(void)dealTapWeiboClick:(UITapGestureRecognizer  *) tap
 {
-    //NSLog(@" 点击了 markview 的微博事件");
-    if (self.isSelected==YES) {  //是选中的状态,则把它变成没有选中的状态，//同时需要去把下面的工具栏给隐藏
+    if (self.isSelected==YES) {  //是选中的状态,则把它变成没有选中的状态
         NSLog(@" 取消选中 markview 的微博事件");
         // 设置可以自身动画了
-        self.isAnimation=YES;
-        self.isSelected=NO;
-       // [self setMaskViewNormal];
+       // self.isAnimation=YES;
+        //  取消选中状态
+        //self.isSelected=NO;
         [self CancelMarksetSelect];
-        if (self.delegate &&[self.delegate respondsToSelector:@selector(MarkViewClick:withMarkView:)]) {
+      //  if (self.delegate &&[self.delegate respondsToSelector:@selector(MarkViewClick:withMarkView:)]) {
             // 传递markview  当前的字典数据和的指针到了stageview。在stagview 中再传递到controller
-          [self.delegate MarkViewClick:_weiboDict withMarkView:self];
-        }
+        //  [self.delegate MarkViewClick:_weiboDict withMarkView:self];
+        //}
     }
     else if(self.isSelected==NO)  //是没有选中的状态，则把其中变成选中的状态
     {
-       // NSLog(@" 选中了 markview 的微博事件");
         // 设置不能自身动画了
-        self.isAnimation=NO;
-        self.isSelected=YES;
+        
         [self setMaskViewSelected];
-        if (self.delegate &&[self.delegate respondsToSelector:@selector(MarkViewClick:withMarkView:)]) {
+       if (self.delegate &&[self.delegate respondsToSelector:@selector(MarkViewClick:withMarkView:)]) {
             // 传递markview  当前的字典数据和的指针到了stageview。在stagview 中再传递到controller
-
             [self.delegate MarkViewClick:_weiboDict withMarkView:self];
         }
     }
@@ -150,26 +143,21 @@
 #pragma mark   -------
 #pragma mark   ------ 设置selected 和没有选中的两种状态
 #pragma mark   ------
-//正常的状态
-/*-(void)setMaskViewNormal
-{
-    //_rightView.backgroundColor=[UIColor clearColor];
-    _LeftImageView.layer.backgroundColor=[UIColor whiteColor].CGColor;
-    _rightView.backgroundColor=[[UIColor blackColor] colorWithAlphaComponent:0.7];
-    
-}*/
 //选中的状态的状态
 -(void)setMaskViewSelected
 {
-    NSLog(@"执行了markview 的  setMaskViewSelected");
+    self.isAnimation=NO;
+    self.isSelected=YES;
+    NSLog(@"  在 markview   中执行了markview 的  setMaskViewSelected");
     _LeftImageView.layer.borderColor=VBlue_color.CGColor;
     _rightView.layer.backgroundColor=VBlue_color.CGColor;
 }
 
 -(void)CancelMarksetSelect;
 {
-    NSLog(@"执行了markview 的  CancelMarksetSelect");
-
+    NSLog(@"在markview 中  执行了markview 的  CancelMarksetSelect");
+    self.isSelected=NO;
+    self.isAnimation=YES;
     _LeftImageView.layer.backgroundColor=[UIColor whiteColor].CGColor;
      _rightView.backgroundColor=[[UIColor blackColor] colorWithAlphaComponent:0.7];
 }
