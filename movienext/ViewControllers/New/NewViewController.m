@@ -9,7 +9,7 @@
 #import "NewViewController.h"
 #import "AppDelegate.h"
 #import "Constant.h"
-#import  "UserDataCenter.h"
+#import "UserDataCenter.h"
 #import "LoadingView.h"
 #import "UserDataCenter.h"
 #import "ZCControl.h"
@@ -153,7 +153,7 @@
         if ([[responseObject  objectForKey:@"return_code"]  intValue]==10000) {
             NSLog(@"点赞成功========%@",responseObject);
             //_mymarkView.ZanNumLable
-            [_toolBar SetZanButtonSelected];
+            //[_toolBar SetZanButtonSelected];
 
          }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -193,7 +193,7 @@
             if (_newDataArray==nil) {
                 _newDataArray=[[NSMutableArray alloc]init];
             }
-            ///NSLog(@"最新数据 JSON: %@", responseObject);
+            NSLog(@"最新数据 JSON: %@", responseObject);
             [_newDataArray addObjectsFromArray:Detailarray];
             [_HotMoVieTableView reloadData];
         }
@@ -490,14 +490,75 @@
 #pragma mark  ----------点赞--------------
     else  if(button.tag==10002)
     {
+        //改变赞的状态
+        [_toolBar SetZanButtonSelected];
+
         //点击了赞
         NSLog(@" 点赞  微博dict  ＝====%@",weiboDict);
+        if ([[weiboDict  objectForKey:@"uped"]  intValue]==0) {///没有赞的话
+            [weiboDict setValue:@"1" forKey:@"uped"];
+            int ups=[[weiboDict objectForKey:@"ups"] intValue];
+            ups =ups+1;
+            [weiboDict setValue:[NSString stringWithFormat:@"%d",ups] forKey:@"ups"];
+        }
+        else  {
+            [weiboDict setValue:@"0" forKey:@"uped"];
+            int ups=[[weiboDict objectForKey:@"ups"] intValue];
+            ups =ups-1;
+            [weiboDict setValue:[NSString stringWithFormat:@"%d",ups] forKey:@"ups"];
+        }
+        
         //获取赞的数量
         //点赞执行这个方法
-        //int   zanNum=[[weiboDict objectForKey:@"ups"]  intValue];
-        //_mymarkView.ZanNumLable.text=[NSString stringWithFormat:@"%d",zanNum+1];
+        //先去改变数组的内容
+        if (segment.selectedSegmentIndex==0) {
+            //先匹配stageid
+            int  stageId;
+            int  weiboId=[[weiboDict  objectForKey:@"id"]  intValue];
+            if([stageInfoDict  objectForKey:@"id"])
+            {
+                stageId= [[stageInfoDict  objectForKey:@"id"] intValue];
+               
+                ///dict 包含热门 weibo，， weibos 的信息
+                for (int i=0 ; i<_hotDataArray.count; i++)  {
+                    NSDictionary  *dict=[_hotDataArray  objectAtIndex:i];
+                    //如果stageid ＝＝stageid
+                    if ([[[dict objectForKey:@"stageinfo"] objectForKey:@"id"] intValue]==stageId) {
+                        
+                        //再遍历跟stageid 同一个字典的weibos 数组
+                        NSMutableArray  *weibosArray=[[NSMutableArray alloc]initWithArray:[dict  objectForKey:@"weibos"]];
+                        for (int j=0; j<weibosArray.count; j++) {
+                            //weibo id == weiboId
+                            if ([[[weibosArray  objectAtIndex:j] objectForKey:@"id"]  intValue]==weiboId) {
+                                
+                             //   if ([[weiboDict objectForKey:@"uped"] intValue]==0) {
+                                    // 替代了字典里面一个数据,
+#warning   替代整个weibo的字典
+                               //     [[[weibosArray  objectAtIndex:j] objectForKey:@"uped"] setObject:@"1" forKey:@"id"];
+                                //替代原来的数组
+                                [weibosArray replaceObjectAtIndex:j withObject:weiboDict];
+                            
+                            }
+                        }
+                        
+                    }
+                    
+                }
+                
+            }
+            
+            
+        }else if(segment.selectedSegmentIndex==1)
+        {
+            
+        }
+        
+        
+        //发送到服务器
         [self LikeRequstData:weiboDict StageInfo:stageInfoDict];
         //点赞成功后，要把赞设置为
+        
+        
         
     }
 
