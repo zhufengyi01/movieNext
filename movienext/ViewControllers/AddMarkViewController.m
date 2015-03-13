@@ -60,7 +60,7 @@
     [RighttBtn addTarget:self action:@selector(dealNavClick:) forControlEvents:UIControlEventTouchUpInside];
     RighttBtn.tag=101;
     [RighttBtn setTitleColor:VGray_color forState:UIControlStateNormal];
-    [RighttBtn setTitle:@"确定" forState:UIControlStateNormal];
+    [RighttBtn setTitle:@"发布" forState:UIControlStateNormal];
     self.navigationItem.rightBarButtonItem=[[UIBarButtonItem alloc]initWithCustomView:RighttBtn];
     
 
@@ -78,20 +78,22 @@
 {
     
     
-     _toolBar=[[UIToolbar alloc]initWithFrame:CGRectMake(0,kDeviceHeight-40-kHeightNavigation, kDeviceHeight, 40)];
+     _toolBar=[[UIToolbar alloc]initWithFrame:CGRectMake(0,kDeviceHeight-50-kHeightNavigation, kDeviceHeight, 50)];
      //_toolBar.barTintColor=[UIColor redColor];   //背景颜色
    // [self.navigat setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color.png"] forBarMetrics:UIBarMetricsDefault];
     [_toolBar setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color.png"] forToolbarPosition:UIBarPositionAny barMetrics:UIBarMetricsDefault];
      _toolBar.tintColor=VGray_color;  //内容颜色
      
-     _inputText= [[UITextField alloc]initWithFrame:CGRectMake(10,5, kDeviceWidth-80,30)];
-     _inputText.layer.cornerRadius=4;
-     _inputText.layer.borderWidth=1;
+     _inputText= [[UITextField alloc]initWithFrame:CGRectMake(10,10, kDeviceWidth-80,30)];
+     _inputText.font = [UIFont systemFontOfSize:14];
     _inputText.delegate=self;
+     _inputText.layer.cornerRadius=4;
+     _inputText.layer.borderWidth=0.5;
      _inputText.layer.borderColor=VLight_GrayColor.CGColor;
+
      [_toolBar addSubview:_inputText];
      
-     UIButton  *publishBtn=[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-60, 5, 50, 28) ImageName:@"loginoutbackgroundcolor.png" Target:self Action:@selector(dealNavClick:) Title:@"发布"];
+     UIButton  *publishBtn=[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-60, 10, 50, 28) ImageName:@"loginoutbackgroundcolor.png" Target:self Action:@selector(dealNavClick:) Title:@"确定"];
     
     publishBtn.titleLabel.font=[UIFont systemFontOfSize:14];
     publishBtn.layer.cornerRadius=4;
@@ -220,7 +222,7 @@
 {
     [UIView  animateWithDuration:1.0 animations:^{
         CGRect  tframe=_toolBar.frame;
-        tframe.origin.y=kDeviceHeight-216-35-kHeightNavigation-40;
+        tframe.origin.y=kDeviceHeight-216-35-kHeightNavigation-50;
         _toolBar.frame=tframe;
     } completion:^(BOOL finished) {
         
@@ -231,7 +233,7 @@
     
     [UIView  animateWithDuration:1.0 animations:^{
         CGRect  tframe=_toolBar.frame;
-        tframe.origin.y=kDeviceHeight-40-kHeightNavigation;
+        tframe.origin.y=kDeviceHeight-50-kHeightNavigation;
         _toolBar.frame=tframe;
     } completion:^(BOOL finished) {
         
