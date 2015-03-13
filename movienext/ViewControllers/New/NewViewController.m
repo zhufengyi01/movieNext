@@ -77,6 +77,14 @@
     segment.selectedSegmentIndex = 0;
     segment.backgroundColor = [UIColor clearColor];
     segment.tintColor = kAppTintColor;
+    
+    NSDictionary* selectedTextAttributes = @{NSFontAttributeName:[UIFont boldSystemFontOfSize:14]
+                                             };
+    [segment setTitleTextAttributes:selectedTextAttributes forState:UIControlStateSelected];
+    NSDictionary* unselectedTextAttributes = @{NSFontAttributeName:[UIFont boldSystemFontOfSize:14]
+                                               };
+    [segment setTitleTextAttributes:unselectedTextAttributes forState:UIControlStateNormal];
+    
     [segment addTarget:self action:@selector(segmentClick:) forControlEvents:UIControlEventValueChanged];
     [self.navigationItem setTitleView:segment];
 }

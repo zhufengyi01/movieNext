@@ -42,17 +42,17 @@
     BgView0.backgroundColor=[UIColor whiteColor];
     [self.contentView addSubview:BgView0];
     
-    UserLogoButton =[ZCControl createButtonWithFrame:CGRectMake(10, 8, 25, 25) ImageName:nil Target:self.superview Action:@selector(UserLogoButtonClick:) Title:@"头像"];
-    UserLogoButton.layer.cornerRadius=2;
+    UserLogoButton =[ZCControl createButtonWithFrame:CGRectMake(10, 8, 30, 30) ImageName:nil Target:self.superview Action:@selector(UserLogoButtonClick:) Title:@"头像"];
+    UserLogoButton.layer.cornerRadius=4;
     UserLogoButton.layer.masksToBounds = YES;
     [BgView0 addSubview:UserLogoButton];
     
-    UserNameLable =[ZCControl createLabelWithFrame:CGRectMake(UserLogoButton.frame.origin.x + UserLogoButton.frame.size.width + 3, 5, 180, 15) Font:14 Text:@"名字"];
+    UserNameLable =[ZCControl createLabelWithFrame:CGRectMake(UserLogoButton.frame.origin.x + UserLogoButton.frame.size.width + 3, 8, 180, 15) Font:14 Text:@"名字"];
     UserNameLable.textColor=VGray_color;
     UserNameLable.numberOfLines = 1;
     [BgView0 addSubview:UserNameLable];
     
-    TimeLable =[ZCControl createLabelWithFrame:CGRectMake(UserNameLable.frame.origin.x, 20, 140, 15) Font:12 Text:@"时间"];
+    TimeLable =[ZCControl createLabelWithFrame:CGRectMake(UserNameLable.frame.origin.x, 23, 140, 15) Font:12 Text:@"时间"];
     TimeLable.textColor=VGray_color;
     [BgView0 addSubview:TimeLable];
     

@@ -285,6 +285,9 @@
 		00E609FC1AABF1AC00E2F53B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00E609FB1AABF1AC00E2F53B /* UIKit.framework */; };
 		00E609FE1AABF1B900E2F53B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00E609FD1AABF1B900E2F53B /* Foundation.framework */; };
 		4076AF011AA9B0D2006DC466 /* StageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4076AF001AA9B0D2006DC466 /* StageView.m */; };
+		409390461AB2C15A00FABA50 /* tab_switch.png in Resources */ = {isa = PBXBuildFile; fileRef = 409390431AB2C15A00FABA50 /* tab_switch.png */; };
+		409390471AB2C15A00FABA50 /* tab_switch@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 409390441AB2C15A00FABA50 /* tab_switch@2x.png */; };
+		409390481AB2C15A00FABA50 /* tab_switch@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 409390451AB2C15A00FABA50 /* tab_switch@3x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -713,6 +716,9 @@
 		00E609FD1AABF1B900E2F53B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4076AEFF1AA9B0D2006DC466 /* StageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StageView.h; sourceTree = "<group>"; };
 		4076AF001AA9B0D2006DC466 /* StageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StageView.m; sourceTree = "<group>"; };
+		409390431AB2C15A00FABA50 /* tab_switch.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tab_switch.png; sourceTree = "<group>"; };
+		409390441AB2C15A00FABA50 /* tab_switch@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab_switch@2x.png"; sourceTree = "<group>"; };
+		409390451AB2C15A00FABA50 /* tab_switch@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab_switch@3x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -764,6 +770,9 @@
 		000B08FB1AA2EB8C00B8D13A /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				409390431AB2C15A00FABA50 /* tab_switch.png */,
+				409390441AB2C15A00FABA50 /* tab_switch@2x.png */,
+				409390451AB2C15A00FABA50 /* tab_switch@3x.png */,
 				003E74D01AB1A29F0080F7A8 /* btn_add_default@2x.png */,
 				003E74D11AB1A29F0080F7A8 /* btn_add_default@3x.png */,
 				003E74D31AB1A29F0080F7A8 /* btn_add_select@2x.png */,
@@ -1613,6 +1622,7 @@
 				003E74F81AB1A29F0080F7A8 /* btn_share_default@3x.png in Resources */,
 				000B09901AA3029800B8D13A /* iOSiPhone6&6plus标注.png in Resources */,
 				000B098B1AA3029800B8D13A /* icon@76.png in Resources */,
+				409390461AB2C15A00FABA50 /* tab_switch.png in Resources */,
 				003E75031AB1A29F0080F7A8 /* ic_menu_share_default@2x.png in Resources */,
 				000B09E11AA3029800B8D13A /* Weibo@2x.png in Resources */,
 				000B09B91AA3029800B8D13A /* movie_tab_butten@2x.png in Resources */,
@@ -1624,6 +1634,7 @@
 				000B09DE1AA3029800B8D13A /* Wechat@2x.png in Resources */,
 				000B09E41AA30CB900B8D13A /* loginoutbackgroundcolor.png in Resources */,
 				003E74FB1AB1A29F0080F7A8 /* btn_share_select@3x.png in Resources */,
+				409390481AB2C15A00FABA50 /* tab_switch@3x.png in Resources */,
 				000B09B61AA3029800B8D13A /* movie_tab_butten（gray）.png in Resources */,
 				000B099C1AA3029800B8D13A /* login out@3x.png in Resources */,
 				00AA544F1AA2C526004096F8 /* TencentOpenApi_IOS_Bundle.bundle in Resources */,
@@ -1633,6 +1644,7 @@
 				000B09D21AA3029800B8D13A /* single_switch@3x.png in Resources */,
 				00AA54451AA2C525004096F8 /* UMSCommentInputControlleriPad.xib in Resources */,
 				000B09A51AA3029800B8D13A /* login_button_sina －in@3x.png in Resources */,
+				409390471AB2C15A00FABA50 /* tab_switch@2x.png in Resources */,
 				000B09D11AA3029800B8D13A /* single_switch@2x.png in Resources */,
 				000B09131AA2EB8C00B8D13A /* tabbar_icon_mine@2x.png in Resources */,
 				000B09861AA3029800B8D13A /* feed_tab_butten（gray).png in Resources */,
@@ -1980,8 +1992,8 @@
 		00AA53271AA2C3F4004096F8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Wenliang Zhao (9THF4SEGPY)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Wenliang Zhao (9THF4SEGPY)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Wenliang Zhao (TCW76CZZEC)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Wenliang Zhao (TCW76CZZEC)";
 				ENABLE_STRICT_OBJC_MSGSEND = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1998,7 +2010,7 @@
 					"$(PROJECT_DIR)/Libs/UMSocial_Sdk_Extra_Frameworks/Wechat",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "cf548245-13f3-4d5a-8895-6be170bd0205";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -2006,8 +2018,8 @@
 		00AA53281AA2C3F4004096F8 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Wenliang Zhao (9THF4SEGPY)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Wenliang Zhao (9THF4SEGPY)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Wenliang Zhao (TCW76CZZEC)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Wenliang Zhao (TCW76CZZEC)";
 				ENABLE_STRICT_OBJC_MSGSEND = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2024,7 +2036,7 @@
 					"$(PROJECT_DIR)/Libs/UMSocial_Sdk_Extra_Frameworks/Wechat",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "cf548245-13f3-4d5a-8895-6be170bd0205";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
