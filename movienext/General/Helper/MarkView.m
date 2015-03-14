@@ -119,26 +119,17 @@
     if (self.isSelected==YES) {  //是选中的状态,则把它变成没有选中的状态
         NSLog(@" 取消选中 markview 的微博事件");
         // 设置可以自身动画了
-       // self.isAnimation=YES;
-        //  取消选中状态
-        //self.isSelected=NO;
         [self CancelMarksetSelect];
-      //  if (self.delegate &&[self.delegate respondsToSelector:@selector(MarkViewClick:withMarkView:)]) {
-            // 传递markview  当前的字典数据和的指针到了stageview。在stagview 中再传递到controller
-        //  [self.delegate MarkViewClick:_weiboDict withMarkView:self];
-        //}
     }
     else if(self.isSelected==NO)  //是没有选中的状态，则把其中变成选中的状态
     {
         // 设置不能自身动画了
-        
         [self setMaskViewSelected];
        if (self.delegate &&[self.delegate respondsToSelector:@selector(MarkViewClick:withMarkView:)]) {
             // 传递markview  当前的字典数据和的指针到了stageview。在stagview 中再传递到controller
-            [self.delegate MarkViewClick:_weiboDict withMarkView:self];
+            [self.delegate MarkViewClick:self.weiboDict withMarkView:self];
         }
     }
-    
 }
 #pragma mark   -------
 #pragma mark   ------ 设置selected 和没有选中的两种状态

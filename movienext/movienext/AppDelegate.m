@@ -36,7 +36,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     NSDictionary  *userInfo=[[NSUserDefaults  standardUserDefaults] objectForKey:kUserKey];
-    NSLog(@"app delegate  userInfo  =====%@",userInfo);
+   // NSLog(@"app delegate  userInfo  =====%@",userInfo);
 
     UserDataCenter  *userCenter=[UserDataCenter shareInstance];
    if (userInfo) {  //用户已经登陆

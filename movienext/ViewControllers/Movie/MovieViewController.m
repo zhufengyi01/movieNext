@@ -198,6 +198,7 @@
     MovieCollectionViewCell    *cell=(MovieCollectionViewCell*)[collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
     NSLog(@"   圣诞节可视电话首都华盛顿老师=======index.item  %ld --- index.row  ==%ld",indexPath.item,indexPath.row);
     if (_dataArray.count > indexPath.row) {
+    
      [cell setValueforCell:[_dataArray  objectAtIndex:(long)indexPath.row]];
      //cell.backgroundColor=[UIColor whiteColor];
     }

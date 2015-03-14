@@ -208,7 +208,10 @@
            //cell.pageType=NSPageSourceTypeMyAddedViewController;
           //  小闪动标签的数组
             cell.WeibosArray=[[_dataArray objectAtIndex:indexPath.row]  objectForKey:@"weibos"];
-            [cell setCellValue:[[_dataArray objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] indexPath:indexPath.row];
+            
+            cell.StageInfoDict=[[_dataArray objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"];
+            [cell ConfigCellWithIndexPath:indexPath.row];
+          //  [cell setCellValue:;
         }
           [cell.StageView performSelector:@selector(startAnimation) withObject:nil afterDelay:1];
         //cell.backgroundColor = [UIColor redColor];

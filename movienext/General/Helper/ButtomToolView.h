@@ -8,12 +8,14 @@
 
 #import <UIKit/UIKit.h>
 #import "MarkView.h"
+#import "WeiboModel.h"
+#import "StageInfoModel.h"
 @protocol ButtomToolViewDelegate <NSObject>
 //点击底部视图的方法，根据tag值判断是点击了那一个按钮
 //button.tag=10000; 头像
 //button.tag=10001;  分享
 //button.tag=10002  赞
--(void)ToolViewHandClick:(UIButton  *) button :(MarkView *) markView weiboDict:(NSDictionary *) weiboDict StageInfo:(NSDictionary *)stageInfoDict;
+-(void)ToolViewHandClick:(UIButton  *) button :(MarkView *) markView weiboDict:(WeiboModel*) weiboDict StageInfo:(StageInfoModel *)stageInfoDict;
 
 ///点击屏幕的透明颜色时候，弹回上面
 -(void)topViewTouchBengan;
@@ -26,21 +28,23 @@
     UIButton  *shareButton;
     UIButton  *zanbutton;
     //当前气泡视图
-    MarkView  *_markView;
+    //MarkView  *_markView;
     //当前weibo的字典数据
-    NSDictionary  *_weiboDict;
+    //NSDictionary  *_weiboDict;
     //整个透明背景的图大小
     CGRect    m_frame;
     //上面的透明的试图，点击的按钮
     UIButton   *_topButtom;
     //底部的弹出视图
     UIView   *buttomView;
-    NSDictionary  *stageInfo;
+    //NSDictionary  *stageInfo;
     int  zanNum;
 }
 #pragma mark  ------外部方法
-//设置buttomview 的值
--(void)setToolBarValue:(NSDictionary  *) dict :(id) markView WithStageInfo:(NSDictionary *)stageInfoDict;
+@property(nonatomic,strong) WeiboModel   *weiboDict;
+@property(nonatomic,strong) StageInfoModel   *StageInfoDict;
+@property(nonatomic,strong) id markView;
+-(void)configToolBar;
 //显示底部试图
 -(void)ShowButtomView;
 //隐藏底部试图
@@ -48,7 +52,7 @@
 
 #pragma  mark 点赞的方法
 //设置赞的状态为选中
--(void)SetZanButtonSelected;
+//-(void)SetZanButtonSelected;
 //设置代理
 @property (nonatomic,strong) id<ButtomToolViewDelegate> delegete;
 

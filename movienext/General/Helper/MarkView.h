@@ -7,10 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "WeiboModel.h"
+#import "StageInfoModel.h"
 @protocol MarkViewDelegate <NSObject>
 //标签的点击事件，对stageview 提供接口，传递微博对象
--(void)MarkViewClick:(NSDictionary  *) weiboDict withMarkView:(id) markView;
+-(void)MarkViewClick:(WeiboModel  *) weiboDict withMarkView:(id) markView;
 @end
 @interface MarkView : UIView
 {
@@ -26,7 +27,7 @@
 @property (nonatomic,assign) BOOL  isSelected;   // 是否被选中
 
 //从stagview传递过来的微博字典对象，这个对象中包含微博的详细信息
-@property (nonatomic,strong)NSDictionary  *weiboDict;
+@property (nonatomic,strong)WeiboModel  *weiboDict;
 
 @property (nonatomic,assign) id <MarkViewDelegate> delegate;
 @property (nonatomic,assign) BOOL isAnimation;   //是否是可以动的动画

@@ -60,6 +60,7 @@
     search=[[UISearchBar alloc]initWithFrame:CGRectMake(30, 10, 0, 28)];
     search.placeholder=@"搜索电影";
     search.delegate=self;
+    search.searchBarStyle=UISearchBarStyleMinimal;
     search.showsCancelButton=YES;
     [search becomeFirstResponder];
     self.navigationItem.titleView=search;

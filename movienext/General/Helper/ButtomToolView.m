@@ -97,16 +97,14 @@
     
 }
 // 设置toolbar 的值
--(void)setToolBarValue:(NSDictionary *)dict :(id)markView WithStageInfo:(NSDictionary *)stageInfoDict
-//-(void)setToolBarValue:(NSDictionary  *) dict :(id) markView;
+-(void)configToolBar
 {
-    //把字典传过来，然后通过代理再传出去
-    _weiboDict=dict;
-    _markView=markView;
-    zanNum=[[dict objectForKey:@"ups"]  intValue];
+    //_weiboDict=dict;
+    //_markView=markView;
+    zanNum=[self.weiboDict.ups integerValue];//[[self.weiboDict objectForKey:@"ups"]  intValue];
     //把这个字典存在了stageview 中,在代理的时候，又反悔给了controller
-    stageInfo=[NSDictionary dictionaryWithDictionary:stageInfoDict];
-    if ([[dict  objectForKey:@"uped"]  intValue]==0) {
+  //  stageInfo=[NSDictionary dictionaryWithDictionary:stageInfoDict];
+    if ([self.weiboDict.uped  intValue]==0) {
         zanbutton.selected=NO;
     }
     else
@@ -114,8 +112,6 @@
         zanbutton.selected=YES;
     }
     
-    //[ headButton sd_setBackgroundImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!thumb", kUrlAvatar, [dict objectForKey:@"avatar"]]] forState:UIControlStateNormal placeholderImage:nil];
-    //nameLable.text=[NSString stringWithFormat:@"%@",[dict objectForKey:@"username"]];
     
 }
 #pragma mark
@@ -124,11 +120,37 @@
 -(void)dealButtomClick:(UIButton  *) button
 {
     
+    if (zanbutton.selected==YES) {
+        zanbutton.selected=NO;
+    }
+    else if (zanbutton.selected==NO)
+    {
+        zanbutton.selected=YES;
+        
+        
+    }
     
     if (self.delegete &&[self.delegete respondsToSelector:@selector(ToolViewHandClick::weiboDict:StageInfo:)]) {
-        [self.delegete ToolViewHandClick:button :_markView weiboDict:_weiboDict StageInfo:stageInfo];
+        [self.delegete ToolViewHandClick:button :_markView weiboDict:_weiboDict StageInfo:self.StageInfoDict];
     }
 }
+
+
+//设置赞的状态为选中
+/*-(void)SetZanButtonSelected
+{
+    if (zanbutton.selected==YES) {
+        zanbutton.selected=NO;
+    }
+    else if (zanbutton.selected==NO)
+    {
+        zanbutton.selected=YES;
+        
+        
+    }
+    
+}
+*/
 
 //显示底部试图
 -(void)ShowButtomView;
@@ -159,20 +181,5 @@
     }
 }
 
-
-//设置赞的状态为选中
--(void)SetZanButtonSelected
-{
-    if (zanbutton.selected==YES) {
-        zanbutton.selected=NO;  
-    }
-    else if (zanbutton.selected==NO)
-    {
-       zanbutton.selected=YES;
-      
-
-    }
-    
-}
 
 @end

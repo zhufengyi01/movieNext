@@ -36,9 +36,7 @@
     [self addSubview:_MovieImageView];
 }
 #pragma mark    设置stageview的值  ，主要是给stagview 添加markview  和添加一张图片
-- (void)setStageValue:(NSDictionary *)dict {
-    //这里把值赋给了stageinfo了，用于把stageinfo 方向传递给了controller
-    stageInfoDict=dict;
+-(void)configStageViewforStageInfoDict{
     //先移除所有的Mark视图
     for (UIView  *Mview in  self.subviews) {
         if ([Mview isKindOfClass:[MarkView class]]) {
@@ -46,60 +44,62 @@
         }
     }
     
-    float  ImageWith=[[dict objectForKey:@"w"]  floatValue];
-    float  ImgeHight=[[dict objectForKey:@"h"]  floatValue];
+    float  ImageWith=[_StageInfoDict.w intValue]; //[[self.StageInfoDict objectForKey:@"w"]  floatValue];
+    float  ImgeHight=[_StageInfoDict.h intValue];//[[self.StageInfoDict objectForKey:@"h"]  floatValue];
     float hight=0;
      hight= kDeviceWidth;
      if(ImgeHight>ImageWith)
     {
         hight=  (ImgeHight/ImageWith) *kDeviceWidth;
     }
-    if ([dict  objectForKey:@"stage"]) {
-        //计算位置
+    if (self.StageInfoDict.stage)
+    {//计算位置
         float   y=(hight-(ImgeHight/ImageWith)*kDeviceWidth)/2;
           _MovieImageView.frame=CGRectMake(0,y, kDeviceWidth, (ImgeHight/ImageWith)*kDeviceWidth);
-       [_MovieImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w640",kUrlStage,[dict objectForKey:@"stage"]]] placeholderImage:[UIImage imageNamed:@"loading_image_all.png"]];
-     }
+        [_MovieImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w640",kUrlStage,self.StageInfoDict.stage]] placeholderImage:[UIImage imageNamed:@"loading_image_all.png"]];
+                                            
+                            }
 #pragma  mark  是静态的, 气泡是不动的
-    if ( _weiboDict ) {
+    if ( _weiboDict) {
+        //WeiboModel  *weibodict=self.weiboDict;
         MarkView *markView = [self createMarkViewWithDict:_weiboDict andIndex:2000];
         markView.alpha = 1.0;
         //设置是否markview 不可以动画
         markView.isAnimation = NO;
         //设置单条微博的参数信息
-        markView.weiboDict=_weiboDict;
+        markView.weiboDict=self.weiboDict;
        //遵守markView 的协议
         markView.delegate=self;
        [self addSubview:markView];
     }
 #pragma  mark  有很多气泡，气泡循环播放
     
-    for ( int i=0;i<_WeibosArray.count ; i++) {
-        NSDictionary  *weibodict=[NSDictionary dictionaryWithDictionary:[_WeibosArray  objectAtIndex:i]];
-        MarkView *markView = [self createMarkViewWithDict:weibodict andIndex:i];
+    if (self.WeibosArray&&self.WeibosArray.count>0) {
+      for ( int i=0;i<_WeibosArray.count ; i++) {
+        MarkView *markView = [self createMarkViewWithDict:self.WeibosArray[i] andIndex:i];
         // 设置markview 可以动画
         markView.isAnimation = YES;
         //设置单条微博的参数信息
-        markView.weiboDict=weibodict;
+        markView.weiboDict=self.WeibosArray[i];
         //遵守markView 的协议
         markView.delegate=self;
 
        [self addSubview:markView];
+     }
     }
 }
 #pragma mark 内部创建气泡的方法
-- (MarkView *) createMarkViewWithDict:(NSDictionary *)weibodict andIndex:(NSInteger)index{
+- (MarkView *) createMarkViewWithDict:(WeiboModel *)weibodict andIndex:(NSInteger)index{
     
             MarkView *markView=[[MarkView alloc]initWithFrame:CGRectMake(10, 10, 100, 30)];
             markView.alpha = 0;
             markView.tag=1000+index;
-            
-            float  x=[[weibodict objectForKey:@"x"]floatValue ];
-            float  y=[[weibodict objectForKey:@"y"]floatValue ];
-             //NSLog(@" ==== =mark  view  ===%f  ==== mark view =====%f",x,y);
-            NSString  *weiboTitleString=[weibodict  objectForKey:@"topic"];
-            NSString  *UpString=[weibodict objectForKey:@"ups"];
     
+    NSLog(@"stageview  ＝＝=====weiboDict====%@",weibodict);
+             float  x=[weibodict.x floatValue];
+             float  y=[weibodict.y floatValue];
+             NSString  *weiboTitleString=weibodict.topic;
+    NSString  *UpString=[NSString stringWithFormat:@"%@",weibodict.ups];//weibodict.ups;
             //计算标题的size
             CGSize  Msize=[weiboTitleString boundingRectWithSize:CGSizeMake(kDeviceWidth/2,MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:markView.TitleLable.font forKey:NSFontAttributeName] context:nil].size;
             // 计算赞数量的size
@@ -122,8 +122,8 @@
 #pragma mark 设置标签的内容
             markView.TitleLable.text=weiboTitleString;
             ///显示标签的头像
-            [ markView.LeftImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kUrlAvatar,[weibodict objectForKey:@"avatar"]]]];
-            markView.ZanNumLable.text=[weibodict objectForKey:@"ups"];
+            [ markView.LeftImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kUrlAvatar,weibodict.avatar]]];
+           markView.ZanNumLable.text=weibodict.ups; //[weibodict objectForKey:@"ups"];
            // markView.isAnimation = YES;
     return markView;
 }
@@ -212,23 +212,12 @@
 #pragma mark   ---markViewDelegate 
 #pragma  mark -----
 //实现markview 的代理
--(void)MarkViewClick:(NSDictionary *)weiboDict withMarkView:(id)markView
+-(void)MarkViewClick:(WeiboModel *)weiboDict withMarkView:(id)markView
 {
-    /*
-    for (UIView  *view in  self.subviews ) {
-        if ([view isKindOfClass:[MarkView class]]) {
-            MarkView *mv=(MarkView *)view;
-            mv.isSelected=NO;
-        }
-    }
-    MarkView  *mav=(MarkView *) markView;
-    mav.isSelected=YES;*/
-       NSLog(@"点击了 stageview 的微博操作");
-       //if (self.delegate &&[self.delegate respondsToSelector:@selector(StageViewHandClickMark:withmarkView:)]) {
-        //[self.delegate StageViewHandClickMark:weiboDict withmarkView:markView];
-    //}
+    
+    NSLog(@"点击了 stageview 的微博操作");
     if (self.delegate &&[self.delegate respondsToSelector:@selector(StageViewHandClickMark:withmarkView:StageInfoDict:)]) {
-        [self.delegate StageViewHandClickMark:weiboDict withmarkView:markView StageInfoDict:stageInfoDict];
+        [self.delegate StageViewHandClickMark:weiboDict withmarkView:markView StageInfoDict:self.StageInfoDict];
     }
 
 }

@@ -18,6 +18,9 @@
 #import "CommonStageCell.h"
 #import "AddMarkViewController.h"
 #import "MovieDetailViewController.h"
+#import "WeiboModel.h"
+#import "HotMovieModel.h"
+
 
 //友盟分享
 #import "UMSocial.h"
@@ -191,9 +194,32 @@
             if (_hotDataArray ==nil) {
                 _hotDataArray=[[NSMutableArray alloc]init];
             }
-            NSLog(@"热门数据 JSON: %@", responseObject);
-            [_hotDataArray addObjectsFromArray:Detailarray];
+//            NSLog(@"热门数据 JSON: %@", responseObject);
+//            [_hotDataArray addObjectsFromArray:Detailarray];
+//            [_HotMoVieTableView reloadData];
+            for (NSDictionary  *hotDict in Detailarray) {
+                HotMovieModel  *hotModel=[[HotMovieModel alloc]init];
+                if (hotModel) {
+                    [hotModel setValuesForKeysWithDictionary:hotDict];
+                    
+                    NSMutableArray  *weibosArray=[[NSMutableArray alloc]init];
+                    for (NSDictionary  *weiboDict in [hotDict objectForKey:@"weibos"]) {
+                        WeiboModel *weiboModel=[[WeiboModel alloc]init];
+                        [weiboModel setValuesForKeysWithDictionary:weiboDict];
+                        [weibosArray addObject:weiboModel];
+                    }
+                    hotModel.weibos=weibosArray;
+                     StageInfoModel  *stageModel=[[StageInfoModel alloc]init];
+                    [stageModel setValuesForKeysWithDictionary:[hotDict objectForKey:@"stageinfo"]];
+                    hotModel.stageinfo=stageModel;
+                    
+                    NSLog(@"热门数据的 hotmodel     ====%@",hotModel);
+                    [_hotDataArray addObject:hotModel];
+                    
+                }
+            }
             [_HotMoVieTableView reloadData];
+            NSLog(@"打印出来的热门数据，没有weibo ＝＝====%@",_hotDataArray);
 
         }
         else if(segment.selectedSegmentIndex==1)
@@ -202,7 +228,25 @@
                 _newDataArray=[[NSMutableArray alloc]init];
             }
             NSLog(@"最新数据 JSON: %@", responseObject);
-            [_newDataArray addObjectsFromArray:Detailarray];
+            for (NSDictionary  *newdict  in Detailarray) {
+                HotMovieModel *model =[[HotMovieModel alloc]init];
+                if (model) {
+                    [model setValuesForKeysWithDictionary:newdict];
+                     StageInfoModel  *stagemodel=[[StageInfoModel alloc]init];
+                    if (stagemodel) {
+                        [stagemodel setValuesForKeysWithDictionary:[newdict objectForKey:@"stageinfo"]];
+                        model.stageinfo=stagemodel;
+                    }
+                     WeiboModel  *weibomodel =[[WeiboModel alloc]init];
+                    if (weibomodel) {
+                        [weibomodel setValuesForKeysWithDictionary:[newdict objectForKey:@"weibo"]];
+                        model.weibo=weibomodel;
+                    }
+                    [_newDataArray addObject:model];
+                }
+            }
+          
+           // [_newDataArray addObjectsFromArray:Detailarray];
             [_HotMoVieTableView reloadData];
         }
         
@@ -227,11 +271,12 @@
 
 -(CGFloat )tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     if (segment.selectedSegmentIndex==0) {
+        HotMovieModel *hotModel=[_hotDataArray objectAtIndex:indexPath.row];
         float hight;
         if (_hotDataArray.count>indexPath.row) {
-        float  h=   [[[[_hotDataArray  objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] objectForKey:@"h"] floatValue];
-        float w=   [[[[_hotDataArray  objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] objectForKey:@"w"] floatValue];
-        if (w==0||h==0) {
+            float  h=[hotModel.stageinfo.h floatValue]; 
+            float w=  [hotModel.stageinfo.w floatValue];
+            if (w==0||h==0) {
              hight= kDeviceWidth+45;
         }
          if (w>h) {
@@ -249,8 +294,9 @@
     {
         float hight;
         if (_newDataArray.count>indexPath.row) {
-            float  h=   [[[[_newDataArray  objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] objectForKey:@"h"] floatValue];
-            float w=   [[[[_newDataArray  objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] objectForKey:@"w"] floatValue];
+            HotMovieModel   *hotmodel=[_hotDataArray objectAtIndex:indexPath.row];
+            float  h=[hotmodel.stageinfo.h  floatValue];   //[[[[_newDataArray  objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] objectForKey:@"h"] floatValue];
+            float w=[hotmodel.stageinfo.w floatValue];   //[[[[_newDataArray  objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] objectForKey:@"w"] floatValue];
             if (w==0||h==0) {
                 hight= kDeviceWidth+90;
             }
@@ -279,14 +325,16 @@
         cell.selectionStyle=UITableViewCellSelectionStyleNone;
         cell.backgroundColor=View_BackGround;
     }
+    HotMovieModel  *hotModel=[_hotDataArray objectAtIndex:indexPath.row];
     
     if  (segment.selectedSegmentIndex==0) {
         if (_hotDataArray.count>indexPath.row) {
             cell.pageType=NSPageSourceTypeMainHotController;
             //小闪动标签的数组
-            cell.WeibosArray=[[_hotDataArray objectAtIndex:indexPath.row]  objectForKey:@"weibos"];
+            cell.WeibosArray =hotModel.weibos;
             cell.weiboDict=nil;
-            [cell setCellValue:[[_hotDataArray objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] indexPath:indexPath.row];
+            cell.StageInfoDict=hotModel.stageinfo;
+            [cell ConfigsetCellindexPath:indexPath.row];
             //遵守stagview的协议，点击事件在controller里面响应
             cell.stageView.delegate=self;
         }
@@ -294,13 +342,18 @@
     }
     else if (segment.selectedSegmentIndex==1)
     {
+        
         if (_newDataArray.count>indexPath.row) {
+            HotMovieModel   *hotmodel=[_newDataArray  objectAtIndex:indexPath.row];
             //配置cell的类型。
             cell.pageType=NSPageSourceTypeMainNewController;
             //根据类型配置cell的气泡数据
-            cell.weiboDict =[[_newDataArray  objectAtIndex:indexPath.row]  objectForKey:@"weibo"];
+            cell.weiboDict =hotmodel.weibo; //[[_newDataArray  objectAtIndex:indexPath.row]  objectForKey:@"weibo"];
             //配置stage的数据
-            [cell setCellValue:[[_newDataArray objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"]indexPath:indexPath.row];
+            cell.WeibosArray=nil;
+            cell.StageInfoDict=hotmodel.stageinfo;//[[_newDataArray objectAtIndex:indexPath.row] objectForKey:@"stageinfo"];
+            [cell ConfigsetCellindexPath:indexPath.row];
+             // [cell setCellValue:[[_newDataArray objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"]indexPath:indexPath.row];
             //遵守了stageview的协议，点击事件在这里执行
             cell.stageView.delegate=self;
             
@@ -405,10 +458,10 @@
 #pragma mark  -----
 #pragma mark  ---StaegViewDelegate
 #pragma mark  ----
--(void)StageViewHandClickMark:(NSDictionary *)weiboDict withmarkView:(id)markView StageInfoDict:(NSDictionary *)stageInfoDict
+-(void)StageViewHandClickMark:(WeiboModel *)weiboDict withmarkView:(id)markView StageInfoDict:(StageInfoModel *)stageInfoDict
 {
 
-    NSLog(@"在new view controller  里面响应了这个方法 weibo dict  ====%@",    weiboDict) ;
+   // NSLog(@"在new view controller  里面响应了这个方法 weibo dict  ====%@",    weiboDict) ;
     ///执行buttonview 弹出
     //获取markview的指针
     MarkView   *mv=(MarkView *)markView;
@@ -428,14 +481,19 @@
     
 }
 #pragma mark  ----- toolbar 上面的按钮，执行给toolbar 赋值，显示，弹出工具栏
--(void)SetToolBarValueWithDict:(NSDictionary  *)weiboDict markView:(id) markView isSelect:(BOOL ) isselect StageInfo:(NSDictionary *) stageInfo
+-(void)SetToolBarValueWithDict:(WeiboModel  *)weiboDict markView:(id) markView isSelect:(BOOL ) isselect StageInfo:(StageInfoModel *) stageInfo
 {
    //先对它赋值，然后让他弹出到界面
     if (isselect==YES) {
         NSLog(@" new viewController SetToolBarValueWithDict  执行了出现工具栏的方法");
         
         //设置工具栏的值
-        [_toolBar setToolBarValue:weiboDict :markView WithStageInfo:stageInfo];
+        //[_toolBar setToolBarValue:weiboDict :markView WithStageInfo:stageInfo];
+        _toolBar.weiboDict=weiboDict;
+        _toolBar.StageInfoDict=stageInfo;
+        _toolBar.markView=markView;
+        [_toolBar configToolBar];
+        
         //把工具栏添加到当前视图
         self.tabBarController.tabBar.hidden=YES;
         [self.view addSubview:_toolBar];
@@ -462,7 +520,7 @@
 #pragma mark   ------
 #pragma mark   -------- ButtomToolViewDelegate
 #pragma  mark  -------
--(void)ToolViewHandClick:(UIButton *)button :(MarkView *)markView weiboDict:(NSDictionary *)weiboDict StageInfo:(NSDictionary *)stageInfoDict
+-(void)ToolViewHandClick:(UIButton *)button :(MarkView *)markView weiboDict:(WeiboModel *)weiboDict StageInfo:(StageInfoModel *)stageInfoDict
 {
     if (button.tag==10000) {
         ///点击了头像//进入个人页面
@@ -474,7 +532,7 @@
     {
         //点击了分享
         //分享文字
-        NSString  *shareText=[weiboDict objectForKey:@"topic"];
+        NSString  *shareText=weiboDict.topic;//[weiboDict objectForKey:@"topic"];
         NSLog(@" 点击了分享按钮");
         CommonStageCell *cell = (CommonStageCell *)(markView.superview.superview.superview);
         
@@ -498,31 +556,32 @@
     else  if(button.tag==10002)
     {
         //改变赞的状态
-        [_toolBar SetZanButtonSelected];
-        //把weibodict 复制给了_weiboDict
-        NSMutableDictionary   *_weiboDict=weiboDict;
-
         //点击了赞
-        NSLog(@" 点赞  微博dict  ＝====%@",_weiboDict);
-        if ([[_weiboDict  objectForKey:@"uped"]  intValue]==0) {///没有赞的话
-            [_weiboDict setValue:@"1" forKey:@"uped"];
-            int ups=[[weiboDict objectForKey:@"ups"] intValue];
+        NSLog(@" 点赞  微博dict  ＝====%@",weiboDict);
+      //  NSMutableDictionary  *_weiboDict=[[NSMutableDictionary alloc]initWithDictionary:weiboDict];
+        
+       if ([weiboDict.uped intValue]==0)//[[_weiboDict  objectForKey:@"uped"]  intValue]==0) {///没有赞的话
+           weiboDict.uped=[NSString stringWithFormat:@"%d",1];  //[_weiboDict setValue:@"1" forKey:@"uped"];
+        int ups=[weiboDict.ups intValue];//[[_weiboDict objectForKey:@"ups"] intValue];
             ups =ups+1;
-            [_weiboDict setValue:[NSString stringWithFormat:@"%d",ups] forKey:@"ups"];
+            //[_weiboDict setValue:[NSString stringWithFormat:@"%d",ups] forKey:@"ups"];
+        weiboDict.ups=[NSString stringWithFormat:@"%d",ups];
         }
         else  {
-            [_weiboDict setValue:@"0" forKey:@"uped"];
-            int ups=[[_weiboDict objectForKey:@"ups"] intValue];
+           // [_weiboDict setValue:@"0" forKey:@"uped"];
+            weiboDict.uped=0;
+            int ups=[weiboDict.ups intValue];//[[weiboDict objectForKey:@"ups"] intValue];
             ups =ups-1;
-            [_weiboDict setValue:[NSString stringWithFormat:@"%d",ups] forKey:@"ups"];
+           // [_weiboDict setValue:[NSString stringWithFormat:@"%d",ups] forKey:@"ups"];
+            weiboDict.ups=[NSString stringWithFormat:@"%d",ups];
         }
         //获取赞的数量
         //点赞执行这个方法
         //先去改变数组的内容
         if (segment.selectedSegmentIndex==0) {
             //先匹配stageid
-            int  stageId;
-            int  weiboId=[[_weiboDict  objectForKey:@"id"]  intValue];
+          /*  int  stageId;
+            int  weiboId=[[weiboDict  objectForKey:@"id"]  intValue];
             if([stageInfoDict  objectForKey:@"id"])
             {
                 stageId= [[stageInfoDict  objectForKey:@"id"] intValue];
@@ -556,8 +615,9 @@
                 
             }
             
-            
-        }else if(segment.selectedSegmentIndex==1)
+         */
+        }
+      else if(segment.selectedSegmentIndex==1)
         {
             
         }
@@ -567,8 +627,8 @@
         //点赞成功后，要把赞设置为
     }
 
-    
-}
+
+
 #pragma mark  -----
 #pragma mark  -------隐藏工具栏的方法
 #pragma mark  -------

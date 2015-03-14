@@ -330,7 +330,8 @@
             cell.pageType=NSPageSourceTypeMyAddedViewController;
             //小闪动标签的数组
             cell.weiboDict=[[_addedDataArray objectAtIndex:indexPath.row]  objectForKey:@"weibo"];
-            [cell setCellValue:[[_addedDataArray objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] indexPath:indexPath.row];
+           // [cell setCellValue:[[_addedDataArray objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] indexPath:indexPath.row];
+            [cell ConfigsetCellindexPath:indexPath.row];
         }
         return cell;
     }
@@ -346,7 +347,8 @@
         if (_upedDataArray.count>indexPath.row) {
             cell.pageType=NSPageSourceTypeMainNewController;
             cell.weiboDict =[[_upedDataArray  objectAtIndex:indexPath.row]  objectForKey:@"weibo"];
-            [cell setCellValue:[[_upedDataArray objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"]indexPath:indexPath.row];
+            [cell ConfigsetCellindexPath:indexPath.row];
+          //  [cell setCellValue:[[_upedDataArray objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"]indexPath:indexPath.row];
         }
         return  cell;
     }

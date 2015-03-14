@@ -9,6 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "MarkView.h"
 #import "StageView.h"
+#import "StageInfoModel.h"
+#import "HotMovieModel.h"
+#import "WeiboModel.h"
 
 typedef NS_ENUM(NSInteger, NSPageSourceType)
 {
@@ -42,11 +45,11 @@ typedef NS_ENUM(NSInteger, NSPageSourceType)
 ///@property (nonatomic,strong) StageView          *BgView1;   //放图片和弹幕的黑色背景图
 @property(nonatomic,strong)StageView    *stageView;
 
-@property (nonatomic,strong) NSMutableArray     *WeibosArray;   //小标签的数组，在多个标签的时候使用这个
-
-@property (nonatomic,strong) NSDictionary       *weiboDict;     //只有一个标签的时候传递这个参数
+@property(nonatomic,strong) StageInfoModel   *StageInfoDict;
+@property (nonatomic,strong) NSArray       *WeibosArray;   //小标签的数组，在多个标签的时候使用这个
+@property (nonatomic,strong) WeiboModel       *weiboDict;     //只有一个标签的时候传递这个参数
 @property (nonatomic,assign) NSPageSourceType   pageType;
 //设置stageview的背景图片
--(void)setCellValue:(NSDictionary  *) dict indexPath:(NSInteger) row;
+-(void)ConfigsetCellindexPath:(NSInteger) row;
 
 @end

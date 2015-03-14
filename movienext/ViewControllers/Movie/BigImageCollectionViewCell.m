@@ -54,8 +54,7 @@
 - (void)awakeFromNib {
     // Initialization code
 }
--(void)setCellValue:(NSDictionary  *) dict indexPath:(NSInteger) row;
-{
+-(void)ConfigCellWithIndexPath:(NSInteger)row{
     if (_weiboDict) {
         _StageView.weiboDict = _weiboDict;
     }
@@ -65,10 +64,12 @@
     }
     ScreenButton.tag=2000+row;  //截屏分享
     addMarkButton.tag=3000+row;   //添加弹幕
-    [_StageView setStageValue:dict];
+    //[_StageView setStageValue:dict];
+    _StageView.StageInfoDict=self.StageInfoDict;
+    [_StageView configStageViewforStageInfoDict];
     
-    float  ImageWith=[[dict objectForKey:@"w"]  floatValue];
-    float  ImgeHight=[[dict objectForKey:@"h"]  floatValue];
+    float  ImageWith=[[self.StageInfoDict objectForKey:@"w"]  floatValue];
+    float  ImgeHight=[[self.StageInfoDict objectForKey:@"h"]  floatValue];
     float hight=0;
     if (ImageWith>ImgeHight) {
         hight= kDeviceWidth;  // 计算的事bgview1的高度

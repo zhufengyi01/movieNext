@@ -68,7 +68,6 @@
     _stageView.backgroundColor=[UIColor blackColor];
     _stageView.delegate=self;
     [self.contentView addSubview:_stageView];
-    
     /*
     _MovieImageView =[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, 200)];
     [BgView1 addSubview:_MovieImageView];
@@ -112,8 +111,8 @@
 - (void)awakeFromNib {
     // Initialization code
 }
--(void)setCellValue:(NSDictionary  *) dict indexPath:(NSInteger) row;
-{
+-(void)ConfigsetCellindexPath:(NSInteger)row{
+   // NSLog(@"=====在cell 里面打印  =WeibosArray==%p   index ===%ld",self.StageInfoDict,  row);
     //设置工具栏按钮的tag 值，可以根据tag值去获取点击按钮
     leftButtomButton.tag=1000+row;
     ScreenButton.tag=2000+row;
@@ -123,18 +122,18 @@
 
     
 //   单个标签的时候用这个
-     if (_weiboDict.count) {
+     if (_weiboDict) {
          _stageView.weiboDict = _weiboDict;
      }
     // 多个标签用这个
      if (_WeibosArray.count>0) {
          _stageView.WeibosArray = _WeibosArray;
      }
-    
-    [_stageView setStageValue:dict];
+    _stageView.StageInfoDict=self.StageInfoDict;
+    [_stageView configStageViewforStageInfoDict];
     //这里计算hight 图片的高度，主要是为了计算toolbar 的y轴坐标，真实赋值是在stageview
-    float  ImageWith=[[dict objectForKey:@"w"]  floatValue];
-    float  ImgeHight=[[dict objectForKey:@"h"]  floatValue];
+    float  ImageWith=[self.StageInfoDict.w floatValue];//[[self.StageInfoDict objectForKey:@"w"]  floatValue];
+    float  ImgeHight=[self.StageInfoDict.h floatValue];//[[self.StageInfoDict objectForKey:@"h"]  floatValue];
     float hight=0;
     hight= kDeviceWidth;  // 计算的事bgview1的高度
      if(ImgeHight>ImageWith)
@@ -143,14 +142,13 @@
     }
 #pragma mark 设置底部tool的图片，名字
     //设置底部
-    if ([dict  objectForKey:@"movie_name"]) {  //电影名字，这里设置title 偏移
-        [leftButtomButton setTitle:[dict objectForKey:@"movie_name"] forState:UIControlStateNormal];
+    if (self.StageInfoDict.movie_name) {  //电影名字，这里设置title 偏移
+        [leftButtomButton setTitle:self.StageInfoDict.movie_name forState:UIControlStateNormal];
     }
     
-    if ([dict objectForKey:@"stage"]) {
-        [MovieLogoImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w100h100",kUrlMoviePoster,[dict objectForKey:@"movie_poster"]]] placeholderImage:[ UIImage imageNamed:@"loading_image_all.png"]];
+    if (self.StageInfoDict.stage) {
+        [MovieLogoImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w100h100",kUrlMoviePoster,self.StageInfoDict.movie_poster] ] placeholderImage:[ UIImage imageNamed:@"loading_image_all.png"]];
     }
-
     
 #pragma  mark  热门cell
     if (_pageType  ==NSPageSourceTypeMainHotController) {  //热门
@@ -169,9 +167,9 @@
         _stageView.frame=CGRectMake(0, 45, kDeviceWidth, hight);
         _stageView.isAnimation=NO;
         BgView2.frame=CGRectMake(0, hight+45,kDeviceWidth,45);
-        [UserLogoButton sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!thumb", kUrlAvatar, [_weiboDict objectForKey:@"avatar"]]] forState:UIControlStateNormal];
-        UserNameLable.text = [_weiboDict objectForKey:@"username"];
-        TimeLable.text = [Function friendlyTime:[_weiboDict objectForKey:@"create_time"]];
+        [UserLogoButton sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!thumb", kUrlAvatar, _weiboDict.avatar]] forState:UIControlStateNormal];
+        UserNameLable.text = _weiboDict.username;
+        TimeLable.text = [Function friendlyTime:_weiboDict.create_time];
      
     }
 }

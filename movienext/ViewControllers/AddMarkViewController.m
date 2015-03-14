@@ -69,7 +69,8 @@
 {
     stageView = [[StageView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceWidth)];
     NSLog(@" 在 添加弹幕页面的   stagedict = %@",_myDict);
-    [stageView setStageValue:_stageDict];
+    stageView.StageInfoDict=_stageDict;
+    //[stageView setStageValue:_stageDict];
     [self.view addSubview:stageView];
     
 }
