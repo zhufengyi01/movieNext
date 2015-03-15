@@ -100,7 +100,7 @@
  
     layout=[[UICollectionViewFlowLayout alloc]init];
     //layout.minimumInteritemSpacing=10; //cell之间左右的
-   // layout.minimumLineSpacing=10;      //cell上下间隔
+    //layout.minimumLineSpacing=10;      //cell上下间隔
     //layout.itemSize=CGSizeMake(80,140);  //cell的大小
     if(bigModel==YES)
     {
@@ -130,15 +130,12 @@
 {
     loadView =[[LoadingView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight)];
     [self.view addSubview:loadView];
-    
 }
 //创建底部的视图
 -(void)createToolBar
-
 {
     _toolBar=[[ButtomToolView alloc]initWithFrame:CGRectMake(0,0,kDeviceWidth,kDeviceHeight)];
     _toolBar.delegete=self;
-    
 }
 
 

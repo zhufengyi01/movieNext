@@ -11,6 +11,8 @@
 #import "UserDataCenter.h"
 #import "AppDelegate.h"
 #import "LoginViewController.h"
+#import <MessageUI/MessageUI.h>
+#import <MessageUI/MFMailComposeViewController.h>
 @interface SettingViewController ()<UITableViewDataSource,UITableViewDelegate>
 {
     AppDelegate *appdelegate;
@@ -25,14 +27,12 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
     self.navigationController.navigationItem.title=@"设置";
     self.view.backgroundColor=View_BackGround;
     appdelegate = [[UIApplication sharedApplication]delegate ];
     window=appdelegate.window;
     [self createUI];
     [self createOutLogin];
-    
 }
 -(void)createUI
 {
@@ -85,6 +85,12 @@
     return cell;
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.row==2) {
+        [self sendFeedBack];
+    }
+}
+
 //退出登录
 -(void)OutLoginClick:(UIButton *)button
 {
@@ -107,14 +113,104 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (void)sendFeedBack
+{
+    //    [self showNativeFeedbackWithAppkey:UMENT_APP_KEY];
+    Class mailClass = (NSClassFromString(@"MFMailComposeViewController"));
+    if (mailClass != nil)
+    {
+        // We must always check whether the current device is configured for sending emails
+        if ([mailClass canSendMail])
+        {
+            [self displayComposerSheet];
+        }
+        else
+        {
+            [self launchMailAppOnDevice];
+        }
+    }
+    else
+    {
+        [self launchMailAppOnDevice];
+    }
+    
 }
-*/
+
+#pragma mark - tool Methods
+// 1.  Launches the Mail application on the device.
+
+-(void)launchMailAppOnDevice
+{
+    NSString *recipients = @"mailto:dcj3sjt@gmail.com&subject=Pocket Truth or Dare Support";
+    NSString *body = @"&body=email body!";
+    NSString *email = [NSString stringWithFormat:@"%@%@", recipients, body];
+    email = [email stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:email]];
+}
+// 2. Displays an email composition interface inside the application. Populates all the Mail fields.
+-(void)displayComposerSheet
+{
+    MFMailComposeViewController *picker = [[MFMailComposeViewController alloc] init];/*MFMailComposeViewController邮件发送选择器*/
+    picker.mailComposeDelegate = self;
+    
+    // Custom NavgationBar background And set the backgroup picture
+    picker.navigationBar.tintColor = [UIColor colorWithRed:0.0f/255.0f green:0.0f/255.0f blue:0.0f/255.0f alpha:0.5];
+    //    picker.navigationBar.tintColor = [UIColor colorWithRed:178.0/255 green:173.0/255 blue:170.0/255 alpha:1.0]; //    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 5.0) {
+    //        [picker.navigationBar setBackgroundImage:[UIImage imageNamed:@"nav_bg.png"] forBarMetrics:UIBarMetricsDefault];
+    //    }
+    //    NSArray *ccRecipients = [NSArray arrayWithObjects:@"dcj3sjt@gmail.com", nil];
+    //    NSArray *bccRecipients = [NSArray arrayWithObjects:@"dcj3sjt@163.com", nil];
+    //    [picker setCcRecipients:ccRecipients];
+    //    [picker setBccRecipients:bccRecipients];
+    
+    // Set up recipients
+    NSArray *toRecipients = [NSArray arrayWithObject:@"feedback@immovie.me"];
+    [picker setToRecipients:toRecipients];
+    // Fill out the email body text
+    //struct utsname device_info;
+    //uname(&device_info);
+    
+    NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
+    NSString *appCurName = [infoDictionary objectForKey:@"CFBundleDisplayName"];
+    NSString *appCurVersion = [infoDictionary objectForKey:@"CFBundleShortVersionString"];
+    NSString *appCurVersionNum = [infoDictionary objectForKey:@"CFBundleVersion"];
+    
+    UIDevice * myDevice = [UIDevice currentDevice];
+    NSString * sysVersion = [myDevice systemVersion];
+    NSString *emailBody = [NSString stringWithFormat:@"\n\n\n\n附属信息：\n\n%@ %@(%@)\n%@ / %@ / %@ IOS%@", appCurName, appCurVersion, appCurVersionNum, @"", @"", @"",  sysVersion];
+    [picker setMessageBody:emailBody isHTML:NO];
+    [picker setSubject:[NSString stringWithFormat:@"反馈：我是电影%@(%@)", appCurVersion, appCurVersionNum]];/*emailpicker标题主题行*/
+    
+    [self presentViewController:picker animated:YES completion:nil];
+    //        [self.navigationController presentViewController:picker animated:YES completion:nil];
+    //        [self.navigationController pushViewController:picker animated:YES];
+}
+
+#pragma mark - 协议的委托方法
+
+- (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error
+{
+    NSString *msg;
+    switch (result)
+    {
+        case MFMailComposeResultCancelled:
+            msg = @"邮件发送取消";//@"邮件发送取消";
+            break;
+        case MFMailComposeResultSaved:
+            msg = @"邮件保存成功";//@"邮件保存成功";
+            break;
+        case MFMailComposeResultSent:
+            msg = @"邮件发送成功";//@"邮件发送成功";
+            break;
+        case MFMailComposeResultFailed:
+            msg = @"邮件发送失败";//@"邮件发送失败";
+            break;
+        default:
+            msg = @"邮件未发送";
+            break;
+    }
+    [controller dismissViewControllerAnimated:YES completion:nil];
+}
 
 @end

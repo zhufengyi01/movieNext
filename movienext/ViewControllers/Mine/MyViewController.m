@@ -215,8 +215,6 @@
 #pragma  mark ------  DataRequest 
 #pragma  mark ----
 - (void)requestData{
-#warning  这里需要替换用户id
-    UserDataCenter  *userCenter=[UserDataCenter shareInstance];
     if ( !_author_id ) {
         _author_id = userCenter.user_id;
     }
