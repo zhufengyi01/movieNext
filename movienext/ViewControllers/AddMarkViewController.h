@@ -9,11 +9,13 @@
 #import "RootViewController.h"
 #import "StageView.h"
 #import "MarkView.h"
+#import "StageInfoModel.h"
+#import "WeiboModel.h"
 
 @interface AddMarkViewController : RootViewController
 {
     StageView *stageView;
 }
-@property (nonatomic, strong) NSDictionary  *stageDict;
+@property (nonatomic, strong) StageInfoModel  *stageInfoDict;
 
 @end

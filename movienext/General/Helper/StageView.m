@@ -68,6 +68,7 @@
         markView.isAnimation = NO;
         //设置单条微博的参数信息
         markView.weiboDict=self.weiboDict;
+       
        //遵守markView 的协议
         markView.delegate=self;
        [self addSubview:markView];
@@ -123,7 +124,7 @@
             markView.TitleLable.text=weiboTitleString;
             ///显示标签的头像
             [ markView.LeftImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kUrlAvatar,weibodict.avatar]]];
-           markView.ZanNumLable.text=weibodict.ups; //[weibodict objectForKey:@"ups"];
+    markView.ZanNumLable.text=[NSString stringWithFormat:@"%@",weibodict.ups];//weibodict.ups; //[weibodict objectForKey:@"ups"];
            // markView.isAnimation = YES;
     return markView;
 }
@@ -209,13 +210,13 @@
     _timer=nil;
 }
 #pragma mark  ----
-#pragma mark   ---markViewDelegate 
+#pragma mark   ---markView   Delegate
 #pragma  mark -----
 //实现markview 的代理
 -(void)MarkViewClick:(WeiboModel *)weiboDict withMarkView:(id)markView
 {
     
-    NSLog(@"点击了 stageview 的微博操作");
+    NSLog(@"点击了 stageview 的微博操作 ＝＝＝%@   %@",weiboDict,self.StageInfoDict);
     if (self.delegate &&[self.delegate respondsToSelector:@selector(StageViewHandClickMark:withmarkView:StageInfoDict:)]) {
         [self.delegate StageViewHandClickMark:weiboDict withmarkView:markView StageInfoDict:self.StageInfoDict];
     }

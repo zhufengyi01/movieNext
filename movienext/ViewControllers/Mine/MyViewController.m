@@ -16,6 +16,9 @@
 #import "UserDataCenter.h"
 #import "SettingViewController.h"
 #import "UIImageView+WebCache.h"
+#import "HotMovieModel.h"
+#import "StageInfoModel.h"
+#import "WeiboModel.h"
 @interface MyViewController ()<UITableViewDataSource, UITableViewDelegate,StageViewDelegate,MarkViewDelegate>
 {
     UISegmentedControl *segment;
@@ -236,8 +239,27 @@
             if (_addedDataArray ==nil) {
                 _addedDataArray=[[NSMutableArray alloc]init];
             }
-            //NSLog(@"用户添加的数据 JSON: %@", responseObject);
-            [_addedDataArray addObjectsFromArray:Detailarray];
+            NSLog(@"用户添加的数据 JSON: %@", responseObject);
+           // [_addedDataArray addObjectsFromArray:Detailarray];
+            for (NSDictionary  *addDict  in Detailarray) {
+                HotMovieModel  *model =[[HotMovieModel alloc]init];
+                if (model) {
+                    [model setValuesForKeysWithDictionary:addDict];
+                    StageInfoModel  *stagemodel =[[StageInfoModel alloc]init];
+                    if (stagemodel) {
+                        [stagemodel setValuesForKeysWithDictionary:[addDict objectForKey:@"stageinfo"]];
+                         model.stageinfo=stagemodel;
+                    }
+                   
+                    WeiboModel  *weibomodel =[[WeiboModel alloc]init];
+                    if (weibomodel) {
+                        [weibomodel setValuesForKeysWithDictionary:[addDict objectForKey:@"weibo"]];
+                        model.weibo=weibomodel;
+                    }
+                    
+                }
+                [_addedDataArray addObject:model];
+            }
             [_tableView reloadData];
 
         }
@@ -246,8 +268,28 @@
             if (_upedDataArray==nil) {
                 _upedDataArray=[[NSMutableArray alloc]init];
             }
-           /// NSLog(@"用户赞过的数据 JSON: %@", responseObject);
-            [_upedDataArray addObjectsFromArray:Detailarray];
+           NSLog(@"用户赞过的数据 JSON: %@", responseObject);
+           // [_upedDataArray addObjectsFromArray:Detailarray];
+            for (NSDictionary  *addDict  in Detailarray) {
+                HotMovieModel  *model =[[HotMovieModel alloc]init];
+                if (model) {
+                    [model setValuesForKeysWithDictionary:addDict];
+                    StageInfoModel  *stagemodel =[[StageInfoModel alloc]init];
+                    if (stagemodel) {
+                        [stagemodel setValuesForKeysWithDictionary:[addDict objectForKey:@"stageinfo"]];
+                        model.stageinfo=stagemodel;
+                    }
+                    
+                    WeiboModel  *weibomodel =[[WeiboModel alloc]init];
+                    if (weibomodel) {
+                        [weibomodel setValuesForKeysWithDictionary:[addDict objectForKey:@"weibo"]];
+                        model.weibo=weibomodel;
+                    }
+                    
+                }
+                [_upedDataArray addObject:model];
+            }
+
             [_tableView reloadData];
         }
         
@@ -272,10 +314,11 @@
 
 -(CGFloat )tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     if (segment.selectedSegmentIndex==0) {
+        HotMovieModel *model =[_addedDataArray objectAtIndex:indexPath.row];
         float hight;
         if (_addedDataArray.count>indexPath.row) {
-        float  h=   [[[[_addedDataArray  objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] objectForKey:@"h"] floatValue];
-        float w=   [[[[_addedDataArray  objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] objectForKey:@"w"] floatValue];
+            float  h= [model.stageinfo.h floatValue]; // [[[[_addedDataArray  objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] objectForKey:@"h"] floatValue];
+            float w=  [model.stageinfo.w floatValue]; //[[[[_addedDataArray  objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] objectForKey:@"w"] floatValue];
         if (w==0||h==0) {
              hight= kDeviceWidth+90;
         }
@@ -292,11 +335,12 @@
     }
     else if (segment.selectedSegmentIndex==1)
     {
+        HotMovieModel  *model =[_upedDataArray objectAtIndex:indexPath.row];
         float hight;
         if (_upedDataArray.count>indexPath.row) {
         
-        float  h=   [[[[_upedDataArray  objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] objectForKey:@"h"] floatValue];
-        float w=   [[[[_upedDataArray  objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] objectForKey:@"w"] floatValue];
+            float  h=[model.stageinfo.h floatValue];  // [[[[_upedDataArray  objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] objectForKey:@"h"] floatValue];
+            float w= [model.stageinfo.w floatValue]; // [[[[_upedDataArray  objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] objectForKey:@"w"] floatValue];
         if (w==0||h==0) {
             hight= kDeviceWidth+90;
         }
@@ -318,6 +362,7 @@
 {
 
     if  (segment.selectedSegmentIndex==0) {
+        HotMovieModel  *model =[_addedDataArray objectAtIndex:indexPath.row];
         static NSString *cellID=@"CELL1";
         CommonStageCell  *cell= (CommonStageCell *)[tableView dequeueReusableCellWithIdentifier:cellID];
         if (!cell) {
@@ -329,14 +374,16 @@
         if (_addedDataArray.count>indexPath.row) {
             cell.pageType=NSPageSourceTypeMyAddedViewController;
             //小闪动标签的数组
-            cell.weiboDict=[[_addedDataArray objectAtIndex:indexPath.row]  objectForKey:@"weibo"];
+            cell.weiboDict=model.weibo;//[[_addedDataArray objectAtIndex:indexPath.row]  objectForKey:@"weibo"];
            // [cell setCellValue:[[_addedDataArray objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] indexPath:indexPath.row];
+            cell.StageInfoDict=model.stageinfo;
             [cell ConfigsetCellindexPath:indexPath.row];
         }
         return cell;
     }
     else if (segment.selectedSegmentIndex==1)
     {
+        HotMovieModel  *model =[_upedDataArray objectAtIndex:indexPath.row];
         static NSString *cellID=@"CELL2";
         CommonStageCell  *cell= (CommonStageCell *)[tableView dequeueReusableCellWithIdentifier:cellID];
         if (!cell) {
@@ -346,7 +393,8 @@
         }
         if (_upedDataArray.count>indexPath.row) {
             cell.pageType=NSPageSourceTypeMainNewController;
-            cell.weiboDict =[[_upedDataArray  objectAtIndex:indexPath.row]  objectForKey:@"weibo"];
+            cell.weiboDict =model.weibo;    //[[_upedDataArray  objectAtIndex:indexPath.row]  objectForKey:@"weibo"];
+            cell.StageInfoDict=model.stageinfo;
             [cell ConfigsetCellindexPath:indexPath.row];
           //  [cell setCellValue:[[_upedDataArray objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"]indexPath:indexPath.row];
         }

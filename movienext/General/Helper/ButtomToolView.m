@@ -51,7 +51,7 @@
     
     headButton=[UIButton buttonWithType:UIButtonTypeCustom];
     headButton.frame=CGRectMake(0,0, kDeviceWidth/3, 50);
-    headButton.backgroundColor=VBlue_color;
+    headButton.backgroundColor=VGray_color;
     headButton.clipsToBounds=YES;
     [headButton addTarget:self action:@selector(dealButtomClick:) forControlEvents:UIControlEventTouchDragInside];
     headButton.tag=10000;
@@ -61,9 +61,6 @@
     [headButton setTitleEdgeInsets:UIEdgeInsetsMake(10, 25, 10, 10)];
     [buttomView addSubview:headButton];
     
-   // nameLable =[ZCControl createLabelWithFrame:CGRectMake(headButton.frame.origin.x+headButton.frame.size.width+10, 10,100, 20) Font:14 Text:@"名字"];
-    //nameLable.textColor=[UIColor whiteColor];
-    //[buttomView addSubview:nameLable];
 
     UIView  *lineView1=[[UIView alloc]initWithFrame:CGRectMake(kDeviceWidth/3, 15, 1, 20)];
     lineView1.backgroundColor=VLight_GrayColor;
@@ -71,6 +68,7 @@
     
     
     shareButton =[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth/3,0,kDeviceWidth/3,50) ImageName:nil Target:self Action:@selector(dealButtomClick:) Title:@"分享"];
+    shareButton.backgroundColor=VBlue_color;
     shareButton.titleLabel.font=[UIFont systemFontOfSize:14];
     [shareButton setTitleEdgeInsets:UIEdgeInsetsMake(10, 25, 10, 10)];
 
@@ -101,7 +99,7 @@
 {
     //_weiboDict=dict;
     //_markView=markView;
-    zanNum=[self.weiboDict.ups integerValue];//[[self.weiboDict objectForKey:@"ups"]  intValue];
+    //zanNum=[self.weiboDict.ups integerValue];//[[self.weiboDict objectForKey:@"ups"]  intValue];
     //把这个字典存在了stageview 中,在代理的时候，又反悔给了controller
   //  stageInfo=[NSDictionary dictionaryWithDictionary:stageInfoDict];
     if ([self.weiboDict.uped  intValue]==0) {
@@ -126,31 +124,11 @@
     else if (zanbutton.selected==NO)
     {
         zanbutton.selected=YES;
-        
-        
     }
-    
     if (self.delegete &&[self.delegete respondsToSelector:@selector(ToolViewHandClick::weiboDict:StageInfo:)]) {
-        [self.delegete ToolViewHandClick:button :_markView weiboDict:_weiboDict StageInfo:self.StageInfoDict];
+        [self.delegete ToolViewHandClick:button :_markView weiboDict:self.weiboDict StageInfo:self.StageInfoDict];
     }
 }
-
-
-//设置赞的状态为选中
-/*-(void)SetZanButtonSelected
-{
-    if (zanbutton.selected==YES) {
-        zanbutton.selected=NO;
-    }
-    else if (zanbutton.selected==NO)
-    {
-        zanbutton.selected=YES;
-        
-        
-    }
-    
-}
-*/
 
 //显示底部试图
 -(void)ShowButtomView;

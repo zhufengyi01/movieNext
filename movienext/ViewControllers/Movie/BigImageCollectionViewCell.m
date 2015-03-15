@@ -68,8 +68,8 @@
     _StageView.StageInfoDict=self.StageInfoDict;
     [_StageView configStageViewforStageInfoDict];
     
-    float  ImageWith=[[self.StageInfoDict objectForKey:@"w"]  floatValue];
-    float  ImgeHight=[[self.StageInfoDict objectForKey:@"h"]  floatValue];
+    float  ImageWith=[self.StageInfoDict.w floatValue]; //[[self.StageInfoDict objectForKey:@"w"]  floatValue];
+    float  ImgeHight=[self.StageInfoDict.h floatValue];//[[self.StageInfoDict objectForKey:@"h"]  floatValue];
     float hight=0;
     if (ImageWith>ImgeHight) {
         hight= kDeviceWidth;  // 计算的事bgview1的高度

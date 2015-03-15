@@ -16,7 +16,7 @@
 {
     UIToolbar  *_toolBar;
     UITextField  *_inputText;
-    NSDictionary  *_myDict;
+   // NSDictionary  *_myDict;
     MarkView  *_myMarkView;
     NSString    *X;
     NSString    *Y;
@@ -28,7 +28,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    _myDict =[NSDictionary dictionaryWithDictionary:_stageDict];
+   // _myDict =[NSDictionary dictionaryWithDictionary:_stageDict];
     [self createNavigation];
     //键盘将要显示
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
@@ -68,10 +68,11 @@
 -(void)createStageView
 {
     stageView = [[StageView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceWidth)];
-    NSLog(@" 在 添加弹幕页面的   stagedict = %@",_myDict);
-    stageView.StageInfoDict=_stageDict;
-    //[stageView setStageValue:_stageDict];
-    [self.view addSubview:stageView];
+ //   NSLog(@" 在 添加弹幕页面的   stagedict = %@",_myDict);
+    stageView.StageInfoDict=self.stageInfoDict;
+       NSLog(@" 在 添加弹幕页面的   stagedict = %@",self.stageInfoDict);
+
+     [self.view addSubview:stageView];
     
 }
 
@@ -81,8 +82,8 @@
     
      _toolBar=[[UIToolbar alloc]initWithFrame:CGRectMake(0,kDeviceHeight-50-kHeightNavigation, kDeviceHeight, 50)];
      //_toolBar.barTintColor=[UIColor redColor];   //背景颜色
-   // [self.navigat setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color.png"] forBarMetrics:UIBarMetricsDefault];
-    [_toolBar setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color.png"] forToolbarPosition:UIBarPositionAny barMetrics:UIBarMetricsDefault];
+     // [self.navigat setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color.png"] forBarMetrics:UIBarMetricsDefault];
+     [_toolBar setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color.png"] forToolbarPosition:UIBarPositionAny barMetrics:UIBarMetricsDefault];
      _toolBar.tintColor=VGray_color;  //内容颜色
      
      _inputText= [[UITextField alloc]initWithFrame:CGRectMake(10,10, kDeviceWidth-80,30)];
@@ -103,8 +104,6 @@
      [_toolBar addSubview:publishBtn];
      [_inputText becomeFirstResponder];
     [self.view addSubview:_toolBar];
-    
-    
 }
 
 
@@ -121,8 +120,6 @@
     {
         NSLog(@" =========执行确定发布的方法");
         [self  PublicRuqest];
-        
-        
         //执行发布的方法
     }
     else if (button.tag==99)
@@ -142,7 +139,6 @@
             [view removeFromSuperview];
         }
     }
-    
     _myMarkView =[[MarkView alloc]initWithFrame:CGRectMake(100,140 , 100, 20)];
    //  _myMarkView.backgroundColor=[UIColor redColor];
     ///显示标签的头像
@@ -201,7 +197,7 @@
 {
 
     UserDataCenter  *userCenter=[UserDataCenter shareInstance];
-    NSDictionary *parameter = @{@"user_id": userCenter.user_id,@"topic_name":[_inputText text],@"stage_id":[_myDict  objectForKey:@"id"],@"x":X,@"y":Y};
+    NSDictionary *parameter = @{@"user_id": userCenter.user_id,@"topic_name":[_inputText text],@"stage_id":self.stageInfoDict.Id,@"x":X,@"y":Y};
 
     NSLog(@"==parameter====%@",parameter);
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];

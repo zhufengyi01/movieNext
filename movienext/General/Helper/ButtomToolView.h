@@ -27,17 +27,13 @@
     UILabel   *nameLable;
     UIButton  *shareButton;
     UIButton  *zanbutton;
-    //当前气泡视图
-    //MarkView  *_markView;
-    //当前weibo的字典数据
-    //NSDictionary  *_weiboDict;
+    
     //整个透明背景的图大小
     CGRect    m_frame;
     //上面的透明的试图，点击的按钮
     UIButton   *_topButtom;
     //底部的弹出视图
     UIView   *buttomView;
-    //NSDictionary  *stageInfo;
     int  zanNum;
 }
 #pragma mark  ------外部方法

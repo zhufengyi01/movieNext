@@ -27,7 +27,9 @@
 #import "CommonStageCell.h"
 #import "UMSocial.h"
 #import "AddMarkViewController.h"
-
+#import "HotMovieModel.h"
+#import "StageInfoModel.h"
+#import "WeiboModel.h"
 @interface MovieDetailViewController ()<UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UICollectionViewDelegate,MovieHeadViewDelegate>
 {
     UICollectionView    *_myConllectionView;
@@ -163,14 +165,39 @@
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:[NSString stringWithFormat:@"%@/movieStage/list", kApiBaseUrl] parameters:parameter success:^(AFHTTPRequestOperation *operation, id responseObject) {
      ///   NSLog(@"  电影详情页面数据JSON: %@", responseObject);
+        NSMutableArray  *detailArray=[responseObject objectForKey:@"detail"];
         [loadView stopAnimation];
         [loadView removeFromSuperview];
         
         if (_dataArray==nil) {
             _dataArray=[[NSMutableArray alloc]init];
         }
-        [_dataArray addObjectsFromArray:[responseObject objectForKey:@"detail"]];
-        NSLog(@"=-=======dataArray 电影详细页面的数组 是=====%@",_dataArray);
+       // [_dataArray addObjectsFromArray:[responseObject objectForKey:@"detail"]];
+       // NSLog(@"=-=======dataArray 电影详细页面的数组 是=====%@",_dataArray);
+        for (NSDictionary  *movieDict in detailArray) {
+            HotMovieModel *model=[[HotMovieModel alloc]init];
+            if (model) {
+                [model setValuesForKeysWithDictionary:movieDict];
+                StageInfoModel  *stageModel=[[StageInfoModel alloc]init];
+                [stageModel setValuesForKeysWithDictionary:[movieDict objectForKey:@"stageinfo"]];
+                model.stageinfo=stageModel;
+              
+                NSMutableArray  *weibosArray=[[NSMutableArray alloc]init];
+                for (NSDictionary  *weiboDict in [movieDict objectForKey:@"weibos"]) {
+                    WeiboModel  *weibomodel=[[WeiboModel alloc]init];
+                    if (weibomodel) {
+                        [weibomodel setValuesForKeysWithDictionary:weiboDict];
+                        [weibosArray addObject:weibomodel];
+                    }
+                }
+                model.weibos=weibosArray;
+                
+            }
+            [_dataArray addObject:model];
+           
+            
+        }
+        
         [_myConllectionView reloadData];
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -201,15 +228,16 @@
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     //在这里先将内容给清除一下, 然后再加载新的, 添加完内容之后先动画, 在cell消失的时候做清理工作
-    NSDictionary *dict = [_dataArray objectAtIndex:(indexPath.row)];
+    //NSDictionary *dict = [_dataArray objectAtIndex:(indexPath.row)];
+    HotMovieModel  *model=[_dataArray objectAtIndex:indexPath.row];
     if (bigModel ==YES) {
         BigImageCollectionViewCell *cell = (BigImageCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"bigcell" forIndexPath:indexPath];
         if (_dataArray.count>indexPath.row) {
            //cell.pageType=NSPageSourceTypeMyAddedViewController;
           //  小闪动标签的数组
-            cell.WeibosArray=[[_dataArray objectAtIndex:indexPath.row]  objectForKey:@"weibos"];
-            
-            cell.StageInfoDict=[[_dataArray objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"];
+           // cell.WeibosArray=[[_dataArray objectAtIndex:indexPath.row]  objectForKey:@"weibos"];
+            cell.WeibosArray=model.weibos;
+            cell.StageInfoDict=model.stageinfo;//[[_dataArray objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"];
             [cell ConfigCellWithIndexPath:indexPath.row];
           //  [cell setCellValue:;
         }
@@ -220,9 +248,9 @@
         SmallImageCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"smallcell" forIndexPath:indexPath];
         //cell.backgroundColor = [UIColor redColor];
         
-        [cell.imageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w340h340",kUrlStage,[[dict  objectForKey:@"stageinfo"]  objectForKey:@"stage"]]] placeholderImage:[UIImage imageNamed:@"loading_image_all.png"]];
-        if ([[dict objectForKey:@"stageinfo"] objectForKey:@"marks"]) {
-            cell.titleLab.text=[NSString stringWithFormat:@"%@",  [[dict objectForKey:@"stageinfo"] objectForKey:@"marks"]];
+        [cell.imageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w340h340",kUrlStage,model.stageinfo.stage]] placeholderImage:[UIImage imageNamed:@"loading_image_all.png"]];
+        if (model.stageinfo.marks) {
+            cell.titleLab.text=[NSString stringWithFormat:@"%@",  model.stageinfo.marks];
 
         }
         
@@ -265,12 +293,13 @@
 
 // 设置每个item的尺寸
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
+    HotMovieModel  *model =[_dataArray objectAtIndex:indexPath.row];
     if (bigModel==YES) {
       
         float hight;
         if (_dataArray.count>indexPath.row) {
-            float  h=   [[[[_dataArray  objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] objectForKey:@"h"] floatValue];
-            float w=   [[[[_dataArray  objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] objectForKey:@"w"] floatValue];
+            float  h= [model.stageinfo.h  floatValue]; // [[[[_dataArray  objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] objectForKey:@"h"] floatValue];
+            float w=[model.stageinfo.w floatValue];   //[[[[_dataArray  objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] objectForKey:@"w"] floatValue];
             if (w==0||h==0) {
                 hight= kDeviceWidth+45;
             }
@@ -431,7 +460,7 @@
     AddMarkViewController  *AddMarkVC=[[AddMarkViewController alloc]init];
     //CommonStageCell *cell = (CommonStageCell *)button.superview.superview.superview;
     NSDictionary *dict = [_dataArray objectAtIndex:button.tag-3000];
-    AddMarkVC.stageDict = [dict valueForKey:@"stageinfo"];
+    AddMarkVC.stageInfoDict = [dict valueForKey:@"stageinfo"];
     //NSLog(@"dict = %@", dict);
     NSLog(@"dict.stageinfo = %@", [dict valueForKey:@"stageinfo"]);
     [self.navigationController pushViewController:AddMarkVC animated:NO];

@@ -9,5 +9,8 @@
 #import "StageInfoModel.h"
 
 @implementation StageInfoModel
-
+-(void)setValue:(id)value forUndefinedKey:(NSString *)key
+{
+    
+}
 @end

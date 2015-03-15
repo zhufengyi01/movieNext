@@ -138,23 +138,26 @@
 #pragma  mark ------  DataRequest 
 #pragma  mark ----
 //微博点赞请求
--(void)LikeRequstData:(NSDictionary  *) upDict StageInfo :(NSDictionary *) stageInfoDict
+-(void)LikeRequstData:(WeiboModel  *) weiboDict StageInfo :(StageInfoModel *) stageInfoDict
 {
     
     UserDataCenter  *userCenter=[UserDataCenter shareInstance];
-    NSString  *weiboId=[upDict objectForKey:@"id"];
-    NSString  *stageId=[stageInfoDict objectForKey:@"id"];
-    NSString  *movieId=[stageInfoDict objectForKey:@"movie_id"];
-    NSString  *movieName=[stageInfoDict objectForKey:@"movie_name"];
+    NSNumber  *weiboId=weiboDict.Id;  //[upDict objectForKey:@"id"];
+    NSNumber  *stageId=stageInfoDict.Id;//[stageInfoDict objectForKey:@"id"];
+    NSString  *movieId=stageInfoDict.movie_id; //[stageInfoDict objectForKey:@"movie_id"];
+    NSString  *movieName=stageInfoDict.movie_name;//[stageInfoDict objectForKey:@"movie_name"];
     NSString  *userId=userCenter.user_id;
-    NSString  *autorId=[upDict objectForKey:@"user_id"];
-    NSString  *uped;
-    if ([[upDict objectForKey:@"uped"]  intValue]==0) {
-        uped =[NSString stringWithFormat:@"%d",1];
+    NSString  *autorId =weiboDict.user_id; // [upDict objectForKey:@"user_id"];
+    NSNumber  *uped;
+    //if ([[upDict objectForKey:@"uped"]  intValue]==0) {
+        //uped =[NSString stringWithFormat:@"%d",1];
+    //}
+    if ([weiboDict.uped  integerValue] ==0) {
+        uped=[NSNumber numberWithInt:0];
     }
     else
     {
-        uped =[NSString stringWithFormat:@"%d",0];
+       uped=[NSNumber numberWithInt:1];
     }
     
     NSDictionary *parameters = @{@"weibo_id":weiboId, @"stage_id":stageId,@"movie_id":movieId,@"movie_name":movieName,@"user_id":userId,@"author_id":autorId,@"operation":uped};
@@ -393,21 +396,24 @@
 
 
 #pragma  mark  =====ButtonClick
-
+ 
 //点击左下角的电影按钮
 -(void)dealMovieButtonClick:(UIButton  *) button{
-    NSLog(@" ==dealMovieButtonClick  ====%d",button.tag);
-    
+    HotMovieModel  *hotmovie;
+    if (segment.selectedSegmentIndex==0) {
+        hotmovie =[_hotDataArray objectAtIndex:button.tag-1000];
+    }
+    else  {
+        hotmovie=[_newDataArray objectAtIndex:button.tag-1000];
+    }
     MovieDetailViewController *vc =  [MovieDetailViewController new];
-    NSDictionary *dict = segment.selectedSegmentIndex==0 ? [_hotDataArray objectAtIndex:button.tag-1000] : [_newDataArray objectAtIndex:button.tag-1000];
-    NSLog(@"dict = %@", dict);
-    vc.movieId = [[dict objectForKey:@"stageinfo"] objectForKey:@"movie_id"];
-   [self.navigationController pushViewController:vc animated:YES];
+     vc.movieId =  hotmovie.stageinfo.movie_id;
+    [self.navigationController pushViewController:vc animated:YES];
 }
 //分享
 -(void)ScreenButtonClick:(UIButton  *) button
 {
-    NSLog(@" ==ScreenButtonClick  ====%d",button.tag);
+    NSLog(@" ==ScreenButtonClick  ====%ld",button.tag);
     //获取cell
 #pragma mark 暂时把sharetext设置成null
 
@@ -434,13 +440,17 @@
 {
     NSLog(@" ==addMarkButtonClick  ====%ld",button.tag);
     AddMarkViewController  *AddMarkVC=[[AddMarkViewController alloc]init];
-    //CommonStageCell *cell = (CommonStageCell *)button.superview.superview.superview;
-    NSDictionary *dict = [_hotDataArray objectAtIndex:button.tag-3000];
-    AddMarkVC.stageDict = [dict valueForKey:@"stageinfo"];
-    //NSLog(@"dict = %@", dict);
-    NSLog(@"dict.stageinfo = %@", [dict valueForKey:@"stageinfo"]);
+    HotMovieModel  *hotmovie=[[HotMovieModel alloc]init];
+    if (segment.selectedSegmentIndex==0) {
+        hotmovie =[_hotDataArray objectAtIndex:button.tag-3000];
+    }
+   else
+   {
+       hotmovie=[_newDataArray objectAtIndex:button.tag-3000];
+   }
+    AddMarkVC.stageInfoDict=hotmovie.stageinfo;
+    NSLog(@"dict.stageinfo = %@", AddMarkVC.stageInfoDict);
     [self.navigationController pushViewController:AddMarkVC animated:NO];
-   //[self presentViewController:AddMarkVC animated:NO completion:nil]
 
 }
 //点击头像
@@ -460,8 +470,6 @@
 #pragma mark  ----
 -(void)StageViewHandClickMark:(WeiboModel *)weiboDict withmarkView:(id)markView StageInfoDict:(StageInfoModel *)stageInfoDict
 {
-
-   // NSLog(@"在new view controller  里面响应了这个方法 weibo dict  ====%@",    weiboDict) ;
     ///执行buttonview 弹出
     //获取markview的指针
     MarkView   *mv=(MarkView *)markView;
@@ -476,7 +484,6 @@
     {
         NSLog(@"隐藏工具栏工具栏");
         [self SetToolBarValueWithDict:weiboDict markView:markView isSelect:NO StageInfo:stageInfoDict];
-        
     }
     
 }
@@ -522,6 +529,8 @@
 #pragma  mark  -------
 -(void)ToolViewHandClick:(UIButton *)button :(MarkView *)markView weiboDict:(WeiboModel *)weiboDict StageInfo:(StageInfoModel *)stageInfoDict
 {
+            NSLog(@"点击头像  微博dict  ＝====%@ ======出现的stageinfo  ＝＝＝＝＝＝%@",weiboDict,stageInfoDict);
+    
     if (button.tag==10000) {
         ///点击了头像//进入个人页面
         NSLog(@"点击头像  微博dict  ＝====%@ ======出现的stageinfo  ＝＝＝＝＝＝%@",weiboDict,stageInfoDict);
@@ -558,75 +567,35 @@
         //改变赞的状态
         //点击了赞
         NSLog(@" 点赞  微博dict  ＝====%@",weiboDict);
-      //  NSMutableDictionary  *_weiboDict=[[NSMutableDictionary alloc]initWithDictionary:weiboDict];
-        
-       if ([weiboDict.uped intValue]==0)//[[_weiboDict  objectForKey:@"uped"]  intValue]==0) {///没有赞的话
-           weiboDict.uped=[NSString stringWithFormat:@"%d",1];  //[_weiboDict setValue:@"1" forKey:@"uped"];
-        int ups=[weiboDict.ups intValue];//[[_weiboDict objectForKey:@"ups"] intValue];
-            ups =ups+1;
-            //[_weiboDict setValue:[NSString stringWithFormat:@"%d",ups] forKey:@"ups"];
-        weiboDict.ups=[NSString stringWithFormat:@"%d",ups];
-        }
+       if ([weiboDict.uped intValue]==0)
+       {
+          weiboDict.uped=[NSNumber numberWithInt:1];
+          int ups=[weiboDict.ups intValue];
+            ups =ups+[weiboDict.uped intValue];
+           weiboDict.ups=[NSNumber numberWithInt:ups];
+           
+           if ([weiboDict.ups intValue]==0) {
+           markView.ZanNumLable.hidden=NO;
+          // markView.rightView.frame.size.width=markView.rightView.frame.size.width+10;
+           CGRect   markframe=markView.rightView.frame;
+           markframe.size.width=markframe.size.width+10;
+           markView.rightView.frame=markframe;
+           markView.ZanNumLable.text=[NSString stringWithFormat:@"%@",weiboDict.ups];
+           }
+       }
         else  {
-           // [_weiboDict setValue:@"0" forKey:@"uped"];
-            weiboDict.uped=0;
-            int ups=[weiboDict.ups intValue];//[[weiboDict objectForKey:@"ups"] intValue];
-            ups =ups-1;
-           // [_weiboDict setValue:[NSString stringWithFormat:@"%d",ups] forKey:@"ups"];
-            weiboDict.ups=[NSString stringWithFormat:@"%d",ups];
+
+            weiboDict.uped=[NSNumber numberWithInt:0];
+            int ups=[weiboDict.ups intValue];
+            ups =ups-[weiboDict.uped intValue];
+            weiboDict.ups=[NSNumber numberWithInt:ups];
         }
-        //获取赞的数量
-        //点赞执行这个方法
-        //先去改变数组的内容
-        if (segment.selectedSegmentIndex==0) {
-            //先匹配stageid
-          /*  int  stageId;
-            int  weiboId=[[weiboDict  objectForKey:@"id"]  intValue];
-            if([stageInfoDict  objectForKey:@"id"])
-            {
-                stageId= [[stageInfoDict  objectForKey:@"id"] intValue];
-               
-                ///dict 包含热门 weibo，， weibos 的信息
-                for (int i=0 ; i<_hotDataArray.count; i++)  {
-                    NSDictionary  *dict=[_hotDataArray  objectAtIndex:i];
-                    //如果stageid ＝＝stageid
-                    if ([[[dict objectForKey:@"stageinfo"] objectForKey:@"id"] intValue]==stageId) {
-                        
-                        //再遍历跟stageid 同一个字典的weibos 数组
-                        NSMutableArray  *weibosArray=[[NSMutableArray alloc]initWithArray:[dict  objectForKey:@"weibos"]];
-                        for (int j=0; j<weibosArray.count; j++) {
-                            //weibo id == weiboId
-                            if ([[[weibosArray  objectAtIndex:j] objectForKey:@"id"]  intValue]==weiboId) {
-                                
-                              //  _hotDataArray
-                             //   if ([[weiboDict objectForKey:@"uped"] intValue]==0) {
-                                    // 替代了字典里面一个数据,
-#warning   替代整个weibo的字典
-                               //     [[[weibosArray  objectAtIndex:j] objectForKey:@"uped"] setObject:@"1" forKey:@"id"];
-                                //替代原来的数组
-                                //[weibosArray replaceObjectAtIndex:j withObject:weiboDict];
-                            
-                            }
-                        }
-                        
-                    }
-                    
-                }
-                
-            }
-            
-         */
-        }
-      else if(segment.selectedSegmentIndex==1)
-        {
-            
-        }
-    
-        //发送到服务器
+       
+        ////发送到服务器
         [self LikeRequstData:weiboDict StageInfo:stageInfoDict];
         //点赞成功后，要把赞设置为
     }
-
+}
 
 
 #pragma mark  -----
