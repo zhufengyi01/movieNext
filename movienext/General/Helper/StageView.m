@@ -100,7 +100,7 @@
              float  x=[weibodict.x floatValue];
              float  y=[weibodict.y floatValue];
              NSString  *weiboTitleString=weibodict.topic;
-    NSString  *UpString=[NSString stringWithFormat:@"%@",weibodict.ups];//weibodict.ups;
+             NSString  *UpString=[NSString stringWithFormat:@"%@",weibodict.ups];//weibodict.ups;
             //计算标题的size
             CGSize  Msize=[weiboTitleString boundingRectWithSize:CGSizeMake(kDeviceWidth/2,MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:markView.TitleLable.font forKey:NSFontAttributeName] context:nil].size;
             // 计算赞数量的size

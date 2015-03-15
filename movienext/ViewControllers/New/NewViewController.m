@@ -130,9 +130,7 @@
 {
     _toolBar=[[ButtomToolView alloc]initWithFrame:CGRectMake(0,0,kDeviceWidth,kDeviceHeight)];
     _toolBar.delegete=self;
-   // [self.view addSubview:_toolBar];
-    
-
+ 
 }
 #pragma  mark -----
 #pragma  mark ------  DataRequest 
@@ -166,9 +164,7 @@
     [manager POST:[NSString stringWithFormat:@"%@/weiboUp/up", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"return_code"]  intValue]==10000) {
             NSLog(@"点赞成功========%@",responseObject);
-            //_mymarkView.ZanNumLable
-            //[_toolBar SetZanButtonSelected];
-
+          
          }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
@@ -465,6 +461,9 @@
     NSLog(@" ==ZanButtonClick  ====%ld",button.tag);
 
 }
+
+
+
 #pragma mark  -----
 #pragma mark  ---StaegViewDelegate
 #pragma mark  ----
@@ -474,7 +473,7 @@
     //获取markview的指针
     MarkView   *mv=(MarkView *)markView;
     //把当前的markview 给存储在了controller 里面
-    _mymarkView=mv;
+     _mymarkView=mv;
     if (mv.isSelected==YES) {  //当前已经选中的状态
         //设置工具栏的值，并且，弹出工具栏
          // NSLog(@"出现工具栏,   ======stageinfo =====%@",stageInfoDict);
@@ -566,38 +565,76 @@
     {
         //改变赞的状态
         //点击了赞
-        NSLog(@" 点赞  微博dict  ＝====%@",weiboDict);
+        
+        NSLog(@" 点赞 前 微博dict  ＝====uped====%@    ups===%@",weiboDict.uped,weiboDict.ups);
        if ([weiboDict.uped intValue]==0)
        {
           weiboDict.uped=[NSNumber numberWithInt:1];
           int ups=[weiboDict.ups intValue];
             ups =ups+[weiboDict.uped intValue];
-           weiboDict.ups=[NSNumber numberWithInt:ups];
+            weiboDict.ups=[NSNumber numberWithInt:ups];
+           //重新给markview 赋值，改变markview的frame
+           [self layoutMarkViewWithMarkView:markView WeiboInfo:weiboDict];
            
-           if ([weiboDict.ups intValue]==0) {
-           markView.ZanNumLable.hidden=NO;
-          // markView.rightView.frame.size.width=markView.rightView.frame.size.width+10;
-           CGRect   markframe=markView.rightView.frame;
-           markframe.size.width=markframe.size.width+10;
-           markView.rightView.frame=markframe;
-           markView.ZanNumLable.text=[NSString stringWithFormat:@"%@",weiboDict.ups];
-           }
+           
+          
        }
         else  {
 
             weiboDict.uped=[NSNumber numberWithInt:0];
             int ups=[weiboDict.ups intValue];
-            ups =ups-[weiboDict.uped intValue];
+            ups =ups-1;
             weiboDict.ups=[NSNumber numberWithInt:ups];
+            [self layoutMarkViewWithMarkView:markView WeiboInfo:weiboDict];
         }
        
         ////发送到服务器
         [self LikeRequstData:weiboDict StageInfo:stageInfoDict];
-        //点赞成功后，要把赞设置为
+        
     }
 }
+//重新布局markview
+-(void)layoutMarkViewWithMarkView:(MarkView  *) markView WeiboInfo:(WeiboModel *) weibodict
+{
+    
+    
+    NSLog(@" 点赞 后 微博dict  ＝====uped====%@    ups===%@",weibodict.uped,weibodict.ups);
 
-
+     float  x=[weibodict.x floatValue];
+     float  y=[weibodict.y floatValue];
+     NSString  *weiboTitleString=weibodict.topic;
+      NSString  *UpString=[NSString stringWithFormat:@"%@",weibodict.ups];//weibodict.ups;
+     //计算标题的size
+      CGSize  Msize=[weiboTitleString boundingRectWithSize:CGSizeMake(kDeviceWidth/2,MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:markView.TitleLable.font forKey:NSFontAttributeName] context:nil].size;
+    // 计算赞数量的size
+      CGSize Usize=[UpString boundingRectWithSize:CGSizeMake(40,MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:markView.ZanNumLable.font forKey:NSFontAttributeName] context:nil].size;
+    
+    // NSLog(@"size= %f %f", Msize.width, Msize.height);
+    //计算赞数量的长度
+    float  Uwidth=[UpString floatValue]==0?0:Usize.width;
+    //宽度=字的宽度+左头像图片的宽度＋赞图片的宽度＋赞数量的宽度+中间两个空格2+2
+    float markViewWidth = Msize.width+23+Uwidth+5+5+11+5;
+    float markViewHeight = Msize.height+6;
+    float markViewX = (x*kDeviceWidth)/100-markViewWidth;
+    markViewX = MIN(MAX(markViewX, 1.0f), kDeviceWidth-markViewWidth-1);
+    
+    float markViewY = (y*kDeviceWidth)/100+(Msize.height/2);
+#warning    kDeviceWidth 目前计算的是正方形的，当图片高度>屏幕的宽度的实际，需要使用图片的高度
+    markViewY = MIN(MAX(markViewY, 1.0f), kDeviceWidth-markViewHeight-1);
+#pragma mark 设置气泡的大小和位置
+    markView.frame=CGRectMake(markViewX, markViewY, markViewWidth, markViewHeight);
+#pragma mark 设置标签的内容
+   // markView.TitleLable.text=weiboTitleString;
+    markView.ZanNumLable.text =[NSString stringWithFormat:@"%@",weibodict.ups];
+    if ([weibodict.ups intValue]==0) {
+        markView.ZanNumLable.hidden=YES;
+    }
+    else
+    {
+        markView.ZanNumLable.hidden=NO;
+    }
+    
+}
 #pragma mark  -----
 #pragma mark  -------隐藏工具栏的方法
 #pragma mark  -------

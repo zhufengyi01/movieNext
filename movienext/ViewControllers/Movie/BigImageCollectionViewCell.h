@@ -21,7 +21,7 @@
 
 }
 @property (nonatomic,strong) StageView          *StageView;     //放图片和弹幕的黑色背景图
-@property (nonatomic,strong) NSMutableArray     *WeibosArray;   //小标签的数组，在多个标签的时候使用这个
+@property (nonatomic,strong) NSArray     *WeibosArray;   //小标签的数组，在多个标签的时候使用这个
 @property (nonatomic,strong) WeiboModel       *weiboDict;     //只有一个标签的时候传递这个参数
 @property(nonatomic,strong) StageInfoModel   *StageInfoDict;
 -(void)ConfigCellWithIndexPath:(NSInteger )row;
