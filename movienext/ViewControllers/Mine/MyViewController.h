@@ -10,6 +10,6 @@
 
 @interface MyViewController : UIViewController
 
-@property (nonatomic, strong) NSString * user_id;
+@property (nonatomic, strong) NSString * author_id;//当前正在查看的作者ID
 
 @end

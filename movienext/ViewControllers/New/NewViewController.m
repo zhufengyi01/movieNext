@@ -18,6 +18,7 @@
 #import "CommonStageCell.h"
 #import "AddMarkViewController.h"
 #import "MovieDetailViewController.h"
+#import "MyViewController.h"
 #import "WeiboModel.h"
 #import "HotMovieModel.h"
 
@@ -457,7 +458,11 @@
 -(void)UserLogoButtonClick:(UIButton *) button
 {
     NSLog(@" ==UserLogoButtonClick  ====%ld",button.tag);
-
+    MyViewController  *myVC=[[MyViewController alloc]init];
+    HotMovieModel *hotMovieModel = [_newDataArray objectAtIndex:button.tag-4000];
+    myVC.author_id = hotMovieModel.weibo.user_id;
+    [self.navigationController pushViewController:myVC animated:NO];
+    
 }
 //点赞
 -(void)ZanButtonClick:(UIButton *)button

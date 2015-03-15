@@ -217,10 +217,11 @@
 - (void)requestData{
 #warning  这里需要替换用户id
     UserDataCenter  *userCenter=[UserDataCenter shareInstance];
-    if ( !_user_id ) {
-        _user_id = userCenter.user_id;
+    if ( !_author_id ) {
+        _author_id = userCenter.user_id;
     }
-    NSDictionary *parameters = @{@"user_id":_user_id, @"page":[NSString stringWithFormat:@"%d",page], @"author_id":@"54"};
+    //user_id是当前用户的ID
+    NSDictionary *parameters = @{@"user_id":userCenter.user_id, @"page":[NSString stringWithFormat:@"%d",page], @"author_id":_author_id};
     NSString * section;
     if (segment.selectedSegmentIndex==1) {  // 赞过的
         section=@"weibo/upedListByUserId";
