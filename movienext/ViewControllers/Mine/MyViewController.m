@@ -288,8 +288,12 @@
 
 }
 - (void)requestData{
+<<<<<<< HEAD
     UserDataCenter  *userCenter=[UserDataCenter shareInstance];
     if ( !_author_id |[self.author_id isEqualToString:@"0"]) {  //表示直接进入这个页面的话，这个为空
+=======
+    if ( !_author_id ) {
+>>>>>>> 2591d62392d62997be880af56c3a1d810dff2490
         _author_id = userCenter.user_id;
     }
     //user_id是当前用户的ID
