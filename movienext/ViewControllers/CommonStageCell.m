@@ -56,9 +56,16 @@
     TimeLable.textColor=VGray_color;
     [BgView0 addSubview:TimeLable];
     
-    ZanButton =[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-55, 10, 45, 25) ImageName:@"like.png" Target:self.superview Action:@selector(ZanButtonClick:) Title:@""];
+    deletButton=[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-105, 10, 40, 27) ImageName:@"btn_delete.png" Target:self.superview Action:@selector(delectButtonClick:) Title:@""];
+    deletButton.layer.cornerRadius=2;
+    deletButton.hidden=YES;
+    //[ZanButton setBackgroundImage:[UIImage imageNamed:@"liked.png"] forState:UIControlStateSelected];
+    [BgView0 addSubview:deletButton];
+    
+    
+    ZanButton =[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-55, 10, 45, 27) ImageName:@"btn_like_default.png" Target:self.superview Action:@selector(ZanButtonClick:) Title:@""];
     ZanButton.layer.cornerRadius=2;
-    [ZanButton setBackgroundImage:[UIImage imageNamed:@"liked.png"] forState:UIControlStateSelected];
+    [ZanButton setBackgroundImage:[UIImage imageNamed:@"btn_like_select.png"] forState:UIControlStateSelected];
     [BgView0 addSubview:ZanButton];
 }
 
@@ -119,6 +126,7 @@
     addMarkButton.tag=3000+row;
     UserLogoButton.tag=4000+row;
     ZanButton.tag=5000+row;
+    deletButton.tag==6000+row;
 
     
 //   单个标签的时候用这个
@@ -170,8 +178,26 @@
         [UserLogoButton sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!thumb", kUrlAvatar, _weiboDict.avatar]] forState:UIControlStateNormal];
         UserNameLable.text = _weiboDict.username;
         TimeLable.text = [Function friendlyTime:_weiboDict.create_time];
+        // 点赞按钮的状态
+        if ([self.weiboDict.uped  intValue]==0) {
+            ZanButton.selected=NO;
+        }
+        else
+        {
+            ZanButton.selected=YES;
+        }
+#pragma mark 区分于个人页面是来源于自己还是他人
+        if (self.userPage==NSUserPageTypeMySelfController ) {  //进来的页面是从我自己的页面进来的
+            deletButton.hidden=NO;
+        }
+        else
+        {
+            deletButton.hidden=YES;
+        }
+        
      
     }
+    
 }
 
 - (void)layoutSubviews {
@@ -200,7 +226,12 @@
 }
 -(void)ZanButtonClick:(UIButton *)button
 {
-    
+    //点赞按钮
+}
+-(void)delectButtonClick:(UIButton *) button
+{
+    //删除按钮
+   
 }
 #pragma mark   --
 #pragma mark   --StageViewDelegate
