@@ -59,6 +59,7 @@
     [self creatNavigation];
     [self initData];
     [self createHotView];
+    [self setupRefresh];
     [self creatLoadView];
     [self requestData];
     [self createToolBar];
@@ -119,6 +120,48 @@
     _HotMoVieTableView.separatorStyle=UITableViewCellSeparatorStyleNone;
     [self.view addSubview:_HotMoVieTableView];
 }
+
+
+
+-(void)setupRefresh
+{
+    // 1.下拉刷新(进入刷新状态就会调用self的headerRereshing)
+    [_HotMoVieTableView addHeaderWithTarget:self action:@selector(headerRereshing)];
+    //  #warning 自动刷新(一进入程序就下拉刷新)
+    [_HotMoVieTableView headerBeginRefreshing];
+    // 2.上拉加载更多(进入刷新状态就会调用self的footerRereshing)
+    [_HotMoVieTableView addFooterWithTarget:self action:@selector(footerRereshing)];
+}
+#pragma mark 开始进入刷新状态
+- (void)headerRereshing
+{
+    page=0;
+    [self requestData];
+    // 2.2秒后刷新表格UI
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        // 刷新表格
+        [_HotMoVieTableView reloadData];
+        // (最好在刷新表格后调用)调用endRefreshing可以结束刷新状态
+        [_HotMoVieTableView headerEndRefreshing];
+    });
+}
+
+- (void)footerRereshing
+{
+    page++;
+    [self  requestData];
+    // 2.2秒后刷新表格UI
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        // 刷新表格
+        [_HotMoVieTableView reloadData];
+        
+        // (最好在刷新表格后调用)调用endRefreshing可以结束刷新状态
+        [_HotMoVieTableView footerEndRefreshing];
+    });
+}
+
+
+
 -(void)creatLoadView
 {
     loadView =[[LoadingView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight)];
@@ -294,7 +337,7 @@
     {
         float hight;
         if (_newDataArray.count>indexPath.row) {
-            HotMovieModel   *hotmodel=[_hotDataArray objectAtIndex:indexPath.row];
+            HotMovieModel   *hotmodel=[_newDataArray objectAtIndex:indexPath.row];
             float  h=[hotmodel.stageinfo.h  floatValue];   //[[[[_newDataArray  objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] objectForKey:@"h"] floatValue];
             float w=[hotmodel.stageinfo.w floatValue];   //[[[[_newDataArray  objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] objectForKey:@"w"] floatValue];
             if (w==0||h==0) {
@@ -308,9 +351,7 @@
                 hight=  (h/w)*kDeviceWidth+90;
             }
         }
-      //
-        //NSLog(@"============  hight  for  row  =====%f",hight);
-
+      
         return hight+10;
     }
     return 200.0f;

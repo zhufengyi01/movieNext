@@ -24,6 +24,7 @@
 #import "ButtomToolView.h"
 #import "MovieDetailViewController.h"
 #import "UMSocial.h"
+#import "MJRefresh.h"
 #import "AddMarkViewController.h"
 @interface MyViewController ()<UITableViewDataSource, UITableViewDelegate,StageViewDelegate,MarkViewDelegate,StageViewDelegate,ButtomToolViewDelegate>
 {
@@ -64,7 +65,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.view.backgroundColor=[UIColor yellowColor];
+    self.view.backgroundColor=View_BackGround;
     [self createNavigation];
     [self initData];
     if (self.author_id&&![self.author_id isEqualToString:@"0"]) {
@@ -72,6 +73,7 @@
         [self requestUserInfo];
     } else {
         [self createTableView];
+        [self setupRefresh];
         [self createLoadview];
         [self requestData];
         [self createToolBar];
@@ -230,6 +232,48 @@
     [_tableView setTableHeaderView:viewHeader];
 }
 
+
+
+-(void)setupRefresh
+{
+    // 1.下拉刷新(进入刷新状态就会调用self的headerRereshing)
+    [_tableView addHeaderWithTarget:self action:@selector(headerRereshing)];
+    //  #warning 自动刷新(一进入程序就下拉刷新)
+    [_tableView headerBeginRefreshing];
+    // 2.上拉加载更多(进入刷新状态就会调用self的footerRereshing)
+    [_tableView addFooterWithTarget:self action:@selector(footerRereshing)];
+}
+#pragma mark 开始进入刷新状态
+- (void)headerRereshing
+{
+    page=0;
+    [self requestData];
+    // 2.2秒后刷新表格UI
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        // 刷新表格
+        [_tableView reloadData];
+        // (最好在刷新表格后调用)调用endRefreshing可以结束刷新状态
+        [_tableView headerEndRefreshing];
+    });
+}
+
+- (void)footerRereshing
+{
+    page++;
+    [self  requestData];
+    // 2.2秒后刷新表格UI
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        // 刷新表格
+        [_tableView reloadData];
+        
+        // (最好在刷新表格后调用)调用endRefreshing可以结束刷新状态
+        [_tableView footerEndRefreshing];
+    });
+}
+
+
+
+
 -(void)segmentClick:(UISegmentedControl *)seg
 {
     if(seg.selectedSegmentIndex==0)
@@ -294,11 +338,11 @@
 }
 - (void)requestData{
     UserDataCenter  *userCenter=[UserDataCenter shareInstance];
-<<<<<<< HEAD
-    if ( !_author_id ) {
-=======
+//<<<<<<< HEAD
+    //if ( !_author_id ) {/
+//=======
     if ( !_author_id |[self.author_id isEqualToString:@"0"]) {  //表示直接进入这个页面的话，这个为空
->>>>>>> c0187a190ac2db0006933e21f91179e7f07415a6
+//>>>>>>> c0187a190ac2db0006933e21f91179e7f07415a6
         _author_id = userCenter.user_id;
     }
     //user_id是当前用户的ID

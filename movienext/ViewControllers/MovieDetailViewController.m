@@ -77,12 +77,12 @@
 }
 -(void)createNavigation
 {
-   UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:@"电影详细"];
-    titleLable.textColor=VBlue_color;
+ //  UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:@"电影详细"];
+   // titleLable.textColor=VBlue_color;
     
    // titleLable.font=[UIFont boldSystemFontOfSize:16];
     //titleLable.textAlignment=NSTextAlignmentCenter;
-    self.navigationItem.titleView=titleLable;
+   // self.navigationItem.titleView=titleLable;
 //    UIButton  *leftBtn= [UIButton buttonWithType:UIButtonTypeSystem];
 //    leftBtn.frame=CGRectMake(0, 30, 60, 36);
 //    [leftBtn setTitleColor:VGray_color forState:UIControlStateNormal];

@@ -66,7 +66,7 @@
     ZanButton =[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-55, 10, 45, 27) ImageName:@"btn_like_default.png" Target:self.superview Action:@selector(ZanButtonClick:) Title:@""];
     ZanButton.layer.cornerRadius=2;
     [ZanButton setBackgroundImage:[UIImage imageNamed:@"btn_like_select.png"] forState:UIControlStateSelected];
-    [BgView0 addSubview:ZanButton];
+    //[BgView0 addSubview:ZanButton];
 }
 
 -(void)CreateSatageView
