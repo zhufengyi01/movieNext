@@ -10,9 +10,8 @@
 #import "StageInfoModel.h"
 #import "WeiboModel.h"
 
-
 @interface HotMovieModel : NSObject
-@property(nonatomic,strong)  NSString  *hot_id;
+@property(nonatomic,strong) NSString  *hot_id;
 @property(nonatomic,strong) StageInfoModel  *stageinfo;
 @property(nonatomic,strong) WeiboModel  *weibo;
 @property(nonatomic,strong) NSArray    *weibos;
