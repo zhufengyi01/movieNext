@@ -70,11 +70,12 @@
     if (self.author_id&&![self.author_id isEqualToString:@"0"]) {
         //如果有用户id 并且用户的id 不为0
         [self requestUserInfo];
-    }
-    [self createTableView];
-    [self createLoadview];
+    } else {
+        [self createTableView];
+        [self createLoadview];
         [self requestData];
-    [self createToolBar];
+        [self createToolBar];
+    }
 }
 
 -(void)initData {
@@ -280,6 +281,10 @@
             }
             _userInfoDict =[responseObject objectForKey:@"detail"];
             
+            [self createTableView];
+            [self createLoadview];
+            [self requestData];
+            [self createToolBar];
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
@@ -289,7 +294,11 @@
 }
 - (void)requestData{
     UserDataCenter  *userCenter=[UserDataCenter shareInstance];
+<<<<<<< HEAD
     if ( !_author_id ) {
+=======
+    if ( !_author_id |[self.author_id isEqualToString:@"0"]) {  //表示直接进入这个页面的话，这个为空
+>>>>>>> c0187a190ac2db0006933e21f91179e7f07415a6
         _author_id = userCenter.user_id;
     }
     //user_id是当前用户的ID
