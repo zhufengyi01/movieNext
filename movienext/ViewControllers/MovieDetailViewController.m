@@ -62,20 +62,27 @@
     [self initData];
     [self initUI];
     [self creatLoadView];
-    [self requestMovieInfoData];
-    [self requestData];
+    if (self.pageSourceType==NSMovieSourcePageSearchListController) { //电影搜索页面进来的
+        [self requestMovieIdWithdoubanId];
+    }
+    else
+    {
+        [self requestMovieInfoData];
+        [self requestData];
+
+    }
     [self createToolBar];
 
 
 }
 -(void)createNavigation
 {
-   // UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:@"电影详细"];
-    //titleLable.textColor=VBlue_color;
+   UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:@"电影详细"];
+    titleLable.textColor=VBlue_color;
     
    // titleLable.font=[UIFont boldSystemFontOfSize:16];
     //titleLable.textAlignment=NSTextAlignmentCenter;
-    //self.navigationItem.titleView=titleLable;
+    self.navigationItem.titleView=titleLable;
 //    UIButton  *leftBtn= [UIButton buttonWithType:UIButtonTypeSystem];
 //    leftBtn.frame=CGRectMake(0, 30, 60, 36);
 //    [leftBtn setTitleColor:VGray_color forState:UIControlStateNormal];
@@ -141,6 +148,27 @@
 
 #pragma  mark  ----RequestData
 #pragma  mark  ---
+//根据豆瓣id  请求movieid
+-(void)requestMovieIdWithdoubanId
+{
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    NSDictionary *parameters = @{@"douban_id": self.douban_Id};
+    
+    [manager POST:[NSString stringWithFormat:@"%@/movie/create", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"responseobject = %@", responseObject);
+        NSDictionary *detail = [responseObject objectForKey:@"detail"];
+        NSString * movie_id = [detail objectForKey:@"id"];
+        if (movie_id && [movie_id intValue]>0) {
+            self.movieId = movie_id;
+        }
+        [self requestMovieInfoData];
+        [self requestData];
+
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+
+}
 
 //根据电影id 请求电影的详细信息
 -(void)requestMovieInfoData
@@ -148,7 +176,7 @@
     if (!_movieId || _movieId<=0) {
         return;
     }
-    NSDictionary *parameter = @{@"id": _movieId};
+    NSDictionary *parameter = @{@"id": self.movieId};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:[NSString stringWithFormat:@"%@/movie/info", kApiBaseUrl] parameters:parameter success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"  电影详情页面的电影信息数据JSON: %@", responseObject);
@@ -222,7 +250,7 @@
 //微博点赞请求
 -(void)LikeRequstData:(WeiboModel  *) weiboDict StageInfo :(StageInfoModel *) stageInfoDict
 {
-    NSLog(@"===============weibo dict  =======%@  stageInfo Dict movieid  ==%@  ======%@  movie name =%@",weiboDict,stageInfoDict.movie_id,stageInfoDict.movie_name);
+   // NSLog(@"===============weibo dict  =======%@  stageInfo Dict movieid  ==%@  ======%@  movie name =%@",weiboDict,stageInfoDict.movie_id,stageInfoDict.movie_name);
     
     UserDataCenter  *userCenter=[UserDataCenter shareInstance];
     NSNumber  *weiboId=weiboDict.Id;  //[upDict objectForKey:@"id"];

@@ -30,6 +30,7 @@
 //导入电影页的视图
 #import "LoadingView.h"
 #import "SearchmovieTableViewCell.h"
+#import "MovieDetailViewController.h"
 @interface MovieSearchViewController ()<UISearchBarDelegate,UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate>
 {
     LoadingView   *loadView;
@@ -152,11 +153,18 @@
 }
 
 //选择了cell之后
-/*- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    DoubanInfo * doubanInfo = _data[indexPath.row];
-    [self performSegueWithIdentifier:ksSearchMovieToMovie sender:doubanInfo.doubanId];
-}*/
+    if (tableView==_myTableView) {
+        if (_dataArray.count > indexPath.row) {
+            MovieDetailViewController  *mvdetail =[[MovieDetailViewController alloc]init];
+            mvdetail.douban_Id=[[_dataArray objectAtIndex:indexPath.row]  objectForKey:@"doubanId"];
+            mvdetail.pageSourceType=NSMovieSourcePageSearchListController; //从电影列表页今日电影详细页面
+            [self.navigationController pushViewController:mvdetail animated:YES];
+        }
+    }
+ 
+}
 
 #pragma  mark ----
 #pragma  mark  ---UISearchBarDelegate
