@@ -11,9 +11,10 @@
 #import "UserDataCenter.h"
 #import "AppDelegate.h"
 #import "LoginViewController.h"
+#import "UMSocial.h"
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
-@interface SettingViewController ()<UITableViewDataSource,UITableViewDelegate>
+@interface SettingViewController ()<UITableViewDataSource,UITableViewDelegate,UMSocialUIDelegate>
 {
     AppDelegate *appdelegate;
     UIWindow  *window;
@@ -45,7 +46,6 @@
     _myTableView.separatorColor = VLight_GrayColor;
     _myTableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     [self.view addSubview:_myTableView];
-    
 }
 -(void)createOutLogin
 {
@@ -86,6 +86,15 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.row==0) {
+        [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeApp;
+        [UMSocialSnsService presentSnsIconSheetView:self
+                                             appKey:kUmengKey
+                                          shareText:@"影弹"
+                                         shareImage:[UIImage imageNamed:@"icon.png"]
+                                    shareToSnsNames:[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQzone, UMShareToSina, nil]
+                                           delegate:self];
+    }
     if (indexPath.row==2) {
         [self sendFeedBack];
     }
