@@ -222,6 +222,7 @@
 //微博点赞请求
 -(void)LikeRequstData:(WeiboModel  *) weiboDict StageInfo :(StageInfoModel *) stageInfoDict
 {
+    NSLog(@"===============weibo dict  =======%@  stageInfo Dict movieid  ==%@  ======%@  movie name =%@",weiboDict,stageInfoDict.movie_id,stageInfoDict.movie_name);
     
     UserDataCenter  *userCenter=[UserDataCenter shareInstance];
     NSNumber  *weiboId=weiboDict.Id;  //[upDict objectForKey:@"id"];
@@ -244,6 +245,7 @@
     
     NSDictionary *parameters = @{@"weibo_id":weiboId, @"stage_id":stageId,@"movie_id":movieId,@"movie_name":movieName,@"user_id":userId,@"author_id":autorId,@"operation":uped};
     
+    NSLog(@"");
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:[NSString stringWithFormat:@"%@/weiboUp/up", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"return_code"]  intValue]==10000) {
@@ -509,13 +511,10 @@
 {
     NSLog(@" ==addMarkButtonClick  ====%d",button.tag);
     AddMarkViewController  *AddMarkVC=[[AddMarkViewController alloc]init];
-    //CommonStageCell *cell = (CommonStageCell *)button.superview.superview.superview;
-    NSDictionary *dict = [_dataArray objectAtIndex:button.tag-3000];
-    AddMarkVC.stageInfoDict = [dict valueForKey:@"stageinfo"];
-    //NSLog(@"dict = %@", dict);
-    NSLog(@"dict.stageinfo = %@", [dict valueForKey:@"stageinfo"]);
+    HotMovieModel  *model =[_dataArray objectAtIndex:button.tag-3000];
+    AddMarkVC.stageInfoDict = model.stageinfo;//[dict valueForKey:@"stageinfo"];
+    
     [self.navigationController pushViewController:AddMarkVC animated:NO];
-    //[self presentViewController:AddMarkVC animated:NO completion:nil]
     
 }
 
@@ -523,18 +522,6 @@
 
 
 
-//点击头像
--(void)UserLogoButtonClick:(UIButton *) button
-{
-    NSLog(@" ==UserLogoButtonClick  ====%ld",button.tag);
-    
-}
-//点赞
--(void)ZanButtonClick:(UIButton *)button
-{
-    NSLog(@" ==ZanButtonClick  ====%ld",button.tag);
-    
-}
 
 
 #pragma mark  -----
@@ -615,10 +602,10 @@
         //分享文字
         NSString  *shareText=weiboDict.topic;//[weiboDict objectForKey:@"topic"];
         NSLog(@" 点击了分享按钮");
-        CommonStageCell *cell = (CommonStageCell *)(markView.superview.superview.superview);
+        BigImageCollectionViewCell  *cell = (BigImageCollectionViewCell *)(markView.superview.superview.superview);
         
         UIGraphicsBeginImageContextWithOptions(_myConllectionView.bounds.size, YES, [UIScreen mainScreen].scale);
-        [cell.stageView drawViewHierarchyInRect:cell.stageView.bounds afterScreenUpdates:YES];
+        [cell.StageView drawViewHierarchyInRect:cell.StageView.bounds afterScreenUpdates:YES];
         
         // old style [self.layer renderInContext:UIGraphicsGetCurrentContext()];
         
@@ -661,8 +648,9 @@
             [self layoutMarkViewWithMarkView:markView WeiboInfo:weiboDict];
         }
         
+#warning    暂时屏蔽了上传网络服务器请求
         ////发送到服务器
-        [self LikeRequstData:weiboDict StageInfo:stageInfoDict];
+      //  [self LikeRequstData:weiboDict StageInfo:stageInfoDict];
         
     }
 }
@@ -726,12 +714,6 @@
         
     }
 }
-
-
-
-
-
-
 
 
 - (void)didReceiveMemoryWarning {

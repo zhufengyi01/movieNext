@@ -19,7 +19,13 @@
 #import "HotMovieModel.h"
 #import "StageInfoModel.h"
 #import "WeiboModel.h"
-@interface MyViewController ()<UITableViewDataSource, UITableViewDelegate,StageViewDelegate,MarkViewDelegate>
+#import "StageView.h"
+#import "StageInfoModel.h"
+#import "ButtomToolView.h"
+#import "MovieDetailViewController.h"
+#import "UMSocial.h"
+#import "AddMarkViewController.h"
+@interface MyViewController ()<UITableViewDataSource, UITableViewDelegate,StageViewDelegate,MarkViewDelegate,StageViewDelegate,ButtomToolViewDelegate>
 {
     UISegmentedControl *segment;
     UITableView   *_tableView;
@@ -34,6 +40,10 @@
     UILabel *lblZanCout;
     UILabel *lblBrief;//简介
     UserDataCenter  *userCenter;
+    
+    ButtomToolView *_toolBar;
+    MarkView       *_mymarkView;
+
 }
 @end
 
@@ -57,6 +67,7 @@
     [self createTableView];
     [self createLoadview];
     [self requestData];
+    [self createToolBar];
 }
 
 -(void)initData {
@@ -211,6 +222,16 @@
     [self.view addSubview:loadView];
 }
 
+//创建底部的视图
+-(void)createToolBar
+
+{
+    _toolBar=[[ButtomToolView alloc]initWithFrame:CGRectMake(0,0,kDeviceWidth,kDeviceHeight)];
+    _toolBar.delegete=self;
+    
+}
+
+
 #pragma  mark -----
 #pragma  mark ------  DataRequest 
 #pragma  mark ----
@@ -296,6 +317,44 @@
         NSLog(@"Error: %@", error);
     }];
 }
+//微博点赞请求
+-(void)LikeRequstData:(WeiboModel  *) weiboDict StageInfo :(StageInfoModel *) stageInfoDict
+{
+    
+    UserDataCenter  *userCenter=[UserDataCenter shareInstance];
+    NSNumber  *weiboId=weiboDict.Id;  //[upDict objectForKey:@"id"];
+    NSNumber  *stageId=stageInfoDict.Id;//[stageInfoDict objectForKey:@"id"];
+    NSString  *movieId=stageInfoDict.movie_id; //[stageInfoDict objectForKey:@"movie_id"];
+    NSString  *movieName=stageInfoDict.movie_name;//[stageInfoDict objectForKey:@"movie_name"];
+    NSString  *userId=userCenter.user_id;
+    NSString  *autorId =weiboDict.user_id; // [upDict objectForKey:@"user_id"];
+    NSNumber  *uped;
+    //if ([[upDict objectForKey:@"uped"]  intValue]==0) {
+    //uped =[NSString stringWithFormat:@"%d",1];
+    //}
+    if ([weiboDict.uped  integerValue] ==0) {
+        uped=[NSNumber numberWithInt:0];
+    }
+    else
+    {
+        uped=[NSNumber numberWithInt:1];
+    }
+    
+    NSDictionary *parameters = @{@"weibo_id":weiboId, @"stage_id":stageId,@"movie_id":movieId,@"movie_name":movieName,@"user_id":userId,@"author_id":autorId,@"operation":uped};
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    [manager POST:[NSString stringWithFormat:@"%@/weiboUp/up", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if ([[responseObject  objectForKey:@"return_code"]  intValue]==10000) {
+            NSLog(@"点赞成功========%@",responseObject);
+            
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+    
+}
+
+
 #pragma mark  -----
 #pragma mark --------UItableViewDelegate
 #pragma mark  -------
@@ -377,6 +436,7 @@
            // [cell setCellValue:[[_addedDataArray objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] indexPath:indexPath.row];
             cell.StageInfoDict=model.stageinfo;
             [cell ConfigsetCellindexPath:indexPath.row];
+            cell.stageView.delegate=self;
         }
         return cell;
     }
@@ -395,6 +455,7 @@
             cell.weiboDict =model.weibo;    //[[_upedDataArray  objectAtIndex:indexPath.row]  objectForKey:@"weibo"];
             cell.StageInfoDict=model.stageinfo;
             [cell ConfigsetCellindexPath:indexPath.row];
+            cell.stageView.delegate=self;
           //  [cell setCellValue:[[_upedDataArray objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"]indexPath:indexPath.row];
         }
         return  cell;
@@ -402,20 +463,272 @@
     return nil;
     
 }
-
+//设置页面
 -(void)GotoSettingClick:(UIButton  *) button
 {
     
     [self.navigationController pushViewController:[SettingViewController new] animated:YES];
 }
 
+#pragma  mark  =====ButtonClick
+
+//点击左下角的电影按钮
+-(void)dealMovieButtonClick:(UIButton  *) button{
+    HotMovieModel  *hotmovie;
+    if (segment.selectedSegmentIndex==0) {
+        hotmovie =[_addedDataArray objectAtIndex:button.tag-1000];
+    }
+    else  {
+        hotmovie=[_upedDataArray objectAtIndex:button.tag-1000];
+    }
+    MovieDetailViewController *vc =  [MovieDetailViewController new];
+    vc.movieId =  hotmovie.stageinfo.movie_id;
+    [self.navigationController pushViewController:vc animated:YES];
+}
+//分享
+-(void)ScreenButtonClick:(UIButton  *) button
+{
+    NSLog(@" ==ScreenButtonClick  ====%ld",button.tag);
+    //获取cell
+#pragma mark 暂时把sharetext设置成null
+    
+    CommonStageCell *cell = (CommonStageCell *)(button.superview.superview.superview);
+    
+    UIGraphicsBeginImageContextWithOptions(_tableView.bounds.size, YES, [UIScreen mainScreen].scale);
+    [cell.stageView drawViewHierarchyInRect:cell.stageView.bounds afterScreenUpdates:YES];
+    
+    // old style [self.layer renderInContext:UIGraphicsGetCurrentContext()];
+    
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
+    [UMSocialSnsService presentSnsIconSheetView:self
+                                         appKey:kUmengKey
+                                      shareText:@"index share image"
+                                     shareImage: image
+                                shareToSnsNames:[NSArray arrayWithObjects: UMShareToWechatSession, UMShareToWechatTimeline, UMShareToQzone, UMShareToSina, nil]
+                                       delegate:nil];
+}
+//点击增加弹幕
+-(void)addMarkButtonClick:(UIButton  *) button
+{
+    NSLog(@" ==addMarkButtonClick  ====%ld",button.tag);
+    AddMarkViewController  *AddMarkVC=[[AddMarkViewController alloc]init];
+    HotMovieModel  *hotmovie=[[HotMovieModel alloc]init];
+    if (segment.selectedSegmentIndex==0) {
+        hotmovie =[_addedDataArray objectAtIndex:button.tag-3000];
+    }
+    else
+    {
+        hotmovie=[_upedDataArray objectAtIndex:button.tag-3000];
+    }
+    AddMarkVC.stageInfoDict=hotmovie.stageinfo;
+    NSLog(@"dict.stageinfo = %@", AddMarkVC.stageInfoDict);
+    [self.navigationController pushViewController:AddMarkVC animated:NO];
+    
+}
+
+
+
+
+
 #pragma mark   ---
 #pragma mark   ----stageViewDelegate   --
 #pragma mark    ---
--(void)StageViewHandClickMark:(NSDictionary *)weiboDict withStageView:(id)stageView
+-(void)StageViewHandClickMark:(WeiboModel *)weiboDict withmarkView:(id)markView StageInfoDict:(StageInfoModel *)stageInfoDict
+{
+    ///执行buttonview 弹出
+    //获取markview的指针
+    MarkView   *mv=(MarkView *)markView;
+    //把当前的markview 给存储在了controller 里面
+    _mymarkView=mv;
+    if (mv.isSelected==YES) {  //当前已经选中的状态
+        //设置工具栏的值，并且，弹出工具栏
+        // NSLog(@"出现工具栏,   ======stageinfo =====%@",stageInfoDict);
+        [self SetToolBarValueWithDict:weiboDict markView:markView isSelect:YES StageInfo:stageInfoDict];
+    }
+    else if(mv.isSelected==NO)
+    {
+        NSLog(@"隐藏工具栏工具栏");
+        [self SetToolBarValueWithDict:weiboDict markView:markView isSelect:NO StageInfo:stageInfoDict];
+    }
+    
+}
+#pragma mark  ----- toolbar 上面的按钮，执行给toolbar 赋值，显示，弹出工具栏
+-(void)SetToolBarValueWithDict:(WeiboModel  *)weiboDict markView:(id) markView isSelect:(BOOL ) isselect StageInfo:(StageInfoModel *) stageInfo
+{
+    //先对它赋值，然后让他弹出到界面
+    if (isselect==YES) {
+        NSLog(@" new viewController SetToolBarValueWithDict  执行了出现工具栏的方法");
+        
+        //设置工具栏的值
+        //[_toolBar setToolBarValue:weiboDict :markView WithStageInfo:stageInfo];
+        _toolBar.weiboDict=weiboDict;
+        _toolBar.StageInfoDict=stageInfo;
+        _toolBar.markView=markView;
+        [_toolBar configToolBar];
+        
+        //把工具栏添加到当前视图
+        self.tabBarController.tabBar.hidden=YES;
+        [self.view addSubview:_toolBar];
+        //弹出工具栏
+        [_toolBar ShowButtomView];
+        
+    }
+    else if (isselect==NO)
+    {
+        //隐藏toolbar
+        NSLog(@" 执行了隐藏工具栏的方法");
+        self.tabBarController.tabBar.hidden=NO;
+        //隐藏工具栏
+        if (_toolBar) {
+            
+            [_toolBar HidenButtomView];
+            //从父视图中除掉工具栏
+            [_toolBar removeFromSuperview];
+        }
+    }
+    
+    
+}
+#pragma mark   ------
+#pragma mark   -------- ButtomToolViewDelegate
+#pragma  mark  -------
+-(void)ToolViewHandClick:(UIButton *)button :(MarkView *)markView weiboDict:(WeiboModel *)weiboDict StageInfo:(StageInfoModel *)stageInfoDict
+{
+    NSLog(@"点击头像  微博dict  ＝====%@ ======出现的stageinfo  ＝＝＝＝＝＝%@",weiboDict,stageInfoDict);
+    
+    if (button.tag==10000) {
+        ///点击了头像//进入个人页面
+        NSLog(@"点击头像  微博dict  ＝====%@ ======出现的stageinfo  ＝＝＝＝＝＝%@",weiboDict,stageInfoDict);
+        
+    }
+#pragma mark     -----------分享
+    else if (button.tag==10001)
+    {
+        //点击了分享
+        //分享文字
+        NSString  *shareText=weiboDict.topic;//[weiboDict objectForKey:@"topic"];
+        NSLog(@" 点击了分享按钮");
+        CommonStageCell *cell = (CommonStageCell *)(markView.superview.superview.superview);
+        
+        UIGraphicsBeginImageContextWithOptions(_tableView.bounds.size, YES, [UIScreen mainScreen].scale);
+        [cell.stageView drawViewHierarchyInRect:cell.stageView.bounds afterScreenUpdates:YES];
+        
+        // old style [self.layer renderInContext:UIGraphicsGetCurrentContext()];
+        
+        UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        
+        [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
+        [UMSocialSnsService presentSnsIconSheetView:self
+                                             appKey:kUmengKey
+                                          shareText:shareText
+                                         shareImage: image
+                                    shareToSnsNames:[NSArray arrayWithObjects: UMShareToWechatSession, UMShareToWechatTimeline, UMShareToQzone, UMShareToSina, nil]
+                                           delegate:nil];
+    }
+#pragma mark  ----------点赞--------------
+    else  if(button.tag==10002)
+    {
+        //改变赞的状态
+        //点击了赞
+        
+        NSLog(@" 点赞 前 微博dict  ＝====uped====%@    ups===%@",weiboDict.uped,weiboDict.ups);
+        if ([weiboDict.uped intValue]==0)
+        {
+            weiboDict.uped=[NSNumber numberWithInt:1];
+            int ups=[weiboDict.ups intValue];
+            ups =ups+[weiboDict.uped intValue];
+            weiboDict.ups=[NSNumber numberWithInt:ups];
+            //重新给markview 赋值，改变markview的frame
+            [self layoutMarkViewWithMarkView:markView WeiboInfo:weiboDict];
+            
+            
+            
+        }
+        else  {
+            
+            weiboDict.uped=[NSNumber numberWithInt:0];
+            int ups=[weiboDict.ups intValue];
+            ups =ups-1;
+            weiboDict.ups=[NSNumber numberWithInt:ups];
+            [self layoutMarkViewWithMarkView:markView WeiboInfo:weiboDict];
+        }
+        
+        ////发送到服务器
+        [self LikeRequstData:weiboDict StageInfo:stageInfoDict];
+        
+    }
+}
+//重新布局markview
+-(void)layoutMarkViewWithMarkView:(MarkView  *) markView WeiboInfo:(WeiboModel *) weibodict
+{
+    
+    
+    NSLog(@" 点赞 后 微博dict  ＝====uped====%@    ups===%@",weibodict.uped,weibodict.ups);
+    
+    float  x=[weibodict.x floatValue];
+    float  y=[weibodict.y floatValue];
+    NSString  *weiboTitleString=weibodict.topic;
+    NSString  *UpString=[NSString stringWithFormat:@"%@",weibodict.ups];//weibodict.ups;
+    //计算标题的size
+    CGSize  Msize=[weiboTitleString boundingRectWithSize:CGSizeMake(kDeviceWidth/2,MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:markView.TitleLable.font forKey:NSFontAttributeName] context:nil].size;
+    // 计算赞数量的size
+    CGSize Usize=[UpString boundingRectWithSize:CGSizeMake(40,MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:markView.ZanNumLable.font forKey:NSFontAttributeName] context:nil].size;
+    
+    // NSLog(@"size= %f %f", Msize.width, Msize.height);
+    //计算赞数量的长度
+    float  Uwidth=[UpString floatValue]==0?0:Usize.width;
+    //宽度=字的宽度+左头像图片的宽度＋赞图片的宽度＋赞数量的宽度+中间两个空格2+2
+    float markViewWidth = Msize.width+23+Uwidth+5+5+11+5;
+    float markViewHeight = Msize.height+6;
+    float markViewX = (x*kDeviceWidth)/100-markViewWidth;
+    markViewX = MIN(MAX(markViewX, 1.0f), kDeviceWidth-markViewWidth-1);
+    
+    float markViewY = (y*kDeviceWidth)/100+(Msize.height/2);
+#warning    kDeviceWidth 目前计算的是正方形的，当图片高度>屏幕的宽度的实际，需要使用图片的高度
+    markViewY = MIN(MAX(markViewY, 1.0f), kDeviceWidth-markViewHeight-1);
+#pragma mark 设置气泡的大小和位置
+    markView.frame=CGRectMake(markViewX, markViewY, markViewWidth, markViewHeight);
+#pragma mark 设置标签的内容
+    // markView.TitleLable.text=weiboTitleString;
+    markView.ZanNumLable.text =[NSString stringWithFormat:@"%@",weibodict.ups];
+    if ([weibodict.ups intValue]==0) {
+        markView.ZanNumLable.hidden=YES;
+    }
+    else
+    {
+        markView.ZanNumLable.hidden=NO;
+    }
+    
+}
+#pragma mark  -----
+#pragma mark  -------隐藏工具栏的方法
+#pragma mark  -------
+//点击屏幕，隐藏工具栏
+
+-(void)topViewTouchBengan
+{
+    NSLog(@"controller touchbegan  中 执行了隐藏工具栏的方法");
+    //取消当前的选中的那个气泡
+    [_mymarkView CancelMarksetSelect];
+    self.tabBarController.tabBar.hidden=NO;
+    if (_toolBar) {
+        [_toolBar HidenButtomView];
+        //  [_toolBar performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.5];
+        [_toolBar removeFromSuperview];
+        
+    }
+    
+}
+
+
+/*-(void)StageViewHandClickMark:(NSDictionary *)weiboDict withStageView:(id)stageView
 {
     NSLog(@"点击了一个标签，标签的内容为   =====%@",weiboDict);
-}
+}*/
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

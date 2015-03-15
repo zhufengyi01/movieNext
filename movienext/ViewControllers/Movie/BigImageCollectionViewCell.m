@@ -55,12 +55,16 @@
     // Initialization code
 }
 -(void)ConfigCellWithIndexPath:(NSInteger)row{
+    //分享
+    ScreenButton.tag=2000+row;
+    // 添加弹幕
+    addMarkButton.tag=3000+row;
     if (_weiboDict) {
         _StageView.weiboDict = _weiboDict;
     }
     
     if (_WeibosArray) {
-        _StageView.WeibosArray = _WeibosArray;
+        _StageView.WeibosArray = self.WeibosArray;
     }
     ScreenButton.tag=2000+row;  //截屏分享
     addMarkButton.tag=3000+row;   //添加弹幕
@@ -93,10 +97,11 @@
 #pragma mark ------
 -(void)ScreenButtonClick:(UIButton  *) button
 {
-    
+   //分享
 }
 -(void)addMarkButtonClick:(UIButton  *) button
 {
+    //添加弹幕
     
 }
 
