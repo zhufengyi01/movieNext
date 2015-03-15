@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "CommonStageCell.h"
 @interface MyViewController : UIViewController
 
 @property (nonatomic, strong) NSString * author_id;//当前正在查看的作者ID

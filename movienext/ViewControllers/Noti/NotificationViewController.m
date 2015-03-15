@@ -183,7 +183,7 @@
     myVC.author_id = [dict valueForKey:@"user_id"];
     NSLog(@"dict = %@", dict);
     NSLog(@"dict.user_id = %@", [dict valueForKey:@"user_id"]);
-    [self.navigationController pushViewController:myVC animated:NO];
+    [self.navigationController pushViewController:myVC animated:YES];
     
 }
 

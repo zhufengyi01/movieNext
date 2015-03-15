@@ -65,7 +65,7 @@
         MarkView *markView = [self createMarkViewWithDict:_weiboDict andIndex:2000];
         markView.alpha = 1.0;
         //设置是否markview 不可以动画
-        markView.isAnimation = NO;
+        markView.isAnimation =YES;
         //设置单条微博的参数信息
         markView.weiboDict=self.weiboDict;
        

@@ -12,7 +12,7 @@
 #import "StageInfoModel.h"
 #import "HotMovieModel.h"
 #import "WeiboModel.h"
-
+//页面来源，区分使用哪种类型的cell
 typedef NS_ENUM(NSInteger, NSPageSourceType)
 {
     NSPageSourceTypeMainHotController =0,
@@ -22,6 +22,12 @@ typedef NS_ENUM(NSInteger, NSPageSourceType)
     NSPageSourceTypeMyupedViewController=5,
     
 };
+//个人页面来源，区分于那个
+typedef NS_ENUM(NSInteger,NSUserPageType)
+{
+    NSUserPageTypeMySelfController=100,
+    NSUserPageTypeOthersController=101,
+};
 @interface CommonStageCell : UITableViewCell <StageViewDelegate>
 {
     CGRect        m_frame;
@@ -30,6 +36,7 @@ typedef NS_ENUM(NSInteger, NSPageSourceType)
     UIButton  *UserLogoButton;
     UILabel   *UserNameLable;
     UILabel   *TimeLable;
+    UIButton   *deletButton;
     UIButton  *ZanButton;
    // NSMutableArray   *_MarkMuatableArray;
     
@@ -48,7 +55,8 @@ typedef NS_ENUM(NSInteger, NSPageSourceType)
 @property(nonatomic,strong) StageInfoModel   *StageInfoDict;
 @property (nonatomic,strong) NSArray       *WeibosArray;   //小标签的数组，在多个标签的时候使用这个
 @property (nonatomic,strong) WeiboModel       *weiboDict;     //只有一个标签的时候传递这个参数
-@property (nonatomic,assign) NSPageSourceType   pageType;
+@property (nonatomic,assign) NSPageSourceType   pageType;      //页面来源
+@property(nonatomic,assign) NSUserPageType          userPage;  //  是自己的首页还是别人的首页
 //设置stageview的背景图片
 -(void)ConfigsetCellindexPath:(NSInteger) row;
 

@@ -31,6 +31,7 @@
     UITableView   *_tableView;
     NSMutableArray    *_addedDataArray;
     NSMutableArray    *_upedDataArray;
+    NSMutableDictionary  *_userInfoDict;
     LoadingView   *loadView;
     int page;
     
@@ -53,26 +54,38 @@
     self.navigationController.navigationBar.hidden=NO;
     self.navigationController.navigationBar.alpha=1;
     self.navigationController.navigationBar.translucent=NO;
-
     self.tabBarController.tabBar.hidden=NO;
+    UserDataCenter  *userCenter =[UserDataCenter shareInstance];
+    if (![self.author_id isEqualToString:userCenter.user_id]) {
+        self.tabBarController.tabBar.hidden=YES;
+    }
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.view.backgroundColor=[UIColor yellowColor];
-    
     [self createNavigation];
     [self initData];
+    if (self.author_id&&![self.author_id isEqualToString:@"0"]) {
+        //如果有用户id 并且用户的id 不为0
+        [self requestUserInfo];
+    }
     [self createTableView];
     [self createLoadview];
-    [self requestData];
+        [self requestData];
     [self createToolBar];
 }
 
 -(void)initData {
     _addedDataArray = [[NSMutableArray alloc] init];
     _upedDataArray = [[NSMutableArray alloc] init];
+    if (self.author_id&&![self.author_id isEqualToString:@"0"]) {
+        //如果有用户id 并且用户的id 不为0
+        _userInfoDict =[[NSMutableDictionary alloc]init];
+        
+    }
+
 }
 #pragma mark - CreateUI
 -(void)createNavigation
@@ -105,7 +118,6 @@
     _tableView.dataSource = self;
     [self.view addSubview:_tableView];
     
-    
     userCenter=[UserDataCenter shareInstance];
     
     int BodyConut=[userCenter.product_count intValue];
@@ -115,9 +127,7 @@
     if (signature==nil) {
         signature=@"";
     }
-   /// NSLog(@"   ==========用户信息===body count %d   zanCount ===%d   signatuer ===%@,头像 =====%@",BodyConut,ZanCount,signature,    userCenter.avatar);
-    
-    UIView *viewHeader = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, 130)];
+     UIView *viewHeader = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, 130)];
     viewHeader.backgroundColor =View_BackGround;
     
     int ivAvatarWidth = 50;
@@ -125,19 +135,31 @@
     ivAvatar.layer.cornerRadius = ivAvatarWidth * 0.5;
     ivAvatar.layer.masksToBounds = YES;
    // ivAvatar.backgroundColor = [UIColor redColor];
-    
-
-   // ivAvatar.image=[UIImage imageNamed:[]];
-    [ivAvatar sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@!thumb",kUrlAvatar,userCenter.avatar]] placeholderImage:[UIImage imageNamed:@"loading_image_all.png"]];
-    NSLog(@"avatar url = %@/%@!thumb", kUrlAvatar, userCenter.avatar );
+    NSURL   *imageURL;
+    if (_userInfoDict) {
+        
+        imageURL =[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@!thumb",kUrlAvatar,[_userInfoDict  objectForKey:@"avatar"]]];
+    }
+    else
+    {
+        imageURL =[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@!thumb",kUrlAvatar,userCenter.avatar]];
+        
+    }
+ 
+    [ivAvatar sd_setImageWithURL:imageURL placeholderImage:[UIImage imageNamed:@"loading_image_all.png"]];
+  //  NSLog(@"avatar url = %@/%@!thumb", kUrlAvatar, userCenter.avatar );
 
     [viewHeader addSubview:ivAvatar];
     
     lblUsername = [[UILabel alloc] initWithFrame:CGRectMake(ivAvatar.frame.origin.x+ivAvatar.frame.size.width+10, ivAvatar.frame.origin.y, 200, 20)];
     lblUsername.font = [UIFont systemFontOfSize:15];
     lblUsername.textColor = VBlue_color;
-    //lblUsername.backgroundColor = [UIColor blueColor];
+    if (_userInfoDict) {
+        lblUsername.text=[NSString stringWithFormat:@"%@",[_userInfoDict objectForKey:@"username"]];
+    }
+    else {
     lblUsername.text=[NSString stringWithFormat:@"%@",userCenter.username];
+    }
     [viewHeader addSubview:lblUsername];
     
     UILabel  *lbl1=[ZCControl createLabelWithFrame:CGRectMake(lblUsername.frame.origin.x,lblUsername.frame.origin.y+lblUsername.frame.size.height+10, 40, 20) Font:14 Text:@"内容"];
@@ -147,7 +169,12 @@
     //内容的数量
     lblCount = [[UILabel alloc] initWithFrame:CGRectMake(lbl1.frame.origin.x+lbl1.frame.size.width, lblUsername.frame.origin.y+lblUsername.frame.size.height+10, 60, 20)];
     lblCount.font = [UIFont systemFontOfSize:14];
-    lblCount.text=[NSString stringWithFormat:@"%d",BodyConut];//BodyConut;]
+    if (_userInfoDict) {
+        lblCount.text=[NSString stringWithFormat:@"%@",[_userInfoDict objectForKey:@"product_count"]];
+    }
+    else{
+        lblCount.text=[NSString stringWithFormat:@"%d",BodyConut];
+    }
     lblCount.textColor = VGray_color;
     //lblCount.backgroundColor = [UIColor purpleColor];
     [viewHeader addSubview:lblCount];
@@ -161,7 +188,12 @@
     lblZanCout = [[UILabel alloc] initWithFrame:CGRectMake(lbl2.frame.origin.x+lbl2.frame.size.height+10,lblCount.frame.origin.y , 50, 20)];
     lblZanCout.font = [UIFont systemFontOfSize:14];
     lblZanCout.textColor = VGray_color;
+    if (_userInfoDict) {
+        lblCount.text  =[NSString stringWithFormat:@"%@",[_userInfoDict objectForKey:@"uped_count"]];
+    }
+    else {
     lblZanCout.text=[NSString stringWithFormat:@"%d",ZanCount];
+    }
     
     //lblZanCout.backgroundColor = [UIColor purpleColor];
     [viewHeader addSubview:lblZanCout];
@@ -235,10 +267,29 @@
 #pragma  mark -----
 #pragma  mark ------  DataRequest 
 #pragma  mark ----
+-(void)requestUserInfo
+{
+    NSDictionary *parameters = @{@"user_id":self.author_id};
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    [manager POST:[NSString stringWithFormat:@"%@/user/info", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if ([[responseObject  objectForKey:@"return_code"]  intValue]==10000) {
+            NSLog(@"请求的用户数据========%@",responseObject);
+            if (_userInfoDict ==nil){
+                _userInfoDict=[[NSMutableDictionary alloc]init];
+            }
+            _userInfoDict =[responseObject objectForKey:@"detail"];
+            
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+    
+
+}
 - (void)requestData{
-#warning  这里需要替换用户id
     UserDataCenter  *userCenter=[UserDataCenter shareInstance];
-    if ( !_author_id ) {
+    if ( !_author_id |[self.author_id isEqualToString:@"0"]) {  //表示直接进入这个页面的话，这个为空
         _author_id = userCenter.user_id;
     }
     //user_id是当前用户的ID
@@ -261,7 +312,7 @@
             if (_addedDataArray ==nil) {
                 _addedDataArray=[[NSMutableArray alloc]init];
             }
-            NSLog(@"用户添加的数据 JSON: %@", responseObject);
+          //  NSLog(@"用户添加的数据 JSON: %@", responseObject);
            // [_addedDataArray addObjectsFromArray:Detailarray];
             for (NSDictionary  *addDict  in Detailarray) {
                 HotMovieModel  *model =[[HotMovieModel alloc]init];
@@ -290,7 +341,7 @@
             if (_upedDataArray==nil) {
                 _upedDataArray=[[NSMutableArray alloc]init];
             }
-           NSLog(@"用户赞过的数据 JSON: %@", responseObject);
+          // NSLog(@"用户赞过的数据 JSON: %@", responseObject);
            // [_upedDataArray addObjectsFromArray:Detailarray];
             for (NSDictionary  *addDict  in Detailarray) {
                 HotMovieModel  *model =[[HotMovieModel alloc]init];
@@ -377,8 +428,8 @@
         HotMovieModel *model =[_addedDataArray objectAtIndex:indexPath.row];
         float hight;
         if (_addedDataArray.count>indexPath.row) {
-            float  h= [model.stageinfo.h floatValue]; // [[[[_addedDataArray  objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] objectForKey:@"h"] floatValue];
-            float w=  [model.stageinfo.w floatValue]; //[[[[_addedDataArray  objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] objectForKey:@"w"] floatValue];
+            float  h= [model.stageinfo.h floatValue];
+            float w=  [model.stageinfo.w floatValue];
         if (w==0||h==0) {
              hight= kDeviceWidth+90;
         }
@@ -399,8 +450,8 @@
         float hight;
         if (_upedDataArray.count>indexPath.row) {
         
-            float  h=[model.stageinfo.h floatValue];  // [[[[_upedDataArray  objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] objectForKey:@"h"] floatValue];
-            float w= [model.stageinfo.w floatValue]; // [[[[_upedDataArray  objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] objectForKey:@"w"] floatValue];
+            float  h=[model.stageinfo.h floatValue];
+            float w= [model.stageinfo.w floatValue];
         if (w==0||h==0) {
             hight= kDeviceWidth+90;
         }
@@ -433,9 +484,17 @@
      
         if (_addedDataArray.count>indexPath.row) {
             cell.pageType=NSPageSourceTypeMyAddedViewController;
+            //个人页面的来源
+            UserDataCenter  *userCenter=[UserDataCenter shareInstance];
+            if ([_author_id isEqualToString:userCenter.user_id]) {  //表示直接进入这个页面的话，这个为空
+                cell.userPage=NSUserPageTypeMySelfController;
+            }
+            else {
+                cell.userPage=NSUserPageTypeOthersController;
+            }
+
             //小闪动标签的数组
-            cell.weiboDict=model.weibo;//[[_addedDataArray objectAtIndex:indexPath.row]  objectForKey:@"weibo"];
-           // [cell setCellValue:[[_addedDataArray objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] indexPath:indexPath.row];
+            cell.weiboDict=model.weibo;
             cell.StageInfoDict=model.stageinfo;
             [cell ConfigsetCellindexPath:indexPath.row];
             cell.stageView.delegate=self;

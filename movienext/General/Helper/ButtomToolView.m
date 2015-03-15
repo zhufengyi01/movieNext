@@ -38,7 +38,7 @@
     _topButtom.frame=CGRectMake(0, 0, kDeviceWidth, kDeviceHeight-50-kHeightNavigation);
     _topButtom.backgroundColor=[UIColor redColor];
     [_topButtom addTarget:self action:@selector(TouchbuttonClick:) forControlEvents:UIControlEventTouchUpInside];
-    _topButtom.backgroundColor=[[UIColor blackColor]colorWithAlphaComponent:0.2];
+    _topButtom.backgroundColor=[[UIColor blackColor]colorWithAlphaComponent:0];
     [self addSubview:_topButtom];
     
     
@@ -51,12 +51,13 @@
     
     headButton=[UIButton buttonWithType:UIButtonTypeCustom];
     headButton.frame=CGRectMake(0,0, kDeviceWidth/3, 50);
-    headButton.backgroundColor=VGray_color;
-    headButton.clipsToBounds=YES;
-    [headButton addTarget:self action:@selector(dealButtomClick:) forControlEvents:UIControlEventTouchDragInside];
+   
+   // headButton.clipsToBounds=YES;
+    [headButton addTarget:self action:@selector(dealButtomClick:) forControlEvents:UIControlEventTouchUpInside];
     headButton.tag=10000;
     headButton.titleLabel.font=[UIFont systemFontOfSize:14];
     [headButton setImage:[UIImage imageNamed:@"ic_menu_person_default.png"] forState:UIControlStateNormal];
+    [headButton setBackgroundImage:[UIImage imageNamed:@"loginoutbackgroundcolor.png"] forState:UIControlStateNormal];
     [headButton setTitle:@"主页" forState:UIControlStateNormal];
     [headButton setTitleEdgeInsets:UIEdgeInsetsMake(10, 25, 10, 10)];
     [buttomView addSubview:headButton];
@@ -71,8 +72,9 @@
     shareButton.backgroundColor=VBlue_color;
     shareButton.titleLabel.font=[UIFont systemFontOfSize:14];
     [shareButton setTitleEdgeInsets:UIEdgeInsetsMake(10, 25, 10, 10)];
-
+  
     [shareButton setImage:[UIImage imageNamed:@"ic_menu_share_default.png"] forState:UIControlStateNormal];
+    [shareButton setBackgroundImage:[UIImage imageNamed:@"loginoutbackgroundcolor.png"] forState:UIControlStateNormal];
     shareButton.tag=10001;
     [buttomView addSubview:shareButton];
     
@@ -85,6 +87,7 @@
     zanbutton =[ZCControl createButtonWithFrame:CGRectMake((kDeviceWidth/3)*2, 0, kDeviceWidth/3, 50) ImageName:nil Target:self Action:@selector(dealButtomClick:) Title:@"点赞"];
     zanbutton.tag=10002;
     [zanbutton setImage:[UIImage imageNamed:@"ic_menu_like_default.png"] forState:UIControlStateNormal];
+    [zanbutton setBackgroundImage:[UIImage imageNamed:@"loginoutbackgroundcolor.png"] forState:UIControlStateNormal];
     [zanbutton setTitle:@"已赞" forState:UIControlStateSelected];
     [zanbutton setTitleEdgeInsets:UIEdgeInsetsMake(10, 25, 10, 10)];
     zanbutton.titleLabel.font=[UIFont systemFontOfSize:14];

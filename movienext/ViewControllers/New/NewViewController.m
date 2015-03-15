@@ -173,7 +173,7 @@
 
 }
 - (void)requestData{
-  #warning  暂时设置为18
+  
     UserDataCenter  *userCenter=[UserDataCenter shareInstance];
     NSDictionary *parameters = @{@"user_id":userCenter.user_id, @"page":[NSString stringWithFormat:@"%d",page]};
     NSString * section;
@@ -464,9 +464,17 @@
 -(void)ZanButtonClick:(UIButton *)button
 {
     NSLog(@" ==ZanButtonClick  ====%ld",button.tag);
+    if (button.selected==YES) {
+        button.selected=NO;
+    }
+    else
+    {
+        button.selected=YES;
+    }
+    HotMovieModel   *model=[_newDataArray  objectAtIndex:5000-button.tag];
+    [self LikeRequstData:model.weibo StageInfo:model.stageinfo];
 
 }
-
 
 
 #pragma mark  -----
@@ -533,12 +541,12 @@
 #pragma  mark  -------
 -(void)ToolViewHandClick:(UIButton *)button :(MarkView *)markView weiboDict:(WeiboModel *)weiboDict StageInfo:(StageInfoModel *)stageInfoDict
 {
-            NSLog(@"点击头像  微博dict  ＝====%@ ======出现的stageinfo  ＝＝＝＝＝＝%@",weiboDict,stageInfoDict);
     
     if (button.tag==10000) {
         ///点击了头像//进入个人页面
-        NSLog(@"点击头像  微博dict  ＝====%@ ======出现的stageinfo  ＝＝＝＝＝＝%@",weiboDict,stageInfoDict);
-        
+        MyViewController   *myVc=[[MyViewController alloc]init];
+        myVc.author_id=weiboDict.user_id;
+        [self.navigationController pushViewController:myVc animated:YES];
     }
 #pragma mark     -----------分享
     else if (button.tag==10001)
