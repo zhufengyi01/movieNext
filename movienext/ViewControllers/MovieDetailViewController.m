@@ -114,7 +114,7 @@
         layout.sectionInset=UIEdgeInsetsMake(10, 0, 10, 0);
     }
     else{
-        layout.sectionInset=UIEdgeInsetsMake(20,10, 10, 10); //整个偏移量 上左下右
+        layout.sectionInset=UIEdgeInsetsMake(10, 10, 10, 10); //整个偏移量 上左下右
     }
     //kDeviceHeight/3-45+44
     [layout setHeaderReferenceSize:CGSizeMake(_myConllectionView.frame.size.width, kDeviceHeight/3+44)];

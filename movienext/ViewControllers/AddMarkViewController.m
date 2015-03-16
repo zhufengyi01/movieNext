@@ -166,8 +166,11 @@
 -(void)handelPan:(UIPanGestureRecognizer*)gestureRecognizer{
    //获取平移手势对象在stageView的位置点，并将这个点作为self.aView的center,这样就实现了拖动的效果
     CGPoint curPoint = [gestureRecognizer locationInView:stageView];
+    /*
     float x=((curPoint.x)/kDeviceWidth)*100;  //获取在stagview 上的x
     float y=((curPoint.y)/kDeviceWidth)*100;   //获取在stageview 上的y
+    //float x=curPoint.x;  //获取在stagview 上的x
+    //float y=curPoint.y;   //获取在stageview 上的y
          NSString   *inputString=_inputText.text;
      CGSize  Msize= [inputString  boundingRectWithSize:CGSizeMake(kDeviceWidth/2, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:_myMarkView.TitleLable.font forKey:NSFontAttributeName] context:nil].size;
 
@@ -186,7 +189,13 @@
     Y=[NSString stringWithFormat:@"%f",((markViewY+(markViewHeight/2))/kDeviceHeight)*100];
     _myMarkView.frame=CGRectMake(markViewX, markViewY, markViewWidth, markViewHeight);
   //  _myMarkView.center=CGPointMake(markViewX, markViewY);
-
+     */
+    
+    CGFloat xoffset = _myMarkView.frame.size.width/2.0;
+    CGFloat yoffset = _myMarkView.frame.size.height/2.0;
+    CGFloat x = MIN(stageView.frame.size.width-xoffset,  MAX(xoffset, curPoint.x) );
+    CGFloat y = MIN(stageView.frame.size.height-yoffset,  MAX(yoffset, curPoint.y) );
+    _myMarkView.center = CGPointMake(x, y);
 }
 # pragma  mark  发布数据请求
 //确定发布

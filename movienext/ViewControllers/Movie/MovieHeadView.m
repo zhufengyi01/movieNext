@@ -24,7 +24,7 @@
 -(void)createUI
 {
     //放置所有控件的view
-     bgImageView=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth,(kDeviceWidth/3+20+64+50))];
+     bgImageView=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth,(kDeviceHeight/3+20+44))];
     bgImageView.userInteractionEnabled=YES;
    // bgImageView.image =[UIImage imageNamed:@"loading_image_all"];
     [self addSubview:bgImageView];
@@ -40,9 +40,7 @@
     [bgImageView addSubview:leftBtn];
 */
     
-    
     movieLogoImageView  =[[UIImageView alloc]initWithFrame:CGRectMake(20, 64+20, 50, 70)];
-    
     [bgImageView addSubview:movieLogoImageView];
     
     titleLable=[ZCControl createLabelWithFrame:CGRectMake(movieLogoImageView.frame.origin.x+movieLogoImageView.frame.size.width+10, movieLogoImageView.frame.origin.y,kDeviceWidth-20-50-20 ,30) Font:16 Text:@"电影标题"];
@@ -60,7 +58,7 @@
     
     //下面的点击
     
-    UIView  *btnBg =[[UIView  alloc] initWithFrame:CGRectMake(0, kDeviceHeight/3-45+44+5, kDeviceWidth, 45)];
+    UIView  *btnBg =[[UIView  alloc] initWithFrame:CGRectMake(0, bgImageView.frame.origin.y+bgImageView.frame.size.height, kDeviceWidth, 45)];
     btnBg.backgroundColor=[[UIColor blackColor]colorWithAlphaComponent:0.2];
     [bgImageView addSubview:btnBg];
     
