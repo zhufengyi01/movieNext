@@ -138,7 +138,12 @@
     _myMarkView =[[MarkView alloc]initWithFrame:CGRectMake(100,140 , 100, 20)];
     ///显示标签的头像
     UserDataCenter  * userCenter=[UserDataCenter shareInstance];
+//<<<<<<< HEAD
     [ _myMarkView.LeftImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@!thumb",kUrlAvatar,    userCenter.avatar]]];
+//=======
+//    [ _myMarkView.LeftImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!thumb",kUrlAvatar,    userCenter.avatar]]];
+//    NSLog(@ "  add mark   view   头像没有显示  出来  ＝＝==%@",userCenter.avatar);
+//>>>>>>> 0624d05de07183c8eb701e3a19be66e2fb7a3e89
     _myMarkView.TitleLable.text=[_inputText text];
     [stageView addSubview:_myMarkView];
     

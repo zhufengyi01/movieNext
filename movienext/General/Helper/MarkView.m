@@ -25,6 +25,9 @@
     self.isSelected=NO;
     //左视图
     _LeftImageView =[[UIImageView alloc]initWithFrame:CGRectMake(0, 0,20, 20)];
+    if (IsIphone6) {
+        _LeftImageView.frame=CGRectMake(0, 0, 25, 25);
+    }
     _LeftImageView.layer.borderWidth=1;
     _LeftImageView.layer.cornerRadius=3;
     _LeftImageView.layer.masksToBounds=YES;
@@ -41,7 +44,10 @@
     
     //标题，点赞的view
     _TitleLable=[ZCControl createLabelWithFrame:CGRectMake(0,0, 0,0) Font:12 Text:@""];
-    _TitleLable.font=[UIFont systemFontOfSize:MarkTextFont];
+    _TitleLable.font=[UIFont systemFontOfSize:MarkTextFont14];
+    if (IsIphone6) {
+        _TitleLable.font=[UIFont systemFontOfSize:MarkTextFont16];
+    }
     _TitleLable.textColor=[UIColor whiteColor];
     [_rightView addSubview:_TitleLable];
     

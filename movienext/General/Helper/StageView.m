@@ -63,12 +63,11 @@
     if ( _weiboDict) {
         //WeiboModel  *weibodict=self.weiboDict;
         MarkView *markView = [self createMarkViewWithDict:_weiboDict andIndex:2000];
-        markView.alpha = 1.0;
+        markView.alpha = 0.2;
         //设置是否markview 不可以动画
         markView.isAnimation =YES;
         //设置单条微博的参数信息
         markView.weiboDict=self.weiboDict;
-       
        //遵守markView 的协议
         markView.delegate=self;
        [self addSubview:markView];

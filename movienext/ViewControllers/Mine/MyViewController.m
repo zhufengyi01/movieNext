@@ -59,6 +59,7 @@
     UserDataCenter  *userCenter =[UserDataCenter shareInstance];
     if (![self.author_id isEqualToString:userCenter.user_id]) {
         self.tabBarController.tabBar.hidden=YES;
+
     }
 }
 
@@ -71,6 +72,8 @@
     if (self.author_id&&![self.author_id isEqualToString:@"0"]) {
         //如果有用户id 并且用户的id 不为0
         [self requestUserInfo];
+          self.navigationItem.rightBarButtonItem=nil;
+           self.navigationItem.titleView=nil;
     } else {
         [self createTableView];
         [self setupRefresh];
@@ -137,16 +140,14 @@
     ivAvatar = [[UIImageView alloc] initWithFrame:CGRectMake(25, 20, ivAvatarWidth, ivAvatarWidth)];
     ivAvatar.layer.cornerRadius = ivAvatarWidth * 0.5;
     ivAvatar.layer.masksToBounds = YES;
-   // ivAvatar.backgroundColor = [UIColor redColor];
+    //ivAvatar.backgroundColor = [UIColor redColor];
     NSURL   *imageURL;
     if (_userInfoDict) {
-        
-        imageURL =[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@!thumb",kUrlAvatar,[_userInfoDict  objectForKey:@"avatar"]]];
+        imageURL =[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!thumb",kUrlAvatar,[_userInfoDict  objectForKey:@"avatar"]]];
     }
     else
     {
-        imageURL =[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@!thumb",kUrlAvatar,userCenter.avatar]];
-        
+        imageURL =[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!thumb",kUrlAvatar,userCenter.avatar]];
     }
  
     [ivAvatar sd_setImageWithURL:imageURL placeholderImage:[UIImage imageNamed:@"loading_image_all.png"]];
@@ -642,6 +643,15 @@
     [self.navigationController pushViewController:AddMarkVC animated:NO];
     
 }
+
+-(void)delectButtonClick:(UIButton *) button
+{
+    //删除按钮
+    NSLog(@"");
+    
+}
+
+
 
 
 

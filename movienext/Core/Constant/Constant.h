@@ -13,7 +13,7 @@
 #define kApiBaseUrl @"http://182.92.214.199"
 
 #define kUrlWeibo @"http://next-weibo.b0.upaiyun.com/"
-#define kUrlAvatar @"http://next-avatar.b0.upaiyun.com"   
+#define kUrlAvatar @"http://next-avatar.b0.upaiyun.com/"   
 #define kUrlFeed @"http://next-feed.b0.upaiyun.com/"
 #define kUrlStage @"http://next-stage.b0.upaiyun.com/"
 #define kUrlMoviePoster @"http://next-movieposter.b0.upaiyun.com/"
@@ -29,6 +29,8 @@
 #pragma  mark    宽高设置
 #define kDeviceWidth        [UIScreen mainScreen].bounds.size.width
 #define kDeviceHeight       [UIScreen mainScreen].bounds.size.height
+#define IsIphone6            [UIScreen mainScreen].bounds.size.height>600
+
 #define kHeightNavigation 64
 #define kHeigthTabBar     49
 #define kMarkWidth 22
@@ -38,6 +40,7 @@
 #pragma  mark  三方平台key  设置
 #define kUmengKey @"53e9e548fd98c5e4a90017c6"
 #define SSOSinRedirectURL  @"http://sns.whalecloud.com/sina2/callback"
+
 
 #pragma  mark 颜色设置
 #define kAppTintColor [UIColor colorWithRed:0.0/255.0 green:146.0/255.0 blue:255.0/255.0 alpha:1]
@@ -69,6 +72,6 @@
 //坐标图片的大小控制
 
 //右边字体的大小控制
-#define MarkTextFont  14
-
+#define MarkTextFont14  14
+#define MarkTextFont16   16
 #endif

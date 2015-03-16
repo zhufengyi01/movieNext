@@ -24,7 +24,7 @@
 -(void)createUI
 {
     //放置所有控件的view
-     bgImageView=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth,(kDeviceWidth/3+20+64+50))];
+     bgImageView=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth,(kDeviceHeight/3+64))];
     bgImageView.userInteractionEnabled=YES;
    // bgImageView.image =[UIImage imageNamed:@"loading_image_all"];
     [self addSubview:bgImageView];
@@ -63,7 +63,7 @@
     
     //下面的点击
     
-    UIView  *btnBg =[[UIView  alloc] initWithFrame:CGRectMake(0, kDeviceHeight/3-45+44+5, kDeviceWidth, 45)];
+    UIView  *btnBg =[[UIView  alloc] initWithFrame:CGRectMake(0, kDeviceHeight/3+64-45, kDeviceWidth, 45)];
     btnBg.backgroundColor=[[UIColor blackColor]colorWithAlphaComponent:0.2];
     [bgImageView addSubview:btnBg];
     

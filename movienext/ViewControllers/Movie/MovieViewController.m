@@ -49,7 +49,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.view.backgroundColor=View_BackGround;
     
     //创建导航
     [self createNavigation];
@@ -79,7 +78,12 @@
 -(void)createSegmentView
 {
     UIImageView   *TopImageView=[[UIImageView alloc]initWithFrame:CGRectMake(0,0, kDeviceWidth, 30)];
-    TopImageView.image=[UIImage imageNamed:@"tab_switch.png"];
+    ///TopImageView.image=[UIImage imageNamed:@"tab_switch.png"];
+    TopImageView.backgroundColor=[UIColor whiteColor];
+    UILabel  *lable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, kDeviceWidth, 30) Font:14 Text:@"下面是添加了很多弹幕的电影"];
+    lable.textColor=VGray_color;
+    lable.textAlignment=NSTextAlignmentCenter;
+    [TopImageView addSubview:lable];
     [self.view addSubview:TopImageView];
 }
 -(void)creatLoadView

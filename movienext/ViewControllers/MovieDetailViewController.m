@@ -111,15 +111,15 @@
     //layout.itemSize=CGSizeMake(80,140);  //cell的大小
     if(bigModel==YES)
     {
-        layout.sectionInset=UIEdgeInsetsMake(10, 0, 10, 0);
+        layout.sectionInset=UIEdgeInsetsMake(0, 0, 64, 0);
     }
     else{
-        layout.sectionInset=UIEdgeInsetsMake(20,10, 10, 10); //整个偏移量 上左下右
+        layout.sectionInset=UIEdgeInsetsMake(0,0,64, 0); //整个偏移量 上左下右
     }
     //kDeviceHeight/3-45+44
-    [layout setHeaderReferenceSize:CGSizeMake(_myConllectionView.frame.size.width, kDeviceHeight/3+44)];
+    [layout setHeaderReferenceSize:CGSizeMake(_myConllectionView.frame.size.width, kDeviceHeight/3+64)];
     
-    _myConllectionView =[[UICollectionView alloc]initWithFrame:CGRectMake(0, -64,kDeviceWidth, kDeviceHeight+20+kHeigthTabBar) collectionViewLayout:layout];
+    _myConllectionView =[[UICollectionView alloc]initWithFrame:CGRectMake(0, -64,kDeviceWidth, kDeviceHeight+20+kHeightNavigation) collectionViewLayout:layout];
     _myConllectionView.backgroundColor=View_BackGround;
     //注册大图模式
     [_myConllectionView registerClass:[BigImageCollectionViewCell class] forCellWithReuseIdentifier:@"bigcell"];
@@ -392,12 +392,12 @@
                 hight=  (h/w) *kDeviceWidth+45;
             }
         }
-        NSLog(@"============  hight  for  row  =====%f",hight);
+        //NSLog(@"============  hight  for  row  =====%f",hight);
         return CGSizeMake(kDeviceWidth,hight);
     }
     else
     {
-        return CGSizeMake(( kDeviceWidth-20)/3,(kDeviceWidth-20-10)/3);
+        return CGSizeMake(( kDeviceWidth-20)/3,(kDeviceWidth-20)/3);
 
     }
     return CGSizeMake(0, 0);
@@ -405,10 +405,10 @@
 
 -(UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
 {
-    if (bigModel==NO) {
-        return UIEdgeInsetsMake(15, 5, 5, 5);
+    if (bigModel==YES) {
+        return UIEdgeInsetsMake(0, 5, 5, 5);
     }
-    return UIEdgeInsetsMake(0, 0, 0, 0);
+    return UIEdgeInsetsMake(5, 5, 5, 5);
 }
 //左右间距
 -(CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
@@ -515,7 +515,7 @@
 -(void)ScreenButtonClick:(UIButton  *) button
 {
     
-    NSLog(@" ==ScreenButtonClick  ====%d",button.tag);
+    //NSLog(@" ==ScreenButtonClick  ====%d",button.tag);
     BigImageCollectionViewCell *cell = (BigImageCollectionViewCell *)(button.superview.superview.superview);
     
     UIGraphicsBeginImageContextWithOptions(_myConllectionView.bounds.size, YES, [UIScreen mainScreen].scale);
