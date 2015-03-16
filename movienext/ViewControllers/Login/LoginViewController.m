@@ -83,7 +83,7 @@
     //[self.view addSubview:qqButton];
     
     UIButton  *weiboButton=[UIButton buttonWithType:UIButtonTypeCustom];
-    weiboButton.frame=CGRectMake(50, kDeviceHeight-160, kDeviceWidth-100, 40);
+    weiboButton.frame=CGRectMake((kDeviceWidth-231)/2, kDeviceHeight-160, 231, 40);
     [weiboButton setBackgroundImage:[UIImage imageNamed:@"login_button_sina.png"] forState:UIControlStateNormal];
     [weiboButton setBackgroundImage:[UIImage imageNamed:@"login_button_sina －in.png"] forState:UIControlStateHighlighted];
     [weiboButton addTarget:self action:@selector(dealloginClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -94,7 +94,7 @@
     
     
     UIButton  *weiChateButton=[UIButton buttonWithType:UIButtonTypeCustom];
-    weiChateButton.frame=CGRectMake(50, kDeviceHeight-110, kDeviceWidth-100, 40);
+    weiChateButton.frame=CGRectMake((kDeviceWidth-231)/2, kDeviceHeight-110, 231, 40);
     [weiChateButton setBackgroundImage:[UIImage imageNamed:@"login_button_wechat.png"] forState:UIControlStateNormal];
     [weiChateButton setBackgroundImage:[UIImage imageNamed:@"login_button_wechat_press.png"] forState:UIControlStateHighlighted];
     //[weiChateButton setTitle:@"登陆" forState:UIControlStateNormal];

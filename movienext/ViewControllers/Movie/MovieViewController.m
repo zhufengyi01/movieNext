@@ -25,13 +25,12 @@
 #import "MovieSearchViewController.h"
 #import "MovieCollectionViewCell.h"
 #import "MovieDetailViewController.h"
-#warning  等下要删掉
-#import "MovieDetailViewController.h"
+#import "MJRefresh.h"
 
 //#import  "SearchMovieViewController.h"
 @interface MovieViewController ()<UISearchBarDelegate,UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout>
 {
-    UICollectionView    *_myConllectionView;
+    //UICollectionView    *_myConllectionView;
     LoadingView         *loadView;
     NSMutableArray      *_dataArray;
     int page;
@@ -108,47 +107,70 @@
     _myConllectionView.delegate=self;
     _myConllectionView.dataSource=self;
     [self.view addSubview:_myConllectionView];
-    [self setupRefresh];
+    [self setupHeadView];
+    [self setupFootView];
+    
     /**
      *  集成刷新控件
      */
 }
--(void)setupRefresh
+- (void)setupHeadView
 {
-    // 1.下拉刷新(进入刷新状态就会调用self的headerRereshing)
-    //[_myTableView addHeaderWithTarget:self action:@selector(headerRereshing)];
-    //  #warning 自动刷新(一进入程序就下拉刷新)
-    //[_myTableView headerBeginRefreshing];
-    // 2.上拉加载更多(进入刷新状态就会调用self的footerRereshing)
-  //  [_myTableView addFooterWithTarget:self action:@selector(footerRereshing)];
-}
-#pragma mark 开始进入刷新状态
-- (void)headerRereshing
-{
-    page=0;
-    [self requestData];
-    // 2.2秒后刷新表格UI
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        // 刷新表格
-      //  [_myTableView reloadData];
-        // (最好在刷新表格后调用)调用endRefreshing可以结束刷新状态
-        //[_myTableView headerEndRefreshing];
-    });
+    __unsafe_unretained typeof(self) vc = self;
+    // 添加下拉刷新头部控件
+    [_myConllectionView addHeaderWithCallback:^{
+        // 进入刷新状态就会回调这个Block
+        
+        // 增加5条假数据
+        //for (int i = 0; i<5; i++) {
+          //  [vc.fakeColors insertObject:MJRandomColor atIndex:0];
+        //}
+        
+        // 模拟延迟加载数据，因此2秒后才调用）
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [vc.myConllectionView reloadData];
+            // 结束刷新
+            [vc.myConllectionView headerEndRefreshing];
+        });
+    }];
+    
+#warning 自动刷新(一进入程序就下拉刷新)
+    [vc.myConllectionView headerBeginRefreshing];
 }
 
-- (void)footerRereshing
+- (void)setupFootView
 {
-    page++;
-    [self  requestData];
-    // 2.2秒后刷新表格UI
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        // 刷新表格
-        //[_myTableView reloadData];
+    __unsafe_unretained typeof(self) vc = self;
+    // 添加上拉刷新尾部控件
+    [vc.myConllectionView addFooterWithCallback:^{
+        // 进入刷新状态就会回调这个Block
         
-        // (最好在刷新表格后调用)调用endRefreshing可以结束刷新状态
-        //[_myTableView footerEndRefreshing];
-    });
+        // 增加5条假数据
+      ///  for (int i = 0; i<5; i++) {
+         //   [vc.fakeColors addObject:MJRandomColor];
+        //}
+        
+        // 模拟延迟加载数据，因此2秒后才调用）
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [vc.myConllectionView reloadData];
+            // 结束刷新
+            [vc.myConllectionView footerEndRefreshing];
+        });
+    }];
 }
+
+/**
+ 为了保证内部不泄露，在dealloc中释放占用的内存
+ */
+- (void)dealloc
+{
+    NSLog(@"MJCollectionViewController--dealloc---");
+}
+
+
+
+
+
 #pragma  mark  ---
 #pragma  mark  ----RequestData
 #pragma  mark  ---

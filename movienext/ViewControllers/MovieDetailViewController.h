@@ -7,7 +7,12 @@
 //
 
 #import "RootViewController.h"
-
+//个人页面来源，区分于那个
+typedef NS_ENUM(NSInteger,NSMovieSourcePage)
+{
+    NSMovieSourcePageMovieListController =100,
+    NSMovieSourcePageSearchListController  =101,
+};
 @interface MovieDetailViewController : RootViewController
 {
         
@@ -15,6 +20,7 @@
 // 属性，提供向外的接口，外部只要获得当前类，就可以获得他的属性和方法
 @property (nonatomic,strong) NSString  *movieId;
 @property(nonatomic,strong) NSString  *douban_Id;
+@property(nonatomic,assign) NSMovieSourcePage   pageSourceType;
 
 //viod  返回类型
 

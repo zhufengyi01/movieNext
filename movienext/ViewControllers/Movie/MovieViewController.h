@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface MovieViewController : UIViewController
-
+@property(nonatomic,strong)UICollectionView  *myConllectionView;
 @end
