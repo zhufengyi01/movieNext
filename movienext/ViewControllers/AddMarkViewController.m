@@ -167,31 +167,12 @@
 
 -(void)handelPan:(UIPanGestureRecognizer*)gestureRecognizer{
    //获取平移手势对象在stageView的位置点，并将这个点作为self.aView的center,这样就实现了拖动的效果
-    CGPoint curPoint = [gestureRecognizer locationInView:stageView];  //获取手势在stagview的位置
-    CGPoint marPiont =[gestureRecognizer locationInView:_myMarkView]; //获取手势在marview的位置
-    NSLog(@"=== mark point ==%f",marPiont.x);
-    NSLog(@"=== cur point ==%f",curPoint.x);
-
-    NSString   *inputString=_inputText.text;
-     CGSize  Msize= [inputString  boundingRectWithSize:CGSizeMake(kDeviceWidth/2, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:_myMarkView.TitleLable.font forKey:NSFontAttributeName] context:nil].size;
-
-    float markViewWidth = Msize.width+23+5+5+11+5;
-    float markViewHeight = Msize.height+6;
-    
-    //float markViewX = (x*kDeviceWidth)/100-markViewWidth;
-    float markViewX=curPoint.x;
-    markViewX = MIN(MAX(markViewX, 1.0f), kDeviceWidth-markViewWidth-1);
-    
-    //float markViewY = (y*kDeviceWidth)/100+(Msize.height/2);
-    float markViewY=curPoint.y;
-#warning    kDeviceWidth 目前计算的是正方形的，当图片高度>屏幕的宽度的实际，需要使用图片的高度
-    markViewY = MIN(MAX(markViewY, 1.0f), kDeviceWidth-markViewHeight-1);
-    //获得上传x，y的坐标点，坐标点是右中点的位置
-    X =[NSString stringWithFormat:@"%f",((markViewX+markViewWidth)/kDeviceWidth)*100];
-    Y=[NSString stringWithFormat:@"%f",((markViewY+(markViewHeight/2))/kDeviceHeight)*100];
-    _myMarkView.frame=CGRectMake(markViewX, markViewY, markViewWidth, markViewHeight);
-    //_myMarkView.center=CGPointMake(curPoint.x, curPoint.y);
-
+    CGPoint curPoint = [gestureRecognizer locationInView:stageView];    
+    CGFloat xoffset = _myMarkView.frame.size.width/2.0;
+    CGFloat yoffset = _myMarkView.frame.size.height/2.0;
+    CGFloat x = MIN(stageView.frame.size.width-xoffset,  MAX(xoffset, curPoint.x) );
+    CGFloat y = MIN(stageView.frame.size.height-yoffset,  MAX(yoffset, curPoint.y) );
+    _myMarkView.center = CGPointMake(x, y);
 }
 # pragma  mark  发布数据请求
 //确定发布
@@ -258,7 +239,9 @@
 #pragma  mark  ----UIAlertViewdelegate  ---
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    if (buttonIndex==0) {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
 }
 /*
 #pragma mark - Navigation

@@ -19,7 +19,7 @@
     UIImageView   *_MovieImageView;
     NSInteger currentMarkIndex;
     NSTimer *_timer;
-   
+    
 }
 @property (nonatomic,strong ) NSMutableArray    *WeibosArray;   //小标签的数组，在多个标签的时候使用这个
 @property (nonatomic,strong ) WeiboModel      *weiboDict;     //只有一个标签的时候传递这个参数
@@ -38,4 +38,7 @@
  *  结束动画
  */
 - (void)stopAnimation;   //在cellenddisplay 执行的方法
+//点击cell隐藏弹幕，再点击显示弹幕
+-(void)hidenAndShowMarkView:(BOOL) isShow;
+
 @end

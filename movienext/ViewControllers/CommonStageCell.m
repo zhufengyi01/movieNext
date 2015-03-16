@@ -58,6 +58,7 @@
     
     deletButton=[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-50, 10, 40, 27) ImageName:@"btn_delete.png" Target:self.superview Action:@selector(delectButtonClick:) Title:@""];
     deletButton.layer.cornerRadius=2;
+    //deletButton.backgroundColor=[UIColor redColor];
     deletButton.hidden=YES;
     //[ZanButton setBackgroundImage:[UIImage imageNamed:@"liked.png"] forState:UIControlStateSelected];
     [BgView0 addSubview:deletButton];
@@ -126,7 +127,7 @@
     addMarkButton.tag=3000+row;
     UserLogoButton.tag=4000+row;
     ZanButton.tag=5000+row;
-    deletButton.tag==6000+row;
+    deletButton.tag=6000+row;
 
     
 //   单个标签的时候用这个

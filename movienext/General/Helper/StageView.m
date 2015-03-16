@@ -54,6 +54,7 @@
     }
     if (self.StageInfoDict.stage)
     {//计算位置
+#warning 这里如果宽高为0的话会崩溃
         float   y=(hight-(ImgeHight/ImageWith)*kDeviceWidth)/2;
           _MovieImageView.frame=CGRectMake(0,y, kDeviceWidth, (ImgeHight/ImageWith)*kDeviceWidth);
         [_MovieImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w640",kUrlStage,self.StageInfoDict.stage]] placeholderImage:[UIImage imageNamed:@"loading_image_all.png"]];
@@ -63,7 +64,7 @@
     if ( _weiboDict) {
         //WeiboModel  *weibodict=self.weiboDict;
         MarkView *markView = [self createMarkViewWithDict:_weiboDict andIndex:2000];
-        markView.alpha = 0.2;
+        markView.alpha = 1.0;
         //设置是否markview 不可以动画
         markView.isAnimation =YES;
         //设置单条微博的参数信息
@@ -71,10 +72,24 @@
        //遵守markView 的协议
         markView.delegate=self;
        [self addSubview:markView];
+        
+        //改变透明度
+        //闪烁动画
+        [markView.layer addAnimation:[self opacityForver_animation:KappearTime] forKey:nil];
+        
+        
     }
 #pragma  mark  有很多气泡，气泡循环播放
     
     if (self.WeibosArray&&self.WeibosArray.count>0) {
+        
+        //创建之前 //先移除所有的Mark视图
+        /*for (UIView  *Mview in  self.subviews) {
+            if ([Mview isKindOfClass:[MarkView class]]) {
+                [Mview  removeFromSuperview];
+            }
+        }*/
+        
       for ( int i=0;i<_WeibosArray.count ; i++) {
         MarkView *markView = [self createMarkViewWithDict:self.WeibosArray[i] andIndex:i];
         // 设置markview 可以动画
@@ -208,6 +223,56 @@
     [_timer invalidate];
     _timer=nil;
 }
+
+
+//最新页面的饿动画
+-(CABasicAnimation *)opacityForver_animation:(float)time
+{
+    CABasicAnimation  *animation=[CABasicAnimation animationWithKeyPath:@"opacity"];
+    animation.fromValue=[NSNumber numberWithFloat:0.2f];
+    animation.toValue=[NSNumber numberWithFloat:0.7f];
+    animation.autoreverses=YES;
+    animation.duration=time;
+    animation.repeatCount=MAXFLOAT;
+    animation.removedOnCompletion=NO;
+    animation.fillMode=kCAFillModeForwards;
+    animation.timingFunction=[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionDefault];  //默认均匀的动画
+    return animation;
+}
+
+
+
+#pragma mark 点击屏幕显示和隐藏marview
+//显示隐藏markview
+-(void)hidenAndShowMarkView:(BOOL) isShow;
+{
+    if (isShow==NO) {
+        NSLog(@"执行了隐藏 view ");
+        for (UIView  *view  in self.subviews) {
+            if  ([view isKindOfClass:[MarkView class]]) {
+                MarkView  *mv =(MarkView *)view;
+                mv.hidden=YES;
+                
+
+            }
+        }
+    }
+    else if (isShow==YES)
+    {
+        NSLog(@"执行了显示view ");
+        for (UIView  *view  in self.subviews) {
+            if  ([view isKindOfClass:[MarkView class]]) {
+                MarkView  *mv =(MarkView *)view;
+                mv.hidden=NO;
+
+            }
+        }
+
+        
+    }
+
+}
+
 #pragma mark  ----
 #pragma mark   ---markView   Delegate
 #pragma  mark -----

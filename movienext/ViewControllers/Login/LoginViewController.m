@@ -175,7 +175,7 @@
                         [parameters setObject:verified forKey:@"verified"];
 
                     }
-                    NSLog(@"打印参数=== weixin =======%@",parameters);
+                  //  NSLog(@"打印参数=== weixin =======%@",parameters);
                     
                     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
                     [manager POST:[NSString stringWithFormat:@"%@/user/login", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {

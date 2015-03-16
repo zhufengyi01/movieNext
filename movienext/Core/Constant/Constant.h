@@ -63,6 +63,7 @@
 #define kStaticTimeOffset  5.7  //动画的停留时间
 #define kShowTimeOffset 0.7  // 淡入时间
 #define kHidenTimeOffset 1.0  //淡出时间
+#define KappearTime    3     //最新页面的闪烁动画时间
 
 #define kUserKey @"userinfo"  ///用户信息
 
