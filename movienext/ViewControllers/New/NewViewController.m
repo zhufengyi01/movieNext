@@ -52,7 +52,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.view.backgroundColor =[UIColor redColor];
     appdelegate =(AppDelegate *)[[UIApplication sharedApplication]delegate ];
     UserDataCenter  *userInfo=  [UserDataCenter shareInstance];
    NSLog(@"-------登陆成功  user=======%@ ",  userInfo.username);
@@ -565,11 +564,16 @@
         UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
         
+        CGRect rect =  CGRectMake(0, 0, 320, 100);//要裁剪的图片区域，按照原图的像素大小来，超过原图大小的边自动适配
+        CGImageRef cgimg = CGImageCreateWithImageInRect([image CGImage], rect);
+        image = [UIImage imageWithCGImage:cgimg];
+        CGImageRelease(cgimg);//用完一定要释放，否则内存泄露
+        
         [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
         [UMSocialSnsService presentSnsIconSheetView:self
                                              appKey:kUmengKey
                                           shareText:shareText
-                                         shareImage: image
+                                         shareImage:image
                                     shareToSnsNames:[NSArray arrayWithObjects: UMShareToWechatSession, UMShareToWechatTimeline, UMShareToQzone, UMShareToSina, nil]
                                            delegate:nil];
     }

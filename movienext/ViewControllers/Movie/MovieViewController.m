@@ -50,7 +50,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.view.backgroundColor=View_BackGround;
     
     //创建导航
     [self createNavigation];

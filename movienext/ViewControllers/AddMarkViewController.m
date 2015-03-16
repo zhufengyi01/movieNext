@@ -140,7 +140,7 @@
    //  _myMarkView.backgroundColor=[UIColor redColor];
     ///显示标签的头像
     UserDataCenter  * userCenter=[UserDataCenter shareInstance];
-    [ _myMarkView.LeftImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@!thumb",kUrlAvatar,    userCenter.avatar]]];
+    [ _myMarkView.LeftImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!thumb",kUrlAvatar,    userCenter.avatar]]];
     NSLog(@ "  add mark   view   头像没有显示  出来  ＝＝==%@",userCenter.avatar);
     _myMarkView.TitleLable.text=[_inputText text];
     [stageView addSubview:_myMarkView];
