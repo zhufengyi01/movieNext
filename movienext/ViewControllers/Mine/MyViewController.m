@@ -65,10 +65,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-<<<<<<< HEAD
-=======
-    self.view.backgroundColor=View_BackGround;
->>>>>>> 328e600025eb16a93f22fdfc841ea078e9de5c3c
     [self createNavigation];
     [self initData];
     if (self.author_id&&![self.author_id isEqualToString:@"0"]) {
@@ -339,11 +335,7 @@
 }
 - (void)requestData{
     UserDataCenter  *userCenter=[UserDataCenter shareInstance];
-//<<<<<<< HEAD
-    //if ( !_author_id ) {/
-//=======
     if ( !_author_id |[self.author_id isEqualToString:@"0"]) {  //表示直接进入这个页面的话，这个为空
-//>>>>>>> c0187a190ac2db0006933e21f91179e7f07415a6
         _author_id = userCenter.user_id;
     }
     //user_id是当前用户的ID
