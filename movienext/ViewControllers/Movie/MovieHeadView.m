@@ -46,16 +46,19 @@
     [bgImageView addSubview:movieLogoImageView];
     
     titleLable=[ZCControl createLabelWithFrame:CGRectMake(movieLogoImageView.frame.origin.x+movieLogoImageView.frame.size.width+10, movieLogoImageView.frame.origin.y,kDeviceWidth-20-50-20 ,30) Font:16 Text:@"电影标题"];
+    titleLable.textColor=[UIColor whiteColor];
     
     [bgImageView addSubview:titleLable];
     
     //导演
     derectorLable=[ZCControl createLabelWithFrame:CGRectMake(movieLogoImageView.frame.origin.x+movieLogoImageView.frame.size.width+10,titleLable.frame.origin.y+titleLable.frame.size.height+5,kDeviceWidth-30-10-30,20) Font:12 Text:@"导演"];
+    derectorLable.textColor=[UIColor whiteColor];
     derectorLable.numberOfLines=2;
     [bgImageView addSubview:derectorLable];
     //演员
     performerLable=[ZCControl createLabelWithFrame:CGRectMake(movieLogoImageView.frame.origin.x+10+movieLogoImageView.frame.size.width, derectorLable.frame.origin.y+derectorLable.frame.size.height, kDeviceWidth-movieLogoImageView.frame.origin.x-movieLogoImageView.frame.size.width-10-10, 40) Font:12 Text:@"演员"];
     performerLable.numberOfLines=2;
+    performerLable.textColor=[UIColor whiteColor];
     [bgImageView addSubview:performerLable];
     
     //下面的点击

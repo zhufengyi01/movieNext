@@ -16,7 +16,6 @@
 {
     UIToolbar  *_toolBar;
     UITextField  *_inputText;
-   // NSDictionary  *_myDict;
     MarkView  *_myMarkView;
     NSString    *X;
     NSString    *Y;
@@ -137,11 +136,9 @@
         }
     }
     _myMarkView =[[MarkView alloc]initWithFrame:CGRectMake(100,140 , 100, 20)];
-   //  _myMarkView.backgroundColor=[UIColor redColor];
     ///显示标签的头像
     UserDataCenter  * userCenter=[UserDataCenter shareInstance];
     [ _myMarkView.LeftImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@!thumb",kUrlAvatar,    userCenter.avatar]]];
-    NSLog(@ "  add mark   view   头像没有显示  出来  ＝＝==%@",userCenter.avatar);
     _myMarkView.TitleLable.text=[_inputText text];
     [stageView addSubview:_myMarkView];
     
@@ -165,27 +162,30 @@
 
 -(void)handelPan:(UIPanGestureRecognizer*)gestureRecognizer{
    //获取平移手势对象在stageView的位置点，并将这个点作为self.aView的center,这样就实现了拖动的效果
-    CGPoint curPoint = [gestureRecognizer locationInView:stageView];
-    float x=((curPoint.x)/kDeviceWidth)*100;  //获取在stagview 上的x
-    float y=((curPoint.y)/kDeviceWidth)*100;   //获取在stageview 上的y
-         NSString   *inputString=_inputText.text;
+    CGPoint curPoint = [gestureRecognizer locationInView:stageView];  //获取手势在stagview的位置
+    CGPoint marPiont =[gestureRecognizer locationInView:_myMarkView]; //获取手势在marview的位置
+    NSLog(@"=== mark point ==%f",marPiont.x);
+    NSLog(@"=== cur point ==%f",curPoint.x);
+
+    NSString   *inputString=_inputText.text;
      CGSize  Msize= [inputString  boundingRectWithSize:CGSizeMake(kDeviceWidth/2, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:_myMarkView.TitleLable.font forKey:NSFontAttributeName] context:nil].size;
 
     float markViewWidth = Msize.width+23+5+5+11+5;
     float markViewHeight = Msize.height+6;
-    float markViewX = (x*kDeviceWidth)/100-markViewWidth;
+    
+    //float markViewX = (x*kDeviceWidth)/100-markViewWidth;
+    float markViewX=curPoint.x;
     markViewX = MIN(MAX(markViewX, 1.0f), kDeviceWidth-markViewWidth-1);
     
-    float markViewY = (y*kDeviceWidth)/100+(Msize.height/2);
+    //float markViewY = (y*kDeviceWidth)/100+(Msize.height/2);
+    float markViewY=curPoint.y;
 #warning    kDeviceWidth 目前计算的是正方形的，当图片高度>屏幕的宽度的实际，需要使用图片的高度
     markViewY = MIN(MAX(markViewY, 1.0f), kDeviceWidth-markViewHeight-1);
     //获得上传x，y的坐标点，坐标点是右中点的位置
-    //X=markViewX+markViewWidth;
-    //Y=markViewY+(markViewHeight)/2;
     X =[NSString stringWithFormat:@"%f",((markViewX+markViewWidth)/kDeviceWidth)*100];
     Y=[NSString stringWithFormat:@"%f",((markViewY+(markViewHeight/2))/kDeviceHeight)*100];
     _myMarkView.frame=CGRectMake(markViewX, markViewY, markViewWidth, markViewHeight);
-  //  _myMarkView.center=CGPointMake(markViewX, markViewY);
+    //_myMarkView.center=CGPointMake(curPoint.x, curPoint.y);
 
 }
 # pragma  mark  发布数据请求
@@ -201,7 +201,7 @@
     [manager POST:[NSString stringWithFormat:@"%@/weibo/create", kApiBaseUrl] parameters:parameter success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"  添加弹幕发布请求    JSON: %@", responseObject);
         if ([responseObject  objectForKey:@"detail"]) {
-            UIAlertView  *Al=[[UIAlertView alloc]initWithTitle:@"发布成功" message:@"恭喜你发布成功" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            UIAlertView  *Al=[[UIAlertView alloc]initWithTitle:@"发布成功" message:@"恭喜你发布成功" delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
             [Al show];
         }
         
