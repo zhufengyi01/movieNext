@@ -45,6 +45,9 @@
     
     ButtomToolView *_toolBar;
     MarkView       *_mymarkView;
+    
+    BOOL isMarkViewsShow;
+
 
 }
 @end
@@ -619,6 +622,21 @@
     }
     return nil;
     
+}
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSLog(@"didDeselectRowAtIndexPath  =====%ld",indexPath.row);
+    CommonStageCell   *cell=(CommonStageCell *)[tableView cellForRowAtIndexPath:indexPath];
+    if (isMarkViewsShow==YES) {
+        isMarkViewsShow=NO;
+        [cell.stageView  hidenAndShowMarkView:YES];
+        
+    }
+    else{
+        isMarkViewsShow=YES;
+        [cell.stageView  hidenAndShowMarkView:NO];
+    }
+
 }
 //设置页面
 -(void)GotoSettingClick:(UIButton  *) button

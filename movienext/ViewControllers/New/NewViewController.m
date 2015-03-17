@@ -21,7 +21,7 @@
 #import "MyViewController.h"
 #import "WeiboModel.h"
 #import "HotMovieModel.h"
-
+#import "Function.h"
 
 //友盟分享
 #import "UMSocial.h"
@@ -411,7 +411,7 @@
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (segment.selectedSegmentIndex==0) {
+    //if (segment.selectedSegmentIndex==0) {
         //点击cell 隐藏弹幕，再点击隐藏
         NSLog(@"didDeselectRowAtIndexPath  =====%ld",indexPath.row);
         CommonStageCell   *cell=(CommonStageCell *)[tableView cellForRowAtIndexPath:indexPath];
@@ -425,12 +425,12 @@
               [cell.stageView  hidenAndShowMarkView:NO];
         }
         
-    }
-    else
-    {
+   // }
+   // else
+    //{
         
         
-    }
+    //}
 }
 -(void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -515,25 +515,30 @@
     movieLable.textColor=VGray_color;
     [imageView addSubview:movieLable];
     
-    UILabel  *logoLable=[ZCControl createLabelWithFrame:CGRectMake(200,kDeviceWidth-20, 50, 20) Font:14 Text:@"影弹App"];
+    UILabel  *logoLable=[ZCControl createLabelWithFrame:CGRectMake(200,kDeviceWidth-20, 100, 20) Font:14 Text:@"影弹App"];
     //logoLable.text=hotmovie.stageinfo.movie_name;
+    logoLable.textAlignment=NSTextAlignmentRight;
     logoLable.textColor=VGray_color;
     [imageView addSubview:logoLable];
     
    // [self.view addSubview:imageView];
+    UIImage  *getImage=[Function getImage:imageView];
     
     NSString  *shareText=hotmovie.stageinfo.movie_name;
     
-    //UIImageView   *shareImage=[UIImageView alloc]initWithFrame:CGRectMake(0, 0, <#CGFloat width#>, <#CGFloat height#>)
 
     [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
     [UMSocialSnsService presentSnsIconSheetView:self
                                          appKey:kUmengKey
                                       shareText:shareText
-                                     shareImage: imageView.image
+                                     shareImage: getImage
                                 shareToSnsNames:[NSArray arrayWithObjects: UMShareToWechatSession, UMShareToWechatTimeline, UMShareToQzone, UMShareToSina, nil]
                                        delegate:nil];
 }
+//根据有的view 上次一张图片
+
+
+
 //点击增加弹幕
 -(void)addMarkButtonClick:(UIButton  *) button
 {

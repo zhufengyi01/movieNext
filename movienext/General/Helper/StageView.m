@@ -34,6 +34,12 @@
     self.backgroundColor = [UIColor blackColor];
     _MovieImageView =[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, 200)];
     [self addSubview:_MovieImageView];
+    
+    //加一个弹的图片,弹幕出来隐藏，弹幕进去显示
+    tanimageView=[[UIImageView alloc]initWithFrame:CGRectMake(kDeviceWidth-30, 10, 20, 20)];
+    tanimageView.image=[UIImage imageNamed:@"tan.png"];
+    tanimageView.hidden=YES;
+    [self addSubview:tanimageView];
 }
 #pragma mark    设置stageview的值  ，主要是给stagview 添加markview  和添加一张图片
 -(void)configStageViewforStageInfoDict{
@@ -55,8 +61,12 @@
     if (self.StageInfoDict.stage)
     {//计算位置
 #warning 这里如果宽高为0的话会崩溃
+        
         float   y=(hight-(ImgeHight/ImageWith)*kDeviceWidth)/2;
+        NSLog(@"_MovieImageView======%f   ",y);
+        if (ImageWith!=0) {
           _MovieImageView.frame=CGRectMake(0,y, kDeviceWidth, (ImgeHight/ImageWith)*kDeviceWidth);
+        }
         [_MovieImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w640",kUrlStage,self.StageInfoDict.stage]] placeholderImage:[UIImage imageNamed:@"loading_image_all.png"]];
                                             
                             }
@@ -240,8 +250,7 @@
             if  ([view isKindOfClass:[MarkView class]]) {
                 MarkView  *mv =(MarkView *)view;
                 mv.hidden=YES;
-                
-
+                 tanimageView.hidden=NO;
             }
         }
     }
@@ -252,11 +261,9 @@
             if  ([view isKindOfClass:[MarkView class]]) {
                 MarkView  *mv =(MarkView *)view;
                 mv.hidden=NO;
-
+                tanimageView.hidden=YES;
             }
         }
-
-        
     }
 
 }

@@ -19,6 +19,7 @@
     UIImageView   *_MovieImageView;
     NSInteger currentMarkIndex;
     NSTimer *_timer;
+    UIImageView  *tanimageView;
     
 }
 @property (nonatomic,strong ) NSMutableArray    *WeibosArray;   //小标签的数组，在多个标签的时候使用这个
