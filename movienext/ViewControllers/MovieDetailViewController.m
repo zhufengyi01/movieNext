@@ -327,7 +327,7 @@
 //点击小图模式的时候，跳转到大图模式
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (bigModel==NO&&collectionView==_myConllectionView) {
+    if (bigModel==YES&&collectionView==_myConllectionView) {
                 //点击cell 隐藏弹幕，再点击隐藏
                 NSLog(@"didDeselectRowAtIndexPath  =====%ld",indexPath.row);
                 BigImageCollectionViewCell   *cell=(BigImageCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];

@@ -137,6 +137,32 @@
         }
     }
 }
+
+
+#pragma mark  开始闪现动作
+-(void)StartShowAndhiden;
+{
+    //最新页面的饿动画
+    if (self.isShowansHiden==YES) {
+    [self.layer addAnimation:[self opacityForver_animation:KappearTime] forKey:nil];
+    }
+    
+
+}
+-(CABasicAnimation *)opacityForver_animation:(float)time
+{
+    CABasicAnimation  *animation=[CABasicAnimation animationWithKeyPath:@"opacity"];
+    animation.fromValue=[NSNumber numberWithFloat:0.2f];
+    animation.toValue=[NSNumber numberWithFloat:0.7f];
+    animation.autoreverses=YES;
+    animation.duration=time;
+    animation.repeatCount=MAXFLOAT;
+    animation.removedOnCompletion=NO;
+    animation.fillMode=kCAFillModeForwards;
+    animation.timingFunction=[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionDefault];  //默认均匀的动画
+    return animation;
+}
+
 #pragma mark   -------
 #pragma mark   ------ 设置selected 和没有选中的两种状态
 #pragma mark   ------
@@ -145,6 +171,7 @@
 {
     self.isAnimation=NO;
     self.isSelected=YES;
+    self.isShowansHiden=NO;
     NSLog(@"  在 markview   中执行了markview 的  setMaskViewSelected");
     _LeftImageView.layer.borderColor=VBlue_color.CGColor;
     _rightView.layer.backgroundColor=VBlue_color.CGColor;
@@ -155,6 +182,7 @@
     NSLog(@"在markview 中  执行了markview 的  CancelMarksetSelect");
     self.isSelected=NO;
     self.isAnimation=YES;
+    self.isShowansHiden=YES;
     _LeftImageView.layer.backgroundColor=[UIColor whiteColor].CGColor;
      _rightView.backgroundColor=[[UIColor blackColor] colorWithAlphaComponent:0.7];
 }

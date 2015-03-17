@@ -546,8 +546,7 @@
         HotMovieModel  *model =[_upedDataArray objectAtIndex:indexPath.row];
         float hight;
         if (_upedDataArray.count>indexPath.row) {
-        
-            float  h=[model.stageinfo.h floatValue];
+        float  h=[model.stageinfo.h floatValue];
             float w= [model.stageinfo.w floatValue];
         if (w==0||h==0) {
             hight= kDeviceWidth+90;
@@ -583,7 +582,7 @@
             cell.pageType=NSPageSourceTypeMyAddedViewController;
             //个人页面的来源
           //  UserDataCenter  *userCenter=[UserDataCenter shareInstance];
-            if (![_author_id isEqualToString:userCenter.user_id]) {  //表示直接进入这个页面的话，这个为空
+            if (self.author_id.length==0||[self.author_id isEqualToString:@"0"]) {  //表示直接进入这个页面的话，这个为空
                 cell.userPage=NSUserPageTypeMySelfController;
             }
             else {
@@ -692,7 +691,7 @@
     //删除按钮
     NSLog(@"点击了删除 button tag＝＝＝＝ %ld",button.tag);
     
-       UIActionSheet   *ash=[[UIActionSheet alloc]initWithTitle:@"删除评论" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"确定删除", nil];
+       UIActionSheet   *ash=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"删除弹幕", nil];
     ash.tag=button.tag;
     [ash showInView:self.view];
     
@@ -703,14 +702,24 @@
 -(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     
-    NSLog(@" button Index ===%d",buttonIndex);
-    if (buttonIndex==0) {
-        HotMovieModel  *model =[_addedDataArray objectAtIndex:actionSheet.tag-6000];
-        [_addedDataArray removeObjectAtIndex:actionSheet.tag-6000];
-        [_tableView reloadData];
-        [self requestDelectData:model];
+    NSLog(@" button Index ===%ld",(long)buttonIndex);
+    if (actionSheet.tag<7000) {
+      if (buttonIndex==0) {          
+          UIActionSheet   *ash=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"确定删除弹幕", nil];
+          ash.tag=actionSheet.tag+1000;
+          [ash showInView:self.view];
+     }
     }
-    
+    else
+    {
+        if (buttonIndex==0) {
+               HotMovieModel  *model =[_addedDataArray objectAtIndex:actionSheet.tag-7000];
+               [_addedDataArray removeObjectAtIndex:actionSheet.tag-7000];
+                [_tableView reloadData];
+                [self requestDelectData:model];
+        }
+
+    }
     
 }
 

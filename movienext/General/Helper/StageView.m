@@ -71,11 +71,12 @@
         markView.weiboDict=self.weiboDict;
        //遵守markView 的协议
         markView.delegate=self;
+        markView.isShowansHiden=YES;
+        [markView StartShowAndhiden];
        [self addSubview:markView];
         
         //改变透明度
         //闪烁动画
-        [markView.layer addAnimation:[self opacityForver_animation:KappearTime] forKey:nil];
         
         
     }
@@ -97,6 +98,7 @@
         //设置单条微博的参数信息
         markView.weiboDict=self.WeibosArray[i];
         //遵守markView 的协议
+          markView.isShowansHiden=NO;
         markView.delegate=self;
 
        [self addSubview:markView];
@@ -225,20 +227,6 @@
 }
 
 
-//最新页面的饿动画
--(CABasicAnimation *)opacityForver_animation:(float)time
-{
-    CABasicAnimation  *animation=[CABasicAnimation animationWithKeyPath:@"opacity"];
-    animation.fromValue=[NSNumber numberWithFloat:0.2f];
-    animation.toValue=[NSNumber numberWithFloat:0.7f];
-    animation.autoreverses=YES;
-    animation.duration=time;
-    animation.repeatCount=MAXFLOAT;
-    animation.removedOnCompletion=NO;
-    animation.fillMode=kCAFillModeForwards;
-    animation.timingFunction=[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionDefault];  //默认均匀的动画
-    return animation;
-}
 
 
 

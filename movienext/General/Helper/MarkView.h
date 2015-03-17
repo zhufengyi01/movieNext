@@ -31,7 +31,10 @@
 
 @property (nonatomic,assign) id <MarkViewDelegate> delegate;
 @property (nonatomic,assign) BOOL isAnimation;   //是否是可以动的动画
+@property(nonatomic,assign) BOOL  isShowansHiden;  //是否可以闪现
 
+//最新页面的markview 闪现
+-(void)StartShowAndhiden;
 //在controller 里面实现的方法，点击屏幕，让当前的的气泡取消选中
 #warning  唯一一个外部和内部都会调用的方法
 //外部和内部都会调用的方法
