@@ -36,6 +36,9 @@
     int page;
     ButtomToolView *_toolBar;
     MarkView       *_mymarkView;
+    
+    BOOL isMarkViewsShow;
+
 }
 @end
 
@@ -69,6 +72,7 @@
     _hotDataArray = [[NSMutableArray alloc]init];
     _newDataArray=[[NSMutableArray alloc]init];
     page=0;
+    isMarkViewsShow=YES;
 }
 #pragma  mark   ------
 #pragma  mark  -------CreatUI;
@@ -96,18 +100,20 @@
 {
       if(seg.selectedSegmentIndex==0)
       {
-          [_HotMoVieTableView reloadData];
           if (_hotDataArray.count==0) {
               [self requestData];
           }
+          [_HotMoVieTableView reloadData];
+
       }
      else if(seg.selectedSegmentIndex==1)
      {
-         [_HotMoVieTableView reloadData];
          
          if (_newDataArray.count==0) {
              [self requestData];
          }
+         [_HotMoVieTableView reloadData];
+
      }
 
 }
@@ -403,6 +409,33 @@
     return nil;
     
 }
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (segment.selectedSegmentIndex==0) {
+        //点击cell 隐藏弹幕，再点击隐藏
+        NSLog(@"didDeselectRowAtIndexPath  =====%ld",indexPath.row);
+        CommonStageCell   *cell=(CommonStageCell *)[tableView cellForRowAtIndexPath:indexPath];
+        if (isMarkViewsShow==YES) {
+            isMarkViewsShow=NO;
+            [cell.stageView  hidenAndShowMarkView:YES];
+
+        }
+        else{
+              isMarkViewsShow=YES;
+              [cell.stageView  hidenAndShowMarkView:NO];
+        }
+        
+    }
+    else
+    {
+        
+        
+    }
+}
+-(void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    
+}
 //开始现实cell 的时候执行这个方法，执行动画
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -412,6 +445,7 @@
     }
     else if (segment.selectedSegmentIndex==1)
     {
+        //开始了闪现
         
     }
 }
@@ -427,6 +461,7 @@
     }
     else if (segment.selectedSegmentIndex==1)
     {
+        //结束闪现
         
     }
 }
@@ -456,19 +491,46 @@
 
     CommonStageCell *cell = (CommonStageCell *)(button.superview.superview.superview);
     
-    UIGraphicsBeginImageContextWithOptions(_HotMoVieTableView.bounds.size, YES, [UIScreen mainScreen].scale);
+    UIGraphicsBeginImageContextWithOptions(CGSizeMake(kDeviceWidth, kDeviceWidth+40), YES, [UIScreen mainScreen].scale);
     [cell.stageView drawViewHierarchyInRect:cell.stageView.bounds afterScreenUpdates:YES];
     
     // old style [self.layer renderInContext:UIGraphicsGetCurrentContext()];
     
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
+  //  NSLog(@"===w =%@ ",image);
+    HotMovieModel  *hotmovie;
+    if (segment.selectedSegmentIndex==0) {
+        hotmovie =[_hotDataArray objectAtIndex:button.tag-2000];
+    }
+    else  {
+        hotmovie=[_newDataArray objectAtIndex:button.tag-2000];
+    }
+
+    UIImageView   *imageView=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceWidth)];
+    imageView.image=image;
     
+    UILabel  *movieLable=[ZCControl createLabelWithFrame:CGRectMake(10,kDeviceWidth-20, 200, 20) Font:14 Text:@""];
+    movieLable.text=hotmovie.stageinfo.movie_name;
+    movieLable.textColor=VGray_color;
+    [imageView addSubview:movieLable];
+    
+    UILabel  *logoLable=[ZCControl createLabelWithFrame:CGRectMake(200,kDeviceWidth-20, 50, 20) Font:14 Text:@"影弹App"];
+    //logoLable.text=hotmovie.stageinfo.movie_name;
+    logoLable.textColor=VGray_color;
+    [imageView addSubview:logoLable];
+    
+   // [self.view addSubview:imageView];
+    
+    NSString  *shareText=hotmovie.stageinfo.movie_name;
+    
+    //UIImageView   *shareImage=[UIImageView alloc]initWithFrame:CGRectMake(0, 0, <#CGFloat width#>, <#CGFloat height#>)
+
     [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
     [UMSocialSnsService presentSnsIconSheetView:self
                                          appKey:kUmengKey
-                                      shareText:@"index share image"
-                                     shareImage: image
+                                      shareText:shareText
+                                     shareImage: imageView.image
                                 shareToSnsNames:[NSArray arrayWithObjects: UMShareToWechatSession, UMShareToWechatTimeline, UMShareToQzone, UMShareToSina, nil]
                                        delegate:nil];
 }
@@ -497,7 +559,7 @@
     MyViewController  *myVC=[[MyViewController alloc]init];
     HotMovieModel *hotMovieModel = [_newDataArray objectAtIndex:button.tag-4000];
     myVC.author_id = hotMovieModel.weibo.user_id;
-    [self.navigationController pushViewController:myVC animated:NO];
+    [self.navigationController pushViewController:myVC animated:YES];
     
 }
 //点赞
@@ -605,7 +667,7 @@
         UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
         
-        CGRect rect =  CGRectMake(0, 0, 320, 100);//要裁剪的图片区域，按照原图的像素大小来，超过原图大小的边自动适配
+        CGRect rect =  CGRectMake(0, 0, 320, 300);//要裁剪的图片区域，按照原图的像素大小来，超过原图大小的边自动适配
         CGImageRef cgimg = CGImageCreateWithImageInRect([image CGImage], rect);
         image = [UIImage imageWithCGImage:cgimg];
         CGImageRelease(cgimg);//用完一定要释放，否则内存泄露

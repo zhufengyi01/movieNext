@@ -69,14 +69,28 @@
         markView.isAnimation =YES;
         //设置单条微博的参数信息
         markView.weiboDict=self.weiboDict;
-       
        //遵守markView 的协议
         markView.delegate=self;
+        markView.isShowansHiden=YES;
+        [markView StartShowAndhiden];
        [self addSubview:markView];
+        
+        //改变透明度
+        //闪烁动画
+        
+        
     }
 #pragma  mark  有很多气泡，气泡循环播放
     
     if (self.WeibosArray&&self.WeibosArray.count>0) {
+        
+        //创建之前 //先移除所有的Mark视图
+        /*for (UIView  *Mview in  self.subviews) {
+            if ([Mview isKindOfClass:[MarkView class]]) {
+                [Mview  removeFromSuperview];
+            }
+        }*/
+        
       for ( int i=0;i<_WeibosArray.count ; i++) {
         MarkView *markView = [self createMarkViewWithDict:self.WeibosArray[i] andIndex:i];
         // 设置markview 可以动画
@@ -84,6 +98,7 @@
         //设置单条微博的参数信息
         markView.weiboDict=self.WeibosArray[i];
         //遵守markView 的协议
+          markView.isShowansHiden=NO;
         markView.delegate=self;
 
        [self addSubview:markView];
@@ -210,6 +225,42 @@
     [_timer invalidate];
     _timer=nil;
 }
+
+
+
+
+
+#pragma mark 点击屏幕显示和隐藏marview
+//显示隐藏markview
+-(void)hidenAndShowMarkView:(BOOL) isShow;
+{
+    if (isShow==NO) {
+        NSLog(@"执行了隐藏 view ");
+        for (UIView  *view  in self.subviews) {
+            if  ([view isKindOfClass:[MarkView class]]) {
+                MarkView  *mv =(MarkView *)view;
+                mv.hidden=YES;
+                
+
+            }
+        }
+    }
+    else if (isShow==YES)
+    {
+        NSLog(@"执行了显示view ");
+        for (UIView  *view  in self.subviews) {
+            if  ([view isKindOfClass:[MarkView class]]) {
+                MarkView  *mv =(MarkView *)view;
+                mv.hidden=NO;
+
+            }
+        }
+
+        
+    }
+
+}
+
 #pragma mark  ----
 #pragma mark   ---markView   Delegate
 #pragma  mark -----

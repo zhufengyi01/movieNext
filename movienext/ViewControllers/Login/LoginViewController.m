@@ -135,12 +135,11 @@
 {
     [UMSocialControllerService defaultControllerService].socialUIDelegate = self;
     UMSocialSnsPlatform *snsPlatform = [UMSocialSnsPlatformManager getSocialPlatformWithName:ssoName];
-    
     snsPlatform.loginClickHandler(self,[UMSocialControllerService defaultControllerService],YES,^(UMSocialResponseEntity *response){
         if (response.responseCode == UMSResponseCodeSuccess) {
             [[UMSocialDataService defaultDataService] requestSnsInformation:ssoName completion:^(UMSocialResponseEntity *response) {
                 if (response.responseCode == UMSResponseCodeSuccess) {
-                    NSLog(@"====  weixxin  =response ======%@",[response valueForKey:@"data"]);
+                   // NSLog(@"====  weixxin  =response ======%@",[response valueForKey:@"data"]);
                     NSDictionary *data = [response valueForKey:@"data"];
                     NSString * uid            = [data valueForKey:@"uid"];
 
@@ -175,7 +174,7 @@
                         [parameters setObject:verified forKey:@"verified"];
 
                     }
-                    NSLog(@"打印参数=== weixin =======%@",parameters);
+                  //  NSLog(@"打印参数=== weixin =======%@",parameters);
                     
                     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
                     [manager POST:[NSString stringWithFormat:@"%@/user/login", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {

@@ -29,6 +29,8 @@
 #pragma  mark    宽高设置
 #define kDeviceWidth        [UIScreen mainScreen].bounds.size.width
 #define kDeviceHeight       [UIScreen mainScreen].bounds.size.height
+#define IsIphone6            [UIScreen mainScreen].bounds.size.height>600
+
 #define kHeightNavigation 64
 #define kHeigthTabBar     49
 #define kMarkWidth 22
@@ -38,6 +40,7 @@
 #pragma  mark  三方平台key  设置
 #define kUmengKey @"53e9e548fd98c5e4a90017c6"
 #define SSOSinRedirectURL  @"http://sns.whalecloud.com/sina2/callback"
+
 
 #pragma  mark 颜色设置
 #define kAppTintColor [UIColor colorWithRed:0.0/255.0 green:146.0/255.0 blue:255.0/255.0 alpha:1]
@@ -60,6 +63,7 @@
 #define kStaticTimeOffset  5.7  //动画的停留时间
 #define kShowTimeOffset 0.7  // 淡入时间
 #define kHidenTimeOffset 1.0  //淡出时间
+#define KappearTime    3     //最新页面的闪烁动画时间
 
 #define kUserKey @"userinfo"  ///用户信息
 
@@ -69,6 +73,6 @@
 //坐标图片的大小控制
 
 //右边字体的大小控制
-#define MarkTextFont  14
-
+#define MarkTextFont14  14
+#define MarkTextFont16   16
 #endif

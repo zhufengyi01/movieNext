@@ -41,6 +41,7 @@
     BOOL bigModel;
     ButtomToolView *_toolBar;
     MarkView       *_mymarkView;
+    BOOL   isMarkViewsShow;
 
 }
 
@@ -98,6 +99,7 @@
 -(void)initData
 {
     bigModel=YES;
+    isMarkViewsShow=YES;
     _MovieDict=[[NSMutableDictionary alloc]init];
     _dataArray =[[NSMutableArray alloc]init];
     
@@ -111,15 +113,16 @@
     //layout.itemSize=CGSizeMake(80,140);  //cell的大小
     if(bigModel==YES)
     {
-        layout.sectionInset=UIEdgeInsetsMake(10, 0, 10, 0);
+        layout.sectionInset=UIEdgeInsetsMake(0, 0, 64, 0);
     }
     else{
-        layout.sectionInset=UIEdgeInsetsMake(10, 10, 10, 10); //整个偏移量 上左下右
+
+        layout.sectionInset=UIEdgeInsetsMake(0,0,64, 0); //整个偏移量 上左下右
     }
     //kDeviceHeight/3-45+44
-    [layout setHeaderReferenceSize:CGSizeMake(_myConllectionView.frame.size.width, kDeviceHeight/3+44)];
+    [layout setHeaderReferenceSize:CGSizeMake(_myConllectionView.frame.size.width, kDeviceHeight/3+64)];
     
-    _myConllectionView =[[UICollectionView alloc]initWithFrame:CGRectMake(0, -64,kDeviceWidth, kDeviceHeight+20+kHeigthTabBar) collectionViewLayout:layout];
+    _myConllectionView =[[UICollectionView alloc]initWithFrame:CGRectMake(0, -64,kDeviceWidth, kDeviceHeight+20+kHeightNavigation) collectionViewLayout:layout];
     _myConllectionView.backgroundColor=View_BackGround;
     //注册大图模式
     [_myConllectionView registerClass:[BigImageCollectionViewCell class] forCellWithReuseIdentifier:@"bigcell"];
@@ -185,6 +188,7 @@
         }
         _MovieDict =[NSMutableDictionary dictionaryWithDictionary:[responseObject  objectForKey:@"detail"]];
         
+        
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
@@ -203,7 +207,7 @@
     NSDictionary *parameter = @{@"movie_id": _movieId, @"start_id":@"0", @"user_id": @"18"};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:[NSString stringWithFormat:@"%@/movieStage/list", kApiBaseUrl] parameters:parameter success:^(AFHTTPRequestOperation *operation, id responseObject) {
-     ///   NSLog(@"  电影详情页面数据JSON: %@", responseObject);
+        NSLog(@"  电影详情页面数据JSON: %@", responseObject);
         NSMutableArray  *detailArray=[responseObject objectForKey:@"detail"];
         [loadView stopAnimation];
         [loadView removeFromSuperview];
@@ -211,8 +215,6 @@
         if (_dataArray==nil) {
             _dataArray=[[NSMutableArray alloc]init];
         }
-       // [_dataArray addObjectsFromArray:[responseObject objectForKey:@"detail"]];
-       // NSLog(@"=-=======dataArray 电影详细页面的数组 是=====%@",_dataArray);
         for (NSDictionary  *movieDict in detailArray) {
             HotMovieModel *model=[[HotMovieModel alloc]init];
             if (model) {
@@ -250,30 +252,12 @@
 //微博点赞请求
 -(void)LikeRequstData:(WeiboModel  *) weiboDict StageInfo :(StageInfoModel *) stageInfoDict
 {
-   // NSLog(@"===============weibo dict  =======%@  stageInfo Dict movieid  ==%@  ======%@  movie name =%@",weiboDict,stageInfoDict.movie_id,stageInfoDict.movie_name);
     
     UserDataCenter  *userCenter=[UserDataCenter shareInstance];
-    NSNumber  *weiboId=weiboDict.Id;  //[upDict objectForKey:@"id"];
-    NSNumber  *stageId=stageInfoDict.Id;//[stageInfoDict objectForKey:@"id"];
-    NSString  *movieId=stageInfoDict.movie_id; //[stageInfoDict objectForKey:@"movie_id"];
-    NSString  *movieName=stageInfoDict.movie_name;//[stageInfoDict objectForKey:@"movie_name"];
-    NSString  *userId=userCenter.user_id;
-    NSString  *autorId =weiboDict.user_id; // [upDict objectForKey:@"user_id"];
-    NSNumber  *uped;
-    //if ([[upDict objectForKey:@"uped"]  intValue]==0) {
-    //uped =[NSString stringWithFormat:@"%d",1];
-    //}
-    if ([weiboDict.uped  integerValue] ==0) {
-        uped=[NSNumber numberWithInt:0];
-    }
-    else
-    {
-        uped=[NSNumber numberWithInt:1];
-    }
+    NSString  *movieId=[_MovieDict objectForKey:@"id"];
+    NSString  *movieName=[_MovieDict objectForKey:@"name"];
+    NSDictionary *parameters = @{@"weibo_id":weiboDict.Id, @"stage_id":stageInfoDict.Id,@"movie_id":movieId,@"movie_name":movieName,@"user_id":userCenter.user_id,@"author_id":weiboDict.user_id,@"operation":weiboDict.uped};
     
-    NSDictionary *parameters = @{@"weibo_id":weiboId, @"stage_id":stageId,@"movie_id":movieId,@"movie_name":movieName,@"user_id":userId,@"author_id":autorId,@"operation":uped};
-    
-    NSLog(@"");
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:[NSString stringWithFormat:@"%@/weiboUp/up", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"return_code"]  intValue]==10000) {
@@ -343,9 +327,21 @@
 //点击小图模式的时候，跳转到大图模式
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (bigModel==NO&&collectionView==_myConllectionView) {
-     
-    }
+    if (bigModel==YES&&collectionView==_myConllectionView) {
+                //点击cell 隐藏弹幕，再点击隐藏
+                NSLog(@"didDeselectRowAtIndexPath  =====%ld",indexPath.row);
+                BigImageCollectionViewCell   *cell=(BigImageCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
+                if (isMarkViewsShow==YES) {
+                    isMarkViewsShow=NO;
+                    [cell.StageView  hidenAndShowMarkView:YES];
+                    
+                }
+                else{
+                    isMarkViewsShow=YES;
+                    [cell.StageView  hidenAndShowMarkView:NO];
+                }
+        }
+
 }
 
 
@@ -392,12 +388,12 @@
                 hight=  (h/w) *kDeviceWidth+45;
             }
         }
-        NSLog(@"============  hight  for  row  =====%f",hight);
+        //NSLog(@"============  hight  for  row  =====%f",hight);
         return CGSizeMake(kDeviceWidth,hight);
     }
     else
     {
-        return CGSizeMake(( kDeviceWidth-20)/3,(kDeviceWidth-20-10)/3);
+        return CGSizeMake(( kDeviceWidth-20)/3,(kDeviceWidth-20)/3);
 
     }
     return CGSizeMake(0, 0);
@@ -405,10 +401,10 @@
 
 -(UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
 {
-    if (bigModel==NO) {
-        return UIEdgeInsetsMake(15, 5, 5, 5);
+    if (bigModel==YES) {
+        return UIEdgeInsetsMake(0, 5, 5, 5);
     }
-    return UIEdgeInsetsMake(0, 0, 0, 0);
+    return UIEdgeInsetsMake(5, 5, 5, 5);
 }
 //左右间距
 -(CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
@@ -515,7 +511,7 @@
 -(void)ScreenButtonClick:(UIButton  *) button
 {
     
-    NSLog(@" ==ScreenButtonClick  ====%d",button.tag);
+    //NSLog(@" ==ScreenButtonClick  ====%d",button.tag);
     BigImageCollectionViewCell *cell = (BigImageCollectionViewCell *)(button.superview.superview.superview);
     
     UIGraphicsBeginImageContextWithOptions(_myConllectionView.bounds.size, YES, [UIScreen mainScreen].scale);
@@ -678,7 +674,7 @@
         
 #warning    暂时屏蔽了上传网络服务器请求
         ////发送到服务器
-      //  [self LikeRequstData:weiboDict StageInfo:stageInfoDict];
+        [self LikeRequstData:weiboDict StageInfo:stageInfoDict];
         
     }
 }

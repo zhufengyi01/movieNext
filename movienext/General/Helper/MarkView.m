@@ -25,6 +25,9 @@
     self.isSelected=NO;
     //左视图
     _LeftImageView =[[UIImageView alloc]initWithFrame:CGRectMake(0, 0,20, 20)];
+    if (IsIphone6) {
+        _LeftImageView.frame=CGRectMake(0, 0, 25, 25);
+    }
     _LeftImageView.layer.borderWidth=1;
     _LeftImageView.layer.cornerRadius=3;
     _LeftImageView.layer.masksToBounds=YES;
@@ -41,7 +44,10 @@
     
     //标题，点赞的view
     _TitleLable=[ZCControl createLabelWithFrame:CGRectMake(0,0, 0,0) Font:12 Text:@""];
-    _TitleLable.font=[UIFont systemFontOfSize:MarkTextFont];
+    _TitleLable.font=[UIFont systemFontOfSize:MarkTextFont14];
+    if (IsIphone6) {
+        _TitleLable.font=[UIFont systemFontOfSize:MarkTextFont16];
+    }
     _TitleLable.textColor=[UIColor whiteColor];
     [_rightView addSubview:_TitleLable];
     
@@ -131,6 +137,32 @@
         }
     }
 }
+
+
+#pragma mark  开始闪现动作
+-(void)StartShowAndhiden;
+{
+    //最新页面的饿动画
+    if (self.isShowansHiden==YES) {
+    [self.layer addAnimation:[self opacityForver_animation:KappearTime] forKey:nil];
+    }
+    
+
+}
+-(CABasicAnimation *)opacityForver_animation:(float)time
+{
+    CABasicAnimation  *animation=[CABasicAnimation animationWithKeyPath:@"opacity"];
+    animation.fromValue=[NSNumber numberWithFloat:0.2f];
+    animation.toValue=[NSNumber numberWithFloat:0.7f];
+    animation.autoreverses=YES;
+    animation.duration=time;
+    animation.repeatCount=MAXFLOAT;
+    animation.removedOnCompletion=NO;
+    animation.fillMode=kCAFillModeForwards;
+    animation.timingFunction=[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionDefault];  //默认均匀的动画
+    return animation;
+}
+
 #pragma mark   -------
 #pragma mark   ------ 设置selected 和没有选中的两种状态
 #pragma mark   ------
@@ -139,6 +171,7 @@
 {
     self.isAnimation=NO;
     self.isSelected=YES;
+    self.isShowansHiden=NO;
     NSLog(@"  在 markview   中执行了markview 的  setMaskViewSelected");
     _LeftImageView.layer.borderColor=VBlue_color.CGColor;
     _rightView.layer.backgroundColor=VBlue_color.CGColor;
@@ -149,6 +182,7 @@
     NSLog(@"在markview 中  执行了markview 的  CancelMarksetSelect");
     self.isSelected=NO;
     self.isAnimation=YES;
+    self.isShowansHiden=YES;
     _LeftImageView.layer.backgroundColor=[UIColor whiteColor].CGColor;
      _rightView.backgroundColor=[[UIColor blackColor] colorWithAlphaComponent:0.7];
 }

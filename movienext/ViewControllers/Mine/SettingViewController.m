@@ -55,7 +55,7 @@
     [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     button.titleLabel.font=[UIFont systemFontOfSize:14];
     [button setBackgroundImage:[UIImage imageNamed:@"login out.png"] forState:UIControlStateNormal];
-    button.frame=CGRectMake((kDeviceWidth-233)/2, 360, 233, 43);
+    button.frame=CGRectMake((kDeviceWidth-233)/2, 280, 233, 43);
     [button addTarget:self action:@selector(OutLoginClick:) forControlEvents:UIControlEventTouchUpInside];
     button.layer.cornerRadius=3;
     button.clipsToBounds=YES;

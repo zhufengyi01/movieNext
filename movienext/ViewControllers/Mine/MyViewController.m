@@ -26,7 +26,7 @@
 #import "UMSocial.h"
 #import "MJRefresh.h"
 #import "AddMarkViewController.h"
-@interface MyViewController ()<UITableViewDataSource, UITableViewDelegate,StageViewDelegate,MarkViewDelegate,StageViewDelegate,ButtomToolViewDelegate>
+@interface MyViewController ()<UITableViewDataSource, UITableViewDelegate,StageViewDelegate,MarkViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UIActionSheetDelegate>
 {
     UISegmentedControl *segment;
     UITableView   *_tableView;
@@ -54,11 +54,15 @@
 {
     self.navigationController.navigationBar.hidden=NO;
     self.navigationController.navigationBar.alpha=1;
-    self.navigationController.navigationBar.translucent=NO;
     self.tabBarController.tabBar.hidden=NO;
-    UserDataCenter  *userCenter =[UserDataCenter shareInstance];
-    if (![self.author_id isEqualToString:userCenter.user_id]) {
+    self.navigationController.navigationBar.translucent=NO;
+    if (self.author_id.length>0&&![self.author_id isEqualToString:@"0"]) {
         self.tabBarController.tabBar.hidden=YES;
+    }
+    else
+    {
+        self.tabBarController.tabBar.hidden=NO;
+   
     }
 }
 
@@ -67,16 +71,18 @@
     // Do any additional setup after loading the view.
     [self createNavigation];
     [self initData];
+     [self requestUserInfo];
+    
+
+    [self createLoadview];
+    [self createToolBar];
+
     if (self.author_id&&![self.author_id isEqualToString:@"0"]) {
         //如果有用户id 并且用户的id 不为0
-        [self requestUserInfo];
-    } else {
-        [self createTableView];
-        [self setupRefresh];
-        [self createLoadview];
-        [self requestData];
-        [self createToolBar];
+        self.navigationItem.rightBarButtonItem=nil;
+        self.navigationItem.titleView=nil;
     }
+   
 }
 
 -(void)initData {
@@ -114,7 +120,7 @@
 
 -(void)createTableView
 {
-    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight-kHeightNavigation)];
+    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight-kHeigthTabBar)];
     _tableView.separatorStyle=UITableViewCellSeparatorStyleNone;
     _tableView.delegate = self;
     _tableView.dataSource = self;
@@ -124,8 +130,8 @@
     
     int BodyConut=[userCenter.product_count intValue];
     int  ZanCount= [userCenter.like_count  intValue];
-
-    NSString  *signature=[NSString stringWithFormat:@"%@",userCenter.signature];
+  
+    NSString  *signature=[NSString stringWithFormat:@"%@",  [_userInfoDict  objectForKey:@"brief"]];
     if (signature==nil) {
         signature=@"";
     }
@@ -141,10 +147,10 @@
     if (_userInfoDict) {
         imageURL =[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!thumb",kUrlAvatar,[_userInfoDict  objectForKey:@"avatar"]]];
     }
-    else
-    {
-        imageURL =[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!thumb",kUrlAvatar,userCenter.avatar]];
-    }
+   // else
+   // {
+     //   imageURL =[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!thumb",kUrlAvatar,userCenter.avatar]];
+    //}
  
     [ivAvatar sd_setImageWithURL:imageURL placeholderImage:[UIImage imageNamed:@"loading_image_all.png"]];
   //  NSLog(@"avatar url = %@/%@!thumb", kUrlAvatar, userCenter.avatar );
@@ -157,9 +163,9 @@
     if (_userInfoDict) {
         lblUsername.text=[NSString stringWithFormat:@"%@",[_userInfoDict objectForKey:@"username"]];
     }
-    else {
-    lblUsername.text=[NSString stringWithFormat:@"%@",userCenter.username];
-    }
+   // else {
+    //lblUsername.text=[NSString stringWithFormat:@"%@",userCenter.username];
+    //}
     [viewHeader addSubview:lblUsername];
     
     UILabel  *lbl1=[ZCControl createLabelWithFrame:CGRectMake(lblUsername.frame.origin.x,lblUsername.frame.origin.y+lblUsername.frame.size.height+10, 40, 20) Font:14 Text:@"内容"];
@@ -169,38 +175,41 @@
     //内容的数量
     lblCount = [[UILabel alloc] initWithFrame:CGRectMake(lbl1.frame.origin.x+lbl1.frame.size.width, lblUsername.frame.origin.y+lblUsername.frame.size.height+10, 60, 20)];
     lblCount.font = [UIFont systemFontOfSize:14];
+
     if (_userInfoDict) {
         lblCount.text=[NSString stringWithFormat:@"%@",[_userInfoDict objectForKey:@"product_count"]];
     }
-    else{
-        lblCount.text=[NSString stringWithFormat:@"%d",BodyConut];
-    }
+  //  else{
+    //    lblCount.text=[NSString stringWithFormat:@"%d",BodyConut];
+    //}
     lblCount.textColor = VGray_color;
     //lblCount.backgroundColor = [UIColor purpleColor];
     [viewHeader addSubview:lblCount];
     
     
-    UILabel  *lbl2=[ZCControl createLabelWithFrame:CGRectMake(lblCount.frame.origin.x+lblCount.frame.size.width+10,lblUsername.frame.origin.y+lblUsername.frame.size.height+10, 40, 20) Font:14 Text:@"赞"];
+    UILabel  *lbl2=[ZCControl createLabelWithFrame:CGRectMake(lblCount.frame.origin.x+lblCount.frame.size.width+10,lblUsername.frame.origin.y+lblUsername.frame.size.height+10, 40, 20) Font:14 Text:@"被赞"];
     lbl2.textColor=VBlue_color;
     [viewHeader addSubview:lbl2];
 
     //赞的数量
-    lblZanCout = [[UILabel alloc] initWithFrame:CGRectMake(lbl2.frame.origin.x+lbl2.frame.size.height+10,lblCount.frame.origin.y , 50, 20)];
+    lblZanCout = [[UILabel alloc] initWithFrame:CGRectMake(lbl2.frame.origin.x+lbl2.frame.size.width+10,lblCount.frame.origin.y , 50, 20)];
     lblZanCout.font = [UIFont systemFontOfSize:14];
     lblZanCout.textColor = VGray_color;
     if (_userInfoDict) {
-        lblCount.text  =[NSString stringWithFormat:@"%@",[_userInfoDict objectForKey:@"uped_count"]];
+        lblZanCout.text  =[NSString stringWithFormat:@"%@",[_userInfoDict objectForKey:@"uped_count"]];
     }
-    else {
-    lblZanCout.text=[NSString stringWithFormat:@"%d",ZanCount];
-    }
+   // else {
+    //lblZanCout.text=[NSString stringWithFormat:@"%d",ZanCount];
+    //}
     
     //lblZanCout.backgroundColor = [UIColor purpleColor];
     [viewHeader addSubview:lblZanCout];
     
    //简介
     lblBrief = [[UILabel alloc] initWithFrame:CGRectMake(ivAvatar.frame.origin.x+ivAvatar.frame.size.width+10,lblCount.frame.origin.y+lblCount.frame.size.height+10, kDeviceWidth-ivAvatar.frame.origin.x-ivAvatar.frame.size.width-20, 20)];
+    lblBrief.numberOfLines=0;
     lblBrief.font = [UIFont systemFontOfSize:12];
+    
     CGSize  Msize= [signature boundingRectWithSize:CGSizeMake(kDeviceWidth-80, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:lblBrief.font forKey:NSFontAttributeName] context:nil].size;
     lblBrief.textColor = VGray_color;
    // lblBrief.backgroundColor = [UIColor orangeColor];
@@ -227,6 +236,9 @@
     viewHeader.frame=CGRectMake(0, 0, kDeviceWidth,segment.frame.origin.y+segment.frame.size.height);
 
     [_tableView setTableHeaderView:viewHeader];
+    
+    [self setupRefresh];
+
 }
 
 
@@ -244,6 +256,18 @@
 - (void)headerRereshing
 {
     page=0;
+    if (segment.selectedSegmentIndex==0) {
+    if (_addedDataArray.count>0) {
+        [_addedDataArray removeAllObjects];
+
+    }
+    }
+    else if (segment.selectedSegmentIndex==1)
+    {
+        if (_upedDataArray.count>0) {
+            [_upedDataArray removeAllObjects];
+        }
+    }
     [self requestData];
     // 2.2秒后刷新表格UI
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -270,23 +294,25 @@
 
 
 
-
 -(void)segmentClick:(UISegmentedControl *)seg
 {
     if(seg.selectedSegmentIndex==0)
     {
         [_tableView reloadData];
+
         if (_addedDataArray.count==0) {
             [self requestData];
         }
+        
     }
     else if(seg.selectedSegmentIndex==1)
     {
-        [_tableView reloadData];
-        
+            [_tableView reloadData];
         if (_upedDataArray.count==0) {
             [self requestData];
         }
+
+
     }
     
 }
@@ -311,8 +337,16 @@
 #pragma  mark ----
 -(void)requestUserInfo
 {
-    NSDictionary *parameters = @{@"user_id":self.author_id};
-    
+    NSString  *userId;
+    if (self.author_id>0&&![self.author_id isEqualToString:@"0"]) {
+        userId=self.author_id;
+    }
+    else
+    {
+        UserDataCenter  *user=[UserDataCenter shareInstance];
+        userId=user.user_id;
+    }
+    NSDictionary *parameters = @{@"user_id":userId};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:[NSString stringWithFormat:@"%@/user/info", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"return_code"]  intValue]==10000) {
@@ -321,11 +355,8 @@
                 _userInfoDict=[[NSMutableDictionary alloc]init];
             }
             _userInfoDict =[responseObject objectForKey:@"detail"];
-            
             [self createTableView];
-            [self createLoadview];
-            [self requestData];
-            [self createToolBar];
+            
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
@@ -334,12 +365,17 @@
 
 }
 - (void)requestData{
-    UserDataCenter  *userCenter=[UserDataCenter shareInstance];
-    if ( !_author_id |[self.author_id isEqualToString:@"0"]) {  //表示直接进入这个页面的话，这个为空
-        _author_id = userCenter.user_id;
+   // UserDataCenter  *userCenter=[UserDataCenter shareInstance];
+    NSString  *autorid;
+    if ( !_author_id ||[self.author_id isEqualToString:@"0"]) {  //表示直接进入这个页面的话，这个为空
+        autorid = userCenter.user_id;
+    }
+    else
+    {
+        autorid=_author_id;
     }
     //user_id是当前用户的ID
-    NSDictionary *parameters = @{@"user_id":userCenter.user_id, @"page":[NSString stringWithFormat:@"%d",page], @"author_id":_author_id};
+    NSDictionary *parameters = @{@"user_id":userCenter.user_id, @"page":[NSString stringWithFormat:@"%d",page], @"author_id":autorid};
     NSString * section;
     if (segment.selectedSegmentIndex==1) {  // 赞过的
         section=@"weibo/upedListByUserId";
@@ -352,13 +388,13 @@
     //    [manager POST:[NSString stringWithFormat:@"%@/movieStage/listRecently", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
     [manager POST:[NSString stringWithFormat:@"%@/%@", kApiBaseUrl, section] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         [loadView stopAnimation];
-        loadView.hidden=YES;
+        [loadView removeFromSuperview];
         NSMutableArray  *Detailarray=[responseObject objectForKey:@"detail"];
         if (segment.selectedSegmentIndex==0) {
             if (_addedDataArray ==nil) {
                 _addedDataArray=[[NSMutableArray alloc]init];
             }
-          //  NSLog(@"用户添加的数据 JSON: %@", responseObject);
+           // NSLog(@"用户添加的数据 JSON: %@", responseObject);
            // [_addedDataArray addObjectsFromArray:Detailarray];
             for (NSDictionary  *addDict  in Detailarray) {
                 HotMovieModel  *model =[[HotMovieModel alloc]init];
@@ -398,7 +434,6 @@
                         [stagemodel setValuesForKeysWithDictionary:[addDict objectForKey:@"stageinfo"]];
                         model.stageinfo=stagemodel;
                     }
-                    
                     WeiboModel  *weibomodel =[[WeiboModel alloc]init];
                     if (weibomodel) {
                         [weibomodel setValuesForKeysWithDictionary:[addDict objectForKey:@"weibo"]];
@@ -415,6 +450,21 @@
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
+}
+-(void)requestDelectData:(HotMovieModel *) hotmodel
+{
+    NSLog(@"hotmodel  ==weibiid ==%@   hotmodel stageinfo id ==%@ ",hotmodel.weibo.Id,hotmodel.stageinfo.Id);
+    NSDictionary *parameters = @{@"id":hotmodel.weibo.Id,@"stage_id":hotmodel.stageinfo.Id};
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    [manager POST:[NSString stringWithFormat:@"%@/weibo/remove", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if ([[responseObject  objectForKey:@"return_code"]  intValue]==10000) {
+            NSLog(@"删除数据成功=======%@",responseObject);
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+    
+   
 }
 //微博点赞请求
 -(void)LikeRequstData:(WeiboModel  *) weiboDict StageInfo :(StageInfoModel *) stageInfoDict
@@ -445,6 +495,7 @@
     [manager POST:[NSString stringWithFormat:@"%@/weiboUp/up", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"return_code"]  intValue]==10000) {
             NSLog(@"点赞成功========%@",responseObject);
+            
             
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -495,8 +546,7 @@
         HotMovieModel  *model =[_upedDataArray objectAtIndex:indexPath.row];
         float hight;
         if (_upedDataArray.count>indexPath.row) {
-        
-            float  h=[model.stageinfo.h floatValue];
+        float  h=[model.stageinfo.h floatValue];
             float w= [model.stageinfo.w floatValue];
         if (w==0||h==0) {
             hight= kDeviceWidth+90;
@@ -531,8 +581,8 @@
         if (_addedDataArray.count>indexPath.row) {
             cell.pageType=NSPageSourceTypeMyAddedViewController;
             //个人页面的来源
-            UserDataCenter  *userCenter=[UserDataCenter shareInstance];
-            if ([_author_id isEqualToString:userCenter.user_id]) {  //表示直接进入这个页面的话，这个为空
+          //  UserDataCenter  *userCenter=[UserDataCenter shareInstance];
+            if (self.author_id.length==0||[self.author_id isEqualToString:@"0"]) {  //表示直接进入这个页面的话，这个为空
                 cell.userPage=NSUserPageTypeMySelfController;
             }
             else {
@@ -636,7 +686,42 @@
     
 }
 
+-(void)delectButtonClick:(UIButton *) button
+{
+    //删除按钮
+    NSLog(@"点击了删除 button tag＝＝＝＝ %ld",button.tag);
+    
+       UIActionSheet   *ash=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"删除弹幕", nil];
+    ash.tag=button.tag;
+    [ash showInView:self.view];
+    
+    
 
+    
+}
+-(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    
+    NSLog(@" button Index ===%ld",(long)buttonIndex);
+    if (actionSheet.tag<7000) {
+      if (buttonIndex==0) {          
+          UIActionSheet   *ash=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"确定删除弹幕", nil];
+          ash.tag=actionSheet.tag+1000;
+          [ash showInView:self.view];
+     }
+    }
+    else
+    {
+        if (buttonIndex==0) {
+               HotMovieModel  *model =[_addedDataArray objectAtIndex:actionSheet.tag-7000];
+               [_addedDataArray removeObjectAtIndex:actionSheet.tag-7000];
+                [_tableView reloadData];
+                [self requestDelectData:model];
+        }
+
+    }
+    
+}
 
 
 
