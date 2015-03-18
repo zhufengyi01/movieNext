@@ -19,6 +19,7 @@
     MarkView  *_myMarkView;
     NSString    *X;
     NSString    *Y;
+    CGSize   keyboardSize;
 }
 @end
 
@@ -27,6 +28,7 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     self.navigationController.navigationBar.alpha=1;
+    self.tabBarController.tabBar.hidden=YES;
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -114,12 +116,9 @@
         NSLog(@" =========取消发布的方法");
         //取消发布
         [self.navigationController popViewControllerAnimated:NO];
-        //[_inputText becomeFirstResponder];
     }
     else if (button.tag==101)
-    {
-        NSLog(@" =========执行确定发布的方法");
-        [self  PublicRuqest];
+    {        [self  PublicRuqest];
         //执行发布的方法
     }
     else if (button.tag==99)
@@ -144,10 +143,6 @@
     UserDataCenter  * userCenter=[UserDataCenter shareInstance];
 //<<<<<<< HEAD
     [ _myMarkView.LeftImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@!thumb",kUrlAvatar,    userCenter.avatar]]];
-//=======
-//    [ _myMarkView.LeftImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!thumb",kUrlAvatar,    userCenter.avatar]]];
-//    NSLog(@ "  add mark   view   头像没有显示  出来  ＝＝==%@",userCenter.avatar);
-//>>>>>>> 0624d05de07183c8eb701e3a19be66e2fb7a3e89
     _myMarkView.TitleLable.text=[_inputText text];
     [stageView addSubview:_myMarkView];
     
@@ -193,7 +188,11 @@
 //确定发布
 -(void)PublicRuqest
 {
-
+    if ([_inputText text].length==0) {
+        UIAlertView  *Al =[[UIAlertView alloc]initWithTitle:nil message:@"对不起，您还没有添加内容" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+        [Al show];
+        return ;
+    }
     UserDataCenter  *userCenter=[UserDataCenter shareInstance];
     NSDictionary *parameter = @{@"user_id": userCenter.user_id,@"topic_name":[_inputText text],@"stage_id":self.stageInfoDict.Id,@"x":X,@"y":Y};
 
@@ -215,9 +214,20 @@
 #pragma mark 键盘的通知事件
 -(void)keyboardWillShow:(NSNotification * )  notification
 {
-    [UIView  animateWithDuration:1.0 animations:^{
+        NSDictionary *info = [notification userInfo];
+        NSValue *value = [info objectForKey:UIKeyboardFrameBeginUserInfoKey];
+         keyboardSize = [value CGRectValue].size;
+       float  timeInterval=1.0;
+        NSLog(@"keyBoard:%f", keyboardSize.height);
+        ///keyboardWasShown = YES;
+    if (keyboardSize.height>216) {
+        keyboardSize.height=keyboardSize.height+30;
+        timeInterval=0.3;
+    }
+    
+    [UIView  animateWithDuration:timeInterval animations:^{
         CGRect  tframe=_toolBar.frame;
-        tframe.origin.y=kDeviceHeight-216-35-kHeightNavigation-50;
+        tframe.origin.y=kDeviceHeight-keyboardSize.height-35-kHeightNavigation-50;
         _toolBar.frame=tframe;
     } completion:^(BOOL finished) {
         

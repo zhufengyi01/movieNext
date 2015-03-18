@@ -364,19 +364,21 @@
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
-    static NSString *cellID=@"CELL1";
-    CommonStageCell  *cell= (CommonStageCell *)[tableView dequeueReusableCellWithIdentifier:cellID];
-    if (!cell) {
-        cell=[[CommonStageCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
-        cell.selectionStyle=UITableViewCellSelectionStyleNone;
-        cell.backgroundColor=View_BackGround;
-    }
-    HotMovieModel  *hotModel=[_hotDataArray objectAtIndex:indexPath.row];
-    
     if  (segment.selectedSegmentIndex==0) {
+            static NSString *cellID=@"CELL1";
+            CommonStageCell  *cell= (CommonStageCell *)[tableView dequeueReusableCellWithIdentifier:cellID];
+            if (!cell) {
+                cell=[[CommonStageCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+                cell.selectionStyle=UITableViewCellSelectionStyleNone;
+                cell.backgroundColor=View_BackGround;
+            }
+        
+        
         if (_hotDataArray.count>indexPath.row) {
+             HotMovieModel  *hotModel=[_hotDataArray objectAtIndex:indexPath.row];
             cell.pageType=NSPageSourceTypeMainHotController;
             //小闪动标签的数组
+            
             cell.WeibosArray =hotModel.weibos;
             cell.weiboDict=nil;
             cell.StageInfoDict=hotModel.stageinfo;
@@ -388,8 +390,15 @@
     }
     else if (segment.selectedSegmentIndex==1)
     {
-        
+        static NSString *cellID=@"CELL2";
+        CommonStageCell  *cell= (CommonStageCell *)[tableView dequeueReusableCellWithIdentifier:cellID];
+        if (!cell) {
+            cell=[[CommonStageCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+            cell.selectionStyle=UITableViewCellSelectionStyleNone;
+            cell.backgroundColor=View_BackGround;
+        }
         if (_newDataArray.count>indexPath.row) {
+           
             HotMovieModel   *hotmodel=[_newDataArray  objectAtIndex:indexPath.row];
             //配置cell的类型。
             cell.pageType=NSPageSourceTypeMainNewController;

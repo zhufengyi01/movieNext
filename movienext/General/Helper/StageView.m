@@ -31,6 +31,7 @@
 
 #pragma  mark 创建基本ui
 - (void)createUI {
+    [self removeStageViewSubView];
     self.backgroundColor = [UIColor blackColor];
     _MovieImageView =[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, 200)];
     [self addSubview:_MovieImageView];
@@ -44,11 +45,7 @@
 #pragma mark    设置stageview的值  ，主要是给stagview 添加markview  和添加一张图片
 -(void)configStageViewforStageInfoDict{
     //先移除所有的Mark视图
-    for (UIView  *Mview in  self.subviews) {
-        if ([Mview isKindOfClass:[MarkView class]]) {
-            [Mview  removeFromSuperview];
-        }
-    }
+    [self removeStageViewSubView];
     
     float  ImageWith=[_StageInfoDict.w intValue]; //[[self.StageInfoDict objectForKey:@"w"]  floatValue];
     float  ImgeHight=[_StageInfoDict.h intValue];//[[self.StageInfoDict objectForKey:@"h"]  floatValue];
@@ -63,10 +60,12 @@
 #warning 这里如果宽高为0的话会崩溃
         
         float   y=(hight-(ImgeHight/ImageWith)*kDeviceWidth)/2;
-        NSLog(@"_MovieImageView======%f   ",y);
-        if (ImageWith!=0) {
-          _MovieImageView.frame=CGRectMake(0,y, kDeviceWidth, (ImgeHight/ImageWith)*kDeviceWidth);
+        if (ImageWith==0) {
+//          _MovieImageView.frame=CGRectMake(0,y, kDeviceWidth, (ImgeHight/ImageWith)*kDeviceWidth);
+            ImageWith=ImgeHight;
+            
         }
+        _MovieImageView.frame=CGRectMake(0,y, kDeviceWidth, (ImgeHight/ImageWith)*kDeviceWidth);
         [_MovieImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w640",kUrlStage,self.StageInfoDict.stage]] placeholderImage:[UIImage imageNamed:@"loading_image_all.png"]];
                                             
                             }
@@ -93,13 +92,6 @@
 #pragma  mark  有很多气泡，气泡循环播放
     
     if (self.WeibosArray&&self.WeibosArray.count>0) {
-        
-        //创建之前 //先移除所有的Mark视图
-        /*for (UIView  *Mview in  self.subviews) {
-            if ([Mview isKindOfClass:[MarkView class]]) {
-                [Mview  removeFromSuperview];
-            }
-        }*/
         
       for ( int i=0;i<_WeibosArray.count ; i++) {
         MarkView *markView = [self createMarkViewWithDict:self.WeibosArray[i] andIndex:i];
@@ -154,7 +146,19 @@
            // markView.isAnimation = YES;
     return markView;
 }
-
+//防止cell服用导致的原来的内容存在,移除原来的markview
+-(void)removeStageViewSubView
+{
+    for (UIView  *Mview in  self.subviews) {
+        if ([Mview isKindOfClass:[MarkView class]]) {
+            MarkView  *mv =(MarkView  *) Mview;
+            [mv  removeFromSuperview];
+            mv=nil;
+            
+        }
+    }
+    
+}
 #pragma mark  ------
 #pragma  mark ----执行动画的开始和结束
 #pragma  mark ------
