@@ -125,7 +125,7 @@
 -(void)requestData
 {
     UserDataCenter *userCenter=[UserDataCenter shareInstance];
-    NSDictionary *parameters = @{@"author_id":@"18",@"page":[NSString stringWithFormat:@"%d",page]};
+    NSDictionary *parameters = @{@"author_id":userCenter.user_id,@"page":[NSString stringWithFormat:@"%d",page]};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:[NSString stringWithFormat:@"%@/notiUp/list", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if (page==0) {
