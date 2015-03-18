@@ -285,12 +285,11 @@
 +(UIImage *)getImage:(UIImageView *) imageview
 {
     
-    UIGraphicsBeginImageContextWithOptions(CGSizeMake(kDeviceWidth, kDeviceWidth), YES, 1.0);  //NO，YES 控制是否透明
+    UIGraphicsBeginImageContextWithOptions(CGSizeMake(kDeviceWidth, kDeviceWidth), YES, 5.0);  //NO，YES 控制是否透明
     [imageview.layer renderInContext:UIGraphicsGetCurrentContext()];
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     // 生成后的image
-    
     return image;
 }
 

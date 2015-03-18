@@ -488,17 +488,6 @@
     NSLog(@" ==ScreenButtonClick  ====%ld",button.tag);
     //获取cell
 #pragma mark 暂时把sharetext设置成null
-
-    CommonStageCell *cell = (CommonStageCell *)(button.superview.superview.superview);
-    
-    UIGraphicsBeginImageContextWithOptions(CGSizeMake(kDeviceWidth, kDeviceWidth+40), YES, [UIScreen mainScreen].scale);
-    [cell.stageView drawViewHierarchyInRect:cell.stageView.bounds afterScreenUpdates:YES];
-    
-    // old style [self.layer renderInContext:UIGraphicsGetCurrentContext()];
-    
-    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-  //  NSLog(@"===w =%@ ",image);
     HotMovieModel  *hotmovie;
     if (segment.selectedSegmentIndex==0) {
         hotmovie =[_hotDataArray objectAtIndex:button.tag-2000];
@@ -506,16 +495,34 @@
     else  {
         hotmovie=[_newDataArray objectAtIndex:button.tag-2000];
     }
+   
+    float hight= kDeviceWidth;
+    float  ImageWith=[hotmovie.stageinfo.w intValue]; //[[self.StageInfoDict objectForKey:@"w"]  floatValue];
+    float  ImgeHight=[hotmovie.stageinfo.h intValue];//[[self.StageInfoDict objectForKey:@"h"]  floatValue];
+    if(ImgeHight>ImageWith)
+    {
+        hight=  (ImgeHight/ImageWith) *kDeviceWidth;
+    }
 
-    UIImageView   *imageView=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceWidth)];
+    CommonStageCell *cell = (CommonStageCell *)(button.superview.superview.superview);
+    
+    UIGraphicsBeginImageContextWithOptions(CGSizeMake(kDeviceWidth,hight+20), YES, [UIScreen mainScreen].scale);
+    [cell.stageView drawViewHierarchyInRect:cell.stageView.bounds afterScreenUpdates:YES];
+    
+    // old style [self.layer renderInContext:UIGraphicsGetCurrentContext()];
+    
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+  //  NSLog(@"===w =%@ ",image);
+    UIImageView   *imageView=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, hight)];
     imageView.image=image;
     
-    UILabel  *movieLable=[ZCControl createLabelWithFrame:CGRectMake(10,kDeviceWidth-20, 200, 20) Font:14 Text:@""];
+    UILabel  *movieLable=[ZCControl createLabelWithFrame:CGRectMake(10,hight-20, 200, 20) Font:12 Text:@""];
     movieLable.text=hotmovie.stageinfo.movie_name;
     movieLable.textColor=VGray_color;
     [imageView addSubview:movieLable];
     
-    UILabel  *logoLable=[ZCControl createLabelWithFrame:CGRectMake(200,kDeviceWidth-20, 100, 20) Font:14 Text:@"影弹App"];
+    UILabel  *logoLable=[ZCControl createLabelWithFrame:CGRectMake(kDeviceWidth-70,hight-20, 60, 20) Font:12 Text:@"影弹App"];
     //logoLable.text=hotmovie.stageinfo.movie_name;
     logoLable.textAlignment=NSTextAlignmentRight;
     logoLable.textColor=VGray_color;
@@ -662,9 +669,19 @@
         //分享文字
         NSString  *shareText=weiboDict.topic;//[weiboDict objectForKey:@"topic"];
         NSLog(@" 点击了分享按钮");
+        
+        float hight= kDeviceWidth;
+        float  ImageWith=[stageInfoDict.w intValue]; //[[self.StageInfoDict objectForKey:@"w"]  floatValue];
+        float  ImgeHight=[stageInfoDict.h intValue];//[[self.StageInfoDict objectForKey:@"h"]  floatValue];
+        if(ImgeHight>ImageWith)
+        {
+            hight=  (ImgeHight/ImageWith) *kDeviceWidth;
+        }
+        
+
         CommonStageCell *cell = (CommonStageCell *)(markView.superview.superview.superview);
         
-        UIGraphicsBeginImageContextWithOptions(_HotMoVieTableView.bounds.size, YES, [UIScreen mainScreen].scale);
+        UIGraphicsBeginImageContextWithOptions(CGSizeMake(kDeviceWidth, hight+20), YES, [UIScreen mainScreen].scale);
         [cell.stageView drawViewHierarchyInRect:cell.stageView.bounds afterScreenUpdates:YES];
         
         // old style [self.layer renderInContext:UIGraphicsGetCurrentContext()];
@@ -672,16 +689,29 @@
         UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
         
-        CGRect rect =  CGRectMake(0, 0, 320, 300);//要裁剪的图片区域，按照原图的像素大小来，超过原图大小的边自动适配
-        CGImageRef cgimg = CGImageCreateWithImageInRect([image CGImage], rect);
-        image = [UIImage imageWithCGImage:cgimg];
-        CGImageRelease(cgimg);//用完一定要释放，否则内存泄露
+
+
+        
+        UIImageView   *imageView=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, hight)];
+        imageView.image=image;
+        
+        UILabel  *movieLable=[ZCControl createLabelWithFrame:CGRectMake(10,hight-20, 200, 20) Font:12 Text:@""];
+        movieLable.text=stageInfoDict.movie_name;
+        movieLable.textColor=VGray_color;
+        [imageView addSubview:movieLable];
+        
+        UILabel  *logoLable=[ZCControl createLabelWithFrame:CGRectMake(kDeviceWidth-70,hight-20, 60, 20) Font:12 Text:@"影弹App"];
+        //logoLable.text=hotmovie.stageinfo.movie_name;
+        logoLable.textAlignment=NSTextAlignmentRight;
+        logoLable.textColor=VGray_color;
+        [imageView addSubview:logoLable];
+        UIImage  *getImage=[Function getImage:imageView];
         
         [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
         [UMSocialSnsService presentSnsIconSheetView:self
                                              appKey:kUmengKey
                                           shareText:shareText
-                                         shareImage:image
+                                         shareImage:getImage
                                     shareToSnsNames:[NSArray arrayWithObjects: UMShareToWechatSession, UMShareToWechatTimeline, UMShareToQzone, UMShareToSina, nil]
                                            delegate:nil];
     }

@@ -26,6 +26,7 @@
 #import "UMSocial.h"
 #import "MJRefresh.h"
 #import "AddMarkViewController.h"
+#import "Function.h"
 @interface MyViewController ()<UITableViewDataSource, UITableViewDelegate,StageViewDelegate,MarkViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UIActionSheetDelegate>
 {
     UISegmentedControl *segment;
@@ -666,10 +667,26 @@
     NSLog(@" ==ScreenButtonClick  ====%ld",button.tag);
     //获取cell
 #pragma mark 暂时把sharetext设置成null
+    HotMovieModel  *hotmovie;
+    if (segment.selectedSegmentIndex==0) {
+        hotmovie =[_addedDataArray objectAtIndex:button.tag-2000];
+    }
+    else  {
+        hotmovie=[_upedDataArray objectAtIndex:button.tag-2000];
+    }
+    
+    float hight= kDeviceWidth;
+    float  ImageWith=[hotmovie.stageinfo.w intValue]; //[[self.StageInfoDict objectForKey:@"w"]  floatValue];
+    float  ImgeHight=[hotmovie.stageinfo.h intValue];//[[self.StageInfoDict objectForKey:@"h"]  floatValue];
+    if(ImgeHight>ImageWith)
+    {
+        hight=  (ImgeHight/ImageWith) *kDeviceWidth;
+    }
+
     
     CommonStageCell *cell = (CommonStageCell *)(button.superview.superview.superview);
     
-    UIGraphicsBeginImageContextWithOptions(_tableView.bounds.size, YES, [UIScreen mainScreen].scale);
+    UIGraphicsBeginImageContextWithOptions(CGSizeMake(kDeviceWidth,hight+20), YES, [UIScreen mainScreen].scale);
     [cell.stageView drawViewHierarchyInRect:cell.stageView.bounds afterScreenUpdates:YES];
     
     // old style [self.layer renderInContext:UIGraphicsGetCurrentContext()];
@@ -677,11 +694,35 @@
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     
+    
+    UIImageView   *imageView=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, hight)];
+    imageView.image=image;
+    
+    UILabel  *movieLable=[ZCControl createLabelWithFrame:CGRectMake(10,hight-20, 200, 20) Font:12 Text:@""];
+    movieLable.text=hotmovie.stageinfo.movie_name;
+    movieLable.textColor=VGray_color;
+    [imageView addSubview:movieLable];
+    
+    UILabel  *logoLable=[ZCControl createLabelWithFrame:CGRectMake(kDeviceWidth-70,hight-20, 60, 20) Font:12 Text:@"影弹App"];
+    //logoLable.text=hotmovie.stageinfo.movie_name;
+    logoLable.textAlignment=NSTextAlignmentRight;
+    logoLable.textColor=VGray_color;
+    [imageView addSubview:logoLable];
+    
+    // [self.view addSubview:imageView];
+    UIImage  *getImage=[Function getImage:imageView];
+    
+    NSString  *shareText=hotmovie.stageinfo.movie_name;
+
+    
+    
+    
+    
     [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
     [UMSocialSnsService presentSnsIconSheetView:self
                                          appKey:kUmengKey
-                                      shareText:@"index share image"
-                                     shareImage: image
+                                      shareText:shareText
+                                     shareImage: getImage
                                 shareToSnsNames:[NSArray arrayWithObjects: UMShareToWechatSession, UMShareToWechatTimeline, UMShareToQzone, UMShareToSina, nil]
                                        delegate:nil];
 }
@@ -821,9 +862,19 @@
         //分享文字
         NSString  *shareText=weiboDict.topic;//[weiboDict objectForKey:@"topic"];
         NSLog(@" 点击了分享按钮");
+        
+        float hight= kDeviceWidth;
+        float  ImageWith=[stageInfoDict.w intValue]; //[[self.StageInfoDict objectForKey:@"w"]  floatValue];
+        float  ImgeHight=[stageInfoDict.h intValue];//[[self.StageInfoDict objectForKey:@"h"]  floatValue];
+        if(ImgeHight>ImageWith)
+        {
+            hight=  (ImgeHight/ImageWith) *kDeviceWidth;
+        }
+        
+        
         CommonStageCell *cell = (CommonStageCell *)(markView.superview.superview.superview);
         
-        UIGraphicsBeginImageContextWithOptions(_tableView.bounds.size, YES, [UIScreen mainScreen].scale);
+        UIGraphicsBeginImageContextWithOptions(CGSizeMake(kDeviceWidth, hight+20), YES, [UIScreen mainScreen].scale);
         [cell.stageView drawViewHierarchyInRect:cell.stageView.bounds afterScreenUpdates:YES];
         
         // old style [self.layer renderInContext:UIGraphicsGetCurrentContext()];
@@ -831,11 +882,29 @@
         UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
         
+        
+        
+        
+        UIImageView   *imageView=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, hight)];
+        imageView.image=image;
+        
+        UILabel  *movieLable=[ZCControl createLabelWithFrame:CGRectMake(10,hight-20, 200, 20) Font:12 Text:@""];
+        movieLable.text=stageInfoDict.movie_name;
+        movieLable.textColor=VGray_color;
+        [imageView addSubview:movieLable];
+        
+        UILabel  *logoLable=[ZCControl createLabelWithFrame:CGRectMake(kDeviceWidth-70,hight-20, 60, 20) Font:12 Text:@"影弹App"];
+        //logoLable.text=hotmovie.stageinfo.movie_name;
+        logoLable.textAlignment=NSTextAlignmentRight;
+        logoLable.textColor=VGray_color;
+        [imageView addSubview:logoLable];
+        UIImage  *getImage=[Function getImage:imageView];
+        
         [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
         [UMSocialSnsService presentSnsIconSheetView:self
                                              appKey:kUmengKey
                                           shareText:shareText
-                                         shareImage: image
+                                         shareImage:getImage
                                     shareToSnsNames:[NSArray arrayWithObjects: UMShareToWechatSession, UMShareToWechatTimeline, UMShareToQzone, UMShareToSina, nil]
                                            delegate:nil];
     }
