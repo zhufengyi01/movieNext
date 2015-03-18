@@ -102,4 +102,12 @@ float getHeightByWidthAndHeight(float width, float height){
 //计算字符串的长度
 +(CGFloat)widthWithString:(NSString *)string hight:(CGFloat)hight  fontsize:(CGFloat)fontsize;
 
+
+//根据图片一个view 把这个view变成一张图片
++(UIImage *)getImage:(UIImageView *) imageview;
+//根据一张大的图片，把这个大的图片截取成一张小的图片
+
++(UIImage *)getImageFromImage:(UIImage *) BigImage;
+
+
 @end

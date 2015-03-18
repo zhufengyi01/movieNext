@@ -155,8 +155,6 @@
                          
                     }
 
-                    
-                    
                     NSMutableDictionary * parameters = [NSMutableDictionary dictionaryWithCapacity:0];
                     [parameters setObject:screen_name ? screen_name : @""  forKey:@"username"];
                     [parameters setObject:uid ? uid : @"" forKey:@"weiboId"];

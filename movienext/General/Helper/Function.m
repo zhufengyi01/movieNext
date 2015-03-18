@@ -279,6 +279,39 @@
     //float imageSmallHight=0;
     return Rect.size.width;
 }
+#pragma mark  图片的处理方法
+
+//根据view 把view 变成一张图片
++(UIImage *)getImage:(UIImageView *) imageview
+{
+    
+    UIGraphicsBeginImageContextWithOptions(CGSizeMake(kDeviceWidth, kDeviceWidth), YES, 5.0);  //NO，YES 控制是否透明
+    [imageview.layer renderInContext:UIGraphicsGetCurrentContext()];
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    // 生成后的image
+    return image;
+}
+
+// 根据给定得图片，从其指定区域截取一张新得图片
++(UIImage *)getImageFromImage:(UIImage *) BigImage
+{
+    //大图bigImage
+    //定义myImageRect，截图的区域
+    CGRect myImageRect = CGRectMake(70, 10, 150, 150);
+    UIImage* bigImage=BigImage; //[UIImage imageNamed:@"mm.jpg"];
+    CGImageRef imageRef = bigImage.CGImage;
+    CGImageRef subImageRef = CGImageCreateWithImageInRect(imageRef, myImageRect);
+    CGSize size;
+    size.width = 150;
+    size.height = 150;
+    UIGraphicsBeginImageContext(size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextDrawImage(context, myImageRect, subImageRef);
+    UIImage* smallImage = [UIImage imageWithCGImage:subImageRef];
+    UIGraphicsEndImageContext();
+    return smallImage;
+}
 
 
 @end

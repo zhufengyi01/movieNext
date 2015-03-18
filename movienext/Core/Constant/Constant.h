@@ -40,6 +40,8 @@
 #pragma  mark  三方平台key  设置
 #define kUmengKey @"53e9e548fd98c5e4a90017c6"
 #define SSOSinRedirectURL  @"http://sns.whalecloud.com/sina2/callback"
+#define weiChatShareKey  @"wxf2ee2163c0aceaa0"
+#define weiChatShareSecret @"ce1e16a6fa8b594e614eda18903cd22c"
 
 
 #pragma  mark 颜色设置

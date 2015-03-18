@@ -24,6 +24,10 @@
 
 @implementation AddMarkViewController
 
+-(void)viewWillAppear:(BOOL)animated
+{
+    self.navigationController.navigationBar.alpha=1;
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -165,8 +169,19 @@
     CGPoint curPoint = [gestureRecognizer locationInView:stageView];    
     CGFloat xoffset = _myMarkView.frame.size.width/2.0;
     CGFloat yoffset = _myMarkView.frame.size.height/2.0;
-    CGFloat x = MIN(stageView.frame.size.width-xoffset,  MAX(xoffset, curPoint.x) );
-    CGFloat y = MIN(stageView.frame.size.height-yoffset,  MAX(yoffset, curPoint.y) );
+    //CGRect  stageViewfrem=stageView.frame;
+    float  stageX=kDeviceWidth;
+    float hight= kDeviceWidth;
+    float  ImageWith=[self.stageInfoDict.w intValue]; //[[self.StageInfoDict objectForKey:@"w"]  floatValue];
+    float  ImgeHight=[self.stageInfoDict.h intValue];//[[self.StageInfoDict objectForKey:@"h"]  floatValue];
+    if(ImgeHight>ImageWith)
+    {
+        hight=  (ImgeHight/ImageWith) *kDeviceWidth;
+    }
+    float  stageY=hight;
+    
+    CGFloat x = MIN(stageX-xoffset,  MAX(xoffset, curPoint.x) );
+    CGFloat y = MIN(stageY-yoffset,  MAX(yoffset, curPoint.y) );
     _myMarkView.center = CGPointMake(x, y);
 }
 # pragma  mark  发布数据请求

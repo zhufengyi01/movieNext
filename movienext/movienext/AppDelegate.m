@@ -85,12 +85,13 @@
     [UMSocialData openLog:YES];
     [UMSocialConfig setSupportedInterfaceOrientations:UIInterfaceOrientationMaskPortrait];
     NSString *shareAppUrl = @"http://um0.cn/47MUuq/";
-    [UMSocialWechatHandler setWXAppId:@"wxacf55d5740f7290f" appSecret:@"d2f735f634c9933f774fab162b809943" url:shareAppUrl];
+   // [UMSocialWechatHandler setWXAppId:@"wxacf55d5740f7290f" appSecret:@"d2f735f634c9933f774fab162b809943" url:shareAppUrl];
+     [UMSocialWechatHandler setWXAppId:weiChatShareKey appSecret:weiChatShareSecret url:shareAppUrl];
     
     //    QQ100551660 的16进制是 05FE4BEC
     //    1103486275 41C5DD43
     [UMSocialQQHandler setQQWithAppId:@"1103486275" appKey:@"htGJ2JFqtS2GTmM2" url:@"http://www.redianying.com"];
-    //[UMSocialSinaHandler openSSOWithRedirectURL:@"https://api.weibo.com/oauth2default.html"];
+  //  [UMSocialSinaHandler openSSOWithRedirectURL:@"https://api.weibo.com/oauth2default.html"];
     [UMSocialSinaHandler openSSOWithRedirectURL:SSOSinRedirectURL];
 }
 

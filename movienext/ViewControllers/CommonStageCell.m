@@ -47,7 +47,7 @@
     UserLogoButton.layer.masksToBounds = YES;
     [BgView0 addSubview:UserLogoButton];
     
-    UserNameLable =[ZCControl createLabelWithFrame:CGRectMake(UserLogoButton.frame.origin.x + UserLogoButton.frame.size.width + 3, 8, 180, 15) Font:14 Text:@"名字"];
+    UserNameLable =[ZCControl createLabelWithFrame:CGRectMake(UserLogoButton.frame.origin.x + UserLogoButton.frame.size.width + 5, 8, 180, 15) Font:14 Text:@"名字"];
     UserNameLable.textColor=VGray_color;
     UserNameLable.numberOfLines = 1;
     [BgView0 addSubview:UserNameLable];
