@@ -17,7 +17,7 @@ DerivedData
 *.ipa
 *.xcuserstate
 .DS_Store
-movienext/movienext/Info.plist
+movienext/movienext.xcodeproj/project.pbxproj
 
 # CocoaPods
 #
