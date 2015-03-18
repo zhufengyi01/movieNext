@@ -36,7 +36,7 @@
    // _myDict =[NSDictionary dictionaryWithDictionary:_stageDict];
     [self createNavigation];
     //键盘将要显示
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardDidShowNotification object:nil];
      //键盘将要隐藏
     [[NSNotificationCenter defaultCenter ]addObserver:self selector:@selector(keyboardWillHiden:) name:UIKeyboardWillHideNotification object:nil];
     [self createStageView];
@@ -218,11 +218,11 @@
          keyboardSize = [value CGRectValue].size;
         float  timeInterval=1.0;
         NSLog(@"keyBoard   height  :%f", keyboardSize.height);
-
+/*
        if (keyboardSize.height>216) {
            keyboardSize.height= keyboardSize.height+30; //keyboardSize.height+30;
            timeInterval=0.3;
-       }
+       }*/
     
     [UIView  animateWithDuration:timeInterval animations:^{
         CGRect  tframe=_toolBar.frame;
