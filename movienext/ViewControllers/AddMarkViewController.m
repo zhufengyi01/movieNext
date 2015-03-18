@@ -228,7 +228,7 @@
     
     [UIView  animateWithDuration:timeInterval animations:^{
         CGRect  tframe=_toolBar.frame;
-        tframe.origin.y=kDeviceHeight -keyboardSize.height-35-kHeightNavigation-50;
+        tframe.origin.y=kDeviceHeight -keyboardSize.height-kHeightNavigation-50;
         _toolBar.frame=tframe;
     } completion:^(BOOL finished) {
         
