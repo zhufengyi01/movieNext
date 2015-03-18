@@ -216,19 +216,19 @@
         NSDictionary *info = [notification userInfo];
         NSValue *value = [info objectForKey:UIKeyboardFrameEndUserInfoKey];
          keyboardSize = [value CGRectValue].size;
-       float  timeInterval=1.0;
-        NSLog(@"keyBoard:%f", keyboardSize.height);
-        ///keyboardWasShown = YES;
+        float  timeInterval=1.0;
+        NSLog(@"keyBoard   height  :%f", keyboardSize.height);
+
     /*
-    if (keyboardSize.height>216) {
-        keyboardSize.height=keyboardSize.height+30;
-        timeInterval=0.3;
-    }
+       if (keyboardSize.height>216) {
+           keyboardSize.height= keyboardSize.height+30; //keyboardSize.height+30;
+           timeInterval=0.3;
+       }
      */
     
     [UIView  animateWithDuration:timeInterval animations:^{
         CGRect  tframe=_toolBar.frame;
-        tframe.origin.y=kDeviceHeight-keyboardSize.height-35-kHeightNavigation-50;
+        tframe.origin.y=kDeviceHeight -keyboardSize.height-35-kHeightNavigation-50;
         _toolBar.frame=tframe;
     } completion:^(BOOL finished) {
         
