@@ -14,12 +14,15 @@
 #import "AFNetworking.h"
 @interface AddMarkViewController ()<UITextFieldDelegate,UIAlertViewDelegate>
 {
+    UIScrollView  *_myScorllerView;
     UIToolbar  *_toolBar;
     UITextField  *_inputText;
     MarkView  *_myMarkView;
     NSString    *X;
     NSString    *Y;
     CGSize   keyboardSize;
+    UIButton  *RighttBtn;
+    UIView   *tipView;
 }
 @end
 
@@ -39,6 +42,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardDidShowNotification object:nil];
      //键盘将要隐藏
     [[NSNotificationCenter defaultCenter ]addObserver:self selector:@selector(keyboardWillHiden:) name:UIKeyboardWillHideNotification object:nil];
+    [self createMyScrollerView];
     [self createStageView];
     [self createButtomView];
 }
@@ -60,7 +64,7 @@
     UIBarButtonItem  *leftBarButton=[[UIBarButtonItem alloc]initWithCustomView:leftBtn];
     self.navigationItem.leftBarButtonItem=leftBarButton;
     
-    UIButton  *RighttBtn= [UIButton buttonWithType:UIButtonTypeSystem];
+    RighttBtn= [UIButton buttonWithType:UIButtonTypeSystem];
     RighttBtn.frame=CGRectMake(0, 0, 40, 30);
     [RighttBtn addTarget:self action:@selector(dealNavClick:) forControlEvents:UIControlEventTouchUpInside];
     RighttBtn.tag=101;
@@ -70,14 +74,54 @@
     
 
 }
+-(void)createMyScrollerView
+{
+    _myScorllerView =[[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight)];
+    
+    //计算stagview 的高度
+    float  ImageWith=[self.stageInfoDict.w floatValue];
+    float  ImgeHight=[self.stageInfoDict.h floatValue];
+    float hight=0;
+    hight= kDeviceHeight;  // 计算的事bgview1的高度
+    if((ImgeHight/ImageWith) *kDeviceWidth>kDeviceHeight)
+    {
+        hight=  (ImgeHight/ImageWith) *kDeviceWidth;
+    }
+    _myScorllerView.contentSize=CGSizeMake(kDeviceWidth, hight+20);
+     [self.view addSubview:_myScorllerView];
+    
+    
+    tipView =[[UIView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, 30)];
+    tipView.backgroundColor=[[UIColor blackColor]colorWithAlphaComponent:0.7];
+    UILabel  *tiplable =[[UILabel alloc]initWithFrame:CGRectMake(0,0,kDeviceWidth,30)];
+    tiplable.textColor=[UIColor whiteColor];
+    tiplable.textAlignment=NSTextAlignmentCenter;
+    tiplable.font =[UIFont systemFontOfSize:14];
+    tiplable.text=@"拖动可移动弹幕";
+    [tipView addSubview:tiplable];
+    tipView.alpha=0;
+    [self.view addSubview:tipView];
+    
+    
+    
+}
 -(void)createStageView
 {
-    stageView = [[StageView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceWidth)];
+    float  ImageWith=[self.stageInfoDict.w floatValue];
+    float  ImgeHight=[self.stageInfoDict.h floatValue];
+    float hight=0;
+    hight= kDeviceWidth;  // 计算的事bgview1的高度
+    if(ImgeHight>ImageWith)
+    {
+        hight=  (ImgeHight/ImageWith) *kDeviceWidth;
+    }
+
+    stageView = [[StageView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, hight)];
  //   NSLog(@" 在 添加弹幕页面的   stagedict = %@",_myDict);
     stageView.StageInfoDict=self.stageInfoDict;
     [stageView configStageViewforStageInfoDict];
        NSLog(@" 在 添加弹幕页面的   stagedict = %@",self.stageInfoDict);
-     [self.view addSubview:stageView];
+     [_myScorllerView addSubview:stageView];
 }
 
 -(void)createButtomView
@@ -94,9 +138,18 @@
      _inputText.layer.cornerRadius=4;
      _inputText.layer.borderWidth=0.5;
      _inputText.layer.borderColor=VLight_GrayColor.CGColor;
+    
+
+    
+    UIView  *leftView=[[UIView alloc]initWithFrame:CGRectMake(0,10, 8, 20)];
+    leftView.backgroundColor=[UIColor clearColor];
+    _inputText.leftView=leftView;
+    _inputText.leftViewMode=UITextFieldViewModeAlways;
 
      [_toolBar addSubview:_inputText];
-     
+    
+    
+    
      UIButton  *publishBtn=[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-60, 10, 50, 28) ImageName:@"loginoutbackgroundcolor.png" Target:self Action:@selector(dealNavClick:) Title:@"确定"];
     
     publishBtn.titleLabel.font=[UIFont systemFontOfSize:14];
@@ -132,19 +185,47 @@
 //把markview 添加到屏幕
 -(void)PushlicInScreen
 {
+    
+    [UIView animateWithDuration:0.3 animations:^{
+        tipView.alpha=1;
+    } completion:^(BOOL finished) {
+        
+    }];
+    RighttBtn.titleLabel.textColor=VBlue_color;
+    [_inputText resignFirstResponder];
     //清楚原来添加的弹幕
     for (UIView *view in stageView.subviews) {
         if ([view isKindOfClass:[MarkView class]]) {
             [view removeFromSuperview];
         }
     }
-    _myMarkView =[[MarkView alloc]initWithFrame:CGRectMake(100,140 , 100, 20)];
+    
+    if ([_inputText text].length==0||[[_inputText text]  isEqualToString:@" "]) {
+        UIAlertView  *Al =[[UIAlertView alloc]initWithTitle:nil message:@"对不起，您还没有添加内容" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+        [Al show];
+        return ;
+    }
+
+    
+     _myMarkView =[[MarkView alloc]initWithFrame:CGRectMake(100,140 , 100, 20)];
     ///显示标签的头像
     UserDataCenter  * userCenter=[UserDataCenter shareInstance];
     [ _myMarkView.LeftImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@!thumb",kUrlAvatar,    userCenter.avatar]]];
     _myMarkView.TitleLable.text=[_inputText text];
     [stageView addSubview:_myMarkView];
+#warning  这里的stageview 的位置一直是320 所以说不能使用这个值
     
+    //计算stagview 的高度
+    float  ImageWith=[self.stageInfoDict.w floatValue];
+    float  ImgeHight=[self.stageInfoDict.h floatValue];
+    float hight=0;
+    hight= kDeviceWidth;  // 计算的事bgview1的高度
+    if(ImgeHight>ImageWith)
+    {
+        hight=  (ImgeHight/ImageWith) *kDeviceWidth;
+    }
+    NSLog(@"stageView frame====%f",hight);
+
     
     NSString   *inputString=_inputText.text;
      CGSize  Msize= [inputString  boundingRectWithSize:CGSizeMake(kDeviceWidth/2, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:_myMarkView.TitleLable.font forKey:NSFontAttributeName] context:nil].size;
@@ -153,7 +234,8 @@
     //位置=
     float markViewWidth = Msize.width+23+5+5+11+5;
     float markViewHeight = Msize.height+6;
-    _myMarkView.frame=CGRectMake((kDeviceWidth-markViewWidth)/2, stageView.frame.size.height/2, markViewWidth, markViewHeight);
+    
+    _myMarkView.frame=CGRectMake((kDeviceWidth-markViewWidth)/2, (hight-(Msize.height+6))/2, markViewWidth, markViewHeight);
     X =[NSString stringWithFormat:@"%f",((_myMarkView.frame.origin.x+_myMarkView.frame.size.width)/kDeviceWidth)*100];
     Y=[NSString stringWithFormat:@"%f",((_myMarkView.frame.origin.y+(markViewHeight/2))/kDeviceHeight)*100];
 
@@ -164,6 +246,14 @@
 }
 
 -(void)handelPan:(UIPanGestureRecognizer*)gestureRecognizer{
+    
+    [UIView animateWithDuration:0.5 animations:^{
+        tipView.alpha=0;
+    } completion:^(BOOL finished) {
+        
+    }];
+
+    
    //获取平移手势对象在stageView的位置点，并将这个点作为self.aView的center,这样就实现了拖动的效果
     CGPoint curPoint = [gestureRecognizer locationInView:stageView];    
     CGFloat xoffset = _myMarkView.frame.size.width/2.0;
@@ -182,12 +272,22 @@
     CGFloat x = MIN(stageX-xoffset,  MAX(xoffset, curPoint.x) );
     CGFloat y = MIN(stageY-yoffset,  MAX(yoffset, curPoint.y) );
     _myMarkView.center = CGPointMake(x, y);
+    float  markViewY=_myMarkView.frame.origin.y;
+    float  markviewHight2 =_myMarkView.frame.size.height/2;
+    //发布的右下中部的位置
+    X =[NSString stringWithFormat:@"%f",((_myMarkView.frame.origin.x+_myMarkView.frame.size.width)/kDeviceWidth)*100];
+    Y=[NSString stringWithFormat:@"%f",((markViewY+markviewHight2)/hight)*100];
+    
+    NSLog(@"=====markview  x ==%f  mark view  y ==%f",_myMarkView.frame.origin.x,_myMarkView.frame.origin.y);
+    NSLog(@"===发布的x =%@ 发布的y ===%@",X,Y);
+
 }
 # pragma  mark  发布数据请求
 //确定发布
 -(void)PublicRuqest
 {
-    if ([_inputText text].length==0) {
+    RighttBtn.enabled=NO;
+    if ([_inputText text].length==0||[[_inputText text]  isEqualToString:@""]) {
         UIAlertView  *Al =[[UIAlertView alloc]initWithTitle:nil message:@"对不起，您还没有添加内容" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
         [Al show];
         return ;
@@ -216,7 +316,7 @@
         NSDictionary *info = [notification userInfo];
         NSValue *value = [info objectForKey:UIKeyboardFrameEndUserInfoKey];
          keyboardSize = [value CGRectValue].size;
-        float  timeInterval=1.0;
+        float  timeInterval=0.1;
         NSLog(@"keyBoard   height  :%f", keyboardSize.height);
     [UIView  animateWithDuration:timeInterval animations:^{
         CGRect  tframe=_toolBar.frame;
@@ -224,13 +324,13 @@
         _toolBar.frame=tframe;
     } completion:^(BOOL finished) {
         
-    }]gi;
+    }];
 }
 
 -(void)keyboardWillHiden:(NSNotification *) notification
 {
     
-    [UIView  animateWithDuration:1.0 animations:^{
+    [UIView  animateWithDuration:0.1 animations:^{
         CGRect  tframe=_toolBar.frame;
         tframe.origin.y=kDeviceHeight-50-kHeightNavigation;
         _toolBar.frame=tframe;

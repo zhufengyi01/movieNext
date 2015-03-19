@@ -22,10 +22,11 @@
 #import "WeiboModel.h"
 #import "HotMovieModel.h"
 #import "Function.h"
-
-//友盟分享
 #import "UMSocial.h"
-@interface NewViewController ()<UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UIScrollViewDelegate>
+#import "UMShareView.h"
+//友盟分享
+//#import "UMSocial.h"
+@interface NewViewController ()<UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UIScrollViewDelegate,UMSocialDataDelegate,UMSocialUIDelegate>
 {
     AppDelegate  *appdelegate;
     UISegmentedControl *segment;
@@ -38,7 +39,8 @@
     MarkView       *_mymarkView;
     
     BOOL isMarkViewsShow;
-
+    UIImageView   *ShareimageView;
+    UMShareView   *shareView;
 }
 @end
 
@@ -50,6 +52,9 @@
 //    self.navigationController.navigationBar.translucent=NO;
 //
     self.tabBarController.tabBar.hidden=NO;
+    if (_HotMoVieTableView) {
+        [self setupRefresh];
+    }
 }
 
 - (void)viewDidLoad {
@@ -141,6 +146,18 @@
 - (void)headerRereshing
 {
     page=0;
+    
+    if (segment.selectedSegmentIndex==0) {
+        if (_hotDataArray.count>0) {
+            [_hotDataArray removeAllObjects];
+        }
+    }
+    else if (segment.selectedSegmentIndex==1)
+    {
+        if (_newDataArray.count>0) {
+            [_newDataArray removeAllObjects];
+        }
+    }
     [self requestData];
     // 2.2秒后刷新表格UI
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -319,10 +336,12 @@
 
 -(CGFloat )tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     if (segment.selectedSegmentIndex==0) {
-        HotMovieModel *hotModel=[_hotDataArray objectAtIndex:indexPath.row];
+        
         float hight;
         if (_hotDataArray.count>indexPath.row) {
-            float  h=[hotModel.stageinfo.h floatValue]; 
+            HotMovieModel *hotModel=[_hotDataArray objectAtIndex:indexPath.row];
+
+            float  h=[hotModel.stageinfo.h floatValue];
             float w=  [hotModel.stageinfo.w floatValue];
             if (w==0||h==0) {
              hight= kDeviceWidth+45;
@@ -506,52 +525,71 @@
     }
    
     float hight= kDeviceWidth;
-    float  ImageWith=[hotmovie.stageinfo.w intValue]; //[[self.StageInfoDict objectForKey:@"w"]  floatValue];
-    float  ImgeHight=[hotmovie.stageinfo.h intValue];//[[self.StageInfoDict objectForKey:@"h"]  floatValue];
+    float  ImageWith=[hotmovie.stageinfo.w intValue];
+    float  ImgeHight=[hotmovie.stageinfo.h intValue];
     if(ImgeHight>ImageWith)
     {
         hight=  (ImgeHight/ImageWith) *kDeviceWidth;
     }
-
     CommonStageCell *cell = (CommonStageCell *)(button.superview.superview.superview);
-    
     UIGraphicsBeginImageContextWithOptions(CGSizeMake(kDeviceWidth,hight+20), YES, [UIScreen mainScreen].scale);
     [cell.stageView drawViewHierarchyInRect:cell.stageView.bounds afterScreenUpdates:YES];
-    
     // old style [self.layer renderInContext:UIGraphicsGetCurrentContext()];
     
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
   //  NSLog(@"===w =%@ ",image);
-    UIImageView   *imageView=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, hight)];
-    imageView.image=image;
     
-    UILabel  *movieLable=[ZCControl createLabelWithFrame:CGRectMake(10,hight-20, 200, 20) Font:12 Text:@""];
-    movieLable.text=hotmovie.stageinfo.movie_name;
-    movieLable.textColor=VGray_color;
-    [imageView addSubview:movieLable];
+    if (shareView) {
+        [shareView removeFromSuperview];
+    }
+    shareView =[[UMShareView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight-50)];
+    [self.view addSubview:shareView];
+    //设置shareview的图片
+    shareView.ShareimageView.image=image;
+    shareView.moviewName.text=hotmovie.stageinfo.movie_name;
+    shareView.ShareimageView.frame=CGRectMake(0,(kDeviceHeight-50-hight)/2-60, kDeviceWidth, hight);
     
-    UILabel  *logoLable=[ZCControl createLabelWithFrame:CGRectMake(kDeviceWidth-70,hight-20, 60, 20) Font:12 Text:@"影弹App"];
-    //logoLable.text=hotmovie.stageinfo.movie_name;
-    logoLable.textAlignment=NSTextAlignmentRight;
-    logoLable.textColor=VGray_color;
-    [imageView addSubview:logoLable];
-    
-   // [self.view addSubview:imageView];
-    UIImage  *getImage=[Function getImage:imageView];
-    
+    UIImage  *getImage=[Function getImage:shareView.ShareimageView];
     NSString  *shareText=hotmovie.stageinfo.movie_name;
     
-
     [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
     [UMSocialSnsService presentSnsIconSheetView:self
                                          appKey:kUmengKey
                                       shareText:shareText
                                      shareImage: getImage
                                 shareToSnsNames:[NSArray arrayWithObjects: UMShareToWechatSession, UMShareToWechatTimeline, UMShareToQzone, UMShareToSina, nil]
-                                       delegate:nil];
+                                       delegate:self];
+    
+}
+-(void)didCloseUIViewController:(UMSViewControllerType)fromViewControllerType
+{
+    //返回到app执行的方法，移除的时候应该写在这里
+    NSLog(@"didCloseUIViewController第一步执行这个");
+    if (shareView) {
+        [shareView removeFromSuperview];
+
+    }
+    
 }
 //根据有的view 上次一张图片
+-(void)didFinishGetUMSocialDataInViewController:(UMSocialResponseEntity *)response
+{
+    NSLog(@"didFinishGetUMSocialDataInViewController第二部执行这个");
+    if (shareView) {
+        [shareView removeFromSuperview];
+    }
+   
+}
+-(void)didFinishGetUMSocialDataResponse:(UMSocialResponseEntity *)response;
+{
+    NSLog(@"didFinishGetUMSocialDataResponse第二部执行这个");
+    if (shareView) {
+        [shareView removeFromSuperview];
+    }
+
+
+}
 
 
 
@@ -779,14 +817,14 @@
     //宽度=字的宽度+左头像图片的宽度＋赞图片的宽度＋赞数量的宽度+中间两个空格2+2
     float markViewWidth = Msize.width+23+Uwidth+5+5+11+5;
     float markViewHeight = Msize.height+6;
-    float markViewX = (x*kDeviceWidth)/100-markViewWidth;
-    markViewX = MIN(MAX(markViewX, 1.0f), kDeviceWidth-markViewWidth-1);
+    //float markViewX = (x*kDeviceWidth)/100-markViewWidth;
+    //markViewX = MIN(MAX(markViewX, 1.0f), kDeviceWidth-markViewWidth-1);
     
-    float markViewY = (y*kDeviceWidth)/100+(Msize.height/2);
+    //float markViewY = (y*kDeviceWidth)/100+(Msize.height/2);
 #warning    kDeviceWidth 目前计算的是正方形的，当图片高度>屏幕的宽度的实际，需要使用图片的高度
-    markViewY = MIN(MAX(markViewY, 1.0f), kDeviceWidth-markViewHeight-1);
+    //markViewY = MIN(MAX(markViewY, 1.0f), kDeviceWidth-markViewHeight-1);
 #pragma mark 设置气泡的大小和位置
-    markView.frame=CGRectMake(markViewX, markViewY, markViewWidth, markViewHeight);
+    markView.frame=CGRectMake(markView.frame.origin.x, markView.frame.origin.y, markViewWidth, markViewHeight);
 #pragma mark 设置标签的内容
    // markView.TitleLable.text=weiboTitleString;
     markView.ZanNumLable.text =[NSString stringWithFormat:@"%@",weibodict.ups];

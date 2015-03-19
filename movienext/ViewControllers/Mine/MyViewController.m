@@ -68,6 +68,9 @@
         self.tabBarController.tabBar.hidden=NO;
    
     }
+    if (_tableView) {
+        [self setupRefresh];
+    }
 }
 
 - (void)viewDidLoad {
@@ -221,7 +224,7 @@
     lblBrief.frame=CGRectMake(ivAvatar.frame.origin.x+ivAvatar.frame.size.width+10,lblCount.frame.origin.y+lblCount.frame.size.height+10, kDeviceWidth-ivAvatar.frame.origin.x-ivAvatar.frame.size.width-20, Msize.height);
       [viewHeader addSubview:lblBrief];
     
-    NSArray *segmentedArray = [[NSArray alloc] initWithObjects:@"添加", @"被赞", nil];
+    NSArray *segmentedArray = [[NSArray alloc] initWithObjects:@"添加", @"赞", nil];
     segment = [[UISegmentedControl alloc] initWithItems:segmentedArray];
     segment.frame = CGRectMake(0, lblBrief.frame.origin.y+lblBrief.frame.size.height+10, kDeviceWidth, 30);
     segment.selectedSegmentIndex = 0;
@@ -573,6 +576,10 @@
 {
 
     if  (segment.selectedSegmentIndex==0) {
+
+        
+        if (_addedDataArray.count>indexPath.row) {
+            
         HotMovieModel  *model =[_addedDataArray objectAtIndex:indexPath.row];
         static NSString *cellID=@"CELL1";
         CommonStageCell  *cell= (CommonStageCell *)[tableView dequeueReusableCellWithIdentifier:cellID];
@@ -581,9 +588,7 @@
             cell.selectionStyle=UITableViewCellSelectionStyleNone;
             cell.backgroundColor=View_BackGround;
         }
-     
-        if (_addedDataArray.count>indexPath.row) {
-            cell.pageType=NSPageSourceTypeMyAddedViewController;
+                 cell.pageType=NSPageSourceTypeMyAddedViewController;
             //个人页面的来源
           //  UserDataCenter  *userCenter=[UserDataCenter shareInstance];
             if (self.author_id.length==0||[self.author_id isEqualToString:@"0"]) {  //表示直接进入这个页面的话，这个为空
@@ -598,11 +603,14 @@
             cell.StageInfoDict=model.stageinfo;
             [cell ConfigsetCellindexPath:indexPath.row];
             cell.stageView.delegate=self;
+                    return cell;
         }
-        return cell;
+        return nil;
+
     }
     else if (segment.selectedSegmentIndex==1)
     {
+        if (_upedDataArray.count>indexPath.row) {
         HotMovieModel  *model =[_upedDataArray objectAtIndex:indexPath.row];
         static NSString *cellID=@"CELL2";
         CommonStageCell  *cell= (CommonStageCell *)[tableView dequeueReusableCellWithIdentifier:cellID];
@@ -611,15 +619,16 @@
             cell.selectionStyle=UITableViewCellSelectionStyleNone;
             cell.backgroundColor=View_BackGround;
         }
-        if (_upedDataArray.count>indexPath.row) {
+        
             cell.pageType=NSPageSourceTypeMainNewController;
             cell.weiboDict =model.weibo;    //[[_upedDataArray  objectAtIndex:indexPath.row]  objectForKey:@"weibo"];
             cell.StageInfoDict=model.stageinfo;
             [cell ConfigsetCellindexPath:indexPath.row];
             cell.stageView.delegate=self;
           //  [cell setCellValue:[[_upedDataArray objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"]indexPath:indexPath.row];
+            return  cell;
+
         }
-        return  cell;
     }
     return nil;
     
@@ -750,7 +759,7 @@
     //删除按钮
     NSLog(@"点击了删除 button tag＝＝＝＝ %ld",button.tag);
     
-       UIActionSheet   *ash=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"删除弹幕", nil];
+    UIActionSheet   *ash=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"删除弹幕" otherButtonTitles:nil, nil];
     ash.tag=button.tag;
     [ash showInView:self.view];
     
@@ -764,7 +773,7 @@
     NSLog(@" button Index ===%ld",(long)buttonIndex);
     if (actionSheet.tag<7000) {
       if (buttonIndex==0) {          
-          UIActionSheet   *ash=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"确定删除弹幕", nil];
+          UIActionSheet   *ash=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"确定删除弹幕" otherButtonTitles:nil, nil];
           ash.tag=actionSheet.tag+1000;
           [ash showInView:self.view];
      }

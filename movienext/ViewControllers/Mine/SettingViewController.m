@@ -95,6 +95,10 @@
                                     shareToSnsNames:[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQzone, UMShareToSina, nil]
                                            delegate:self];
     }
+    if (indexPath.row==1) {
+        UIAlertView  *Al =[[UIAlertView alloc]initWithTitle:nil message:@"恭喜你，缓存清理成功" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+        [Al show];
+    }
     if (indexPath.row==2) {
         [self sendFeedBack];
     }

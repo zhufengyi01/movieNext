@@ -26,7 +26,7 @@
     //放置所有控件的view
 
      bgImageView=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth,(kDeviceHeight/3+64))];
-
+    bgImageView.backgroundColor=VLight_GrayColor;
     bgImageView.userInteractionEnabled=YES;
    // bgImageView.image =[UIImage imageNamed:@"loading_image_all"];
     [self addSubview:bgImageView];
@@ -96,7 +96,7 @@
     
     //[movieLogoImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kUrlMoviePoster,[dict objectForKey:@"logo"]]] placeholderImage:[UIImage imageNamed:@"loading_image_all"]];
     
-    [movieLogoImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kUrlMoviePoster,[dict objectForKey:@"logo"]]] placeholderImage:[UIImage imageNamed:@"loading_image_all"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+    [movieLogoImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kUrlMoviePoster,[dict objectForKey:@"logo"]]] placeholderImage:[UIImage imageNamed:@""] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         //设置头部的北京图片
         // jpeg quality image data
         float quality = 0.00001f;

@@ -30,6 +30,7 @@
 #import "HotMovieModel.h"
 #import "StageInfoModel.h"
 #import "WeiboModel.h"
+#import "MyViewController.h"
 #import "ButtomToolView.h"
 @interface MovieDetailViewController ()<UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UICollectionViewDelegate,MovieHeadViewDelegate,StageViewDelegate,ButtomToolViewDelegate>
 {
@@ -621,7 +622,7 @@
         [_toolBar configToolBar];
         
         //把工具栏添加到当前视图
-        self.tabBarController.tabBar.hidden=YES;
+        //self.tabBarController.tabBar.hidden=YES;
         [self.view addSubview:_toolBar];
         //弹出工具栏
         [_toolBar ShowButtomView];
@@ -631,7 +632,7 @@
     {
         //隐藏toolbar
         NSLog(@" 执行了隐藏工具栏的方法");
-        self.tabBarController.tabBar.hidden=NO;
+       // self.tabBarController.tabBar.hidden=NO;
         //隐藏工具栏
         if (_toolBar) {
             
@@ -653,6 +654,11 @@
     if (button.tag==10000) {
         ///点击了头像//进入个人页面
         NSLog(@"点击头像  微博dict  ＝====%@ ======出现的stageinfo  ＝＝＝＝＝＝%@",weiboDict,stageInfoDict);
+        MyViewController   *myVc=[[MyViewController alloc]init];
+        myVc.author_id=weiboDict.user_id;
+        [self.navigationController pushViewController:myVc animated:YES];
+
+        
         
     }
 #pragma mark     -----------分享

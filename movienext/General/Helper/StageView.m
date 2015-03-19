@@ -115,7 +115,7 @@
             markView.tag=1000+index;
     
     NSLog(@"stageview  ＝＝=====weiboDict====%@",weibodict);
-             float  x=[weibodict.x floatValue];
+             float  x=[weibodict.x floatValue];   //位置的百分比
              float  y=[weibodict.y floatValue];
              NSString  *weiboTitleString=weibodict.topic;
              NSString  *UpString=[NSString stringWithFormat:@"%@",weibodict.ups];//weibodict.ups;
@@ -125,6 +125,15 @@
             CGSize Usize=[UpString boundingRectWithSize:CGSizeMake(40,MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:markView.ZanNumLable.font forKey:NSFontAttributeName] context:nil].size;
           
            // NSLog(@"size= %f %f", Msize.width, Msize.height);
+              float  ImageWith=[self.StageInfoDict.w floatValue];
+              float  ImgeHight=[self.StageInfoDict.h floatValue];
+             float hight=0;
+              hight= kDeviceWidth;  // 计算的事bgview1的高度
+             if(ImgeHight>ImageWith)
+             {
+              hight=  (ImgeHight/ImageWith) *kDeviceWidth;
+             }
+
             //计算赞数量的长度
             float  Uwidth=[UpString floatValue]==0?0:Usize.width;
             //宽度=字的宽度+左头像图片的宽度＋赞图片的宽度＋赞数量的宽度+中间两个空格2+2
@@ -133,9 +142,10 @@
             float markViewX = (x*kDeviceWidth)/100-markViewWidth;
             markViewX = MIN(MAX(markViewX, 1.0f), kDeviceWidth-markViewWidth-1);
             
-            float markViewY = (y*kDeviceWidth)/100+(Msize.height/2);
+            float markViewY = (y*hight)/100+(Msize.height/2);
 #warning    kDeviceWidth 目前计算的是正方形的，当图片高度>屏幕的宽度的实际，需要使用图片的高度
-            markViewY = MIN(MAX(markViewY, 1.0f), kDeviceWidth-markViewHeight-1);
+      
+            markViewY = MIN(MAX(markViewY, 1.0f), hight-markViewHeight-1);
 #pragma mark 设置气泡的大小和位置
             markView.frame=CGRectMake(markViewX, markViewY, markViewWidth, markViewHeight);
 #pragma mark 设置标签的内容
