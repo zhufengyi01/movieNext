@@ -38,7 +38,7 @@
     _topButtom.frame=CGRectMake(0, 0, kDeviceWidth, kDeviceHeight-50-kHeightNavigation);
     _topButtom.backgroundColor=[UIColor redColor];
     [_topButtom addTarget:self action:@selector(TouchbuttonClick:) forControlEvents:UIControlEventTouchUpInside];
-    _topButtom.backgroundColor=[[UIColor blackColor]colorWithAlphaComponent:0];
+    _topButtom.backgroundColor=[[UIColor blackColor]colorWithAlphaComponent:0.5];
     [self addSubview:_topButtom];
     
     
