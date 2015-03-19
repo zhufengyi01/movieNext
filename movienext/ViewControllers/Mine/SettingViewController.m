@@ -86,6 +86,8 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
     if (indexPath.row==0) {
         [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeApp;
         [UMSocialSnsService presentSnsIconSheetView:self
@@ -94,12 +96,10 @@
                                          shareImage:[UIImage imageNamed:@"icon.png"]
                                     shareToSnsNames:[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQzone, UMShareToSina, nil]
                                            delegate:self];
-    }
-    if (indexPath.row==1) {
+    } else if (indexPath.row==1) {
         UIAlertView  *Al =[[UIAlertView alloc]initWithTitle:nil message:@"恭喜你，缓存清理成功" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
         [Al show];
-    }
-    if (indexPath.row==2) {
+    } else if (indexPath.row==2) {
         [self sendFeedBack];
     }
 }

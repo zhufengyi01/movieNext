@@ -79,7 +79,7 @@
     /*
     _MovieImageView =[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, 200)];
     [BgView1 addSubview:_MovieImageView];
-     */
+    */
  
 }
 
@@ -92,12 +92,13 @@
     
     
     leftButtomButton=[UIButton buttonWithType:UIButtonTypeCustom];
-    leftButtomButton.frame=CGRectMake(10, 10, 100, 26);
+    leftButtomButton.frame=CGRectMake(10, 10, 120, 26);
     [leftButtomButton setBackgroundImage:[[UIImage imageNamed:@"movie_icon_backgroud_color.png"]stretchableImageWithLeftCapWidth:10 topCapHeight:10] forState:UIControlStateNormal];
     [leftButtomButton addTarget:self.superview action:@selector(dealMovieButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     [leftButtomButton setTitleColor:VGray_color forState:UIControlStateNormal];
     [leftButtomButton setTitleEdgeInsets:UIEdgeInsetsMake(0, 33, 0, 5)];
     leftButtomButton.titleLabel.font = [UIFont systemFontOfSize:13];
+    leftButtomButton.titleLabel.lineBreakMode = NSLineBreakByTruncatingTail;
     [BgView2 addSubview:leftButtomButton];
     
     MovieLogoImageView=[[UIImageView alloc]initWithFrame:CGRectMake(0,0,30, 26)];
