@@ -32,8 +32,12 @@
 #import "WeiboModel.h"
 #import "MyViewController.h"
 #import "ButtomToolView.h"
+#import "HotMovieModel.h"
 #import "UMShareView.h"
+
+
 @interface MovieDetailViewController ()<UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UICollectionViewDelegate,MovieHeadViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UMSocialUIDelegate,UMSocialDataDelegate>
+
 {
     UICollectionView    *_myConllectionView;
     UICollectionViewFlowLayout    *layout;
@@ -81,11 +85,11 @@
 }
 -(void)createNavigation
 {
- //  UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:@"电影详细"];
+//  UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:@"电影详细"];
    // titleLable.textColor=VBlue_color;
     
    // titleLable.font=[UIFont boldSystemFontOfSize:16];
-    //titleLable.textAlignment=NSTextAlignmentCenter;
+   //titleLable.textAlignment=NSTextAlignmentCenter;
    // self.navigationItem.titleView=titleLable;
 //    UIButton  *leftBtn= [UIButton buttonWithType:UIButtonTypeSystem];
 //    leftBtn.frame=CGRectMake(0, 30, 60, 36);
@@ -94,11 +98,8 @@
 //    [leftBtn addTarget:self action:@selector(dealBackClick:) forControlEvents:UIControlEventTouchUpInside];
 //    [leftBtn setImage:[UIImage imageNamed:@"Back Icon"] forState:UIControlStateNormal];
 //    [self.view addSubview:leftBtn];
-
-    
-
-    
 }
+
 -(void)initData
 {
     bigModel=YES;
@@ -331,20 +332,23 @@
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if (bigModel==YES&&collectionView==_myConllectionView) {
-                //点击cell 隐藏弹幕，再点击隐藏
-                NSLog(@"didDeselectRowAtIndexPath  =====%ld",indexPath.row);
-                BigImageCollectionViewCell   *cell=(BigImageCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
-                if (isMarkViewsShow==YES) {
-                    isMarkViewsShow=NO;
-                    [cell.StageView  hidenAndShowMarkView:YES];
-                    
-                }
-                else{
-                    isMarkViewsShow=YES;
-                    [cell.StageView  hidenAndShowMarkView:NO];
-                }
+        //点击cell 隐藏弹幕，再点击隐藏
+        NSLog(@"didDeselectRowAtIndexPath  =====%ld",indexPath.row);
+        BigImageCollectionViewCell   *cell=(BigImageCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
+        if (isMarkViewsShow==YES) {
+            isMarkViewsShow=NO;
+            [cell.StageView  hidenAndShowMarkView:YES];
+            
+        } else{
+            isMarkViewsShow=YES;
+            [cell.StageView  hidenAndShowMarkView:NO];
         }
-
+    } else {
+      /*  ShowStageViewController *vc = [[ShowStageViewController alloc] init];
+        HotMovieModel  *model=[_dataArray objectAtIndex:indexPath.row];
+        vc.movieModel = model;
+        [self.navigationController presentViewController:vc animated:NO completion:^{ }];*/
+    }
 }
 
 
