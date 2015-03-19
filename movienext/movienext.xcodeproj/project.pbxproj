@@ -123,6 +123,7 @@
 		000B09E11AA3029800B8D13A /* Weibo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 000B09801AA3029800B8D13A /* Weibo@2x.png */; };
 		000B09E21AA3029800B8D13A /* Weibo@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 000B09811AA3029800B8D13A /* Weibo@3x.png */; };
 		000B09E41AA30CB900B8D13A /* loginoutbackgroundcolor.png in Resources */ = {isa = PBXBuildFile; fileRef = 000B09E31AA30CB900B8D13A /* loginoutbackgroundcolor.png */; };
+		001244071ABA9D9F005B0AB5 /* UMShareView.m in Sources */ = {isa = PBXBuildFile; fileRef = 001244061ABA9D9F005B0AB5 /* UMShareView.m */; };
 		003E74EB1AB1A29F0080F7A8 /* btn_add_default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 003E74D01AB1A29F0080F7A8 /* btn_add_default@2x.png */; };
 		003E74EC1AB1A29F0080F7A8 /* btn_add_default@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 003E74D11AB1A29F0080F7A8 /* btn_add_default@3x.png */; };
 		003E74EE1AB1A29F0080F7A8 /* btn_add_select@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 003E74D31AB1A29F0080F7A8 /* btn_add_select@2x.png */; };
@@ -439,6 +440,8 @@
 		000B09801AA3029800B8D13A /* Weibo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Weibo@2x.png"; sourceTree = "<group>"; };
 		000B09811AA3029800B8D13A /* Weibo@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Weibo@3x.png"; sourceTree = "<group>"; };
 		000B09E31AA30CB900B8D13A /* loginoutbackgroundcolor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loginoutbackgroundcolor.png; sourceTree = "<group>"; };
+		001244051ABA9D9F005B0AB5 /* UMShareView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UMShareView.h; sourceTree = "<group>"; };
+		001244061ABA9D9F005B0AB5 /* UMShareView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UMShareView.m; sourceTree = "<group>"; };
 		003E74D01AB1A29F0080F7A8 /* btn_add_default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_add_default@2x.png"; sourceTree = "<group>"; };
 		003E74D11AB1A29F0080F7A8 /* btn_add_default@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_add_default@3x.png"; sourceTree = "<group>"; };
 		003E74D31AB1A29F0080F7A8 /* btn_add_select@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_add_select@2x.png"; sourceTree = "<group>"; };
@@ -1186,6 +1189,8 @@
 				4076AF001AA9B0D2006DC466 /* StageView.m */,
 				004DD1E61AB028B000394A9D /* ButtomToolView.h */,
 				004DD1E71AB028B000394A9D /* ButtomToolView.m */,
+				001244051ABA9D9F005B0AB5 /* UMShareView.h */,
+				001244061ABA9D9F005B0AB5 /* UMShareView.m */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -1904,6 +1909,7 @@
 				00AA54261AA2C525004096F8 /* NSLayoutConstraint+MASDebugAdditions.m in Sources */,
 				006739591AA491250087C240 /* UIScrollView+MJRefresh.m in Sources */,
 				00AA543A1AA2C525004096F8 /* UIActivityIndicatorView+AFNetworking.m in Sources */,
+				001244071ABA9D9F005B0AB5 /* UMShareView.m in Sources */,
 				00AA545E1AA2C526004096F8 /* MyViewController.m in Sources */,
 				00AA54221AA2C525004096F8 /* MASLayoutConstraint.m in Sources */,
 				0074273D1AADAB9B0034047D /* UIImage+Screenshot.m in Sources */,
