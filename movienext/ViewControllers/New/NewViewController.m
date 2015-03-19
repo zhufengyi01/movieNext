@@ -562,6 +562,8 @@
                                        delegate:self];
     
 }
+#pragma mark  --umShareDelegate
+
 -(void)didCloseUIViewController:(UMSViewControllerType)fromViewControllerType
 {
     //返回到app执行的方法，移除的时候应该写在这里
@@ -736,23 +738,19 @@
         UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
         
+        if (shareView) {
+            [shareView removeFromSuperview];
+        }
+        shareView =[[UMShareView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight-50)];
+        [self.view addSubview:shareView];
+        //设置shareview的图片
+        shareView.ShareimageView.image=image;
+        shareView.moviewName.text=stageInfoDict.movie_name;
+        shareView.ShareimageView.frame=CGRectMake(0,(kDeviceHeight-50-hight)/2-60, kDeviceWidth, hight);
+        
+        UIImage  *getImage=[Function getImage:shareView.ShareimageView];
 
-
         
-        UIImageView   *imageView=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, hight)];
-        imageView.image=image;
-        
-        UILabel  *movieLable=[ZCControl createLabelWithFrame:CGRectMake(10,hight-20, 200, 20) Font:12 Text:@""];
-        movieLable.text=stageInfoDict.movie_name;
-        movieLable.textColor=VGray_color;
-        [imageView addSubview:movieLable];
-        
-        UILabel  *logoLable=[ZCControl createLabelWithFrame:CGRectMake(kDeviceWidth-70,hight-20, 60, 20) Font:12 Text:@"影弹App"];
-        //logoLable.text=hotmovie.stageinfo.movie_name;
-        logoLable.textAlignment=NSTextAlignmentRight;
-        logoLable.textColor=VGray_color;
-        [imageView addSubview:logoLable];
-        UIImage  *getImage=[Function getImage:imageView];
         
         [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
         [UMSocialSnsService presentSnsIconSheetView:self
@@ -760,7 +758,7 @@
                                           shareText:shareText
                                          shareImage:getImage
                                     shareToSnsNames:[NSArray arrayWithObjects: UMShareToWechatSession, UMShareToWechatTimeline, UMShareToQzone, UMShareToSina, nil]
-                                           delegate:nil];
+                                           delegate:self];
     }
 #pragma mark  ----------点赞--------------
     else  if(button.tag==10002)

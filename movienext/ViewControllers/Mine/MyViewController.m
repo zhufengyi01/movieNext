@@ -27,7 +27,8 @@
 #import "MJRefresh.h"
 #import "AddMarkViewController.h"
 #import "Function.h"
-@interface MyViewController ()<UITableViewDataSource, UITableViewDelegate,StageViewDelegate,MarkViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UIActionSheetDelegate>
+#import "UMShareView.h"
+@interface MyViewController ()<UITableViewDataSource, UITableViewDelegate,StageViewDelegate,MarkViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UIActionSheetDelegate,UMSocialDataDelegate,UMSocialUIDelegate>
 {
     UISegmentedControl *segment;
     UITableView   *_tableView;
@@ -48,6 +49,7 @@
     MarkView       *_mymarkView;
     
     BOOL isMarkViewsShow;
+    UMShareView  *shareView;
 
 
 }
@@ -135,8 +137,8 @@
     
     userCenter=[UserDataCenter shareInstance];
     
-    int BodyConut=[userCenter.product_count intValue];
-    int  ZanCount= [userCenter.like_count  intValue];
+   // int BodyConut=[userCenter.product_count intValue];
+    //int  ZanCount= [userCenter.like_count  intValue];
   
     NSString  *signature=[NSString stringWithFormat:@"%@",  [_userInfoDict  objectForKey:@"brief"]];
     if (signature==nil) {
@@ -703,38 +705,60 @@
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     
+    if (shareView) {
+        [shareView removeFromSuperview];
+    }
+    shareView =[[UMShareView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight-50)];
+    [self.view addSubview:shareView];
+    //设置shareview的图片
+    shareView.ShareimageView.image=image;
+    shareView.moviewName.text=hotmovie.stageinfo.movie_name;
+    shareView.ShareimageView.frame=CGRectMake(0,(kDeviceHeight-50-hight)/2-60, kDeviceWidth, hight);
     
-    UIImageView   *imageView=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, hight)];
-    imageView.image=image;
-    
-    UILabel  *movieLable=[ZCControl createLabelWithFrame:CGRectMake(10,hight-20, 200, 20) Font:12 Text:@""];
-    movieLable.text=hotmovie.stageinfo.movie_name;
-    movieLable.textColor=VGray_color;
-    [imageView addSubview:movieLable];
-    
-    UILabel  *logoLable=[ZCControl createLabelWithFrame:CGRectMake(kDeviceWidth-70,hight-20, 60, 20) Font:12 Text:@"影弹App"];
-    //logoLable.text=hotmovie.stageinfo.movie_name;
-    logoLable.textAlignment=NSTextAlignmentRight;
-    logoLable.textColor=VGray_color;
-    [imageView addSubview:logoLable];
-    
-    // [self.view addSubview:imageView];
-    UIImage  *getImage=[Function getImage:imageView];
-    
-    NSString  *shareText=hotmovie.stageinfo.movie_name;
+    UIImage  *getImage=[Function getImage:shareView.ShareimageView];
 
     
     
-    
-    
+    NSString  *shareText=hotmovie.stageinfo.movie_name;
+
     [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
     [UMSocialSnsService presentSnsIconSheetView:self
                                          appKey:kUmengKey
                                       shareText:shareText
                                      shareImage: getImage
                                 shareToSnsNames:[NSArray arrayWithObjects: UMShareToWechatSession, UMShareToWechatTimeline, UMShareToQzone, UMShareToSina, nil]
-                                       delegate:nil];
+                                       delegate:self];
 }
+-(void)didCloseUIViewController:(UMSViewControllerType)fromViewControllerType
+{
+    //返回到app执行的方法，移除的时候应该写在这里
+    NSLog(@"didCloseUIViewController第一步执行这个");
+    if (shareView) {
+        [shareView removeFromSuperview];
+        
+    }
+    
+}
+//根据有的view 上次一张图片
+-(void)didFinishGetUMSocialDataInViewController:(UMSocialResponseEntity *)response
+{
+    NSLog(@"didFinishGetUMSocialDataInViewController第二部执行这个");
+    if (shareView) {
+        [shareView removeFromSuperview];
+    }
+    
+}
+-(void)didFinishGetUMSocialDataResponse:(UMSocialResponseEntity *)response;
+{
+    NSLog(@"didFinishGetUMSocialDataResponse第二部执行这个");
+    if (shareView) {
+        [shareView removeFromSuperview];
+    }
+    
+    
+}
+
+
 //点击增加弹幕
 -(void)addMarkButtonClick:(UIButton  *) button
 {
@@ -891,23 +915,17 @@
         UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
         
+        if (shareView) {
+            [shareView removeFromSuperview];
+        }
+        shareView =[[UMShareView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight-50)];
+        [self.view addSubview:shareView];
+        //设置shareview的图片
+        shareView.ShareimageView.image=image;
+        shareView.moviewName.text=stageInfoDict.movie_name;
+        shareView.ShareimageView.frame=CGRectMake(0,(kDeviceHeight-50-hight)/2-60, kDeviceWidth, hight);
         
-        
-        
-        UIImageView   *imageView=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, hight)];
-        imageView.image=image;
-        
-        UILabel  *movieLable=[ZCControl createLabelWithFrame:CGRectMake(10,hight-20, 200, 20) Font:12 Text:@""];
-        movieLable.text=stageInfoDict.movie_name;
-        movieLable.textColor=VGray_color;
-        [imageView addSubview:movieLable];
-        
-        UILabel  *logoLable=[ZCControl createLabelWithFrame:CGRectMake(kDeviceWidth-70,hight-20, 60, 20) Font:12 Text:@"影弹App"];
-        //logoLable.text=hotmovie.stageinfo.movie_name;
-        logoLable.textAlignment=NSTextAlignmentRight;
-        logoLable.textColor=VGray_color;
-        [imageView addSubview:logoLable];
-        UIImage  *getImage=[Function getImage:imageView];
+        UIImage  *getImage=[Function getImage:shareView.ShareimageView];
         
         [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
         [UMSocialSnsService presentSnsIconSheetView:self
@@ -915,7 +933,7 @@
                                           shareText:shareText
                                          shareImage:getImage
                                     shareToSnsNames:[NSArray arrayWithObjects: UMShareToWechatSession, UMShareToWechatTimeline, UMShareToQzone, UMShareToSina, nil]
-                                           delegate:nil];
+                                           delegate:self];
     }
 #pragma mark  ----------点赞--------------
     else  if(button.tag==10002)

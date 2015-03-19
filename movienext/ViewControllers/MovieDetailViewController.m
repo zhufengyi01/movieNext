@@ -32,7 +32,8 @@
 #import "WeiboModel.h"
 #import "MyViewController.h"
 #import "ButtomToolView.h"
-@interface MovieDetailViewController ()<UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UICollectionViewDelegate,MovieHeadViewDelegate,StageViewDelegate,ButtomToolViewDelegate>
+#import "UMShareView.h"
+@interface MovieDetailViewController ()<UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UICollectionViewDelegate,MovieHeadViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UMSocialUIDelegate,UMSocialDataDelegate>
 {
     UICollectionView    *_myConllectionView;
     UICollectionViewFlowLayout    *layout;
@@ -43,6 +44,7 @@
     ButtomToolView *_toolBar;
     MarkView       *_mymarkView;
     BOOL   isMarkViewsShow;
+    UMShareView   *shareView;
 
 }
 
@@ -536,24 +538,33 @@
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     //  NSLog(@"===w =%@ ",image);
-    UIImageView   *imageView=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, hight)];
-    imageView.image=image;
+//    UIImageView   *imageView=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, hight)];
+//    imageView.image=image;
+//    
+//    UILabel  *movieLable=[ZCControl createLabelWithFrame:CGRectMake(10,hight-20, 200, 20) Font:12 Text:@""];
+//       movieLable.text=[_MovieDict  objectForKey:@"name"];
+//    
+//    movieLable.textColor=VGray_color;
+//    [imageView addSubview:movieLable];
+//    
+//    UILabel  *logoLable=[ZCControl createLabelWithFrame:CGRectMake(kDeviceWidth-70,hight-20, 60, 20) Font:12 Text:@"影弹App"];
+//    //logoLable.text=hotmovie.stageinfo.movie_name;
+//    logoLable.textAlignment=NSTextAlignmentRight;
+//    logoLable.textColor=VGray_color;
+//    [imageView addSubview:logoLable];
     
-    UILabel  *movieLable=[ZCControl createLabelWithFrame:CGRectMake(10,hight-20, 200, 20) Font:12 Text:@""];
-       movieLable.text=[_MovieDict  objectForKey:@"name"];
+    if (shareView) {
+        [shareView removeFromSuperview];
+    }
+    shareView =[[UMShareView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight-50)];
+    [self.view addSubview:shareView];
+    //设置shareview的图片
+    shareView.ShareimageView.image=image;
+    shareView.moviewName.text=[_MovieDict  objectForKey:@"name"];;
+    shareView.ShareimageView.frame=CGRectMake(0,(kDeviceHeight-50-hight)/2-60, kDeviceWidth, hight);
     
-    movieLable.textColor=VGray_color;
-    [imageView addSubview:movieLable];
-    
-    UILabel  *logoLable=[ZCControl createLabelWithFrame:CGRectMake(kDeviceWidth-70,hight-20, 60, 20) Font:12 Text:@"影弹App"];
-    //logoLable.text=hotmovie.stageinfo.movie_name;
-    logoLable.textAlignment=NSTextAlignmentRight;
-    logoLable.textColor=VGray_color;
-    [imageView addSubview:logoLable];
-    
-    // [self.view addSubview:imageView];
-    UIImage  *getImage=[Function getImage:imageView];
-    
+    UIImage  *getImage=[Function getImage:shareView.ShareimageView];
+
     NSString  *shareText=[_MovieDict  objectForKey:@"name"];
     
     
@@ -563,10 +574,41 @@
                                       shareText:shareText
                                      shareImage: getImage
                                 shareToSnsNames:[NSArray arrayWithObjects: UMShareToWechatSession, UMShareToWechatTimeline, UMShareToQzone, UMShareToSina, nil]
-                                       delegate:nil];
+                                       delegate:self];
 
+}
+#pragma mark  --umShareDelegate
+
+-(void)didCloseUIViewController:(UMSViewControllerType)fromViewControllerType
+{
+    //返回到app执行的方法，移除的时候应该写在这里
+    NSLog(@"didCloseUIViewController第一步执行这个");
+    if (shareView) {
+        [shareView removeFromSuperview];
+        
+    }
     
 }
+//根据有的view 上次一张图片
+-(void)didFinishGetUMSocialDataInViewController:(UMSocialResponseEntity *)response
+{
+    NSLog(@"didFinishGetUMSocialDataInViewController第二部执行这个");
+    if (shareView) {
+        [shareView removeFromSuperview];
+    }
+    
+}
+-(void)didFinishGetUMSocialDataResponse:(UMSocialResponseEntity *)response;
+{
+    NSLog(@"didFinishGetUMSocialDataResponse第二部执行这个");
+    if (shareView) {
+        [shareView removeFromSuperview];
+    }
+    
+    
+}
+
+
 //点击增加弹幕
 -(void)addMarkButtonClick:(UIButton  *) button
 {
@@ -622,7 +664,7 @@
         [_toolBar configToolBar];
         
         //把工具栏添加到当前视图
-        //self.tabBarController.tabBar.hidden=YES;
+        self.tabBarController.tabBar.hidden=YES;
         [self.view addSubview:_toolBar];
         //弹出工具栏
         [_toolBar ShowButtomView];
@@ -632,7 +674,7 @@
     {
         //隐藏toolbar
         NSLog(@" 执行了隐藏工具栏的方法");
-       // self.tabBarController.tabBar.hidden=NO;
+        self.tabBarController.tabBar.hidden=YES;
         //隐藏工具栏
         if (_toolBar) {
             
@@ -688,23 +730,20 @@
         UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
         
+                
+        if (shareView) {
+            [shareView removeFromSuperview];
+        }
+        shareView =[[UMShareView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight-50)];
+        [self.view addSubview:shareView];
+        //设置shareview的图片
+        shareView.ShareimageView.image=image;
+        shareView.moviewName.text=[_MovieDict  objectForKey:@"name"];
+        shareView.ShareimageView.frame=CGRectMake(0,(kDeviceHeight-50-hight)/2-60, kDeviceWidth, hight);
         
+        UIImage  *getImage=[Function getImage:shareView.ShareimageView];
         
-        
-        UIImageView   *imageView=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, hight)];
-        imageView.image=image;
-        
-        UILabel  *movieLable=[ZCControl createLabelWithFrame:CGRectMake(10,hight-20, 200, 20) Font:12 Text:@""];
-        movieLable.text=[_MovieDict  objectForKey:@"name"];
-        movieLable.textColor=VGray_color;
-        [imageView addSubview:movieLable];
-        
-        UILabel  *logoLable=[ZCControl createLabelWithFrame:CGRectMake(kDeviceWidth-70,hight-20, 60, 20) Font:12 Text:@"影弹App"];
-        //logoLable.text=hotmovie.stageinfo.movie_name;
-        logoLable.textAlignment=NSTextAlignmentRight;
-        logoLable.textColor=VGray_color;
-        [imageView addSubview:logoLable];
-        UIImage  *getImage=[Function getImage:imageView];
+
         
         [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
         [UMSocialSnsService presentSnsIconSheetView:self
@@ -712,7 +751,7 @@
                                           shareText:shareText
                                          shareImage:getImage
                                     shareToSnsNames:[NSArray arrayWithObjects: UMShareToWechatSession, UMShareToWechatTimeline, UMShareToQzone, UMShareToSina, nil]
-                                           delegate:nil];
+                                           delegate:self];
 
         
     }
@@ -802,7 +841,7 @@
     NSLog(@"controller touchbegan  中 执行了隐藏工具栏的方法");
     //取消当前的选中的那个气泡
     [_mymarkView CancelMarksetSelect];
-    self.tabBarController.tabBar.hidden=NO;
+    self.tabBarController.tabBar.hidden=YES;
     if (_toolBar) {
         [_toolBar HidenButtomView];
         //  [_toolBar performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.5];
