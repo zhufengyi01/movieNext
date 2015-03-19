@@ -224,7 +224,7 @@
         _toolBar.frame=tframe;
     } completion:^(BOOL finished) {
         
-    }]gi;
+    }];
 }
 
 -(void)keyboardWillHiden:(NSNotification *) notification
