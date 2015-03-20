@@ -54,7 +54,6 @@
     titleLable.textAlignment=NSTextAlignmentCenter;
     self.navigationItem.titleView=titleLable;
     
-    
     UIButton  *leftBtn= [UIButton buttonWithType:UIButtonTypeSystem];
     leftBtn.frame=CGRectMake(0, 0, 40, 30);
     [leftBtn setTitleColor:VGray_color forState:UIControlStateNormal];

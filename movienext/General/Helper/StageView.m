@@ -142,7 +142,7 @@
             float markViewX = (x*kDeviceWidth)/100-markViewWidth;
             markViewX = MIN(MAX(markViewX, 1.0f), kDeviceWidth-markViewWidth-1);
             
-            float markViewY = (y*hight)/100+(Msize.height/2);
+            float markViewY = (y*hight)/100;
 #warning    kDeviceWidth 目前计算的是正方形的，当图片高度>屏幕的宽度的实际，需要使用图片的高度
       
             markViewY = MIN(MAX(markViewY, 1.0f), hight-markViewHeight-1);
