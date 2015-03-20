@@ -78,12 +78,14 @@
 #warning 这里如果宽高为0的话会崩溃
         
         float   y=(hight-(ImgeHight/ImageWith)*kDeviceWidth)/2;
-        if (ImageWith==0) {
+        if (ImageWith==0 && ImgeHight>0) {
 //          _MovieImageView.frame=CGRectMake(0,y, kDeviceWidth, (ImgeHight/ImageWith)*kDeviceWidth);
             ImageWith=ImgeHight;
-            
         }
-        _MovieImageView.frame=CGRectMake(0,y, kDeviceWidth, (ImgeHight/ImageWith)*kDeviceWidth);
+        ImgeHight = ImgeHight>0 ? ImgeHight : 1;
+        ImageWith = ImageWith>0 ? ImageWith : 1;
+        y = y > 0 ? y : 0;
+        _MovieImageView.frame=CGRectMake(0, y, kDeviceWidth, (ImgeHight/ImageWith)*kDeviceWidth);
         [_MovieImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w640",kUrlStage,self.StageInfoDict.stage]] placeholderImage:[UIImage imageNamed:@"loading_image_all.png"]];
                                             
                             }
