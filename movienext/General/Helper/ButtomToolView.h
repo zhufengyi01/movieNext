@@ -41,7 +41,8 @@
 @property(nonatomic,strong) StageInfoModel   *StageInfoDict;
 @property(nonatomic,strong) id markView;
 -(void)configToolBar;
-//显示底部试图
+
+//显示底部试图.用于动画
 -(void)ShowButtomView;
 //隐藏底部试图
 -(void)HidenButtomView;
