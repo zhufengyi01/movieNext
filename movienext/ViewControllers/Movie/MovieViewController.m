@@ -33,7 +33,8 @@
     //UICollectionView    *_myConllectionView;
     LoadingView         *loadView;
     NSMutableArray      *_dataArray;
-    int page;
+    //int page;
+    NSString  *startId;
 }
 
 @end
@@ -44,6 +45,9 @@
     self.navigationController.navigationBar.hidden=NO;
     self.navigationController.navigationBar.alpha=1;
     self.tabBarController.tabBar.hidden=NO;
+   // if (self.myConllectionView) {
+     //[  self.myConllectionView headerBeginRefreshing];
+    //}
 }
 
 - (void)viewDidLoad {
@@ -56,7 +60,7 @@
     [self initData];
     [self initUI];
     [self creatLoadView];
-    [self requestData];
+    //[self requestData];
        
 }
 -(void)createNavigation
@@ -94,7 +98,7 @@
 }
 -(void)initData
 {
-    page=0;
+    //page=0;
     _dataArray=[[NSMutableArray alloc]init];
 }
 -(void)initUI
@@ -125,7 +129,7 @@
     // 添加下拉刷新头部控件
     [_myConllectionView addHeaderWithCallback:^{
         // 进入刷新状态就会回调这个Block
-        
+        [vc requestData];
         // 增加5条假数据
         //for (int i = 0; i<5; i++) {
           //  [vc.fakeColors insertObject:MJRandomColor atIndex:0];
@@ -150,6 +154,7 @@
     [vc.myConllectionView addFooterWithCallback:^{
         // 进入刷新状态就会回调这个Block
         
+        [vc requestData];
         // 增加5条假数据
       ///  for (int i = 0; i<5; i++) {
          //   [vc.fakeColors addObject:MJRandomColor];
@@ -172,27 +177,45 @@
     NSLog(@"MJCollectionViewController--dealloc---");
 }
 
-
-
-
-
 #pragma  mark  ---
 #pragma  mark  ----RequestData
 #pragma  mark  ---
 -(void)requestData
 {
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager POST:[NSString stringWithFormat:@"%@/feed/list", kApiBaseUrl] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    //NSString  *startid =[[_dataArray lastObject]  objectForKey:@"create_time"];
+    NSDictionary  *parameter;
+    if (_dataArray.count==0) {
+        parameter=nil;
+    }
+    else
+    {
+        parameter=@{@"start_id":startId};
+
+    }
+    [manager POST:[NSString stringWithFormat:@"%@/feed/list", kApiBaseUrl] parameters:parameter success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"  电影首页数据JSON: %@", responseObject);
             [loadView stopAnimation];
             [loadView removeFromSuperview];
-        
         if (_dataArray==nil) {
             _dataArray=[[NSMutableArray alloc]init];
         }
-        [_dataArray addObjectsFromArray:[responseObject objectForKey:@"detail"]];
-        NSLog(@"=-=======dataArray =====%@",_dataArray);
-        [_myConllectionView reloadData];
+        if ([responseObject objectForKey:@"detail"]) {
+            
+        }
+        if ([[responseObject objectForKey:@"detail"] lastObject]) {
+            startId=[[[responseObject objectForKey:@"detail"] lastObject] objectForKey:@"create_time"];
+         
+            NSArray  *detailarray=[responseObject objectForKey:@"detail"];
+            if (detailarray.count>0) {
+                [_dataArray addObjectsFromArray:detailarray];
+                //NSLog(@"=-=======dataArray =====%@",_dataArray);
+               // [_myConllectionView reloadData];
+                
+            }
+
+        }
+        
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);

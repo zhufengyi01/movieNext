@@ -20,14 +20,20 @@
 #import "Function.h"
 #import "UserDataCenter.h"
 #import "UMSocialWechatHandler.h"
-
-#define kSegueLoginToIndex @"LoginToIndex"
+#import "ZCControl.h"
+#import "SerViceViewController.h"
+//#define kSegueLoginToIndex @"LoginToIndex"
 
 @interface LoginViewController ()<UMSocialUIDelegate>
 {
     AppDelegate  *appdelegate;
     UIWindow     *window;
     NSString     *ssoName;
+    
+    UIButton  *weiChateButton;
+    UIButton  *weiboButton;
+    UIButton  *checkBtn;
+    UIButton  *checkBtn2;
     
 }
 @end
@@ -44,59 +50,72 @@
 }
 -(void)creatUI
 {
-   /* UILabel  *TitleLable=[[UILabel alloc] init];//initWithFrame:CGRectMake(100, 150, 100, 80)]
-    TitleLable.frame=CGRectMake((kDeviceWidth-100)/2, 60, 100, 80);
-    TitleLable.text=@"影记";
-    TitleLable.textColor=[UIColor redColor];
-    TitleLable.textAlignment=NSTextAlignmentCenter;
-    TitleLable.font=[UIFont boldSystemFontOfSize:24];
-    [self.view addSubview:TitleLable];    
-    //[TitleLable mas_makeConstraints:^(MASConstraintMaker *make) {
-        //make.centerX.equalTo(self.view.mas_centerX);  //水平居中
-        //make.size.mas_equalTo(CGSizeMake(100, 100));  //宽高
-      //  make.top.equalTo(self.view).width.offset(150);  //设置距离最上面高度
-        //make.edges.equalTo(self.view).width.insets(UIEdgeInsetsMake(kDeviceHeight-100, 0, 0, 0));
-      //  make.centerX.equalTo(self.view.mas_centerX);  //水平居中
-
-    //}];
-    
-    UILabel  *DetailTitleLable=[[UILabel alloc]initWithFrame:CGRectMake((kDeviceWidth-100)/2, 100, 100, 60)];
-    DetailTitleLable.text=@"看完电影上影记";
-    DetailTitleLable.textColor=[UIColor redColor];
-    DetailTitleLable.textAlignment=NSTextAlignmentCenter;
-    DetailTitleLable.font=[UIFont boldSystemFontOfSize:14];
-    [self.view addSubview:DetailTitleLable];
-    */
-    
     UIImageView   *logoImageView=[[UIImageView alloc]initWithFrame:CGRectMake((kDeviceWidth-180)/2, 125, 180, 125)];
     logoImageView.image=[UIImage imageNamed:@"first_screen_slogan.png"];
     [self.view addSubview:logoImageView];
     
     
-    UIButton  *qqButton=[UIButton buttonWithType:UIButtonTypeCustom];
-    qqButton.frame=CGRectMake(50, kDeviceHeight-220, kDeviceWidth-100, 40);
-    [qqButton setBackgroundImage:[UIImage imageNamed:@"login_button_qq －in.png"] forState:UIControlStateNormal];
-    [qqButton setBackgroundImage:[UIImage imageNamed:@"login_button_qq.png"] forState:UIControlStateHighlighted];
- 
-    [qqButton addTarget:self action:@selector(dealloginClick:) forControlEvents:UIControlEventTouchUpInside];
-    qqButton.tag=1000;
-    //[self.view addSubview:qqButton];
     
-    UIButton  *weiboButton=[UIButton buttonWithType:UIButtonTypeCustom];
+    checkBtn=[ZCControl createButtonWithFrame:CGRectMake((kDeviceWidth-120)/2,kDeviceHeight-65, 70, 20) ImageName:nil Target:self Action:@selector(checkClick:) Title:@""];
+    checkBtn.titleLabel.textColor=[UIColor redColor];
+    [checkBtn setImage:[UIImage imageNamed:@"dischoice_icon@2x.png"] forState:UIControlStateNormal];
+    [checkBtn setImage:[UIImage imageNamed:@"choice_icon@2x.png"] forState:UIControlStateSelected];
+    //默认勾选状态
+    checkBtn.selected=YES;
+    checkBtn.tag=100;
+    [checkBtn setTitleColor:VGray_color forState:UIControlStateNormal];
+    [checkBtn setTitle:@"影弹服务" forState:UIControlStateNormal];
+    [checkBtn setTitleEdgeInsets:UIEdgeInsetsMake(5, 5, 0, 0)];
+    //checkBtn.backgroundColor=[UIColor redColor];
+    [checkBtn setImageEdgeInsets:UIEdgeInsetsMake(5, 0, 0, 0)];
+    checkBtn.titleLabel.font=[UIFont systemFontOfSize:12];
+    [self.view addSubview:checkBtn];
+    
+    
+    checkBtn2=[ZCControl createButtonWithFrame:CGRectMake(checkBtn.frame.origin.x+checkBtn.frame.size.width, kDeviceHeight-65, 60, 20) ImageName:nil Target:self Action:@selector(checkClick:) Title:@""];
+    [checkBtn2 setTitleEdgeInsets:UIEdgeInsetsMake(5, 0, 0, 0)];
+    // checkBtn2.backgroundColor=[UIColor blackColor];
+    [checkBtn2 setTitle:@"使用条款" forState:UIControlStateNormal];
+    [checkBtn2 setTitleColor:VBlue_color forState:UIControlStateNormal];
+    checkBtn2.tag=101;
+    
+    checkBtn2.titleLabel.font=[UIFont systemFontOfSize:12];
+    [self.view addSubview:checkBtn2];
+    
+
+
+//    
+//    UIButton  *qqButton=[UIButton buttonWithType:UIButtonTypeCustom];
+//    qqButton.frame=CGRectMake(50, kDeviceHeight-220, kDeviceWidth-100, 40);
+//    [qqButton setBackgroundImage:[UIImage imageNamed:@"login_button_qq －in.png"] forState:UIControlStateNormal];
+//    [qqButton setBackgroundImage:[UIImage imageNamed:@"login_button_qq.png"] forState:UIControlStateHighlighted];
+// 
+//    [qqButton addTarget:self action:@selector(dealloginClick:) forControlEvents:UIControlEventTouchUpInside];
+//    qqButton.tag=1000;
+//    //[self.view addSubview:qqButton];
+//    
+    weiboButton=[UIButton buttonWithType:UIButtonTypeCustom];
     weiboButton.frame=CGRectMake((kDeviceWidth-231)/2, kDeviceHeight-160, 231, 40);
     [weiboButton setBackgroundImage:[UIImage imageNamed:@"login_button_sina.png"] forState:UIControlStateNormal];
     [weiboButton setBackgroundImage:[UIImage imageNamed:@"login_button_sina －in.png"] forState:UIControlStateHighlighted];
     [weiboButton addTarget:self action:@selector(dealloginClick:) forControlEvents:UIControlEventTouchUpInside];
     weiboButton.tag=1001;
-
+   // weiboButton.userInteractionEnabled=NO;
+   // if (checkBtn.selected==YES) {
+        weiboButton.userInteractionEnabled=YES;
+    //}
     [self.view addSubview:weiboButton];
     
     
     
-    UIButton  *weiChateButton=[UIButton buttonWithType:UIButtonTypeCustom];
+    weiChateButton=[UIButton buttonWithType:UIButtonTypeCustom];
     weiChateButton.frame=CGRectMake((kDeviceWidth-231)/2, kDeviceHeight-110, 231, 40);
     [weiChateButton setBackgroundImage:[UIImage imageNamed:@"login_button_wechat.png"] forState:UIControlStateNormal];
     [weiChateButton setBackgroundImage:[UIImage imageNamed:@"login_button_wechat_press.png"] forState:UIControlStateHighlighted];
+   // weiChateButton.userInteractionEnabled=NO;
+    //if (checkBtn.selected==YES) {
+        weiChateButton.userInteractionEnabled=YES;
+    //}
     //[weiChateButton setTitle:@"登陆" forState:UIControlStateNormal];
     [weiChateButton addTarget:self action:@selector(dealloginClick:) forControlEvents:UIControlEventTouchUpInside];
     weiChateButton.tag=1002;
@@ -104,7 +123,36 @@
     [self.view addSubview:weiChateButton];
 
     
+    
+    
+    
+
 }
+//服务条款按钮
+-(void)checkClick:(UIButton *) button
+{
+    if (button==checkBtn) {
+        if (checkBtn.selected==YES) {
+            weiboButton.userInteractionEnabled=NO;
+            weiChateButton.userInteractionEnabled=NO;
+            button.selected=NO;
+        }
+        else if (checkBtn.selected==NO)
+        {
+            weiChateButton.userInteractionEnabled=YES;
+            weiboButton.userInteractionEnabled=YES;
+            button.selected=YES;
+        }
+    }
+    else if(button==checkBtn2)
+    {
+        
+       // [self.navigationController pushViewController:[SerViceViewController new] animated:YES];
+        [self presentViewController:[SerViceViewController new] animated:YES completion:nil];
+    }
+    
+}
+//登陆按钮
 -(void)dealloginClick:(UIButton *) btn
 {
     if (btn.tag==1000) {

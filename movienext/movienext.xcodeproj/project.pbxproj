@@ -124,6 +124,11 @@
 		000B09E21AA3029800B8D13A /* Weibo@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 000B09811AA3029800B8D13A /* Weibo@3x.png */; };
 		000B09E41AA30CB900B8D13A /* loginoutbackgroundcolor.png in Resources */ = {isa = PBXBuildFile; fileRef = 000B09E31AA30CB900B8D13A /* loginoutbackgroundcolor.png */; };
 		001244071ABA9D9F005B0AB5 /* UMShareView.m in Sources */ = {isa = PBXBuildFile; fileRef = 001244061ABA9D9F005B0AB5 /* UMShareView.m */; };
+		0012440D1ABAE3CE005B0AB5 /* choice_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 001244081ABAE3CE005B0AB5 /* choice_icon@2x.png */; };
+		0012440E1ABAE3CE005B0AB5 /* choice_icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 001244091ABAE3CE005B0AB5 /* choice_icon@3x.png */; };
+		0012440F1ABAE3CE005B0AB5 /* dischoice_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0012440A1ABAE3CE005B0AB5 /* dischoice_icon@2x.png */; };
+		001244101ABAE3CE005B0AB5 /* dischoice_icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0012440B1ABAE3CE005B0AB5 /* dischoice_icon@3x.png */; };
+		001244141ABAE4B5005B0AB5 /* SerViceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 001244131ABAE4B5005B0AB5 /* SerViceViewController.m */; };
 		003E74EB1AB1A29F0080F7A8 /* btn_add_default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 003E74D01AB1A29F0080F7A8 /* btn_add_default@2x.png */; };
 		003E74EC1AB1A29F0080F7A8 /* btn_add_default@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 003E74D11AB1A29F0080F7A8 /* btn_add_default@3x.png */; };
 		003E74EE1AB1A29F0080F7A8 /* btn_add_select@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 003E74D31AB1A29F0080F7A8 /* btn_add_select@2x.png */; };
@@ -150,6 +155,7 @@
 		0043E9691AB2DAF500209C3A /* login_button_wechat@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0043E9631AB2DAF500209C3A /* login_button_wechat@3x.png */; };
 		004DD1E51AAFDD0F00394A9D /* Back__Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 004DD1E41AAFDD0F00394A9D /* Back__Icon.png */; };
 		004DD1E81AB028B000394A9D /* ButtomToolView.m in Sources */ = {isa = PBXBuildFile; fileRef = 004DD1E71AB028B000394A9D /* ButtomToolView.m */; };
+		00562B4D1ABBB2AE001D4FE0 /* terms.html in Resources */ = {isa = PBXBuildFile; fileRef = 00562B4C1ABBB2AE001D4FE0 /* terms.html */; };
 		00572C801AA4003D0041D451 /* loading_image_all.png in Resources */ = {isa = PBXBuildFile; fileRef = 00572C7F1AA4003D0041D451 /* loading_image_all.png */; };
 		00572C841AA405F50041D451 /* loading_roll_image.png in Resources */ = {isa = PBXBuildFile; fileRef = 00572C811AA405F50041D451 /* loading_roll_image.png */; };
 		00572C851AA405F50041D451 /* loading_roll_image@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 00572C821AA405F50041D451 /* loading_roll_image@2x.png */; };
@@ -442,6 +448,12 @@
 		000B09E31AA30CB900B8D13A /* loginoutbackgroundcolor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loginoutbackgroundcolor.png; sourceTree = "<group>"; };
 		001244051ABA9D9F005B0AB5 /* UMShareView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UMShareView.h; sourceTree = "<group>"; };
 		001244061ABA9D9F005B0AB5 /* UMShareView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UMShareView.m; sourceTree = "<group>"; };
+		001244081ABAE3CE005B0AB5 /* choice_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "choice_icon@2x.png"; sourceTree = "<group>"; };
+		001244091ABAE3CE005B0AB5 /* choice_icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "choice_icon@3x.png"; sourceTree = "<group>"; };
+		0012440A1ABAE3CE005B0AB5 /* dischoice_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dischoice_icon@2x.png"; sourceTree = "<group>"; };
+		0012440B1ABAE3CE005B0AB5 /* dischoice_icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dischoice_icon@3x.png"; sourceTree = "<group>"; };
+		001244121ABAE4B5005B0AB5 /* SerViceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SerViceViewController.h; sourceTree = "<group>"; };
+		001244131ABAE4B5005B0AB5 /* SerViceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SerViceViewController.m; sourceTree = "<group>"; };
 		003E74D01AB1A29F0080F7A8 /* btn_add_default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_add_default@2x.png"; sourceTree = "<group>"; };
 		003E74D11AB1A29F0080F7A8 /* btn_add_default@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_add_default@3x.png"; sourceTree = "<group>"; };
 		003E74D31AB1A29F0080F7A8 /* btn_add_select@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_add_select@2x.png"; sourceTree = "<group>"; };
@@ -469,6 +481,7 @@
 		004DD1E41AAFDD0F00394A9D /* Back__Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Back__Icon.png; sourceTree = "<group>"; };
 		004DD1E61AB028B000394A9D /* ButtomToolView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ButtomToolView.h; sourceTree = "<group>"; };
 		004DD1E71AB028B000394A9D /* ButtomToolView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ButtomToolView.m; sourceTree = "<group>"; };
+		00562B4C1ABBB2AE001D4FE0 /* terms.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = terms.html; sourceTree = "<group>"; };
 		00572C7F1AA4003D0041D451 /* loading_image_all.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loading_image_all.png; sourceTree = "<group>"; };
 		00572C811AA405F50041D451 /* loading_roll_image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loading_roll_image.png; sourceTree = "<group>"; };
 		00572C821AA405F50041D451 /* loading_roll_image@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "loading_roll_image@2x.png"; sourceTree = "<group>"; };
@@ -812,6 +825,10 @@
 		000B08FB1AA2EB8C00B8D13A /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				001244081ABAE3CE005B0AB5 /* choice_icon@2x.png */,
+				001244091ABAE3CE005B0AB5 /* choice_icon@3x.png */,
+				0012440A1ABAE3CE005B0AB5 /* dischoice_icon@2x.png */,
+				0012440B1ABAE3CE005B0AB5 /* dischoice_icon@3x.png */,
 				007B5C971AB8276A001D2D25 /* tan.png */,
 				007B5C981AB8276A001D2D25 /* tan@2x.png */,
 				007B5C991AB8276A001D2D25 /* tan@3x.png */,
@@ -1198,6 +1215,7 @@
 		00AA53511AA2C525004096F8 /* Libs */ = {
 			isa = PBXGroup;
 			children = (
+				00562B4C1ABBB2AE001D4FE0 /* terms.html */,
 				007427331AADAB9B0034047D /* UIImage-Helpers */,
 				006739421AA491250087C240 /* MJRefresh */,
 				00AA53521AA2C525004096F8 /* AFNetworking */,
@@ -1496,6 +1514,8 @@
 			children = (
 				00AA53FC1AA2C525004096F8 /* LoginViewController.h */,
 				00AA53FD1AA2C525004096F8 /* LoginViewController.m */,
+				001244121ABAE4B5005B0AB5 /* SerViceViewController.h */,
+				001244131ABAE4B5005B0AB5 /* SerViceViewController.m */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -1646,10 +1666,12 @@
 			files = (
 				000B09921AA3029800B8D13A /* kind_swtich@2x.png in Resources */,
 				000B09A01AA3029800B8D13A /* login_button_qq.png in Resources */,
+				0012440D1ABAE3CE005B0AB5 /* choice_icon@2x.png in Resources */,
 				000500481AA70ABF00691DF4 /* tag_like_icon@2x.png in Resources */,
 				000B09161AA2EB8C00B8D13A /* tabbar_icon_noti@2x.png in Resources */,
 				0043E9661AB2DAF500209C3A /* login_button_wechat_press@3x.png in Resources */,
 				00572C8A1AA4299C0041D451 /* tabbar_backgroud_color.png in Resources */,
+				0012440F1ABAE3CE005B0AB5 /* dischoice_icon@2x.png in Resources */,
 				000B09851AA3029800B8D13A /* feed_tab_butten.png in Resources */,
 				000B09991AA3029800B8D13A /* liked@3x.png in Resources */,
 				00AA54461AA2C525004096F8 /* UMShareEditViewController.xib in Resources */,
@@ -1678,6 +1700,7 @@
 				4093904C1AB2D2C700FABA50 /* first_screen_slogan@2x.png in Resources */,
 				000B098A1AA3029800B8D13A /* feed_tab_butten@3x.png in Resources */,
 				00AA53121AA2C3F4004096F8 /* Main.storyboard in Resources */,
+				0012440E1ABAE3CE005B0AB5 /* choice_icon@3x.png in Resources */,
 				003E74F51AB1A29F0080F7A8 /* btn_like_select@3x.png in Resources */,
 				000B09AB1AA3029800B8D13A /* logo_first screem@3x.png in Resources */,
 				008B0B0D1AB307CD0054767E /* login out@3x.png in Resources */,
@@ -1709,6 +1732,7 @@
 				000B09B61AA3029800B8D13A /* movie_tab_butten（gray）.png in Resources */,
 				00AA544F1AA2C526004096F8 /* TencentOpenApi_IOS_Bundle.bundle in Resources */,
 				0043E9681AB2DAF500209C3A /* login_button_wechat@2x.png in Resources */,
+				00562B4D1ABBB2AE001D4FE0 /* terms.html in Resources */,
 				009A27BA1AA6DBDA0001690C /* movie_icon_backgroud_color@2x.png in Resources */,
 				000B09D91AA3029800B8D13A /* three switch@3x.png in Resources */,
 				00AA54481AA2C525004096F8 /* UMSLoginViewController.xib in Resources */,
@@ -1768,6 +1792,7 @@
 				000B09B21AA3029800B8D13A /* Moments.png in Resources */,
 				4093904E1AB2D2C700FABA50 /* first_screen_slogan.png in Resources */,
 				000B09A11AA3029800B8D13A /* login_button_qq@2x.png in Resources */,
+				001244101ABAE3CE005B0AB5 /* dischoice_icon@3x.png in Resources */,
 				000B09111AA2EB8C00B8D13A /* tabbar_icon_index@2x.png in Resources */,
 				000B09121AA2EB8C00B8D13A /* tabbar_icon_index@3x.png in Resources */,
 				000B09D01AA3029800B8D13A /* single_switch(gray)@3x.png in Resources */,
@@ -1898,6 +1923,7 @@
 				00AA540F1AA2C525004096F8 /* NSDate+Additions.m in Sources */,
 				00AA54101AA2C525004096F8 /* NSString+Additions.m in Sources */,
 				00AA54581AA2C526004096F8 /* NotiComment.m in Sources */,
+				001244141ABAE4B5005B0AB5 /* SerViceViewController.m in Sources */,
 				00AA54121AA2C525004096F8 /* Function.m in Sources */,
 				0074273C1AADAB9B0034047D /* UIImage+ImageWithColor.m in Sources */,
 				006739581AA491250087C240 /* UIScrollView+MJExtension.m in Sources */,
@@ -2102,7 +2128,7 @@
 		00AA53281AA2C3F4004096F8 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_STRICT_OBJC_MSGSEND = NO;
 				FRAMEWORK_SEARCH_PATHS = (

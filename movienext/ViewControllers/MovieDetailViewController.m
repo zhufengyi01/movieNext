@@ -34,12 +34,13 @@
 #import "ButtomToolView.h"
 #import "HotMovieModel.h"
 #import "UMShareView.h"
-
+#import "MJRefresh.h"
+#import "UserDataCenter.h"
 
 @interface MovieDetailViewController ()<UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UICollectionViewDelegate,MovieHeadViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UMSocialUIDelegate,UMSocialDataDelegate>
 
 {
-    UICollectionView    *_myConllectionView;
+    ///UICollectionView    *_myConllectionView;
     UICollectionViewFlowLayout    *layout;
     LoadingView         *loadView;
     NSMutableArray      *_dataArray;
@@ -49,6 +50,8 @@
     MarkView       *_mymarkView;
     BOOL   isMarkViewsShow;
     UMShareView   *shareView;
+    int page;
+
 
 }
 
@@ -71,37 +74,27 @@
     [self initUI];
     [self creatLoadView];
     if (self.pageSourceType==NSMovieSourcePageSearchListController) { //电影搜索页面进来的
+        page=0;
         [self requestMovieIdWithdoubanId];
     }
     else
     {
+        // 从电影列表页进来的
+        page=0;
         [self requestMovieInfoData];
         [self requestData];
 
     }
     [self createToolBar];
 
-
 }
 -(void)createNavigation
 {
-//  UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:@"电影详细"];
-   // titleLable.textColor=VBlue_color;
-    
-   // titleLable.font=[UIFont boldSystemFontOfSize:16];
-   //titleLable.textAlignment=NSTextAlignmentCenter;
-   // self.navigationItem.titleView=titleLable;
-//    UIButton  *leftBtn= [UIButton buttonWithType:UIButtonTypeSystem];
-//    leftBtn.frame=CGRectMake(0, 30, 60, 36);
-//    [leftBtn setTitleColor:VGray_color forState:UIControlStateNormal];
-//    [leftBtn setTitle:@"取消" forState:UIControlStateNormal];
-//    [leftBtn addTarget:self action:@selector(dealBackClick:) forControlEvents:UIControlEventTouchUpInside];
-//    [leftBtn setImage:[UIImage imageNamed:@"Back Icon"] forState:UIControlStateNormal];
-//    [self.view addSubview:leftBtn];
 }
 
 -(void)initData
 {
+    page=0;
     bigModel=YES;
     isMarkViewsShow=YES;
     _MovieDict=[[NSMutableDictionary alloc]init];
@@ -139,7 +132,66 @@
     _myConllectionView.dataSource=self;
     
     [self.view addSubview:_myConllectionView];
+    
+   // [self setupHeadView];
+    [self setupFootView];
+    
+
 }
+
+/*
+ - (void)setupHeadView
+{
+    page=0;
+    __unsafe_unretained typeof(self) vc = self;
+    if (_dataArray.count>0) {
+        [_dataArray removeAllObjects];
+    }
+    // 添加下拉刷新头部控件
+    [_myConllectionView addHeaderWithCallback:^{
+        // 进入刷新状态就会回调这个Block
+        
+        // 增加5条假数据
+        //for (int i = 0; i<5; i++) {
+        //  [vc.fakeColors insertObject:MJRandomColor atIndex:0];
+        //}
+        [vc requestData];
+        
+        // 模拟延迟加载数据，因此2秒后才调用）
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [vc.myConllectionView reloadData];
+            // 结束刷新
+            [vc.myConllectionView headerEndRefreshing];
+        });
+    }];
+    
+#warning 自动刷新(一进入程序就下拉刷新)
+    [vc.myConllectionView headerBeginRefreshing];
+}*/
+
+- (void)setupFootView
+{
+    page++;
+    __unsafe_unretained typeof(self) vc = self;
+    // 添加上拉刷新尾部控件
+    [vc.myConllectionView addFooterWithCallback:^{
+        // 进入刷新状态就会回调这个Block
+        
+        // 增加5条假数据
+        ///  for (int i = 0; i<5; i++) {
+        //   [vc.fakeColors addObject:MJRandomColor];
+        //}
+        
+        [vc requestData];
+        // 模拟延迟加载数据，因此2秒后才调用）
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+          //  [vc.myConllectionView reloadData];
+            // 结束刷新
+            [vc.myConllectionView footerEndRefreshing];
+        });
+    }];
+}
+
 -(void)creatLoadView
 {
     loadView =[[LoadingView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight)];
@@ -191,13 +243,11 @@
             _MovieDict=[[NSMutableDictionary alloc]init];
         }
         _MovieDict =[NSMutableDictionary dictionaryWithDictionary:[responseObject  objectForKey:@"detail"]];
-        
+        //[self requestData];
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
-    
-
 }
 
 -(void)requestData
@@ -207,8 +257,11 @@
     //NSDictionary *parameter = @{@"movie_id": @"859357", @"start_id":@"0", @"user_id": @"18"};
     if (!_movieId || _movieId<=0) {
         return;
+        
     }
-    NSDictionary *parameter = @{@"movie_id": _movieId, @"start_id":@"0", @"user_id": @"18"};
+    UserDataCenter  *userCenter =[UserDataCenter shareInstance];
+
+    NSDictionary *parameter = @{@"movie_id": _movieId, @"page":[NSString stringWithFormat:@"%d",page], @"user_id": userCenter.user_id};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:[NSString stringWithFormat:@"%@/movieStage/list", kApiBaseUrl] parameters:parameter success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"  电影详情页面数据JSON: %@", responseObject);
