@@ -156,6 +156,7 @@
 		004DD1E51AAFDD0F00394A9D /* Back__Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 004DD1E41AAFDD0F00394A9D /* Back__Icon.png */; };
 		004DD1E81AB028B000394A9D /* ButtomToolView.m in Sources */ = {isa = PBXBuildFile; fileRef = 004DD1E71AB028B000394A9D /* ButtomToolView.m */; };
 		00562B4D1ABBB2AE001D4FE0 /* terms.html in Resources */ = {isa = PBXBuildFile; fileRef = 00562B4C1ABBB2AE001D4FE0 /* terms.html */; };
+		00562B511ABBD8E0001D4FE0 /* ShowStageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00562B501ABBD8E0001D4FE0 /* ShowStageViewController.m */; };
 		00572C801AA4003D0041D451 /* loading_image_all.png in Resources */ = {isa = PBXBuildFile; fileRef = 00572C7F1AA4003D0041D451 /* loading_image_all.png */; };
 		00572C841AA405F50041D451 /* loading_roll_image.png in Resources */ = {isa = PBXBuildFile; fileRef = 00572C811AA405F50041D451 /* loading_roll_image.png */; };
 		00572C851AA405F50041D451 /* loading_roll_image@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 00572C821AA405F50041D451 /* loading_roll_image@2x.png */; };
@@ -482,6 +483,8 @@
 		004DD1E61AB028B000394A9D /* ButtomToolView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ButtomToolView.h; sourceTree = "<group>"; };
 		004DD1E71AB028B000394A9D /* ButtomToolView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ButtomToolView.m; sourceTree = "<group>"; };
 		00562B4C1ABBB2AE001D4FE0 /* terms.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = terms.html; sourceTree = "<group>"; };
+		00562B4F1ABBD8E0001D4FE0 /* ShowStageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShowStageViewController.h; sourceTree = "<group>"; };
+		00562B501ABBD8E0001D4FE0 /* ShowStageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShowStageViewController.m; sourceTree = "<group>"; };
 		00572C7F1AA4003D0041D451 /* loading_image_all.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loading_image_all.png; sourceTree = "<group>"; };
 		00572C811AA405F50041D451 /* loading_roll_image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loading_roll_image.png; sourceTree = "<group>"; };
 		00572C821AA405F50041D451 /* loading_roll_image@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "loading_roll_image@2x.png"; sourceTree = "<group>"; };
@@ -812,6 +815,7 @@
 		000B08F71AA2EA1800B8D13A /* Movie */ = {
 			isa = PBXGroup;
 			children = (
+				00562B4E1ABBD8E0001D4FE0 /* Showstage */,
 				00ABFC6E1AAAA78100980824 /* MovieDetail */,
 				0067395B1AA49F260087C240 /* Searchmovie */,
 				000B08F81AA2EA1800B8D13A /* MovieViewController.h */,
@@ -991,6 +995,16 @@
 				000B09091AA2EB8C00B8D13A /* tabbar_icon_noti@3x.png */,
 			);
 			path = Images;
+			sourceTree = "<group>";
+		};
+		00562B4E1ABBD8E0001D4FE0 /* Showstage */ = {
+			isa = PBXGroup;
+			children = (
+				00562B4F1ABBD8E0001D4FE0 /* ShowStageViewController.h */,
+				00562B501ABBD8E0001D4FE0 /* ShowStageViewController.m */,
+			);
+			name = Showstage;
+			path = ShowStag;
 			sourceTree = "<group>";
 		};
 		006739421AA491250087C240 /* MJRefresh */ = {
@@ -1923,6 +1937,7 @@
 				00AA540F1AA2C525004096F8 /* NSDate+Additions.m in Sources */,
 				00AA54101AA2C525004096F8 /* NSString+Additions.m in Sources */,
 				00AA54581AA2C526004096F8 /* NotiComment.m in Sources */,
+				00562B511ABBD8E0001D4FE0 /* ShowStageViewController.m in Sources */,
 				001244141ABAE4B5005B0AB5 /* SerViceViewController.m in Sources */,
 				00AA54121AA2C525004096F8 /* Function.m in Sources */,
 				0074273C1AADAB9B0034047D /* UIImage+ImageWithColor.m in Sources */,
