@@ -237,7 +237,7 @@
 //1.开始执行动画, 动画入口
 - (void)startAnimation {
     //开始动画之后0.5秒再开始动画
-    [self performSelector:@selector(scaleAnimation) withObject:nil afterDelay:0.5];
+    [self performSelector:@selector(scaleAnimation) withObject:nil afterDelay:0];
 }
 
 //6.循环显示气泡动画
