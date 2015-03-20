@@ -36,6 +36,8 @@
 #import "UMShareView.h"
 #import "MJRefresh.h"
 #import "UserDataCenter.h"
+#import "ShowStageViewController.h"
+
 
 @interface MovieDetailViewController ()<UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UICollectionViewDelegate,MovieHeadViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UMSocialUIDelegate,UMSocialDataDelegate>
 
@@ -94,7 +96,7 @@
 
 -(void)initData
 {
-    page=0;
+    //page=0;
     bigModel=YES;
     isMarkViewsShow=YES;
     _MovieDict=[[NSMutableDictionary alloc]init];
@@ -171,7 +173,7 @@
 
 - (void)setupFootView
 {
-    page++;
+    
     __unsafe_unretained typeof(self) vc = self;
     // 添加上拉刷新尾部控件
     [vc.myConllectionView addFooterWithCallback:^{
@@ -181,7 +183,7 @@
         ///  for (int i = 0; i<5; i++) {
         //   [vc.fakeColors addObject:MJRandomColor];
         //}
-        
+        page=page+1;
         [vc requestData];
         // 模拟延迟加载数据，因此2秒后才调用）
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -397,10 +399,14 @@
             [cell.StageView  hidenAndShowMarkView:NO];
         }
     } else {
-      /*  ShowStageViewController *vc = [[ShowStageViewController alloc] init];
+        ShowStageViewController *vc = [[ShowStageViewController alloc] init];
         HotMovieModel  *model=[_dataArray objectAtIndex:indexPath.row];
         vc.movieModel = model;
-        [self.navigationController presentViewController:vc animated:NO completion:^{ }];*/
+       // [vc setModalPresentationStyle:UIModalPresentationCustom];
+        //[vc setModalTransitionStyle:UIModalTransitionStylePartialCurl];  //页面跳转形式
+      //  [self.navigationController presentViewController:vc animated:YES completion:^{ }];
+        [self.navigationController pushViewController:vc animated:YES];
+       // [self dismissModalViewControllerAnimated:YES];
     }
 }
 
