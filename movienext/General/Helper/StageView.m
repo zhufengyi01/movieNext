@@ -127,12 +127,11 @@
 }
 #pragma mark 内部创建气泡的方法
 - (MarkView *) createMarkViewWithDict:(WeiboModel *)weibodict andIndex:(NSInteger)index{
-    
-            MarkView *markView=[[MarkView alloc]initWithFrame:CGRectMake(10, 10, 100, 30)];
+            MarkView *markView=[[MarkView alloc]initWithFrame:CGRectZero];
             markView.alpha = 0;
             markView.tag=1000+index;
     
-    NSLog(@"stageview  ＝＝=====weiboDict====%@",weibodict);
+            NSLog(@"stageview  ＝＝=====weiboDict====%@",weibodict);
              float  x=[weibodict.x floatValue];   //位置的百分比
              float  y=[weibodict.y floatValue];
              NSString  *weiboTitleString=weibodict.topic;
@@ -160,7 +159,7 @@
             float markViewX = (x*kDeviceWidth)/100-markViewWidth;
             markViewX = MIN(MAX(markViewX, 1.0f), kDeviceWidth-markViewWidth-1);
             
-            float markViewY = (y*hight)/100;
+            float markViewY = (y*hight)/100 - markViewHeight/2;
 #warning    kDeviceWidth 目前计算的是正方形的，当图片高度>屏幕的宽度的实际，需要使用图片的高度
       
             markViewY = MIN(MAX(markViewY, 1.0f), hight-markViewHeight-1);
