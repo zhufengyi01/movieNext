@@ -7,6 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+@protocol UMShareViewDelegate <NSObject>
+-(void)UMshareViewHandClick:(UIButton *) button;
+@end
 
 @interface UMShareView : UIView
 {
@@ -16,6 +19,7 @@
     UIButton  *qzoneBtn;
     UIButton  *weiboBtn;
 }
+@property(nonatomic,assign)id<UMShareViewDelegate> delegate;
 @property(nonatomic,strong) UIImageView *ShareimageView;
 @property(nonatomic,strong) UILabel      *moviewName;
 

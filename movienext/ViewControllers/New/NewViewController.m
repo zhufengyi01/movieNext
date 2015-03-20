@@ -24,9 +24,10 @@
 #import "Function.h"
 #import "UMSocial.h"
 #import "UMShareView.h"
+
 //友盟分享
 //#import "UMSocial.h"
-@interface NewViewController ()<UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UIScrollViewDelegate,UMSocialDataDelegate,UMSocialUIDelegate>
+@interface NewViewController ()<UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UIScrollViewDelegate,UMSocialDataDelegate,UMSocialUIDelegate,UMShareViewDelegate>
 {
     AppDelegate  *appdelegate;
     UISegmentedControl *segment;
@@ -70,7 +71,7 @@
     [self creatLoadView];
     [self requestData];
     [self createToolBar];
-    
+    [self createShareView];
     
 }
 -(void)initData{
@@ -197,6 +198,12 @@
     _toolBar=[[ButtomToolView alloc]initWithFrame:CGRectMake(0,0,kDeviceWidth,kDeviceHeight)];
     _toolBar.delegete=self;
  
+}
+
+-(void)createShareView
+{
+    shareView=[[UMShareView alloc]initWithFrame:CGRectMake(0,0, kDeviceWidth, kDeviceHeight)];
+    shareView.delegate=self;
 }
 #pragma  mark -----
 #pragma  mark ------  DataRequest 
@@ -538,31 +545,44 @@
     
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-  //  NSLog(@"===w =%@ ",image);
     
-    if (shareView) {
-        [shareView removeFromSuperview];
-    }
+    //设置shareview的图片
+    shareView.ShareimageView.image=image;
+    shareView.delegate=self;
+    shareView.moviewName.text=hotmovie.stageinfo.movie_name;
+    shareView.ShareimageView.frame=CGRectMake(0,(kDeviceHeight-50-hight)/2-60, kDeviceWidth, hight);
+    
     
     UIImage  *getImage=[Function getImage:shareView.ShareimageView];
     NSString  *shareText=hotmovie.stageinfo.movie_name;
-    
     [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
-    /*
-    [UMSocialSnsService presentSnsIconSheetView:self
-                                         appKey:kUmengKey
-                                      shareText:shareText
-                                     shareImage: getImage
-                                shareToSnsNames:[NSArray arrayWithObjects: UMShareToWechatSession, UMShareToWechatTimeline, UMShareToQzone, UMShareToSina, nil]
-                                       delegate:self];
-     */
-    
-    shareView =[[UMShareView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight)];
     [GetAppDelegate().window addSubview:shareView];
-    //设置shareview的图片
-    shareView.ShareimageView.image=image;
-    shareView.moviewName.text=hotmovie.stageinfo.movie_name;
-    shareView.ShareimageView.frame=CGRectMake(0,(kDeviceHeight-50-hight)/2-60, kDeviceWidth, hight);
+}
+
+-(void)UMshareViewHandClick:(UIButton *)button
+{
+    if (button.tag==10000) {
+        //分享到微信
+        NSLog(@"分享到微信");
+    }
+    else if (button.tag==10001)
+    {
+        //朋友圈
+        NSLog(@"朋友圈");
+
+    }
+    else if(button.tag==10002)
+    {
+        //qq空间
+        NSLog(@"qq空间");
+
+    }
+    else if (button.tag==10003)
+    {
+        //微博
+        NSLog(@"微博");
+
+    }
 }
 #pragma mark  --umShareDelegate
 
