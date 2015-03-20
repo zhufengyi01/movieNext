@@ -11,7 +11,12 @@
 @interface UMShareView : UIView
 {
     UILabel  *logoLable;
+    UIButton  *wechatSessionBtn;
+    UIButton  *wechatTimelineBtn;
+    UIButton  *qzoneBtn;
+    UIButton  *weiboBtn;
 }
 @property(nonatomic,strong) UIImageView *ShareimageView;
 @property(nonatomic,strong) UILabel      *moviewName;
+
 @end
