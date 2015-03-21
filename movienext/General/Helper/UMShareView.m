@@ -25,35 +25,92 @@
 {
     if (self= [super initWithFrame:frame]) {
         [self createUI];
+        
     }
     return self;
 }
 -(void)createUI
-{
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(removeSelf:)];
-    [self addGestureRecognizer:tap];
-    self.backgroundColor=[[UIColor blackColor] colorWithAlphaComponent:0.5];
+{     //创建底部试图
+    //创建上部视图
+    topView =[[UIView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight-(kDeviceWidth/4)-40-kHeightNavigation)];
+    topView.userInteractionEnabled=YES;
+    topView.backgroundColor=[UIColor redColor];
+    [self addSubview:topView];
     
-    _ShareimageView=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth,300)];
-  //  _ShareimageView.backgroundColor=[UIColor redColor];
-    [self addSubview:_ShareimageView];
     
-     _moviewName= [ZCControl createLabelWithFrame:CGRectMake(10,_ShareimageView.frame.size.height-20, 200, 20) Font:12 Text:@""];
-    _moviewName.textColor=VGray_color;
-    [_ShareimageView addSubview:_moviewName];
+    // 上面的透明背景
+    UIButton    *_topButtom =[UIButton buttonWithType:UIButtonTypeSystem];
+    _topButtom.frame=CGRectMake(0, 0, kDeviceWidth, kDeviceHeight-kHeightNavigation-(kDeviceWidth/4)-40);
     
-    logoLable=[ZCControl createLabelWithFrame:CGRectMake(kDeviceWidth-70,_ShareimageView.frame.size.height-20, 60, 20) Font:12 Text:@"影弹App"];
-    logoLable.textAlignment=NSTextAlignmentRight;
-    logoLable.textColor=VGray_color;
-    [_ShareimageView addSubview:logoLable];
+    [_topButtom addTarget:self action:@selector(TouchbuttonClick:) forControlEvents:UIControlEventTouchUpInside];
+    _topButtom.backgroundColor=[[UIColor blackColor]colorWithAlphaComponent:0.2];
+    [topView addSubview:_topButtom];
 
     
+
+    _ShareimageView=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth,400)];
+  //  _ShareimageView.backgroundColor=[UIColor redColor];
+    [topView addSubview:_ShareimageView];
     
+     _moviewName= [ZCControl createLabelWithFrame:CGRectMake(10,kDeviceHeight-(kDeviceWidth/4)-40-20-kHeightNavigation, 200, 20) Font:12 Text:@""];
+    _moviewName.textColor=VGray_color;
+    [topView addSubview:_moviewName];
     
+    logoLable=[ZCControl createLabelWithFrame:CGRectMake(kDeviceWidth-70,topView.frame.size.height-30, 60, 20) Font:12 Text:@"影弹App"];
+    logoLable.textAlignment=NSTextAlignmentRight;
+    logoLable.textColor=VGray_color;
+    [topView addSubview:logoLable];
     
-    UIView  *buttomView=[[UIView alloc]initWithFrame:CGRectMake(0, kDeviceHeight- (kDeviceWidth/4+40), kDeviceWidth, kDeviceWidth/4+40)];
+    //创建下部视图
+    [ self createButtomView];
+
+
+}
+//配置view
+-(void)configShareView;
+{
+    _ShareimageView.image =self.screenImage;
+    _moviewName.text=self.model.stageinfo.movie_name;
+    
+//    float hight= kDeviceWidth;
+//    float  ImageWith=[self.model.stageinfo.w intValue];
+//    float  ImgeHight=[self.model.stageinfo.h intValue];
+//    if(ImgeHight>ImageWith)
+//    {
+//        hight=  (ImgeHight/ImageWith) *kDeviceWidth;
+//    }
+//
+    //_ShareimageView.frame=CGRectMake(0, 0,kDeviceWidth, hight);
+    
+}
+
+-(void)createButtomView
+{
+
+    buttomView=[[UIView alloc]initWithFrame:CGRectMake(0, kDeviceHeight, kDeviceWidth, kDeviceWidth/4+40)];
     buttomView.backgroundColor=[UIColor whiteColor];
+    buttomView.userInteractionEnabled=YES;
     [self addSubview:buttomView];
+#pragma create four button
+    
+    NSArray  *titleArray=[NSArray arrayWithObjects:@"微信",@"朋友圈",@"Q空间",@"微博",nil];
+    NSArray  *imageArray=[NSArray arrayWithObjects:@"Wechat",@"Moments",@"Qzone",@"Weibo.png", nil];
+    
+    for (int i=0; i<4; i++) {
+        double   x=(kDeviceWidth/4)*i;
+        double   y=40;
+        
+     UIButton  *    btn = [ZCControl createButtonWithFrame:CGRectMake(x,y, kDeviceWidth/4, kDeviceWidth/4) ImageName:@"" Target:self Action:@selector(handShareButtonClick:) Title:titleArray[i]];
+        [btn setImage:[UIImage imageNamed:imageArray[i]] forState:UIControlStateNormal];
+        btn.titleEdgeInsets = UIEdgeInsetsMake(65, -30, 10, 10);
+        btn.titleLabel.font=[UIFont systemFontOfSize:12];
+        [btn setTitleColor:VBlue_color forState:UIControlStateNormal];
+        [btn setImageEdgeInsets:UIEdgeInsetsMake(10, 20, 20, 10)];
+        btn.tag=10000+i;
+        btn.backgroundColor=[UIColor whiteColor];
+        [buttomView addSubview:btn];
+
+    }
     
     UILabel  *shareLable =[ZCControl createLabelWithFrame:CGRectMake(0, 0,kDeviceWidth, 40) Font:14 Text:@"分享给好友"];
     shareLable.textAlignment=NSTextAlignmentCenter;
@@ -67,7 +124,6 @@
     UIView  *lineView2=[[UIView alloc]initWithFrame:CGRectMake(0, 40+kDeviceWidth/4-1, kDeviceWidth, 0.5)];
     lineView2.backgroundColor=VLight_GrayColor;
     [buttomView addSubview:lineView2];
-
     
     
     UIView  *lineView3=[[UIView alloc]initWithFrame:CGRectMake(0,40 ,0.5, kDeviceWidth/4)];
@@ -78,79 +134,96 @@
     lineView4.backgroundColor=VLight_GrayColor;
     [buttomView addSubview:lineView4];
     
-
     UIView  *lineView5=[[UIView alloc]initWithFrame:CGRectMake(kDeviceWidth/2,40 , 0.5, kDeviceWidth/4)];
     lineView5.backgroundColor=VLight_GrayColor;
     [buttomView addSubview:lineView5];
-    
-    
     UIView  *lineView6=[[UIView alloc]initWithFrame:CGRectMake((kDeviceWidth/4)*3,40 ,0.5, kDeviceWidth/4)];
     lineView6.backgroundColor=VLight_GrayColor;
     [buttomView addSubview:lineView6];
-    
-    
 
-
-#pragma create four button
-    wechatSessionBtn = [ZCControl createButtonWithFrame:CGRectMake(0, kDeviceHeight-80, kDeviceWidth/4, kDeviceWidth/4) ImageName:@"" Target:self Action:@selector(handShareButtonClick:) Title:@"微信"];
-    [wechatSessionBtn setImage:[UIImage imageNamed:@"Wechat"] forState:UIControlStateNormal];
-    wechatSessionBtn.titleEdgeInsets = UIEdgeInsetsMake(65, -30, 10, 10);
-    wechatSessionBtn.titleLabel.font=[UIFont systemFontOfSize:12];
-    [wechatSessionBtn setTitleColor:VBlue_color forState:UIControlStateNormal];
-    [wechatSessionBtn setImageEdgeInsets:UIEdgeInsetsMake(10, 20, 20, 10)];
-    wechatSessionBtn.tag=10000;
-    [self addSubview:wechatSessionBtn];
     
-    wechatTimelineBtn = [ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth/4, kDeviceHeight-80, kDeviceWidth/4, kDeviceWidth/4) ImageName:@"" Target:self Action:@selector(handShareButtonClick:) Title:@"朋友圈"];
-    [wechatTimelineBtn setImage:[UIImage imageNamed:@"Moments"] forState:UIControlStateNormal];
-    wechatTimelineBtn.titleEdgeInsets = UIEdgeInsetsMake(65, -30, 10, 10);
-    wechatTimelineBtn.titleLabel.font=[UIFont systemFontOfSize:12];
-    [wechatTimelineBtn setTitleColor:VBlue_color forState:UIControlStateNormal];
-    [wechatTimelineBtn setImageEdgeInsets:UIEdgeInsetsMake(10, 20, 20, 10)];
-    wechatTimelineBtn.tag=10001;
-
-    [self addSubview:wechatTimelineBtn];
-    
-    qzoneBtn = [ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth/4*2, kDeviceHeight-80, kDeviceWidth/4, kDeviceWidth/4) ImageName:@"" Target:self Action:@selector(handShareButtonClick:) Title:@"QQ空间"];
-    [qzoneBtn setImage:[UIImage imageNamed:@"Qzone"] forState:UIControlStateNormal];
-  //  qzoneBtn.titleEdgeInsets = UIEdgeInsetsMake(60, 0, 0, 0);
-    //[qzoneBtn setTitleColor:VBlue_color forState:UIControlStateNormal];
-    qzoneBtn.titleEdgeInsets = UIEdgeInsetsMake(65, -30, 10, 10);
-    qzoneBtn.titleLabel.font=[UIFont systemFontOfSize:12];
-    [qzoneBtn setTitleColor:VBlue_color forState:UIControlStateNormal];
-    [qzoneBtn setImageEdgeInsets:UIEdgeInsetsMake(10, 20, 20, 10)];
-    qzoneBtn.tag=10002;
-    [self addSubview:qzoneBtn];
-    
-    weiboBtn = [ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth/4*3, kDeviceHeight-80, kDeviceWidth/4, kDeviceWidth/4) ImageName:@"" Target:self Action:@selector(handShareButtonClick:) Title:@"微博"];
-    [weiboBtn setImage:[UIImage imageNamed:@"Weibo.png"] forState:UIControlStateNormal];
-    weiboBtn.titleEdgeInsets = UIEdgeInsetsMake(65, -30, 10, 10);
-    weiboBtn.titleLabel.font=[UIFont systemFontOfSize:12];
-    [weiboBtn setTitleColor:VBlue_color forState:UIControlStateNormal];
-    [weiboBtn setImageEdgeInsets:UIEdgeInsetsMake(10, 20, 20, 10)];
-    weiboBtn.tag=10003;
-    [self addSubview:weiboBtn];
 }
+
+
+
+//显示底部试图
+-(void)showShareButtomView;
+{
+    [UIView animateWithDuration:0.5 animations:^{
+        CGRect  Bframe=buttomView.frame;
+        Bframe.origin.y=kDeviceHeight-kHeightNavigation-(kDeviceWidth/4+40);
+        buttomView.frame=Bframe;
+    } completion:^(BOOL finished) {
+    }];
+}
+//隐藏底部试图
+-(void)HidenShareButtomView;
+{
+    [UIView animateWithDuration:0.5 animations:^{
+        CGRect  Bframe=buttomView.frame;
+        Bframe.origin.y=kDeviceHeight-kHeightNavigation;
+        buttomView.frame=Bframe;
+    } completion:^(BOOL finished) {
+        
+    }];
+}
+
+
+
 //点击分享
 -(void)handShareButtonClick:(UIButton *) button
 {
-    if (self.delegate &&[self.delegate respondsToSelector:@selector(UMshareViewHandClick:)]) {
-        [self.delegate UMshareViewHandClick:button];
+    if (self.delegate &&[self.delegate respondsToSelector:@selector(UMshareViewHandClick:MoviewModel:)]) {
+        [self.delegate UMshareViewHandClick:button MoviewModel:self.model];
     }
     
 }
-
+/*
 - (void)removeSelf:(UITapGestureRecognizer *)tap {
     [tap.view removeFromSuperview];
-}
+}*/
 -(void)layoutSubviews
 {
     
     //需要从新设置mshareimagview的frame
     
-    _moviewName.frame=CGRectMake(10,_ShareimageView.frame.size.height-20, 200, 20);
-    logoLable.frame=CGRectMake(kDeviceWidth-70, _ShareimageView.frame.size.height-20, 60, 20);
+    _moviewName.frame=CGRectMake(10,topView.frame.size.height-30, 200, 20);
+    logoLable.frame=CGRectMake(kDeviceWidth-70, topView.frame.size.height-30, 60, 20);
+        float hight= kDeviceWidth;
+        float  ImageWith=[self.model.stageinfo.w intValue];
+        float  ImgeHight=[self.model.stageinfo.h intValue];
+       if (ImageWith>ImgeHight) {
+           //宽大于高的时候
+           _ShareimageView.frame=CGRectMake(0,(topView.frame.size.height-hight)/2, kDeviceWidth, kDeviceWidth);
+           
+          
+       }
+       else if(ImgeHight>ImageWith)
+        {
+            hight=  (ImgeHight/ImageWith) *kDeviceWidth;
+            if (hight>topView.frame.size.height) {
+                // 这个时候需要把图片裁剪
 
+            }
+            _ShareimageView.frame=CGRectMake(0, 0,kDeviceWidth, hight);
+
+        }
+    
+
+
+}
+
+//点击屏幕弹回
+-(void)TouchbuttonClick:(UIButton *) button
+{
+    if (self.delegate &&[self.delegate respondsToSelector:@selector(SharetopViewTouchBengan)]) {
+        [self.delegate SharetopViewTouchBengan];
+    }
+}
+
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+   // [self removeFromSuperview];
 }
 @end
 

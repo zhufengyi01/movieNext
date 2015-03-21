@@ -42,6 +42,8 @@
     [self addSubview:_topButtom];
     
     
+    
+    
     //底部的
     buttomView =[[UIView alloc]initWithFrame:CGRectMake(0, kDeviceHeight, kDeviceWidth, 50)];
     buttomView.backgroundColor=VBlue_color;
@@ -113,7 +115,6 @@
         zanbutton.selected=YES;
     }
     
-    
 }
 #pragma mark
 #pragma mark  －－－－底部视图的点击事件
@@ -132,6 +133,7 @@
         [self.delegete ToolViewHandClick:button :_markView weiboDict:self.weiboDict StageInfo:self.StageInfoDict];
     }
 }
+
 
 //显示底部试图
 -(void)ShowButtomView;
@@ -154,6 +156,10 @@
         
     }];
 }
+
+
+
+
 //点击屏幕
 -(void)TouchbuttonClick:(UIButton *) button
 {

@@ -530,7 +530,9 @@
     else  {
         hotmovie=[_newDataArray objectAtIndex:button.tag-2000];
     }
+    //将model的值传递过去，在那边配置
    
+    
     float hight= kDeviceWidth;
     float  ImageWith=[hotmovie.stageinfo.w intValue];
     float  ImgeHight=[hotmovie.stageinfo.h intValue];
@@ -546,45 +548,85 @@
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     
-    //设置shareview的图片
-    shareView.ShareimageView.image=image;
-    shareView.delegate=self;
-    shareView.moviewName.text=hotmovie.stageinfo.movie_name;
-    shareView.ShareimageView.frame=CGRectMake(0,(kDeviceHeight-50-hight)/2-60, kDeviceWidth, hight);
-    
-    
-    UIImage  *getImage=[Function getImage:shareView.ShareimageView];
-    NSString  *shareText=hotmovie.stageinfo.movie_name;
-    [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
-    [GetAppDelegate().window addSubview:shareView];
-}
+    //创建UMshareView 后必须配备这三个方法
+    shareView.model=hotmovie;
+    shareView.screenImage=image;
+    [shareView configShareView];
+    [self.view addSubview:shareView];
+    self.tabBarController.tabBar.hidden=YES;
+    if ([shareView respondsToSelector:@selector(showShareButtomView)]) {
+        [shareView showShareButtomView];
 
--(void)UMshareViewHandClick:(UIButton *)button
+    }
+}
+#pragma  mark  -----UMButtomViewshareViewDlegate-------
+-(void)UMshareViewHandClick:(UIButton *)button MoviewModel:(HotMovieModel *)moviemodel
 {
     if (button.tag==10000) {
         //分享到微信
         NSLog(@"分享到微信");
+        self.tabBarController.tabBar.hidden=NO;
+        if (shareView) {
+            [shareView HidenShareButtomView];
+            [shareView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.5];
+          
+        }
     }
     else if (button.tag==10001)
     {
         //朋友圈
         NSLog(@"朋友圈");
+        self.tabBarController.tabBar.hidden=NO;
+        if (shareView) {
+            [shareView HidenShareButtomView];
+            [shareView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.5];
+            
+        }
+
 
     }
     else if(button.tag==10002)
     {
         //qq空间
         NSLog(@"qq空间");
+        self.tabBarController.tabBar.hidden=NO;
+        if (shareView) {
+            [shareView HidenShareButtomView];
+            [shareView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.5];
+            
+        }
+
 
     }
     else if (button.tag==10003)
     {
         //微博
         NSLog(@"微博");
+        self.tabBarController.tabBar.hidden=NO;
+        if (shareView) {
+            [shareView HidenShareButtomView];
+            [shareView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.5];
+            
+        }
+
 
     }
 }
-#pragma mark  --umShareDelegate
+///点击分享的屏幕，收回分享的背景
+-(void)SharetopViewTouchBengan
+{
+    NSLog(@"controller touchbegan  中 执行了隐藏工具栏的方法");
+    //取消当前的选中的那个气泡
+    [_mymarkView CancelMarksetSelect];
+    if (shareView) {
+        [shareView HidenShareButtomView];
+        [shareView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.5];
+        self.tabBarController.tabBar.hidden=NO;
+
+    }
+
+}
+#pragma mark  --UMShareDelegate 友盟分享实现的功能
 
 -(void)didCloseUIViewController:(UMSViewControllerType)fromViewControllerType
 {
@@ -764,23 +806,23 @@
             [shareView removeFromSuperview];
         }
         shareView =[[UMShareView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight-50)];
-        [self.view addSubview:shareView];
+        //[self.view addSubview:shareView];
         //设置shareview的图片
-        shareView.ShareimageView.image=image;
-        shareView.moviewName.text=stageInfoDict.movie_name;
-        shareView.ShareimageView.frame=CGRectMake(0,(kDeviceHeight-50-hight)/2-60, kDeviceWidth, hight);
+        //shareView.ShareimageView.image=image;
+        //shareView.moviewName.text=stageInfoDict.movie_name;
+        //shareView.ShareimageView.frame=CGRectMake(0,(kDeviceHeight-50-hight)/2-60, kDeviceWidth, hight);
         
-        UIImage  *getImage=[Function getImage:shareView.ShareimageView];
+     ///   UIImage  *getImage=[Function getImage:shareView.ShareimageView];
 
         
         
         [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
-        [UMSocialSnsService presentSnsIconSheetView:self
+       /* [UMSocialSnsService presentSnsIconSheetView:self
                                              appKey:kUmengKey
                                           shareText:shareText
                                          shareImage:getImage
                                     shareToSnsNames:[NSArray arrayWithObjects: UMShareToWechatSession, UMShareToWechatTimeline, UMShareToQzone, UMShareToSina, nil]
-                                           delegate:self];
+                                           delegate:self];*/
     }
 #pragma mark  ----------点赞--------------
     else  if(button.tag==10002)

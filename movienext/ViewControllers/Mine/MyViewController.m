@@ -711,23 +711,23 @@
     shareView =[[UMShareView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight-50)];
     [self.view addSubview:shareView];
     //设置shareview的图片
-    shareView.ShareimageView.image=image;
-    shareView.moviewName.text=hotmovie.stageinfo.movie_name;
-    shareView.ShareimageView.frame=CGRectMake(0,(kDeviceHeight-50-hight)/2-60, kDeviceWidth, hight);
+    //shareView.ShareimageView.image=image;
+    //shareView.moviewName.text=hotmovie.stageinfo.movie_name;
+   // shareView.ShareimageView.frame=CGRectMake(0,(kDeviceHeight-50-hight)/2-60, kDeviceWidth, hight);
     
-    UIImage  *getImage=[Function getImage:shareView.ShareimageView];
+   // UIImage  *getImage=[Function getImage:shareView.ShareimageView];
 
     
     
     NSString  *shareText=hotmovie.stageinfo.movie_name;
 
-    [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
+    /*[UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
     [UMSocialSnsService presentSnsIconSheetView:self
                                          appKey:kUmengKey
                                       shareText:shareText
                                      shareImage: getImage
                                 shareToSnsNames:[NSArray arrayWithObjects: UMShareToWechatSession, UMShareToWechatTimeline, UMShareToQzone, UMShareToSina, nil]
-                                       delegate:self];
+                                       delegate:self];*/
 }
 -(void)didCloseUIViewController:(UMSViewControllerType)fromViewControllerType
 {
@@ -921,7 +921,7 @@
         shareView =[[UMShareView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight-50)];
         [self.view addSubview:shareView];
         //设置shareview的图片
-        shareView.ShareimageView.image=image;
+    /*    shareView.ShareimageView.image=image;
         shareView.moviewName.text=stageInfoDict.movie_name;
         shareView.ShareimageView.frame=CGRectMake(0,(kDeviceHeight-50-hight)/2-60, kDeviceWidth, hight);
         
@@ -933,7 +933,7 @@
                                           shareText:shareText
                                          shareImage:getImage
                                     shareToSnsNames:[NSArray arrayWithObjects: UMShareToWechatSession, UMShareToWechatTimeline, UMShareToQzone, UMShareToSina, nil]
-                                           delegate:self];
+                                           delegate:self];*/
     }
 #pragma mark  ----------点赞--------------
     else  if(button.tag==10002)
