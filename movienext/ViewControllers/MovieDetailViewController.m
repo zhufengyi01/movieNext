@@ -143,8 +143,8 @@
 //    if ([type isEqualToString:@"public.image"])
   //  {
         //先把图片转成NSData
-     //   UIImage* image = [info objectForKey:@"UIImagePickerControllerOriginalImage"];
-        UIImage  *image=[UIImage imageNamed:@"choice_icon@2x.png"];
+      UIImage* image = [info objectForKey:@"UIImagePickerControllerOriginalImage"];
+       // UIImage  *image=[UIImage imageNamed:@"choice_icon@2x.png"];
          NSLog(@" image   ====%@",image);
 //        NSData *data;
 //        if (UIImagePNGRepresentation(image) == nil)
@@ -174,6 +174,7 @@
     {
         UIAlertView * alert = [[UIAlertView alloc]initWithTitle:@"" message:@"上传成功" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
         [alert show];
+        
         NSLog(@"%@",data);
     };
     uy.failBlocker = ^(NSError * error)
@@ -185,6 +186,7 @@
     };
     uy.progressBlocker = ^(CGFloat percent, long long requestDidSendBytes)
     {
+        //进度
         //[_pv setProgress:percent];
     };
     
