@@ -28,7 +28,7 @@
 #import "AddMarkViewController.h"
 #import "Function.h"
 #import "UMShareView.h"
-@interface MyViewController ()<UITableViewDataSource, UITableViewDelegate,StageViewDelegate,MarkViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UIActionSheetDelegate,UMSocialDataDelegate,UMSocialUIDelegate>
+@interface MyViewController ()<UITableViewDataSource, UITableViewDelegate,StageViewDelegate,MarkViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UIActionSheetDelegate,UMSocialDataDelegate,UMSocialUIDelegate,UMShareViewDelegate>
 {
     UISegmentedControl *segment;
     UITableView   *_tableView;
@@ -50,6 +50,7 @@
     
     BOOL isMarkViewsShow;
     UMShareView  *shareView;
+    int  productCount;
 
 
 }
@@ -85,6 +86,8 @@
 
     [self createLoadview];
     [self createToolBar];
+    [self createShareView];
+
 
     if (self.author_id&&![self.author_id isEqualToString:@"0"]) {
         //如果有用户id 并且用户的id 不为0
@@ -279,7 +282,7 @@
     }
     [self requestData];
     // 2.2秒后刷新表格UI
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         // 刷新表格
         [_tableView reloadData];
         // (最好在刷新表格后调用)调用endRefreshing可以结束刷新状态
@@ -292,7 +295,7 @@
     page++;
     [self  requestData];
     // 2.2秒后刷新表格UI
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         // 刷新表格
         [_tableView reloadData];
         
@@ -340,6 +343,13 @@
     
 }
 
+-(void)createShareView
+{
+    shareView=[[UMShareView alloc]initWithFrame:CGRectMake(0,0, kDeviceWidth, kDeviceHeight)];
+    shareView.delegate=self;
+}
+
+
 
 #pragma  mark -----
 #pragma  mark ------  DataRequest 
@@ -364,6 +374,7 @@
                 _userInfoDict=[[NSMutableDictionary alloc]init];
             }
             _userInfoDict =[responseObject objectForKey:@"detail"];
+            productCount=[[_userInfoDict objectForKey:@"product_count"]  intValue];
             [self createTableView];
             
         }
@@ -697,37 +708,54 @@
     
     CommonStageCell *cell = (CommonStageCell *)(button.superview.superview.superview);
     
-    UIGraphicsBeginImageContextWithOptions(CGSizeMake(kDeviceWidth,hight+20), YES, [UIScreen mainScreen].scale);
+    UIGraphicsBeginImageContextWithOptions(CGSizeMake(kDeviceWidth,hight), YES, [UIScreen mainScreen].scale);
     [cell.stageView drawViewHierarchyInRect:cell.stageView.bounds afterScreenUpdates:YES];
     
     // old style [self.layer renderInContext:UIGraphicsGetCurrentContext()];
     
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-    
-    if (shareView) {
-        [shareView removeFromSuperview];
-    }
-    shareView =[[UMShareView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight-50)];
+     //创建UMshareView 后必须配备这三个方法
+    shareView.StageInfo=hotmovie.stageinfo;
+    shareView.screenImage=image;
+    [shareView configShareView];
     [self.view addSubview:shareView];
-    //设置shareview的图片
-    //shareView.ShareimageView.image=image;
-    //shareView.moviewName.text=hotmovie.stageinfo.movie_name;
-   // shareView.ShareimageView.frame=CGRectMake(0,(kDeviceHeight-50-hight)/2-60, kDeviceWidth, hight);
-    
-   // UIImage  *getImage=[Function getImage:shareView.ShareimageView];
+    self.tabBarController.tabBar.hidden=YES;
+    if ([shareView respondsToSelector:@selector(showShareButtomView)]) {
+        [shareView showShareButtomView];
+        
+    }
 
+}
+#pragma  mark  -----UMButtomViewshareViewDlegate-------
+-(void)UMshareViewHandClick:(UIButton *)button ShareImage:(UIImage *)shareImage MoviewModel:(StageInfoModel *)StageInfo
+{
+    NSArray  *sharearray =[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQzone, UMShareToSina, nil];
+    [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
     
+    [[UMSocialControllerService defaultControllerService] setShareText:StageInfo.movie_name shareImage:shareImage socialUIDelegate:self];        //设置分享内容和回调对象
+    [UMSocialSnsPlatformManager getSocialPlatformWithName:[sharearray  objectAtIndex:button.tag-10000]].snsClickHandler(self,[UMSocialControllerService defaultControllerService],YES);
+    NSLog(@"分享到微信");
+    self.tabBarController.tabBar.hidden=NO;
+    if (shareView) {
+        [shareView HidenShareButtomView];
+        [shareView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.5];
+        
+    }
+}
+///点击分享的屏幕，收回分享的背景
+-(void)SharetopViewTouchBengan
+{
+    NSLog(@"controller touchbegan  中 执行了隐藏工具栏的方法");
+    //取消当前的选中的那个气泡
+    [_mymarkView CancelMarksetSelect];
+    if (shareView) {
+        [shareView HidenShareButtomView];
+        [shareView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.5];
+        self.tabBarController.tabBar.hidden=NO;
+        
+    }
     
-    NSString  *shareText=hotmovie.stageinfo.movie_name;
-
-    /*[UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
-    [UMSocialSnsService presentSnsIconSheetView:self
-                                         appKey:kUmengKey
-                                      shareText:shareText
-                                     shareImage: getImage
-                                shareToSnsNames:[NSArray arrayWithObjects: UMShareToWechatSession, UMShareToWechatTimeline, UMShareToQzone, UMShareToSina, nil]
-                                       delegate:self];*/
 }
 -(void)didCloseUIViewController:(UMSViewControllerType)fromViewControllerType
 {
@@ -807,6 +835,8 @@
         if (buttonIndex==0) {
                HotMovieModel  *model =[_addedDataArray objectAtIndex:actionSheet.tag-7000];
                [_addedDataArray removeObjectAtIndex:actionSheet.tag-7000];
+                productCount=productCount-1;
+            lblCount.text=[NSString stringWithFormat:@"%d",productCount];
                 [_tableView reloadData];
                 [self requestDelectData:model];
         }
@@ -907,7 +937,7 @@
         
         CommonStageCell *cell = (CommonStageCell *)(markView.superview.superview.superview);
         
-        UIGraphicsBeginImageContextWithOptions(CGSizeMake(kDeviceWidth, hight+20), YES, [UIScreen mainScreen].scale);
+        UIGraphicsBeginImageContextWithOptions(CGSizeMake(kDeviceWidth, hight), YES, [UIScreen mainScreen].scale);
         [cell.stageView drawViewHierarchyInRect:cell.stageView.bounds afterScreenUpdates:YES];
         
         // old style [self.layer renderInContext:UIGraphicsGetCurrentContext()];
@@ -915,25 +945,19 @@
         UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
         
-        if (shareView) {
-            [shareView removeFromSuperview];
-        }
-        shareView =[[UMShareView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight-50)];
+        //创建UMshareView 后必须配备这三个方法
+        shareView.StageInfo=stageInfoDict;
+        shareView.screenImage=image;
+        [shareView configShareView];
         [self.view addSubview:shareView];
-        //设置shareview的图片
-    /*    shareView.ShareimageView.image=image;
-        shareView.moviewName.text=stageInfoDict.movie_name;
-        shareView.ShareimageView.frame=CGRectMake(0,(kDeviceHeight-50-hight)/2-60, kDeviceWidth, hight);
+        self.tabBarController.tabBar.hidden=YES;
+        if ([shareView respondsToSelector:@selector(showShareButtomView)]) {
+            [shareView showShareButtomView];
+            
+        }
+
+
         
-        UIImage  *getImage=[Function getImage:shareView.ShareimageView];
-        
-        [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
-        [UMSocialSnsService presentSnsIconSheetView:self
-                                             appKey:kUmengKey
-                                          shareText:shareText
-                                         shareImage:getImage
-                                    shareToSnsNames:[NSArray arrayWithObjects: UMShareToWechatSession, UMShareToWechatTimeline, UMShareToQzone, UMShareToSina, nil]
-                                           delegate:self];*/
     }
 #pragma mark  ----------点赞--------------
     else  if(button.tag==10002)
@@ -990,14 +1014,9 @@
     //宽度=字的宽度+左头像图片的宽度＋赞图片的宽度＋赞数量的宽度+中间两个空格2+2
     float markViewWidth = Msize.width+23+Uwidth+5+5+11+5;
     float markViewHeight = Msize.height+6;
-    float markViewX = (x*kDeviceWidth)/100-markViewWidth;
-    markViewX = MIN(MAX(markViewX, 1.0f), kDeviceWidth-markViewWidth-1);
-    
-    float markViewY = (y*kDeviceWidth)/100+(Msize.height/2);
-#warning    kDeviceWidth 目前计算的是正方形的，当图片高度>屏幕的宽度的实际，需要使用图片的高度
-    markViewY = MIN(MAX(markViewY, 1.0f), kDeviceWidth-markViewHeight-1);
+
 #pragma mark 设置气泡的大小和位置
-    markView.frame=CGRectMake(markViewX, markViewY, markViewWidth, markViewHeight);
+    markView.frame=CGRectMake(markView.frame.origin.x,markView.frame.origin.y, markViewWidth, markViewHeight);
 #pragma mark 设置标签的内容
     // markView.TitleLable.text=weiboTitleString;
     markView.ZanNumLable.text =[NSString stringWithFormat:@"%@",weibodict.ups];

@@ -11,6 +11,7 @@
 #import "Constant.h"
 #import "UMSocial.h"
 #import "UMSocialControllerService.h"
+#import "Function.h"
 
 @implementation UMShareView
 
@@ -32,9 +33,10 @@
 -(void)createUI
 {     //创建底部试图
     //创建上部视图
+    self.backgroundColor=[UIColor blackColor];
     topView =[[UIView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight-(kDeviceWidth/4)-40-kHeightNavigation)];
     topView.userInteractionEnabled=YES;
-    topView.backgroundColor=[UIColor redColor];
+    topView.backgroundColor=[UIColor blackColor];
     [self addSubview:topView];
     
     
@@ -52,14 +54,22 @@
   //  _ShareimageView.backgroundColor=[UIColor redColor];
     [topView addSubview:_ShareimageView];
     
-     _moviewName= [ZCControl createLabelWithFrame:CGRectMake(10,kDeviceHeight-(kDeviceWidth/4)-40-20-kHeightNavigation, 200, 20) Font:12 Text:@""];
-    _moviewName.textColor=VGray_color;
-    [topView addSubview:_moviewName];
+    //放置电影名和标签的view
+    logosupView=[[UIView alloc]initWithFrame:CGRectMake(0, topView.frame.size.height-20, kDeviceWidth, 20)];
+    logosupView.backgroundColor=[[UIColor blackColor]colorWithAlphaComponent:0.7];
+    [topView addSubview:logosupView];
     
-    logoLable=[ZCControl createLabelWithFrame:CGRectMake(kDeviceWidth-70,topView.frame.size.height-30, 60, 20) Font:12 Text:@"影弹App"];
+    
+     _moviewName= [ZCControl createLabelWithFrame:CGRectMake(10,0, 200, 20) Font:12 Text:@""];
+    _moviewName.textColor=VGray_color;
+    //_moviewName.backgroundColor=[UIColor blackColor];
+    [logosupView addSubview:_moviewName];
+    
+    logoLable=[ZCControl createLabelWithFrame:CGRectMake(kDeviceWidth-70,0, 60, 20) Font:12 Text:@"影弹App"];
     logoLable.textAlignment=NSTextAlignmentRight;
     logoLable.textColor=VGray_color;
-    [topView addSubview:logoLable];
+    //logoLable.backgroundColor=[UIColor blackColor];
+    [logosupView addSubview:logoLable];
     
     //创建下部视图
     [ self createButtomView];
@@ -70,17 +80,8 @@
 -(void)configShareView;
 {
     _ShareimageView.image =self.screenImage;
-    _moviewName.text=self.model.stageinfo.movie_name;
+    _moviewName.text=self.StageInfo.movie_name;
     
-//    float hight= kDeviceWidth;
-//    float  ImageWith=[self.model.stageinfo.w intValue];
-//    float  ImgeHight=[self.model.stageinfo.h intValue];
-//    if(ImgeHight>ImageWith)
-//    {
-//        hight=  (ImgeHight/ImageWith) *kDeviceWidth;
-//    }
-//
-    //_ShareimageView.frame=CGRectMake(0, 0,kDeviceWidth, hight);
     
 }
 
@@ -173,8 +174,13 @@
 //点击分享
 -(void)handShareButtonClick:(UIButton *) button
 {
-    if (self.delegate &&[self.delegate respondsToSelector:@selector(UMshareViewHandClick:MoviewModel:)]) {
-        [self.delegate UMshareViewHandClick:button MoviewModel:self.model];
+
+   
+    shareImage=[Function getImage:topView];
+ 
+    //把topview 生成一张图片
+    if (self.delegate &&[self.delegate respondsToSelector:@selector(UMshareViewHandClick:ShareImage:MoviewModel:)]) {
+        [self.delegate UMshareViewHandClick:button ShareImage:shareImage MoviewModel:self.StageInfo];
     }
     
 }
@@ -187,11 +193,11 @@
     
     //需要从新设置mshareimagview的frame
     
-    _moviewName.frame=CGRectMake(10,topView.frame.size.height-30, 200, 20);
-    logoLable.frame=CGRectMake(kDeviceWidth-70, topView.frame.size.height-30, 60, 20);
+    //_moviewName.frame=CGRectMake(10,topView.frame.size.height-20, kDeviceWidth-20, 20);
+    //logoLable.frame=CGRectMake(kDeviceWidth-70, topView.frame.size.height-20, 60, 20);
         float hight= kDeviceWidth;
-        float  ImageWith=[self.model.stageinfo.w intValue];
-        float  ImgeHight=[self.model.stageinfo.h intValue];
+        float  ImageWith=[self.StageInfo.w intValue];
+        float  ImgeHight=[self.StageInfo.h intValue];
        if (ImageWith>ImgeHight) {
            //宽大于高的时候
            _ShareimageView.frame=CGRectMake(0,(topView.frame.size.height-hight)/2, kDeviceWidth, kDeviceWidth);

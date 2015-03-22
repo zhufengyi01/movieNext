@@ -36,10 +36,11 @@
 #import "UMShareView.h"
 #import "MJRefresh.h"
 #import "UserDataCenter.h"
+#import "UMShareView.h"
 #import "ShowStageViewController.h"
 
 
-@interface MovieDetailViewController ()<UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UICollectionViewDelegate,MovieHeadViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UMSocialUIDelegate,UMSocialDataDelegate>
+@interface MovieDetailViewController ()<UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UICollectionViewDelegate,MovieHeadViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UMSocialUIDelegate,UMSocialDataDelegate,UMShareViewDelegate>
 
 {
     ///UICollectionView    *_myConllectionView;
@@ -88,10 +89,25 @@
 
     }
     [self createToolBar];
+    [self createShareView];
+
 
 }
 -(void)createNavigation
 {
+    UIButton * RighttBtn= [UIButton buttonWithType:UIButtonTypeSystem];
+    RighttBtn.frame=CGRectMake(0, 0, 60, 30);
+    [RighttBtn addTarget:self action:@selector(dealRightNavClick:) forControlEvents:UIControlEventTouchUpInside];
+    RighttBtn.tag=101;
+    [RighttBtn setTitleColor:VBlue_color forState:UIControlStateNormal];
+    [RighttBtn setTitle:@"添加照片" forState:UIControlStateNormal];
+    self.navigationItem.rightBarButtonItem=[[UIBarButtonItem alloc]initWithCustomView:RighttBtn];
+    
+
+}
+-(void)dealRightNavClick:(UIButton *)button
+{
+    
 }
 
 -(void)initData
@@ -119,9 +135,10 @@
         layout.sectionInset=UIEdgeInsetsMake(0,0,64, 0); //整个偏移量 上左下右
     }
     //kDeviceHeight/3-45+44
-    [layout setHeaderReferenceSize:CGSizeMake(_myConllectionView.frame.size.width, kDeviceHeight/3+64)];
     
-    _myConllectionView =[[UICollectionView alloc]initWithFrame:CGRectMake(0, -64,kDeviceWidth, kDeviceHeight+20+kHeightNavigation) collectionViewLayout:layout];
+    _myConllectionView =[[UICollectionView alloc]initWithFrame:CGRectMake(0, -64,kDeviceWidth, kDeviceHeight+kHeightNavigation) collectionViewLayout:layout];
+    [layout setHeaderReferenceSize:CGSizeMake(_myConllectionView.frame.size.width, kDeviceHeight/3+64)];
+
     _myConllectionView.backgroundColor=View_BackGround;
     //注册大图模式
     [_myConllectionView registerClass:[BigImageCollectionViewCell class] forCellWithReuseIdentifier:@"bigcell"];
@@ -186,7 +203,7 @@
         page=page+1;
         [vc requestData];
         // 模拟延迟加载数据，因此2秒后才调用）
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
           //  [vc.myConllectionView reloadData];
             // 结束刷新
             [vc.myConllectionView footerEndRefreshing];
@@ -205,6 +222,12 @@
     _toolBar=[[ButtomToolView alloc]initWithFrame:CGRectMake(0,0,kDeviceWidth,kDeviceHeight)];
     _toolBar.delegete=self;
 }
+-(void)createShareView
+{
+    shareView=[[UMShareView alloc]initWithFrame:CGRectMake(0,0, kDeviceWidth, kDeviceHeight)];
+    shareView.delegate=self;
+}
+
 
 
 #pragma  mark  ----RequestData
@@ -401,6 +424,9 @@
     } else {
         ShowStageViewController *vc = [[ShowStageViewController alloc] init];
         HotMovieModel  *model=[_dataArray objectAtIndex:indexPath.row];
+        if ([_MovieDict objectForKey:@"name"]) {
+            model.stageinfo.movie_name=[_MovieDict objectForKey:@"name"];
+        }
         vc.movieModel = model;
        // [vc setModalPresentationStyle:UIModalPresentationCustom];
         //[vc setModalTransitionStyle:UIModalTransitionStylePartialCurl];  //页面跳转形式
@@ -593,52 +619,56 @@
     
     BigImageCollectionViewCell *cell = (BigImageCollectionViewCell *)(button.superview.superview.superview);
     
-    UIGraphicsBeginImageContextWithOptions(CGSizeMake(kDeviceWidth,hight+20), YES, [UIScreen mainScreen].scale);
+    UIGraphicsBeginImageContextWithOptions(CGSizeMake(kDeviceWidth,hight), YES, [UIScreen mainScreen].scale);
     [cell.StageView drawViewHierarchyInRect:cell.StageView.bounds afterScreenUpdates:YES];
     
     // old style [self.layer renderInContext:UIGraphicsGetCurrentContext()];
     
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-    //  NSLog(@"===w =%@ ",image);
-//    UIImageView   *imageView=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, hight)];
-//    imageView.image=image;
-//    
-//    UILabel  *movieLable=[ZCControl createLabelWithFrame:CGRectMake(10,hight-20, 200, 20) Font:12 Text:@""];
-//       movieLable.text=[_MovieDict  objectForKey:@"name"];
-//    
-//    movieLable.textColor=VGray_color;
-//    [imageView addSubview:movieLable];
-//    
-//    UILabel  *logoLable=[ZCControl createLabelWithFrame:CGRectMake(kDeviceWidth-70,hight-20, 60, 20) Font:12 Text:@"影弹App"];
-//    //logoLable.text=hotmovie.stageinfo.movie_name;
-//    logoLable.textAlignment=NSTextAlignmentRight;
-//    logoLable.textColor=VGray_color;
-//    [imageView addSubview:logoLable];
-    
-    if (shareView) {
-        [shareView removeFromSuperview];
-    }
-    shareView =[[UMShareView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight-50)];
+
+    //创建UMshareView 后必须配备这三个方法
+    hotmovie.stageinfo.movie_name=[_MovieDict objectForKey:@"name"];
+    shareView.StageInfo=hotmovie.stageinfo;
+    shareView.screenImage=image;
+    [shareView configShareView];
     [self.view addSubview:shareView];
-    //设置shareview的图片
-   // shareView.ShareimageView.image=image;
-   // shareView.moviewName.text=[_MovieDict  objectForKey:@"name"];;
-    ///shareView.ShareimageView.frame=CGRectMake(0,(kDeviceHeight-50-hight)/2-60, kDeviceWidth, hight);
+    self.tabBarController.tabBar.hidden=YES;
+    if ([shareView respondsToSelector:@selector(showShareButtomView)]) {
+        [shareView showShareButtomView];
+        
+    }
     
-   // UIImage  *getImage=[Function getImage:shareView.ShareimageView];
-
-    NSString  *shareText=[_MovieDict  objectForKey:@"name"];
-    
-    
+}
+#pragma  mark  -----UMButtomViewshareViewDlegate-------
+-(void)UMshareViewHandClick:(UIButton *)button ShareImage:(UIImage *)shareImage MoviewModel:(StageInfoModel *)StageInfo
+{
+    NSArray  *sharearray =[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQzone, UMShareToSina, nil];
     [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
-  /*  [UMSocialSnsService presentSnsIconSheetView:self
-                                         appKey:kUmengKey
-                                      shareText:shareText
-                                     shareImage: getImage
-                                shareToSnsNames:[NSArray arrayWithObjects: UMShareToWechatSession, UMShareToWechatTimeline, UMShareToQzone, UMShareToSina, nil]
-                                       delegate:self];*/
-
+    
+    [[UMSocialControllerService defaultControllerService] setShareText:StageInfo.movie_name shareImage:shareImage socialUIDelegate:self];        //设置分享内容和回调对象
+    [UMSocialSnsPlatformManager getSocialPlatformWithName:[sharearray  objectAtIndex:button.tag-10000]].snsClickHandler(self,[UMSocialControllerService defaultControllerService],YES);
+    NSLog(@"分享到微信");
+    self.tabBarController.tabBar.hidden=NO;
+    if (shareView) {
+        [shareView HidenShareButtomView];
+        [shareView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.5];
+        
+    }
+}
+///点击分享的屏幕，收回分享的背景
+-(void)SharetopViewTouchBengan
+{
+    NSLog(@"controller touchbegan  中 执行了隐藏工具栏的方法");
+    //取消当前的选中的那个气泡
+    [_mymarkView CancelMarksetSelect];
+    if (shareView) {
+        [shareView HidenShareButtomView];
+        [shareView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.5];
+        self.tabBarController.tabBar.hidden=NO;
+        
+    }
+    
 }
 #pragma mark  --umShareDelegate
 
@@ -771,7 +801,7 @@
     {
         //点击了分享
     
-        NSString  *shareText=weiboDict.topic;//[weiboDict objectForKey:@"topic"];
+    //    NSString  *shareText=weiboDict.topic;//[weiboDict objectForKey:@"topic"];
         NSLog(@" 点击了分享按钮");
         
         float hight= kDeviceWidth;
@@ -782,10 +812,9 @@
             hight=  (ImgeHight/ImageWith) *kDeviceWidth;
         }
         
-        
         BigImageCollectionViewCell *cell = (BigImageCollectionViewCell *)(markView.superview.superview.superview);
         
-        UIGraphicsBeginImageContextWithOptions(CGSizeMake(kDeviceWidth, hight+20), YES, [UIScreen mainScreen].scale);
+        UIGraphicsBeginImageContextWithOptions(CGSizeMake(kDeviceWidth, hight), YES, [UIScreen mainScreen].scale);
         [cell.StageView drawViewHierarchyInRect:cell.StageView.bounds afterScreenUpdates:YES];
         
         // old style [self.layer renderInContext:UIGraphicsGetCurrentContext()];
@@ -793,28 +822,17 @@
         UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
         
-                
-        if (shareView) {
-            [shareView removeFromSuperview];
-        }
-        shareView =[[UMShareView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight-50)];
+        //创建UMshareView 后必须配备这三个方法
+        stageInfoDict.movie_name=[_MovieDict objectForKey:@"name"];
+        shareView.StageInfo=stageInfoDict;
+        shareView.screenImage=image;
+        [shareView configShareView];
         [self.view addSubview:shareView];
-        //设置shareview的图片
-       // shareView.ShareimageView.image=image;
-        //shareView.moviewName.text=[_MovieDict  objectForKey:@"name"];
-        //shareView.ShareimageView.frame=CGRectMake(0,(kDeviceHeight-50-hight)/2-60, kDeviceWidth, hight);
-        
-       /// UIImage  *getImage=[Function getImage:shareView.ShareimageView];
-        
-
-        
-       /* [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
-        [UMSocialSnsService presentSnsIconSheetView:self
-                                             appKey:kUmengKey
-                                          shareText:shareText
-                                         shareImage:getImage
-                                    shareToSnsNames:[NSArray arrayWithObjects: UMShareToWechatSession, UMShareToWechatTimeline, UMShareToQzone, UMShareToSina, nil]
-                                           delegate:self];*/
+        self.tabBarController.tabBar.hidden=YES;
+        if ([shareView respondsToSelector:@selector(showShareButtomView)]) {
+            [shareView showShareButtomView];
+            
+        }
 
         
     }
@@ -874,14 +892,14 @@
     //宽度=字的宽度+左头像图片的宽度＋赞图片的宽度＋赞数量的宽度+中间两个空格2+2
     float markViewWidth = Msize.width+23+Uwidth+5+5+11+5;
     float markViewHeight = Msize.height+6;
-    float markViewX = (x*kDeviceWidth)/100-markViewWidth;
-    markViewX = MIN(MAX(markViewX, 1.0f), kDeviceWidth-markViewWidth-1);
+    //float markViewX = (x*kDeviceWidth)/100-markViewWidth;
+    //markViewX = MIN(MAX(markViewX, 1.0f), kDeviceWidth-markViewWidth-1);
     
-    float markViewY = (y*kDeviceWidth)/100+(Msize.height/2);
-#warning    kDeviceWidth 目前计算的是正方形的，当图片高度>屏幕的宽度的实际，需要使用图片的高度
-    markViewY = MIN(MAX(markViewY, 1.0f), kDeviceWidth-markViewHeight-1);
+    //float markViewY = (y*kDeviceWidth)/100+(Msize.height/2);
+//#warning    kDeviceWidth 目前计算的是正方形的，当图片高度>屏幕的宽度的实际，需要使用图片的高度
+  //  markViewY = MIN(MAX(markViewY, 1.0f), kDeviceWidth-markViewHeight-1);
 #pragma mark 设置气泡的大小和位置
-    markView.frame=CGRectMake(markViewX, markViewY, markViewWidth, markViewHeight);
+    markView.frame=CGRectMake(markView.frame.origin.x, markView.frame.origin.y, markViewWidth, markViewHeight);
 #pragma mark 设置标签的内容
     // markView.TitleLable.text=weiboTitleString;
     markView.ZanNumLable.text =[NSString stringWithFormat:@"%@",weibodict.ups];

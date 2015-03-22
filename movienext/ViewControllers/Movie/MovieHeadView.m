@@ -31,17 +31,6 @@
    // bgImageView.image =[UIImage imageNamed:@"loading_image_all"];
     [self addSubview:bgImageView];
     
-    
-   /* UIButton  *leftBtn= [UIButton buttonWithType:UIButtonTypeSystem];
-    leftBtn.frame=CGRectMake(0, 70, 60, 36);
-    [leftBtn addTarget:self action:@selector(dealBackClick:) forControlEvents:UIControlEventTouchUpInside];
-    [leftBtn setTitle:@"返回" forState:UIControlStateNormal];
-    [leftBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [leftBtn setImage:[UIImage imageNamed:@"Back__Icon.png"] forState:UIControlStateNormal];
-    //leftBtn.imageEdgeInsets=UIEdgeInsetsMake(<#CGFloat top#>, <#CGFloat left#>, <#CGFloat bottom#>, <#CGFloat right#>)
-    [bgImageView addSubview:leftBtn];
-*/
-    
     movieLogoImageView  =[[UIImageView alloc]initWithFrame:CGRectMake(20, 64+20, 50, 70)];
     [bgImageView addSubview:movieLogoImageView];
     
@@ -92,7 +81,7 @@
 }
 -(void)setCollectionHeaderValue:(NSDictionary *)dict
 {
-    NSLog(@ "在头部设置的信息  =====%@",dict);
+    //NSLog(@ "在头部设置的信息  =====%@",dict);
     
     //[movieLogoImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kUrlMoviePoster,[dict objectForKey:@"logo"]]] placeholderImage:[UIImage imageNamed:@"loading_image_all"]];
     

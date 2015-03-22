@@ -12,7 +12,7 @@
 #import "UserDataCenter.h"
 #import "UIImageView+WebCache.h"
 #import "AFNetworking.h"
-@interface AddMarkViewController ()<UITextFieldDelegate,UIAlertViewDelegate>
+@interface AddMarkViewController ()<UITextFieldDelegate,UIAlertViewDelegate,UIScrollViewDelegate>
 {
     UIScrollView  *_myScorllerView;
     UIToolbar  *_toolBar;
@@ -32,6 +32,9 @@
 {
     self.navigationController.navigationBar.alpha=1;
     self.tabBarController.tabBar.hidden=YES;
+    if (_inputText) {
+        [_inputText resignFirstResponder];
+    }
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -75,18 +78,22 @@
 }
 -(void)createMyScrollerView
 {
-    _myScorllerView =[[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight)];
-    
     //计算stagview 的高度
     float  ImageWith=[self.stageInfoDict.w floatValue];
     float  ImgeHight=[self.stageInfoDict.h floatValue];
     float hight=0;
     hight= kDeviceHeight;  // 计算的事bgview1的高度
+    
     if((ImgeHight/ImageWith) *kDeviceWidth>kDeviceHeight)
     {
         hight=  (ImgeHight/ImageWith) *kDeviceWidth;
+        _myScorllerView.bounces=YES;
     }
-    _myScorllerView.contentSize=CGSizeMake(kDeviceWidth, hight+20);
+    _myScorllerView.contentSize=CGSizeMake(kDeviceWidth, hight);
+    _myScorllerView =[[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth,hight)];
+    _myScorllerView.delegate=self;
+    _myScorllerView.bounces=NO;
+  
      [self.view addSubview:_myScorllerView];
     
     
@@ -277,8 +284,8 @@
     X =[NSString stringWithFormat:@"%f",((_myMarkView.frame.origin.x+_myMarkView.frame.size.width)/kDeviceWidth)*100];
     Y=[NSString stringWithFormat:@"%f",((markViewY+markviewHight2)/hight)*100];
     
-    NSLog(@"=====markview  x ==%f  mark view  y ==%f",_myMarkView.frame.origin.x,_myMarkView.frame.origin.y);
-    NSLog(@"===发布的x =%@ 发布的y ===%@",X,Y);
+   // NSLog(@"=====markview  x ==%f  mark view  y ==%f",_myMarkView.frame.origin.x,_myMarkView.frame.origin.y);
+   // NSLog(@"===发布的x =%@ 发布的y ===%@",X,Y);
 
 }
 # pragma  mark  发布数据请求
@@ -360,6 +367,10 @@
     if (buttonIndex==0) {
         [self.navigationController popViewControllerAnimated:YES];
     }
+}
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    [_inputText resignFirstResponder];
 }
 /*
 #pragma mark - Navigation
