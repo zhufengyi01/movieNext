@@ -38,9 +38,10 @@
 #import "UserDataCenter.h"
 #import "UMShareView.h"
 #import "ShowStageViewController.h"
+#import "UploadImageViewController.h"
+#import "UpYun.h"
 
-
-@interface MovieDetailViewController ()<UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UICollectionViewDelegate,MovieHeadViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UMSocialUIDelegate,UMSocialDataDelegate,UMShareViewDelegate>
+@interface MovieDetailViewController ()<UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UICollectionViewDelegate,MovieHeadViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UMSocialUIDelegate,UMSocialDataDelegate,UMShareViewDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 
 {
     ///UICollectionView    *_myConllectionView;
@@ -54,7 +55,6 @@
     BOOL   isMarkViewsShow;
     UMShareView   *shareView;
     int page;
-
 
 }
 
@@ -105,10 +105,166 @@
     
 
 }
+//上传图片
 -(void)dealRightNavClick:(UIButton *)button
 {
+    UIActionSheet   *ash=[[UIActionSheet alloc]initWithTitle:@"请选择照片" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"从相册中选择", nil];
+     [ash showInView:self.view];
     
 }
+-(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    
+    if (buttonIndex==0) {
+        NSLog(@"从相册中选择照片");
+        UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+        
+        picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        picker.delegate = self;
+        //设置选择后的图片可被编辑
+        picker.allowsEditing = YES;
+       /// [self presentModalViewController:picker animated:YES];
+        [self presentViewController:picker animated:YES completion:nil];
+
+    }
+}
+#pragma mark  ---
+#pragma mark  -----imagePickerControlldelegate
+#pragma mark  ----
+//当选择一张图片后进入这里
+-(void)imagePickerController:(UIImagePickerController*)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+
+{
+    
+    NSString *type = [info objectForKey:UIImagePickerControllerMediaType];
+    
+    
+    //当选择的类型是图片
+//    if ([type isEqualToString:@"public.image"])
+  //  {
+        //先把图片转成NSData
+     //   UIImage* image = [info objectForKey:@"UIImagePickerControllerOriginalImage"];
+        UIImage  *image=[UIImage imageNamed:@"choice_icon@2x.png"];
+         NSLog(@" image   ====%@",image);
+//        NSData *data;
+//        if (UIImagePNGRepresentation(image) == nil)
+//        {
+//            data = UIImageJPEGRepresentation(image, 1.0);
+//        }
+//        else
+//        {
+//            data = UIImagePNGRepresentation(image);
+//        }
+//        
+//        
+//        //图片保存的路径
+//        //这里将图片放在沙盒的documents文件夹中
+//        NSString * DocumentsPath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents"];
+//        
+//        
+//        //文件管理器
+//        NSFileManager *fileManager = [NSFileManager defaultManager];
+//        //把刚刚图片转换的data对象拷贝至沙盒中 并保存为image.png
+//        [fileManager createDirectoryAtPath:DocumentsPath withIntermediateDirectories:YES attributes:nil error:nil];
+//        [fileManager createFileAtPath:[DocumentsPath stringByAppendingString:@"/image.png"] contents:data attributes:nil];
+        
+        
+    UpYun *uy = [[UpYun alloc] init];
+    uy.successBlocker = ^(id data)
+    {
+        UIAlertView * alert = [[UIAlertView alloc]initWithTitle:@"" message:@"上传成功" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+        [alert show];
+        NSLog(@"%@",data);
+    };
+    uy.failBlocker = ^(NSError * error)
+    {
+        NSString *message = [error.userInfo objectForKey:@"message"];
+        UIAlertView * alert = [[UIAlertView alloc]initWithTitle:@"error" message:message delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+        [alert show];
+        NSLog(@"%@",error);
+    };
+    uy.progressBlocker = ^(CGFloat percent, long long requestDidSendBytes)
+    {
+        //[_pv setProgress:percent];
+    };
+    
+        /**
+         *	@brief	根据 UIImage 上传
+         */
+       // UIImage * image = [UIImage imageNamed:@"image.jpg"];
+        [uy uploadFile:image saveKey:[self getSaveKey]];
+        /**
+         *	@brief	根据 文件路径 上传
+         */
+        //    NSString* resourcePath = [[NSBundle mainBundle] resourcePath];
+        //    NSString* filePath = [resourcePath stringByAppendingPathComponent:@"fileTest.file"];
+        //    [uy uploadFile:filePath saveKey:[self getSaveKey]];
+        
+        /**
+         *	@brief	根据 NSDate  上传
+         */
+        //    NSData * fileData = [NSData dataWithContentsOfFile:filePath];
+        //    [uy uploadFile:fileData saveKey:[self getSaveKey]];
+        
+    //}
+    
+}
+
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+    NSLog(@"您取消了选择图片");
+   // [picker dismissModalViewControllerAnimated:YES];
+    [picker dismissViewControllerAnimated:YES completion:nil];
+}
+-(NSString * )getSaveKey {
+    /**
+     *	@brief	方式1 由开发者生成saveKey
+     */
+    NSDate *d = [NSDate date];
+    return [NSString stringWithFormat:@"/%d/%d/%.0f.jpg",[self getYear:d],[self getMonth:d],[[NSDate date] timeIntervalSince1970]];
+    
+    /**
+     *	@brief	方式2 由服务器生成saveKey
+     */
+    //    return [NSString stringWithFormat:@"/{year}/{mon}/{filename}{.suffix}"];
+    
+    /**
+     *	@brief	更多方式 参阅 http://wiki.upyun.com/index.php?title=Policy_%E5%86%85%E5%AE%B9%E8%AF%A6%E8%A7%A3
+     */
+    
+}
+
+- (int)getYear:(NSDate *) date{
+    NSDateFormatter *formatter =[[NSDateFormatter alloc] init];
+    [formatter setTimeStyle:NSDateFormatterMediumStyle];
+    NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+    NSInteger unitFlags = NSYearCalendarUnit;
+    NSDateComponents *comps = [calendar components:unitFlags fromDate:date];
+    int year=[comps year];
+    return year;
+}
+
+- (int)getMonth:(NSDate *) date{
+    NSDateFormatter *formatter =[[NSDateFormatter alloc] init];
+    [formatter setTimeStyle:NSDateFormatterMediumStyle];
+    NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+    NSInteger unitFlags = NSMonthCalendarUnit;
+    NSDateComponents *comps = [calendar components:unitFlags fromDate:date];
+    int month = [comps month];
+    return month;
+}
+
+
+
+
+
+
+
+
+
+
+
 
 -(void)initData
 {
