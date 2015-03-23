@@ -129,6 +129,7 @@
 		0012440F1ABAE3CE005B0AB5 /* dischoice_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0012440A1ABAE3CE005B0AB5 /* dischoice_icon@2x.png */; };
 		001244101ABAE3CE005B0AB5 /* dischoice_icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0012440B1ABAE3CE005B0AB5 /* dischoice_icon@3x.png */; };
 		001244141ABAE4B5005B0AB5 /* SerViceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 001244131ABAE4B5005B0AB5 /* SerViceViewController.m */; };
+		0032657B1ABFB8A800641EE0 /* UploadProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0032657A1ABFB8A800641EE0 /* UploadProgressView.m */; };
 		00354B331ABEC8EC00F650AA /* UploadImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00354B321ABEC8EC00F650AA /* UploadImageViewController.m */; };
 		00354C2C1ABF004100F650AA /* UpYun.m in Sources */ = {isa = PBXBuildFile; fileRef = 00354C201ABF004100F650AA /* UpYun.m */; };
 		00354C2D1ABF004100F650AA /* MF_Base64Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 00354C251ABF004100F650AA /* MF_Base64Additions.m */; };
@@ -459,6 +460,8 @@
 		0012440B1ABAE3CE005B0AB5 /* dischoice_icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dischoice_icon@3x.png"; sourceTree = "<group>"; };
 		001244121ABAE4B5005B0AB5 /* SerViceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SerViceViewController.h; sourceTree = "<group>"; };
 		001244131ABAE4B5005B0AB5 /* SerViceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SerViceViewController.m; sourceTree = "<group>"; };
+		003265791ABFB8A800641EE0 /* UploadProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UploadProgressView.h; sourceTree = "<group>"; };
+		0032657A1ABFB8A800641EE0 /* UploadProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UploadProgressView.m; sourceTree = "<group>"; };
 		00354B311ABEC8EC00F650AA /* UploadImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UploadImageViewController.h; sourceTree = "<group>"; };
 		00354B321ABEC8EC00F650AA /* UploadImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UploadImageViewController.m; sourceTree = "<group>"; };
 		00354C1F1ABF004100F650AA /* UpYun.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UpYun.h; sourceTree = "<group>"; };
@@ -1353,6 +1356,8 @@
 				004DD1E71AB028B000394A9D /* ButtomToolView.m */,
 				001244051ABA9D9F005B0AB5 /* UMShareView.h */,
 				001244061ABA9D9F005B0AB5 /* UMShareView.m */,
+				003265791ABFB8A800641EE0 /* UploadProgressView.h */,
+				0032657A1ABFB8A800641EE0 /* UploadProgressView.m */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -1975,6 +1980,7 @@
 				0064CE321AB3BE12005E0762 /* HotMovieModel.m in Sources */,
 				00AA54271AA2C525004096F8 /* View+MASAdditions.m in Sources */,
 				00AA542A1AA2C525004096F8 /* SDImageCache.m in Sources */,
+				0032657B1ABFB8A800641EE0 /* UploadProgressView.m in Sources */,
 				00AA540E1AA2C525004096F8 /* BaseViewController.m in Sources */,
 				00AA530C1AA2C3F4004096F8 /* AppDelegate.m in Sources */,
 				00AA54331AA2C525004096F8 /* UIImage+MultiFormat.m in Sources */,

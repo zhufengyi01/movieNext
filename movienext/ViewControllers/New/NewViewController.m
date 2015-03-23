@@ -634,6 +634,7 @@
        hotmovie=[_newDataArray objectAtIndex:button.tag-3000];
    }
     AddMarkVC.stageInfoDict=hotmovie.stageinfo;
+    AddMarkVC.pageSoureType=NSAddMarkPageSourceDefault;
     NSLog(@"dict.stageinfo = %@", AddMarkVC.stageInfoDict);
     [self.navigationController pushViewController:AddMarkVC animated:NO];
 

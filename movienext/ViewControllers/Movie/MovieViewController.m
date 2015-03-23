@@ -262,7 +262,7 @@
     [self hidesBottomBarWhenPushed];
     
     MovieDetailViewController *vc =  [MovieDetailViewController new];
-    MovieCollectionViewCell    *cell=(MovieCollectionViewCell*)[collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
+  //  MovieCollectionViewCell    *cell=(MovieCollectionViewCell*)[collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
     if (_dataArray.count > indexPath.row) {
          NSDictionary *dict = [_dataArray  objectAtIndex:(long)indexPath.row];
         vc.movieId = [dict objectForKey:@"movie_id"];

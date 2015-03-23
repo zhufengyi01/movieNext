@@ -12,6 +12,7 @@
 #import "UserDataCenter.h"
 #import "UIImageView+WebCache.h"
 #import "AFNetworking.h"
+#import "MovieDetailViewController.h"
 @interface AddMarkViewController ()<UITextFieldDelegate,UIAlertViewDelegate,UIScrollViewDelegate>
 {
     UIScrollView  *_myScorllerView;
@@ -174,7 +175,17 @@
     if (button.tag==100) {
         NSLog(@" =========取消发布的方法");
         //取消发布
-        [self.navigationController popViewControllerAnimated:NO];
+        //if (self.pageSoureType==NSAddMarkPageSourceDefault) {
+            [self.navigationController popViewControllerAnimated:NO];
+            
+        //}
+        //返回到原来跳转过来的页面
+//       else if (self.pageSoureType==NSAddMarkPageSourceUploadImage) {
+//           MovieDetailViewController  *movie=[[MovieDetailViewController alloc]init];
+//           movie.movieId=self.stageInfoDict.movie_id;
+//           [self.navigationController pushViewController:movie animated:NO];
+//            
+//        }
     }
     else if (button.tag==101)
     {        [self  PublicRuqest];
@@ -365,7 +376,16 @@
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (buttonIndex==0) {
-        [self.navigationController popViewControllerAnimated:YES];
+        if (self.pageSoureType==NSAddMarkPageSourceDefault) {
+            [self.navigationController popViewControllerAnimated:YES];
+        }
+        else if (self.pageSoureType==NSAddMarkPageSourceUploadImage)
+        {
+            MovieDetailViewController  *movie=[[MovieDetailViewController alloc]init];
+            movie.movieId=self.stageInfoDict.movie_id;
+            [self.navigationController pushViewController:movie animated:NO];
+
+        }
     }
 }
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView

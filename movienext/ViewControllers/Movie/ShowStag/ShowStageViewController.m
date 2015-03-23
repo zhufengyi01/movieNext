@@ -179,6 +179,7 @@
    
     AddMarkVC.stageInfoDict=self.movieModel.stageinfo;
     NSLog(@"dict.stageinfo = %@", AddMarkVC.stageInfoDict);
+    AddMarkVC.pageSoureType=NSAddMarkPageSourceDefault;
     [self.navigationController pushViewController:AddMarkVC animated:NO];
 
 }

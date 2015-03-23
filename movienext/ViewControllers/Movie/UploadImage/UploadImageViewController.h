@@ -7,7 +7,8 @@
 //
 
 #import "RootViewController.h"
-
+#import "StageInfoModel.h"
 @interface UploadImageViewController : RootViewController
 @property (nonatomic,strong)UIImage   *upimage;
+@property(nonatomic,strong) NSString *movie_Id;
 @end

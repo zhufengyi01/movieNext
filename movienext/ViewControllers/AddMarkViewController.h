@@ -11,11 +11,17 @@
 #import "MarkView.h"
 #import "StageInfoModel.h"
 #import "WeiboModel.h"
+typedef NS_ENUM(NSInteger,NSAddMarkPageSource)
+{
+    NSAddMarkPageSourceDefault,
+    NSAddMarkPageSourceUploadImage,
+};
 
 @interface AddMarkViewController : RootViewController
 {
     StageView *stageView;
 }
+@property(assign,nonatomic) NSAddMarkPageSource  pageSoureType;
 @property (nonatomic, strong) StageInfoModel  *stageInfoDict;
 
 @end

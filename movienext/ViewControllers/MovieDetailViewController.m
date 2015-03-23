@@ -119,13 +119,14 @@
         NSLog(@"从相册中选择照片");
         UIImagePickerController *picker = [[UIImagePickerController alloc] init];
         
-        picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        picker.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
         picker.delegate = self;
         //设置选择后的图片可被编辑
-     //   picker.allowsEditing = YES;
-       /// [self presentModalViewController:picker animated:YES];
+        picker.allowsEditing = YES;
         [self presentViewController:picker animated:YES completion:nil];
-
+       // [self.navigationController pushViewController:picker animated:YES];
+        
+ 
     }
 }
 #pragma mark  ---
@@ -139,8 +140,8 @@
     NSString *type = [info objectForKey:UIImagePickerControllerMediaType];
     
     //当选择的类型是图片
-//    if ([type isEqualToString:@"public.image"])
-  //  {
+    if ([type isEqualToString:@"public.image"])
+    {
         //先把图片转成NSData
       UIImage* image = [info objectForKey:@"UIImagePickerControllerOriginalImage"];
     
@@ -149,10 +150,12 @@
     
     
     UploadImageViewController  *upload=[[UploadImageViewController alloc]init];
-    //[self.navigationController pushViewController:upload animated:YES];
     upload.upimage=image;
-    //[picker presentViewController:upload  animated:YES completion:nil];
-    [picker.navigationController pushViewController:upload  animated:YES];
+        upload.movie_Id =[_MovieDict objectForKey:@"id"];
+    ///[upload setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];
+       // UINavigationController  *na=[[UINavigationController alloc]initWithRootViewController:upload];
+  //   [picker presentViewController:na  animated:YES completion:nil];
+        [picker pushViewController:upload animated:YES];
     
  //        NSData *data;
 //        if (UIImagePNGRepresentation(image) == nil)
@@ -216,7 +219,7 @@
         //    NSData * fileData = [NSData dataWithContentsOfFile:filePath];
         //    [uy uploadFile:fileData saveKey:[self getSaveKey]];
         
-    //}
+    }
     
 }
 
@@ -226,43 +229,6 @@
     NSLog(@"您取消了选择图片");
    // [picker dismissModalViewControllerAnimated:YES];
     [picker dismissViewControllerAnimated:YES completion:nil];
-}
--(NSString * )getSaveKey {
-    /**
-     *	@brief	方式1 由开发者生成saveKey
-     */
-    NSDate *d = [NSDate date];
-    return [NSString stringWithFormat:@"/%d/%d/%.0f.jpg",[self getYear:d],[self getMonth:d],[[NSDate date] timeIntervalSince1970]];
-    
-    /**
-     *	@brief	方式2 由服务器生成saveKey
-     */
-    //    return [NSString stringWithFormat:@"/{year}/{mon}/{filename}{.suffix}"];
-    
-    /**
-     *	@brief	更多方式 参阅 http://wiki.upyun.com/index.php?title=Policy_%E5%86%85%E5%AE%B9%E8%AF%A6%E8%A7%A3
-     */
-    
-}
-
-- (int)getYear:(NSDate *) date{
-    NSDateFormatter *formatter =[[NSDateFormatter alloc] init];
-    [formatter setTimeStyle:NSDateFormatterMediumStyle];
-    NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
-    NSInteger unitFlags = NSYearCalendarUnit;
-    NSDateComponents *comps = [calendar components:unitFlags fromDate:date];
-    int year=[comps year];
-    return year;
-}
-
-- (int)getMonth:(NSDate *) date{
-    NSDateFormatter *formatter =[[NSDateFormatter alloc] init];
-    [formatter setTimeStyle:NSDateFormatterMediumStyle];
-    NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
-    NSInteger unitFlags = NSMonthCalendarUnit;
-    NSDateComponents *comps = [calendar components:unitFlags fromDate:date];
-    int month = [comps month];
-    return month;
 }
 
 
@@ -867,7 +833,7 @@
     AddMarkViewController  *AddMarkVC=[[AddMarkViewController alloc]init];
     HotMovieModel  *model =[_dataArray objectAtIndex:button.tag-3000];
     AddMarkVC.stageInfoDict = model.stageinfo;//[dict valueForKey:@"stageinfo"];
-    
+    AddMarkVC.pageSoureType=NSAddMarkPageSourceDefault;
     [self.navigationController pushViewController:AddMarkVC animated:NO];
     
 }
