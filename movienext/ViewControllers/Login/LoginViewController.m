@@ -56,7 +56,7 @@
     
     
     
-    checkBtn=[ZCControl createButtonWithFrame:CGRectMake((kDeviceWidth-120)/2,kDeviceHeight-65, 70, 20) ImageName:nil Target:self Action:@selector(checkClick:) Title:@""];
+    checkBtn=[ZCControl createButtonWithFrame:CGRectMake((kDeviceWidth-140)/2,kDeviceHeight-65, 140, 20) ImageName:nil Target:self Action:@selector(checkClick:) Title:@""];
     checkBtn.titleLabel.textColor=[UIColor redColor];
     [checkBtn setImage:[UIImage imageNamed:@"dischoice_icon@2x.png"] forState:UIControlStateNormal];
     [checkBtn setImage:[UIImage imageNamed:@"choice_icon@2x.png"] forState:UIControlStateSelected];
@@ -64,7 +64,7 @@
     checkBtn.selected=YES;
     checkBtn.tag=100;
     [checkBtn setTitleColor:VGray_color forState:UIControlStateNormal];
-    [checkBtn setTitle:@"影弹服务" forState:UIControlStateNormal];
+    [checkBtn setTitle:@"登录注册成功，即接受" forState:UIControlStateNormal];
     [checkBtn setTitleEdgeInsets:UIEdgeInsetsMake(5, 5, 0, 0)];
     //checkBtn.backgroundColor=[UIColor redColor];
     [checkBtn setImageEdgeInsets:UIEdgeInsetsMake(5, 0, 0, 0)];
@@ -72,10 +72,10 @@
     [self.view addSubview:checkBtn];
     
     
-    checkBtn2=[ZCControl createButtonWithFrame:CGRectMake(checkBtn.frame.origin.x+checkBtn.frame.size.width, kDeviceHeight-65, 60, 20) ImageName:nil Target:self Action:@selector(checkClick:) Title:@""];
+    checkBtn2=[ZCControl createButtonWithFrame:CGRectMake((kDeviceWidth-120)/2,checkBtn.frame.origin.y+checkBtn.frame.size.height, 120, 20) ImageName:nil Target:self Action:@selector(checkClick:) Title:@""];
     [checkBtn2 setTitleEdgeInsets:UIEdgeInsetsMake(5, 0, 0, 0)];
     // checkBtn2.backgroundColor=[UIColor blackColor];
-    [checkBtn2 setTitle:@"使用条款" forState:UIControlStateNormal];
+    [checkBtn2 setTitle:@"《影弹服务使用条款》" forState:UIControlStateNormal];
     [checkBtn2 setTitleColor:VBlue_color forState:UIControlStateNormal];
     checkBtn2.tag=101;
     

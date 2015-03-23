@@ -8,6 +8,7 @@
 
 #import "LoadingView.h"
 #import "Constant.h"
+#import "ZCControl.h"
 @implementation LoadingView
 
 /*
@@ -40,6 +41,32 @@
     [self startAnimation];
     
     
+    failLoadView =[[UIView alloc]initWithFrame:CGRectMake(0, (kDeviceWidth-100)/2, kDeviceWidth, 100)];
+    failLoadView.hidden=YES;
+    failLoadView.backgroundColor=[UIColor redColor];
+    failLoadView.userInteractionEnabled=YES;
+    [self addSubview:failLoadView];
+    
+    UILabel * failTitle=[ZCControl createLabelWithFrame:CGRectMake(0, 10, kDeviceWidth, 20) Font:14 Text:@"糟糕，网络连接失败"];
+    failTitle.textColor=VGray_color;
+    [failLoadView addSubview:failTitle];
+    
+    UIButton  *failBtn=[ZCControl createButtonWithFrame:CGRectMake((kDeviceWidth-80)/2, 20, 60, 45) ImageName:@"loginoutbackgroundcolor.png" Target:self Action:@selector(reloadDataClick:) Title:@"重试"];
+    [failLoadView addSubview:failBtn];
+    
+    
+    NullDataView =[[UIView alloc]initWithFrame:CGRectMake(0, (kDeviceWidth-100)/2, kDeviceWidth, 100)];
+    NullDataView.hidden=YES;
+    NullDataView.userInteractionEnabled=YES;
+    [self addSubview:NullDataView];
+    
+    UIImageView *smailview=[[UIImageView alloc]initWithFrame:CGRectMake((kDeviceWidth-50)/2, 20, 50, 50)];
+    smailview.image=[UIImage imageNamed:@""];
+    [NullDataView addSubview:smailview];
+
+    
+    
+    
 }
 //开始动画
 -(void)startAnimation
@@ -64,6 +91,18 @@
 -(void)stopAnimation
 {
     isanimal=NO;
+}
+//重新加载数据
+-(void)reloadDataClick:(UIButton *)button
+{
+ 
+    
+    
+}
+//加载失败的时候执行这个
+-(void)showFailLoadData;
+{
+    
 }
 
 @end

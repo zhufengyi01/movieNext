@@ -14,7 +14,15 @@
     BOOL  isanimal;
     double angle;
     CGRect  m_frame;
+   // UIImageView  *imageView;
+    //加载失败的view
+    
+    UIView  *failLoadView;
+    //没有数据的view
+    UIView   *NullDataView;
+    
 }
 //注意：数据加载完成后先停止动画，然后再把loadview  从supview 中remove 防止占内存空间
 -(void)stopAnimation;
+-(void)showFailLoadData;
 @end

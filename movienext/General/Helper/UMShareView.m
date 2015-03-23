@@ -95,18 +95,18 @@
 #pragma create four button
     
     NSArray  *titleArray=[NSArray arrayWithObjects:@"微信",@"朋友圈",@"Q空间",@"微博",nil];
-    NSArray  *imageArray=[NSArray arrayWithObjects:@"Wechat",@"Moments",@"Qzone",@"Weibo.png", nil];
+    NSArray  *imageArray=[NSArray arrayWithObjects:@"wechat_share_icon@2x.png",@"moments_share_icon@2x.png",@"qzone_share_icon@2x.png",@"weibo_share_icon@2x.png", nil];
     
     for (int i=0; i<4; i++) {
         double   x=(kDeviceWidth/4)*i;
         double   y=40;
         
-     UIButton  *    btn = [ZCControl createButtonWithFrame:CGRectMake(x,y, kDeviceWidth/4, kDeviceWidth/4) ImageName:@"" Target:self Action:@selector(handShareButtonClick:) Title:titleArray[i]];
-        [btn setImage:[UIImage imageNamed:imageArray[i]] forState:UIControlStateNormal];
-        btn.titleEdgeInsets = UIEdgeInsetsMake(65, -30, 10, 10);
-        btn.titleLabel.font=[UIFont systemFontOfSize:12];
-        [btn setTitleColor:VBlue_color forState:UIControlStateNormal];
-        [btn setImageEdgeInsets:UIEdgeInsetsMake(10, 20, 20, 10)];
+     UIButton  *    btn = [ZCControl createButtonWithFrame:CGRectMake(x,y, kDeviceWidth/4, kDeviceWidth/4) ImageName:imageArray[i] Target:self Action:@selector(handShareButtonClick:) Title:nil];
+       // [btn setImage:[UIImage imageNamed:imageArray[i]] forState:UIControlStateNormal];
+      //  btn.titleEdgeInsets = UIEdgeInsetsMake(65, -30, 10, 10);
+       // btn.titleLabel.font=[UIFont systemFontOfSize:12];
+      //  [btn setTitleColor:VBlue_color forState:UIControlStateNormal];
+       // [btn setImageEdgeInsets:UIEdgeInsetsMake(10, 20, 20, 10)];
         btn.tag=10000+i;
         btn.backgroundColor=[UIColor whiteColor];
         [buttomView addSubview:btn];
@@ -118,7 +118,7 @@
     shareLable.textColor=VBlue_color;
     [buttomView addSubview:shareLable];
     
-    UIView  *lineView1=[[UIView alloc]initWithFrame:CGRectMake(0, 40, kDeviceWidth, 0.5)];
+   /* UIView  *lineView1=[[UIView alloc]initWithFrame:CGRectMake(0, 40, kDeviceWidth, 0.5)];
     lineView1.backgroundColor=VLight_GrayColor;
     [buttomView addSubview:lineView1];
     
@@ -141,7 +141,7 @@
     UIView  *lineView6=[[UIView alloc]initWithFrame:CGRectMake((kDeviceWidth/4)*3,40 ,0.5, kDeviceWidth/4)];
     lineView6.backgroundColor=VLight_GrayColor;
     [buttomView addSubview:lineView6];
-
+*/
     
 }
 

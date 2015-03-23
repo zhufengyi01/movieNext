@@ -132,7 +132,7 @@
 
 -(void)createTableView
 {
-    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight-kHeigthTabBar)];
+    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight-kHeigthTabBar-kHeightNavigation)];
     _tableView.separatorStyle=UITableViewCellSeparatorStyleNone;
     _tableView.delegate = self;
     _tableView.dataSource = self;
@@ -801,7 +801,7 @@
         hotmovie=[_upedDataArray objectAtIndex:button.tag-3000];
     }
     AddMarkVC.stageInfoDict=hotmovie.stageinfo;
-    AddMarkVC.pageSoureType=NSAddMarkPageSourceDefault;
+    //AddMarkVC.pageSoureType=NSAddMarkPageSourceDefault;
     NSLog(@"dict.stageinfo = %@", AddMarkVC.stageInfoDict);
     [self.navigationController pushViewController:AddMarkVC animated:NO];
     
@@ -826,7 +826,7 @@
     NSLog(@" button Index ===%ld",(long)buttonIndex);
     if (actionSheet.tag<7000) {
       if (buttonIndex==0) {          
-          UIActionSheet   *ash=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"确定删除弹幕" otherButtonTitles:nil, nil];
+          UIActionSheet   *ash=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"确定" otherButtonTitles:nil, nil];
           ash.tag=actionSheet.tag+1000;
           [ash showInView:self.view];
      }

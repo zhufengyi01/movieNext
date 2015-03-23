@@ -96,11 +96,12 @@
 -(void)createNavigation
 {
     UIButton * RighttBtn= [UIButton buttonWithType:UIButtonTypeSystem];
-    RighttBtn.frame=CGRectMake(0, 0, 60, 30);
+    RighttBtn.frame=CGRectMake(0, 0, 80, 30);
     [RighttBtn addTarget:self action:@selector(dealRightNavClick:) forControlEvents:UIControlEventTouchUpInside];
     RighttBtn.tag=101;
     [RighttBtn setTitleColor:VBlue_color forState:UIControlStateNormal];
-    [RighttBtn setTitle:@"添加照片" forState:UIControlStateNormal];
+    [RighttBtn setTitle:@"添加剧照" forState:UIControlStateNormal];
+    RighttBtn.titleLabel.font=[UIFont boldSystemFontOfSize:16];
     self.navigationItem.rightBarButtonItem=[[UIBarButtonItem alloc]initWithCustomView:RighttBtn];
     
 
@@ -147,16 +148,17 @@
     
        // UIImage  *image=[UIImage imageNamed:@"choice_icon@2x.png"];
          NSLog(@" image   =%@=== Imagesize  higth  =%f width ====%f   ",image,image.size.height,image.size.width);
-    
-    
-    UploadImageViewController  *upload=[[UploadImageViewController alloc]init];
-    upload.upimage=image;
-        upload.movie_Id =[_MovieDict objectForKey:@"id"];
+        [self dismissViewControllerAnimated:NO completion:^{
+            
+            UploadImageViewController  *upload=[[UploadImageViewController alloc]init];
+            upload.upimage=image;
+            upload.movie_Id =[_MovieDict objectForKey:@"id"];
+            [self.navigationController pushViewController:upload animated:YES];
+        }];
+        
     ///[upload setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];
        // UINavigationController  *na=[[UINavigationController alloc]initWithRootViewController:upload];
   //   [picker presentViewController:na  animated:YES completion:nil];
-        [picker pushViewController:upload animated:YES];
-    
  //        NSData *data;
 //        if (UIImagePNGRepresentation(image) == nil)
 //        {
@@ -551,6 +553,9 @@
         if ([_MovieDict objectForKey:@"name"]) {
             model.stageinfo.movie_name=[_MovieDict objectForKey:@"name"];
         }
+        if ([_MovieDict objectForKey:@"id"]) {
+            model.stageinfo.movie_id=[_MovieDict objectForKey:@"id"];
+        }
         vc.movieModel = model;
        // [vc setModalPresentationStyle:UIModalPresentationCustom];
         //[vc setModalTransitionStyle:UIModalTransitionStylePartialCurl];  //页面跳转形式
@@ -833,7 +838,7 @@
     AddMarkViewController  *AddMarkVC=[[AddMarkViewController alloc]init];
     HotMovieModel  *model =[_dataArray objectAtIndex:button.tag-3000];
     AddMarkVC.stageInfoDict = model.stageinfo;//[dict valueForKey:@"stageinfo"];
-    AddMarkVC.pageSoureType=NSAddMarkPageSourceDefault;
+   // AddMarkVC.pageSoureType=NSAddMarkPageSourceDefault;
     [self.navigationController pushViewController:AddMarkVC animated:NO];
     
 }

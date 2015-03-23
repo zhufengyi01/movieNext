@@ -7,6 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0000A4111AC013C8000DCE80 /* first_screen_slogan.png in Resources */ = {isa = PBXBuildFile; fileRef = 0000A40E1AC013C8000DCE80 /* first_screen_slogan.png */; };
+		0000A4121AC013C8000DCE80 /* first_screen_slogan@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0000A40F1AC013C8000DCE80 /* first_screen_slogan@2x.png */; };
+		0000A4131AC013C8000DCE80 /* first_screen_slogan@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0000A4101AC013C8000DCE80 /* first_screen_slogan@3x.png */; };
+		000221D61ABFF79E00FC0D65 /* moments_share_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 000221CE1ABFF79E00FC0D65 /* moments_share_icon@2x.png */; };
+		000221D71ABFF79E00FC0D65 /* moments_share_icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 000221CF1ABFF79E00FC0D65 /* moments_share_icon@3x.png */; };
+		000221D81ABFF79E00FC0D65 /* qzone_share_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 000221D01ABFF79E00FC0D65 /* qzone_share_icon@2x.png */; };
+		000221D91ABFF79E00FC0D65 /* qzone_share_icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 000221D11ABFF79E00FC0D65 /* qzone_share_icon@3x.png */; };
+		000221DA1ABFF79E00FC0D65 /* wechat_share_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 000221D21ABFF79E00FC0D65 /* wechat_share_icon@2x.png */; };
+		000221DB1ABFF79E00FC0D65 /* wechat_share_icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 000221D31ABFF79E00FC0D65 /* wechat_share_icon@3x.png */; };
+		000221DC1ABFF79E00FC0D65 /* weibo_share_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 000221D41ABFF79E00FC0D65 /* weibo_share_icon@2x.png */; };
+		000221DD1ABFF79E00FC0D65 /* weibo_share_icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 000221D51ABFF79E00FC0D65 /* weibo_share_icon@3x.png */; };
 		000500471AA70ABF00691DF4 /* tag_like_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 000500441AA70ABF00691DF4 /* tag_like_icon.png */; };
 		000500481AA70ABF00691DF4 /* tag_like_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 000500451AA70ABF00691DF4 /* tag_like_icon@2x.png */; };
 		000500491AA70ABF00691DF4 /* tag_like_icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 000500461AA70ABF00691DF4 /* tag_like_icon@3x.png */; };
@@ -332,6 +343,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0000A40E1AC013C8000DCE80 /* first_screen_slogan.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = first_screen_slogan.png; path = ../first_screen_slogan.png; sourceTree = "<group>"; };
+		0000A40F1AC013C8000DCE80 /* first_screen_slogan@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "first_screen_slogan@2x.png"; path = "../first_screen_slogan@2x.png"; sourceTree = "<group>"; };
+		0000A4101AC013C8000DCE80 /* first_screen_slogan@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "first_screen_slogan@3x.png"; path = "../first_screen_slogan@3x.png"; sourceTree = "<group>"; };
+		000221CE1ABFF79E00FC0D65 /* moments_share_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "moments_share_icon@2x.png"; sourceTree = "<group>"; };
+		000221CF1ABFF79E00FC0D65 /* moments_share_icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "moments_share_icon@3x.png"; sourceTree = "<group>"; };
+		000221D01ABFF79E00FC0D65 /* qzone_share_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "qzone_share_icon@2x.png"; sourceTree = "<group>"; };
+		000221D11ABFF79E00FC0D65 /* qzone_share_icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "qzone_share_icon@3x.png"; sourceTree = "<group>"; };
+		000221D21ABFF79E00FC0D65 /* wechat_share_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wechat_share_icon@2x.png"; sourceTree = "<group>"; };
+		000221D31ABFF79E00FC0D65 /* wechat_share_icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wechat_share_icon@3x.png"; sourceTree = "<group>"; };
+		000221D41ABFF79E00FC0D65 /* weibo_share_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "weibo_share_icon@2x.png"; sourceTree = "<group>"; };
+		000221D51ABFF79E00FC0D65 /* weibo_share_icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "weibo_share_icon@3x.png"; sourceTree = "<group>"; };
 		000500441AA70ABF00691DF4 /* tag_like_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tag_like_icon.png; sourceTree = "<group>"; };
 		000500451AA70ABF00691DF4 /* tag_like_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tag_like_icon@2x.png"; sourceTree = "<group>"; };
 		000500461AA70ABF00691DF4 /* tag_like_icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tag_like_icon@3x.png"; sourceTree = "<group>"; };
@@ -856,6 +878,17 @@
 		000B08FB1AA2EB8C00B8D13A /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				000221CE1ABFF79E00FC0D65 /* moments_share_icon@2x.png */,
+				0000A40E1AC013C8000DCE80 /* first_screen_slogan.png */,
+				0000A40F1AC013C8000DCE80 /* first_screen_slogan@2x.png */,
+				0000A4101AC013C8000DCE80 /* first_screen_slogan@3x.png */,
+				000221CF1ABFF79E00FC0D65 /* moments_share_icon@3x.png */,
+				000221D01ABFF79E00FC0D65 /* qzone_share_icon@2x.png */,
+				000221D11ABFF79E00FC0D65 /* qzone_share_icon@3x.png */,
+				000221D21ABFF79E00FC0D65 /* wechat_share_icon@2x.png */,
+				000221D31ABFF79E00FC0D65 /* wechat_share_icon@3x.png */,
+				000221D41ABFF79E00FC0D65 /* weibo_share_icon@2x.png */,
+				000221D51ABFF79E00FC0D65 /* weibo_share_icon@3x.png */,
 				001244081ABAE3CE005B0AB5 /* choice_icon@2x.png */,
 				001244091ABAE3CE005B0AB5 /* choice_icon@3x.png */,
 				0012440A1ABAE3CE005B0AB5 /* dischoice_icon@2x.png */,
@@ -1794,7 +1827,9 @@
 				0012440E1ABAE3CE005B0AB5 /* choice_icon@3x.png in Resources */,
 				003E74F51AB1A29F0080F7A8 /* btn_like_select@3x.png in Resources */,
 				000B09AB1AA3029800B8D13A /* logo_first screem@3x.png in Resources */,
+				000221DC1ABFF79E00FC0D65 /* weibo_share_icon@2x.png in Resources */,
 				008B0B0D1AB307CD0054767E /* login out@3x.png in Resources */,
+				0000A4131AC013C8000DCE80 /* first_screen_slogan@3x.png in Resources */,
 				000B090C1AA2EB8C00B8D13A /* bg_weibo@2x.png in Resources */,
 				00572C851AA405F50041D451 /* loading_roll_image@2x.png in Resources */,
 				000B09891AA3029800B8D13A /* feed_tab_butten@2x.png in Resources */,
@@ -1809,6 +1844,7 @@
 				000B098B1AA3029800B8D13A /* icon@76.png in Resources */,
 				409390461AB2C15A00FABA50 /* tab_switch.png in Resources */,
 				003E75031AB1A29F0080F7A8 /* ic_menu_share_default@2x.png in Resources */,
+				000221DB1ABFF79E00FC0D65 /* wechat_share_icon@3x.png in Resources */,
 				000B09E11AA3029800B8D13A /* Weibo@2x.png in Resources */,
 				000B09B91AA3029800B8D13A /* movie_tab_butten@2x.png in Resources */,
 				000B09AF1AA3029800B8D13A /* me_tab_butten（gray）@3x.png in Resources */,
@@ -1831,6 +1867,7 @@
 				00AA54451AA2C525004096F8 /* UMSCommentInputControlleriPad.xib in Resources */,
 				000B09A51AA3029800B8D13A /* login_button_sina －in@3x.png in Resources */,
 				409390471AB2C15A00FABA50 /* tab_switch@2x.png in Resources */,
+				000221D91ABFF79E00FC0D65 /* qzone_share_icon@3x.png in Resources */,
 				000B09D11AA3029800B8D13A /* single_switch@2x.png in Resources */,
 				000B09131AA2EB8C00B8D13A /* tabbar_icon_mine@2x.png in Resources */,
 				000B09861AA3029800B8D13A /* feed_tab_butten（gray).png in Resources */,
@@ -1856,6 +1893,8 @@
 				000B09D71AA3029800B8D13A /* three switch.png in Resources */,
 				000B09C31AA3029800B8D13A /* personal_page_icon@3x.png in Resources */,
 				00E0D47D1AB54A3D00048399 /* btn_delete.png in Resources */,
+				000221DA1ABFF79E00FC0D65 /* wechat_share_icon@2x.png in Resources */,
+				000221DD1ABFF79E00FC0D65 /* weibo_share_icon@3x.png in Resources */,
 				0043E9671AB2DAF500209C3A /* login_button_wechat.png in Resources */,
 				000B09BA1AA3029800B8D13A /* movie_tab_butten@3x.png in Resources */,
 				007B5C9C1AB8276A001D2D25 /* tan@3x.png in Resources */,
@@ -1863,6 +1902,7 @@
 				000B09C51AA3029800B8D13A /* Qzone@2x.png in Resources */,
 				00AA53171AA2C3F4004096F8 /* LaunchScreen.xib in Resources */,
 				000B09941AA3029800B8D13A /* like.png in Resources */,
+				000221D81ABFF79E00FC0D65 /* qzone_share_icon@2x.png in Resources */,
 				000B09BF1AA3029800B8D13A /* notice_tab_butten@2x.png in Resources */,
 				003E74F41AB1A29F0080F7A8 /* btn_like_select@2x.png in Resources */,
 				000B09B51AA3029800B8D13A /* movie_tab_butten.png in Resources */,
@@ -1878,6 +1918,8 @@
 				000B09BE1AA3029800B8D13A /* notice_tab_butten（gray）@3x.png in Resources */,
 				003E75001AB1A29F0080F7A8 /* ic_menu_person_default@2x.png in Resources */,
 				000500471AA70ABF00691DF4 /* tag_like_icon.png in Resources */,
+				000221D61ABFF79E00FC0D65 /* moments_share_icon@2x.png in Resources */,
+				000221D71ABFF79E00FC0D65 /* moments_share_icon@3x.png in Resources */,
 				000B09A91AA3029800B8D13A /* logo_first screem.png in Resources */,
 				00E0D47F1AB54A3D00048399 /* btn_delete@3x.png in Resources */,
 				000B09B21AA3029800B8D13A /* Moments.png in Resources */,
@@ -1897,6 +1939,7 @@
 				000B09AE1AA3029800B8D13A /* me_tab_butten（gray）@2x.png in Resources */,
 				000B09911AA3029800B8D13A /* kind_swtich.png in Resources */,
 				000B09981AA3029800B8D13A /* liked@2x.png in Resources */,
+				0000A4111AC013C8000DCE80 /* first_screen_slogan.png in Resources */,
 				003E74EB1AB1A29F0080F7A8 /* btn_add_default@2x.png in Resources */,
 				003E74F21AB1A29F0080F7A8 /* btn_like_default@3x.png in Resources */,
 				00AA53141AA2C3F4004096F8 /* Images.xcassets in Resources */,
@@ -1911,6 +1954,7 @@
 				003E74EF1AB1A29F0080F7A8 /* btn_add_select@3x.png in Resources */,
 				000B09871AA3029800B8D13A /* feed_tab_butten（gray）@2x.png in Resources */,
 				0043E9641AB2DAF500209C3A /* login_button_wechat_press.png in Resources */,
+				0000A4121AC013C8000DCE80 /* first_screen_slogan@2x.png in Resources */,
 				003E74FA1AB1A29F0080F7A8 /* btn_share_select@2x.png in Resources */,
 				000B090E1AA2EB8C00B8D13A /* logo@2x.png in Resources */,
 				000B09931AA3029800B8D13A /* kind_swtich@3x.png in Resources */,

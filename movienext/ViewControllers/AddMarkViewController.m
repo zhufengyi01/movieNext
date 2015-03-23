@@ -34,7 +34,7 @@
     self.navigationController.navigationBar.alpha=1;
     self.tabBarController.tabBar.hidden=YES;
     if (_inputText) {
-        [_inputText resignFirstResponder];
+        [_inputText becomeFirstResponder];
     }
 }
 - (void)viewDidLoad {
@@ -202,6 +202,17 @@
 //把markview 添加到屏幕
 -(void)PushlicInScreen
 {
+ //发布到屏幕之后需要把输入框退回去
+    [_inputText resignFirstResponder];
+   [UIView animateWithDuration:0.5 animations:^{
+       CGRect  iframe =_toolBar.frame;
+       iframe.origin.y=kDeviceHeight;
+       _toolBar.frame=iframe;
+   } completion:^(BOOL finished) {
+       
+   }];
+  
+ 
     
     [UIView animateWithDuration:0.3 animations:^{
         tipView.alpha=1;
@@ -309,6 +320,12 @@
         [Al show];
         return ;
     }
+    if (X==nil||Y==nil) {
+        X =[NSString stringWithFormat:@"%d",100];
+        Y=[NSString stringWithFormat:@"%d",100];
+
+        
+    }
     UserDataCenter  *userCenter=[UserDataCenter shareInstance];
     NSDictionary *parameter = @{@"user_id": userCenter.user_id,@"topic_name":[_inputText text],@"stage_id":self.stageInfoDict.Id,@"x":X,@"y":Y};
 
@@ -376,16 +393,15 @@
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (buttonIndex==0) {
-        if (self.pageSoureType==NSAddMarkPageSourceDefault) {
+        if (self.pageSoureType==NSAddMarkPageSourceUploadImage) {
+            //[self.navigationController popToRootViewControllerAnimated:YES];
+            [self.navigationController popViewControllerAnimated:YES];
+            [self.navigationController popViewControllerAnimated:YES];
+        }else
+        {
             [self.navigationController popViewControllerAnimated:YES];
         }
-        else if (self.pageSoureType==NSAddMarkPageSourceUploadImage)
-        {
-            MovieDetailViewController  *movie=[[MovieDetailViewController alloc]init];
-            movie.movieId=self.stageInfoDict.movie_id;
-            [self.navigationController pushViewController:movie animated:NO];
-
-        }
+        
     }
 }
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView

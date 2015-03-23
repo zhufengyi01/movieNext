@@ -27,6 +27,7 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     self.navigationController.navigationBar.hidden=NO;
+    self.navigationController.navigationBar.alpha=1;
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -41,39 +42,31 @@
 {
     
     
-    UIView  *view =[[UIView alloc]initWithFrame:CGRectMake(0,0, kDeviceWidth, 64)];
-    view.backgroundColor=[UIColor whiteColor];
-    [self.view addSubview:view];
-    
-    UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake((kDeviceWidth-120)/2, 34, 120, 20) Font:16 Text:@"上传并添加图片"];
+    UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 120, 20) Font:16 Text:@"上传并添加图片"];
     titleLable.textColor=VBlue_color;
     titleLable.font=[UIFont boldSystemFontOfSize:16];
     titleLable.textAlignment=NSTextAlignmentCenter;
-   
-    [view addSubview:titleLable];
+    self.navigationItem.titleView=titleLable;
     
     
-    
-    UIButton * leftBtn= [UIButton buttonWithType:UIButtonTypeSystem];
-    leftBtn.frame=CGRectMake(0, 34, 60, 30);
-    [leftBtn addTarget:self action:@selector(dealRightNavClick:) forControlEvents:UIControlEventTouchUpInside];
-    leftBtn.tag=100;
-    [leftBtn setTitleColor:VBlue_color forState:UIControlStateNormal];
-    [leftBtn setTitle:@"返回" forState:UIControlStateNormal];
-    [view addSubview:leftBtn];
-  //  self.navigationItem.leftBarButtonItem=[[UIBarButtonItem alloc]initWithCustomView:leftBtn];
-
+//    UIButton * leftBtn= [UIButton buttonWithType:UIButtonTypeSystem];
+//    leftBtn.frame=CGRectMake(0, 0, 60, 30);
+//    [leftBtn addTarget:self action:@selector(dealRightNavClick:) forControlEvents:UIControlEventTouchUpInside];
+//    leftBtn.tag=100;
+//    [leftBtn setTitleColor:VBlue_color forState:UIControlStateNormal];
+//    [leftBtn setTitle:@"返回" forState:UIControlStateNormal];
+//     self.navigationItem.leftBarButtonItem=[[UIBarButtonItem alloc]initWithCustomView:leftBtn];
+//
     
     
     UIButton * RighttBtn= [UIButton buttonWithType:UIButtonTypeSystem];
-    RighttBtn.frame=CGRectMake(kDeviceWidth-50, 34, 40, 30);
+    RighttBtn.frame=CGRectMake(0, 0, 40, 30);
     [RighttBtn addTarget:self action:@selector(dealRightNavClick:) forControlEvents:UIControlEventTouchUpInside];
     RighttBtn.tag=101;
     RighttBtn.titleLabel.font=[UIFont systemFontOfSize:16];
     [RighttBtn setTitleColor:VBlue_color forState:UIControlStateNormal];
     [RighttBtn setTitle:@"确定" forState:UIControlStateNormal];
-    [view addSubview:RighttBtn];
-    //self.navigationItem.rightBarButtonItem=[[UIBarButtonItem alloc]initWithCustomView:RighttBtn];
+    self.navigationItem.rightBarButtonItem=[[UIBarButtonItem alloc]initWithCustomView:RighttBtn];
     
     
 }
@@ -131,7 +124,7 @@
          *	@brief	根据 UIImage 上传
          */
         // UIImage * image = [UIImage imageNamed:@"image.jpg"];
-         [uy uploadFile:self.upimage saveKey:[self getSaveKey]];
+         //[uy uploadFile:self.upimage saveKey:[self getSaveKey]];
         /**
          *	@brief	根据 文件路径 上传
          */
@@ -142,8 +135,10 @@
         /**
          *	@brief	根据 NSDate  上传
          */
-        //    NSData * fileData = [NSData dataWithContentsOfFile:filePath];
-        //    [uy uploadFile:fileData saveKey:[self getSaveKey]];
+        float kCompressionQuality = 0.7;
+        NSData *photo = UIImageJPEGRepresentation(self.upimage, kCompressionQuality);
+          //  NSData * fileData = [NSData dataWithContentsOfFile:filePath];
+           [uy uploadFile:photo saveKey:[self getSaveKey]];
     
     }
     
@@ -218,11 +213,14 @@
             stageInfo.stage=[parameter objectForKey:@"stage"];
         }
         
+        
         AddMarkViewController  *Addmark =[[AddMarkViewController alloc]init];
         Addmark.stageInfoDict=stageInfo;
         Addmark.pageSoureType=NSAddMarkPageSourceUploadImage;
         [self.navigationController pushViewController:Addmark animated:YES];
         
+        //关闭当前页面
+      //  [self.view removeFromSuperview];
 
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -232,7 +230,7 @@
 }
 -(void)createUI
 {
-    _myScrollView=[[UIScrollView alloc]initWithFrame:CGRectMake(0, 64, kDeviceWidth, kDeviceHeight)];
+    _myScrollView=[[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight)];
     [self.view addSubview:_myScrollView];
     
     UIImageView  *imageView=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, 200)];

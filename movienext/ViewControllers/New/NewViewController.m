@@ -69,7 +69,7 @@
     [self createHotView];
     [self setupRefresh];
     [self creatLoadView];
-    [self requestData];
+  //  [self requestData];
     [self createToolBar];
     [self createShareView];
     
@@ -109,7 +109,7 @@
           if (_hotDataArray.count==0) {
               [self requestData];
           }
-          [_HotMoVieTableView reloadData];
+      [_HotMoVieTableView reloadData];
 
       }
      else if(seg.selectedSegmentIndex==1)
@@ -161,9 +161,9 @@
     }
     [self requestData];
     // 2.2秒后刷新表格UI
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         // 刷新表格
-        [_HotMoVieTableView reloadData];
+     //   [_HotMoVieTableView reloadData];
         // (最好在刷新表格后调用)调用endRefreshing可以结束刷新状态
         [_HotMoVieTableView headerEndRefreshing];
     });
@@ -174,9 +174,9 @@
     page++;
     [self  requestData];
     // 2.2秒后刷新表格UI
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         // 刷新表格
-        [_HotMoVieTableView reloadData];
+      //  [_HotMoVieTableView reloadData];
         
         // (最好在刷新表格后调用)调用endRefreshing可以结束刷新状态
         [_HotMoVieTableView footerEndRefreshing];
@@ -266,9 +266,7 @@
             if (_hotDataArray ==nil) {
                 _hotDataArray=[[NSMutableArray alloc]init];
             }
-//            NSLog(@"热门数据 JSON: %@", responseObject);
-//            [_hotDataArray addObjectsFromArray:Detailarray];
-//            [_HotMoVieTableView reloadData];
+            NSLog(@"热门数据 JSON: %@", responseObject);
             for (NSDictionary  *hotDict in Detailarray) {
                 HotMovieModel  *hotModel=[[HotMovieModel alloc]init];
                 if (hotModel) {
@@ -290,7 +288,7 @@
                     
                 }
             }
-            [_HotMoVieTableView reloadData];
+          [_HotMoVieTableView reloadData];
             NSLog(@"打印出来的热门数据，没有weibo ＝＝====%@",_hotDataArray);
 
         }
@@ -318,8 +316,7 @@
                 }
             }
           
-           // [_newDataArray addObjectsFromArray:Detailarray];
-            [_HotMoVieTableView reloadData];
+           [_HotMoVieTableView reloadData];
         }
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -529,8 +526,6 @@
         hotmovie=[_newDataArray objectAtIndex:button.tag-2000];
     }
     //将model的值传递过去，在那边配置
-   
-    
     float hight= kDeviceWidth;
     float  ImageWith=[hotmovie.stageinfo.w intValue];
     float  ImgeHight=[hotmovie.stageinfo.h intValue];
@@ -634,7 +629,7 @@
        hotmovie=[_newDataArray objectAtIndex:button.tag-3000];
    }
     AddMarkVC.stageInfoDict=hotmovie.stageinfo;
-    AddMarkVC.pageSoureType=NSAddMarkPageSourceDefault;
+    //AddMarkVC.pageSoureType=NSAddMarkPageSourceDefault;
     NSLog(@"dict.stageinfo = %@", AddMarkVC.stageInfoDict);
     [self.navigationController pushViewController:AddMarkVC animated:NO];
 
