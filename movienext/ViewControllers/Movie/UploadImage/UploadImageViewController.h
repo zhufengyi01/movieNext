@@ -9,5 +9,5 @@
 #import "RootViewController.h"
 
 @interface UploadImageViewController : RootViewController
-
+@property (nonatomic,strong)UIImage   *upimage;
 @end

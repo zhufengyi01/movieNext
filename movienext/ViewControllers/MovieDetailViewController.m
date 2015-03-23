@@ -122,7 +122,7 @@
         picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
         picker.delegate = self;
         //设置选择后的图片可被编辑
-        picker.allowsEditing = YES;
+     //   picker.allowsEditing = YES;
        /// [self presentModalViewController:picker animated:YES];
         [self presentViewController:picker animated:YES completion:nil];
 
@@ -138,15 +138,23 @@
     
     NSString *type = [info objectForKey:UIImagePickerControllerMediaType];
     
-    
     //当选择的类型是图片
 //    if ([type isEqualToString:@"public.image"])
   //  {
         //先把图片转成NSData
       UIImage* image = [info objectForKey:@"UIImagePickerControllerOriginalImage"];
+    
        // UIImage  *image=[UIImage imageNamed:@"choice_icon@2x.png"];
-         NSLog(@" image   ====%@",image);
-//        NSData *data;
+         NSLog(@" image   =%@=== Imagesize  higth  =%f width ====%f   ",image,image.size.height,image.size.width);
+    
+    
+    UploadImageViewController  *upload=[[UploadImageViewController alloc]init];
+    //[self.navigationController pushViewController:upload animated:YES];
+    upload.upimage=image;
+    //[picker presentViewController:upload  animated:YES completion:nil];
+    [picker.navigationController pushViewController:upload  animated:YES];
+    
+ //        NSData *data;
 //        if (UIImagePNGRepresentation(image) == nil)
 //        {
 //            data = UIImageJPEGRepresentation(image, 1.0);
@@ -169,7 +177,7 @@
 //        [fileManager createFileAtPath:[DocumentsPath stringByAppendingString:@"/image.png"] contents:data attributes:nil];
         
         
-    UpYun *uy = [[UpYun alloc] init];
+   /* UpYun *uy = [[UpYun alloc] init];
     uy.successBlocker = ^(id data)
     {
         UIAlertView * alert = [[UIAlertView alloc]initWithTitle:@"" message:@"上传成功" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
@@ -188,13 +196,13 @@
     {
         //进度
         //[_pv setProgress:percent];
-    };
+    };*/
     
         /**
          *	@brief	根据 UIImage 上传
          */
        // UIImage * image = [UIImage imageNamed:@"image.jpg"];
-        [uy uploadFile:image saveKey:[self getSaveKey]];
+       // [uy uploadFile:image saveKey:[self getSaveKey]];
         /**
          *	@brief	根据 文件路径 上传
          */
@@ -256,16 +264,6 @@
     int month = [comps month];
     return month;
 }
-
-
-
-
-
-
-
-
-
-
 
 
 -(void)initData
