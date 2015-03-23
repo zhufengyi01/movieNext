@@ -437,7 +437,6 @@
              // [cell setCellValue:[[_newDataArray objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"]indexPath:indexPath.row];
             //遵守了stageview的协议，点击事件在这里执行
             cell.stageView.delegate=self;
-            
         }
         return  cell;
     }

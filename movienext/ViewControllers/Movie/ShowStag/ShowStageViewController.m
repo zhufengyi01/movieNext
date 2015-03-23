@@ -74,6 +74,7 @@
     scrollView.contentSize = CGSizeMake(kDeviceWidth, MAX(kDeviceHeight, hight));
 
     stageView = [[StageView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, hight)];
+    stageView.isAnimation = YES;
     stageView.StageInfoDict=self.movieModel.stageinfo;
     stageView.WeibosArray = self.movieModel.weibos;
     [stageView configStageViewforStageInfoDict];

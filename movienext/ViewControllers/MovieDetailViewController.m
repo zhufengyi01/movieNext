@@ -552,9 +552,11 @@
         //cell.backgroundColor = [UIColor redColor];
         
         [cell.imageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w340h340",kUrlStage,model.stageinfo.stage]] placeholderImage:[UIImage imageNamed:@"loading_image_all.png"]];
-        if (model.stageinfo.marks) {
+        if (model.stageinfo.marks && [model.stageinfo.marks intValue]>0) {
+            cell.titleLab.hidden = NO;
             cell.titleLab.text=[NSString stringWithFormat:@"%@",  model.stageinfo.marks];
-
+        } else {
+            cell.titleLab.hidden = YES;
         }
         
         return cell;
