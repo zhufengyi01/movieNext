@@ -20,6 +20,7 @@
 #import "AFNetworking.h"
 #import "UserDataCenter.h"
 #import "MyViewController.h"
+#import "Function.h"
 @interface ShowStageViewController() <UMShareViewDelegate,ButtomToolViewDelegate,StageViewDelegate>
 {
     ButtomToolView *_toolBar;
@@ -42,6 +43,7 @@
 {
     self.navigationController.navigationBar.alpha=1;
     self.tabBarController.tabBar.hidden=YES;
+    self.navigationController.navigationBar.hidden=NO;
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -138,13 +140,17 @@
         hight=  (ImgeHight/ImageWith) *kDeviceWidth;
     }
   //  CommonStageCell *cell = (CommonStageCell *)(button.superview.superview.superview);
-    UIGraphicsBeginImageContextWithOptions(CGSizeMake(kDeviceWidth,hight), YES, [UIScreen mainScreen].scale);
+   /* UIGraphicsBeginImageContextWithOptions(CGSizeMake(kDeviceWidth,hight), YES, [UIScreen mainScreen].scale);
     [stageView drawViewHierarchyInRect:stageView.bounds afterScreenUpdates:YES];
     // old style [self.layer renderInContext:UIGraphicsGetCurrentContext()];
     
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
+    */
     
+    UIImage  *image=[Function getImage:stageView WithSize:CGSizeMake(kDeviceWidth, hight)];
+    
+
     //创建UMshareView 后必须配备这三个方法
     shareView.StageInfo=self.movieModel.stageinfo;
     shareView.screenImage=image;
@@ -329,14 +335,18 @@
         }
        // CommonStageCell *cell = (CommonStageCell *)(markView.superview.superview.superview);
         
-        UIGraphicsBeginImageContextWithOptions(CGSizeMake(kDeviceWidth, hight), YES, [UIScreen mainScreen].scale);
+       /* UIGraphicsBeginImageContextWithOptions(CGSizeMake(kDeviceWidth, hight), YES, [UIScreen mainScreen].scale);
         [stageView drawViewHierarchyInRect:stageView.bounds afterScreenUpdates:YES];
         
         // old style [self.layer renderInContext:UIGraphicsGetCurrentContext()];
         
         UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
+        */
         
+        UIImage  *image=[Function getImage:stageView WithSize:CGSizeMake(kDeviceWidth, hight)];
+        
+
         //创建UMshareView 后必须配备这三个方法
         shareView.StageInfo=stageInfoDict;
         shareView.screenImage=image;

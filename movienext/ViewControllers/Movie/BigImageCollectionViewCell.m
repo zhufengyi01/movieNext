@@ -89,6 +89,8 @@
 }
 - (void)layoutSubviews {
     [super layoutSubviews];
+    //_StageView.frame=CGRectMake(0, 0, kDeviceWidth, hight);
+
     
 }
 

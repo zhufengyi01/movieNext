@@ -161,11 +161,13 @@
     }
     
 #pragma  mark  热门cell
-    if (_pageType  ==NSPageSourceTypeMainHotController) {  //热门
+    if (_pageType==NSPageSourceTypeMainHotController) {  //热门
          BgView0.frame=CGRectMake(0, 0, 0, 0);
         BgView0.hidden=YES;
         _stageView.frame=CGRectMake(0, 0, kDeviceWidth, hight);
-        BgView2.frame=CGRectMake(0, kDeviceWidth, kDeviceWidth, 45);
+        
+        BgView2.frame=CGRectMake(0,hight,kDeviceWidth, 45);
+        
         //这里设置为了表示气泡是可以移动的
         _stageView.isAnimation = YES;
     }

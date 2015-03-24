@@ -32,6 +32,7 @@
     UIView  *buttomView;
     UIImage   *shareImage;
     UIView     *logosupView;
+    //UIScrollView  *_myScrollerView;
 }
 @property(nonatomic,assign)id<UMShareViewDelegate> delegate;
 //@property(nonatomic,strong) UIImageView *ShareimageView;

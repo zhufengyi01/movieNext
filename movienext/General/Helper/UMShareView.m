@@ -25,9 +25,9 @@
 -(instancetype)initWithFrame:(CGRect)frame
 {
     if (self= [super initWithFrame:frame]) {
+        //初始化的大小
         m_frame=frame;
         [self createUI];
-        
     }
     return self;
 }
@@ -35,25 +35,41 @@
 {     //创建底部试图
     //创建上部视图
     self.backgroundColor=[UIColor blackColor];
-    topView =[[UIView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight-(kDeviceWidth/4)-40-kHeightNavigation)];
+    
+    
+    /*_myScrollerView=[[UIScrollView alloc]initWithFrame:CGRectMake(0, 64,kDeviceWidth,m_frame.size.height-(kDeviceWidth/4)-40-kHeightNavigation)];
+  #warning  暂时设置为kDeviceWidth
+    //设置scrollview 的背景颜色是黄色的
+    _myScrollerView.backgroundColor=[UIColor yellowColor];
+    _myScrollerView.contentSize=CGSizeMake(kDeviceWidth, kDeviceWidth);
+    [self addSubview:_myScrollerView];
+    */
+    
+    
+    topView =[[UIView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, m_frame.size.height-(kDeviceWidth/4)-40-kHeightNavigation)];
     topView.userInteractionEnabled=YES;
     topView.backgroundColor=[UIColor blackColor];
     [self addSubview:topView];
+     
     
     
     // 上面的透明背景
     UIButton    *_topButtom =[UIButton buttonWithType:UIButtonTypeSystem];
     _topButtom.frame=CGRectMake(0, 0, kDeviceWidth, kDeviceHeight-kHeightNavigation-(kDeviceWidth/4)-40);
-    
     [_topButtom addTarget:self action:@selector(TouchbuttonClick:) forControlEvents:UIControlEventTouchUpInside];
     _topButtom.backgroundColor=[[UIColor blackColor]colorWithAlphaComponent:0.2];
     [topView addSubview:_topButtom];
-
+  
     
+    //在scrolllerview 上添加一个手势，滚回去
+   // UIGestureRecognizer  *tap=[[UIGestureRecognizer alloc]initWithTarget:self action:@selector(ToucSharehbuttonClick:)];
+    //[self addGestureRecognizer:tap];
 
     _ShareimageView=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth,400)];
-  //  _ShareimageView.backgroundColor=[UIColor redColor];
+    // _ShareimageView.backgroundColor=[UIColor redColor];
     [topView addSubview:_ShareimageView];
+    
+    
     
     //放置电影名和标签的view
     logosupView=[[UIView alloc]initWithFrame:CGRectMake(0, topView.frame.size.height-20, kDeviceWidth, 20)];
@@ -80,9 +96,22 @@
 //配置view
 -(void)configShareView;
 {
-    _ShareimageView.image =self.screenImage;
-    _moviewName.text=self.StageInfo.movie_name;
     
+    float  ImageWith=[self.StageInfo.w floatValue];
+    float  ImgeHight=[self.StageInfo.h floatValue];
+    float hight=0;
+    hight= kDeviceWidth;  // 计算的事bgview1的高度
+    if(ImgeHight>ImageWith)
+    {
+        hight=  (ImgeHight/ImageWith) *kDeviceWidth;
+    }
+    
+    //配置shareimagview 的图片和高度
+    _ShareimageView.image =self.screenImage;
+    //_myScrollerView.contentSize=CGSizeMake(kDeviceWidth, hight);
+    _ShareimageView.frame=CGRectMake(0, 0, kDeviceWidth, hight);
+    _moviewName.text=self.StageInfo.movie_name;
+    logosupView.frame=CGRectMake(0, hight,kDeviceWidth, 30);
     
 }
 
@@ -95,7 +124,6 @@
     [self addSubview:buttomView];
 #pragma create four button
     
-    NSArray  *titleArray=[NSArray arrayWithObjects:@"微信",@"朋友圈",@"Q空间",@"微博",nil];
     NSArray  *imageArray=[NSArray arrayWithObjects:@"wechat_share_icon@2x.png",@"moments_share_icon@2x.png",@"qzone_share_icon@2x.png",@"weibo_share_icon@2x.png", nil];
     
     for (int i=0; i<4; i++) {
@@ -103,11 +131,6 @@
         double   y=40;
         
      UIButton  *    btn = [ZCControl createButtonWithFrame:CGRectMake(x,y, kDeviceWidth/4, kDeviceWidth/4) ImageName:imageArray[i] Target:self Action:@selector(handShareButtonClick:) Title:nil];
-       // [btn setImage:[UIImage imageNamed:imageArray[i]] forState:UIControlStateNormal];
-      //  btn.titleEdgeInsets = UIEdgeInsetsMake(65, -30, 10, 10);
-       // btn.titleLabel.font=[UIFont systemFontOfSize:12];
-      //  [btn setTitleColor:VBlue_color forState:UIControlStateNormal];
-       // [btn setImageEdgeInsets:UIEdgeInsetsMake(10, 20, 20, 10)];
         btn.tag=10000+i;
         btn.backgroundColor=[UIColor whiteColor];
         [buttomView addSubview:btn];
@@ -118,31 +141,6 @@
     shareLable.textAlignment=NSTextAlignmentCenter;
     shareLable.textColor=VBlue_color;
     [buttomView addSubview:shareLable];
-    
-   /* UIView  *lineView1=[[UIView alloc]initWithFrame:CGRectMake(0, 40, kDeviceWidth, 0.5)];
-    lineView1.backgroundColor=VLight_GrayColor;
-    [buttomView addSubview:lineView1];
-    
-    UIView  *lineView2=[[UIView alloc]initWithFrame:CGRectMake(0, 40+kDeviceWidth/4-1, kDeviceWidth, 0.5)];
-    lineView2.backgroundColor=VLight_GrayColor;
-    [buttomView addSubview:lineView2];
-    
-    
-    UIView  *lineView3=[[UIView alloc]initWithFrame:CGRectMake(0,40 ,0.5, kDeviceWidth/4)];
-    lineView3.backgroundColor=VLight_GrayColor;
-    [buttomView addSubview:lineView3];
-    
-    UIView  *lineView4=[[UIView alloc]initWithFrame:CGRectMake(kDeviceWidth/4,40 ,0.5, kDeviceWidth/4)];
-    lineView4.backgroundColor=VLight_GrayColor;
-    [buttomView addSubview:lineView4];
-    
-    UIView  *lineView5=[[UIView alloc]initWithFrame:CGRectMake(kDeviceWidth/2,40 , 0.5, kDeviceWidth/4)];
-    lineView5.backgroundColor=VLight_GrayColor;
-    [buttomView addSubview:lineView5];
-    UIView  *lineView6=[[UIView alloc]initWithFrame:CGRectMake((kDeviceWidth/4)*3,40 ,0.5, kDeviceWidth/4)];
-    lineView6.backgroundColor=VLight_GrayColor;
-    [buttomView addSubview:lineView6];
-*/
     
 }
 
@@ -176,8 +174,15 @@
 -(void)handShareButtonClick:(UIButton *) button
 {
 
-   
-    shareImage=[Function getImage:topView];
+    float  ImageWith=[self.StageInfo.w floatValue];
+    float  ImgeHight=[self.StageInfo.h floatValue];
+    float hight=0;
+    hight= kDeviceWidth;  // 计算的事bgview1的高度
+    if(ImgeHight>ImageWith)
+    {
+        hight=  (ImgeHight/ImageWith) *kDeviceWidth;
+    }
+    shareImage=[Function getImage:topView WithSize:CGSizeMake(kDeviceWidth, hight+40)];
  
     //把topview 生成一张图片
     if (self.delegate &&[self.delegate respondsToSelector:@selector(UMshareViewHandClick:ShareImage:MoviewModel:)]) {
@@ -221,7 +226,7 @@
 }
 
 //点击屏幕弹回
--(void)TouchbuttonClick:(UIButton *) button
+-(void)TouchbuttonClick:(UIButton *) tap
 {
     if (self.delegate &&[self.delegate respondsToSelector:@selector(SharetopViewTouchBengan)]) {
         [self.delegate SharetopViewTouchBengan];
@@ -230,7 +235,7 @@
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-   // [self removeFromSuperview];
+    [self removeFromSuperview];
 }
 @end
 

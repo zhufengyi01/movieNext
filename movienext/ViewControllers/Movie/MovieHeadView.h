@@ -21,8 +21,8 @@
     UILabel      *derectorLable;
     UILabel      *performerLable;
     CGRect       m_frame;
-    
 }
+//@property(nonatomic,strong) UILabel  
 -(void)setCollectionHeaderValue:(NSDictionary *) dict;
 @property (nonatomic,assign) id <MovieHeadViewDelegate> delegate;
 @end

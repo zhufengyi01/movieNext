@@ -28,7 +28,7 @@
 #import "AddMarkViewController.h"
 #import "Function.h"
 #import "UMShareView.h"
-@interface MyViewController ()<UITableViewDataSource, UITableViewDelegate,StageViewDelegate,MarkViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UIActionSheetDelegate,UMSocialDataDelegate,UMSocialUIDelegate,UMShareViewDelegate>
+@interface MyViewController ()<UITableViewDataSource, UITableViewDelegate,StageViewDelegate,MarkViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UIActionSheetDelegate,UMSocialDataDelegate,UMSocialUIDelegate,UMShareViewDelegate,LoadingViewDelegate>
 {
     //UISegmentedControl *segment;
     UITableView   *_tableView;
@@ -84,7 +84,7 @@
     [self initData];
      [self requestUserInfo];
     
-
+    //[self requestData];
     [self createLoadview];
     [self createToolBar];
     [self createShareView];
@@ -421,6 +421,7 @@
 - (void)createLoadview
 {
     loadView =[[LoadingView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight)];
+    loadView.delegate=self;
     [self.view addSubview:loadView];
 }
 
@@ -470,6 +471,8 @@
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
+        
+
     }];
     
 
@@ -477,13 +480,22 @@
 - (void)requestData{
    // UserDataCenter  *userCenter=[UserDataCenter shareInstance];
     NSString  *autorid;
-    if ( !_author_id ||[self.author_id isEqualToString:@"0"]) {  //表示直接进入这个页面的话，这个为空
-        autorid = userCenter.user_id;
+//    if ( !_author_id ||[self.author_id isEqualToString:@"0"]) {  //表示直接进入这个页面的话，这个为空
+//        autorid = userCenter.user_id;
+//    }
+//    else
+//    {
+//        autorid=_author_id;
+//    }
+    if (self.author_id>0&&![self.author_id isEqualToString:@"0"]) {
+        autorid=self.author_id;
     }
     else
     {
-        autorid=_author_id;
+        UserDataCenter  *user=[UserDataCenter shareInstance];
+        autorid=user.user_id;
     }
+
     //user_id是当前用户的ID
     NSDictionary *parameters = @{@"user_id":userCenter.user_id, @"page":[NSString stringWithFormat:@"%d",page], @"author_id":autorid};
     NSString * section;
@@ -508,6 +520,9 @@
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     //    [manager POST:[NSString stringWithFormat:@"%@/movieStage/listRecently", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
     [manager POST:[NSString stringWithFormat:@"%@/%@", kApiBaseUrl, section] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"=====responseObject===%@",responseObject);
+        if ([[responseObject objectForKey:@"return_code"] intValue]==10000) {
+
         [loadView stopAnimation];
         [loadView removeFromSuperview];
         NSMutableArray  *Detailarray=[responseObject objectForKey:@"detail"];
@@ -519,8 +534,6 @@
             if (_addedDataArray ==nil) {
                 _addedDataArray=[[NSMutableArray alloc]init];
             }
-           // NSLog(@"用户添加的数据 JSON: %@", responseObject);
-           // [_addedDataArray addObjectsFromArray:Detailarray];
             for (NSDictionary  *addDict  in Detailarray) {
                 HotMovieModel  *model =[[HotMovieModel alloc]init];
                 if (model) {
@@ -536,12 +549,12 @@
                         [weibomodel setValuesForKeysWithDictionary:[addDict objectForKey:@"weibo"]];
                         model.weibo=weibomodel;
                     }
-                    
+                      [_addedDataArray addObject:model];
                 }
-                [_addedDataArray addObject:model];
+
+              
             }
             [_tableView reloadData];
-
         }
         else if(btn.tag==101&&btn.selected==YES)
         {
@@ -564,19 +577,31 @@
                         [weibomodel setValuesForKeysWithDictionary:[addDict objectForKey:@"weibo"]];
                         model.weibo=weibomodel;
                     }
-                    
+                    [_upedDataArray addObject:model];
                 }
-                [_upedDataArray addObject:model];
             }
-
             [_tableView reloadData];
+        }
         }
         }
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Error: %@", error);
+        NSLog(@"下载失败 Error: %@", error);
+        [loadView showFailLoadData];
+   
+        
     }];
 }
+//数据下载失败的时候执行这个方法
+-(void)reloadDataClick
+{
+    [self requestData];
+    //点击完之后，动画又要开始旋转，同时隐藏了加载失败的背景
+    [loadView hidenFailLoadAndShowAnimation];
+    
+    
+}
+
 -(void)requestDelectData:(HotMovieModel *) hotmodel
 {
     NSLog(@"hotmodel  ==weibiid ==%@   hotmodel stageinfo id ==%@ ",hotmodel.weibo.Id,hotmodel.stageinfo.Id);
@@ -862,13 +887,17 @@
     
     CommonStageCell *cell = (CommonStageCell *)(button.superview.superview.superview);
     
-    UIGraphicsBeginImageContextWithOptions(CGSizeMake(kDeviceWidth,hight), YES, [UIScreen mainScreen].scale);
+  /*  UIGraphicsBeginImageContextWithOptions(CGSizeMake(kDeviceWidth,hight), YES, [UIScreen mainScreen].scale);
     [cell.stageView drawViewHierarchyInRect:cell.stageView.bounds afterScreenUpdates:YES];
     
     // old style [self.layer renderInContext:UIGraphicsGetCurrentContext()];
     
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
+    UIGraphicsEndImageContext();*/
+    
+    UIImage  *image=[Function getImage:cell.stageView WithSize:CGSizeMake(kDeviceWidth, hight)];
+    
+
      //创建UMshareView 后必须配备这三个方法
     shareView.StageInfo=hotmovie.stageinfo;
     shareView.screenImage=image;
@@ -1105,13 +1134,16 @@
         
         CommonStageCell *cell = (CommonStageCell *)(markView.superview.superview.superview);
         
-        UIGraphicsBeginImageContextWithOptions(CGSizeMake(kDeviceWidth, hight), YES, [UIScreen mainScreen].scale);
+        /*UIGraphicsBeginImageContextWithOptions(CGSizeMake(kDeviceWidth, hight), YES, [UIScreen mainScreen].scale);
         [cell.stageView drawViewHierarchyInRect:cell.stageView.bounds afterScreenUpdates:YES];
         
         // old style [self.layer renderInContext:UIGraphicsGetCurrentContext()];
         
         UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
+        */
+        
+        UIImage  *image=[Function getImage:cell.stageView WithSize:CGSizeMake(kDeviceWidth, hight)];
         
         //创建UMshareView 后必须配备这三个方法
         shareView.StageInfo=stageInfoDict;

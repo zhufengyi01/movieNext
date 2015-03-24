@@ -103,8 +103,8 @@ float getHeightByWidthAndHeight(float width, float height){
 +(CGFloat)widthWithString:(NSString *)string hight:(CGFloat)hight  fontsize:(CGFloat)fontsize;
 
 
-//根据图片一个view 把这个view变成一张图片
-+(UIImage *)getImage:(UIView *) imageview;
+//根据图片一个view 把这个view按照指定的大小绘画出来
++(UIImage *)getImage:(UIView *) imageview WithSize:(CGSize) size;
 //根据一张大的图片，把这个大的图片截取成一张小的图片
 
 +(UIImage *)getImageFromImage:(UIImage *) BigImage;

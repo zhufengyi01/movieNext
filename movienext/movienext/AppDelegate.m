@@ -23,8 +23,9 @@
 #import "UMSocialQQHandler.h"
 //导入友盟新浪三方登陆
 #import "UMSocialSinaHandler.h"
-
+#import "AFNetworkActivityIndicatorManager.h"
 #import "Constant.h"
+
 
 @interface AppDelegate ()
 
@@ -71,7 +72,7 @@
     self.window.backgroundColor=[UIColor whiteColor];
     //初始化友盟组件
     [self initUmeng];
-
+    [self setAFNetURLCache];
     return YES;
 }
 /**
@@ -112,7 +113,13 @@
     return  [UMSocialSnsService handleOpenURL:url wxApiDelegate:nil];
 }
 
-
+-(void)setAFNetURLCache
+{
+    NSURLCache *URLCache = [[NSURLCache alloc] initWithMemoryCapacity:8 * 1024 * 1024 diskCapacity:40 * 1024 * 1024 diskPath:nil];
+    [NSURLCache setSharedURLCache:URLCache];
+    
+    [[AFNetworkActivityIndicatorManager sharedManager] setEnabled:YES];
+}
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
     // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.

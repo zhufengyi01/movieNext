@@ -32,10 +32,12 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     self.navigationController.navigationBar.alpha=1;
+    self.navigationController.navigationBar.hidden=NO;
     self.tabBarController.tabBar.hidden=YES;
     if (_inputText) {
         [_inputText becomeFirstResponder];
     }
+    
 }
 - (void)viewDidLoad {
     [super viewDidLoad];

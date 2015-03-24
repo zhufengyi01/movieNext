@@ -38,16 +38,16 @@
     UIButton  *backBtn=[ZCControl createButtonWithFrame:CGRectMake(10, 30,60,32) ImageName:nil Target:self Action:@selector(dealBackClick:) Title:nil];
     backBtn.tag=200;
     [backBtn setTitleEdgeInsets:UIEdgeInsetsMake(20, 25, 0, 20)];
-    backBtn.backgroundColor=[UIColor redColor];
+   // backBtn.backgroundColor=[UIColor redColor];
     [backBtn setImage:[UIImage imageNamed:@"back_Icon@2x.png"] forState:UIControlStateNormal];
     [bgImageView addSubview:backBtn];
     
     
-    UIButton  *upLoadimageBtn=[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-70, 35,60,25) ImageName:@"up_image@2x.png" Target:self Action:@selector(dealBackClick:) Title:nil];
+    
+     UIButton  *upLoadimageBtn=[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-70, 35,60,25) ImageName:@"up_image@2x.png" Target:self Action:@selector(dealBackClick:) Title:nil];
     upLoadimageBtn.tag=201;
     [bgImageView addSubview:upLoadimageBtn];
     
-
     
     titleLable=[ZCControl createLabelWithFrame:CGRectMake(movieLogoImageView.frame.origin.x+movieLogoImageView.frame.size.width+10, movieLogoImageView.frame.origin.y,kDeviceWidth-20-50-20 ,30) Font:16 Text:@"电影标题"];
     titleLable.textColor=[UIColor whiteColor];
@@ -112,11 +112,16 @@
         bgImageView.image = blurredImage;
     }];
   
-    titleLable.text=[NSString stringWithFormat:@"%@",[dict objectForKey:@"name"]];
-    derectorLable.text=[NSString stringWithFormat:@"导演 :%@",[dict objectForKey:@"director"]];
-    NSLog(@"导演 ＝＝＝＝＝＝＝xianshi ＝＝%@",[dict objectForKey:@"director"]);
-    performerLable.text=[NSString stringWithFormat:@"演员:%@",[dict objectForKey:@"other_name"]];
-    
+    if ([dict objectForKey:@"name"]) {
+        titleLable.text=[NSString stringWithFormat:@"%@",[dict objectForKey:@"name"]];
+    }
+    if ([dict objectForKey:@"director"]) {
+        derectorLable.text=[NSString stringWithFormat:@"导演 :%@",[dict objectForKey:@"director"]];
+    }
+      NSLog(@"导演 ＝＝＝＝＝＝＝xianshi ＝＝%@",[dict objectForKey:@"director"]);
+    if ([dict objectForKey:@"other_name"]) {
+        performerLable.text=[NSString stringWithFormat:@"演员:%@",[dict objectForKey:@"other_name"]];
+    }
     
 }
 //切换按钮

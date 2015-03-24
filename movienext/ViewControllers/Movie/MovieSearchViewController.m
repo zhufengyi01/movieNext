@@ -155,6 +155,7 @@
 //选择了cell之后
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (tableView==_myTableView) {
         if (_dataArray.count > indexPath.row) {
             MovieDetailViewController  *mvdetail =[[MovieDetailViewController alloc]init];

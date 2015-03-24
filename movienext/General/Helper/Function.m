@@ -282,10 +282,10 @@
 #pragma mark  图片的处理方法
 
 //根据view 把view 变成一张图片
-+(UIImage *)getImage:(UIView *) imageview
++(UIImage *)getImage:(UIView *) imageview WithSize:(CGSize) size
 {
     
-    UIGraphicsBeginImageContextWithOptions(CGSizeMake(kDeviceWidth, kDeviceWidth+120), YES, 5.0);  //NO，YES 控制是否透明
+    UIGraphicsBeginImageContextWithOptions(CGSizeMake(size.width, size.height), YES, 5.0);  //NO，YES 控制是否透明
     [imageview.layer renderInContext:UIGraphicsGetCurrentContext()];
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();

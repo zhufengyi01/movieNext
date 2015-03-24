@@ -200,7 +200,7 @@
     _toolBar.delegete=self;
  
 }
-
+//创建分享视图
 -(void)createShareView
 {
     shareView=[[UMShareView alloc]initWithFrame:CGRectMake(0,0, kDeviceWidth, kDeviceHeight)];
@@ -363,16 +363,11 @@
 
             float  h=[hotModel.stageinfo.h floatValue];
             float w=  [hotModel.stageinfo.w floatValue];
-            if (w==0||h==0) {
-             hight= kDeviceWidth+45;
-        }
-         if (w>h) {
-            hight= kDeviceWidth+45;
-        }
-        else if(h>w)
-        {
-             hight=  (h/w) *kDeviceWidth;
-        }
+            hight=kDeviceWidth+45;
+            if(h>w)
+           {
+             hight=  (h/w) *kDeviceWidth+45;
+            }
         }
        // NSLog(@"============  hight  for  row  =====%f",hight);
         return hight+10;
@@ -382,15 +377,10 @@
         float hight;
         if (_newDataArray.count>indexPath.row) {
             HotMovieModel   *hotmodel=[_newDataArray objectAtIndex:indexPath.row];
-            float  h=[hotmodel.stageinfo.h  floatValue];   //[[[[_newDataArray  objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] objectForKey:@"h"] floatValue];
-            float w=[hotmodel.stageinfo.w floatValue];   //[[[[_newDataArray  objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] objectForKey:@"w"] floatValue];
-            if (w==0||h==0) {
-                hight= kDeviceWidth+90;
-            }
-            if (w>h) {
-                hight= kDeviceWidth+90;
-            }
-            else if(h>w)
+            float  h=[hotmodel.stageinfo.h  floatValue];
+            float w=[hotmodel.stageinfo.w floatValue];
+             hight= kDeviceWidth+90;
+             if(h>w)
             {
                 hight=  (h/w)*kDeviceWidth+90;
             }
@@ -417,7 +407,6 @@
              HotMovieModel  *hotModel=[_hotDataArray objectAtIndex:indexPath.row];
             cell.pageType=NSPageSourceTypeMainHotController;
             //小闪动标签的数组
-            
             cell.WeibosArray =hotModel.weibos;
             cell.weiboDict=nil;
             cell.StageInfoDict=hotModel.stageinfo;
@@ -550,13 +539,14 @@
         hight=  (ImgeHight/ImageWith) *kDeviceWidth;
     }
     CommonStageCell *cell = (CommonStageCell *)(button.superview.superview.superview);
-    UIGraphicsBeginImageContextWithOptions(CGSizeMake(kDeviceWidth,hight), YES, [UIScreen mainScreen].scale);
+   /* UIGraphicsBeginImageContextWithOptions(CGSizeMake(kDeviceWidth,hight), YES, [UIScreen mainScreen].scale);
     [cell.stageView drawViewHierarchyInRect:cell.stageView.bounds afterScreenUpdates:YES];
     // old style [self.layer renderInContext:UIGraphicsGetCurrentContext()];
     
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-    
+    */
+    UIImage  *image=[Function getImage:cell.stageView WithSize:CGSizeMake(kDeviceWidth, hight)];
     //创建UMshareView 后必须配备这三个方法
     shareView.StageInfo=hotmovie.stageinfo;
     shareView.screenImage=image;
@@ -766,14 +756,16 @@
         }
         CommonStageCell *cell = (CommonStageCell *)(markView.superview.superview.superview);
         
-        UIGraphicsBeginImageContextWithOptions(CGSizeMake(kDeviceWidth, hight), YES, [UIScreen mainScreen].scale);
+      /*  UIGraphicsBeginImageContextWithOptions(CGSizeMake(kDeviceWidth, hight), YES, [UIScreen mainScreen].scale);
         [cell.stageView drawViewHierarchyInRect:cell.stageView.bounds afterScreenUpdates:YES];
         
         // old style [self.layer renderInContext:UIGraphicsGetCurrentContext()];
         
         UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
-        
+        */
+        UIImage  *image=[Function getImage:cell.stageView WithSize:CGSizeMake(kDeviceWidth, hight)];
+       
         //创建UMshareView 后必须配备这三个方法
         shareView.StageInfo=stageInfoDict;
         shareView.screenImage=image;

@@ -28,7 +28,7 @@
 #import "MJRefresh.h"
 
 //#import  "SearchMovieViewController.h"
-@interface MovieViewController ()<UISearchBarDelegate,UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout>
+@interface MovieViewController ()<UISearchBarDelegate,UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout,LoadingViewDelegate>
 {
     //UICollectionView    *_myConllectionView;
     LoadingView         *loadView;
@@ -94,6 +94,7 @@
 -(void)creatLoadView
 {
     loadView =[[LoadingView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight)];
+    loadView.delegate=self;
     [self.view addSubview:loadView];
     
 }
@@ -133,7 +134,7 @@
         [vc requestData];
         
         // 模拟延迟加载数据，因此2秒后才调用）
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [vc.myConllectionView reloadData];
             // 结束刷新
             [vc.myConllectionView headerEndRefreshing];
@@ -191,6 +192,9 @@
 
     }
     [manager POST:[NSString stringWithFormat:@"%@/feed/list", kApiBaseUrl] parameters:parameter success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        if ([[responseObject objectForKey:@"return_code"] intValue]==10000) {
+
         NSLog(@"  电影首页数据JSON: %@", responseObject);
             [loadView stopAnimation];
             [loadView removeFromSuperview];
@@ -207,16 +211,26 @@
             if (detailarray.count>0) {
                 [_dataArray addObjectsFromArray:detailarray];
                 //NSLog(@"=-=======dataArray =====%@",_dataArray);
-               // [_myConllectionView reloadData];
+                [_myConllectionView reloadData];
                 
             }
 
         }
-        
+        }
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
+        [loadView showFailLoadData];
     }];
+    
+}
+//数据下载失败的时候执行这个方法
+-(void)reloadDataClick
+{
+    [self requestData];
+    //点击完之后，动画又要开始旋转，同时隐藏了加载失败的背景
+    [loadView hidenFailLoadAndShowAnimation];
+    
     
 }
 

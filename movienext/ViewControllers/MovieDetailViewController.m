@@ -761,13 +761,17 @@
     
     BigImageCollectionViewCell *cell = (BigImageCollectionViewCell *)(button.superview.superview.superview);
     
-    UIGraphicsBeginImageContextWithOptions(CGSizeMake(kDeviceWidth,hight), YES, [UIScreen mainScreen].scale);
+   /* UIGraphicsBeginImageContextWithOptions(CGSizeMake(kDeviceWidth,hight), YES, [UIScreen mainScreen].scale);
     [cell.StageView drawViewHierarchyInRect:cell.StageView.bounds afterScreenUpdates:YES];
     
     // old style [self.layer renderInContext:UIGraphicsGetCurrentContext()];
     
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
+*/
+    
+    UIImage  *image=[Function getImage:cell.StageView WithSize:CGSizeMake(kDeviceWidth, hight)];
+    
 
     //创建UMshareView 后必须配备这三个方法
     hotmovie.stageinfo.movie_name=[_MovieDict objectForKey:@"name"];
@@ -791,7 +795,7 @@
     [[UMSocialControllerService defaultControllerService] setShareText:StageInfo.movie_name shareImage:shareImage socialUIDelegate:self];        //设置分享内容和回调对象
     [UMSocialSnsPlatformManager getSocialPlatformWithName:[sharearray  objectAtIndex:button.tag-10000]].snsClickHandler(self,[UMSocialControllerService defaultControllerService],YES);
     NSLog(@"分享到微信");
-    self.tabBarController.tabBar.hidden=NO;
+    self.tabBarController.tabBar.hidden=YES;
     if (shareView) {
         [shareView HidenShareButtomView];
         [shareView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.5];
@@ -807,7 +811,7 @@
     if (shareView) {
         [shareView HidenShareButtomView];
         [shareView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.5];
-        self.tabBarController.tabBar.hidden=NO;
+        self.tabBarController.tabBar.hidden=YES;
         
     }
     
@@ -956,14 +960,18 @@
         
         BigImageCollectionViewCell *cell = (BigImageCollectionViewCell *)(markView.superview.superview.superview);
         
-        UIGraphicsBeginImageContextWithOptions(CGSizeMake(kDeviceWidth, hight), YES, [UIScreen mainScreen].scale);
+        /*UIGraphicsBeginImageContextWithOptions(CGSizeMake(kDeviceWidth, hight), YES, [UIScreen mainScreen].scale);
         [cell.StageView drawViewHierarchyInRect:cell.StageView.bounds afterScreenUpdates:YES];
         
         // old style [self.layer renderInContext:UIGraphicsGetCurrentContext()];
         
         UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
+       */
         
+        UIImage  *image=[Function getImage:cell.StageView WithSize:CGSizeMake(kDeviceWidth, hight)];
+        
+
         //创建UMshareView 后必须配备这三个方法
         stageInfoDict.movie_name=[_MovieDict objectForKey:@"name"];
         shareView.StageInfo=stageInfoDict;
