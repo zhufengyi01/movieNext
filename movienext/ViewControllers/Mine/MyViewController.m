@@ -30,7 +30,7 @@
 #import "UMShareView.h"
 @interface MyViewController ()<UITableViewDataSource, UITableViewDelegate,StageViewDelegate,MarkViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UIActionSheetDelegate,UMSocialDataDelegate,UMSocialUIDelegate,UMShareViewDelegate>
 {
-    UISegmentedControl *segment;
+    //UISegmentedControl *segment;
     UITableView   *_tableView;
     NSMutableArray    *_addedDataArray;
     NSMutableArray    *_upedDataArray;
@@ -47,10 +47,11 @@
     
     ButtomToolView *_toolBar;
     MarkView       *_mymarkView;
-    
     BOOL isMarkViewsShow;
     UMShareView  *shareView;
     int  productCount;
+    //保存头部视图按钮的状态
+    NSMutableDictionary  *buttonStateDict;
 
 
 }
@@ -71,9 +72,9 @@
         self.tabBarController.tabBar.hidden=NO;
    
     }
-    if (_tableView) {
-        [self setupRefresh];
-    }
+   // if (_tableView) {
+     //   [self setupRefresh];
+    //}
 }
 
 - (void)viewDidLoad {
@@ -100,6 +101,8 @@
 -(void)initData {
     _addedDataArray = [[NSMutableArray alloc] init];
     _upedDataArray = [[NSMutableArray alloc] init];
+    buttonStateDict=[[NSMutableDictionary alloc]init];
+    [buttonStateDict setValue:@"YES" forKey:@"100"];
     if (self.author_id&&![self.author_id isEqualToString:@"0"]) {
         //如果有用户id 并且用户的id 不为0
         _userInfoDict =[[NSMutableDictionary alloc]init];
@@ -137,6 +140,11 @@
     _tableView.delegate = self;
     _tableView.dataSource = self;
     [self.view addSubview:_tableView];
+    //是从别人的页面进来的不是自己的
+    if (self.author_id.length>0&&![self.author_id isEqualToString:@"0"]) {
+        _tableView.frame=CGRectMake(0, 0, kDeviceWidth, kDeviceHeight-kHeightNavigation);
+    }
+
     
     userCenter=[UserDataCenter shareInstance];
     
@@ -148,12 +156,15 @@
         signature=@"";
     }
      UIView *viewHeader = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, 130)];
-    viewHeader.backgroundColor =View_BackGround;
+ //   viewHeader.backgroundColor =View_BackGround;
     
     int ivAvatarWidth = 50;
-    ivAvatar = [[UIImageView alloc] initWithFrame:CGRectMake(25, 20, ivAvatarWidth, ivAvatarWidth)];
+    ivAvatar = [[UIImageView alloc] initWithFrame:CGRectMake(20, 20, ivAvatarWidth, ivAvatarWidth)];
     ivAvatar.layer.cornerRadius = ivAvatarWidth * 0.5;
     ivAvatar.layer.masksToBounds = YES;
+    ivAvatar.layer.borderColor=VBlue_color.CGColor;
+    ivAvatar.layer.borderWidth=2;
+
     //ivAvatar.backgroundColor = [UIColor redColor];
     NSURL   *imageURL;
     if (_userInfoDict) {
@@ -171,7 +182,7 @@
     
     lblUsername = [[UILabel alloc] initWithFrame:CGRectMake(ivAvatar.frame.origin.x+ivAvatar.frame.size.width+10, ivAvatar.frame.origin.y, 200, 20)];
     lblUsername.font = [UIFont systemFontOfSize:15];
-    lblUsername.textColor = VBlue_color;
+    lblUsername.textColor = VGray_color;
     if (_userInfoDict) {
         lblUsername.text=[NSString stringWithFormat:@"%@",[_userInfoDict objectForKey:@"username"]];
     }
@@ -180,12 +191,12 @@
     //}
     [viewHeader addSubview:lblUsername];
     
-    UILabel  *lbl1=[ZCControl createLabelWithFrame:CGRectMake(lblUsername.frame.origin.x,lblUsername.frame.origin.y+lblUsername.frame.size.height+10, 40, 20) Font:14 Text:@"内容"];
+    UILabel  *lbl1=[ZCControl createLabelWithFrame:CGRectMake(lblUsername.frame.origin.x,lblUsername.frame.origin.y+lblUsername.frame.size.height+5, 40, 20) Font:14 Text:@"内容"];
     lbl1.textColor=VBlue_color;
     [viewHeader addSubview:lbl1];
     
     //内容的数量
-    lblCount = [[UILabel alloc] initWithFrame:CGRectMake(lbl1.frame.origin.x+lbl1.frame.size.width, lblUsername.frame.origin.y+lblUsername.frame.size.height+10, 60, 20)];
+    lblCount = [[UILabel alloc] initWithFrame:CGRectMake(lbl1.frame.origin.x+lbl1.frame.size.width, lblUsername.frame.origin.y+lblUsername.frame.size.height+5, 25, 20)];
     lblCount.font = [UIFont systemFontOfSize:14];
 
     if (_userInfoDict) {
@@ -199,12 +210,12 @@
     [viewHeader addSubview:lblCount];
     
     
-    UILabel  *lbl2=[ZCControl createLabelWithFrame:CGRectMake(lblCount.frame.origin.x+lblCount.frame.size.width+10,lblUsername.frame.origin.y+lblUsername.frame.size.height+10, 40, 20) Font:14 Text:@"被赞"];
+    UILabel  *lbl2=[ZCControl createLabelWithFrame:CGRectMake(lblCount.frame.origin.x+lblCount.frame.size.width+10,lblUsername.frame.origin.y+lblUsername.frame.size.height+5, 40, 20) Font:14 Text:@"被赞"];
     lbl2.textColor=VBlue_color;
     [viewHeader addSubview:lbl2];
 
     //赞的数量
-    lblZanCout = [[UILabel alloc] initWithFrame:CGRectMake(lbl2.frame.origin.x+lbl2.frame.size.width+10,lblCount.frame.origin.y , 50, 20)];
+    lblZanCout = [[UILabel alloc] initWithFrame:CGRectMake(lbl2.frame.origin.x+lbl2.frame.size.width+5,lblCount.frame.origin.y , 50, 20)];
     lblZanCout.font = [UIFont systemFontOfSize:14];
     lblZanCout.textColor = VGray_color;
     if (_userInfoDict) {
@@ -229,6 +240,43 @@
     lblBrief.frame=CGRectMake(ivAvatar.frame.origin.x+ivAvatar.frame.size.width+10,lblCount.frame.origin.y+lblCount.frame.size.height+10, kDeviceWidth-ivAvatar.frame.origin.x-ivAvatar.frame.size.width-20, Msize.height);
       [viewHeader addSubview:lblBrief];
     
+    
+    UIButton  *addButton=[ZCControl createButtonWithFrame:CGRectMake(0,  lblBrief.frame.origin.y+lblBrief.frame.size.height+25, kDeviceWidth/2, 40) ImageName:nil Target:self Action:@selector(dealSegmentClick:) Title:@"添加"];
+    [addButton setTitleColor:VGray_color forState:UIControlStateNormal];
+    [addButton setTitleColor:VBlue_color forState:UIControlStateSelected];
+    if ([[buttonStateDict objectForKey:@"100"] isEqualToString:@"YES"]) {
+        [addButton setSelected:YES];
+    }
+    else{
+        [addButton setSelected:NO];
+    }
+    addButton.titleLabel.font=[UIFont systemFontOfSize:16];
+    //addButton.backgroundColor=VLight_GrayColor;
+    addButton.tag=100;
+    [viewHeader addSubview:addButton];
+    
+    UIView  *lineView=[[UIView alloc]initWithFrame:CGRectMake(kDeviceWidth/2,addButton.frame.origin.y+10,0.5,20)];
+    lineView.backgroundColor=VLight_GrayColor;
+    [viewHeader addSubview:lineView];
+    
+    UIButton  *zanButton=[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth/2,  lblBrief.frame.origin.y+lblBrief.frame.size.height+25, kDeviceWidth/2, 40) ImageName:nil Target:self Action:@selector(dealSegmentClick:) Title:@"赞"];
+    //zanButton.backgroundColor=VLight_GrayColor;
+    [zanButton setTitleColor:VGray_color forState:UIControlStateNormal];
+    [zanButton setTitleColor:VBlue_color forState:UIControlStateSelected];
+    if ([[buttonStateDict objectForKey:@"101"] isEqualToString:@"YES"]) {
+        [zanButton setSelected:YES];
+    }
+    else{
+        [zanButton setSelected:NO];
+    }
+    zanButton.titleLabel.font=[UIFont systemFontOfSize:16];
+
+   
+    zanButton.tag=101;
+    [viewHeader addSubview:zanButton];
+
+    
+   /*
     NSArray *segmentedArray = [[NSArray alloc] initWithObjects:@"添加", @"赞", nil];
     segment = [[UISegmentedControl alloc] initWithItems:segmentedArray];
     segment.frame = CGRectMake(0, lblBrief.frame.origin.y+lblBrief.frame.size.height+10, kDeviceWidth, 30);
@@ -243,16 +291,15 @@
                                                };
     [segment setTitleTextAttributes:unselectedTextAttributes forState:UIControlStateNormal];
     [segment addTarget:self action:@selector(segmentClick:) forControlEvents:UIControlEventValueChanged];
-    [viewHeader addSubview:segment];
+    [viewHeader addSubview:segment];*/
     
-    viewHeader.frame=CGRectMake(0, 0, kDeviceWidth,segment.frame.origin.y+segment.frame.size.height);
+    viewHeader.frame=CGRectMake(0, 0, kDeviceWidth,addButton.frame.origin.y+addButton.frame.size.height);
 
     [_tableView setTableHeaderView:viewHeader];
     
     [self setupRefresh];
 
 }
-
 
 
 -(void)setupRefresh
@@ -268,18 +315,36 @@
 - (void)headerRereshing
 {
     page=0;
-    if (segment.selectedSegmentIndex==0) {
-    if (_addedDataArray.count>0) {
-        [_addedDataArray removeAllObjects];
-
-    }
-    }
-    else if (segment.selectedSegmentIndex==1)
-    {
-        if (_upedDataArray.count>0) {
-            [_upedDataArray removeAllObjects];
+//    if (segment.selectedSegmentIndex==0) {
+//    if (_addedDataArray.count>0) {
+//        [_addedDataArray removeAllObjects];
+//
+//    }
+//    }
+//    else if (segment.selectedSegmentIndex==1)
+//    {
+//        if (_upedDataArray.count>0) {
+//            [_upedDataArray removeAllObjects];
+//        }
+//    }
+//
+    for (int i=100; i<102;i++ ) {
+        UIButton  *btn =(UIButton *)[self.view viewWithTag:i];
+        if (btn.tag==100&&btn.selected==YES) {
+            if (_addedDataArray.count>0) {
+                [_addedDataArray removeAllObjects];
+            }
+            
         }
+        else if (btn.tag==101&&btn.selected==YES)
+        {
+            if (_upedDataArray.count>0) {
+                [_upedDataArray removeAllObjects];
+            }
+        }
+        
     }
+    
     [self requestData];
     // 2.2秒后刷新表格UI
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -306,27 +371,52 @@
 
 
 
--(void)segmentClick:(UISegmentedControl *)seg
+-(void)dealSegmentClick:(UIButton *) button
 {
-    if(seg.selectedSegmentIndex==0)
+    if(button.tag==100)
     {
-        [_tableView reloadData];
-
-        if (_addedDataArray.count==0) {
-            [self requestData];
+        NSLog(@"点击了第一个按钮");
+        if (button.selected==YES) {
+            //已经选择的情况下，点击这个没有反应
         }
-        
-    }
-    else if(seg.selectedSegmentIndex==1)
-    {
+        else if(button.selected==NO)
+        {
+            button.selected=YES;
+            [buttonStateDict setValue:@"YES" forKey:@"100"];
+            //把赞设置为选择状态
+            UIButton  *btn =(UIButton *)[self.view viewWithTag:101];
+            btn.selected=NO;
+            [buttonStateDict setValue:@"NO" forKey:@"101"];
             [_tableView reloadData];
-        if (_upedDataArray.count==0) {
-            [self requestData];
+            if (_addedDataArray.count==0) {
+                [self requestData];
+            }
         }
+    }
+    else if(button.tag==101)
+    {
+        NSLog(@"点击了第er个按钮");
 
-
+        if (button.selected==YES) {
+            
+        }
+        else if(button.selected==NO)
+        {
+           button.selected=YES;
+         
+          [buttonStateDict setValue:@"YES" forKey:@"101"];
+         //把赞设置为选择状态
+          UIButton  *btn =(UIButton *)[self.view viewWithTag:100];
+          [buttonStateDict setValue:@"NO" forKey:@"100"];
+          btn.selected=NO;
+          [_tableView reloadData];
+           if (_upedDataArray.count==0) {
+            [self requestData];
+           }
+        }
     }
     
+    NSLog(@"buttonStateDict=======%@",buttonStateDict);
 }
 - (void)createLoadview
 {
@@ -397,12 +487,23 @@
     //user_id是当前用户的ID
     NSDictionary *parameters = @{@"user_id":userCenter.user_id, @"page":[NSString stringWithFormat:@"%d",page], @"author_id":autorid};
     NSString * section;
-    if (segment.selectedSegmentIndex==1) {  // 赞过的
-        section=@"weibo/upedListByUserId";
-    }
-    else if(segment.selectedSegmentIndex==0) // 用户添加的
-    {
-        section= @"weibo/listByUserId";
+//    if (segment.selectedSegmentIndex==1) {  // 赞过的
+//        section=@"weibo/upedListByUserId";
+//    }
+//    else if(segment.selectedSegmentIndex==0) // 用户添加的
+//    {
+//        section= @"weibo/listByUserId";
+//    }
+    for (int i=100; i<102;i++ ) {
+        UIButton  *btn =(UIButton *)[self.view viewWithTag:i];
+        if (btn.tag==100&&btn.selected==YES) {
+            section=@"weibo/upedListByUserId";
+        }
+        else if (btn.tag==101&&btn.selected==YES)
+        {
+            section= @"weibo/listByUserId";
+        }
+        
     }
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     //    [manager POST:[NSString stringWithFormat:@"%@/movieStage/listRecently", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -410,7 +511,11 @@
         [loadView stopAnimation];
         [loadView removeFromSuperview];
         NSMutableArray  *Detailarray=[responseObject objectForKey:@"detail"];
-        if (segment.selectedSegmentIndex==0) {
+        
+        for (int i=100; i<102;i++ ) {
+            UIButton  *btn =(UIButton *)[self.view viewWithTag:i];
+            
+        if (btn.tag==100&&btn.selected==YES) {
             if (_addedDataArray ==nil) {
                 _addedDataArray=[[NSMutableArray alloc]init];
             }
@@ -438,7 +543,7 @@
             [_tableView reloadData];
 
         }
-        else if(segment.selectedSegmentIndex==1)
+        else if(btn.tag==101&&btn.selected==YES)
         {
             if (_upedDataArray==nil) {
                 _upedDataArray=[[NSMutableArray alloc]init];
@@ -465,6 +570,7 @@
             }
 
             [_tableView reloadData];
+        }
         }
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -530,18 +636,38 @@
 #pragma mark  -------
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (segment.selectedSegmentIndex==0) {
-        return _addedDataArray.count;
+//    if (segment.selectedSegmentIndex==0) {
+//        return _addedDataArray.count;
+//    }
+//    else if (segment.selectedSegmentIndex==1)
+//    {
+//        return _upedDataArray.count;
+//    }
+    
+    for (int i=100; i<102;i++ ) {
+        UIButton  *btn =(UIButton *)[self.view viewWithTag:i];
+        if (btn.tag==100&&btn.selected==YES) {
+            return _addedDataArray.count;
+
+        }
+        else if (btn.tag==101&&btn.selected==YES)
+        {
+            return _upedDataArray.count;
+        }
+        
     }
-    else if (segment.selectedSegmentIndex==1)
-    {
-        return _upedDataArray.count;
-    }
+
     return 0;
 }
 
 -(CGFloat )tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    if (segment.selectedSegmentIndex==0) {
+    
+    
+    for (int i=100; i<102;i++ ) {
+    
+        UIButton  *btn =(UIButton *)[self.view viewWithTag:i];
+
+    if (btn.tag==100&&btn.selected==YES) {
         HotMovieModel *model =[_addedDataArray objectAtIndex:indexPath.row];
         float hight;
         if (_addedDataArray.count>indexPath.row) {
@@ -561,7 +687,7 @@
         NSLog(@"============  hight  for  row  =====%f",hight);
         return hight+10;
     }
-    else if (segment.selectedSegmentIndex==1)
+    else if (btn.tag==101&&btn.selected==YES)
     {
         HotMovieModel  *model =[_upedDataArray objectAtIndex:indexPath.row];
         float hight;
@@ -583,12 +709,15 @@
 
         return hight+10;
     }
+    }
     return 200.0f;
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    for (int i=100; i<102;i++ ) {
+        UIButton  *btn =(UIButton *)[self.view viewWithTag:i];
 
-    if  (segment.selectedSegmentIndex==0) {
+    if  (btn.tag==100&&btn.selected==YES) {
 
         
         if (_addedDataArray.count>indexPath.row) {
@@ -616,12 +745,11 @@
             cell.StageInfoDict=model.stageinfo;
             [cell ConfigsetCellindexPath:indexPath.row];
             cell.stageView.delegate=self;
-                    return cell;
+            return cell;
         }
         return nil;
-
     }
-    else if (segment.selectedSegmentIndex==1)
+    else if (btn.tag==101&&btn.selected==YES)
     {
         if (_upedDataArray.count>indexPath.row) {
         HotMovieModel  *model =[_upedDataArray objectAtIndex:indexPath.row];
@@ -640,8 +768,8 @@
             cell.stageView.delegate=self;
           //  [cell setCellValue:[[_upedDataArray objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"]indexPath:indexPath.row];
             return  cell;
-
         }
+      }
     }
     return nil;
     
@@ -673,12 +801,25 @@
 //点击左下角的电影按钮
 -(void)dealMovieButtonClick:(UIButton  *) button{
     HotMovieModel  *hotmovie;
-    if (segment.selectedSegmentIndex==0) {
-        hotmovie =[_addedDataArray objectAtIndex:button.tag-1000];
+    for (int i=100; i<102;i++ ) {
+        UIButton  *btn =(UIButton *)[self.view viewWithTag:i];
+        if (btn.tag==100&&btn.selected==YES) {
+            hotmovie =[_addedDataArray objectAtIndex:button.tag-1000];
+
+        }
+        else if (btn.tag==101&&btn.selected==YES)
+        {
+            hotmovie=[_upedDataArray objectAtIndex:button.tag-1000];
+        }
+        
     }
-    else  {
-        hotmovie=[_upedDataArray objectAtIndex:button.tag-1000];
-    }
+
+//    if (segment.selectedSegmentIndex==0) {
+//        hotmovie =[_addedDataArray objectAtIndex:button.tag-1000];
+//    }
+//    else  {
+//        hotmovie=[_upedDataArray objectAtIndex:button.tag-1000];
+//    }
     MovieDetailViewController *vc =  [MovieDetailViewController new];
     vc.movieId =  hotmovie.stageinfo.movie_id;
     [self.navigationController pushViewController:vc animated:YES];
@@ -690,12 +831,25 @@
     //获取cell
 #pragma mark 暂时把sharetext设置成null
     HotMovieModel  *hotmovie;
-    if (segment.selectedSegmentIndex==0) {
-        hotmovie =[_addedDataArray objectAtIndex:button.tag-2000];
+    
+    for (int i=100; i<102;i++ ) {
+        UIButton  *btn =(UIButton *)[self.view viewWithTag:i];
+        if (btn.tag==100&&btn.selected==YES) {
+            hotmovie =[_addedDataArray objectAtIndex:button.tag-2000];
+            
+        }
+        else if (btn.tag==101&&btn.selected==YES)
+        {
+            hotmovie=[_upedDataArray objectAtIndex:button.tag-2000];
+        }
+        
     }
-    else  {
-        hotmovie=[_upedDataArray objectAtIndex:button.tag-2000];
-    }
+//    if (segment.selectedSegmentIndex==0) {
+//        hotmovie =[_addedDataArray objectAtIndex:button.tag-2000];
+//    }
+//    else  {
+//        hotmovie=[_upedDataArray objectAtIndex:button.tag-2000];
+//    }
     
     float hight= kDeviceWidth;
     float  ImageWith=[hotmovie.stageinfo.w intValue]; //[[self.StageInfoDict objectForKey:@"w"]  floatValue];
@@ -793,13 +947,26 @@
     NSLog(@" ==addMarkButtonClick  ====%ld",button.tag);
     AddMarkViewController  *AddMarkVC=[[AddMarkViewController alloc]init];
     HotMovieModel  *hotmovie=[[HotMovieModel alloc]init];
-    if (segment.selectedSegmentIndex==0) {
-        hotmovie =[_addedDataArray objectAtIndex:button.tag-3000];
+    for (int i=100; i<102;i++ ) {
+        UIButton  *btn =(UIButton *)[self.view viewWithTag:i];
+        if (btn.tag==100&&btn.selected==YES) {
+            hotmovie =[_addedDataArray objectAtIndex:button.tag-1000];
+            
+        }
+        else if (btn.tag==101&&btn.selected==YES)
+        {
+            hotmovie=[_upedDataArray objectAtIndex:button.tag-1000];
+        }
+        
     }
-    else
-    {
-        hotmovie=[_upedDataArray objectAtIndex:button.tag-3000];
-    }
+
+//    if (segment.selectedSegmentIndex==0) {
+//        hotmovie =[_addedDataArray objectAtIndex:button.tag-3000];
+//    }
+//    else
+//    {
+//        hotmovie=[_upedDataArray objectAtIndex:button.tag-3000];
+//    }
     AddMarkVC.stageInfoDict=hotmovie.stageinfo;
     //AddMarkVC.pageSoureType=NSAddMarkPageSourceDefault;
     NSLog(@"dict.stageinfo = %@", AddMarkVC.stageInfoDict);

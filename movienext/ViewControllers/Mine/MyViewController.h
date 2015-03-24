@@ -8,6 +8,12 @@
 
 #import <UIKit/UIKit.h>
 #import "CommonStageCell.h"
+/*typedef NS_ENUM(NSInteger,NSUserCente)
+{
+    NSUserPageTypeMySelfController=100,
+    NSUserPageTypeOthersController=101,
+};
+*/
 @interface MyViewController : UIViewController
 
 @property (nonatomic, strong) NSString * author_id;//当前正在查看的作者ID

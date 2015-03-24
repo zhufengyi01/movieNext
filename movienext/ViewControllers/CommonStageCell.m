@@ -39,7 +39,7 @@
 -(void)CreateTopView
 {
     BgView0 =[[UIView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, 0)];
-    BgView0.backgroundColor=[UIColor whiteColor];
+    BgView0.backgroundColor=View_ToolBar;
     [self.contentView addSubview:BgView0];
     
     UserLogoButton =[ZCControl createButtonWithFrame:CGRectMake(10, 8, 30, 30) ImageName:nil Target:self.superview Action:@selector(UserLogoButtonClick:) Title:@"头像"];

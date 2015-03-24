@@ -18,6 +18,7 @@
 
 @interface UMShareView : UIView
 {
+    CGRect  m_frame;
     UILabel  *logoLable;
     UIButton  *wechatSessionBtn;
     UIButton  *wechatTimelineBtn;

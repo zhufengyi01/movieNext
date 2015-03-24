@@ -64,15 +64,15 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     self.tabBarController.tabBar.hidden=YES;
-    self.navigationController.navigationBar.hidden=NO;
+    self.navigationController.navigationBar.hidden=YES;
     //下面透明度的设置，效果是设置了导航条的高度的多少倍，不是透明度多少
-    self.navigationController.navigationBar.alpha=0.4;
+  ///  self.navigationController.navigationBar.alpha=0.4;
   
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    [self createNavigation];
+    //[self createNavigation];
     [self initData];
     [self initUI];
     [self creatLoadView];
@@ -93,7 +93,7 @@
 
 
 }
--(void)createNavigation
+/*-(void)createNavigation
 {
     UIButton * RighttBtn= [UIButton buttonWithType:UIButtonTypeSystem];
     RighttBtn.frame=CGRectMake(0, 0, 80, 30);
@@ -105,9 +105,9 @@
     self.navigationItem.rightBarButtonItem=[[UIBarButtonItem alloc]initWithCustomView:RighttBtn];
     
 
-}
+}*/
 //上传图片
--(void)dealRightNavClick:(UIButton *)button
+/*-(void)dealRightNavClick:(UIButton *)button
 {
     UIActionSheet   *ash=[[UIActionSheet alloc]initWithTitle:@"请选择照片" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"从相册中选择", nil];
      [ash showInView:self.view];
@@ -129,7 +129,7 @@
         
  
     }
-}
+}*/
 #pragma mark  ---
 #pragma mark  -----imagePickerControlldelegate
 #pragma mark  ----
@@ -260,7 +260,7 @@
     }
     //kDeviceHeight/3-45+44
     
-    _myConllectionView =[[UICollectionView alloc]initWithFrame:CGRectMake(0, -64,kDeviceWidth, kDeviceHeight+kHeightNavigation) collectionViewLayout:layout];
+    _myConllectionView =[[UICollectionView alloc]initWithFrame:CGRectMake(0, -20,kDeviceWidth, kDeviceHeight+kHeightNavigation) collectionViewLayout:layout];
     [layout setHeaderReferenceSize:CGSizeMake(_myConllectionView.frame.size.width, kDeviceHeight/3+64)];
 
     _myConllectionView.backgroundColor=View_BackGround;
@@ -343,12 +343,12 @@
 //创建底部的视图
 -(void)createToolBar
 {
-    _toolBar=[[ButtomToolView alloc]initWithFrame:CGRectMake(0,0,kDeviceWidth,kDeviceHeight)];
+    _toolBar=[[ButtomToolView alloc]initWithFrame:CGRectMake(0,0,kDeviceWidth,kDeviceHeight+64)];
     _toolBar.delegete=self;
 }
 -(void)createShareView
 {
-    shareView=[[UMShareView alloc]initWithFrame:CGRectMake(0,0, kDeviceWidth, kDeviceHeight)];
+    shareView=[[UMShareView alloc]initWithFrame:CGRectMake(0,0, kDeviceWidth, kDeviceHeight+64)];
     shareView.delegate=self;
 }
 
@@ -596,8 +596,8 @@
       
         float hight;
         if (_dataArray.count>indexPath.row) {
-            float  h= [model.stageinfo.h  floatValue]; // [[[[_dataArray  objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] objectForKey:@"h"] floatValue];
-            float w=[model.stageinfo.w floatValue];   //[[[[_dataArray  objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"] objectForKey:@"w"] floatValue];
+            float  h= [model.stageinfo.h  floatValue];
+            float w=[model.stageinfo.w floatValue];
             if (w==0||h==0) {
                 hight= kDeviceWidth+45;
             }
@@ -722,10 +722,23 @@
         
     }
 }
-
--(void)backClick
+-(void)NavigationClick:(UIButton *)button
+//返回
 {
-    [self.navigationController popViewControllerAnimated:YES];
+   // [self.navigationController popViewControllerAnimated:YES];
+    if (button.tag==200) {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+    else if (button.tag==201)
+    {
+        UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+        
+        picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        picker.delegate = self;
+        //设置选择后的图片可被编辑
+        picker.allowsEditing = YES;
+        [self presentViewController:picker animated:YES completion:nil];
+    }
 }
 
 //分享

@@ -97,7 +97,7 @@
     weiboButton=[UIButton buttonWithType:UIButtonTypeCustom];
     weiboButton.frame=CGRectMake((kDeviceWidth-231)/2, kDeviceHeight-160, 231, 40);
     [weiboButton setBackgroundImage:[UIImage imageNamed:@"login_button_sina.png"] forState:UIControlStateNormal];
-    [weiboButton setBackgroundImage:[UIImage imageNamed:@"login_button_sina －in.png"] forState:UIControlStateHighlighted];
+    [weiboButton setBackgroundImage:[UIImage imageNamed:@"login_button_sina_press@2x.png"] forState:UIControlStateHighlighted];
     [weiboButton addTarget:self action:@selector(dealloginClick:) forControlEvents:UIControlEventTouchUpInside];
     weiboButton.tag=1001;
    // weiboButton.userInteractionEnabled=NO;

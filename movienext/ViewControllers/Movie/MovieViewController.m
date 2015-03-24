@@ -55,6 +55,7 @@
     // Do any additional setup after loading the view.
     
     //创建导航
+    //self.view.backgroundColor=[UIColor whiteColor];
     [self createNavigation];
     [self createSegmentView];
     [self initData];
@@ -245,7 +246,7 @@
     if (_dataArray.count > indexPath.row) {
     
      [cell setValueforCell:[_dataArray  objectAtIndex:(long)indexPath.row]];
-     //cell.backgroundColor=[UIColor whiteColor];
+     cell.backgroundColor=[UIColor whiteColor];
     }
     return cell;
 }

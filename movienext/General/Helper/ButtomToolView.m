@@ -140,7 +140,7 @@
 {
     [UIView animateWithDuration:0.5 animations:^{
         CGRect  Bframe=buttomView.frame;
-        Bframe.origin.y=kDeviceHeight-kHeightNavigation-50;
+        Bframe.origin.y=m_frame.size.height-kHeightNavigation-50;
         buttomView.frame=Bframe;
     } completion:^(BOOL finished) {
     }];
@@ -150,7 +150,7 @@
 {
     [UIView animateWithDuration:0.5 animations:^{
         CGRect  Bframe=buttomView.frame;
-        Bframe.origin.y=kDeviceHeight-kHeightNavigation;
+        Bframe.origin.y=m_frame.size.height-kHeightNavigation;
         buttomView.frame=Bframe;
     } completion:^(BOOL finished) {
         

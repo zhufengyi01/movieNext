@@ -27,7 +27,7 @@
 #import "UMSocialControllerService.h"
 //友盟分享
 //#import "UMSocial.h"
-@interface NewViewController ()<UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UIScrollViewDelegate,UMSocialDataDelegate,UMSocialUIDelegate,UMShareViewDelegate>
+@interface NewViewController ()<UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UIScrollViewDelegate,UMSocialDataDelegate,UMSocialUIDelegate,UMShareViewDelegate,LoadingViewDelegate>
 {
     AppDelegate  *appdelegate;
     UISegmentedControl *segment;
@@ -53,9 +53,9 @@
 //    self.navigationController.navigationBar.translucent=NO;
 //
     self.tabBarController.tabBar.hidden=NO;
-    if (_HotMoVieTableView) {
-        [self setupRefresh];
-    }
+    //if (_HotMoVieTableView) {
+      //  [self setupRefresh];
+    //}
 }
 
 - (void)viewDidLoad {
@@ -188,6 +188,7 @@
 -(void)creatLoadView
 {
     loadView =[[LoadingView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight)];
+    loadView.delegate=self;
     [self.view addSubview:loadView];
 }
 
@@ -259,8 +260,10 @@
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     //    [manager POST:[NSString stringWithFormat:@"%@/movieStage/listRecently", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
     [manager POST:[NSString stringWithFormat:@"%@/%@", kApiBaseUrl, section] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        [loadView stopAnimation];
-        loadView.hidden=YES;
+        if ([[responseObject objectForKey:@"return_code"] intValue]==10000) {
+            [loadView stopAnimation];
+            loadView.hidden=YES;
+
         NSMutableArray  *Detailarray=[responseObject objectForKey:@"detail"];
         if (segment.selectedSegmentIndex==0) {
             if (_hotDataArray ==nil) {
@@ -318,10 +321,23 @@
           
            [_HotMoVieTableView reloadData];
         }
+        }
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
+        [loadView showFailLoadData];
+        
+        
     }];
+}
+//数据下载失败的时候执行这个方法
+-(void)reloadDataClick
+{
+    [self requestData];
+    //点击完之后，动画又要开始旋转，同时隐藏了加载失败的背景
+    [loadView hidenFailLoadAndShowAnimation];
+    
+    
 }
 #pragma mark  -----
 #pragma mark --------UItableViewDelegate

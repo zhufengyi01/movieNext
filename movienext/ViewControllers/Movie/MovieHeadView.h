@@ -11,7 +11,7 @@
 //改变显示大图和小图的状态
 //button.tag==1000 大图  button.tag==1000 小图
 -(void)ChangeCollectionModel:(UIButton  *) button;
--(void)backClick;
+-(void)NavigationClick:(UIButton *) button;
 @end
 @interface MovieHeadView : UICollectionReusableView
 {
