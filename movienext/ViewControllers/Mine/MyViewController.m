@@ -508,10 +508,10 @@
 //    }
     for (int i=100; i<102;i++ ) {
         UIButton  *btn =(UIButton *)[self.view viewWithTag:i];
-        if (btn.tag==100&&btn.selected==YES) {
+        if (btn.tag==101&&btn.selected==YES) {
             section=@"weibo/upedListByUserId";
         }
-        else if (btn.tag==101&&btn.selected==YES)
+        else if (btn.tag==100&&btn.selected==YES)
         {
             section= @"weibo/listByUserId";
         }
@@ -968,8 +968,6 @@
     
     
 }
-
-
 //点击增加弹幕
 -(void)addMarkButtonClick:(UIButton  *) button
 {
@@ -979,12 +977,17 @@
     for (int i=100; i<102;i++ ) {
         UIButton  *btn =(UIButton *)[self.view viewWithTag:i];
         if (btn.tag==100&&btn.selected==YES) {
-            hotmovie =[_addedDataArray objectAtIndex:button.tag-1000];
+            if (_addedDataArray.count>button.tag-3000) {
+                hotmovie =[_addedDataArray objectAtIndex:button.tag-3000];
+
+            }
             
         }
         else if (btn.tag==101&&btn.selected==YES)
         {
-            hotmovie=[_upedDataArray objectAtIndex:button.tag-1000];
+            if (_upedDataArray.count>button.tag-3000) {
+            hotmovie=[_upedDataArray objectAtIndex:button.tag-3000];
+            }
         }
         
     }
@@ -1214,7 +1217,11 @@
     //宽度=字的宽度+左头像图片的宽度＋赞图片的宽度＋赞数量的宽度+中间两个空格2+2
     float markViewWidth = Msize.width+23+Uwidth+5+5+11+5;
     float markViewHeight = Msize.height+6;
-
+    if(IsIphone6)
+    {
+        markViewWidth=markViewWidth+10;
+        markViewHeight=markViewHeight+4;
+    }
 #pragma mark 设置气泡的大小和位置
     markView.frame=CGRectMake(markView.frame.origin.x,markView.frame.origin.y, markViewWidth, markViewHeight);
 #pragma mark 设置标签的内容

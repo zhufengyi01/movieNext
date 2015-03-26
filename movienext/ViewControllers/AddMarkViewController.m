@@ -39,6 +39,12 @@
     }
     
 }
+
+-(void)viewDidAppear:(BOOL)animated
+{
+    if(_inputText)
+        [_inputText becomeFirstResponder];
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -54,16 +60,18 @@
 }
 -(void)createNavigation
 {
-    UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:@"发布弹幕"];
-    titleLable.textColor=VBlue_color;
-    titleLable.font=[UIFont boldSystemFontOfSize:16];
-    titleLable.textAlignment=NSTextAlignmentCenter;
-    self.navigationItem.titleView=titleLable;
+//    UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:@"发布弹幕"];
+//    titleLable.textColor=VBlue_color;
+//    titleLable.font=[UIFont boldSystemFontOfSize:16];
+//    titleLable.textAlignment=NSTextAlignmentCenter;
+//    self.navigationItem.titleView=titleLable;
     
     UIButton  *leftBtn= [UIButton buttonWithType:UIButtonTypeSystem];
     leftBtn.frame=CGRectMake(0, 0, 40, 30);
     [leftBtn setTitleColor:VGray_color forState:UIControlStateNormal];
     [leftBtn setTitle:@"取消" forState:UIControlStateNormal];
+    leftBtn.titleLabel.font=[UIFont boldSystemFontOfSize:16];
+    [leftBtn setTitleEdgeInsets:UIEdgeInsetsMake(0, -15, 0, 0)];
     [leftBtn addTarget:self action:@selector(dealNavClick:) forControlEvents:UIControlEventTouchUpInside];
     leftBtn.tag=100;
     UIBarButtonItem  *leftBarButton=[[UIBarButtonItem alloc]initWithCustomView:leftBtn];
@@ -73,8 +81,12 @@
     RighttBtn.frame=CGRectMake(0, 0, 40, 30);
     [RighttBtn addTarget:self action:@selector(dealNavClick:) forControlEvents:UIControlEventTouchUpInside];
     RighttBtn.tag=101;
-    [RighttBtn setTitleColor:VGray_color forState:UIControlStateNormal];
+   // [RighttBtn setTitleColor:VGray_color forState:UIControlStateNormal];
     [RighttBtn setTitle:@"发布" forState:UIControlStateNormal];
+    [RighttBtn setTitleEdgeInsets:UIEdgeInsetsMake(0, 0, 0, -10)];
+
+    RighttBtn.titleLabel.font=[UIFont boldSystemFontOfSize:16];
+    RighttBtn.hidden=YES;
     self.navigationItem.rightBarButtonItem=[[UIBarButtonItem alloc]initWithCustomView:RighttBtn];
     
 
@@ -148,13 +160,11 @@
      _inputText.layer.borderWidth=0.5;
      _inputText.layer.borderColor=VLight_GrayColor.CGColor;
     
-
-    
     UIView  *leftView=[[UIView alloc]initWithFrame:CGRectMake(0,10, 8, 20)];
     leftView.backgroundColor=[UIColor clearColor];
     _inputText.leftView=leftView;
     _inputText.leftViewMode=UITextFieldViewModeAlways;
-
+     [_inputText becomeFirstResponder];
      [_toolBar addSubview:_inputText];
     
     
@@ -166,7 +176,7 @@
     publishBtn.tag=99;
     publishBtn.clipsToBounds=YES;
      [_toolBar addSubview:publishBtn];
-     [_inputText becomeFirstResponder];
+    
     [self.view addSubview:_toolBar];
 }
 
@@ -177,17 +187,8 @@
     if (button.tag==100) {
         NSLog(@" =========取消发布的方法");
         //取消发布
-        //if (self.pageSoureType==NSAddMarkPageSourceDefault) {
-            [self.navigationController popViewControllerAnimated:NO];
-            
-        //}
-        //返回到原来跳转过来的页面
-//       else if (self.pageSoureType==NSAddMarkPageSourceUploadImage) {
-//           MovieDetailViewController  *movie=[[MovieDetailViewController alloc]init];
-//           movie.movieId=self.stageInfoDict.movie_id;
-//           [self.navigationController pushViewController:movie animated:NO];
-//            
-//        }
+        [self.navigationController popViewControllerAnimated:NO];
+    
     }
     else if (button.tag==101)
     {        [self  PublicRuqest];
@@ -221,6 +222,7 @@
     } completion:^(BOOL finished) {
         
     }];
+    RighttBtn.hidden=NO;
     RighttBtn.titleLabel.textColor=VBlue_color;
     [_inputText resignFirstResponder];
     //清楚原来添加的弹幕
@@ -264,7 +266,11 @@
     //位置=
     float markViewWidth = Msize.width+23+5+5+11+5;
     float markViewHeight = Msize.height+6;
-    
+    if(IsIphone6)
+    {
+        markViewWidth=markViewWidth+10;
+        markViewHeight=markViewHeight+4;
+    }
     _myMarkView.frame=CGRectMake((kDeviceWidth-markViewWidth)/2, (hight-(Msize.height+6))/2, markViewWidth, markViewHeight);
     X =[NSString stringWithFormat:@"%f",((_myMarkView.frame.origin.x+_myMarkView.frame.size.width)/kDeviceWidth)*100];
     Y=[NSString stringWithFormat:@"%f",((_myMarkView.frame.origin.y+(markViewHeight/2))/kDeviceHeight)*100];
@@ -396,7 +402,6 @@
 {
     if (buttonIndex==0) {
         if (self.pageSoureType==NSAddMarkPageSourceUploadImage) {
-            //[self.navigationController popToRootViewControllerAnimated:YES];
             [self.navigationController popViewControllerAnimated:YES];
             [self.navigationController popViewControllerAnimated:YES];
         }else

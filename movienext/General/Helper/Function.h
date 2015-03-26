@@ -108,6 +108,7 @@ float getHeightByWidthAndHeight(float width, float height){
 //根据一张大的图片，把这个大的图片截取成一张小的图片
 
 +(UIImage *)getImageFromImage:(UIImage *) BigImage;
-
+//进入appdelegate页面时候，根据磁盘信息把磁盘信息复制给usercenter
++(void)getUserInfoWith:(NSDictionary  *) userInfo;
 
 @end

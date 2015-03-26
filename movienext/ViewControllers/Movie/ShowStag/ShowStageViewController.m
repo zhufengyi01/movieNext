@@ -414,6 +414,11 @@
     //宽度=字的宽度+左头像图片的宽度＋赞图片的宽度＋赞数量的宽度+中间两个空格2+2
     float markViewWidth = Msize.width+23+Uwidth+5+5+11+5;
     float markViewHeight = Msize.height+6;
+    if(IsIphone6)
+    {
+        markViewWidth=markViewWidth+10;
+        markViewHeight=markViewHeight+4;
+    }
 #warning    kDeviceWidth 目前计算的是正方形的，当图片高度>屏幕的宽度的实际，需要使用图片的高度
     //markViewY = MIN(MAX(markViewY, 1.0f), kDeviceWidth-markViewHeight-1);
 #pragma mark 设置气泡的大小和位置

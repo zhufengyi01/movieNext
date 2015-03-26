@@ -42,14 +42,20 @@
 @implementation MovieViewController
 -(void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:YES];
     self.navigationController.navigationBar.hidden=NO;
     self.navigationController.navigationBar.alpha=1;
-    self.tabBarController.tabBar.hidden=NO;
+    //self.tabBarController.tabBar.hidden=NO;
    // if (self.myConllectionView) {
      //[  self.myConllectionView headerBeginRefreshing];
     //}
 }
+-(void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:YES];
+    self.tabBarController.tabBar.hidden=NO;
 
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -76,7 +82,6 @@
     //search.alpha=0.3;
      search.backgroundColor=[UIColor clearColor];
 //    [[search.subviews objectAtIndex:0]removeFromSuperview];
-    
     self.navigationItem.titleView=search;
     
 }

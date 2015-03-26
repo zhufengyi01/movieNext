@@ -37,8 +37,8 @@
     
     UIButton  *backBtn=[ZCControl createButtonWithFrame:CGRectMake(10, 30,60,32) ImageName:nil Target:self Action:@selector(dealBackClick:) Title:nil];
     backBtn.tag=200;
-    [backBtn setTitleEdgeInsets:UIEdgeInsetsMake(20, 25, 0, 20)];
-   // backBtn.backgroundColor=[UIColor redColor];
+     [backBtn setImageEdgeInsets:UIEdgeInsetsMake(0, -25, 0, 0)];
+  //  backBtn.backgroundColor=[UIColor redColor];
     [backBtn setImage:[UIImage imageNamed:@"back_Icon@2x.png"] forState:UIControlStateNormal];
     [bgImageView addSubview:backBtn];
     
@@ -60,8 +60,9 @@
     derectorLable.numberOfLines=2;
     [bgImageView addSubview:derectorLable];
     //演员
-    performerLable=[ZCControl createLabelWithFrame:CGRectMake(movieLogoImageView.frame.origin.x+10+movieLogoImageView.frame.size.width, derectorLable.frame.origin.y+derectorLable.frame.size.height, kDeviceWidth-movieLogoImageView.frame.origin.x-movieLogoImageView.frame.size.width-10-10, 40) Font:12 Text:@"演员"];
-    performerLable.numberOfLines=2;
+    performerLable=[ZCControl createLabelWithFrame:CGRectMake(movieLogoImageView.frame.origin.x+10+movieLogoImageView.frame.size.width, derectorLable.frame.origin.y+derectorLable.frame.size.height, kDeviceWidth-movieLogoImageView.frame.origin.x-movieLogoImageView.frame.size.width-10-10, 50) Font:12 Text:@"演员"];
+    performerLable.numberOfLines=3;
+    performerLable.lineBreakMode=NSLineBreakByCharWrapping;
     performerLable.textColor=[UIColor whiteColor];
     [bgImageView addSubview:performerLable];
     
@@ -120,7 +121,7 @@
     }
       NSLog(@"导演 ＝＝＝＝＝＝＝xianshi ＝＝%@",[dict objectForKey:@"director"]);
     if ([dict objectForKey:@"other_name"]) {
-        performerLable.text=[NSString stringWithFormat:@"演员:%@",[dict objectForKey:@"other_name"]];
+        performerLable.text=[NSString stringWithFormat:@"演员:%@",[dict objectForKey:@"actors"]];
     }
     
 }

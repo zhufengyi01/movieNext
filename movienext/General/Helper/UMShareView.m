@@ -34,9 +34,7 @@
 -(void)createUI
 {     //创建底部试图
     //创建上部视图
-    self.backgroundColor=[UIColor blackColor];
-    
-    
+    self.backgroundColor=VStageView_color;
     /*_myScrollerView=[[UIScrollView alloc]initWithFrame:CGRectMake(0, 64,kDeviceWidth,m_frame.size.height-(kDeviceWidth/4)-40-kHeightNavigation)];
   #warning  暂时设置为kDeviceWidth
     //设置scrollview 的背景颜色是黄色的
@@ -45,47 +43,35 @@
     [self addSubview:_myScrollerView];
     */
     
-    
     topView =[[UIView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, m_frame.size.height-(kDeviceWidth/4)-40-kHeightNavigation)];
     topView.userInteractionEnabled=YES;
-    topView.backgroundColor=[UIColor blackColor];
+    topView.backgroundColor=VStageView_color;
     [self addSubview:topView];
      
-    
     
     // 上面的透明背景
     UIButton    *_topButtom =[UIButton buttonWithType:UIButtonTypeSystem];
     _topButtom.frame=CGRectMake(0, 0, kDeviceWidth, kDeviceHeight-kHeightNavigation-(kDeviceWidth/4)-40);
     [_topButtom addTarget:self action:@selector(TouchbuttonClick:) forControlEvents:UIControlEventTouchUpInside];
-    _topButtom.backgroundColor=[[UIColor blackColor]colorWithAlphaComponent:0.2];
-    [topView addSubview:_topButtom];
+     [topView addSubview:_topButtom];
   
-    
-    //在scrolllerview 上添加一个手势，滚回去
-   // UIGestureRecognizer  *tap=[[UIGestureRecognizer alloc]initWithTarget:self action:@selector(ToucSharehbuttonClick:)];
-    //[self addGestureRecognizer:tap];
-
+ 
     _ShareimageView=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth,400)];
-    // _ShareimageView.backgroundColor=[UIColor redColor];
-    [topView addSubview:_ShareimageView];
-    
-    
+     [topView addSubview:_ShareimageView];
     
     //放置电影名和标签的view
     logosupView=[[UIView alloc]initWithFrame:CGRectMake(0, topView.frame.size.height-20, kDeviceWidth, 20)];
-    logosupView.backgroundColor=[[UIColor blackColor]colorWithAlphaComponent:0.7];
+    logosupView.backgroundColor=VStageView_color;
     [topView addSubview:logosupView];
     
     
      _moviewName= [ZCControl createLabelWithFrame:CGRectMake(10,0, 200, 20) Font:12 Text:@""];
     _moviewName.textColor=VGray_color;
-    //_moviewName.backgroundColor=[UIColor blackColor];
     [logosupView addSubview:_moviewName];
     
     logoLable=[ZCControl createLabelWithFrame:CGRectMake(kDeviceWidth-70,0, 60, 20) Font:12 Text:@"影弹App"];
     logoLable.textAlignment=NSTextAlignmentRight;
     logoLable.textColor=VGray_color;
-    //logoLable.backgroundColor=[UIColor blackColor];
     [logosupView addSubview:logoLable];
     
     //创建下部视图
@@ -182,7 +168,7 @@
     {
         hight=  (ImgeHight/ImageWith) *kDeviceWidth;
     }
-    shareImage=[Function getImage:topView WithSize:CGSizeMake(kDeviceWidth, hight+40)];
+    shareImage=[Function getImage:topView WithSize:CGSizeMake(kDeviceWidth, hight+30)];
  
     //把topview 生成一张图片
     if (self.delegate &&[self.delegate respondsToSelector:@selector(UMshareViewHandClick:ShareImage:MoviewModel:)]) {
@@ -190,17 +176,9 @@
     }
     
 }
-/*
-- (void)removeSelf:(UITapGestureRecognizer *)tap {
-    [tap.view removeFromSuperview];
-}*/
+
 -(void)layoutSubviews
 {
-    
-    //需要从新设置mshareimagview的frame
-    
-    //_moviewName.frame=CGRectMake(10,topView.frame.size.height-20, kDeviceWidth-20, 20);
-    //logoLable.frame=CGRectMake(kDeviceWidth-70, topView.frame.size.height-20, 60, 20);
         float hight= kDeviceWidth;
         float  ImageWith=[self.StageInfo.w intValue];
         float  ImgeHight=[self.StageInfo.h intValue];
@@ -208,21 +186,15 @@
            //宽大于高的时候
            _ShareimageView.frame=CGRectMake(0,(topView.frame.size.height-hight)/2, kDeviceWidth, kDeviceWidth);
            
-          
        }
        else if(ImgeHight>ImageWith)
         {
             hight=  (ImgeHight/ImageWith) *kDeviceWidth;
             if (hight>topView.frame.size.height) {
-                // 这个时候需要把图片裁剪
-
+             // 这个时候需要把图片裁剪
             }
             _ShareimageView.frame=CGRectMake(0, 0,kDeviceWidth, hight);
-
         }
-    
-
-
 }
 
 //点击屏幕弹回

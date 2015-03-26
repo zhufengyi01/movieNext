@@ -31,7 +31,7 @@
 -(void)CreateTopView
 {
     _StageView=[[StageView alloc]initWithFrame:CGRectMake(0, 45, kDeviceWidth, 200)];
-    _StageView.backgroundColor=[UIColor blackColor];
+    _StageView.backgroundColor=VStageView_color;
     [self.contentView addSubview:_StageView];
     
 }
@@ -68,17 +68,16 @@
     }
     ScreenButton.tag=2000+row;  //截屏分享
     addMarkButton.tag=3000+row;   //添加弹幕
-    //[_StageView setStageValue:dict];
     _StageView.StageInfoDict=self.StageInfoDict;
     [_StageView configStageViewforStageInfoDict];
     
-    float  ImageWith=[self.StageInfoDict.w floatValue]; //[[self.StageInfoDict objectForKey:@"w"]  floatValue];
-    float  ImgeHight=[self.StageInfoDict.h floatValue];//[[self.StageInfoDict objectForKey:@"h"]  floatValue];
+    float  ImageWith=[self.StageInfoDict.w floatValue];
+    float  ImgeHight=[self.StageInfoDict.h floatValue];
     float hight=0;
     if (ImageWith>ImgeHight) {
         hight= kDeviceWidth;  // 计算的事bgview1的高度
     }
-    else if(ImgeHight>ImageWith)
+    else
     {
         hight=  (ImgeHight/ImageWith) *kDeviceWidth;
     }
@@ -89,8 +88,18 @@
 }
 - (void)layoutSubviews {
     [super layoutSubviews];
-    //_StageView.frame=CGRectMake(0, 0, kDeviceWidth, hight);
+    float  ImageWith=[self.StageInfoDict.w floatValue];
+    float  ImgeHight=[self.StageInfoDict.h floatValue];
+    float hight=0;
+    if (ImageWith>ImgeHight) {
+        hight= kDeviceWidth;  // 计算的事bgview1的高度
+    }
+    else
+    {
+        hight=  (ImgeHight/ImageWith) *kDeviceWidth;
+    }
 
+      BgView2.frame=CGRectMake(0, hight, kDeviceWidth, 45);
     
 }
 

@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "User.h"
+//#import "User.h"
 
 /**
  *  评论对象
@@ -45,7 +45,7 @@
 /**
  *  评论的作者
  */
-@property (nonatomic, strong) User * user;
+//@property (nonatomic, strong) User * user;
 
 /**
  *  初始化评论对象

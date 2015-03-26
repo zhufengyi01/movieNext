@@ -29,7 +29,7 @@
         _LeftImageView.frame=CGRectMake(0, 0, 25, 25);
     }
     _LeftImageView.layer.borderWidth=1;
-    _LeftImageView.layer.cornerRadius=3;
+    _LeftImageView.layer.cornerRadius=MarkViewCornerRed;
     _LeftImageView.layer.masksToBounds=YES;
     _LeftImageView.layer.borderColor=[[UIColor whiteColor] CGColor];
     [self addSubview:_LeftImageView];
@@ -37,7 +37,7 @@
     //右视图
     _rightView=[[UIView alloc]initWithFrame:CGRectMake(0, 0,0,0)];
     _rightView.backgroundColor=[[UIColor blackColor] colorWithAlphaComponent:0.7];
-    _rightView.layer.cornerRadius=3;
+    _rightView.layer.cornerRadius=MarkViewCornerRed;
     _rightView.contentMode=UIViewContentModeTop;  //设置内容上对齐方式
     _rightView.layer.masksToBounds=YES;
     [self addSubview:_rightView];
@@ -83,13 +83,12 @@
     CGSize  Msize=[_ZanNumLable.text boundingRectWithSize:CGSizeMake(kDeviceWidth/2,MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:_ZanNumLable.font forKey:NSFontAttributeName] context:nil].size;
     
     int zanWidth = [_ZanNumLable.text intValue]>0 ? Msize.width: 0;
-    _ZanNumLable.frame=CGRectMake(_ZanImageView.frame.origin.x+_ZanImageView.frame.size.width+2, _ZanImageView.frame.origin.y, zanWidth, 15);
+    _ZanNumLable.frame=CGRectMake(_ZanImageView.frame.origin.x+_ZanImageView.frame.size.width+2, _ZanImageView.frame.origin.y-2, zanWidth, 15);
     
     //如果是静态的, 则将边框描一下
     if (!_isAnimation) {
         _LeftImageView.layer.borderColor = kAppTintColor.CGColor;
         _LeftImageView.layer.borderWidth = 1;
-        
         _rightView.layer.borderColor = kAppTintColor.CGColor;
         _rightView.layer.borderWidth = 1;
     }

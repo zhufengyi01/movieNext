@@ -25,7 +25,7 @@
 #import "UMSocialSinaHandler.h"
 #import "AFNetworkActivityIndicatorManager.h"
 #import "Constant.h"
-
+#import "Function.h"
 
 @interface AppDelegate ()
 
@@ -37,31 +37,8 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     NSDictionary  *userInfo=[[NSUserDefaults  standardUserDefaults] objectForKey:kUserKey];
-   // NSLog(@"app delegate  userInfo  =====%@",userInfo);
-
-    UserDataCenter  *userCenter=[UserDataCenter shareInstance];
    if (userInfo) {  //用户已经登陆
-        if ([userInfo objectForKey:@"id"]) {
-             userCenter.user_id=[userInfo objectForKey:@"id"];
-        }
-        if ([userInfo objectForKey:@"username"]) {
-               userCenter.username=[userInfo objectForKey:@"username"];
-        }
-        if ([userInfo objectForKey:@"level"]) {
-             userCenter.is_admin =[userInfo objectForKey:@"level"];
-        }
-        if ([userInfo objectForKey:@"avatar"]) {
-            userCenter.avatar =[userInfo objectForKey:@"avatar"];
-        }
-        if ([userInfo objectForKey:@"brief"]) {
-            userCenter.signature=[userInfo objectForKey:@"brief"];
-        }
-        if ([userInfo objectForKey:@"update_time"]) {
-            userCenter.update_time=[userInfo objectForKey:@"update_time"];
-        }
-        if ([userInfo  objectForKey:@"bind_type"]) {
-            userCenter.user_bind_type=[userInfo objectForKey:@"bind_type"];
-        }
+       [Function getUserInfoWith:userInfo];
        self.window.rootViewController =[CustmoTabBarController new];
 
     }
@@ -70,9 +47,11 @@
         self.window.rootViewController=[LoginViewController new];
      }
     self.window.backgroundColor=[UIColor whiteColor];
+    //自动显示和隐藏请求时的状态提示
+    [[AFNetworkActivityIndicatorManager sharedManager] setEnabled:YES];
+
     //初始化友盟组件
     [self initUmeng];
-    [self setAFNetURLCache];
     return YES;
 }
 /**
@@ -113,13 +92,6 @@
     return  [UMSocialSnsService handleOpenURL:url wxApiDelegate:nil];
 }
 
--(void)setAFNetURLCache
-{
-    NSURLCache *URLCache = [[NSURLCache alloc] initWithMemoryCapacity:8 * 1024 * 1024 diskCapacity:40 * 1024 * 1024 diskPath:nil];
-    [NSURLCache setSharedURLCache:URLCache];
-    
-    [[AFNetworkActivityIndicatorManager sharedManager] setEnabled:YES];
-}
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
     // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.

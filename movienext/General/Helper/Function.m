@@ -8,7 +8,7 @@
 
 #import "Function.h"
 //导入用户模型
-#import "User.h"
+///#import "User.h"
 #import "UserDataCenter.h"
 //导入微博模型
 #import "Weibo.h"
@@ -313,7 +313,38 @@
     return smallImage;
 }
 
++(void)getUserInfoWith:(NSDictionary  *) userInfo
+{
+    
+    UserDataCenter  *userCenter=[UserDataCenter shareInstance];
 
+    if (userInfo) {  //用户已经登陆
+        if ([userInfo objectForKey:@"id"]) {
+            userCenter.user_id=[userInfo objectForKey:@"id"];
+        }
+        if ([userInfo objectForKey:@"username"]) {
+            userCenter.username=[userInfo objectForKey:@"username"];
+        }
+        if ([userInfo objectForKey:@"level"]) {
+            userCenter.is_admin =[userInfo objectForKey:@"level"];
+        }
+        if ([userInfo objectForKey:@"avatar"]) {
+            userCenter.avatar =[userInfo objectForKey:@"avatar"];
+        }
+        if ([userInfo objectForKey:@"brief"]) {
+            userCenter.signature=[userInfo objectForKey:@"brief"];
+        }
+        if ([userInfo objectForKey:@"update_time"]) {
+            userCenter.update_time=[userInfo objectForKey:@"update_time"];
+        }
+        if ([userInfo  objectForKey:@"bind_type"]) {
+            userCenter.user_bind_type=[userInfo objectForKey:@"bind_type"];
+        }
+        
+    }
+
+    
+}
 
 
 

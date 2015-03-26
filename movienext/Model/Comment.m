@@ -22,7 +22,7 @@
             _body               = [dict objectForKey:@"body"];
             _create_time        = [dict objectForKey:@"create_time"];
             _status             = [dict objectForKey:@"status"];
-            _user               = [[User alloc] initWithDictionary:[dict objectForKey:@"userinfo"]];
+            //_user               = [[User alloc] initWithDictionary:[dict objectForKey:@"userinfo"]];
         }
         
         if ( [_comment_id intValue]<0 ) {

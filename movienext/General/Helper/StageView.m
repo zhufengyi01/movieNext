@@ -32,21 +32,10 @@
 #pragma  mark 创建基本ui
 - (void)createUI {
     [self removeStageViewSubView];
-    self.backgroundColor = [UIColor blackColor];
+    self.backgroundColor =VStageView_color;
     _MovieImageView =[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, 200)];
     [self addSubview:_MovieImageView];
-    //创建 之前先清楚原阿里的tanimageview
-//    if (tanimageView) {
-//        tanimageView.hidden=YES;
-//        [tanimageView removeFromSuperview];
-//        tanimageView=nil;
-//    }
-//    
-//    //加一个弹的图片,弹幕出来隐藏，弹幕进去显示
-//    tanimageView=[[UIImageView alloc]initWithFrame:CGRectMake(kDeviceWidth-30, 10, 20, 20)];
-//    tanimageView.image=[UIImage imageNamed:@"tan.png"];
-//    tanimageView.hidden=YES;
-//    [self addSubview:tanimageView];
+
 }
 #pragma mark    设置stageview的值  ，主要是给stagview 添加markview  和添加一张图片
 -(void)configStageViewforStageInfoDict{
@@ -65,32 +54,68 @@
     //先移除所有的Mark视图
     [self removeStageViewSubView];
     
-    float  ImageWith=[_StageInfoDict.w intValue]; //[[self.StageInfoDict objectForKey:@"w"]  floatValue];
-    float  ImgeHight=[_StageInfoDict.h intValue];//[[self.StageInfoDict objectForKey:@"h"]  floatValue];
+    float  ImageWith=[_StageInfoDict.w intValue];
+    float  ImgeHight=[_StageInfoDict.h intValue];
     float hight=0;
      hight= kDeviceWidth;
      if(ImgeHight>ImageWith)
     {
         hight=  (ImgeHight/ImageWith) *kDeviceWidth;
     }
-    if (self.StageInfoDict.stage)
-    {//计算位置
+  //  if (self.StageInfoDict.stage)
+    //{//计算位置
 #warning 这里如果宽高为0的话会崩溃
         
         float   y=(hight-(ImgeHight/ImageWith)*kDeviceWidth)/2;
         if (ImageWith==0 && ImgeHight>0) {
-//          _MovieImageView.frame=CGRectMake(0,y, kDeviceWidth, (ImgeHight/ImageWith)*kDeviceWidth);
             ImageWith=ImgeHight;
         }
         ImgeHight = ImgeHight>0 ? ImgeHight : 1;
         ImageWith = ImageWith>0 ? ImageWith : 1;
         y = y > 0 ? y : 0;
         _MovieImageView.frame=CGRectMake(0, y, kDeviceWidth, (ImgeHight/ImageWith)*kDeviceWidth);
-        [_MovieImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w640",kUrlStage,self.StageInfoDict.stage]] placeholderImage:[UIImage imageNamed:@"loading_image_all.png"]];
-                                            
-                            }
+    _MovieImageView.backgroundColor =VStageView_color;
+    [_MovieImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w640",kUrlStage,self.StageInfoDict.stage]] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+        
 #pragma  mark  是静态的, 气泡是不动的
-    if ( _weiboDict) {
+         if ( _weiboDict) {
+         //WeiboModel  *weibodict=self.weiboDict;
+         MarkView *markView = [self createMarkViewWithDict:_weiboDict andIndex:2000];
+         markView.alpha = 1.0;
+         //设置是否markview 不可以动画
+         markView.isAnimation =YES;
+         //设置单条微博的参数信息
+         markView.weiboDict=self.weiboDict;
+         //遵守markView 的协议
+         markView.delegate=self;
+         markView.isShowansHiden=YES;
+         [markView StartShowAndhiden];
+         [self addSubview:markView];
+         
+         
+         }
+         #pragma  mark  有很多气泡，气泡循环播放
+         
+         if (self.WeibosArray&&self.WeibosArray.count>0) {
+         
+         for ( int i=0;i<_WeibosArray.count ; i++) {
+         MarkView *markView = [self createMarkViewWithDict:self.WeibosArray[i] andIndex:i];
+         // 设置markview 可以动画
+         markView.isAnimation = YES;
+         //设置单条微博的参数信息
+         markView.weiboDict=self.WeibosArray[i];
+         //遵守markView 的协议
+         markView.isShowansHiden=NO;
+         markView.delegate=self;
+         
+         [self addSubview:markView];
+         }
+         }
+
+        
+    }];
+#pragma  mark  是静态的, 气泡是不动的
+   /* if ( _weiboDict) {
         //WeiboModel  *weibodict=self.weiboDict;
         MarkView *markView = [self createMarkViewWithDict:_weiboDict andIndex:2000];
         markView.alpha = 1.0;
@@ -103,9 +128,6 @@
         markView.isShowansHiden=YES;
         [markView StartShowAndhiden];
        [self addSubview:markView];
-        
-        //改变透明度
-        //闪烁动画
         
         
     }
@@ -125,7 +147,7 @@
 
        [self addSubview:markView];
      }
-    }
+    }*/
 }
 #pragma mark 内部创建气泡的方法
 - (MarkView *) createMarkViewWithDict:(WeiboModel *)weibodict andIndex:(NSInteger)index{
@@ -158,6 +180,11 @@
             //宽度=字的宽度+左头像图片的宽度＋赞图片的宽度＋赞数量的宽度+中间两个空格2+2
             float markViewWidth = Msize.width+23+Uwidth+5+5+11+5;
             float markViewHeight = Msize.height+6;
+           if(IsIphone6)
+           {
+               markViewWidth=markViewWidth+10;
+               markViewHeight=markViewHeight+4;
+           }
             float markViewX = (x*kDeviceWidth)/100-markViewWidth;
             markViewX = MIN(MAX(markViewX, 1.0f), kDeviceWidth-markViewWidth-1);
             

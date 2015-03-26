@@ -114,7 +114,6 @@
       }
      else if(seg.selectedSegmentIndex==1)
      {
-         
          if (_newDataArray.count==0) {
              [self requestData];
          }
@@ -125,7 +124,7 @@
 }
 -(void)createHotView
 {
-    _HotMoVieTableView=[[UITableView alloc]initWithFrame:CGRectMake(0,0, kDeviceWidth, kDeviceHeight)];
+    _HotMoVieTableView=[[UITableView alloc]initWithFrame:CGRectMake(0,0, kDeviceWidth, kDeviceHeight-kHeightNavigation)];
     _HotMoVieTableView.delegate=self;
     _HotMoVieTableView.dataSource=self;
     _HotMoVieTableView.separatorStyle=UITableViewCellSeparatorStyleNone;
@@ -477,7 +476,8 @@
 {
     if (segment.selectedSegmentIndex==0) {
         CommonStageCell *commonStageCell = (CommonStageCell *)cell;
-        [commonStageCell.stageView startAnimation];
+       // [commonStageCell.stageView startAnimation];
+        [commonStageCell.stageView performSelector:@selector(startAnimation) withObject:nil afterDelay:1];
     }
     else if (segment.selectedSegmentIndex==1)
     {
@@ -539,13 +539,6 @@
         hight=  (ImgeHight/ImageWith) *kDeviceWidth;
     }
     CommonStageCell *cell = (CommonStageCell *)(button.superview.superview.superview);
-   /* UIGraphicsBeginImageContextWithOptions(CGSizeMake(kDeviceWidth,hight), YES, [UIScreen mainScreen].scale);
-    [cell.stageView drawViewHierarchyInRect:cell.stageView.bounds afterScreenUpdates:YES];
-    // old style [self.layer renderInContext:UIGraphicsGetCurrentContext()];
-    
-    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    */
     UIImage  *image=[Function getImage:cell.stageView WithSize:CGSizeMake(kDeviceWidth, hight)];
     //创建UMshareView 后必须配备这三个方法
     shareView.StageInfo=hotmovie.stageinfo;
@@ -628,11 +621,17 @@
     AddMarkViewController  *AddMarkVC=[[AddMarkViewController alloc]init];
     HotMovieModel  *hotmovie=[[HotMovieModel alloc]init];
     if (segment.selectedSegmentIndex==0) {
+        if(_hotDataArray.count > button.tag-3000)
+        {
         hotmovie =[_hotDataArray objectAtIndex:button.tag-3000];
+        }
     }
    else
    {
+       if (_newDataArray.count > button.tag-3000) {
+        
        hotmovie=[_newDataArray objectAtIndex:button.tag-3000];
+       }
    }
     AddMarkVC.stageInfoDict=hotmovie.stageinfo;
     //AddMarkVC.pageSoureType=NSAddMarkPageSourceDefault;
@@ -833,6 +832,11 @@
     //宽度=字的宽度+左头像图片的宽度＋赞图片的宽度＋赞数量的宽度+中间两个空格2+2
     float markViewWidth = Msize.width+23+Uwidth+5+5+11+5;
     float markViewHeight = Msize.height+6;
+    if(IsIphone6)
+    {
+        markViewWidth=markViewWidth+10;
+        markViewHeight=markViewHeight+4;
+    }
 #warning    kDeviceWidth 目前计算的是正方形的，当图片高度>屏幕的宽度的实际，需要使用图片的高度
     //markViewY = MIN(MAX(markViewY, 1.0f), kDeviceWidth-markViewHeight-1);
 #pragma mark 设置气泡的大小和位置

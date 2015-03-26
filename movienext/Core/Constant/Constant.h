@@ -29,7 +29,7 @@
 #pragma  mark    宽高设置
 #define kDeviceWidth        [UIScreen mainScreen].bounds.size.width
 #define kDeviceHeight       [UIScreen mainScreen].bounds.size.height
-#define IsIphone6            [UIScreen mainScreen].bounds.size.height>600
+#define IsIphone6            [UIScreen mainScreen].bounds.size.height>700
 
 #define kHeightNavigation 64
 #define kHeigthTabBar     49
@@ -57,6 +57,8 @@
 #define VGray_color      [UIColor colorWithRed:127.0/255 green:127.0/255 blue:139.0/255 alpha:1]
 //字体蓝色
 #define VBlue_color [UIColor colorWithRed:0/255 green:146.0/255 blue:255.0/255 alpha:1]
+#define VStageView_color [UIColor colorWithRed:35.0/255 green:35.0/255 blue:35.0/255 alpha:1]
+
 
 #define GetAppDelegate()   ((AppDelegate*)[[UIApplication sharedApplication] delegate])
 
@@ -76,5 +78,6 @@
 
 //右边字体的大小控制
 #define MarkTextFont14  14
-#define MarkTextFont16   16
+#define MarkTextFont16  16
+#define MarkViewCornerRed 4
 #endif

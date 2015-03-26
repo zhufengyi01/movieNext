@@ -73,7 +73,7 @@
 -(void)CreateSatageView
 {
     _stageView=[[StageView alloc]initWithFrame:CGRectMake(0, 45, kDeviceWidth, 200)];
-    _stageView.backgroundColor=[UIColor blackColor];
+    _stageView.backgroundColor=VStageView_color;
     _stageView.delegate=self;
     [self.contentView addSubview:_stageView];
     /*

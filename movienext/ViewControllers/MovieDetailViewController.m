@@ -63,11 +63,17 @@
 @implementation MovieDetailViewController
 -(void)viewWillAppear:(BOOL)animated
 {
-    self.tabBarController.tabBar.hidden=YES;
-    self.navigationController.navigationBar.hidden=YES;
     //下面透明度的设置，效果是设置了导航条的高度的多少倍，不是透明度多少
   ///  self.navigationController.navigationBar.alpha=0.4;
+    self.navigationController.navigationBar.hidden=YES;
+
   
+}
+-(void)viewDidAppear:(BOOL)animated
+{
+    self.tabBarController.tabBar.hidden=YES;
+    self.navigationController.navigationBar.hidden=YES;
+
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -93,43 +99,7 @@
 
 
 }
-/*-(void)createNavigation
-{
-    UIButton * RighttBtn= [UIButton buttonWithType:UIButtonTypeSystem];
-    RighttBtn.frame=CGRectMake(0, 0, 80, 30);
-    [RighttBtn addTarget:self action:@selector(dealRightNavClick:) forControlEvents:UIControlEventTouchUpInside];
-    RighttBtn.tag=101;
-    [RighttBtn setTitleColor:VBlue_color forState:UIControlStateNormal];
-    [RighttBtn setTitle:@"添加剧照" forState:UIControlStateNormal];
-    RighttBtn.titleLabel.font=[UIFont boldSystemFontOfSize:16];
-    self.navigationItem.rightBarButtonItem=[[UIBarButtonItem alloc]initWithCustomView:RighttBtn];
-    
 
-}*/
-//上传图片
-/*-(void)dealRightNavClick:(UIButton *)button
-{
-    UIActionSheet   *ash=[[UIActionSheet alloc]initWithTitle:@"请选择照片" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"从相册中选择", nil];
-     [ash showInView:self.view];
-    
-}
--(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    
-    if (buttonIndex==0) {
-        NSLog(@"从相册中选择照片");
-        UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-        
-        picker.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
-        picker.delegate = self;
-        //设置选择后的图片可被编辑
-        picker.allowsEditing = YES;
-        [self presentViewController:picker animated:YES completion:nil];
-       // [self.navigationController pushViewController:picker animated:YES];
-        
- 
-    }
-}*/
 #pragma mark  ---
 #pragma mark  -----imagePickerControlldelegate
 #pragma mark  ----
@@ -155,76 +125,10 @@
             upload.movie_Id =[_MovieDict objectForKey:@"id"];
             [self.navigationController pushViewController:upload animated:YES];
         }];
-        
-    ///[upload setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];
-       // UINavigationController  *na=[[UINavigationController alloc]initWithRootViewController:upload];
-  //   [picker presentViewController:na  animated:YES completion:nil];
- //        NSData *data;
-//        if (UIImagePNGRepresentation(image) == nil)
-//        {
-//            data = UIImageJPEGRepresentation(image, 1.0);
-//        }
-//        else
-//        {
-//            data = UIImagePNGRepresentation(image);
-//        }
-//        
-//        
-//        //图片保存的路径
-//        //这里将图片放在沙盒的documents文件夹中
-//        NSString * DocumentsPath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents"];
-//        
-//        
-//        //文件管理器
-//        NSFileManager *fileManager = [NSFileManager defaultManager];
-//        //把刚刚图片转换的data对象拷贝至沙盒中 并保存为image.png
-//        [fileManager createDirectoryAtPath:DocumentsPath withIntermediateDirectories:YES attributes:nil error:nil];
-//        [fileManager createFileAtPath:[DocumentsPath stringByAppendingString:@"/image.png"] contents:data attributes:nil];
-        
-        
-   /* UpYun *uy = [[UpYun alloc] init];
-    uy.successBlocker = ^(id data)
-    {
-        UIAlertView * alert = [[UIAlertView alloc]initWithTitle:@"" message:@"上传成功" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
-        [alert show];
-        
-        NSLog(@"%@",data);
-    };
-    uy.failBlocker = ^(NSError * error)
-    {
-        NSString *message = [error.userInfo objectForKey:@"message"];
-        UIAlertView * alert = [[UIAlertView alloc]initWithTitle:@"error" message:message delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
-        [alert show];
-        NSLog(@"%@",error);
-    };
-    uy.progressBlocker = ^(CGFloat percent, long long requestDidSendBytes)
-    {
-        //进度
-        //[_pv setProgress:percent];
-    };*/
     
-        /**
-         *	@brief	根据 UIImage 上传
-         */
-       // UIImage * image = [UIImage imageNamed:@"image.jpg"];
-       // [uy uploadFile:image saveKey:[self getSaveKey]];
-        /**
-         *	@brief	根据 文件路径 上传
-         */
-        //    NSString* resourcePath = [[NSBundle mainBundle] resourcePath];
-        //    NSString* filePath = [resourcePath stringByAppendingPathComponent:@"fileTest.file"];
-        //    [uy uploadFile:filePath saveKey:[self getSaveKey]];
-        
-        /**
-         *	@brief	根据 NSDate  上传
-         */
-        //    NSData * fileData = [NSData dataWithContentsOfFile:filePath];
-        //    [uy uploadFile:fileData saveKey:[self getSaveKey]];
-        
     }
     
 }
-
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
 {
@@ -503,23 +407,19 @@
     if (bigModel ==YES) {
         BigImageCollectionViewCell *cell = (BigImageCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"bigcell" forIndexPath:indexPath];
         if (_dataArray.count>indexPath.row) {
-           //cell.pageType=NSPageSourceTypeMyAddedViewController;
-          //  小闪动标签的数组
-           // cell.WeibosArray=[[_dataArray objectAtIndex:indexPath.row]  objectForKey:@"weibos"];
             cell.WeibosArray=model.weibos;
-            cell.StageInfoDict=model.stageinfo;//[[_dataArray objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"];
+            cell.backgroundColor=View_BackGround;
+            cell.StageInfoDict=model.stageinfo;
             [cell ConfigCellWithIndexPath:indexPath.row];
             cell.StageView.delegate=self;
-          //  [cell setCellValue:;
+          
         }
           [cell.StageView performSelector:@selector(startAnimation) withObject:nil afterDelay:1];
-        //cell.backgroundColor = [UIColor redColor];
         return cell;
     } else {
         SmallImageCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"smallcell" forIndexPath:indexPath];
-        //cell.backgroundColor = [UIColor redColor];
-        
-        [cell.imageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w340h340",kUrlStage,model.stageinfo.stage]] placeholderImage:[UIImage imageNamed:@"loading_image_all.png"]];
+        cell.imageView.backgroundColor=VStageView_color;
+        [cell.imageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w340h340",kUrlStage,model.stageinfo.stage]] placeholderImage:[UIImage imageNamed:nil]];
         if (model.stageinfo.marks && [model.stageinfo.marks intValue]>0) {
             cell.titleLab.hidden = NO;
             cell.titleLab.text=[NSString stringWithFormat:@"%@",  model.stageinfo.marks];
@@ -557,12 +457,8 @@
             model.stageinfo.movie_id=[_MovieDict objectForKey:@"id"];
         }
         vc.movieModel = model;
-       // [vc setModalPresentationStyle:UIModalPresentationCustom];
-        //[vc setModalTransitionStyle:UIModalTransitionStylePartialCurl];  //页面跳转形式
-      //  [self.navigationController presentViewController:vc animated:YES completion:^{ }];
         [self.navigationController pushViewController:vc animated:YES];
-       // [self dismissModalViewControllerAnimated:YES];
-    }
+     }
 }
 
 
@@ -575,7 +471,6 @@
         //定制头部视图的内容
         MovieHeadView *headerV = (MovieHeadView *)[collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"headerView" forIndexPath:indexPath];
         headerV.delegate=self;
-     
         if (_MovieDict) {
         [headerV setCollectionHeaderValue:_MovieDict];
         }
@@ -593,28 +488,21 @@
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
     HotMovieModel  *model =[_dataArray objectAtIndex:indexPath.row];
     if (bigModel==YES) {
-      
         float hight;
         if (_dataArray.count>indexPath.row) {
             float  h= [model.stageinfo.h  floatValue];
             float w=[model.stageinfo.w floatValue];
-            if (w==0||h==0) {
-                hight= kDeviceWidth+45;
-            }
-            if (w>h) {
-                hight= kDeviceWidth+45;
-            }
-            else if(h>w)
+             hight= kDeviceWidth+45;
+             if(h>w)
             {
                 hight=  (h/w) *kDeviceWidth+45;
             }
         }
-        //NSLog(@"============  hight  for  row  =====%f",hight);
-        return CGSizeMake(kDeviceWidth,hight);
+        return CGSizeMake(kDeviceWidth,hight+10);
     }
     else
     {
-        return CGSizeMake(( kDeviceWidth-20)/3,(kDeviceWidth-20)/3);
+        return CGSizeMake(( kDeviceWidth-10)/3,(kDeviceWidth-10)/3);
 
     }
     return CGSizeMake(0, 0);
@@ -623,9 +511,9 @@
 -(UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
 {
     if (bigModel==YES) {
-        return UIEdgeInsetsMake(0, 5, 5, 5);
+        return UIEdgeInsetsMake(0,0,0,0);
     }
-    return UIEdgeInsetsMake(5, 5, 5, 5);
+    return UIEdgeInsetsMake(0,0, 5,0);
 }
 //左右间距
 -(CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
@@ -633,13 +521,13 @@
     if (bigModel==YES) {
         return 0;
     }
-    return 5;
+    return 0;
 }
 //上下
 -(CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section
 {
     if (bigModel==YES) {
-        return 10;
+        return 0;
     }
     return 5;
 }
@@ -1042,6 +930,11 @@
     //宽度=字的宽度+左头像图片的宽度＋赞图片的宽度＋赞数量的宽度+中间两个空格2+2
     float markViewWidth = Msize.width+23+Uwidth+5+5+11+5;
     float markViewHeight = Msize.height+6;
+    if(IsIphone6)
+    {
+        markViewWidth=markViewWidth+10;
+        markViewHeight=markViewHeight+4;
+    }
     //float markViewX = (x*kDeviceWidth)/100-markViewWidth;
     //markViewX = MIN(MAX(markViewX, 1.0f), kDeviceWidth-markViewWidth-1);
     
