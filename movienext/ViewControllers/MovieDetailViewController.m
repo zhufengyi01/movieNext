@@ -41,7 +41,7 @@
 #import "UploadImageViewController.h"
 #import "UpYun.h"
 
-@interface MovieDetailViewController ()<UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UICollectionViewDelegate,MovieHeadViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UMSocialUIDelegate,UMSocialDataDelegate,UMShareViewDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
+@interface MovieDetailViewController ()<UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UICollectionViewDelegate,MovieHeadViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UMSocialUIDelegate,UMSocialDataDelegate,UMShareViewDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIScrollViewDelegate>
 
 {
     ///UICollectionView    *_myConllectionView;
@@ -55,6 +55,12 @@
     BOOL   isMarkViewsShow;
     UMShareView   *shareView;
     int page;
+    //导航条
+    UIView *Navview;
+    //上传图片的按钮
+    UIButton  *upLoadimageBtn;
+    // 返回按钮
+    UIButton  *backBtn;
 
 }
 
@@ -78,7 +84,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    //[self createNavigation];
     [self initData];
     [self initUI];
     [self creatLoadView];
@@ -92,13 +97,33 @@
         page=0;
         [self requestMovieInfoData];
         [self requestData];
-
     }
+    [self createNavigation];
     [self createToolBar];
     [self createShareView];
-
-
 }
+//创建可以显示隐藏的导航条
+-(void)createNavigation
+{
+    
+    Navview=[[UIView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, 64)];
+    Navview.userInteractionEnabled=YES;
+    Navview.backgroundColor=[[UIColor whiteColor] colorWithAlphaComponent:0];
+    [_myConllectionView bringSubviewToFront:Navview];
+    [self.view addSubview:Navview];
+    
+    backBtn=[ZCControl createButtonWithFrame:CGRectMake(10,26,60,32) ImageName:nil Target:self Action:@selector(NavigationClick:) Title:nil];
+    backBtn.tag=200;
+    [backBtn setImageEdgeInsets:UIEdgeInsetsMake(0, -40, 0, 0)];
+    //  backBtn.backgroundColor=[UIColor redColor];
+    [backBtn setImage:[UIImage imageNamed:@"back_Icon@2x.png"] forState:UIControlStateNormal];
+    [self.view addSubview:backBtn];
+    
+    upLoadimageBtn=[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-70,30,60,25) ImageName:@"update_picture_whaite@2x.png" Target:self Action:@selector(NavigationClick:) Title:nil];
+    upLoadimageBtn.tag=201;
+    [self.view addSubview:upLoadimageBtn];
+}
+
 
 #pragma mark  ---
 #pragma mark  -----imagePickerControlldelegate
@@ -164,8 +189,8 @@
     }
     //kDeviceHeight/3-45+44
     
-    _myConllectionView =[[UICollectionView alloc]initWithFrame:CGRectMake(0, -20,kDeviceWidth, kDeviceHeight+kHeightNavigation) collectionViewLayout:layout];
-    [layout setHeaderReferenceSize:CGSizeMake(_myConllectionView.frame.size.width, kDeviceHeight/3+64)];
+    _myConllectionView =[[UICollectionView alloc]initWithFrame:CGRectMake(0, -200,kDeviceWidth, kDeviceHeight+kHeightNavigation+180) collectionViewLayout:layout];
+    [layout setHeaderReferenceSize:CGSizeMake(_myConllectionView.frame.size.width, kDeviceHeight/3+64+180)];
 
     _myConllectionView.backgroundColor=View_BackGround;
     //注册大图模式
@@ -610,6 +635,7 @@
         
     }
 }
+#pragma mark  ----navigationClick--and Delegate
 -(void)NavigationClick:(UIButton *)button
 //返回
 {
@@ -747,10 +773,6 @@
     [self.navigationController pushViewController:AddMarkVC animated:NO];
     
 }
-
-
-
-
 
 
 
@@ -970,9 +992,45 @@
         [_toolBar HidenButtomView];
         //  [_toolBar performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.5];
         [_toolBar removeFromSuperview];
-        
     }
 }
+#pragma mark ---UIScrollerViewDelegate
+//滑倒最顶部的时候执行这个
+-(void)scrollViewDidScrollToTop:(UIScrollView *)scrollView
+{
+    Navview.backgroundColor=[[UIColor whiteColor]  colorWithAlphaComponent:0];
+    [backBtn setImage:[UIImage imageNamed:@"back_Icon@2x.png"] forState:UIControlStateNormal];
+    [upLoadimageBtn setImage:[UIImage imageNamed:@"update_picture_whaite@2x.png"] forState:UIControlStateNormal];
+}
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    if (scrollView.contentOffset.y<80) {
+        Navview.backgroundColor=[[UIColor whiteColor] colorWithAlphaComponent:0];
+        [backBtn setImage:[UIImage imageNamed:@"back_Icon@2x.png"] forState:UIControlStateNormal];
+        [upLoadimageBtn setImage:[UIImage imageNamed:@"update_picture_whaite@2x.png"] forState:UIControlStateNormal];
+
+    }
+     else   if (scrollView.contentOffset.y>80&&scrollView.contentOffset.y<scrollView.contentOffset.y<300) {
+        //在80的时候为0 在300的时候为1
+        float compoent =((scrollView.contentOffset.y)-80)/220;
+        Navview.backgroundColor=[[UIColor whiteColor] colorWithAlphaComponent:compoent];
+        
+         if (scrollView.contentOffset.y>160) {
+             
+             [backBtn setImage:[UIImage imageNamed:@"back_icon_blue@2x.png"] forState:UIControlStateNormal];
+             [upLoadimageBtn setImage:[UIImage imageNamed:@"up_picture_blue@2x.png"] forState:UIControlStateNormal];
+         }
+    }
+    else
+    {
+        Navview.backgroundColor=[[UIColor whiteColor] colorWithAlphaComponent:1];
+        [backBtn setImage:[UIImage imageNamed:@"back_icon_blue@2x.png"] forState:UIControlStateNormal];
+        [upLoadimageBtn setImage:[UIImage imageNamed:@"up_picture_blue@2x.png"] forState:UIControlStateNormal];
+    }
+}
+
+
+
 
 
 - (void)didReceiveMemoryWarning {

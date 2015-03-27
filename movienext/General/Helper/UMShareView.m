@@ -60,18 +60,21 @@
      [topView addSubview:_ShareimageView];
     
     //放置电影名和标签的view
-    logosupView=[[UIView alloc]initWithFrame:CGRectMake(0, topView.frame.size.height-20, kDeviceWidth, 20)];
+    logosupView=[[UIView alloc]initWithFrame:CGRectMake(0, topView.frame.size.height-20, kDeviceWidth, 30)];
     logosupView.backgroundColor=VStageView_color;
     [topView addSubview:logosupView];
     
     
-     _moviewName= [ZCControl createLabelWithFrame:CGRectMake(10,0, 200, 20) Font:12 Text:@""];
-    _moviewName.textColor=VGray_color;
+     _moviewName= [ZCControl createLabelWithFrame:CGRectMake(10,5, kDeviceWidth-70, 20) Font:12 Text:@""];
+    _moviewName.textColor=VLight_GrayColor;
+    _moviewName.numberOfLines=0;
+    //_moviewName.lineBreakMode=NSLineBreakByTruncatingTail;
+
     [logosupView addSubview:_moviewName];
     
-    logoLable=[ZCControl createLabelWithFrame:CGRectMake(kDeviceWidth-70,0, 60, 20) Font:12 Text:@"影弹App"];
+    logoLable=[ZCControl createLabelWithFrame:CGRectMake(kDeviceWidth-60,5, 50, 20) Font:12 Text:@"影弹App"];
     logoLable.textAlignment=NSTextAlignmentRight;
-    logoLable.textColor=VGray_color;
+    logoLable.textColor=VLight_GrayColor;
     [logosupView addSubview:logoLable];
     
     //创建下部视图

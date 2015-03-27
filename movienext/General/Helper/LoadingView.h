@@ -22,7 +22,7 @@
     UIView  *failLoadView;
     //没有数据的view
     UIView   *NullDataView;
-    
+    UILabel * failTitle2;
 }
 //注意：数据加载完成后先停止动画，然后再把loadview  从supview 中remove 防止占内存空间
 @property(assign,nonatomic)id<LoadingViewDelegate> delegate;
@@ -35,5 +35,5 @@
 //隐藏加载失败。同时显示旋转动画
 -(void)hidenFailLoadAndShowAnimation;
 //现实没有数据
--(void)showNullView;
+-(void)showNullView:(NSString *) failString;
 @end

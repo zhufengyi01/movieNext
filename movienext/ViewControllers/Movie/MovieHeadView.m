@@ -25,29 +25,29 @@
 {
     //放置所有控件的view
 
-     bgImageView=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth,(kDeviceHeight/3+64))];
+     bgImageView=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth,(kDeviceHeight/3+64)+180)];
     bgImageView.backgroundColor=VLight_GrayColor;
     bgImageView.userInteractionEnabled=YES;
    // bgImageView.image =[UIImage imageNamed:@"loading_image_all"];
     [self addSubview:bgImageView];
     
-    movieLogoImageView  =[[UIImageView alloc]initWithFrame:CGRectMake(15, 64+20, 50, 70)];
+    movieLogoImageView  =[[UIImageView alloc]initWithFrame:CGRectMake(15, 64+20+180, 50, 70)];
     [bgImageView addSubview:movieLogoImageView];
     
-    
-    UIButton  *backBtn=[ZCControl createButtonWithFrame:CGRectMake(10, 30,60,32) ImageName:nil Target:self Action:@selector(dealBackClick:) Title:nil];
+    /*
+    UIButton  *backBtn=[ZCControl createButtonWithFrame:CGRectMake(10, 30+180,60,32) ImageName:nil Target:self Action:@selector(dealBackClick:) Title:nil];
     backBtn.tag=200;
      [backBtn setImageEdgeInsets:UIEdgeInsetsMake(0, -25, 0, 0)];
   //  backBtn.backgroundColor=[UIColor redColor];
     [backBtn setImage:[UIImage imageNamed:@"back_Icon@2x.png"] forState:UIControlStateNormal];
-    [bgImageView addSubview:backBtn];
+    //[bgImageView addSubview:backBtn];
     
     
     
-     UIButton  *upLoadimageBtn=[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-70, 35,60,25) ImageName:@"up_image@2x.png" Target:self Action:@selector(dealBackClick:) Title:nil];
+     UIButton  *upLoadimageBtn=[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-70, 35+180,60,25) ImageName:@"up_image@2x.png" Target:self Action:@selector(dealBackClick:) Title:nil];
     upLoadimageBtn.tag=201;
     [bgImageView addSubview:upLoadimageBtn];
-    
+    */
     
     titleLable=[ZCControl createLabelWithFrame:CGRectMake(movieLogoImageView.frame.origin.x+movieLogoImageView.frame.size.width+10, movieLogoImageView.frame.origin.y,kDeviceWidth-20-50-20 ,30) Font:16 Text:@"电影标题"];
     titleLable.textColor=[UIColor whiteColor];
@@ -68,7 +68,7 @@
     
     //下面的点击
     
-    UIView  *btnBg =[[UIView  alloc] initWithFrame:CGRectMake(0, kDeviceHeight/3+64-45, kDeviceWidth, 45)];
+    UIView  *btnBg =[[UIView  alloc] initWithFrame:CGRectMake(0, kDeviceHeight/3+64-45+180, kDeviceWidth, 45)];
     btnBg.backgroundColor=[[UIColor blackColor]colorWithAlphaComponent:0.2];
     [bgImageView addSubview:btnBg];
     
@@ -135,14 +135,14 @@
 }
 
 //返回按钮的实现添加剧照
--(void)dealBackClick:(UIButton *) button
-{
- //   [self.navigationController popViewControllerAnimated:YES];
-    if (self.delegate&&[self.delegate respondsToSelector:@selector(NavigationClick:)]) {
-        [self.delegate NavigationClick:button];
-    }
-    
-}
+//-(void)dealBackClick:(UIButton *) button
+//{
+// //   [self.navigationController popViewControllerAnimated:YES];
+//    if (self.delegate&&[self.delegate respondsToSelector:@selector(NavigationClick:)]) {
+//        [self.delegate NavigationClick:button];
+//    }
+//    
+//}
 
 //自动布局self.view的子类
 -(void)layoutSubviews

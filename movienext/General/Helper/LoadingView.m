@@ -48,7 +48,7 @@
     failLoadView.userInteractionEnabled=YES;
     [self addSubview:failLoadView];
     
-    UILabel * failTitle=[ZCControl createLabelWithFrame:CGRectMake(0, 10, kDeviceWidth, 20) Font:14 Text:@"糟糕，网络连接失败"];
+    UILabel * failTitle=[ZCControl createLabelWithFrame:CGRectMake(0, 10, kDeviceWidth, 20) Font:16 Text:@"糟糕，网络连接失败"];
     failTitle.textAlignment=NSTextAlignmentCenter;
     failTitle.textColor=VGray_color;
     [failLoadView addSubview:failTitle];
@@ -60,18 +60,18 @@
     
     
     
-    
+    //没有数据的时候显示这个笑脸的
     NullDataView =[[UIView alloc]initWithFrame:CGRectMake(0, (kDeviceWidth-100)/2, kDeviceWidth, 100)];
     NullDataView.hidden=YES;
-    NullDataView.backgroundColor=[UIColor yellowColor];
+    //NullDataView.backgroundColor=[UIColor yellowColor];
     NullDataView.userInteractionEnabled=YES;
     [self addSubview:NullDataView];
     
-    UIImageView *smailview=[[UIImageView alloc]initWithFrame:CGRectMake((kDeviceWidth-50)/2, 20, 50, 50)];
-    smailview.image=[UIImage imageNamed:@"notice_icon@2x .png!"];
+    UIImageView *smailview=[[UIImageView alloc]initWithFrame:CGRectMake((kDeviceWidth-25)/2, 20, 25, 25)];
+    smailview.image=[UIImage imageNamed:@"notice_icon@2x.png"];
     [NullDataView addSubview:smailview];
     
-    UILabel * failTitle2=[ZCControl createLabelWithFrame:CGRectMake(0, 10, kDeviceWidth, 20) Font:14 Text:@"亲，没有数据"];
+    failTitle2=[ZCControl createLabelWithFrame:CGRectMake(0, 60, kDeviceWidth, 20) Font:16 Text:@"亲，没有数据"];
     failTitle2.textAlignment=NSTextAlignmentCenter;
     failTitle2.textColor=VGray_color;
     [NullDataView addSubview:failTitle2];
@@ -129,11 +129,12 @@
     imageView.hidden=NO;
     
 }
--(void)showNullView;
+-(void)showNullView:(NSString *) failString;
 {
     NullDataView.hidden=NO;
     [self stopAnimation];
     imageView.hidden=YES;
+    failTitle2.text=failString;
 }
 
 

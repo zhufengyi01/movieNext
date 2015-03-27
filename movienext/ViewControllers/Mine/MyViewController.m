@@ -82,10 +82,11 @@
     // Do any additional setup after loading the view.
     [self createNavigation];
     [self initData];
+    [self createLoadview];
+
      [self requestUserInfo];
     
     //[self requestData];
-    [self createLoadview];
     [self createToolBar];
     [self createShareView];
 
@@ -156,9 +157,7 @@
         signature=@"";
     }
      UIView *viewHeader = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, 130)];
- //   viewHeader.backgroundColor =View_BackGround;
-    
-    int ivAvatarWidth = 50;
+     int ivAvatarWidth = 50;
     ivAvatar = [[UIImageView alloc] initWithFrame:CGRectMake(20, 20, ivAvatarWidth, ivAvatarWidth)];
     ivAvatar.layer.cornerRadius = ivAvatarWidth * 0.5;
     ivAvatar.layer.masksToBounds = YES;
@@ -170,11 +169,7 @@
     if (_userInfoDict) {
         imageURL =[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!thumb",kUrlAvatar,[_userInfoDict  objectForKey:@"avatar"]]];
     }
-   // else
-   // {
-     //   imageURL =[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!thumb",kUrlAvatar,userCenter.avatar]];
-    //}
- 
+  
     [ivAvatar sd_setImageWithURL:imageURL placeholderImage:[UIImage imageNamed:@"loading_image_all.png"]];
   //  NSLog(@"avatar url = %@/%@!thumb", kUrlAvatar, userCenter.avatar );
 
@@ -186,10 +181,7 @@
     if (_userInfoDict) {
         lblUsername.text=[NSString stringWithFormat:@"%@",[_userInfoDict objectForKey:@"username"]];
     }
-   // else {
-    //lblUsername.text=[NSString stringWithFormat:@"%@",userCenter.username];
-    //}
-    [viewHeader addSubview:lblUsername];
+     [viewHeader addSubview:lblUsername];
     
     UILabel  *lbl1=[ZCControl createLabelWithFrame:CGRectMake(lblUsername.frame.origin.x,lblUsername.frame.origin.y+lblUsername.frame.size.height+5, 40, 20) Font:14 Text:@"内容"];
     lbl1.textColor=VBlue_color;
@@ -202,10 +194,7 @@
     if (_userInfoDict) {
         lblCount.text=[NSString stringWithFormat:@"%@",[_userInfoDict objectForKey:@"product_count"]];
     }
-  //  else{
-    //    lblCount.text=[NSString stringWithFormat:@"%d",BodyConut];
-    //}
-    lblCount.textColor = VGray_color;
+     lblCount.textColor = VGray_color;
     //lblCount.backgroundColor = [UIColor purpleColor];
     [viewHeader addSubview:lblCount];
     
@@ -221,12 +210,7 @@
     if (_userInfoDict) {
         lblZanCout.text  =[NSString stringWithFormat:@"%@",[_userInfoDict objectForKey:@"uped_count"]];
     }
-   // else {
-    //lblZanCout.text=[NSString stringWithFormat:@"%d",ZanCount];
-    //}
-    
-    //lblZanCout.backgroundColor = [UIColor purpleColor];
-    [viewHeader addSubview:lblZanCout];
+     [viewHeader addSubview:lblZanCout];
     
    //简介
     lblBrief = [[UILabel alloc] initWithFrame:CGRectMake(ivAvatar.frame.origin.x+ivAvatar.frame.size.width+10,lblCount.frame.origin.y+lblCount.frame.size.height+10, kDeviceWidth-ivAvatar.frame.origin.x-ivAvatar.frame.size.width-20, 20)];
@@ -270,11 +254,14 @@
         [zanButton setSelected:NO];
     }
     zanButton.titleLabel.font=[UIFont systemFontOfSize:16];
-
-   
     zanButton.tag=101;
     [viewHeader addSubview:zanButton];
 
+    //修改了loadview的frame
+    if (loadView) {
+        float  y=zanButton.frame.origin.y+zanButton.frame.size.height;
+        loadView.frame=CGRectMake(0, y, kDeviceWidth, kDeviceHeight-y);
+    }
     
    /*
     NSArray *segmentedArray = [[NSArray alloc] initWithObjects:@"添加", @"赞", nil];
@@ -294,7 +281,6 @@
     [viewHeader addSubview:segment];*/
     
     viewHeader.frame=CGRectMake(0, 0, kDeviceWidth,addButton.frame.origin.y+addButton.frame.size.height);
-
     [_tableView setTableHeaderView:viewHeader];
     
     [self setupRefresh];
@@ -315,19 +301,6 @@
 - (void)headerRereshing
 {
     page=0;
-//    if (segment.selectedSegmentIndex==0) {
-//    if (_addedDataArray.count>0) {
-//        [_addedDataArray removeAllObjects];
-//
-//    }
-//    }
-//    else if (segment.selectedSegmentIndex==1)
-//    {
-//        if (_upedDataArray.count>0) {
-//            [_upedDataArray removeAllObjects];
-//        }
-//    }
-//
     for (int i=100; i<102;i++ ) {
         UIButton  *btn =(UIButton *)[self.view viewWithTag:i];
         if (btn.tag==100&&btn.selected==YES) {
@@ -342,9 +315,7 @@
                 [_upedDataArray removeAllObjects];
             }
         }
-        
     }
-    
     [self requestData];
     // 2.2秒后刷新表格UI
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -363,7 +334,6 @@
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         // 刷新表格
         [_tableView reloadData];
-        
         // (最好在刷新表格后调用)调用endRefreshing可以结束刷新状态
         [_tableView footerEndRefreshing];
     });
@@ -420,7 +390,8 @@
 }
 - (void)createLoadview
 {
-    loadView =[[LoadingView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight)];
+    loadView =[[LoadingView alloc]initWithFrame:CGRectMake(0, 200, kDeviceWidth, kDeviceHeight-kHeightNavigation-200)];
+    loadView.backgroundColor=[UIColor redColor];
     loadView.delegate=self;
     [self.view addSubview:loadView];
 }
@@ -478,15 +449,7 @@
 
 }
 - (void)requestData{
-   // UserDataCenter  *userCenter=[UserDataCenter shareInstance];
     NSString  *autorid;
-//    if ( !_author_id ||[self.author_id isEqualToString:@"0"]) {  //表示直接进入这个页面的话，这个为空
-//        autorid = userCenter.user_id;
-//    }
-//    else
-//    {
-//        autorid=_author_id;
-//    }
     if (self.author_id>0&&![self.author_id isEqualToString:@"0"]) {
         autorid=self.author_id;
     }
@@ -499,13 +462,6 @@
     //user_id是当前用户的ID
     NSDictionary *parameters = @{@"user_id":userCenter.user_id, @"page":[NSString stringWithFormat:@"%d",page], @"author_id":autorid};
     NSString * section;
-//    if (segment.selectedSegmentIndex==1) {  // 赞过的
-//        section=@"weibo/upedListByUserId";
-//    }
-//    else if(segment.selectedSegmentIndex==0) // 用户添加的
-//    {
-//        section= @"weibo/listByUserId";
-//    }
     for (int i=100; i<102;i++ ) {
         UIButton  *btn =(UIButton *)[self.view viewWithTag:i];
         if (btn.tag==101&&btn.selected==YES) {
@@ -520,13 +476,9 @@
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     //    [manager POST:[NSString stringWithFormat:@"%@/movieStage/listRecently", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
     [manager POST:[NSString stringWithFormat:@"%@/%@", kApiBaseUrl, section] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"=====responseObject===%@",responseObject);
         if ([[responseObject objectForKey:@"return_code"] intValue]==10000) {
-
-        [loadView stopAnimation];
-        [loadView removeFromSuperview];
-        NSMutableArray  *Detailarray=[responseObject objectForKey:@"detail"];
-        
+            NSLog(@"个人页面返回的数据====%@",responseObject);
+            NSMutableArray  *Detailarray=[responseObject objectForKey:@"detail"];
         for (int i=100; i<102;i++ ) {
             UIButton  *btn =(UIButton *)[self.view viewWithTag:i];
             
@@ -551,18 +503,25 @@
                     }
                       [_addedDataArray addObject:model];
                 }
-
-              
             }
-            [_tableView reloadData];
+            if (_addedDataArray.count==0) {
+                [loadView showNullView:@"还没有添加弹幕"];
+                
+            }
+            else
+            {
+                [loadView stopAnimation];
+                [loadView removeFromSuperview];
+                //[_tableView reloadData];
+
+            }
+            
         }
         else if(btn.tag==101&&btn.selected==YES)
         {
             if (_upedDataArray==nil) {
                 _upedDataArray=[[NSMutableArray alloc]init];
             }
-          // NSLog(@"用户赞过的数据 JSON: %@", responseObject);
-           // [_upedDataArray addObjectsFromArray:Detailarray];
             for (NSDictionary  *addDict  in Detailarray) {
                 HotMovieModel  *model =[[HotMovieModel alloc]init];
                 if (model) {
@@ -580,14 +539,25 @@
                     [_upedDataArray addObject:model];
                 }
             }
-            [_tableView reloadData];
+            //[_tableView reloadData];
+            if (_upedDataArray.count ==0) {
+                [loadView showNullView:@"还没有被赞"];
+                
+            }
+            else
+            {
+                ///[loadView stopAnimation];
+                //[loadView removeFromSuperview];
+                //[_tableView reloadData];
+            }
         }
-        }
-        }
+       }
+     }
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"下载失败 Error: %@", error);
-        [loadView showFailLoadData];
+      //  [loadView showFailLoadData];
+        [loadView showNullView:@"还没有数据"];
    
         
     }];

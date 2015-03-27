@@ -118,7 +118,7 @@
     layout.sectionInset=UIEdgeInsetsMake(10, 10, 10, 10); //整个偏移量 上左下右
     
     _myConllectionView =[[UICollectionView alloc]initWithFrame:CGRectMake(0, 30,kDeviceWidth, kDeviceHeight-30-kHeightNavigation-kHeigthTabBar) collectionViewLayout:layout];
-    _myConllectionView.backgroundColor=View_BackGround;
+    _myConllectionView.backgroundColor=[UIColor whiteColor];
     [_myConllectionView registerClass:[MovieCollectionViewCell class] forCellWithReuseIdentifier:@"cell"];
     _myConllectionView.delegate=self;
     _myConllectionView.dataSource=self;
