@@ -137,6 +137,8 @@
 		001244101ABAE3CE005B0AB5 /* dischoice_icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0012440B1ABAE3CE005B0AB5 /* dischoice_icon@3x.png */; };
 		001244141ABAE4B5005B0AB5 /* SerViceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 001244131ABAE4B5005B0AB5 /* SerViceViewController.m */; };
 		0014E3091AC55B370078CABD /* ThanksViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0014E3081AC55B370078CABD /* ThanksViewController.m */; };
+		002E39171AC9439C00666AD0 /* liked_icon_light@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 002E39151AC9439C00666AD0 /* liked_icon_light@2x.png */; };
+		002E39181AC9439C00666AD0 /* liked_icon_light@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 002E39161AC9439C00666AD0 /* liked_icon_light@3x.png */; };
 		0032657B1ABFB8A800641EE0 /* UploadProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0032657A1ABFB8A800641EE0 /* UploadProgressView.m */; };
 		00354B331ABEC8EC00F650AA /* UploadImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00354B321ABEC8EC00F650AA /* UploadImageViewController.m */; };
 		00354C2C1ABF004100F650AA /* UpYun.m in Sources */ = {isa = PBXBuildFile; fileRef = 00354C201ABF004100F650AA /* UpYun.m */; };
@@ -490,6 +492,8 @@
 		001244131ABAE4B5005B0AB5 /* SerViceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SerViceViewController.m; sourceTree = "<group>"; };
 		0014E3071AC55B370078CABD /* ThanksViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThanksViewController.h; sourceTree = "<group>"; };
 		0014E3081AC55B370078CABD /* ThanksViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThanksViewController.m; sourceTree = "<group>"; };
+		002E39151AC9439C00666AD0 /* liked_icon_light@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "liked_icon_light@2x.png"; sourceTree = "<group>"; };
+		002E39161AC9439C00666AD0 /* liked_icon_light@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "liked_icon_light@3x.png"; sourceTree = "<group>"; };
 		003265791ABFB8A800641EE0 /* UploadProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UploadProgressView.h; sourceTree = "<group>"; };
 		0032657A1ABFB8A800641EE0 /* UploadProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UploadProgressView.m; sourceTree = "<group>"; };
 		00354B311ABEC8EC00F650AA /* UploadImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UploadImageViewController.h; sourceTree = "<group>"; };
@@ -897,6 +901,8 @@
 		000B08FB1AA2EB8C00B8D13A /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				002E39151AC9439C00666AD0 /* liked_icon_light@2x.png */,
+				002E39161AC9439C00666AD0 /* liked_icon_light@3x.png */,
 				007A32B61AC4FDFE00D491D0 /* back_icon_blue@2x.png */,
 				007A32B71AC4FDFE00D491D0 /* back_icon_blue@3x.png */,
 				007A32B81AC4FDFE00D491D0 /* up_picture_blue@2x.png */,
@@ -1852,6 +1858,7 @@
 				00539A071AC0565C00DC8BD7 /* notice_icon@2x.png in Resources */,
 				007A32BC1AC4FDFE00D491D0 /* back_icon_blue@2x.png in Resources */,
 				00BA5F6E1AC13C1800BC3039 /* login_button_sina_press@3x.png in Resources */,
+				002E39181AC9439C00666AD0 /* liked_icon_light@3x.png in Resources */,
 				000B09BD1AA3029800B8D13A /* notice_tab_butten（gray）@2x.png in Resources */,
 				003E74F11AB1A29F0080F7A8 /* btn_like_default@2x.png in Resources */,
 				000B098E1AA3029800B8D13A /* icon@3x.png in Resources */,
@@ -1890,6 +1897,7 @@
 				000B09AF1AA3029800B8D13A /* me_tab_butten（gray）@3x.png in Resources */,
 				000B099D1AA3029800B8D13A /* login_button_qq －in.png in Resources */,
 				000B09C11AA3029800B8D13A /* personal_page_icon.png in Resources */,
+				002E39171AC9439C00666AD0 /* liked_icon_light@2x.png in Resources */,
 				00AA54431AA2C525004096F8 /* UMSCommentDetailController.xib in Resources */,
 				000B09DE1AA3029800B8D13A /* Wechat@2x.png in Resources */,
 				000B09E41AA30CB900B8D13A /* loginoutbackgroundcolor.png in Resources */,

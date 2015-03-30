@@ -75,6 +75,7 @@
     _stageView=[[StageView alloc]initWithFrame:CGRectMake(0, 45, kDeviceWidth, 200)];
     _stageView.backgroundColor=VStageView_color;
     _stageView.delegate=self;
+    _stageView.userInteractionEnabled=YES;
     [self.contentView addSubview:_stageView];
     /*
     _MovieImageView =[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, 200)];

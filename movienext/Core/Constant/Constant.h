@@ -63,7 +63,7 @@
 #define GetAppDelegate()   ((AppDelegate*)[[UIApplication sharedApplication] delegate])
 
 //动画定义
-#define  kTimeInterval  1.2   //  气泡和气泡之间动画出现的时间间隔
+#define  kTimeInterval  1.1   //  气泡和气泡之间动画出现的时间间隔
 #define kStaticTimeOffset  5.7  //动画的停留时间
 #define kShowTimeOffset 0.7  // 淡入时间
 #define kHidenTimeOffset 1.0  //淡出时间

@@ -34,6 +34,7 @@
 #pragma  mark 创建基本ui
 - (void)createUI {
     [self removeStageViewSubView];
+    self.userInteractionEnabled=YES;
     self.backgroundColor =VStageView_color;
     _MovieImageView =[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, 200)];
     [self addSubview:_MovieImageView];
@@ -250,7 +251,22 @@
                 animation.toValue = [NSNumber numberWithFloat:1.05]; // 结束时的倍率
                 // 添加动画
                 [mv.layer addAnimation:animation forKey:@"scale-layer"];
-            
+                
+// 证明不是layer导致的不可点击
+//                
+//                [UIView animateWithDuration:0.25 animations:^{
+//                    mv.transform=CGAffineTransformScale(CGAffineTransformIdentity, 1.05, 1.05);
+//                } completion:^(BOOL finished) {
+//                    [UIView animateWithDuration:0.2 animations:^{
+//                        mv.transform=CGAffineTransformScale(CGAffineTransformIdentity, 1.0, 1.0);
+//                        
+//                    } completion:^(BOOL finished) {
+//                        
+//                    }];
+//                    
+//                }];
+                
+               
             }
         }
     } completion:^(BOOL finished) {
@@ -262,16 +278,16 @@
                 if ([v isKindOfClass:[MarkView class]]) {
                     MarkView *mv = (MarkView *)v;
                     mv.alpha = 0.0;
-                    
                 }
-            }
+              }
+        } completion:^(BOOL finished) {
             //每隔kTimeInterval时间显示一个动画
             if (_timer) {
                 [_timer invalidate];
                 _timer=nil;
             }
             _timer = [NSTimer scheduledTimerWithTimeInterval:kTimeInterval target:self selector:@selector( CircleshowAnimation) userInfo:nil repeats:YES];
-        } completion:nil];
+        }];
     }];
 }
 
@@ -280,8 +296,7 @@
 - (void)CircleshowAnimation {
 
    // NSLog(@"currentMarkIndex   = %ld", currentMarkIndex);
-    
-    if (!_isAnimation) {
+     if (!_isAnimation) {
         return;
     }
     
@@ -289,6 +304,7 @@
         UIView *v = self.subviews[currentMarkIndex];
         if ([v isKindOfClass:[MarkView class]]) {
             MarkView *mv = (MarkView *)v;
+            //自身动画
             [mv startAnimation];
         }
     }

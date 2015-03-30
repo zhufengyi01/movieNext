@@ -346,6 +346,40 @@
     
 }
 
+//ios 判断字符串为空和只为空格解决办法
++(BOOL)isBlankString:(NSString *)string{
+    
+    if (string == nil) {
+        return YES;
+    }
+    if (string == NULL) {
+        return YES;
+    }
+    if ([string isKindOfClass:[NSNull class]]) {
+        
+        return YES;
+        
+    }
+    if ([[string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] length]==0) {
+        
+        return YES;
+    }
+    return NO;
+}
 
++(void)BasicAnimationwithkey:(NSString *)string  Duration:(float) duration repeatcont:(int )repeat autoresverses:(BOOL) resverse fromValue:(float)fromValue toValue:(float)toValue View:(UIView *) view
+{
+    CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:string];
+    // 动画选项设定
+    animation.duration = duration; // 动画持续时间
+    animation.repeatCount = repeat; // 重复次数
+    animation.autoreverses = resverse; // 动画结束时执行逆动画
+    // 缩放倍数
+    animation.fromValue = [NSNumber numberWithFloat:fromValue]; // 开始时的倍率
+    animation.toValue = [NSNumber numberWithFloat:toValue]; // 结束时的倍率
+    // 添加动画
+    [view.layer addAnimation:animation forKey:@"scale-layer"];
+
+}
 
 @end

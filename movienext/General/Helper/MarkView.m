@@ -183,6 +183,8 @@
     self.isAnimation=YES;
     self.isShowansHiden=YES;
     _LeftImageView.layer.backgroundColor=[UIColor whiteColor].CGColor;
+    _rightView.layer.borderColor=[UIColor clearColor].CGColor;
+    _LeftImageView.layer.borderColor=[UIColor clearColor].CGColor;
      _rightView.backgroundColor=[[UIColor blackColor] colorWithAlphaComponent:0.7];
 }
 /*

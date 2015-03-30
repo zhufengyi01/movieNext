@@ -931,8 +931,9 @@
     
     
     NSLog(@" 点赞 后 微博dict  ＝====uped====%@    ups===%@",weibodict.uped,weibodict.ups);
-    float  x=[weibodict.x floatValue];
-    float  y=[weibodict.y floatValue];
+    //float  x=[weibodict.x floatValue];
+    //float  y=[weibodict.y floatValue];
+        [Function BasicAnimationwithkey:@"transform.scale" Duration:0.25 repeatcont:1 autoresverses:YES fromValue:1.0 toValue:1.05 View:markView];
     NSString  *weiboTitleString=weibodict.topic;
     NSString  *UpString=[NSString stringWithFormat:@"%@",weibodict.ups];//weibodict.ups;
     //计算标题的size

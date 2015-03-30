@@ -35,44 +35,37 @@
 {     //创建底部试图
     //创建上部视图
     self.backgroundColor=VStageView_color;
-    /*_myScrollerView=[[UIScrollView alloc]initWithFrame:CGRectMake(0, 64,kDeviceWidth,m_frame.size.height-(kDeviceWidth/4)-40-kHeightNavigation)];
-  #warning  暂时设置为kDeviceWidth
-    //设置scrollview 的背景颜色是黄色的
-    _myScrollerView.backgroundColor=[UIColor yellowColor];
-    _myScrollerView.contentSize=CGSizeMake(kDeviceWidth, kDeviceWidth);
-    [self addSubview:_myScrollerView];
-    */
-    
-    topView =[[UIView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, m_frame.size.height-(kDeviceWidth/4)-40-kHeightNavigation)];
-    topView.userInteractionEnabled=YES;
-    topView.backgroundColor=VStageView_color;
-    [self addSubview:topView];
+   
+     topView =[[UIView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, m_frame.size.height-(kDeviceWidth/4)-40-kHeightNavigation)];
+      topView.userInteractionEnabled=YES;
+     topView.backgroundColor=VStageView_color;
+      [self addSubview:topView];
      
-    
     // 上面的透明背景
     UIButton    *_topButtom =[UIButton buttonWithType:UIButtonTypeSystem];
-    _topButtom.frame=CGRectMake(0, 0, kDeviceWidth, kDeviceHeight-kHeightNavigation-(kDeviceWidth/4)-40);
+    _topButtom.frame=CGRectMake(0, 0, kDeviceWidth, m_frame.size.height-kHeightNavigation-(kDeviceWidth/4)-40);
     [_topButtom addTarget:self action:@selector(TouchbuttonClick:) forControlEvents:UIControlEventTouchUpInside];
      [topView addSubview:_topButtom];
   
  
     _ShareimageView=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth,400)];
+    _ShareimageView.backgroundColor=[UIColor whiteColor];
      [topView addSubview:_ShareimageView];
     
     //放置电影名和标签的view
-    logosupView=[[UIView alloc]initWithFrame:CGRectMake(0, topView.frame.size.height-20, kDeviceWidth, 30)];
+    logosupView=[[UIView alloc]initWithFrame:CGRectMake(0, _ShareimageView.frame.origin.y+_ShareimageView.frame.size.height, kDeviceWidth, 20)];
     logosupView.backgroundColor=VStageView_color;
     [topView addSubview:logosupView];
     
     
-     _moviewName= [ZCControl createLabelWithFrame:CGRectMake(10,5, kDeviceWidth-70, 20) Font:12 Text:@""];
+     _moviewName= [ZCControl createLabelWithFrame:CGRectMake(10,0, kDeviceWidth-70, 20) Font:12 Text:@""];
     _moviewName.textColor=VLight_GrayColor;
     _moviewName.numberOfLines=0;
     //_moviewName.lineBreakMode=NSLineBreakByTruncatingTail;
 
     [logosupView addSubview:_moviewName];
     
-    logoLable=[ZCControl createLabelWithFrame:CGRectMake(kDeviceWidth-60,5, 50, 20) Font:12 Text:@"影弹App"];
+    logoLable=[ZCControl createLabelWithFrame:CGRectMake(kDeviceWidth-60,0, 50, 20) Font:12 Text:@"影弹App"];
     logoLable.textAlignment=NSTextAlignmentRight;
     logoLable.textColor=VLight_GrayColor;
     [logosupView addSubview:logoLable];
@@ -85,22 +78,8 @@
 //配置view
 -(void)configShareView;
 {
-    
-    float  ImageWith=[self.StageInfo.w floatValue];
-    float  ImgeHight=[self.StageInfo.h floatValue];
-    float hight=0;
-    hight= kDeviceWidth;  // 计算的事bgview1的高度
-    if(ImgeHight>ImageWith)
-    {
-        hight=  (ImgeHight/ImageWith) *kDeviceWidth;
-    }
-    
-    //配置shareimagview 的图片和高度
-    _ShareimageView.image =self.screenImage;
-    //_myScrollerView.contentSize=CGSizeMake(kDeviceWidth, hight);
-    _ShareimageView.frame=CGRectMake(0, 0, kDeviceWidth, hight);
-    _moviewName.text=self.StageInfo.movie_name;
-    logosupView.frame=CGRectMake(0, hight,kDeviceWidth, 30);
+      _ShareimageView.image =self.screenImage;
+     _moviewName.text=self.StageInfo.movie_name;
     
 }
 
@@ -171,7 +150,7 @@
     {
         hight=  (ImgeHight/ImageWith) *kDeviceWidth;
     }
-    shareImage=[Function getImage:topView WithSize:CGSizeMake(kDeviceWidth, hight+30)];
+    shareImage=[Function getImage:topView WithSize:CGSizeMake(kDeviceWidth, hight+20)];
  
     //把topview 生成一张图片
     if (self.delegate &&[self.delegate respondsToSelector:@selector(UMshareViewHandClick:ShareImage:MoviewModel:)]) {
@@ -187,7 +166,7 @@
         float  ImgeHight=[self.StageInfo.h intValue];
        if (ImageWith>ImgeHight) {
            //宽大于高的时候
-           _ShareimageView.frame=CGRectMake(0,(topView.frame.size.height-hight)/2, kDeviceWidth, kDeviceWidth);
+           _ShareimageView.frame=CGRectMake(0,0,kDeviceWidth, kDeviceWidth);
            
        }
        else if(ImgeHight>ImageWith)
@@ -198,6 +177,8 @@
             }
             _ShareimageView.frame=CGRectMake(0, 0,kDeviceWidth, hight);
         }
+        logosupView.frame=CGRectMake(0, _ShareimageView.frame.origin.y+_ShareimageView.frame.size.height,kDeviceWidth, 20);
+    
 }
 
 //点击屏幕弹回

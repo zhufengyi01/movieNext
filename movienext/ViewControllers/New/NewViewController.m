@@ -751,16 +751,7 @@
             hight=  (ImgeHight/ImageWith) *kDeviceWidth;
         }
         CommonStageCell *cell = (CommonStageCell *)(markView.superview.superview.superview);
-        
-      /*  UIGraphicsBeginImageContextWithOptions(CGSizeMake(kDeviceWidth, hight), YES, [UIScreen mainScreen].scale);
-        [cell.stageView drawViewHierarchyInRect:cell.stageView.bounds afterScreenUpdates:YES];
-        
-        // old style [self.layer renderInContext:UIGraphicsGetCurrentContext()];
-        
-        UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
-        */
-        UIImage  *image=[Function getImage:cell.stageView WithSize:CGSizeMake(kDeviceWidth, hight)];
+         UIImage  *image=[Function getImage:cell.stageView WithSize:CGSizeMake(kDeviceWidth, hight)];
        
         //创建UMshareView 后必须配备这三个方法
         shareView.StageInfo=stageInfoDict;
@@ -789,9 +780,6 @@
             weiboDict.ups=[NSNumber numberWithInt:ups];
            //重新给markview 赋值，改变markview的frame
            [self layoutMarkViewWithMarkView:markView WeiboInfo:weiboDict];
-           
-           
-          
        }
         else  {
 
@@ -811,12 +799,13 @@
 -(void)layoutMarkViewWithMarkView:(MarkView  *) markView WeiboInfo:(WeiboModel *) weibodict
 {
     
+#pragma mark   缩放整体的弹幕大小
+    [Function BasicAnimationwithkey:@"transform.scale" Duration:0.25 repeatcont:1 autoresverses:YES fromValue:1.0 toValue:1.05 View:markView];
+
     
     NSLog(@" 点赞 后 微博dict  ＝====uped====%@    ups===%@",weibodict.uped,weibodict.ups);
 
-//     float  x=[weibodict.x floatValue];
-  //   float  y=[weibodict.y floatValue];
-     NSString  *weiboTitleString=weibodict.topic;
+      NSString  *weiboTitleString=weibodict.topic;
       NSString  *UpString=[NSString stringWithFormat:@"%@",weibodict.ups];//weibodict.ups;
      //计算标题的size
       CGSize  Msize=[weiboTitleString boundingRectWithSize:CGSizeMake(kDeviceWidth/2,MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:markView.TitleLable.font forKey:NSFontAttributeName] context:nil].size;
@@ -834,8 +823,6 @@
         markViewWidth=markViewWidth+10;
         markViewHeight=markViewHeight+4;
     }
-#warning    kDeviceWidth 目前计算的是正方形的，当图片高度>屏幕的宽度的实际，需要使用图片的高度
-    //markViewY = MIN(MAX(markViewY, 1.0f), kDeviceWidth-markViewHeight-1);
 #pragma mark 设置气泡的大小和位置
     markView.frame=CGRectMake(markView.frame.origin.x, markView.frame.origin.y, markViewWidth, markViewHeight);
 #pragma mark 设置标签的内容

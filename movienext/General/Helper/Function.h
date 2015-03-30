@@ -110,5 +110,10 @@ float getHeightByWidthAndHeight(float width, float height){
 +(UIImage *)getImageFromImage:(UIImage *) BigImage;
 //进入appdelegate页面时候，根据磁盘信息把磁盘信息复制给usercenter
 +(void)getUserInfoWith:(NSDictionary  *) userInfo;
+//判断一个字符串为空，或者只有空格的情况
++(BOOL)isBlankString:(NSString *)string;
+//动画效果，根据传递进来的view 初始值，时间
++(void)BasicAnimationwithkey:(NSString *)string  Duration:(float) duration repeatcont:(int )repeat autoresverses:(BOOL) resverse fromValue:(float)fromValue toValue:(float)toValue View:(UIView *) view;
+
 
 @end

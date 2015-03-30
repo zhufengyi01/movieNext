@@ -9,6 +9,7 @@
 #import "AddMarkViewController.h"
 #import "ZCControl.h"
 #import "Constant.h"
+#import "Function.h"
 #import "UserDataCenter.h"
 #import "UIImageView+WebCache.h"
 #import "AFNetworking.h"
@@ -24,6 +25,7 @@
     CGSize   keyboardSize;
     UIButton  *RighttBtn;
     UIView   *tipView;
+    UIButton  *publishBtn;
 }
 @end
 
@@ -169,8 +171,9 @@
     
     
     
-     UIButton  *publishBtn=[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-60, 10, 50, 28) ImageName:@"loginoutbackgroundcolor.png" Target:self Action:@selector(dealNavClick:) Title:@"确定"];
-    
+     publishBtn=[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-60, 10, 50, 28) ImageName:@"loginoutbackgroundcolor.png" Target:self Action:@selector(dealNavClick:) Title:@"确定"];
+    //publishBtn.alpha=0.8;
+    publishBtn.enabled=NO;
     publishBtn.titleLabel.font=[UIFont systemFontOfSize:14];
     publishBtn.layer.cornerRadius=4;
     publishBtn.tag=99;
@@ -205,7 +208,9 @@
 //把markview 添加到屏幕
 -(void)PushlicInScreen
 {
- //发布到屏幕之后需要把输入框退回去
+      //方法只是去掉左右两边的空格；
+    NSString   *inputString = [_inputText.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    //发布到屏幕之后需要把输入框退回去
     [_inputText resignFirstResponder];
    [UIView animateWithDuration:0.5 animations:^{
        CGRect  iframe =_toolBar.frame;
@@ -232,18 +237,19 @@
         }
     }
     
-    if ([_inputText text].length==0||[[_inputText text]  isEqualToString:@" "]) {
+    /*if ([_inputText text].length==0||[[_inputText text]  isEqualToString:@" "]) {
         UIAlertView  *Al =[[UIAlertView alloc]initWithTitle:nil message:@"对不起，您还没有添加内容" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
         [Al show];
         return ;
-    }
+    }*/
 
     
      _myMarkView =[[MarkView alloc]initWithFrame:CGRectMake(100,140 , 100, 20)];
     ///显示标签的头像
     UserDataCenter  * userCenter=[UserDataCenter shareInstance];
     [ _myMarkView.LeftImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@!thumb",kUrlAvatar,    userCenter.avatar]]];
-    _myMarkView.TitleLable.text=[_inputText text];
+    _myMarkView.TitleLable.text=inputString;
+    
     [stageView addSubview:_myMarkView];
 #warning  这里的stageview 的位置一直是320 所以说不能使用这个值
     
@@ -258,8 +264,6 @@
     }
     NSLog(@"stageView frame====%f",hight);
 
-    
-    NSString   *inputString=_inputText.text;
      CGSize  Msize= [inputString  boundingRectWithSize:CGSizeMake(kDeviceWidth/2, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:_myMarkView.TitleLable.font forKey:NSFontAttributeName] context:nil].size;
     
     //宽度=字的宽度+左头像图片的宽度＋赞图片的宽度＋赞数量的宽度+中间两个空格2+2
@@ -297,8 +301,8 @@
     //CGRect  stageViewfrem=stageView.frame;
     float  stageX=kDeviceWidth;
     float hight= kDeviceWidth;
-    float  ImageWith=[self.stageInfoDict.w intValue]; //[[self.StageInfoDict objectForKey:@"w"]  floatValue];
-    float  ImgeHight=[self.stageInfoDict.h intValue];//[[self.StageInfoDict objectForKey:@"h"]  floatValue];
+    float  ImageWith=[self.stageInfoDict.w intValue];
+    float  ImgeHight=[self.stageInfoDict.h intValue];
     if(ImgeHight>ImageWith)
     {
         hight=  (ImgeHight/ImageWith) *kDeviceWidth;
@@ -314,9 +318,7 @@
     X =[NSString stringWithFormat:@"%f",((_myMarkView.frame.origin.x+_myMarkView.frame.size.width)/kDeviceWidth)*100];
     Y=[NSString stringWithFormat:@"%f",((markViewY+markviewHight2)/hight)*100];
     
-   // NSLog(@"=====markview  x ==%f  mark view  y ==%f",_myMarkView.frame.origin.x,_myMarkView.frame.origin.y);
-   // NSLog(@"===发布的x =%@ 发布的y ===%@",X,Y);
-
+ 
 }
 # pragma  mark  发布数据请求
 //确定发布
@@ -388,6 +390,28 @@
     [_inputText resignFirstResponder];
     return YES;
 }
+-(void)textFieldDidBeginEditing:(UITextField *)textField
+{
+}
+-(BOOL)textFieldShouldBeginEditing:(UITextField *)textField
+{
+    return  YES;
+}
+-(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    NSLog(@"=====_input text ====%@",_inputText.text);
+    if (textField==_inputText) {
+         if (_inputText.text.length>0&&[Function isBlankString:_inputText.text]==NO) {
+            publishBtn.enabled=YES;
+         }
+         else
+        {
+          publishBtn.enabled=NO;
+         }
+    }
+    return YES;
+}
+
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
     [_inputText resignFirstResponder];
