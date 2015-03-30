@@ -63,14 +63,7 @@
     scrollView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:scrollView];
 }
-//-(void)createTopView
-//{
-//    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-//    btn.frame = CGRectMake(kDeviceWidth-100, 0, 100, 44);
-//    [btn setTitle:@"完成" forState:UIControlStateNormal];
-//    [btn addTarget:self action:@selector(handleComplete) forControlEvents:UIControlEventTouchUpInside];
-//    [scrollView addSubview:btn];
-//}
+
 
 -(void)createStageView
 {
@@ -93,6 +86,7 @@
     [stageView configStageViewforStageInfoDict];
      [scrollView addSubview:stageView];
     [stageView startAnimation];
+    //[stageView  performSelector:@selector(startAnimation) withObject:nil afterDelay:1];
     
     //创建分享和添加弹幕的的底部试图
 }
@@ -333,20 +327,8 @@
         {
             hight=  (ImgeHight/ImageWith) *kDeviceWidth;
         }
-       // CommonStageCell *cell = (CommonStageCell *)(markView.superview.superview.superview);
-        
-       /* UIGraphicsBeginImageContextWithOptions(CGSizeMake(kDeviceWidth, hight), YES, [UIScreen mainScreen].scale);
-        [stageView drawViewHierarchyInRect:stageView.bounds afterScreenUpdates:YES];
-        
-        // old style [self.layer renderInContext:UIGraphicsGetCurrentContext()];
-        
-        UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
-        */
-        
         UIImage  *image=[Function getImage:stageView WithSize:CGSizeMake(kDeviceWidth, hight)];
         
-
         //创建UMshareView 后必须配备这三个方法
         shareView.StageInfo=stageInfoDict;
         shareView.screenImage=image;

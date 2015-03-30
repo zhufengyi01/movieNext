@@ -35,6 +35,7 @@
     //底部的弹出视图
     UIView   *buttomView;
     int  zanNum;
+    UIImageView  *likeimageview;
 }
 #pragma mark  ------外部方法
 @property(nonatomic,strong) WeiboModel   *weiboDict;

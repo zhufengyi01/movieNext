@@ -24,6 +24,8 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     
     if (self = [super initWithFrame:frame]) {
+        //最开始设置为0
+        currentMarkIndex=0;
         [self createUI];
     }
     return self;
@@ -88,16 +90,14 @@
          markView.weiboDict=self.weiboDict;
          //遵守markView 的协议
          markView.delegate=self;
+        //单个气泡的时候，隐约显示的参数
          markView.isShowansHiden=YES;
          [markView StartShowAndhiden];
          [self addSubview:markView];
          
-         
          }
-         #pragma  mark  有很多气泡，气泡循环播放
-         
+#pragma  mark  有很多气泡，气泡循环播放
          if (self.WeibosArray&&self.WeibosArray.count>0) {
-         
          for ( int i=0;i<_WeibosArray.count ; i++) {
          MarkView *markView = [self createMarkViewWithDict:self.WeibosArray[i] andIndex:i];
          // 设置markview 可以动画
@@ -107,12 +107,9 @@
          //遵守markView 的协议
          markView.isShowansHiden=NO;
          markView.delegate=self;
-         
          [self addSubview:markView];
+          }
          }
-         }
-
-        
     }];
 #pragma  mark  是静态的, 气泡是不动的
    /* if ( _weiboDict) {
@@ -215,22 +212,37 @@
     }
     
 }
+
+
+
+
+
+
+
+//1.开始执行动画, 动画入口
+- (void)startAnimation {
+    //开始动画之后0.5秒再开始动画
+    [self performSelector:@selector(scaleAnimation) withObject:nil afterDelay:kdisplayTime];
+}
+
 #pragma mark  ------
 #pragma  mark ----执行动画的开始和结束
 #pragma  mark ------
 //2.放大动画
 - (void)scaleAnimation {
        //执行放大动画
-    [UIView animateWithDuration:0.5 animations:^{
+    //1.6代表动画弹出到小时的那消失的那段时间
+    [UIView animateWithDuration:kalpaOneTime animations:^{
         for (UIView *v in self.subviews) {
             if ([v isKindOfClass:[MarkView class]]) {
                 MarkView *mv = (MarkView *)v;
+                mv.userInteractionEnabled=YES;
                 mv.alpha = 1.0;
                 mv.hidden = NO;
                 // 设定为缩放
                 CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"transform.scale"];
                 // 动画选项设定
-                animation.duration = 0.15; // 动画持续时间
+                animation.duration = 0.25; // 动画持续时间
                 animation.repeatCount = 1; // 重复次数
                 animation.autoreverses = YES; // 动画结束时执行逆动画
                 // 缩放倍数
@@ -238,21 +250,25 @@
                 animation.toValue = [NSNumber numberWithFloat:1.05]; // 结束时的倍率
                 // 添加动画
                 [mv.layer addAnimation:animation forKey:@"scale-layer"];
+            
             }
         }
     } completion:^(BOOL finished) {
         //，放大动画执行完成后，结束放大动画, 同时开始循环显示动画
-        [UIView animateWithDuration:0.2 delay:0.6 options:UIViewAnimationOptionCurveLinear animations:^{
+        //动画延时小时5s,消失动画显示
+        [UIView animateWithDuration:kalpaZeroTime delay:0.6 options:UIViewAnimationOptionCurveLinear animations:^{
             // 先把所有的气泡的透明度都设置成了 0
             for (UIView *v in self.subviews) {
                 if ([v isKindOfClass:[MarkView class]]) {
                     MarkView *mv = (MarkView *)v;
                     mv.alpha = 0.0;
+                    
                 }
-                            }
+            }
             //每隔kTimeInterval时间显示一个动画
             if (_timer) {
                 [_timer invalidate];
+                _timer=nil;
             }
             _timer = [NSTimer scheduledTimerWithTimeInterval:kTimeInterval target:self selector:@selector( CircleshowAnimation) userInfo:nil repeats:YES];
         } completion:nil];
@@ -260,16 +276,10 @@
 }
 
 
-
-//1.开始执行动画, 动画入口
-- (void)startAnimation {
-    //开始动画之后0.5秒再开始动画
-    [self performSelector:@selector(scaleAnimation) withObject:nil afterDelay:0];
-}
-
 //6.循环显示气泡动画
 - (void)CircleshowAnimation {
-    //NSLog(@"index = %ld", currentMarkIndex);
+
+   // NSLog(@"currentMarkIndex   = %ld", currentMarkIndex);
     
     if (!_isAnimation) {
         return;
@@ -283,10 +293,14 @@
         }
     }
     currentMarkIndex ++;
+#warning  疑点，为什么是13  的最大值
     //执行完成一轮动画之后，实行，重新再动第一个执行
-    if (currentMarkIndex > MAX(self.subviews.count, 13) ) {
+   if (currentMarkIndex > MAX(self.subviews.count, 4) ) {
         currentMarkIndex = 0;
     }
+    
+     //这里打印出来证明self.subview  - self.weiboarray.cout =2
+    NSLog(@"CircleshowAnimatio self.subviews  ===%ld  ====weibos ===%ld ",self.subviews.count,self.WeibosArray.count);
 }
 
 //7.停止动画

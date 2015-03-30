@@ -402,8 +402,13 @@
 {
     if (buttonIndex==0) {
         if (self.pageSoureType==NSAddMarkPageSourceUploadImage) {
+            //返回电影详细页面的时候需要去刷新一下
+            [[NSNotificationCenter  defaultCenter] postNotificationName:@"RefreshMovieDeatail" object:nil userInfo:nil];
+            
             [self.navigationController popViewControllerAnimated:YES];
             [self.navigationController popViewControllerAnimated:YES];
+            
+        
         }else
         {
             [self.navigationController popViewControllerAnimated:YES];

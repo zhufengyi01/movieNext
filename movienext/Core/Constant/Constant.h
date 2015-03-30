@@ -63,11 +63,14 @@
 #define GetAppDelegate()   ((AppDelegate*)[[UIApplication sharedApplication] delegate])
 
 //动画定义
-#define  kTimeInterval  0.7   //  气泡和气泡之间动画出现的时间间隔
+#define  kTimeInterval  1.2   //  气泡和气泡之间动画出现的时间间隔
 #define kStaticTimeOffset  5.7  //动画的停留时间
 #define kShowTimeOffset 0.7  // 淡入时间
 #define kHidenTimeOffset 1.0  //淡出时间
-#define KappearTime    3     //最新页面的闪烁动画时间
+#define KappearTime    3     //最新页面的自身闪烁动画时间
+#define kdisplayTime   1.2     //滑动cell 动画延时的时间
+#define kalpaOneTime 0.6      //动画全部弹出透明度变成1的那段时间
+#define kalpaZeroTime  0.3    //动画全部弹出后然后变成透明度为0的那段时间
 
 #define kUserKey @"userinfo"  ///用户信息
 

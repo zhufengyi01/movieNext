@@ -34,33 +34,18 @@
     movieLogoImageView  =[[UIImageView alloc]initWithFrame:CGRectMake(15, 64+20+180, 50, 70)];
     [bgImageView addSubview:movieLogoImageView];
     
-    /*
-    UIButton  *backBtn=[ZCControl createButtonWithFrame:CGRectMake(10, 30+180,60,32) ImageName:nil Target:self Action:@selector(dealBackClick:) Title:nil];
-    backBtn.tag=200;
-     [backBtn setImageEdgeInsets:UIEdgeInsetsMake(0, -25, 0, 0)];
-  //  backBtn.backgroundColor=[UIColor redColor];
-    [backBtn setImage:[UIImage imageNamed:@"back_Icon@2x.png"] forState:UIControlStateNormal];
-    //[bgImageView addSubview:backBtn];
-    
-    
-    
-     UIButton  *upLoadimageBtn=[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-70, 35+180,60,25) ImageName:@"up_image@2x.png" Target:self Action:@selector(dealBackClick:) Title:nil];
-    upLoadimageBtn.tag=201;
-    [bgImageView addSubview:upLoadimageBtn];
-    */
-    
-    titleLable=[ZCControl createLabelWithFrame:CGRectMake(movieLogoImageView.frame.origin.x+movieLogoImageView.frame.size.width+10, movieLogoImageView.frame.origin.y,kDeviceWidth-20-50-20 ,30) Font:16 Text:@"电影标题"];
+    titleLable=[ZCControl createLabelWithFrame:CGRectMake(movieLogoImageView.frame.origin.x+movieLogoImageView.frame.size.width+10, movieLogoImageView.frame.origin.y,kDeviceWidth-20-50-20 ,30) Font:16 Text:@""];
     titleLable.textColor=[UIColor whiteColor];
     titleLable.font=[UIFont boldSystemFontOfSize:18];
     [bgImageView addSubview:titleLable];
     
     //导演
-    derectorLable=[ZCControl createLabelWithFrame:CGRectMake(movieLogoImageView.frame.origin.x+movieLogoImageView.frame.size.width+10,titleLable.frame.origin.y+titleLable.frame.size.height,kDeviceWidth-30-10-30,15) Font:14 Text:@"导演"];
+    derectorLable=[ZCControl createLabelWithFrame:CGRectMake(movieLogoImageView.frame.origin.x+movieLogoImageView.frame.size.width+10,titleLable.frame.origin.y+titleLable.frame.size.height,kDeviceWidth-30-10-30,15) Font:14 Text:@""];
     derectorLable.textColor=[UIColor whiteColor];
     derectorLable.numberOfLines=2;
     [bgImageView addSubview:derectorLable];
     //演员
-    performerLable=[ZCControl createLabelWithFrame:CGRectMake(movieLogoImageView.frame.origin.x+10+movieLogoImageView.frame.size.width, derectorLable.frame.origin.y+derectorLable.frame.size.height, kDeviceWidth-movieLogoImageView.frame.origin.x-movieLogoImageView.frame.size.width-10-10, 50) Font:12 Text:@"演员"];
+    performerLable=[ZCControl createLabelWithFrame:CGRectMake(movieLogoImageView.frame.origin.x+10+movieLogoImageView.frame.size.width, derectorLable.frame.origin.y+derectorLable.frame.size.height, kDeviceWidth-movieLogoImageView.frame.origin.x-movieLogoImageView.frame.size.width-10-10, 50) Font:12 Text:@""];
     performerLable.numberOfLines=3;
     performerLable.lineBreakMode=NSLineBreakByCharWrapping;
     performerLable.textColor=[UIColor whiteColor];
@@ -100,7 +85,6 @@
     //NSLog(@ "在头部设置的信息  =====%@",dict);
     
     //[movieLogoImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kUrlMoviePoster,[dict objectForKey:@"logo"]]] placeholderImage:[UIImage imageNamed:@"loading_image_all"]];
-    
     [movieLogoImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kUrlMoviePoster,[dict objectForKey:@"logo"]]] placeholderImage:[UIImage imageNamed:@""] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         //设置头部的北京图片
         // jpeg quality image data

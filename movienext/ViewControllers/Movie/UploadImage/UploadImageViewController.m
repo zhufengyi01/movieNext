@@ -42,23 +42,13 @@
 {
     
     
-    UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 120, 20) Font:16 Text:@"上传并添加图片"];
+    UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 120, 20) Font:16 Text:@"上传图片"];
     titleLable.textColor=VBlue_color;
     titleLable.font=[UIFont boldSystemFontOfSize:16];
     titleLable.textAlignment=NSTextAlignmentCenter;
     self.navigationItem.titleView=titleLable;
-    
-    
-//    UIButton * leftBtn= [UIButton buttonWithType:UIButtonTypeSystem];
-//    leftBtn.frame=CGRectMake(0, 0, 60, 30);
-//    [leftBtn addTarget:self action:@selector(dealRightNavClick:) forControlEvents:UIControlEventTouchUpInside];
-//    leftBtn.tag=100;
-//    [leftBtn setTitleColor:VBlue_color forState:UIControlStateNormal];
-//    [leftBtn setTitle:@"返回" forState:UIControlStateNormal];
-//     self.navigationItem.leftBarButtonItem=[[UIBarButtonItem alloc]initWithCustomView:leftBtn];
-//
-    
-    
+ 
+     //确定发布
     UIButton * RighttBtn= [UIButton buttonWithType:UIButtonTypeSystem];
     RighttBtn.frame=CGRectMake(0, 0, 40, 30);
     [RighttBtn addTarget:self action:@selector(dealRightNavClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -66,6 +56,7 @@
     RighttBtn.titleLabel.font=[UIFont systemFontOfSize:16];
     [RighttBtn setTitleColor:VBlue_color forState:UIControlStateNormal];
     [RighttBtn setTitle:@"确定" forState:UIControlStateNormal];
+    RighttBtn.titleLabel.font=[UIFont boldSystemFontOfSize:16];
     self.navigationItem.rightBarButtonItem=[[UIBarButtonItem alloc]initWithCustomView:RighttBtn];
     
     

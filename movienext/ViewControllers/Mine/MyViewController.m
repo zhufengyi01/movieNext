@@ -12,6 +12,7 @@
 #import "LoadingView.h"
 #import "UserDataCenter.h"
 #import "AFNetworking.h"
+#import "AFHTTPRequestOperationManager.h"
 #import "CommonStageCell.h"
 #import "UserDataCenter.h"
 #import "SettingViewController.h"
@@ -28,7 +29,7 @@
 #import "AddMarkViewController.h"
 #import "Function.h"
 #import "UMShareView.h"
-@interface MyViewController ()<UITableViewDataSource, UITableViewDelegate,StageViewDelegate,MarkViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UIActionSheetDelegate,UMSocialDataDelegate,UMSocialUIDelegate,UMShareViewDelegate,LoadingViewDelegate>
+@interface MyViewController ()<UITableViewDataSource, UITableViewDelegate,StageViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UIActionSheetDelegate,UMSocialDataDelegate,UMSocialUIDelegate,UMShareViewDelegate>
 {
     //UISegmentedControl *segment;
     UITableView   *_tableView;
@@ -52,6 +53,7 @@
     int  productCount;
     //保存头部视图按钮的状态
     NSMutableDictionary  *buttonStateDict;
+    NSMutableDictionary  *IsNullStateDict; //纪录添加还是赞的数据为空
 
 
 }
@@ -82,7 +84,6 @@
     // Do any additional setup after loading the view.
     [self createNavigation];
     [self initData];
-    [self createLoadview];
 
      [self requestUserInfo];
     
@@ -104,10 +105,14 @@
     _upedDataArray = [[NSMutableArray alloc] init];
     buttonStateDict=[[NSMutableDictionary alloc]init];
     [buttonStateDict setValue:@"YES" forKey:@"100"];
+    //纪录那个数据为空
+    IsNullStateDict =[[NSMutableDictionary  alloc]init];
+    [IsNullStateDict setValue:@"NO" forKey:@"ONE"];
+    [IsNullStateDict setValue:@"NO" forKey:@"TWO"];
+    
     if (self.author_id&&![self.author_id isEqualToString:@"0"]) {
         //如果有用户id 并且用户的id 不为0
         _userInfoDict =[[NSMutableDictionary alloc]init];
-        
     }
 
 }
@@ -136,7 +141,7 @@
 
 -(void)createTableView
 {
-    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight-kHeigthTabBar-kHeightNavigation)];
+    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight-kHeightNavigation-kHeigthTabBar)];
     _tableView.separatorStyle=UITableViewCellSeparatorStyleNone;
     _tableView.delegate = self;
     _tableView.dataSource = self;
@@ -146,12 +151,7 @@
         _tableView.frame=CGRectMake(0, 0, kDeviceWidth, kDeviceHeight-kHeightNavigation);
     }
 
-    
     userCenter=[UserDataCenter shareInstance];
-    
-   // int BodyConut=[userCenter.product_count intValue];
-    //int  ZanCount= [userCenter.like_count  intValue];
-  
     NSString  *signature=[NSString stringWithFormat:@"%@",  [_userInfoDict  objectForKey:@"brief"]];
     if (signature==nil) {
         signature=@"";
@@ -244,7 +244,6 @@
     [viewHeader addSubview:lineView];
     
     UIButton  *zanButton=[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth/2,  lblBrief.frame.origin.y+lblBrief.frame.size.height+25, kDeviceWidth/2, 40) ImageName:nil Target:self Action:@selector(dealSegmentClick:) Title:@"赞"];
-    //zanButton.backgroundColor=VLight_GrayColor;
     [zanButton setTitleColor:VGray_color forState:UIControlStateNormal];
     [zanButton setTitleColor:VBlue_color forState:UIControlStateSelected];
     if ([[buttonStateDict objectForKey:@"101"] isEqualToString:@"YES"]) {
@@ -257,32 +256,15 @@
     zanButton.tag=101;
     [viewHeader addSubview:zanButton];
 
+    [self createLoadview];
     //修改了loadview的frame
     if (loadView) {
         float  y=zanButton.frame.origin.y+zanButton.frame.size.height;
-        loadView.frame=CGRectMake(0, y, kDeviceWidth, kDeviceHeight-y);
+        loadView.frame=CGRectMake(0, y, kDeviceWidth, kDeviceHeight-y-kHeightNavigation);
     }
-    
-   /*
-    NSArray *segmentedArray = [[NSArray alloc] initWithObjects:@"添加", @"赞", nil];
-    segment = [[UISegmentedControl alloc] initWithItems:segmentedArray];
-    segment.frame = CGRectMake(0, lblBrief.frame.origin.y+lblBrief.frame.size.height+10, kDeviceWidth, 30);
-    segment.selectedSegmentIndex = 0;
-    segment.tintColor = kAppTintColor;
-    segment.backgroundColor = [UIColor clearColor];
-    
-    NSDictionary* selectedTextAttributes = @{NSFontAttributeName:[UIFont boldSystemFontOfSize:14]
-                                             };
-    [segment setTitleTextAttributes:selectedTextAttributes forState:UIControlStateSelected];
-    NSDictionary* unselectedTextAttributes = @{NSFontAttributeName:[UIFont boldSystemFontOfSize:14]
-                                               };
-    [segment setTitleTextAttributes:unselectedTextAttributes forState:UIControlStateNormal];
-    [segment addTarget:self action:@selector(segmentClick:) forControlEvents:UIControlEventValueChanged];
-    [viewHeader addSubview:segment];*/
     
     viewHeader.frame=CGRectMake(0, 0, kDeviceWidth,addButton.frame.origin.y+addButton.frame.size.height);
     [_tableView setTableHeaderView:viewHeader];
-    
     [self setupRefresh];
 
 }
@@ -361,6 +343,13 @@
             if (_addedDataArray.count==0) {
                 [self requestData];
             }
+            if ( [[IsNullStateDict objectForKey:@"ONE"] isEqualToString:@"YES"]) {
+                [_tableView addSubview:loadView];
+            }
+            else
+            {
+                [loadView removeFromSuperview];
+            }
         }
     }
     else if(button.tag==101)
@@ -383,6 +372,14 @@
            if (_upedDataArray.count==0) {
             [self requestData];
            }
+          if ( [[IsNullStateDict objectForKey:@"TWO"] isEqualToString:@"YES"]) {
+                [_tableView addSubview:loadView];
+            }
+            else
+            {
+                [loadView removeFromSuperview];
+            }
+
         }
     }
     
@@ -391,9 +388,6 @@
 - (void)createLoadview
 {
     loadView =[[LoadingView alloc]initWithFrame:CGRectMake(0, 200, kDeviceWidth, kDeviceHeight-kHeightNavigation-200)];
-    loadView.backgroundColor=[UIColor redColor];
-    loadView.delegate=self;
-    [self.view addSubview:loadView];
 }
 
 //创建底部的视图
@@ -458,7 +452,6 @@
         UserDataCenter  *user=[UserDataCenter shareInstance];
         autorid=user.user_id;
     }
-
     //user_id是当前用户的ID
     NSDictionary *parameters = @{@"user_id":userCenter.user_id, @"page":[NSString stringWithFormat:@"%d",page], @"author_id":autorid};
     NSString * section;
@@ -473,15 +466,16 @@
         }
         
     }
+    NSLog(@" parameters  ====%@",parameters);
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    //    [manager POST:[NSString stringWithFormat:@"%@/movieStage/listRecently", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    //manager.requestSerializer=[AFHTTPRequestSerializer serializer];
+    //manager.responseSerializer=[AFHTTPResponseSerializer serializer];
     [manager POST:[NSString stringWithFormat:@"%@/%@", kApiBaseUrl, section] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject objectForKey:@"return_code"] intValue]==10000) {
             NSLog(@"个人页面返回的数据====%@",responseObject);
-            NSMutableArray  *Detailarray=[responseObject objectForKey:@"detail"];
+             NSMutableArray  *Detailarray=[responseObject objectForKey:@"detail"];
         for (int i=100; i<102;i++ ) {
             UIButton  *btn =(UIButton *)[self.view viewWithTag:i];
-            
         if (btn.tag==100&&btn.selected==YES) {
             if (_addedDataArray ==nil) {
                 _addedDataArray=[[NSMutableArray alloc]init];
@@ -505,17 +499,18 @@
                 }
             }
             if (_addedDataArray.count==0) {
-                [loadView showNullView:@"还没有添加弹幕"];
-                
+                [IsNullStateDict setValue:@"YES" forKey:@"ONE"];
+                [_tableView addSubview:loadView];
+                [loadView showNullView:@"没有数据"];
             }
             else
             {
+                [IsNullStateDict setValue:@"NO" forKey:@"ONE"];
                 [loadView stopAnimation];
                 [loadView removeFromSuperview];
-                //[_tableView reloadData];
+                [_tableView reloadData];
 
             }
-            
         }
         else if(btn.tag==101&&btn.selected==YES)
         {
@@ -539,42 +534,36 @@
                     [_upedDataArray addObject:model];
                 }
             }
-            //[_tableView reloadData];
-            if (_upedDataArray.count ==0) {
-                [loadView showNullView:@"还没有被赞"];
-                
+            if (_upedDataArray.count==0) {
+                  [IsNullStateDict setValue:@"YES" forKey:@"TWO"];
+                [_tableView addSubview:loadView];
+                [loadView showNullView:@"没有数据"];
             }
             else
             {
-                ///[loadView stopAnimation];
-                //[loadView removeFromSuperview];
-                //[_tableView reloadData];
+                  [IsNullStateDict setValue:@"NO" forKey:@"TWO"];
+                [loadView stopAnimation];
+                [loadView removeFromSuperview];
+                [_tableView reloadData];
+                
             }
+            [_tableView reloadData];
         }
        }
      }
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"下载失败 Error: %@", error);
-      //  [loadView showFailLoadData];
-        [loadView showNullView:@"还没有数据"];
-   
-        
+        [loadView stopAnimation];
+        [loadView showFailLoadData];
+     
     }];
 }
-//数据下载失败的时候执行这个方法
--(void)reloadDataClick
-{
-    [self requestData];
-    //点击完之后，动画又要开始旋转，同时隐藏了加载失败的背景
-    [loadView hidenFailLoadAndShowAnimation];
-    
-    
-}
+
 
 -(void)requestDelectData:(HotMovieModel *) hotmodel
 {
-    NSLog(@"hotmodel  ==weibiid ==%@   hotmodel stageinfo id ==%@ ",hotmodel.weibo.Id,hotmodel.stageinfo.Id);
+  //  NSLog(@"hotmodel  ==weibiid ==%@   hotmodel stageinfo id ==%@ ",hotmodel.weibo.Id,hotmodel.stageinfo.Id);
     NSDictionary *parameters = @{@"id":hotmodel.weibo.Id,@"stage_id":hotmodel.stageinfo.Id};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:[NSString stringWithFormat:@"%@/weibo/remove", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -799,23 +788,14 @@
     for (int i=100; i<102;i++ ) {
         UIButton  *btn =(UIButton *)[self.view viewWithTag:i];
         if (btn.tag==100&&btn.selected==YES) {
-            hotmovie =[_addedDataArray objectAtIndex:button.tag-1000];
-
-        }
+            hotmovie =[_addedDataArray objectAtIndex:button.tag-1000];}
         else if (btn.tag==101&&btn.selected==YES)
         {
             hotmovie=[_upedDataArray objectAtIndex:button.tag-1000];
         }
         
     }
-
-//    if (segment.selectedSegmentIndex==0) {
-//        hotmovie =[_addedDataArray objectAtIndex:button.tag-1000];
-//    }
-//    else  {
-//        hotmovie=[_upedDataArray objectAtIndex:button.tag-1000];
-//    }
-    MovieDetailViewController *vc =  [MovieDetailViewController new];
+     MovieDetailViewController *vc =  [MovieDetailViewController new];
     vc.movieId =  hotmovie.stageinfo.movie_id;
     [self.navigationController pushViewController:vc animated:YES];
 }
@@ -857,13 +837,6 @@
     
     CommonStageCell *cell = (CommonStageCell *)(button.superview.superview.superview);
     
-  /*  UIGraphicsBeginImageContextWithOptions(CGSizeMake(kDeviceWidth,hight), YES, [UIScreen mainScreen].scale);
-    [cell.stageView drawViewHierarchyInRect:cell.stageView.bounds afterScreenUpdates:YES];
-    
-    // old style [self.layer renderInContext:UIGraphicsGetCurrentContext()];
-    
-    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();*/
     
     UIImage  *image=[Function getImage:cell.stageView WithSize:CGSizeMake(kDeviceWidth, hight)];
     

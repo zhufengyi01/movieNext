@@ -446,7 +446,7 @@
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    //if (segment.selectedSegmentIndex==0) {
+ 
         //点击cell 隐藏弹幕，再点击隐藏
         NSLog(@"didDeselectRowAtIndexPath  =====%ld",indexPath.row);
         CommonStageCell   *cell=(CommonStageCell *)[tableView cellForRowAtIndexPath:indexPath];
@@ -460,12 +460,7 @@
               [cell.stageView  hidenAndShowMarkView:NO];
         }
         
-   // }
-   // else
-    //{
-        
-        
-    //}
+   
 }
 -(void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -474,10 +469,11 @@
 //开始现实cell 的时候执行这个方法，执行动画
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSLog(@"willDisplayCell ==== 当前显示的cell %ld",(long)indexPath.row);
     if (segment.selectedSegmentIndex==0) {
         CommonStageCell *commonStageCell = (CommonStageCell *)cell;
-       // [commonStageCell.stageView startAnimation];
-        [commonStageCell.stageView performSelector:@selector(startAnimation) withObject:nil afterDelay:1];
+       [commonStageCell.stageView startAnimation];
+        //[commonStageCell.stageView performSelector:@selector(startAnimation) withObject:nil afterDelay:1];
     }
     else if (segment.selectedSegmentIndex==1)
     {
@@ -485,6 +481,7 @@
         
     }
 }
+
 //结束显示cell的时候执行这个方法
 -(void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {

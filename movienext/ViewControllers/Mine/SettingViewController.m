@@ -13,6 +13,7 @@
 #import "LoginViewController.h"
 #import "UMSocial.h"
 #import <MessageUI/MessageUI.h>
+#import "ThanksViewController.h"
 #import <MessageUI/MFMailComposeViewController.h>
 @interface SettingViewController ()<UITableViewDataSource,UITableViewDelegate,UMSocialUIDelegate>
 {
@@ -37,8 +38,8 @@
 }
 -(void)createUI
 {
-    _dataArray =[[NSMutableArray alloc]initWithObjects:@"分享给好小伙伴",@"清空缓存",@"意见反馈",nil];
-    _myTableView =[[UITableView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, 165) style:UITableViewStylePlain];
+    _dataArray =[[NSMutableArray alloc]initWithObjects:@"分享给好小伙伴",@"清空缓存",@"意见反馈",@"特别感谢",nil];
+    _myTableView =[[UITableView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, 220) style:UITableViewStylePlain];
     _myTableView.delegate=self;
     _myTableView.dataSource=self;
     _myTableView.bounces=NO;
@@ -101,6 +102,11 @@
         [Al show];
     } else if (indexPath.row==2) {
         [self sendFeedBack];
+    }
+    else if (indexPath.row==3)
+    {
+        [self.navigationController pushViewController:[ThanksViewController new] animated:YES];
+        
     }
 }
 

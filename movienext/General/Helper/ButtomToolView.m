@@ -88,11 +88,17 @@
 
     zanbutton =[ZCControl createButtonWithFrame:CGRectMake((kDeviceWidth/3)*2, 0, kDeviceWidth/3, 50) ImageName:nil Target:self Action:@selector(dealButtomClick:) Title:@"点赞"];
     zanbutton.tag=10002;
-    [zanbutton setImage:[UIImage imageNamed:@"ic_menu_like_default.png"] forState:UIControlStateNormal];
-    [zanbutton setBackgroundImage:[UIImage imageNamed:@"loginoutbackgroundcolor.png"] forState:UIControlStateNormal];
+    //[zanbutton setImage:[UIImage imageNamed:@"ic_menu_like_default.png"] forState:UIControlStateNormal];
+    //[zanbutton setBackgroundImage:[UIImage imageNamed:@"loginoutbackgroundcolor.png"] forState:UIControlStateNormal];
     [zanbutton setTitle:@"已赞" forState:UIControlStateSelected];
     [zanbutton setTitleEdgeInsets:UIEdgeInsetsMake(10, 25, 10, 10)];
     zanbutton.titleLabel.font=[UIFont systemFontOfSize:14];
+    
+    // 在赞上面添加一个大拇指
+    likeimageview=[[UIImageView alloc]initWithFrame:CGRectMake(10, 10, 15, 14)];
+    likeimageview.image=[UIImage imageNamed:@"ic_menu_like_default.png"];
+    [zanbutton addSubview:likeimageview];
+   
 
     //高亮显示
     [buttomView addSubview:zanbutton];
@@ -113,6 +119,7 @@
     else
     {
         zanbutton.selected=YES;
+      
     }
     
 }
@@ -128,6 +135,27 @@
     else if (zanbutton.selected==NO)
     {
         zanbutton.selected=YES;
+        //如果按钮点击的是赞的话
+        if (button==zanbutton) {
+        //执行放大动画又缩小回去
+            //UIImageView  *btnImageView=button.imageView;
+            
+            
+            // 设定为缩放
+            CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"transform.scale"];
+            // 动画选项设定
+            animation.duration = 0.25; // 动画持续时间
+            animation.repeatCount = 1; // 重复次数
+            animation.autoreverses = YES; // 动画结束时执行逆动画
+            // 缩放倍数
+            animation.fromValue = [NSNumber numberWithFloat:1.0]; // 开始时的倍率
+            animation.toValue = [NSNumber numberWithFloat:1.05]; // 结束时的倍率
+            // 添加动画
+            [likeimageview.layer addAnimation:animation forKey:@"scale-layer"];
+
+            
+        }
+        
     }
     if (self.delegete &&[self.delegete respondsToSelector:@selector(ToolViewHandClick::weiboDict:StageInfo:)]) {
         [self.delegete ToolViewHandClick:button :_markView weiboDict:self.weiboDict StageInfo:self.StageInfoDict];

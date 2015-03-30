@@ -72,14 +72,25 @@
     //下面透明度的设置，效果是设置了导航条的高度的多少倍，不是透明度多少
   ///  self.navigationController.navigationBar.alpha=0.4;
     self.navigationController.navigationBar.hidden=YES;
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(requestMovieData) name:@"RefreshMovieDeatail" object:nil];
 
-  
+
 }
 -(void)viewDidAppear:(BOOL)animated
 {
     self.tabBarController.tabBar.hidden=YES;
     self.navigationController.navigationBar.hidden=YES;
 
+
+}
+-(void)requestMovieData
+{
+    page=0;
+    if (_dataArray.count >0) {
+        [_dataArray removeAllObjects];
+    }
+    [self requestData];
+    
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -101,7 +112,9 @@
     [self createNavigation];
     [self createToolBar];
     [self createShareView];
+  
 }
+
 //创建可以显示隐藏的导航条
 -(void)createNavigation
 {
@@ -439,7 +452,8 @@
             cell.StageView.delegate=self;
           
         }
-          [cell.StageView performSelector:@selector(startAnimation) withObject:nil afterDelay:1];
+        [cell.StageView startAnimation];
+          // [cell.StageView performSelector:@selector(startAnimation) withObject:nil afterDelay:1];
         return cell;
     } else {
         SmallImageCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"smallcell" forIndexPath:indexPath];
@@ -675,15 +689,6 @@
     
     BigImageCollectionViewCell *cell = (BigImageCollectionViewCell *)(button.superview.superview.superview);
     
-   /* UIGraphicsBeginImageContextWithOptions(CGSizeMake(kDeviceWidth,hight), YES, [UIScreen mainScreen].scale);
-    [cell.StageView drawViewHierarchyInRect:cell.StageView.bounds afterScreenUpdates:YES];
-    
-    // old style [self.layer renderInContext:UIGraphicsGetCurrentContext()];
-    
-    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-*/
-    
     UIImage  *image=[Function getImage:cell.StageView WithSize:CGSizeMake(kDeviceWidth, hight)];
     
 
@@ -869,16 +874,6 @@
         }
         
         BigImageCollectionViewCell *cell = (BigImageCollectionViewCell *)(markView.superview.superview.superview);
-        
-        /*UIGraphicsBeginImageContextWithOptions(CGSizeMake(kDeviceWidth, hight), YES, [UIScreen mainScreen].scale);
-        [cell.StageView drawViewHierarchyInRect:cell.StageView.bounds afterScreenUpdates:YES];
-        
-        // old style [self.layer renderInContext:UIGraphicsGetCurrentContext()];
-        
-        UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
-       */
-        
         UIImage  *image=[Function getImage:cell.StageView WithSize:CGSizeMake(kDeviceWidth, hight)];
         
 
@@ -936,7 +931,6 @@
     
     
     NSLog(@" 点赞 后 微博dict  ＝====uped====%@    ups===%@",weibodict.uped,weibodict.ups);
-    
     float  x=[weibodict.x floatValue];
     float  y=[weibodict.y floatValue];
     NSString  *weiboTitleString=weibodict.topic;
@@ -957,12 +951,6 @@
         markViewWidth=markViewWidth+10;
         markViewHeight=markViewHeight+4;
     }
-    //float markViewX = (x*kDeviceWidth)/100-markViewWidth;
-    //markViewX = MIN(MAX(markViewX, 1.0f), kDeviceWidth-markViewWidth-1);
-    
-    //float markViewY = (y*kDeviceWidth)/100+(Msize.height/2);
-//#warning    kDeviceWidth 目前计算的是正方形的，当图片高度>屏幕的宽度的实际，需要使用图片的高度
-  //  markViewY = MIN(MAX(markViewY, 1.0f), kDeviceWidth-markViewHeight-1);
 #pragma mark 设置气泡的大小和位置
     markView.frame=CGRectMake(markView.frame.origin.x, markView.frame.origin.y, markViewWidth, markViewHeight);
 #pragma mark 设置标签的内容
@@ -1028,7 +1016,11 @@
         [upLoadimageBtn setImage:[UIImage imageNamed:@"up_picture_blue@2x.png"] forState:UIControlStateNormal];
     }
 }
+-(void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"RefreshMovieDeatail" object:nil];
 
+}
 
 
 
