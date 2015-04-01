@@ -7,8 +7,8 @@
 //
 
 #import "StageView.h"
-//#import "MarkView.h"
 #import "Constant.h"
+#import "Function.h"
 #import "UIImageView+WebCache.h"
 
 @implementation StageView 
@@ -82,7 +82,6 @@
         
 #pragma  mark  是静态的, 气泡是不动的
          if ( _weiboDict) {
-         //WeiboModel  *weibodict=self.weiboDict;
          MarkView *markView = [self createMarkViewWithDict:_weiboDict andIndex:2000];
          markView.alpha = 1.0;
          //设置是否markview 不可以动画
@@ -99,53 +98,22 @@
          }
 #pragma  mark  有很多气泡，气泡循环播放
          if (self.WeibosArray&&self.WeibosArray.count>0) {
-         for ( int i=0;i<_WeibosArray.count ; i++) {
+         for ( int i=0;i<self.WeibosArray.count ; i++) {
          MarkView *markView = [self createMarkViewWithDict:self.WeibosArray[i] andIndex:i];
          // 设置markview 可以动画
          markView.isAnimation = YES;
+         markView.alpha=0;
+             //markView.hidden = YES;
          //设置单条微博的参数信息
          markView.weiboDict=self.WeibosArray[i];
          //遵守markView 的协议
          markView.isShowansHiden=NO;
          markView.delegate=self;
          [self addSubview:markView];
-          }
+         }
          }
     }];
-#pragma  mark  是静态的, 气泡是不动的
-   /* if ( _weiboDict) {
-        //WeiboModel  *weibodict=self.weiboDict;
-        MarkView *markView = [self createMarkViewWithDict:_weiboDict andIndex:2000];
-        markView.alpha = 1.0;
-        //设置是否markview 不可以动画
-        markView.isAnimation =YES;
-        //设置单条微博的参数信息
-        markView.weiboDict=self.weiboDict;
-       //遵守markView 的协议
-        markView.delegate=self;
-        markView.isShowansHiden=YES;
-        [markView StartShowAndhiden];
-       [self addSubview:markView];
-        
-        
-    }
-#pragma  mark  有很多气泡，气泡循环播放
-    
-    if (self.WeibosArray&&self.WeibosArray.count>0) {
-        
-      for ( int i=0;i<_WeibosArray.count ; i++) {
-        MarkView *markView = [self createMarkViewWithDict:self.WeibosArray[i] andIndex:i];
-        // 设置markview 可以动画
-        markView.isAnimation = YES;
-        //设置单条微博的参数信息
-        markView.weiboDict=self.WeibosArray[i];
-        //遵守markView 的协议
-          markView.isShowansHiden=NO;
-        markView.delegate=self;
 
-       [self addSubview:markView];
-     }
-    }*/
 }
 #pragma mark 内部创建气泡的方法
 - (MarkView *) createMarkViewWithDict:(WeiboModel *)weibodict andIndex:(NSInteger)index{
@@ -196,8 +164,7 @@
             markView.TitleLable.text=weiboTitleString;
             ///显示标签的头像
             [ markView.LeftImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kUrlAvatar,weibodict.avatar]]];
-    markView.ZanNumLable.text=[NSString stringWithFormat:@"%@",weibodict.ups];//weibodict.ups; //[weibodict objectForKey:@"ups"];
-           // markView.isAnimation = YES;
+    markView.ZanNumLable.text=[NSString stringWithFormat:@"%@",weibodict.ups];
     return markView;
 }
 //防止cell服用导致的原来的内容存在,移除原来的markview
@@ -218,8 +185,6 @@
 
 
 
-
-
 //1.开始执行动画, 动画入口
 - (void)startAnimation {
     //开始动画之后0.5秒再开始动画
@@ -232,41 +197,55 @@
 //2.放大动画
 - (void)scaleAnimation {
        //执行放大动画
+  /*  for (UIView *v in self.subviews) {
+              if ([v isKindOfClass:[MarkView class]]) {
+                MarkView *mv = (MarkView *)v;
+                  self.userInteractionEnabled=YES;
+                  mv.userInteractionEnabled=YES;
+                 CABasicAnimation  *opacityanimation=[CABasicAnimation animationWithKeyPath:@"opacity"];
+                 opacityanimation.fromValue=[NSNumber numberWithFloat:0.0f];
+                 opacityanimation.toValue=[NSNumber numberWithFloat:1.0f];
+                  //opacityanimation.autoreverses=YES;
+                 //opacityanimation.repeatCount=1;
+                 //opacityanimation.delegate=self;
+                 //opacityanimation.removedOnCompletion=NO;
+                 opacityanimation.fillMode=kCAFillModeForwards;
+                 opacityanimation.timingFunction=[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionDefault];  //默认均匀
+                  
+                CABasicAnimation  *scaleanimation=[CABasicAnimation animationWithKeyPath:@"ransform.scale"];
+                 // scaleanimation.repeatCount = 1; // 重复次数
+                  //scaleanimation.autoreverses =YES; // 动画结束时执行逆动画
+                  // 缩放倍数
+                  scaleanimation.fromValue = [NSNumber numberWithFloat:1]; // 开始时的倍率
+                  scaleanimation.toValue = [NSNumber numberWithFloat:1.05]; // 结束时的倍率
+                  // 添加动画
+                  //scaleanimation.delegate=self;
+                  //scaleanimation.fillMode=kCAFillModeForwards;
+                 // scaleanimation.timingFunction=[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
+                  
+                  CAAnimationGroup *animGroup = [CAAnimationGroup animation];
+                  animGroup.animations = [NSArray arrayWithObjects: opacityanimation, scaleanimation, nil];
+                  animGroup.duration =16;
+                  animGroup.repeatCount=1;
+                  animGroup.delegate=self;
+                  animGroup.fillMode=kCAFillModeForwards;
+                  opacityanimation.timingFunction=[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionDefault];
+                  [mv.layer addAnimation:animGroup forKey:nil];
+                  
+                  
+              }
+    }*/
+    
     //1.6代表动画弹出到小时的那消失的那段时间
     [UIView animateWithDuration:kalpaOneTime animations:^{
         for (UIView *v in self.subviews) {
             if ([v isKindOfClass:[MarkView class]]) {
                 MarkView *mv = (MarkView *)v;
+                self.userInteractionEnabled=YES;
                 mv.userInteractionEnabled=YES;
-                mv.alpha = 1.0;
-                mv.hidden = NO;
-                // 设定为缩放
-                CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"transform.scale"];
-                // 动画选项设定
-                animation.duration = 0.25; // 动画持续时间
-                animation.repeatCount = 1; // 重复次数
-                animation.autoreverses = YES; // 动画结束时执行逆动画
-                // 缩放倍数
-                animation.fromValue = [NSNumber numberWithFloat:1.0]; // 开始时的倍率
-                animation.toValue = [NSNumber numberWithFloat:1.05]; // 结束时的倍率
-                // 添加动画
-                [mv.layer addAnimation:animation forKey:@"scale-layer"];
-                
-// 证明不是layer导致的不可点击
-//                
-//                [UIView animateWithDuration:0.25 animations:^{
-//                    mv.transform=CGAffineTransformScale(CGAffineTransformIdentity, 1.05, 1.05);
-//                } completion:^(BOOL finished) {
-//                    [UIView animateWithDuration:0.2 animations:^{
-//                        mv.transform=CGAffineTransformScale(CGAffineTransformIdentity, 1.0, 1.0);
-//                        
-//                    } completion:^(BOOL finished) {
-//                        
-//                    }];
-//                    
-//                }];
-                
-               
+                 mv.alpha = 1.0;
+                 // mv.hidden = NO;
+                 [Function BasicAnimationwithkey:@"transform.scale" Duration:0.25 repeatcont:1 autoresverses:YES fromValue:1.0 toValue:1.05 View:mv];
             }
         }
     } completion:^(BOOL finished) {
@@ -277,9 +256,11 @@
             for (UIView *v in self.subviews) {
                 if ([v isKindOfClass:[MarkView class]]) {
                     MarkView *mv = (MarkView *)v;
-                    mv.alpha = 0.0;
+                    mv.alpha = 0;
+                  //  mv.hidden=YES;
+                    
                 }
-              }
+            }
         } completion:^(BOOL finished) {
             //每隔kTimeInterval时间显示一个动画
             if (_timer) {
@@ -289,10 +270,13 @@
             _timer = [NSTimer scheduledTimerWithTimeInterval:kTimeInterval target:self selector:@selector( CircleshowAnimation) userInfo:nil repeats:YES];
         }];
     }];
+    
+    
 }
 
-
 //6.循环显示气泡动画
+//每次去控制一个动画的显示
+//在markview 中只做一件事,就是自身的现实和隐藏，不管外部对他怎么操作
 - (void)CircleshowAnimation {
 
    // NSLog(@"currentMarkIndex   = %ld", currentMarkIndex);
@@ -304,6 +288,8 @@
         UIView *v = self.subviews[currentMarkIndex];
         if ([v isKindOfClass:[MarkView class]]) {
             MarkView *mv = (MarkView *)v;
+            //mv.hidden = NO;
+            mv.userInteractionEnabled = YES;
             //自身动画
             [mv startAnimation];
         }
@@ -314,9 +300,6 @@
    if (currentMarkIndex > MAX(self.subviews.count, 4) ) {
         currentMarkIndex = 0;
     }
-    
-     //这里打印出来证明self.subview  - self.weiboarray.cout =2
-    NSLog(@"CircleshowAnimatio self.subviews  ===%ld  ====weibos ===%ld ",self.subviews.count,self.WeibosArray.count);
 }
 
 //7.停止动画

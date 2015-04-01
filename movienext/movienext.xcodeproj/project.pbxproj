@@ -242,14 +242,6 @@
 		00AA53141AA2C3F4004096F8 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 00AA53131AA2C3F4004096F8 /* Images.xcassets */; };
 		00AA53171AA2C3F4004096F8 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00AA53151AA2C3F4004096F8 /* LaunchScreen.xib */; };
 		00AA53231AA2C3F4004096F8 /* movienextTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00AA53221AA2C3F4004096F8 /* movienextTests.m */; };
-		00AA54071AA2C525004096F8 /* BaseButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 00AA53351AA2C525004096F8 /* BaseButton.m */; };
-		00AA54081AA2C525004096F8 /* BaseCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00AA53371AA2C525004096F8 /* BaseCollectionViewController.m */; };
-		00AA54091AA2C525004096F8 /* BaseLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 00AA53391AA2C525004096F8 /* BaseLabel.m */; };
-		00AA540A1AA2C525004096F8 /* BasePageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00AA533B1AA2C525004096F8 /* BasePageViewController.m */; };
-		00AA540B1AA2C525004096F8 /* BaseTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00AA533D1AA2C525004096F8 /* BaseTableViewCell.m */; };
-		00AA540C1AA2C525004096F8 /* BaseTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00AA533F1AA2C525004096F8 /* BaseTableViewController.m */; };
-		00AA540D1AA2C525004096F8 /* BaseTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 00AA53411AA2C525004096F8 /* BaseTextField.m */; };
-		00AA540E1AA2C525004096F8 /* BaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00AA53431AA2C525004096F8 /* BaseViewController.m */; };
 		00AA540F1AA2C525004096F8 /* NSDate+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 00AA53461AA2C525004096F8 /* NSDate+Additions.m */; };
 		00AA54101AA2C525004096F8 /* NSString+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 00AA53481AA2C525004096F8 /* NSString+Additions.m */; };
 		00AA54111AA2C525004096F8 /* DoubanService.m in Sources */ = {isa = PBXBuildFile; fileRef = 00AA534C1AA2C525004096F8 /* DoubanService.m */; };
@@ -655,22 +647,6 @@
 		00AA53221AA2C3F4004096F8 /* movienextTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = movienextTests.m; sourceTree = "<group>"; };
 		00AA532E1AA2C525004096F8 /* Constant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constant.h; sourceTree = "<group>"; };
 		00AA53311AA2C525004096F8 /* core.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = core.pch; sourceTree = "<group>"; };
-		00AA53341AA2C525004096F8 /* BaseButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseButton.h; sourceTree = "<group>"; };
-		00AA53351AA2C525004096F8 /* BaseButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseButton.m; sourceTree = "<group>"; };
-		00AA53361AA2C525004096F8 /* BaseCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseCollectionViewController.h; sourceTree = "<group>"; };
-		00AA53371AA2C525004096F8 /* BaseCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseCollectionViewController.m; sourceTree = "<group>"; };
-		00AA53381AA2C525004096F8 /* BaseLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseLabel.h; sourceTree = "<group>"; };
-		00AA53391AA2C525004096F8 /* BaseLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseLabel.m; sourceTree = "<group>"; };
-		00AA533A1AA2C525004096F8 /* BasePageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BasePageViewController.h; sourceTree = "<group>"; };
-		00AA533B1AA2C525004096F8 /* BasePageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BasePageViewController.m; sourceTree = "<group>"; };
-		00AA533C1AA2C525004096F8 /* BaseTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseTableViewCell.h; sourceTree = "<group>"; };
-		00AA533D1AA2C525004096F8 /* BaseTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseTableViewCell.m; sourceTree = "<group>"; };
-		00AA533E1AA2C525004096F8 /* BaseTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseTableViewController.h; sourceTree = "<group>"; };
-		00AA533F1AA2C525004096F8 /* BaseTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseTableViewController.m; sourceTree = "<group>"; };
-		00AA53401AA2C525004096F8 /* BaseTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseTextField.h; sourceTree = "<group>"; };
-		00AA53411AA2C525004096F8 /* BaseTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseTextField.m; sourceTree = "<group>"; };
-		00AA53421AA2C525004096F8 /* BaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseViewController.h; sourceTree = "<group>"; };
-		00AA53431AA2C525004096F8 /* BaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseViewController.m; sourceTree = "<group>"; };
 		00AA53451AA2C525004096F8 /* NSDate+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Additions.h"; sourceTree = "<group>"; };
 		00AA53461AA2C525004096F8 /* NSDate+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+Additions.m"; sourceTree = "<group>"; };
 		00AA53471AA2C525004096F8 /* NSString+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Additions.h"; sourceTree = "<group>"; };
@@ -1362,35 +1338,11 @@
 		00AA53321AA2C525004096F8 /* General */ = {
 			isa = PBXGroup;
 			children = (
-				00AA53331AA2C525004096F8 /* Base */,
 				00AA53441AA2C525004096F8 /* Category */,
 				00AA53491AA2C525004096F8 /* CustomUI */,
 				00AA534A1AA2C525004096F8 /* Helper */,
 			);
 			path = General;
-			sourceTree = "<group>";
-		};
-		00AA53331AA2C525004096F8 /* Base */ = {
-			isa = PBXGroup;
-			children = (
-				00AA53341AA2C525004096F8 /* BaseButton.h */,
-				00AA53351AA2C525004096F8 /* BaseButton.m */,
-				00AA53361AA2C525004096F8 /* BaseCollectionViewController.h */,
-				00AA53371AA2C525004096F8 /* BaseCollectionViewController.m */,
-				00AA53381AA2C525004096F8 /* BaseLabel.h */,
-				00AA53391AA2C525004096F8 /* BaseLabel.m */,
-				00AA533A1AA2C525004096F8 /* BasePageViewController.h */,
-				00AA533B1AA2C525004096F8 /* BasePageViewController.m */,
-				00AA533C1AA2C525004096F8 /* BaseTableViewCell.h */,
-				00AA533D1AA2C525004096F8 /* BaseTableViewCell.m */,
-				00AA533E1AA2C525004096F8 /* BaseTableViewController.h */,
-				00AA533F1AA2C525004096F8 /* BaseTableViewController.m */,
-				00AA53401AA2C525004096F8 /* BaseTextField.h */,
-				00AA53411AA2C525004096F8 /* BaseTextField.m */,
-				00AA53421AA2C525004096F8 /* BaseViewController.h */,
-				00AA53431AA2C525004096F8 /* BaseViewController.m */,
-			);
-			path = Base;
 			sourceTree = "<group>";
 		};
 		00AA53441AA2C525004096F8 /* Category */ = {
@@ -2069,7 +2021,6 @@
 				00AA54281AA2C525004096F8 /* MKAnnotationView+WebCache.m in Sources */,
 				00AA541D1AA2C525004096F8 /* CustmoTabBarController.m in Sources */,
 				4076AF011AA9B0D2006DC466 /* StageView.m in Sources */,
-				00AA540C1AA2C525004096F8 /* BaseTableViewController.m in Sources */,
 				000B091A1AA2F40E00B8D13A /* UserDataCenter.m in Sources */,
 				005AFB5A1AA5F41900D80CFB /* CommonStageCell.m in Sources */,
 				00AA54341AA2C525004096F8 /* UIImage+WebP.m in Sources */,
@@ -2079,7 +2030,6 @@
 				00AA54271AA2C525004096F8 /* View+MASAdditions.m in Sources */,
 				00AA542A1AA2C525004096F8 /* SDImageCache.m in Sources */,
 				0032657B1ABFB8A800641EE0 /* UploadProgressView.m in Sources */,
-				00AA540E1AA2C525004096F8 /* BaseViewController.m in Sources */,
 				00AA530C1AA2C3F4004096F8 /* AppDelegate.m in Sources */,
 				00AA54331AA2C525004096F8 /* UIImage+MultiFormat.m in Sources */,
 				00AA54541AA2C526004096F8 /* Feed.m in Sources */,
@@ -2100,8 +2050,6 @@
 				00AA545A1AA2C526004096F8 /* Topic.m in Sources */,
 				00AA54111AA2C525004096F8 /* DoubanService.m in Sources */,
 				00ABFC741AAAAB3F00980824 /* SmallImageCollectionViewCell.m in Sources */,
-				00AA540A1AA2C525004096F8 /* BasePageViewController.m in Sources */,
-				00AA540D1AA2C525004096F8 /* BaseTextField.m in Sources */,
 				00354C611ABF030C00F650AA /* UIActivityIndicatorView+AFNetworking.m in Sources */,
 				007427321AAD3F3B0034047D /* AddMarkViewController.m in Sources */,
 				00AA54601AA2C526004096F8 /* NotificationViewController.m in Sources */,
@@ -2121,10 +2069,8 @@
 				0074273C1AADAB9B0034047D /* UIImage+ImageWithColor.m in Sources */,
 				00354C661ABF030C00F650AA /* UIRefreshControl+AFNetworking.m in Sources */,
 				006739581AA491250087C240 /* UIScrollView+MJExtension.m in Sources */,
-				00AA54071AA2C525004096F8 /* BaseButton.m in Sources */,
 				009A27BE1AA6F7520001690C /* MarkView.m in Sources */,
 				000B091D1AA3004E00B8D13A /* RootViewController.m in Sources */,
-				00AA540B1AA2C525004096F8 /* BaseTableViewCell.m in Sources */,
 				00354C581ABF030C00F650AA /* AFHTTPRequestOperationManager.m in Sources */,
 				00AA54261AA2C525004096F8 /* NSLayoutConstraint+MASDebugAdditions.m in Sources */,
 				006739591AA491250087C240 /* UIScrollView+MJRefresh.m in Sources */,
@@ -2134,8 +2080,6 @@
 				00354B331ABEC8EC00F650AA /* UploadImageViewController.m in Sources */,
 				00AA54221AA2C525004096F8 /* MASLayoutConstraint.m in Sources */,
 				0074273D1AADAB9B0034047D /* UIImage+Screenshot.m in Sources */,
-				00AA54091AA2C525004096F8 /* BaseLabel.m in Sources */,
-				00AA54081AA2C525004096F8 /* BaseCollectionViewController.m in Sources */,
 				00AA54361AA2C525004096F8 /* UIImageView+WebCache.m in Sources */,
 				00572CBF1AA4430E0041D451 /* MovieSearchViewController.m in Sources */,
 				00AA54201AA2C525004096F8 /* MASConstraint.m in Sources */,

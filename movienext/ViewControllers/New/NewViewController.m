@@ -433,9 +433,9 @@
             cell.weiboDict =hotmodel.weibo; //[[_newDataArray  objectAtIndex:indexPath.row]  objectForKey:@"weibo"];
             //配置stage的数据
             cell.WeibosArray=nil;
-            cell.StageInfoDict=hotmodel.stageinfo;//[[_newDataArray objectAtIndex:indexPath.row] objectForKey:@"stageinfo"];
+            cell.StageInfoDict=hotmodel.stageinfo;
             [cell ConfigsetCellindexPath:indexPath.row];
-             // [cell setCellValue:[[_newDataArray objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"]indexPath:indexPath.row];
+ 
             //遵守了stageview的协议，点击事件在这里执行
             cell.stageView.delegate=self;
         }

@@ -162,7 +162,7 @@
     ivAvatar.layer.cornerRadius = ivAvatarWidth * 0.5;
     ivAvatar.layer.masksToBounds = YES;
     ivAvatar.layer.borderColor=VBlue_color.CGColor;
-    ivAvatar.layer.borderWidth=2;
+    ivAvatar.layer.borderWidth=3;
 
     //ivAvatar.backgroundColor = [UIColor redColor];
     NSURL   *imageURL;

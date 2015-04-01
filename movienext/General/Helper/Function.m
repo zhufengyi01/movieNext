@@ -340,7 +340,6 @@
         if ([userInfo  objectForKey:@"bind_type"]) {
             userCenter.user_bind_type=[userInfo objectForKey:@"bind_type"];
         }
-        
     }
 
     
@@ -378,7 +377,10 @@
     animation.fromValue = [NSNumber numberWithFloat:fromValue]; // 开始时的倍率
     animation.toValue = [NSNumber numberWithFloat:toValue]; // 结束时的倍率
     // 添加动画
-    [view.layer addAnimation:animation forKey:@"scale-layer"];
+    animation.delegate=self;
+    animation.fillMode=kCAFillModeForwards;
+    animation.timingFunction=[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
+     [view.layer addAnimation:animation forKey:@"scale-layer"];
 
 }
 

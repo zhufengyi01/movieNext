@@ -36,7 +36,7 @@
     //创建上部视图
     self.backgroundColor=VStageView_color;
    
-     topView =[[UIView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, m_frame.size.height-(kDeviceWidth/4)-40-kHeightNavigation)];
+     topView =[[UIView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight-kHeightNavigation)];
       topView.userInteractionEnabled=YES;
      topView.backgroundColor=VStageView_color;
       [self addSubview:topView];
@@ -48,7 +48,7 @@
      [topView addSubview:_topButtom];
   
  
-    _ShareimageView=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth,400)];
+    _ShareimageView=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth,0)];
     _ShareimageView.backgroundColor=[UIColor whiteColor];
      [topView addSubview:_ShareimageView];
     
@@ -80,6 +80,19 @@
 {
       _ShareimageView.image =self.screenImage;
      _moviewName.text=self.StageInfo.movie_name;
+    float hight= kDeviceWidth;
+    float  ImageWith=[self.StageInfo.w intValue];
+    float  ImgeHight=[self.StageInfo.h intValue];
+    if (ImageWith>ImgeHight) {
+        //宽大于高的时候
+        hight=kDeviceWidth;
+    }
+    else
+    {
+        hight=  (ImgeHight/ImageWith) *kDeviceWidth;
+    }
+    _ShareimageView.frame=CGRectMake(0, 0,kDeviceWidth, hight);
+    logosupView.frame=CGRectMake(0, _ShareimageView.frame.origin.y+_ShareimageView.frame.size.height,kDeviceWidth,20);
     
 }
 
@@ -166,17 +179,13 @@
         float  ImgeHight=[self.StageInfo.h intValue];
        if (ImageWith>ImgeHight) {
            //宽大于高的时候
-           _ShareimageView.frame=CGRectMake(0,0,kDeviceWidth, kDeviceWidth);
-           
+           hight=kDeviceWidth;
        }
-       else if(ImgeHight>ImageWith)
+       else
         {
             hight=  (ImgeHight/ImageWith) *kDeviceWidth;
-            if (hight>topView.frame.size.height) {
-             // 这个时候需要把图片裁剪
-            }
-            _ShareimageView.frame=CGRectMake(0, 0,kDeviceWidth, hight);
         }
+         _ShareimageView.frame=CGRectMake(0, 0,kDeviceWidth, hight);
         logosupView.frame=CGRectMake(0, _ShareimageView.frame.origin.y+_ShareimageView.frame.size.height,kDeviceWidth, 20);
     
 }

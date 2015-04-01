@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "WeiboModel.h"
 #import "StageInfoModel.h"
-@protocol MarkViewDelegate <NSObject>
+@protocol MarkViewDelegate <NSObject> 
 //标签的点击事件，对stageview 提供接口，传递微博对象
 -(void)MarkViewClick:(WeiboModel  *) weiboDict withMarkView:(id) markView;
 @end

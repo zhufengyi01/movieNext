@@ -82,5 +82,5 @@
 //右边字体的大小控制
 #define MarkTextFont14  14
 #define MarkTextFont16  16
-#define MarkViewCornerRed 4
+#define MarkViewCornerRed 6
 #endif

@@ -677,21 +677,17 @@
     //获取cell
 #pragma mark 暂时把sharetext设置成null
     HotMovieModel  *hotmovie;
-        hotmovie =[_dataArray objectAtIndex:button.tag-2000];
-    
+    hotmovie =[_dataArray objectAtIndex:button.tag-2000];
     float hight= kDeviceWidth;
-    float  ImageWith=[hotmovie.stageinfo.w intValue]; //[[self.StageInfoDict objectForKey:@"w"]  floatValue];
-    float  ImgeHight=[hotmovie.stageinfo.h intValue];//[[self.StageInfoDict objectForKey:@"h"]  floatValue];
+    float  ImageWith=[hotmovie.stageinfo.w intValue];
+    float  ImgeHight=[hotmovie.stageinfo.h intValue];
     if(ImgeHight>ImageWith)
     {
         hight=  (ImgeHight/ImageWith) *kDeviceWidth;
     }
-    
     BigImageCollectionViewCell *cell = (BigImageCollectionViewCell *)(button.superview.superview.superview);
-    
     UIImage  *image=[Function getImage:cell.StageView WithSize:CGSizeMake(kDeviceWidth, hight)];
     
-
     //创建UMshareView 后必须配备这三个方法
     hotmovie.stageinfo.movie_name=[_MovieDict objectForKey:@"name"];
     shareView.StageInfo=hotmovie.stageinfo;
