@@ -108,14 +108,27 @@
     [leftButtomButton addSubview:MovieLogoImageView];
     
     
+    
     ScreenButton =[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-140,10,60,26) ImageName:@"btn_share_default.png" Target:self.superview Action:@selector(ScreenButtonClick:) Title:@""];
     [ScreenButton setBackgroundImage:[UIImage imageNamed:@"btn_share_select.png"] forState:UIControlStateHighlighted];
     [BgView2 addSubview:ScreenButton];
-    
+
     addMarkButton =[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-70,10,60,26) ImageName:@"btn_add_default.png" Target:self.superview Action:@selector(addMarkButtonClick:) Title:@""];
     [addMarkButton setBackgroundImage:[UIImage imageNamed:@"btn_add_select.png"] forState:UIControlStateHighlighted];
     [BgView2 addSubview:addMarkButton];
     
+
+    
+    UserDataCenter  *userCenter=[UserDataCenter shareInstance];
+    if ([userCenter.is_admin intValue]>0) {
+        //创建长按手势
+        pressview=[[UIView alloc]initWithFrame:CGRectMake(ScreenButton.frame.origin.x-50, ScreenButton.frame.origin.y, 50,30)];
+        //pressview.backgroundColor=[UIColor redColor];
+        [BgView2 addSubview:pressview];
+        UILongPressGestureRecognizer   *longPress=[[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(logPress:)];
+        [pressview addGestureRecognizer:longPress];
+
+    }
     
 }
 - (void)awakeFromNib {
@@ -130,7 +143,7 @@
     UserLogoButton.tag=4000+row;
     ZanButton.tag=5000+row;
     deletButton.tag=6000+row;
-
+    pressview.tag=7000+row;
     
 //   单个标签的时候用这个
      if (_weiboDict) {
@@ -180,6 +193,7 @@
         _stageView.frame=CGRectMake(0, 45, kDeviceWidth, hight);
         _stageView.isAnimation=NO;
         BgView2.frame=CGRectMake(0, hight+45,kDeviceWidth,45);
+        pressview.hidden=YES;
         [UserLogoButton sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!thumb", kUrlAvatar, _weiboDict.avatar]] forState:UIControlStateNormal];
         UserNameLable.text = _weiboDict.username;
         TimeLable.text = [Function friendlyTime:_weiboDict.create_time];
@@ -237,6 +251,21 @@
 {
     //删除按钮
    
+}
+
+//长安显示了
+-(void)logPress:(UILongPressGestureRecognizer *) logPress
+{
+    //开始
+    if(logPress.state==UIGestureRecognizerStateBegan)
+    {
+        if (self.delegate&&[self.delegate respondsToSelector:@selector(commonStageCellLoogPressClickindex:)]) {
+            //pressView.tag=7000+row
+            [self.delegate commonStageCellLoogPressClickindex:pressview.tag];
+        }
+        
+    }
+    
 }
 #pragma mark   --
 #pragma mark   --StageViewDelegate

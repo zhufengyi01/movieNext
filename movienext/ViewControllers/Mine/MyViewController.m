@@ -29,6 +29,7 @@
 #import "AddMarkViewController.h"
 #import "Function.h"
 #import "UMShareView.h"
+#import "ChangeSelfViewController.h"
 @interface MyViewController ()<UITableViewDataSource, UITableViewDelegate,StageViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UIActionSheetDelegate,UMSocialDataDelegate,UMSocialUIDelegate,UMShareViewDelegate>
 {
     //UISegmentedControl *segment;
@@ -72,13 +73,21 @@
     else
     {
         self.tabBarController.tabBar.hidden=NO;
-   
     }
-   // if (_tableView) {
-     //   [self setupRefresh];
-    //}
-}
+    [[NSNotificationCenter defaultCenter]  addObserver:self selector:@selector(changeUser) name:@"initUser" object:nil];
+    //NSNotificationCenter  *c= [NSNotificationCenter defaultCenter];
+   
+    
+ }
+-(void)changeUser
+{
+    if (_tableView) {
+        [_tableView  removeFromSuperview];
+        _tableView=nil;
+        [self requestUserInfo];
 
+    }
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -169,11 +178,22 @@
     if (_userInfoDict) {
         imageURL =[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!thumb",kUrlAvatar,[_userInfoDict  objectForKey:@"avatar"]]];
     }
-  
     [ivAvatar sd_setImageWithURL:imageURL placeholderImage:[UIImage imageNamed:@"loading_image_all.png"]];
-  //  NSLog(@"avatar url = %@/%@!thumb", kUrlAvatar, userCenter.avatar );
-
+   
     [viewHeader addSubview:ivAvatar];
+    
+      if ([userCenter.is_admin  intValue]>0) {
+          //在头像上添加一个手势，实现变成功能
+          UIView  *view =[[UIView alloc]initWithFrame:ivAvatar.frame];
+          view.backgroundColor =[ UIColor clearColor];
+          [viewHeader addSubview:view];
+          UILongPressGestureRecognizer  *longPressHeader =[[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(longPressHead:)];
+          
+          [view addGestureRecognizer:longPressHeader];
+
+
+    }
+    
     
     lblUsername = [[UILabel alloc] initWithFrame:CGRectMake(ivAvatar.frame.origin.x+ivAvatar.frame.size.width+10, ivAvatar.frame.origin.y, 200, 20)];
     lblUsername.font = [UIFont systemFontOfSize:15];
@@ -268,7 +288,14 @@
     [self setupRefresh];
 
 }
-
+//长按进入虚拟用户选择
+-(void)longPressHead:(UILongPressGestureRecognizer  *) longPressHeader
+{
+    if (longPressHeader.state==UIGestureRecognizerStateBegan) {
+        
+        [self.navigationController pushViewController:[ChangeSelfViewController new] animated:YES];
+    }
+}
 
 -(void)setupRefresh
 {
@@ -425,7 +452,7 @@
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:[NSString stringWithFormat:@"%@/user/info", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"return_code"]  intValue]==10000) {
-            NSLog(@"请求的用户数据========%@",responseObject);
+          ///  NSLog(@"请求的用户数据========%@",responseObject);
             if (_userInfoDict ==nil){
                 _userInfoDict=[[NSMutableDictionary alloc]init];
             }
@@ -436,8 +463,6 @@
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
-        
-
     }];
     
 
@@ -574,7 +599,6 @@
         NSLog(@"Error: %@", error);
     }];
     
-   
 }
 //微博点赞请求
 -(void)LikeRequstData:(WeiboModel  *) weiboDict StageInfo :(StageInfoModel *) stageInfoDict
@@ -958,9 +982,7 @@
     ash.tag=button.tag;
     [ash showInView:self.view];
     
-    
 
-    
 }
 -(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
@@ -1198,6 +1220,11 @@
     }
     
 }
+-(void)dealloc
+{
+    [[NSNotificationCenter defaultCenter]removeObserver:nil name:@"initUser" object:nil];
+}
+
 
 
 /*-(void)StageViewHandClickMark:(NSDictionary *)weiboDict withStageView:(id)stageView

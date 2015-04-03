@@ -27,6 +27,7 @@
     UILabel   *nameLable;
     UIButton  *shareButton;
     UIButton  *zanbutton;
+    UIButton    *morebuton;
     
     //整个透明背景的图大小
     CGRect    m_frame;

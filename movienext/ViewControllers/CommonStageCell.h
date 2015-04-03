@@ -28,6 +28,13 @@ typedef NS_ENUM(NSInteger,NSUserPageType)
     NSUserPageTypeMySelfController=100,
     NSUserPageTypeOthersController=101,
 };
+@protocol CommonStageCellDelegate <NSObject>
+//工具条的点击事件
+-(void)commonStageCellToolButtonClick:(UIButton *) button;
+//点击长按手势的事件
+-(void)commonStageCellLoogPressClickindex:(NSInteger )indexrow;
+
+@end
 @interface CommonStageCell : UITableViewCell <StageViewDelegate>
 {
     CGRect        m_frame;
@@ -46,10 +53,12 @@ typedef NS_ENUM(NSInteger,NSUserPageType)
     UIImageView   *MovieLogoImageView;  // 电影的小图片
     UIButton      *ScreenButton;
     UIButton      *addMarkButton;
+    UIView  *pressview;
     
 
  }
-///@property (nonatomic,strong) StageView          *BgView1;   //放图片和弹幕的黑色背景图
+@property (assign,nonatomic)id <CommonStageCellDelegate>  delegate;
+
 @property(nonatomic,strong)StageView    *stageView;
 
 @property(nonatomic,strong) StageInfoModel   *StageInfoDict;

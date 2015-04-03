@@ -61,7 +61,7 @@
 
 {
     if ([dict objectForKey:@"avatar"]) {
-    [logoButton sd_setBackgroundImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", kUrlAvatar, [dict objectForKey:@"avatar"] ]] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"notice_image headloading@2x.png"]];
+    [logoButton sd_setBackgroundImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", kUrlAvatar, [dict objectForKey:@"avatar"] ]] forState:UIControlStateNormal placeholderImage:HeadImagePlaceholder];
         logoButton.tag=6000 + index;
     }
     if ([dict objectForKey:@"stageinfo"]) {

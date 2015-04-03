@@ -25,7 +25,7 @@
     
     if (self = [super initWithFrame:frame]) {
         //最开始设置为0
-        currentMarkIndex=0;
+       // currentMarkIndex=0;
         [self createUI];
     }
     return self;
@@ -49,10 +49,9 @@
         tanimageView=nil;
     }
     tanimageView=[[UIImageView alloc]initWithFrame:CGRectMake(kDeviceWidth-30, 10, 20, 20)];
-        tanimageView.image=[UIImage imageNamed:@"tan.png"];
+        tanimageView.image=[UIImage imageNamed:@"dan_closed@2x.png"];
         tanimageView.hidden=YES;
         [self addSubview:tanimageView];
-
 
     //先移除所有的Mark视图
     [self removeStageViewSubView];
@@ -119,6 +118,7 @@
 - (MarkView *) createMarkViewWithDict:(WeiboModel *)weibodict andIndex:(NSInteger)index{
             MarkView *markView=[[MarkView alloc]initWithFrame:CGRectZero];
             markView.alpha = 0;
+          //设置tag 值为了在下面去取出来循环轮播
             markView.tag=1000+index;
     
             NSLog(@"stageview  ＝＝=====weiboDict====%@",weibodict);
@@ -182,9 +182,6 @@
 }
 
 
-
-
-
 //1.开始执行动画, 动画入口
 - (void)startAnimation {
     //开始动画之后0.5秒再开始动画
@@ -192,8 +189,8 @@
 }
 
 #pragma mark  ------
-#pragma  mark ----执行动画的开始和结束
-#pragma  mark ------
+#pragma mark ----执行动画的开始和结束
+#pragma mark ------
 //2.放大动画
 - (void)scaleAnimation {
        //执行放大动画
@@ -231,11 +228,8 @@
                   animGroup.fillMode=kCAFillModeForwards;
                   opacityanimation.timingFunction=[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionDefault];
                   [mv.layer addAnimation:animGroup forKey:nil];
-                  
-                  
               }
     }*/
-    
     //1.6代表动画弹出到小时的那消失的那段时间
     [UIView animateWithDuration:kalpaOneTime animations:^{
         for (UIView *v in self.subviews) {
@@ -244,7 +238,6 @@
                 self.userInteractionEnabled=YES;
                 mv.userInteractionEnabled=YES;
                  mv.alpha = 1.0;
-                 // mv.hidden = NO;
                  [Function BasicAnimationwithkey:@"transform.scale" Duration:0.25 repeatcont:1 autoresverses:YES fromValue:1.0 toValue:1.05 View:mv];
             }
         }
@@ -257,8 +250,6 @@
                 if ([v isKindOfClass:[MarkView class]]) {
                     MarkView *mv = (MarkView *)v;
                     mv.alpha = 0;
-                  //  mv.hidden=YES;
-                    
                 }
             }
         } completion:^(BOOL finished) {
@@ -267,7 +258,11 @@
                 [_timer invalidate];
                 _timer=nil;
             }
-            _timer = [NSTimer scheduledTimerWithTimeInterval:kTimeInterval target:self selector:@selector( CircleshowAnimation) userInfo:nil repeats:YES];
+            //完成了全部显示后，立马显示第一个
+            currentMarkIndex=0;
+
+           [self CircleshowAnimation];
+            _timer = [NSTimer scheduledTimerWithTimeInterval:kTimeInterval target:self selector:@selector(CircleshowAnimation) userInfo:nil repeats:YES];
         }];
     }];
     
@@ -284,20 +279,26 @@
         return;
     }
     
-    if (currentMarkIndex <= self.subviews.count-1) {
-        UIView *v = self.subviews[currentMarkIndex];
-        if ([v isKindOfClass:[MarkView class]]) {
-            MarkView *mv = (MarkView *)v;
-            //mv.hidden = NO;
-            mv.userInteractionEnabled = YES;
-            //自身动画
-            [mv startAnimation];
-        }
+//    if (currentMarkIndex <= self.subviews.count-1) {
+//        UIView *v = self.subviews[currentMarkIndex];
+//        if ([v isKindOfClass:[MarkView class]]) {
+//            MarkView *mv = (MarkView *)v;
+//            mv.userInteractionEnabled = YES;
+//            //自身动画
+//            [mv startAnimation];
+//      }
+//    }
+    
+    if (currentMarkIndex<self.WeibosArray.count) {
+        MarkView  *markView=(MarkView *)[self viewWithTag:1000+currentMarkIndex];
+        
+        markView.userInteractionEnabled=YES;
+        [markView startAnimation];
     }
-    currentMarkIndex ++;
+    currentMarkIndex =currentMarkIndex +1;
 #warning  疑点，为什么是13  的最大值
     //执行完成一轮动画之后，实行，重新再动第一个执行
-   if (currentMarkIndex > MAX(self.subviews.count, 4) ) {
+   if (currentMarkIndex > MAX(self.subviews.count, 13) ) {
         currentMarkIndex = 0;
     }
 }

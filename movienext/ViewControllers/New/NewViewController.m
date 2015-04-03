@@ -25,9 +25,10 @@
 #import "UMSocial.h"
 #import "UMShareView.h"
 #import "UMSocialControllerService.h"
+#import "UIImageView+WebCache.h"
 //友盟分享
 //#import "UMSocial.h"
-@interface NewViewController ()<UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UIScrollViewDelegate,UMSocialDataDelegate,UMSocialUIDelegate,UMShareViewDelegate,LoadingViewDelegate>
+@interface NewViewController ()<UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UIScrollViewDelegate,UMSocialDataDelegate,UMSocialUIDelegate,UMShareViewDelegate,LoadingViewDelegate,UIActionSheetDelegate,CommonStageCellDelegate>
 {
     AppDelegate  *appdelegate;
     UISegmentedControl *segment;
@@ -42,6 +43,10 @@
     BOOL isMarkViewsShow;
     UIImageView   *ShareimageView;
     UMShareView   *shareView;
+    StageInfoModel  *_TStageInfo;
+    WeiboModel      *_TweiboInfo;
+    //用于移除推荐使用
+    NSString        *_hot_Id;
 }
 @end
 
@@ -206,23 +211,144 @@
     shareView.delegate=self;
 }
 #pragma  mark -----
-#pragma  mark ------  DataRequest 
+#pragma  mark ------  DataRequest －－－－－－－－－－－－－－－－－－－－－－－－－－
 #pragma  mark ----
+#warning  举报某人，未实现
+//举报某人
+-(void)requestReport
+{
+    NSString *type=@"1";
+    UserDataCenter *userCenter =[UserDataCenter shareInstance];
+    NSDictionary *parameters = @{@"reported_user_id":_TweiboInfo.user_id,@"reported_id":_TweiboInfo.Id,@"reason":@"",@"type":type,@"created_by":userCenter.user_id};
+
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    [manager POST:[NSString stringWithFormat:@"%@/report/create", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if ([[responseObject  objectForKey:@"return_code"]  intValue]==10000) {
+            NSLog(@"随机数种子请求成功=======%@",responseObject);
+            UIAlertView  *Al =[[UIAlertView alloc]initWithTitle:nil message:@"你的举报已成功,我们会在24小时内处理" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            [Al show];
+            
+         }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+    
+}
+
+
+
+//变身请求的随机数种子
+-(void)requestChangeUserRand4
+{    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    [manager POST:[NSString stringWithFormat:@"%@/user/fakeUser", kApiBaseUrl] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if ([[responseObject  objectForKey:@"return_code"]  intValue]==10000) {
+            NSLog(@"随机数种子请求成功=======%@",responseObject);
+            
+            [self  requestChangeUser:[responseObject objectForKey:@"detail"]];
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+    
+}
+//跟换用户的数据请求
+-(void)requestChangeUser:(NSDictionary  *) dict
+ {
+    
+     NSDictionary *parameters = @{@"weibo_id":_TweiboInfo.Id,@"user_id":[dict objectForKey:@"id"]};
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    [manager POST:[NSString stringWithFormat:@"%@/weibo/switch", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if ([[responseObject  objectForKey:@"return_code"]  intValue]==10000) {
+            NSLog(@"推荐成功=======%@",responseObject);
+            UIAlertView  *Al=[[UIAlertView alloc]initWithTitle:nil message:@"变身成功" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            [Al show];
+            _TweiboInfo.user_id=[dict objectForKey:@"id"];
+             [ _mymarkView.LeftImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kUrlAvatar, [dict objectForKey:@"avatar"] ]]];
+           
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+    
+}
+
+
+//移除微博推荐接口
+-(void)requestrecommendDeleteDataWith
+{
+    //  NSLog(@"hotmodel  ==weibiid ==%@   hotmodel stageinfo id ==%@ ",hotmodel.weibo.Id,hotmodel.stageinfo.Id);
+    NSDictionary *parameters = @{@"id":_hot_Id};
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    //manager.requestSerializer=[AFHTTPRequestSerializer serializer];
+   // manager.responseSerializer=[AFHTTPResponseSerializer serializer];
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
+    [manager POST:[NSString stringWithFormat:@"%@/hot/delete", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if ([[responseObject  objectForKey:@"return_code"]  intValue]==10000) {
+            NSLog(@"推荐成功=======%@",responseObject);
+            UIAlertView  *Al=[[UIAlertView alloc]initWithTitle:nil message:@"移除推荐成功" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            [Al show];
+            [self requestData];
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+    
+}
+
+
+//推荐微博的接口
+-(void)requestrecommendData
+{
+    //  NSLog(@"hotmodel  ==weibiid ==%@   hotmodel stageinfo id ==%@ ",hotmodel.weibo.Id,hotmodel.stageinfo.Id);
+    NSDictionary *parameters = @{@"id":_TweiboInfo.Id,@"stage_id":_TStageInfo.Id};
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    [manager POST:[NSString stringWithFormat:@"%@/hot/create", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if ([[responseObject  objectForKey:@"return_code"]  intValue]==10000) {
+            NSLog(@"推荐成功=======%@",responseObject);
+            UIAlertView  *Al=[[UIAlertView alloc]initWithTitle:nil message:@"推荐成功" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            [Al show];
+            [self requestData];
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+    
+}
+
+
+//删除微博的接口
+-(void)requestDelectData
+{
+    //  NSLog(@"hotmodel  ==weibiid ==%@   hotmodel stageinfo id ==%@ ",hotmodel.weibo.Id,hotmodel.stageinfo.Id);
+    NSDictionary *parameters = @{@"id":_TweiboInfo.Id,@"stage_id":_TStageInfo.Id};
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    [manager POST:[NSString stringWithFormat:@"%@/weibo/remove", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if ([[responseObject  objectForKey:@"return_code"]  intValue]==10000) {
+            NSLog(@"删除数据成功=======%@",responseObject);
+            UIAlertView  *Al=[[UIAlertView alloc]initWithTitle:nil message:@"删除成功" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            [Al show];
+            [self requestData];
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+    
+}
 //微博点赞请求
 -(void)LikeRequstData:(WeiboModel  *) weiboDict StageInfo :(StageInfoModel *) stageInfoDict
 {
     
     UserDataCenter  *userCenter=[UserDataCenter shareInstance];
-    NSNumber  *weiboId=weiboDict.Id;  //[upDict objectForKey:@"id"];
-    NSNumber  *stageId=stageInfoDict.Id;//[stageInfoDict objectForKey:@"id"];
-    NSString  *movieId=stageInfoDict.movie_id; //[stageInfoDict objectForKey:@"movie_id"];
-    NSString  *movieName=stageInfoDict.movie_name;//[stageInfoDict objectForKey:@"movie_name"];
+    NSNumber  *weiboId=weiboDict.Id;
+    NSNumber  *stageId=stageInfoDict.Id;
+    NSString  *movieId=stageInfoDict.movie_id;
+    NSString  *movieName=stageInfoDict.movie_name;
     NSString  *userId=userCenter.user_id;
-    NSString  *autorId =weiboDict.user_id; // [upDict objectForKey:@"user_id"];
+    NSString  *autorId =weiboDict.user_id;
     NSNumber  *uped;
-    //if ([[upDict objectForKey:@"uped"]  intValue]==0) {
-        //uped =[NSString stringWithFormat:@"%d",1];
-    //}
+    
     if ([weiboDict.uped  integerValue] ==0) {
         uped=[NSNumber numberWithInt:0];
     }
@@ -257,7 +383,6 @@
         section= @"hot/list";
     }
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    //    [manager POST:[NSString stringWithFormat:@"%@/movieStage/listRecently", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
     [manager POST:[NSString stringWithFormat:@"%@/%@", kApiBaseUrl, section] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject objectForKey:@"return_code"] intValue]==10000) {
             [loadView stopAnimation];
@@ -336,7 +461,6 @@
     //点击完之后，动画又要开始旋转，同时隐藏了加载失败的背景
     [loadView hidenFailLoadAndShowAnimation];
     
-    
 }
 #pragma mark  -----
 #pragma mark --------UItableViewDelegate
@@ -368,7 +492,6 @@
              hight=  (h/w) *kDeviceWidth+45;
             }
         }
-       // NSLog(@"============  hight  for  row  =====%f",hight);
         return hight+10;
     }
     else if (segment.selectedSegmentIndex==1)
@@ -408,6 +531,7 @@
             //小闪动标签的数组
             cell.WeibosArray =hotModel.weibos;
             cell.weiboDict=nil;
+            cell.delegate=self;
             cell.StageInfoDict=hotModel.stageinfo;
             [cell ConfigsetCellindexPath:indexPath.row];
             //遵守stagview的协议，点击事件在controller里面响应
@@ -472,8 +596,8 @@
     NSLog(@"willDisplayCell ==== 当前显示的cell %ld",(long)indexPath.row);
     if (segment.selectedSegmentIndex==0) {
         CommonStageCell *commonStageCell = (CommonStageCell *)cell;
-       [commonStageCell.stageView startAnimation];
-        //[commonStageCell.stageView performSelector:@selector(startAnimation) withObject:nil afterDelay:1];
+      // [commonStageCell.stageView startAnimation];
+        [commonStageCell.stageView performSelector:@selector(startAnimation) withObject:nil afterDelay:0.1];
     }
     else if (segment.selectedSegmentIndex==1)
     {
@@ -518,7 +642,7 @@
 //分享
 -(void)ScreenButtonClick:(UIButton  *) button
 {
-    NSLog(@" ==ScreenButtonClick  ====%ld",button.tag);
+    //NSLog(@" ==ScreenButtonClick  ====%ld",button.tag);
     //获取cell
     HotMovieModel  *hotmovie;
     if (segment.selectedSegmentIndex==0) {
@@ -548,7 +672,76 @@
 
     }
 }
-#pragma  mark  -----UMButtomViewshareViewDlegate-------
+
+
+#pragma mark   -----commonStageCelldelegate  ----------------------
+-(void)commonStageCellLoogPressClickindex:(NSInteger)indexrow
+{
+    UIActionSheet  *ash =[[UIActionSheet alloc]initWithTitle:@"移除推荐" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"确定移除" otherButtonTitles:nil, nil];
+     ash.tag=503;
+    [ash showInView:self.view];
+    
+    HotMovieModel  *model= [_hotDataArray objectAtIndex:indexrow-7000];
+    _hot_Id=model.hot_id;
+    
+   // [self requestrecommendDeleteDataWithHotModel:model];
+
+}
+
+
+//点击增加弹幕
+-(void)addMarkButtonClick:(UIButton  *) button
+{
+    NSLog(@" ==addMarkButtonClick  ====%ld",button.tag);
+    AddMarkViewController  *AddMarkVC=[[AddMarkViewController alloc]init];
+    HotMovieModel  *hotmovie=[[HotMovieModel alloc]init];
+    if (segment.selectedSegmentIndex==0) {
+        if(_hotDataArray.count > button.tag-3000)
+        {
+            hotmovie =[_hotDataArray objectAtIndex:button.tag-3000];
+        }
+    }
+    else
+    {
+        if (_newDataArray.count > button.tag-3000) {
+            
+            hotmovie=[_newDataArray objectAtIndex:button.tag-3000];
+        }
+    }
+    AddMarkVC.stageInfoDict=hotmovie.stageinfo;
+    //AddMarkVC.pageSoureType=NSAddMarkPageSourceDefault;
+    NSLog(@"dict.stageinfo = %@", AddMarkVC.stageInfoDict);
+    [self.navigationController pushViewController:AddMarkVC animated:NO];
+    
+}
+//点击头像
+-(void)UserLogoButtonClick:(UIButton *) button
+{
+    NSLog(@" ==UserLogoButtonClick  ====%ld",button.tag);
+    MyViewController  *myVC=[[MyViewController alloc]init];
+    HotMovieModel *hotMovieModel = [_newDataArray objectAtIndex:button.tag-4000];
+    myVC.author_id = hotMovieModel.weibo.user_id;
+    [self.navigationController pushViewController:myVC animated:YES];
+    
+}
+//点赞
+-(void)ZanButtonClick:(UIButton *)button
+{
+    NSLog(@" ==ZanButtonClick  ====%ld",button.tag);
+    if (button.selected==YES) {
+        button.selected=NO;
+    }
+    else
+    {
+        button.selected=YES;
+    }
+    HotMovieModel   *model=[_newDataArray  objectAtIndex:5000-button.tag];
+    [self LikeRequstData:model.weibo StageInfo:model.stageinfo];
+    
+}
+
+
+#pragma  mark  -----UMButtomViewshareViewDlegate------------------------
 -(void)UMshareViewHandClick:(UIButton *)button ShareImage:(UIImage *)shareImage MoviewModel:(StageInfoModel *)StageInfo
 {
     NSArray  *sharearray =[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQzone, UMShareToSina, nil];
@@ -578,7 +771,7 @@
     }
 
 }
-#pragma mark  --UMShareDelegate 友盟分享实现的功能
+//#pragma mark  --UMShareDelegate 友盟分享实现的功能
 
 -(void)didCloseUIViewController:(UMSViewControllerType)fromViewControllerType
 {
@@ -605,62 +798,8 @@
     if (shareView) {
         [shareView removeFromSuperview];
     }
-
-
 }
 
-
-
-//点击增加弹幕
--(void)addMarkButtonClick:(UIButton  *) button
-{
-    NSLog(@" ==addMarkButtonClick  ====%ld",button.tag);
-    AddMarkViewController  *AddMarkVC=[[AddMarkViewController alloc]init];
-    HotMovieModel  *hotmovie=[[HotMovieModel alloc]init];
-    if (segment.selectedSegmentIndex==0) {
-        if(_hotDataArray.count > button.tag-3000)
-        {
-        hotmovie =[_hotDataArray objectAtIndex:button.tag-3000];
-        }
-    }
-   else
-   {
-       if (_newDataArray.count > button.tag-3000) {
-        
-       hotmovie=[_newDataArray objectAtIndex:button.tag-3000];
-       }
-   }
-    AddMarkVC.stageInfoDict=hotmovie.stageinfo;
-    //AddMarkVC.pageSoureType=NSAddMarkPageSourceDefault;
-    NSLog(@"dict.stageinfo = %@", AddMarkVC.stageInfoDict);
-    [self.navigationController pushViewController:AddMarkVC animated:NO];
-
-}
-//点击头像
--(void)UserLogoButtonClick:(UIButton *) button
-{
-    NSLog(@" ==UserLogoButtonClick  ====%ld",button.tag);
-    MyViewController  *myVC=[[MyViewController alloc]init];
-    HotMovieModel *hotMovieModel = [_newDataArray objectAtIndex:button.tag-4000];
-    myVC.author_id = hotMovieModel.weibo.user_id;
-    [self.navigationController pushViewController:myVC animated:YES];
-    
-}
-//点赞
--(void)ZanButtonClick:(UIButton *)button
-{
-    NSLog(@" ==ZanButtonClick  ====%ld",button.tag);
-    if (button.selected==YES) {
-        button.selected=NO;
-    }
-    else
-    {
-        button.selected=YES;
-    }
-    HotMovieModel   *model=[_newDataArray  objectAtIndex:5000-button.tag];
-    [self LikeRequstData:model.weibo StageInfo:model.stageinfo];
-
-}
 
 
 #pragma mark  -----
@@ -723,11 +862,15 @@
     
 }
 #pragma mark   ------
-#pragma mark   -------- ButtomToolViewDelegate
+#pragma mark   -------- ButtomToolViewDelegate－－－－－－－－－－－－－－－－－－－－－
 #pragma  mark  -------
 -(void)ToolViewHandClick:(UIButton *)button :(MarkView *)markView weiboDict:(WeiboModel *)weiboDict StageInfo:(StageInfoModel *)stageInfoDict
 {
+    //把值全局化，有利于下面进行一系列的删除变身操作
+    _TStageInfo=stageInfoDict;
+    _TweiboInfo=weiboDict;
     
+    NSLog(@"ToolViewHandClick  weibo dict ===%@",weiboDict);
     if (button.tag==10000) {
         ///点击了头像//进入个人页面
         MyViewController   *myVc=[[MyViewController alloc]init];
@@ -737,10 +880,6 @@
 #pragma mark     -----------分享
     else if (button.tag==10001)
     {
-        //点击了分享
-        //分享文字
-   
-    //    NSString  *shareText=weiboDict.topic;//[weiboDict objectForKey:@"topic"];
         NSLog(@" 点击了分享按钮");
         
         float hight= kDeviceWidth;
@@ -763,7 +902,6 @@
             [shareView showShareButtomView];
             
         }
-
     }
 #pragma mark  ----------点赞--------------
     else  if(button.tag==10002)
@@ -794,7 +932,86 @@
         [self LikeRequstData:weiboDict StageInfo:stageInfoDict];
         
     }
+    else if(button.tag==10003)
+    {
+       
+        UserDataCenter  *userCenter =[UserDataCenter shareInstance];
+        if ([userCenter.is_admin  intValue]>0) {
+        UIActionSheet   *ash=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"删除",@"变身",@"推荐", nil];
+         ash.tag=500;
+        [ash showInView:self.view];
+        }
+        else
+        {
+            UIActionSheet   *ash=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"举报" otherButtonTitles:nil, nil];
+            ash.tag=504;
+            [ash showInView:self.view];
+        }
+        
+    }
 }
+
+#pragma mark  ----actionSheetDelegate--
+-(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    
+    if (actionSheet.tag==500) {
+        if (buttonIndex==0) {
+            //删除
+            UIActionSheet   *ash=[[UIActionSheet alloc]initWithTitle:@"确定删除" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"删除" otherButtonTitles:nil,nil];
+            ash.tag=501;
+            [ash showInView:self.view];
+            
+        }
+        else if(buttonIndex==1)
+        {
+            ///变身
+           // [self.navigationController pushViewController:[ChangeSelfViewController new] animated:YES];
+            //请求随机数种子
+            [self requestChangeUserRand4];
+        }
+        else if(buttonIndex==2)
+        {
+            //推荐
+            UIActionSheet   *ash=[[UIActionSheet alloc]initWithTitle:@"确定推荐" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"确定" otherButtonTitles:nil,nil];
+            ash.tag=502;
+            [ash showInView:self.view];
+        }
+    }
+    // 确定删除
+    else if(actionSheet.tag==501)
+    {
+        if (buttonIndex==0) {
+            //删除了
+            [self requestDelectData];
+        }
+        
+    }
+    else if(actionSheet.tag==502)
+    {
+        if (buttonIndex==0) {
+            //推荐了
+            [self requestrecommendData];
+        }
+        
+    }
+    else if (actionSheet.tag==503)
+    {
+        if (buttonIndex==0) {
+            [self requestrecommendDeleteDataWith];
+        }
+    }
+#warning  确定举报
+    else if(actionSheet.tag==504)
+    {
+        if (buttonIndex==0) {
+            //确认举报
+            [self requestReport];
+         
+        }
+    }
+}
+
 //重新布局markview
 -(void)layoutMarkViewWithMarkView:(MarkView  *) markView WeiboInfo:(WeiboModel *) weibodict
 {
@@ -854,7 +1071,6 @@
         [_toolBar removeFromSuperview];
         
     }
-
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

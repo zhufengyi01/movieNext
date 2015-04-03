@@ -38,6 +38,15 @@
     self.navigationController.navigationBar.hidden=NO;
     self.navigationController.navigationBar.alpha=1;
     self.tabBarController.tabBar.hidden=NO;
+    
+    [[NSNotificationCenter defaultCenter]  addObserver:self selector:@selector(changeUser) name:@"initUser" object:nil];
+
+}
+-(void)changeUser
+{
+    if (_myTableView) {
+        [self headerRereshing];
+    }
 }
 
 - (void)viewDidLoad {
@@ -54,7 +63,7 @@
     [self initData];
     [self initUI];
      [self creatLoadView];
-    [self requestData];
+    //[self requestData];
     
 }
 -(void)creatLoadView
@@ -95,6 +104,10 @@
 - (void)headerRereshing
 {
     page=0;
+    if (_dataArray.count>0) {
+        [_dataArray removeAllObjects];
+    }
+    
     [self requestData];
     // 2.2秒后刷新表格UI
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -202,6 +215,12 @@
     [self.navigationController pushViewController:myVC animated:YES];
     
 }
+
+-(void)dealloc
+{
+    [[NSNotificationCenter defaultCenter]removeObserver:nil name:@"initUser" object:nil];
+}
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

@@ -14,11 +14,13 @@
 #import "UIImageView+WebCache.h"
 #import "AFNetworking.h"
 #import "MovieDetailViewController.h"
-@interface AddMarkViewController ()<UITextFieldDelegate,UIAlertViewDelegate,UIScrollViewDelegate>
+#define  BOOKMARK_WORD_LIMIT 60
+@interface AddMarkViewController ()<UITextFieldDelegate,UIAlertViewDelegate,UIScrollViewDelegate,UITextViewDelegate>
 {
     UIScrollView  *_myScorllerView;
     UIToolbar  *_toolBar;
-    UITextField  *_inputText;
+    //UITextField  *_inputText;
+    UITextView   *_myTextView;
     MarkView  *_myMarkView;
     NSString    *X;
     NSString    *Y;
@@ -36,16 +38,16 @@
     self.navigationController.navigationBar.alpha=1;
     self.navigationController.navigationBar.hidden=NO;
     self.tabBarController.tabBar.hidden=YES;
-    if (_inputText) {
-        [_inputText becomeFirstResponder];
+    if (_myTextView) {
+        [_myTextView becomeFirstResponder];
     }
     
 }
 
 -(void)viewDidAppear:(BOOL)animated
 {
-    if(_inputText)
-        [_inputText becomeFirstResponder];
+    if(_myTextView)
+        [_myTextView becomeFirstResponder];
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -62,12 +64,6 @@
 }
 -(void)createNavigation
 {
-//    UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:@"发布弹幕"];
-//    titleLable.textColor=VBlue_color;
-//    titleLable.font=[UIFont boldSystemFontOfSize:16];
-//    titleLable.textAlignment=NSTextAlignmentCenter;
-//    self.navigationItem.titleView=titleLable;
-    
     UIButton  *leftBtn= [UIButton buttonWithType:UIButtonTypeSystem];
     leftBtn.frame=CGRectMake(0, 0, 40, 30);
     [leftBtn setTitleColor:VGray_color forState:UIControlStateNormal];
@@ -154,30 +150,29 @@
      // [self.navigat setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color.png"] forBarMetrics:UIBarMetricsDefault];
      [_toolBar setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color.png"] forToolbarPosition:UIBarPositionAny barMetrics:UIBarMetricsDefault];
      _toolBar.tintColor=VGray_color;  //内容颜色
-     
-     _inputText= [[UITextField alloc]initWithFrame:CGRectMake(10,10, kDeviceWidth-80,30)];
-     _inputText.font = [UIFont systemFontOfSize:14];
-    _inputText.delegate=self;
-     _inputText.layer.cornerRadius=4;
-     _inputText.layer.borderWidth=0.5;
-     _inputText.layer.borderColor=VLight_GrayColor.CGColor;
     
-    UIView  *leftView=[[UIView alloc]initWithFrame:CGRectMake(0,10, 8, 20)];
-    leftView.backgroundColor=[UIColor clearColor];
-    _inputText.leftView=leftView;
-    _inputText.leftViewMode=UITextFieldViewModeAlways;
-     [_inputText becomeFirstResponder];
-     [_toolBar addSubview:_inputText];
-    
+     _myTextView=[[UITextView alloc]initWithFrame:CGRectMake(10, 10, kDeviceWidth-80, 30)];
+    _myTextView.delegate=self;
+    _myTextView.textColor=VGray_color;
+    _myTextView.font= [UIFont systemFontOfSize:16];
+    _myTextView.backgroundColor=[UIColor clearColor];
+    _myTextView.layer.cornerRadius=4;
+    _myTextView.layer.borderWidth=0.5;
+    _myTextView.layer.borderColor=VLight_GrayColor.CGColor;
+    _myTextView.maximumZoomScale=3;
+    _myTextView.returnKeyType=UIReturnKeyDone;
+    _myTextView.scrollEnabled=YES;
+    _myTextView.autoresizingMask=UIViewAutoresizingFlexibleHeight;
+    [_myTextView becomeFirstResponder];
+    [_toolBar addSubview:_myTextView];
     
     
      publishBtn=[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-60, 10, 50, 28) ImageName:@"loginoutbackgroundcolor.png" Target:self Action:@selector(dealNavClick:) Title:@"确定"];
-    //publishBtn.alpha=0.8;
-    publishBtn.enabled=NO;
-    publishBtn.titleLabel.font=[UIFont systemFontOfSize:14];
-    publishBtn.layer.cornerRadius=4;
-    publishBtn.tag=99;
-    publishBtn.clipsToBounds=YES;
+     publishBtn.enabled=NO;
+     publishBtn.titleLabel.font=[UIFont systemFontOfSize:14];
+     publishBtn.layer.cornerRadius=4;
+     publishBtn.tag=99;
+     publishBtn.clipsToBounds=YES;
      [_toolBar addSubview:publishBtn];
     
     [self.view addSubview:_toolBar];
@@ -209,9 +204,9 @@
 -(void)PushlicInScreen
 {
       //方法只是去掉左右两边的空格；
-    NSString   *inputString = [_inputText.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    NSString   *inputString = [_myTextView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     //发布到屏幕之后需要把输入框退回去
-    [_inputText resignFirstResponder];
+    [_myTextView resignFirstResponder];
    [UIView animateWithDuration:0.5 animations:^{
        CGRect  iframe =_toolBar.frame;
        iframe.origin.y=kDeviceHeight;
@@ -219,9 +214,6 @@
    } completion:^(BOOL finished) {
        
    }];
-  
- 
-    
     [UIView animateWithDuration:0.3 animations:^{
         tipView.alpha=1;
     } completion:^(BOOL finished) {
@@ -229,21 +221,14 @@
     }];
     RighttBtn.hidden=NO;
     RighttBtn.titleLabel.textColor=VBlue_color;
-    [_inputText resignFirstResponder];
+    //[_myTextView resignFirstResponder];
     //清楚原来添加的弹幕
     for (UIView *view in stageView.subviews) {
         if ([view isKindOfClass:[MarkView class]]) {
             [view removeFromSuperview];
         }
     }
-    
-    /*if ([_inputText text].length==0||[[_inputText text]  isEqualToString:@" "]) {
-        UIAlertView  *Al =[[UIAlertView alloc]initWithTitle:nil message:@"对不起，您还没有添加内容" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-        [Al show];
-        return ;
-    }*/
-
-    
+ 
      _myMarkView =[[MarkView alloc]initWithFrame:CGRectMake(100,140 , 100, 20)];
     ///显示标签的头像
     UserDataCenter  * userCenter=[UserDataCenter shareInstance];
@@ -293,7 +278,6 @@
         
     }];
 
-    
    //获取平移手势对象在stageView的位置点，并将这个点作为self.aView的center,这样就实现了拖动的效果
     CGPoint curPoint = [gestureRecognizer locationInView:stageView];    
     CGFloat xoffset = _myMarkView.frame.size.width/2.0;
@@ -325,7 +309,7 @@
 -(void)PublicRuqest
 {
     RighttBtn.enabled=NO;
-    if ([_inputText text].length==0||[[_inputText text]  isEqualToString:@""]) {
+    if ([_myTextView text].length==0||[[_myTextView text]  isEqualToString:@""]) {
         UIAlertView  *Al =[[UIAlertView alloc]initWithTitle:nil message:@"对不起，您还没有添加内容" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
         [Al show];
         return ;
@@ -337,14 +321,15 @@
         
     }
     UserDataCenter  *userCenter=[UserDataCenter shareInstance];
-    NSDictionary *parameter = @{@"user_id": userCenter.user_id,@"topic_name":[_inputText text],@"stage_id":self.stageInfoDict.Id,@"x":X,@"y":Y};
+#warning  这里需要获取一个处理后的上传字符
+    NSDictionary *parameter = @{@"user_id": userCenter.user_id,@"topic_name":[_myTextView text],@"stage_id":self.stageInfoDict.Id,@"x":X,@"y":Y};
 
     NSLog(@"==parameter====%@",parameter);
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:[NSString stringWithFormat:@"%@/weibo/create", kApiBaseUrl] parameters:parameter success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"  添加弹幕发布请求    JSON: %@", responseObject);
         if ([responseObject  objectForKey:@"detail"]) {
-            UIAlertView  *Al=[[UIAlertView alloc]initWithTitle:@"发布成功" message:@"恭喜你发布成功" delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
+            UIAlertView  *Al=[[UIAlertView alloc]initWithTitle:nil message:@"发布成功" delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
             [Al show];
         }
         
@@ -370,10 +355,8 @@
         
     }];
 }
-
 -(void)keyboardWillHiden:(NSNotification *) notification
 {
-    
     [UIView  animateWithDuration:0.1 animations:^{
         CGRect  tframe=_toolBar.frame;
         tframe.origin.y=kDeviceHeight-50-kHeightNavigation;
@@ -383,43 +366,70 @@
     }];
 
 }
-
-#pragma  mark  ---textfieldDelegate
--(BOOL)textFieldShouldReturn:(UITextField *)textField
+#pragma  mark  ---UItextViewDelegate-------------
+-(void)textViewDidEndEditing:(UITextView *)textView
 {
-    [_inputText resignFirstResponder];
-    return YES;
+    [_myTextView resignFirstResponder];
 }
--(void)textFieldDidBeginEditing:(UITextField *)textField
-{
-}
--(BOOL)textFieldShouldBeginEditing:(UITextField *)textField
-{
-    return  YES;
-}
--(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
-{
-    NSLog(@"=====_input text ====%@",_inputText.text);
-    if (textField==_inputText) {
-         if (_inputText.text.length>0&&[Function isBlankString:_inputText.text]==NO) {
-            publishBtn.enabled=YES;
-         }
-         else
-        {
-          publishBtn.enabled=NO;
-         }
-    }
-    return YES;
-}
-
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    [_inputText resignFirstResponder];
+    //[_myTextView resignFirstResponder];
+}
+ //有时候我们要控件自适应输入的文本的内容的高度，只要在textViewDidChange的代理方法中加入调整控件大小的代理即可
+
+
+-(void)textViewDidChange:(UITextView *)textView{
+    if (textView==_myTextView) {
+        if ([Function isBlankString:_myTextView.text]==NO) {
+            publishBtn.enabled=YES;
+        }
+        else
+        {
+            publishBtn.enabled=NO;
+        }
+    }
+    if (_myTextView.text.length>BOOKMARK_WORD_LIMIT) {
+         textView.text = [textView.text substringToIndex:BOOKMARK_WORD_LIMIT];
+    }
+    //计算文本的高度
+     CGSize   sizeFrame=[textView.text boundingRectWithSize:CGSizeMake(textView.frame.size.width, MAXFLOAT) options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes:[NSDictionary dictionaryWithObject:_myTextView.font forKey:NSFontAttributeName] context:nil].size;
+    
+    NSLog(@" size frame width    % f  size frame  height ====%f  ",sizeFrame.width ,sizeFrame.height);
+    
+    //重新调整textView的高度
+    textView.frame = CGRectMake(textView.frame.origin.x,textView.frame.origin.y,textView.frame.size.width,sizeFrame.height+15);
+    
+    _toolBar.frame=CGRectMake(0,kDeviceHeight-216-textView.frame.size.height -kHeightNavigation-20-35, kDeviceWidth, textView.frame.size.height+20);
+    
+
+    
+}
+
+
+//控制输入文字的长度和内容，可通调用以下代理方法实现
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+{
+    if (range.location>=100)
+    {
+        //控制输入文本的长度
+        return  NO;
+    }
+    if ([text isEqualToString:@"\n"]) {
+        //禁止输入换行
+        return NO;
+    }
+    else
+    {
+        return YES;
+    }
+
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+
 
 #pragma  mark  ----UIAlertViewdelegate  ---
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
@@ -442,7 +452,7 @@
 }
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    [_inputText resignFirstResponder];
+   // [_myTextView resignFirstResponder];
 }
 /*
 #pragma mark - Navigation

@@ -11,6 +11,7 @@
 #import "ZCControl.h"
 #import "UIButton+WebCache.h"
 #import "Function.h"
+#import "UserDataCenter.h"
 @implementation ButtomToolView
 
 /*
@@ -78,19 +79,12 @@
     [buttomView addSubview:shareButton];
     
     
-    UIView  *lineView1=[[UIView alloc]initWithFrame:CGRectMake(kDeviceWidth/3, 15, 1, 20)];
-    lineView1.backgroundColor=VLight_GrayColor;
-    [buttomView addSubview:lineView1];
-
-    UIView  *lineView2=[[UIView alloc]initWithFrame:CGRectMake((kDeviceWidth/3)*2, 15,1, 20)];
-    lineView2.backgroundColor=VLight_GrayColor;
-    [buttomView addSubview:lineView2];
     
 
     zanbutton =[ZCControl createButtonWithFrame:CGRectMake((kDeviceWidth/3)*2, 0, kDeviceWidth/3, 50) ImageName:nil Target:self Action:@selector(dealButtomClick:) Title:@"点赞"];
     zanbutton.tag=10002;
     //[zanbutton setImage:[UIImage imageNamed:@"ic_menu_like_default.png"] forState:UIControlStateNormal];
-    //[zanbutton setBackgroundImage:[UIImage imageNamed:@"loginoutbackgroundcolor.png"] forState:UIControlStateNormal];
+    [zanbutton setBackgroundImage:[UIImage imageNamed:@"loginoutbackgroundcolor.png"] forState:UIControlStateNormal];
     [zanbutton setTitle:@"已赞" forState:UIControlStateSelected];
     [zanbutton setTitleEdgeInsets:UIEdgeInsetsMake(10, 25, 10, 10)];
     zanbutton.titleLabel.font=[UIFont systemFontOfSize:14];
@@ -99,10 +93,25 @@
     likeimageview=[[UIImageView alloc]initWithFrame:CGRectMake((zanbutton.frame.size.width)/2 -13-15, zanbutton.frame.size.height/2 -14/2, 15, 14)];
     likeimageview.image=[UIImage imageNamed:@"ic_menu_like_default.png"];
     [zanbutton addSubview:likeimageview];
-   
-
     //高亮显示
     [buttomView addSubview:zanbutton];
+    
+    UIView  *lineView1=[[UIView alloc]initWithFrame:CGRectMake(kDeviceWidth/3, 15, 1, 20)];
+    lineView1.backgroundColor=VLight_GrayColor;
+    [buttomView addSubview:lineView1];
+    
+    UIView  *lineView2=[[UIView alloc]initWithFrame:CGRectMake((kDeviceWidth/3)*2, 15,1, 20)];
+    lineView2.backgroundColor=VLight_GrayColor;
+    [buttomView addSubview:lineView2];
+  
+    UserDataCenter  *userCenter =[UserDataCenter shareInstance];
+  //  if ([userCenter.is_admin  intValue]>0) {
+    morebuton=[ZCControl createButtonWithFrame:CGRectMake(0, 0, 30, 50) ImageName:@"loginoutbackgroundcolor.png" Target:self Action:@selector(dealButtomClick:) Title:@""];
+    [morebuton setImage:[UIImage imageNamed:@"single_switch(gray).png"] forState:UIControlStateNormal];
+    morebuton.tag=10003;
+    [buttomView addSubview:morebuton];
+    //}
+
 
     
 }
@@ -128,37 +137,23 @@
 -(void)dealButtomClick:(UIButton  *) button
 {
     
-    if (zanbutton.selected==YES) {
+    if (button.tag==10002) {
+        
+      if (zanbutton.selected==YES) {
         zanbutton.selected=NO;
         likeimageview.image=[UIImage imageNamed:@"ic_menu_like_default.png"];
-
-    }
+      }
     else if (zanbutton.selected==NO)
     {
         zanbutton.selected=YES;
         //如果按钮点击的是赞的话
         if (button==zanbutton) {
         //执行放大动画又缩小回去
-            
            likeimageview.image=[UIImage imageNamed:@"liked_icon_light@2x.png"];
-
-//            // 设定为缩放
-//            CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"transform.scale"];
-//            // 动画选项设定
-//            animation.duration = 0.25; // 动画持续时间
-//            animation.repeatCount = 1; // 重复次数
-//            animation.autoreverses = YES; // 动画结束时执行逆动画
-//            // 缩放倍数
-//            animation.fromValue = [NSNumber numberWithFloat:1.0]; // 开始时的倍率
-//            animation.toValue = [NSNumber numberWithFloat:1.5]; // 结束时的倍率
-//            // 添加动画
-//            [likeimageview.layer addAnimation:animation forKey:@"scale-layer"];
-       
             [Function BasicAnimationwithkey:@"transform.scale" Duration:0.25 repeatcont:1 autoresverses:YES fromValue:1.0 toValue:1.5 View:likeimageview];
-
-            
         }
         
+    }
     }
     if (self.delegete &&[self.delegete respondsToSelector:@selector(ToolViewHandClick::weiboDict:StageInfo:)]) {
         [self.delegete ToolViewHandClick:button :_markView weiboDict:self.weiboDict StageInfo:self.StageInfoDict];

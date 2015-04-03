@@ -187,7 +187,7 @@
         if (response.responseCode == UMSResponseCodeSuccess) {
             [[UMSocialDataService defaultDataService] requestSnsInformation:ssoName completion:^(UMSocialResponseEntity *response) {
                 if (response.responseCode == UMSResponseCodeSuccess) {
-                   // NSLog(@"====  weixxin  =response ======%@",[response valueForKey:@"data"]);
+                    NSLog(@"====  weixxin  =response ======%@",[response valueForKey:@"data"]);
                     NSDictionary *data = [response valueForKey:@"data"];
                     NSString * uid            = [data valueForKey:@"uid"];
 
