@@ -22,6 +22,7 @@
 #import "UMSocialWechatHandler.h"
 #import "ZCControl.h"
 #import "SerViceViewController.h"
+#import "UserHeadChangeViewController.h"
 //#define kSegueLoginToIndex @"LoginToIndex"
 
 @interface LoginViewController ()<UMSocialUIDelegate>
@@ -39,11 +40,15 @@
 @end
 
 @implementation LoginViewController
-
+-(void)viewWillAppear:(BOOL)animated
+{
+    self.navigationController.navigationBar.hidden=YES;
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    appdelegate = [[UIApplication sharedApplication]delegate ];
+    self.navigationController.navigationBar.hidden=NO;
+    appdelegate = [[UIApplication sharedApplication]delegate];
     window=appdelegate.window;
     self.view.backgroundColor=[UIColor whiteColor];
     [self creatUI];
@@ -147,9 +152,8 @@
     else if(button==checkBtn2)
     {
         
-       // [self.navigationController pushViewController:[SerViceViewController new] animated:YES];
-        [self presentViewController:[SerViceViewController new] animated:YES completion:nil];
-    }
+       [self.navigationController pushViewController:[SerViceViewController new] animated:YES];
+     }
     
 }
 //登陆按钮
@@ -242,10 +246,14 @@
 
                             NSLog(@"usercenter.avatar = %@", userCenter.avatar);
                             [Function saveUser:userCenter];
-                            window.rootViewController=[CustmoTabBarController new];
+                            //登陆成功后把根
+                            [self.navigationController pushViewController:[UserHeadChangeViewController new] animated:YES];
+                          //  [self presentViewController:[UserHeadChangeViewController new ] animated:YES completion:nil];
+                           // window.rootViewController=[CustmoTabBarController new];
                         }
                     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                         NSLog(@"Error: %@", error);
+                        
                     }];
                     
                 } else {

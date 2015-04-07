@@ -123,8 +123,11 @@
     NSUserDefaults  *userDefualt=[NSUserDefaults standardUserDefaults];
     [userDefualt removeObjectForKey:kUserKey];
     [userDefualt synchronize];
-    window.rootViewController=[LoginViewController new];
     
+    //window.rootViewController=[LoginViewController new];
+    UINavigationController  *loginNa=[[UINavigationController alloc]initWithRootViewController:[LoginViewController new]];
+    window.rootViewController=loginNa;
+
     
 }
 - (void)didReceiveMemoryWarning {

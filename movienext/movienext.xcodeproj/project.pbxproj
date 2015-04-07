@@ -193,6 +193,8 @@
 		00665A0A1ACE7B6200010BED /* ChangeSelfTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00665A091ACE7B6200010BED /* ChangeSelfTableViewCell.m */; };
 		00665A0D1ACE854400010BED /* dan_closed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 00665A0B1ACE854400010BED /* dan_closed@2x.png */; };
 		00665A0E1ACE854400010BED /* dan_closed@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 00665A0C1ACE854400010BED /* dan_closed@3x.png */; };
+		00665A121ACEA65300010BED /* UserHeadChangeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00665A111ACEA65300010BED /* UserHeadChangeViewController.m */; };
+		00665A151ACEA6A600010BED /* ChangeUsernameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00665A141ACEA6A600010BED /* ChangeUsernameViewController.m */; };
 		006739531AA491250087C240 /* MJRefresh.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 006739431AA491250087C240 /* MJRefresh.bundle */; };
 		006739541AA491250087C240 /* MJRefreshBaseView.m in Sources */ = {isa = PBXBuildFile; fileRef = 006739461AA491250087C240 /* MJRefreshBaseView.m */; };
 		006739551AA491250087C240 /* MJRefreshConst.m in Sources */ = {isa = PBXBuildFile; fileRef = 006739481AA491250087C240 /* MJRefreshConst.m */; };
@@ -563,6 +565,10 @@
 		00665A091ACE7B6200010BED /* ChangeSelfTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChangeSelfTableViewCell.m; sourceTree = "<group>"; };
 		00665A0B1ACE854400010BED /* dan_closed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dan_closed@2x.png"; sourceTree = "<group>"; };
 		00665A0C1ACE854400010BED /* dan_closed@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dan_closed@3x.png"; sourceTree = "<group>"; };
+		00665A101ACEA65300010BED /* UserHeadChangeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserHeadChangeViewController.h; sourceTree = "<group>"; };
+		00665A111ACEA65300010BED /* UserHeadChangeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserHeadChangeViewController.m; sourceTree = "<group>"; };
+		00665A131ACEA6A600010BED /* ChangeUsernameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChangeUsernameViewController.h; sourceTree = "<group>"; };
+		00665A141ACEA6A600010BED /* ChangeUsernameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChangeUsernameViewController.m; sourceTree = "<group>"; };
 		006739431AA491250087C240 /* MJRefresh.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = MJRefresh.bundle; sourceTree = "<group>"; };
 		006739441AA491250087C240 /* MJRefresh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJRefresh.h; sourceTree = "<group>"; };
 		006739451AA491250087C240 /* MJRefreshBaseView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJRefreshBaseView.h; sourceTree = "<group>"; };
@@ -1176,6 +1182,17 @@
 			path = ShowStag;
 			sourceTree = "<group>";
 		};
+		00665A0F1ACEA5B100010BED /* loginAfter */ = {
+			isa = PBXGroup;
+			children = (
+				00665A101ACEA65300010BED /* UserHeadChangeViewController.h */,
+				00665A111ACEA65300010BED /* UserHeadChangeViewController.m */,
+				00665A131ACEA6A600010BED /* ChangeUsernameViewController.h */,
+				00665A141ACEA6A600010BED /* ChangeUsernameViewController.m */,
+			);
+			path = loginAfter;
+			sourceTree = "<group>";
+		};
 		006739421AA491250087C240 /* MJRefresh */ = {
 			isa = PBXGroup;
 			children = (
@@ -1586,6 +1603,7 @@
 		00AA53FA1AA2C525004096F8 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				00665A0F1ACEA5B100010BED /* loginAfter */,
 				0053E9261ACBE8AD00C11CB4 /* AddUser */,
 				0053E9221ACBDD6700C11CB4 /* ChangeSelf */,
 				000B08F71AA2EA1800B8D13A /* Movie */,
@@ -2026,6 +2044,7 @@
 				00354C5F1ABF030C00F650AA /* AFURLSessionManager.m in Sources */,
 				00AA54121AA2C525004096F8 /* Function.m in Sources */,
 				0074273C1AADAB9B0034047D /* UIImage+ImageWithColor.m in Sources */,
+				00665A151ACEA6A600010BED /* ChangeUsernameViewController.m in Sources */,
 				00354C661ABF030C00F650AA /* UIRefreshControl+AFNetworking.m in Sources */,
 				006739581AA491250087C240 /* UIScrollView+MJExtension.m in Sources */,
 				009A27BE1AA6F7520001690C /* MarkView.m in Sources */,
@@ -2070,6 +2089,7 @@
 				00AA53091AA2C3F4004096F8 /* main.m in Sources */,
 				0067395E1AA49F560087C240 /* SearchmovieTableViewCell.m in Sources */,
 				000B09201AA3007600B8D13A /* SettingViewController.m in Sources */,
+				00665A121ACEA65300010BED /* UserHeadChangeViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2211,7 +2231,7 @@
 					"$(PROJECT_DIR)/Libs/UMSocial_Sdk_Extra_Frameworks/TencentOpenAPI",
 				);
 				INFOPLIST_FILE = movienext/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2239,7 +2259,7 @@
 					"$(PROJECT_DIR)/Libs/UMSocial_Sdk_Extra_Frameworks/TencentOpenAPI",
 				);
 				INFOPLIST_FILE = movienext/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",

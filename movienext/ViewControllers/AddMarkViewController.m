@@ -14,7 +14,7 @@
 #import "UIImageView+WebCache.h"
 #import "AFNetworking.h"
 #import "MovieDetailViewController.h"
-#define  BOOKMARK_WORD_LIMIT 60
+#define  BOOKMARK_WORD_LIMIT 10000
 @interface AddMarkViewController ()<UITextFieldDelegate,UIAlertViewDelegate,UIScrollViewDelegate,UITextViewDelegate>
 {
     UIScrollView  *_myScorllerView;
@@ -25,6 +25,7 @@
     NSString    *X;
     NSString    *Y;
     CGSize   keyboardSize;
+    float   keybordHeight;
     UIButton  *RighttBtn;
     UIView   *tipView;
     UIButton  *publishBtn;
@@ -53,6 +54,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
    // _myDict =[NSDictionary dictionaryWithDictionary:_stageDict];
+    keybordHeight=0;
     [self createNavigation];
     //键盘将要显示
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardDidShowNotification object:nil];
@@ -347,6 +349,8 @@
          keyboardSize = [value CGRectValue].size;
         float  timeInterval=0.1;
         NSLog(@"keyBoard   height  :%f", keyboardSize.height);
+ 
+    keybordHeight=keyboardSize.height;
     [UIView  animateWithDuration:timeInterval animations:^{
         CGRect  tframe=_toolBar.frame;
         tframe.origin.y=kDeviceHeight -keyboardSize.height-kHeightNavigation-50;
@@ -367,6 +371,12 @@
 
 }
 #pragma  mark  ---UItextViewDelegate-------------
+-(void)textViewDidBeginEditing:(UITextView *)textView
+{
+    if ([_myTextView text].length>100) {
+        
+    }
+}
 -(void)textViewDidEndEditing:(UITextView *)textView
 {
     [_myTextView resignFirstResponder];
@@ -397,19 +407,22 @@
     NSLog(@" size frame width    % f  size frame  height ====%f  ",sizeFrame.width ,sizeFrame.height);
     
     //重新调整textView的高度
-    textView.frame = CGRectMake(textView.frame.origin.x,textView.frame.origin.y,textView.frame.size.width,sizeFrame.height+15);
+    //textView.frame = CGRectMake(textView.frame.origin.x,textView.frame.origin.y,textView.frame.size.width,sizeFrame.height+15);
     
-    _toolBar.frame=CGRectMake(0,kDeviceHeight-216-textView.frame.size.height -kHeightNavigation-20-35, kDeviceWidth, textView.frame.size.height+20);
-    
+//    CGSize  Ssize=textView.contentSize;
+//    textView.frame=CGRectMake(textView.frame.origin.x, textView.frame.origin.y, textView.frame.size.width, Ssize.height);
+    CGRect  Tframe =textView.frame;
+    Tframe.size.height= MIN(sizeFrame.height+15, 80);
+    textView.frame=Tframe;
+     _toolBar.frame=CGRectMake(0,kDeviceHeight-keybordHeight-textView.frame.size.height -kHeightNavigation-20, kDeviceWidth, textView.frame.size.height+20);
 
-    
 }
 
 
 //控制输入文字的长度和内容，可通调用以下代理方法实现
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
-    if (range.location>=100)
+    if (range.location>=60)
     {
         //控制输入文本的长度
         return  NO;
@@ -422,6 +435,7 @@
     {
         return YES;
     }
+    return YES;
 
 }
 - (void)didReceiveMemoryWarning {

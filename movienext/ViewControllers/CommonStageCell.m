@@ -156,8 +156,8 @@
     _stageView.StageInfoDict=self.StageInfoDict;
     [_stageView configStageViewforStageInfoDict];
     //这里计算hight 图片的高度，主要是为了计算toolbar 的y轴坐标，真实赋值是在stageview
-    float  ImageWith=[self.StageInfoDict.w floatValue];//[[self.StageInfoDict objectForKey:@"w"]  floatValue];
-    float  ImgeHight=[self.StageInfoDict.h floatValue];//[[self.StageInfoDict objectForKey:@"h"]  floatValue];
+    float  ImageWith=[self.StageInfoDict.w floatValue];
+    float  ImgeHight=[self.StageInfoDict.h floatValue];
     float hight=0;
     hight= kDeviceWidth;  // 计算的事bgview1的高度
      if(ImgeHight>ImageWith)

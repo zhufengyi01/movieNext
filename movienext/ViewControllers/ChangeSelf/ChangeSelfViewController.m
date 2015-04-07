@@ -19,6 +19,7 @@
 @interface ChangeSelfViewController ()<UISearchBarDelegate,UITableViewDataSource,UITableViewDelegate,UIActionSheetDelegate>
 {
     NSMutableArray   *_DataArray;
+    NSMutableArray   *_detailArray;
     NSMutableArray   *_searchArray;
     UISearchBar      *_searchBar;
     UITableView      *_myTableView;
@@ -62,7 +63,9 @@
 }
 -(void)initData
 {
+    _detailArray =[[NSMutableArray alloc]init];
     _DataArray=[[NSMutableArray alloc]init];
+    
 }
 #pragma  mark  -----
 #pragma  mark  -------requstData
@@ -77,8 +80,9 @@
                 _DataArray=[[NSMutableArray alloc]init];
             }
             //[_DataArray addObjectsFromArray:[responseObject objectForKey:@"detail"]];
-            _DataArray =[responseObject objectForKey:@"detail"];
-      
+            _detailArray =[responseObject objectForKey:@"detail"];
+            _DataArray=[NSMutableArray arrayWithArray:_detailArray];
+           // _DataArray=[_detailArray copy];
             [_myTableView reloadData];
             
         }
@@ -140,6 +144,8 @@
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (tableView==_myTableView) {
         
         UIActionSheet   *ash=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"确定变身" otherButtonTitles:nil, nil];
@@ -153,13 +159,24 @@
 #pragma mark  -------
 -(void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
 {
-//    for (int i=0;i<_DataArray.count;i++) {
-//        NSString  *nameStr =[[_DataArray  objectAtIndex:i] objectForKey:@"username"];
-//        if (searchBar.text ) {
-//            <#statements#>
-//        }
-//
-//    }
+    [_DataArray removeAllObjects];
+    if (searchBar.text.length==0||[searchBar.text isEqualToString:@""]) {
+        _DataArray =[NSMutableArray arrayWithArray:_detailArray];
+    }
+    else
+    {
+    for (int i=0;i<_detailArray.count;i++) {
+        NSMutableString  *nameStr =[[_detailArray  objectAtIndex:i] objectForKey:@"username"];
+        if ([nameStr rangeOfString:[searchBar text]].location!=NSNotFound) {
+            if (_DataArray==nil) {
+                _DataArray =[NSMutableArray array];
+            }
+            [_DataArray addObject:[_detailArray objectAtIndex:i]];
+            
+        }
+     }
+    }
+    [_myTableView reloadData];
 }
 -(void)searchBar:(UISearchBar *)searchBar selectedScopeButtonIndexDidChange:(NSInteger)selectedScope
 {

@@ -44,7 +44,9 @@
     }
     else {
          //用户没有登陆
-        self.window.rootViewController=[LoginViewController new];
+        UINavigationController  *loginNa=[[UINavigationController alloc]initWithRootViewController:[LoginViewController new]];
+        self.window.rootViewController=loginNa;
+       // self.window.rootViewController=[LoginViewController new];
      }
     self.window.backgroundColor=[UIColor whiteColor];
     //自动显示和隐藏请求时的状态提示

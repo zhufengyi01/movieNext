@@ -278,29 +278,21 @@
      if (!_isAnimation) {
         return;
     }
-    
-//    if (currentMarkIndex <= self.subviews.count-1) {
-//        UIView *v = self.subviews[currentMarkIndex];
-//        if ([v isKindOfClass:[MarkView class]]) {
-//            MarkView *mv = (MarkView *)v;
-//            mv.userInteractionEnabled = YES;
-//            //自身动画
-//            [mv startAnimation];
-//      }
-//    }
-    
     if (currentMarkIndex<self.WeibosArray.count) {
         MarkView  *markView=(MarkView *)[self viewWithTag:1000+currentMarkIndex];
-        
         markView.userInteractionEnabled=YES;
         [markView startAnimation];
     }
     currentMarkIndex =currentMarkIndex +1;
 #warning  疑点，为什么是13  的最大值
     //执行完成一轮动画之后，实行，重新再动第一个执行
-   if (currentMarkIndex > MAX(self.subviews.count, 13) ) {
+    
+   if (currentMarkIndex > MAX(self.subviews.count,6) ) {
         currentMarkIndex = 0;
-    }
+   }
+//    if (self.WeibosArray.count-currentMarkIndex) {
+//        <#statements#>
+//    }
 }
 
 //7.停止动画

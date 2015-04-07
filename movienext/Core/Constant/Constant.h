@@ -66,8 +66,8 @@
 //动画定义
 #define  kTimeInterval  1.1   //  气泡和气泡之间动画出现的时间间隔
 #define kStaticTimeOffset  5.7  //动画的停留时间
-#define kShowTimeOffset 0.7  // 淡入时间
-#define kHidenTimeOffset 1.0  //淡出时间
+#define kShowTimeOffset 0.5  // 淡入时间
+#define kHidenTimeOffset 0.7  //淡出时间
 #define KappearTime    3     //最新页面的自身闪烁动画时间
 #define kdisplayTime   1.2     //滑动cell 动画延时的时间
 #define kalpaOneTime 0.6      //动画全部弹出透明度变成1的那段时间
