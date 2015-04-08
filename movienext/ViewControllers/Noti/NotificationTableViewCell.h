@@ -7,7 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-
+@protocol NotificationTableViewCellDelegate <NSObject>
+-(void)NotificationClick:(UIButton *) button indexPath:(NSInteger) index;
+@end
 @interface NotificationTableViewCell : UITableViewCell
 {
     UIButton    *logoButton;  ///头像
@@ -15,6 +17,9 @@
     UILabel     *dateLable;   //时间
     UIImageView   *stageImage;   // 剧情图片
     UILabel     *Zanlable;
+    UIButton  *titleButon;
+    NSInteger  _index;
 }
+@property (assign,nonatomic)id <NotificationTableViewCellDelegate> delegate;
 -(void)setValueforCell:(NSDictionary  *) dict index: (NSInteger )index;
 @end

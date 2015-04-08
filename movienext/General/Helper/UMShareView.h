@@ -12,7 +12,6 @@
 @protocol UMShareViewDelegate <NSObject>
 ///点击屏幕的透明颜色时候，弹回上面
 -(void)SharetopViewTouchBengan;
-
 -(void)UMshareViewHandClick:(UIButton *) button  ShareImage:(UIImage *) shareImage MoviewModel:(StageInfoModel *) StageInfo ;
 @end
 
@@ -32,11 +31,8 @@
     UIView  *buttomView;
     UIImage   *shareImage;
     UIView     *logosupView;
-    //UIScrollView  *_myScrollerView;
 }
 @property(nonatomic,assign)id<UMShareViewDelegate> delegate;
-//@property(nonatomic,strong) UIImageView *ShareimageView;
-//@property(nonatomic,strong) UILabel      *moviewName;
 //数组中的model
 @property(nonatomic,strong) StageInfoModel  *StageInfo;
 //截取cell 的图片

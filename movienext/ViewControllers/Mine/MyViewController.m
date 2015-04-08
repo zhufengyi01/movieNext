@@ -30,7 +30,7 @@
 #import "Function.h"
 #import "UMShareView.h"
 #import "ChangeSelfViewController.h"
-@interface MyViewController ()<UITableViewDataSource, UITableViewDelegate,StageViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UIActionSheetDelegate,UMSocialDataDelegate,UMSocialUIDelegate,UMShareViewDelegate>
+@interface MyViewController ()<UITableViewDataSource, UITableViewDelegate,StageViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UIActionSheetDelegate,UMSocialDataDelegate,UMSocialUIDelegate,UMShareViewDelegate,CommonStageCellDelegate>
 {
     //UISegmentedControl *segment;
     UITableView   *_tableView;
@@ -55,8 +55,8 @@
     //保存头部视图按钮的状态
     NSMutableDictionary  *buttonStateDict;
     NSMutableDictionary  *IsNullStateDict; //纪录添加还是赞的数据为空
-
-
+   // HotMovieModel  *_Tmodel;  ///用户删除的时候存储的model
+    NSInteger  Rowindex;
 }
 @end
 
@@ -586,9 +586,10 @@
 }
 
 
--(void)requestDelectData:(HotMovieModel *) hotmodel
+-(void)requestDelectData
 {
-  //  NSLog(@"hotmodel  ==weibiid ==%@   hotmodel stageinfo id ==%@ ",hotmodel.weibo.Id,hotmodel.stageinfo.Id);
+    
+    HotMovieModel  *hotmodel =[_addedDataArray objectAtIndex:Rowindex];
     NSDictionary *parameters = @{@"id":hotmodel.weibo.Id,@"stage_id":hotmodel.stageinfo.Id};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:[NSString stringWithFormat:@"%@/weibo/remove", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -605,16 +606,14 @@
 {
     
     UserDataCenter  *userCenter=[UserDataCenter shareInstance];
-    NSNumber  *weiboId=weiboDict.Id;  //[upDict objectForKey:@"id"];
-    NSNumber  *stageId=stageInfoDict.Id;//[stageInfoDict objectForKey:@"id"];
-    NSString  *movieId=stageInfoDict.movie_id; //[stageInfoDict objectForKey:@"movie_id"];
-    NSString  *movieName=stageInfoDict.movie_name;//[stageInfoDict objectForKey:@"movie_name"];
+    NSNumber  *weiboId=weiboDict.Id;
+    NSNumber  *stageId=stageInfoDict.Id;
+    NSString  *movieId=stageInfoDict.movie_id;
+    NSString  *movieName=stageInfoDict.movie_name;
     NSString  *userId=userCenter.user_id;
-    NSString  *autorId =weiboDict.user_id; // [upDict objectForKey:@"user_id"];
+    NSString  *autorId =weiboDict.user_id;
     NSNumber  *uped;
-    //if ([[upDict objectForKey:@"uped"]  intValue]==0) {
-    //uped =[NSString stringWithFormat:@"%d",1];
-    //}
+   
     if ([weiboDict.uped  integerValue] ==0) {
         uped=[NSNumber numberWithInt:0];
     }
@@ -644,14 +643,7 @@
 #pragma mark  -------
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-//    if (segment.selectedSegmentIndex==0) {
-//        return _addedDataArray.count;
-//    }
-//    else if (segment.selectedSegmentIndex==1)
-//    {
-//        return _upedDataArray.count;
-//    }
-    
+
     for (int i=100; i<102;i++ ) {
         UIButton  *btn =(UIButton *)[self.view viewWithTag:i];
         if (btn.tag==100&&btn.selected==YES) {
@@ -669,56 +661,7 @@
 }
 
 -(CGFloat )tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    
-    
-    for (int i=100; i<102;i++ ) {
-    
-        UIButton  *btn =(UIButton *)[self.view viewWithTag:i];
-
-    if (btn.tag==100&&btn.selected==YES) {
-        HotMovieModel *model =[_addedDataArray objectAtIndex:indexPath.row];
-        float hight;
-        if (_addedDataArray.count>indexPath.row) {
-            float  h= [model.stageinfo.h floatValue];
-            float w=  [model.stageinfo.w floatValue];
-        if (w==0||h==0) {
-             hight= kDeviceWidth+90;
-        }
-         if (w>h) {
-            hight= kDeviceWidth+90;
-        }
-        else if(h>w)
-        {
-             hight=  (h/w) *kDeviceWidth+90;
-        }
-        }
-        NSLog(@"============  hight  for  row  =====%f",hight);
-        return hight+10;
-    }
-    else if (btn.tag==101&&btn.selected==YES)
-    {
-        HotMovieModel  *model =[_upedDataArray objectAtIndex:indexPath.row];
-        float hight;
-        if (_upedDataArray.count>indexPath.row) {
-        float  h=[model.stageinfo.h floatValue];
-            float w= [model.stageinfo.w floatValue];
-        if (w==0||h==0) {
-            hight= kDeviceWidth+90;
-        }
-        if (w>h) {
-            hight= kDeviceWidth+90;
-        }
-        else if(h>w)
-        {
-            hight=  (h/w)*kDeviceWidth+90;
-        }
-        }
-        NSLog(@"============  hight  for  row  =====%f",hight);
-
-        return hight+10;
-    }
-    }
-    return 200.0f;
+    return kDeviceWidth+90+10;
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -739,9 +682,7 @@
             cell.backgroundColor=View_BackGround;
         }
                  cell.pageType=NSPageSourceTypeMyAddedViewController;
-            //个人页面的来源
-          //  UserDataCenter  *userCenter=[UserDataCenter shareInstance];
-            if (self.author_id.length==0||[self.author_id isEqualToString:@"0"]) {  //表示直接进入这个页面的话，这个为空
+             if (self.author_id.length==0||[self.author_id isEqualToString:@"0"]) {  //表示直接进入这个页面的话，这个为空
                 cell.userPage=NSUserPageTypeMySelfController;
             }
             else {
@@ -750,6 +691,7 @@
 
             //小闪动标签的数组
             cell.weiboDict=model.weibo;
+            cell.delegate=self;
             cell.StageInfoDict=model.stageinfo;
             [cell ConfigsetCellindexPath:indexPath.row];
             cell.stageView.delegate=self;
@@ -770,11 +712,11 @@
         }
         
             cell.pageType=NSPageSourceTypeMainNewController;
-            cell.weiboDict =model.weibo;    //[[_upedDataArray  objectAtIndex:indexPath.row]  objectForKey:@"weibo"];
+            cell.weiboDict =model.weibo;
             cell.StageInfoDict=model.stageinfo;
             [cell ConfigsetCellindexPath:indexPath.row];
             cell.stageView.delegate=self;
-          //  [cell setCellValue:[[_upedDataArray objectAtIndex:indexPath.row]  objectForKey:@"stageinfo"]indexPath:indexPath.row];
+            cell.delegate=self;
             return  cell;
         }
       }
@@ -805,78 +747,6 @@
 }
 
 #pragma  mark  =====ButtonClick
-
-//点击左下角的电影按钮
--(void)dealMovieButtonClick:(UIButton  *) button{
-    HotMovieModel  *hotmovie;
-    for (int i=100; i<102;i++ ) {
-        UIButton  *btn =(UIButton *)[self.view viewWithTag:i];
-        if (btn.tag==100&&btn.selected==YES) {
-            hotmovie =[_addedDataArray objectAtIndex:button.tag-1000];}
-        else if (btn.tag==101&&btn.selected==YES)
-        {
-            hotmovie=[_upedDataArray objectAtIndex:button.tag-1000];
-        }
-        
-    }
-     MovieDetailViewController *vc =  [MovieDetailViewController new];
-    vc.movieId =  hotmovie.stageinfo.movie_id;
-    [self.navigationController pushViewController:vc animated:YES];
-}
-//分享
--(void)ScreenButtonClick:(UIButton  *) button
-{
-    NSLog(@" ==ScreenButtonClick  ====%ld",button.tag);
-    //获取cell
-#pragma mark 暂时把sharetext设置成null
-    HotMovieModel  *hotmovie;
-    
-    for (int i=100; i<102;i++ ) {
-        UIButton  *btn =(UIButton *)[self.view viewWithTag:i];
-        if (btn.tag==100&&btn.selected==YES) {
-            hotmovie =[_addedDataArray objectAtIndex:button.tag-2000];
-            
-        }
-        else if (btn.tag==101&&btn.selected==YES)
-        {
-            hotmovie=[_upedDataArray objectAtIndex:button.tag-2000];
-        }
-        
-    }
-//    if (segment.selectedSegmentIndex==0) {
-//        hotmovie =[_addedDataArray objectAtIndex:button.tag-2000];
-//    }
-//    else  {
-//        hotmovie=[_upedDataArray objectAtIndex:button.tag-2000];
-//    }
-    
-    float hight= kDeviceWidth;
-    float  ImageWith=[hotmovie.stageinfo.w intValue]; //[[self.StageInfoDict objectForKey:@"w"]  floatValue];
-    float  ImgeHight=[hotmovie.stageinfo.h intValue];//[[self.StageInfoDict objectForKey:@"h"]  floatValue];
-    if(ImgeHight>ImageWith)
-    {
-        hight=  (ImgeHight/ImageWith) *kDeviceWidth;
-    }
-
-    
-    CommonStageCell *cell = (CommonStageCell *)(button.superview.superview.superview);
-    
-    
-    UIImage  *image=[Function getImage:cell.stageView WithSize:CGSizeMake(kDeviceWidth, hight)];
-    
-
-     //创建UMshareView 后必须配备这三个方法
-    shareView.StageInfo=hotmovie.stageinfo;
-    shareView.screenImage=image;
-    [shareView configShareView];
-    [self.view addSubview:shareView];
-    self.tabBarController.tabBar.hidden=YES;
-    if ([shareView respondsToSelector:@selector(showShareButtomView)]) {
-        [shareView showShareButtomView];
-        
-    }
-
-}
 #pragma  mark  -----UMButtomViewshareViewDlegate-------
 -(void)UMshareViewHandClick:(UIButton *)button ShareImage:(UIImage *)shareImage MoviewModel:(StageInfoModel *)StageInfo
 {
@@ -935,85 +805,104 @@
     
     
 }
-//点击增加弹幕
--(void)addMarkButtonClick:(UIButton  *) button
+
+#pragma mark   -----commonStageCelldelegate  ---------------------------------------------
+-(void)commonStageCellToolButtonClick:(UIButton *)button Rowindex:(NSInteger)index
 {
-    NSLog(@" ==addMarkButtonClick  ====%ld",button.tag);
-    AddMarkViewController  *AddMarkVC=[[AddMarkViewController alloc]init];
-    HotMovieModel  *hotmovie=[[HotMovieModel alloc]init];
+    HotMovieModel  *hotmovie;
+    Rowindex =index;
     for (int i=100; i<102;i++ ) {
         UIButton  *btn =(UIButton *)[self.view viewWithTag:i];
         if (btn.tag==100&&btn.selected==YES) {
-            if (_addedDataArray.count>button.tag-3000) {
-                hotmovie =[_addedDataArray objectAtIndex:button.tag-3000];
-
-            }
-            
-        }
+            hotmovie =[_addedDataArray objectAtIndex:index];}
         else if (btn.tag==101&&btn.selected==YES)
         {
-            if (_upedDataArray.count>button.tag-3000) {
-            hotmovie=[_upedDataArray objectAtIndex:button.tag-3000];
-            }
+            hotmovie=[_upedDataArray objectAtIndex:index];
         }
+    }
+    if(button.tag==1000)
+    {
+        // 电影
+        MovieDetailViewController *vc =  [MovieDetailViewController new];
+        vc.movieId =  hotmovie.stageinfo.movie_id;
+        [self.navigationController pushViewController:vc animated:YES];
+
+    }
+    else if(button.tag==2000)
+    {
+        //分享
+        float hight= kDeviceWidth;
+        float  ImageWith=[hotmovie.stageinfo.w intValue];
+        float  ImgeHight=[hotmovie.stageinfo.h intValue];
+        if(ImgeHight>ImageWith)
+        {
+            hight=  (ImgeHight/ImageWith) *kDeviceWidth;
+        }
+        CommonStageCell *cell = (CommonStageCell *)(button.superview.superview.superview);
+        UIImage  *image=[Function getImage:cell.stageView WithSize:CGSizeMake(kDeviceWidth, hight)];
+        //创建UMshareView 后必须配备这三个方法
+        shareView.StageInfo=hotmovie.stageinfo;
+        shareView.screenImage=image;
+        [shareView configShareView];
+        [self.view addSubview:shareView];
+        self.tabBarController.tabBar.hidden=YES;
+        if ([shareView respondsToSelector:@selector(showShareButtomView)]) {
+            [shareView showShareButtomView];
+            
+        }
+    }
+    else if(button.tag==3000)
+    {
+        //添加弹幕
+        AddMarkViewController  *AddMarkVC=[[AddMarkViewController alloc]init];
+        AddMarkVC.stageInfoDict=hotmovie.stageinfo;
+        //AddMarkVC.pageSoureType=NSAddMarkPageSourceDefault;
+        NSLog(@"dict.stageinfo = %@", AddMarkVC.stageInfoDict);
+        [self.navigationController pushViewController:AddMarkVC animated:NO];
         
     }
-
-//    if (segment.selectedSegmentIndex==0) {
-//        hotmovie =[_addedDataArray objectAtIndex:button.tag-3000];
-//    }
-//    else
-//    {
-//        hotmovie=[_upedDataArray objectAtIndex:button.tag-3000];
-//    }
-    AddMarkVC.stageInfoDict=hotmovie.stageinfo;
-    //AddMarkVC.pageSoureType=NSAddMarkPageSourceDefault;
-    NSLog(@"dict.stageinfo = %@", AddMarkVC.stageInfoDict);
-    [self.navigationController pushViewController:AddMarkVC animated:NO];
+    else if(button.tag==4000)
+    {
+     //个人头像
+    }
+    else if(button.tag==5000)
+    {
+        //删除
+        UIActionSheet   *ash=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"删除弹幕" otherButtonTitles:nil, nil];
+        ash.tag=200;
+        [ash showInView:self.view];
+        
+    }
     
-}
-
--(void)delectButtonClick:(UIButton *) button
-{
-    //删除按钮
-    NSLog(@"点击了删除 button tag＝＝＝＝ %ld",button.tag);
-    
-    UIActionSheet   *ash=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"删除弹幕" otherButtonTitles:nil, nil];
-    ash.tag=button.tag;
-    [ash showInView:self.view];
-    
-
 }
 -(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     
     NSLog(@" button Index ===%ld",(long)buttonIndex);
-    if (actionSheet.tag<7000) {
-      if (buttonIndex==0) {          
-          UIActionSheet   *ash=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"确定" otherButtonTitles:nil, nil];
-          ash.tag=actionSheet.tag+1000;
-          [ash showInView:self.view];
-     }
+    if (actionSheet.tag==200) {
+        if (buttonIndex==0) {
+            UIActionSheet   *ash=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            ash.tag=300;
+            [ash showInView:self.view];
+        }
     }
     else
     {
         if (buttonIndex==0) {
-               HotMovieModel  *model =[_addedDataArray objectAtIndex:actionSheet.tag-7000];
-               [_addedDataArray removeObjectAtIndex:actionSheet.tag-7000];
-                productCount=productCount-1;
+            [_addedDataArray removeObjectAtIndex:Rowindex];
+            if (productCount>=1) {
+            productCount=productCount-1;
+            }
             lblCount.text=[NSString stringWithFormat:@"%d",productCount];
-                [_tableView reloadData];
-                [self requestDelectData:model];
+            [_tableView reloadData];
+            [self requestDelectData];
         }
-
+        
     }
     
 }
-
-
-
 #pragma mark   ---
-#pragma mark   ----stageViewDelegate   --
+#pragma mark   ----stageViewDelegate   -----------
 #pragma mark    ---
 -(void)StageViewHandClickMark:(WeiboModel *)weiboDict withmarkView:(id)markView StageInfoDict:(StageInfoModel *)stageInfoDict
 {
@@ -1088,31 +977,16 @@
     {
         //点击了分享
         //分享文字
-        NSString  *shareText=weiboDict.topic;//[weiboDict objectForKey:@"topic"];
-        NSLog(@" 点击了分享按钮");
-        
+        NSString  *shareText=weiboDict.topic;
         float hight= kDeviceWidth;
-        float  ImageWith=[stageInfoDict.w intValue]; //[[self.StageInfoDict objectForKey:@"w"]  floatValue];
-        float  ImgeHight=[stageInfoDict.h intValue];//[[self.StageInfoDict objectForKey:@"h"]  floatValue];
+        float  ImageWith=[stageInfoDict.w intValue];
+        float  ImgeHight=[stageInfoDict.h intValue];
         if(ImgeHight>ImageWith)
         {
             hight=  (ImgeHight/ImageWith) *kDeviceWidth;
         }
-        
-        
         CommonStageCell *cell = (CommonStageCell *)(markView.superview.superview.superview);
-        
-        /*UIGraphicsBeginImageContextWithOptions(CGSizeMake(kDeviceWidth, hight), YES, [UIScreen mainScreen].scale);
-        [cell.stageView drawViewHierarchyInRect:cell.stageView.bounds afterScreenUpdates:YES];
-        
-        // old style [self.layer renderInContext:UIGraphicsGetCurrentContext()];
-        
-        UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
-        */
-        
         UIImage  *image=[Function getImage:cell.stageView WithSize:CGSizeMake(kDeviceWidth, hight)];
-        
         //创建UMshareView 后必须配备这三个方法
         shareView.StageInfo=stageInfoDict;
         shareView.screenImage=image;
@@ -1123,8 +997,6 @@
             [shareView showShareButtomView];
             
         }
-
-
         
     }
 #pragma mark  ----------点赞--------------
@@ -1132,7 +1004,6 @@
     {
         //改变赞的状态
         //点击了赞
-        
         NSLog(@" 点赞 前 微博dict  ＝====uped====%@    ups===%@",weiboDict.uped,weiboDict.ups);
         if ([weiboDict.uped intValue]==0)
         {
@@ -1142,8 +1013,6 @@
             weiboDict.ups=[NSNumber numberWithInt:ups];
             //重新给markview 赋值，改变markview的frame
             [self layoutMarkViewWithMarkView:markView WeiboInfo:weiboDict];
-            
-            
             
         }
         else  {
@@ -1167,8 +1036,6 @@
     
     NSLog(@" 点赞 后 微博dict  ＝====uped====%@    ups===%@",weibodict.uped,weibodict.ups);
         [Function BasicAnimationwithkey:@"transform.scale" Duration:0.25 repeatcont:1 autoresverses:YES fromValue:1.0 toValue:1.05 View:markView];
-   // float  x=[weibodict.x floatValue];
-   // float  y=[weibodict.y floatValue];
     NSString  *weiboTitleString=weibodict.topic;
     NSString  *UpString=[NSString stringWithFormat:@"%@",weibodict.ups];//weibodict.ups;
     //计算标题的size
@@ -1176,7 +1043,6 @@
     // 计算赞数量的size
     CGSize Usize=[UpString boundingRectWithSize:CGSizeMake(40,MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:markView.ZanNumLable.font forKey:NSFontAttributeName] context:nil].size;
     
-    // NSLog(@"size= %f %f", Msize.width, Msize.height);
     //计算赞数量的长度
     float  Uwidth=[UpString floatValue]==0?0:Usize.width;
     //宽度=字的宽度+左头像图片的宽度＋赞图片的宽度＋赞数量的宽度+中间两个空格2+2
@@ -1214,9 +1080,7 @@
     self.tabBarController.tabBar.hidden=NO;
     if (_toolBar) {
         [_toolBar HidenButtomView];
-        //  [_toolBar performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.5];
         [_toolBar removeFromSuperview];
-        
     }
     
 }

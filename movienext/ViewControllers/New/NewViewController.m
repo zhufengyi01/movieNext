@@ -26,9 +26,10 @@
 #import "UMShareView.h"
 #import "UMSocialControllerService.h"
 #import "UIImageView+WebCache.h"
+#import "UMShareViewController.h"
 //友盟分享
 //#import "UMSocial.h"
-@interface NewViewController ()<UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UIScrollViewDelegate,UMSocialDataDelegate,UMSocialUIDelegate,UMShareViewDelegate,LoadingViewDelegate,UIActionSheetDelegate,CommonStageCellDelegate>
+@interface NewViewController ()<UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UIScrollViewDelegate,UMSocialDataDelegate,UMSocialUIDelegate,UMShareViewDelegate,LoadingViewDelegate,UIActionSheetDelegate,CommonStageCellDelegate,AddMarkViewControllerDelegate>
 {
     AppDelegate  *appdelegate;
     UISegmentedControl *segment;
@@ -61,6 +62,7 @@
     //if (_HotMoVieTableView) {
       //  [self setupRefresh];
     //}
+    
 }
 
 - (void)viewDidLoad {
@@ -410,13 +412,13 @@
                     [stageModel setValuesForKeysWithDictionary:[hotDict objectForKey:@"stageinfo"]];
                     hotModel.stageinfo=stageModel;
                     
-                    NSLog(@"热门数据的 hotmodel     ====%@",hotModel);
+                  //  NSLog(@"热门数据的 hotmodel     ====%@",hotModel);
                     [_hotDataArray addObject:hotModel];
                     
                 }
             }
           [_HotMoVieTableView reloadData];
-            NSLog(@"打印出来的热门数据，没有weibo ＝＝====%@",_hotDataArray);
+           // NSLog(@"打印出来的热门数据，没有weibo ＝＝====%@",_hotDataArray);
 
         }
         else if(segment.selectedSegmentIndex==1)
@@ -424,7 +426,7 @@
             if (_newDataArray==nil) {
                 _newDataArray=[[NSMutableArray alloc]init];
             }
-            NSLog(@"最新数据 JSON: %@", responseObject);
+            //NSLog(@"最新数据 JSON: %@", responseObject);
             for (NSDictionary  *newdict  in Detailarray) {
                 HotMovieModel *model =[[HotMovieModel alloc]init];
                 if (model) {
@@ -484,13 +486,13 @@
         if (_hotDataArray.count>indexPath.row) {
             HotMovieModel *hotModel=[_hotDataArray objectAtIndex:indexPath.row];
 
-            float  h=[hotModel.stageinfo.h floatValue];
-            float w=  [hotModel.stageinfo.w floatValue];
+           // float  h=[hotModel.stageinfo.h floatValue];
+            //float w=  [hotModel.stageinfo.w floatValue];
             hight=kDeviceWidth+45;
-            if(h>w)
-           {
-             hight=  (h/w) *kDeviceWidth+45;
-            }
+          //  if(h>w)
+          // {
+            // hight=  (h/w) *kDeviceWidth+45;
+            //}
         }
         return hight+10;
     }
@@ -499,13 +501,13 @@
         float hight;
         if (_newDataArray.count>indexPath.row) {
             HotMovieModel   *hotmodel=[_newDataArray objectAtIndex:indexPath.row];
-            float  h=[hotmodel.stageinfo.h  floatValue];
-            float w=[hotmodel.stageinfo.w floatValue];
+           // float  h=[hotmodel.stageinfo.h  floatValue];
+            //float w=[hotmodel.stageinfo.w floatValue];
              hight= kDeviceWidth+90;
-             if(h>w)
-            {
-                hight=  (h/w)*kDeviceWidth+90;
-            }
+//             if(h>w)
+//            {
+//                hight=  (h/w)*kDeviceWidth+90;
+//            }
         }
       
         return hight+10;
@@ -557,6 +559,7 @@
             cell.weiboDict =hotmodel.weibo; //[[_newDataArray  objectAtIndex:indexPath.row]  objectForKey:@"weibo"];
             //配置stage的数据
             cell.WeibosArray=nil;
+            cell.delegate=self;
             cell.StageInfoDict=hotmodel.stageinfo;
             [cell ConfigsetCellindexPath:indexPath.row];
  
@@ -570,7 +573,6 @@
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
- 
         //点击cell 隐藏弹幕，再点击隐藏
         NSLog(@"didDeselectRowAtIndexPath  =====%ld",indexPath.row);
         CommonStageCell   *cell=(CommonStageCell *)[tableView cellForRowAtIndexPath:indexPath];
@@ -583,7 +585,6 @@
               isMarkViewsShow=YES;
               [cell.stageView  hidenAndShowMarkView:NO];
         }
-        
    
 }
 -(void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -623,120 +624,79 @@
     }
 }
 
+#pragma  mark -------------
+#pragma mark   -----CommonStageCelldelegate  ---------------------------------------------
 
-#pragma  mark  =====ButtonClick
- 
-//点击左下角的电影按钮
--(void)dealMovieButtonClick:(UIButton  *) button{
-    HotMovieModel  *hotmovie;
-    if (segment.selectedSegmentIndex==0) {
-        hotmovie =[_hotDataArray objectAtIndex:button.tag-1000];
-    }
-    else  {
-        hotmovie=[_newDataArray objectAtIndex:button.tag-1000];
-    }
-    MovieDetailViewController *vc =  [MovieDetailViewController new];
-     vc.movieId =  hotmovie.stageinfo.movie_id;
-    [self.navigationController pushViewController:vc animated:YES];
-}
-//分享
--(void)ScreenButtonClick:(UIButton  *) button
+-(void)commonStageCellToolButtonClick:(UIButton *)button Rowindex:(NSInteger)index
 {
-    //NSLog(@" ==ScreenButtonClick  ====%ld",button.tag);
-    //获取cell
+    
     HotMovieModel  *hotmovie;
     if (segment.selectedSegmentIndex==0) {
-        hotmovie =[_hotDataArray objectAtIndex:button.tag-2000];
+        hotmovie =[_hotDataArray objectAtIndex:index];
     }
     else  {
-        hotmovie=[_newDataArray objectAtIndex:button.tag-2000];
+        hotmovie=[_newDataArray objectAtIndex:index];
     }
-    //将model的值传递过去，在那边配置
-    float hight= kDeviceWidth;
-    float  ImageWith=[hotmovie.stageinfo.w intValue];
-    float  ImgeHight=[hotmovie.stageinfo.h intValue];
-    if(ImgeHight>ImageWith)
+    if (button.tag==1000) {
+        //电影按钮
+        MovieDetailViewController *vc =  [MovieDetailViewController new];
+        vc.movieId =  hotmovie.stageinfo.movie_id;
+        [self.navigationController pushViewController:vc animated:YES];
+
+    }
+    else if (button.tag==2000)
     {
-        hight=  (ImgeHight/ImageWith) *kDeviceWidth;
-    }
-    CommonStageCell *cell = (CommonStageCell *)(button.superview.superview.superview);
-    UIImage  *image=[Function getImage:cell.stageView WithSize:CGSizeMake(kDeviceWidth, hight)];
-    //创建UMshareView 后必须配备这三个方法
-    shareView.StageInfo=hotmovie.stageinfo;
-    shareView.screenImage=image;
-    [shareView configShareView];
-    [self.view addSubview:shareView];
-    self.tabBarController.tabBar.hidden=YES;
-    if ([shareView respondsToSelector:@selector(showShareButtomView)]) {
-        [shareView showShareButtomView];
-
-    }
-}
-
-
-#pragma mark   -----commonStageCelldelegate  ----------------------
--(void)commonStageCellLoogPressClickindex:(NSInteger)indexrow
-{
-    UIActionSheet  *ash =[[UIActionSheet alloc]initWithTitle:@"移除推荐" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"确定移除" otherButtonTitles:nil, nil];
-     ash.tag=503;
-    [ash showInView:self.view];
-    
-    HotMovieModel  *model= [_hotDataArray objectAtIndex:indexrow-7000];
-    _hot_Id=model.hot_id;
-    
-   // [self requestrecommendDeleteDataWithHotModel:model];
-
-}
-
-
-//点击增加弹幕
--(void)addMarkButtonClick:(UIButton  *) button
-{
-    NSLog(@" ==addMarkButtonClick  ====%ld",button.tag);
-    AddMarkViewController  *AddMarkVC=[[AddMarkViewController alloc]init];
-    HotMovieModel  *hotmovie=[[HotMovieModel alloc]init];
-    if (segment.selectedSegmentIndex==0) {
-        if(_hotDataArray.count > button.tag-3000)
+        //分享
+        float hight= kDeviceWidth;
+        float  ImageWith=[hotmovie.stageinfo.w intValue];
+        float  ImgeHight=[hotmovie.stageinfo.h intValue];
+        if(ImgeHight>ImageWith)
         {
-            hotmovie =[_hotDataArray objectAtIndex:button.tag-3000];
+            hight=  (ImgeHight/ImageWith) *kDeviceWidth;
         }
-    }
-    else
-    {
-        if (_newDataArray.count > button.tag-3000) {
+        CommonStageCell *cell = (CommonStageCell *)(button.superview.superview.superview);
+        UIImage  *image=[Function getImage:cell.stageView WithSize:CGSizeMake(kDeviceWidth, hight)];
+        //创建UMshareView 后必须配备这三个方法
+        shareView.StageInfo=hotmovie.stageinfo;
+        shareView.screenImage=image;
+        [shareView configShareView];
+        [self.view addSubview:shareView];
+        self.tabBarController.tabBar.hidden=YES;
+        if ([shareView respondsToSelector:@selector(showShareButtomView)]) {
+            [shareView showShareButtomView];
             
-            hotmovie=[_newDataArray objectAtIndex:button.tag-3000];
         }
+
     }
-    AddMarkVC.stageInfoDict=hotmovie.stageinfo;
-    //AddMarkVC.pageSoureType=NSAddMarkPageSourceDefault;
-    NSLog(@"dict.stageinfo = %@", AddMarkVC.stageInfoDict);
-    [self.navigationController pushViewController:AddMarkVC animated:NO];
-    
-}
-//点击头像
--(void)UserLogoButtonClick:(UIButton *) button
-{
-    NSLog(@" ==UserLogoButtonClick  ====%ld",button.tag);
-    MyViewController  *myVC=[[MyViewController alloc]init];
-    HotMovieModel *hotMovieModel = [_newDataArray objectAtIndex:button.tag-4000];
-    myVC.author_id = hotMovieModel.weibo.user_id;
-    [self.navigationController pushViewController:myVC animated:YES];
-    
-}
-//点赞
--(void)ZanButtonClick:(UIButton *)button
-{
-    NSLog(@" ==ZanButtonClick  ====%ld",button.tag);
-    if (button.selected==YES) {
-        button.selected=NO;
-    }
-    else
+    else if(button.tag==3000)
     {
-        button.selected=YES;
+        //添加弹幕
+        AddMarkViewController  *AddMarkVC=[[AddMarkViewController alloc]init];
+        AddMarkVC.stageInfoDict=hotmovie.stageinfo;
+        AddMarkVC.model=hotmovie;
+        AddMarkVC.delegate=self;
+        //AddMarkVC.pageSoureType=NSAddMarkPageSourceDefault;
+        NSLog(@"dict.stageinfo = %@", AddMarkVC.stageInfoDict);
+        [self.navigationController pushViewController:AddMarkVC animated:NO];
+        
+
     }
-    HotMovieModel   *model=[_newDataArray  objectAtIndex:5000-button.tag];
-    [self LikeRequstData:model.weibo StageInfo:model.stageinfo];
+    else if (button.tag==4000)
+    {
+        //点击用户头像
+        MyViewController  *myVC=[[MyViewController alloc]init];
+        HotMovieModel *hotMovieModel = [_newDataArray objectAtIndex:index];
+        myVC.author_id = hotMovieModel.weibo.user_id;
+        [self.navigationController pushViewController:myVC animated:YES];
+        
+
+    }
+    
+}
+#pragma mark  -----AddMarkViewControllerDelegate----
+-(void)AddMarkViewControllerReturn
+{
+    [_HotMoVieTableView reloadData];
     
 }
 

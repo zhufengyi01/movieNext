@@ -13,14 +13,14 @@
 #import "UserDataCenter.h"
 #import "UIImageView+WebCache.h"
 #import "AFNetworking.h"
+
 #import "MovieDetailViewController.h"
-#define  BOOKMARK_WORD_LIMIT 10000
+#define  BOOKMARK_WORD_LIMIT 1000
 @interface AddMarkViewController ()<UITextFieldDelegate,UIAlertViewDelegate,UIScrollViewDelegate,UITextViewDelegate>
 {
     UIScrollView  *_myScorllerView;
     UIToolbar  *_toolBar;
-    //UITextField  *_inputText;
-    UITextView   *_myTextView;
+     UITextView   *_myTextView;
     MarkView  *_myMarkView;
     NSString    *X;
     NSString    *Y;
@@ -29,6 +29,7 @@
     UIButton  *RighttBtn;
     UIView   *tipView;
     UIButton  *publishBtn;
+    NSString  *InputStr;
 }
 @end
 
@@ -132,11 +133,11 @@
     float  ImgeHight=[self.stageInfoDict.h floatValue];
     float hight=0;
     hight= kDeviceWidth;  // 计算的事bgview1的高度
-    if(ImgeHight>ImageWith)
-    {
-        hight=  (ImgeHight/ImageWith) *kDeviceWidth;
-    }
-
+//    if(ImgeHight>ImageWith)
+//    {
+//        hight=  (ImgeHight/ImageWith) *kDeviceWidth;
+//    }
+//
     stageView = [[StageView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, hight)];
  //   NSLog(@" 在 添加弹幕页面的   stagedict = %@",_myDict);
     stageView.StageInfoDict=self.stageInfoDict;
@@ -165,8 +166,11 @@
     _myTextView.returnKeyType=UIReturnKeyDone;
     _myTextView.scrollEnabled=YES;
     _myTextView.autoresizingMask=UIViewAutoresizingFlexibleHeight;
+  //  _myTextView.textContainerInset=[UIEdgeInsetsMake(<#CGFloat top#>, <#CGFloat left#>, //,) ];
+    _myTextView.selectedRange = NSMakeRange(0,0);  //默认光标从第一个开始
     [_myTextView becomeFirstResponder];
     [_toolBar addSubview:_myTextView];
+    
     
     
      publishBtn=[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-60, 10, 50, 28) ImageName:@"loginoutbackgroundcolor.png" Target:self Action:@selector(dealNavClick:) Title:@"确定"];
@@ -185,8 +189,7 @@
 {
     
     if (button.tag==100) {
-        NSLog(@" =========取消发布的方法");
-        //取消发布
+         //取消发布
         [self.navigationController popViewControllerAnimated:NO];
     
     }
@@ -197,8 +200,7 @@
     else if (button.tag==99)
     {
         //点击确定按钮
-        NSLog(@" =========点击发布到屏幕");
-        [self  PushlicInScreen];
+         [self  PushlicInScreen];
         
     }
 }
@@ -206,7 +208,7 @@
 -(void)PushlicInScreen
 {
       //方法只是去掉左右两边的空格；
-    NSString   *inputString = [_myTextView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    InputStr = [_myTextView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     //发布到屏幕之后需要把输入框退回去
     [_myTextView resignFirstResponder];
    [UIView animateWithDuration:0.5 animations:^{
@@ -235,37 +237,33 @@
     ///显示标签的头像
     UserDataCenter  * userCenter=[UserDataCenter shareInstance];
     [ _myMarkView.LeftImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@!thumb",kUrlAvatar,    userCenter.avatar]]];
-    _myMarkView.TitleLable.text=inputString;
-    
+    _myMarkView.TitleLable.text=InputStr;
     [stageView addSubview:_myMarkView];
-#warning  这里的stageview 的位置一直是320 所以说不能使用这个值
     
-    //计算stagview 的高度
-    float  ImageWith=[self.stageInfoDict.w floatValue];
-    float  ImgeHight=[self.stageInfoDict.h floatValue];
-    float hight=0;
-    hight= kDeviceWidth;  // 计算的事bgview1的高度
-    if(ImgeHight>ImageWith)
-    {
-        hight=  (ImgeHight/ImageWith) *kDeviceWidth;
-    }
-    NSLog(@"stageView frame====%f",hight);
-
-     CGSize  Msize= [inputString  boundingRectWithSize:CGSizeMake(kDeviceWidth/2, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:_myMarkView.TitleLable.font forKey:NSFontAttributeName] context:nil].size;
+   //计算stagview 的高度
+     CGSize  Msize= [InputStr  boundingRectWithSize:CGSizeMake(kDeviceWidth/2, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:_myMarkView.TitleLable.font forKey:NSFontAttributeName] context:nil].size;
     
     //宽度=字的宽度+左头像图片的宽度＋赞图片的宽度＋赞数量的宽度+中间两个空格2+2
     //位置=
-    float markViewWidth = Msize.width+23+5+5+11+5;
-    float markViewHeight = Msize.height+6;
+     int  markViewWidth = (int)Msize.width+23+5+5+11+5;
+     int markViewHeight =(int) Msize.height+6;
     if(IsIphone6)
     {
         markViewWidth=markViewWidth+10;
         markViewHeight=markViewHeight+4;
     }
-    _myMarkView.frame=CGRectMake((kDeviceWidth-markViewWidth)/2, (hight-(Msize.height+6))/2, markViewWidth, markViewHeight);
+    int  kw=kDeviceWidth;
+    int  x=arc4random()%(kw-markViewWidth);  //要求x在0~~~（宽度-markViewWidth）
+    int  y=arc4random()%(kw-markViewHeight/2)+markViewHeight/2;  //要求y在markviewheight.y/2 ~~~~~~~(高度--markViewheigth/2)
+    
+    _myMarkView.frame=CGRectMake(x,y, markViewWidth, markViewHeight);
+    
+    float  markViewY=_myMarkView.frame.origin.y;
+    float  markviewHight2 =_myMarkView.frame.size.height/2;
     X =[NSString stringWithFormat:@"%f",((_myMarkView.frame.origin.x+_myMarkView.frame.size.width)/kDeviceWidth)*100];
-    Y=[NSString stringWithFormat:@"%f",((_myMarkView.frame.origin.y+(markViewHeight/2))/kDeviceHeight)*100];
-
+    Y=[NSString stringWithFormat:@"%f",((markViewY+markviewHight2)/kDeviceWidth)*100];
+    
+    
     //在标签上添加一个手势
      UIPanGestureRecognizer   *pan=[[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(handelPan:)];
     [_myMarkView addGestureRecognizer:pan];
@@ -284,25 +282,14 @@
     CGPoint curPoint = [gestureRecognizer locationInView:stageView];    
     CGFloat xoffset = _myMarkView.frame.size.width/2.0;
     CGFloat yoffset = _myMarkView.frame.size.height/2.0;
-    //CGRect  stageViewfrem=stageView.frame;
-    float  stageX=kDeviceWidth;
-    float hight= kDeviceWidth;
-    float  ImageWith=[self.stageInfoDict.w intValue];
-    float  ImgeHight=[self.stageInfoDict.h intValue];
-    if(ImgeHight>ImageWith)
-    {
-        hight=  (ImgeHight/ImageWith) *kDeviceWidth;
-    }
-    float  stageY=hight;
-    
-    CGFloat x = MIN(stageX-xoffset,  MAX(xoffset, curPoint.x) );
-    CGFloat y = MIN(stageY-yoffset,  MAX(yoffset, curPoint.y) );
+    CGFloat x = MIN(kDeviceWidth-xoffset,  MAX(xoffset, curPoint.x) );
+    CGFloat y = MIN(kDeviceWidth-yoffset,  MAX(yoffset, curPoint.y) );
     _myMarkView.center = CGPointMake(x, y);
     float  markViewY=_myMarkView.frame.origin.y;
     float  markviewHight2 =_myMarkView.frame.size.height/2;
     //发布的右下中部的位置
     X =[NSString stringWithFormat:@"%f",((_myMarkView.frame.origin.x+_myMarkView.frame.size.width)/kDeviceWidth)*100];
-    Y=[NSString stringWithFormat:@"%f",((markViewY+markviewHight2)/hight)*100];
+    Y=[NSString stringWithFormat:@"%f",((markViewY+markviewHight2)/kDeviceWidth)*100];
     
  
 }
@@ -311,28 +298,26 @@
 -(void)PublicRuqest
 {
     RighttBtn.enabled=NO;
-    if ([_myTextView text].length==0||[[_myTextView text]  isEqualToString:@""]) {
-        UIAlertView  *Al =[[UIAlertView alloc]initWithTitle:nil message:@"对不起，您还没有添加内容" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-        [Al show];
-        return ;
-    }
     if (X==nil||Y==nil) {
         X =[NSString stringWithFormat:@"%d",100];
         Y=[NSString stringWithFormat:@"%d",100];
-
-        
     }
     UserDataCenter  *userCenter=[UserDataCenter shareInstance];
-#warning  这里需要获取一个处理后的上传字符
-    NSDictionary *parameter = @{@"user_id": userCenter.user_id,@"topic_name":[_myTextView text],@"stage_id":self.stageInfoDict.Id,@"x":X,@"y":Y};
-
-    NSLog(@"==parameter====%@",parameter);
+     NSDictionary *parameter = @{@"user_id": userCenter.user_id,@"topic_name":InputStr,@"stage_id":self.stageInfoDict.Id,@"x":X,@"y":Y};
+   // NSLog(@"==parameter====%@",parameter);
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:[NSString stringWithFormat:@"%@/weibo/create", kApiBaseUrl] parameters:parameter success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"  添加弹幕发布请求    JSON: %@", responseObject);
-        if ([responseObject  objectForKey:@"detail"]) {
+        if ([[responseObject  objectForKey:@"return_code"] intValue]==10000) {
             UIAlertView  *Al=[[UIAlertView alloc]initWithTitle:nil message:@"发布成功" delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
             [Al show];
+            
+            WeiboModel *weibomodel =[[WeiboModel alloc]init];
+            if (weibomodel) {
+                [weibomodel setValuesForKeysWithDictionary:[responseObject objectForKey:@"detail"]];
+            }
+            
+            [self.model.weibos addObject:weibomodel];
         }
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -349,8 +334,10 @@
          keyboardSize = [value CGRectValue].size;
         float  timeInterval=0.1;
         NSLog(@"keyBoard   height  :%f", keyboardSize.height);
- 
+    //第一次需要计算键盘的高度
+    if (keybordHeight==0) {
     keybordHeight=keyboardSize.height;
+    }
     [UIView  animateWithDuration:timeInterval animations:^{
         CGRect  tframe=_toolBar.frame;
         tframe.origin.y=kDeviceHeight -keyboardSize.height-kHeightNavigation-50;
@@ -373,13 +360,15 @@
 #pragma  mark  ---UItextViewDelegate-------------
 -(void)textViewDidBeginEditing:(UITextView *)textView
 {
-    if ([_myTextView text].length>100) {
-        
-    }
+ 
 }
 -(void)textViewDidEndEditing:(UITextView *)textView
 {
     [_myTextView resignFirstResponder];
+}
+ -(void)textViewDidChangeSelection:(UITextView *)textView
+{
+    
 }
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
@@ -389,6 +378,47 @@
 
 
 -(void)textViewDidChange:(UITextView *)textView{
+    //防止光标抖动
+   /* CGRect line = [textView caretRectForPosition:
+                   textView.selectedTextRange.start];
+    CGFloat overflow = line.origin.y + line.size.height
+    - ( textView.contentOffset.y + textView.bounds.size.height
+       - textView.contentInset.bottom - textView.contentInset.top );
+    if ( overflow > 0 ) {
+        // We are at the bottom of the visible text and introduced a line feed, scroll down (iOS 7 does not do it)
+        // Scroll caret to visible area
+        CGPoint offset = textView.contentOffset;
+        offset.y += overflow + 7; // leave 7 pixels margin
+        // Cannot animate with setContentOffset:animated: or caret will not appear
+        [UIView animateWithDuration:.2 animations:^{
+            [textView setContentOffset:offset];
+        }];
+    }
+    */
+//    CGSize  tSize=textView.contentSize;
+//    CGPoint  tPoint =textView.contentOffset;
+//    tPoint.y=tSize.height;
+//    textView.contentOffset=tPoint;
+    
+    //计算文本的高度
+    CGSize   sizeFrame=[textView.text boundingRectWithSize:CGSizeMake(textView.frame.size.width, MAXFLOAT) options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes:[NSDictionary dictionaryWithObject:_myTextView.font forKey:NSFontAttributeName] context:nil].size;
+   
+    if ((sizeFrame.height)/19>4) {
+        textView.scrollEnabled=YES;
+    }
+    else
+    {
+        textView.scrollEnabled=NO;
+    }
+    //重新调整textView的高度
+    CGRect  Tframe =textView.frame;
+    Tframe.size.height=MAX(MIN(sizeFrame.height+((sizeFrame.height)/19)*5, 70),30);
+    textView.frame=Tframe;
+   // NSLog(@" textView = heigt =====%f ",textView.frame.size.height);
+    
+    _toolBar.frame=CGRectMake(0,kDeviceHeight-keybordHeight-textView.frame.size.height -kHeightNavigation-20, kDeviceWidth, textView.frame.size.height+20);
+    
+
     if (textView==_myTextView) {
         if ([Function isBlankString:_myTextView.text]==NO) {
             publishBtn.enabled=YES;
@@ -398,34 +428,20 @@
             publishBtn.enabled=NO;
         }
     }
-    if (_myTextView.text.length>BOOKMARK_WORD_LIMIT) {
-         textView.text = [textView.text substringToIndex:BOOKMARK_WORD_LIMIT];
-    }
-    //计算文本的高度
-     CGSize   sizeFrame=[textView.text boundingRectWithSize:CGSizeMake(textView.frame.size.width, MAXFLOAT) options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes:[NSDictionary dictionaryWithObject:_myTextView.font forKey:NSFontAttributeName] context:nil].size;
-    
-    NSLog(@" size frame width    % f  size frame  height ====%f  ",sizeFrame.width ,sizeFrame.height);
-    
-    //重新调整textView的高度
-    //textView.frame = CGRectMake(textView.frame.origin.x,textView.frame.origin.y,textView.frame.size.width,sizeFrame.height+15);
-    
-//    CGSize  Ssize=textView.contentSize;
-//    textView.frame=CGRectMake(textView.frame.origin.x, textView.frame.origin.y, textView.frame.size.width, Ssize.height);
-    CGRect  Tframe =textView.frame;
-    Tframe.size.height= MIN(sizeFrame.height+15, 80);
-    textView.frame=Tframe;
-     _toolBar.frame=CGRectMake(0,kDeviceHeight-keybordHeight-textView.frame.size.height -kHeightNavigation-20, kDeviceWidth, textView.frame.size.height+20);
-
+ //   if (_myTextView.text.length>BOOKMARK_WORD_LIMIT) {
+   //      textView.text = [textView.text substringToIndex:BOOKMARK_WORD_LIMIT];
+    //}
 }
 
 
 //控制输入文字的长度和内容，可通调用以下代理方法实现
-- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+-(BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
+    //这个方法比textdidchange先执行
     if (range.location>=60)
     {
         //控制输入文本的长度
-        return  NO;
+        return  YES;
     }
     if ([text isEqualToString:@"\n"]) {
         //禁止输入换行
@@ -459,6 +475,11 @@
         
         }else
         {
+            //返回之前需要调用
+            if (self.delegate&&[self.delegate respondsToSelector:@selector(AddMarkViewControllerReturn)]) {
+                //返回的时候需要去刷新tableview
+                [self.delegate AddMarkViewControllerReturn];
+            }
             [self.navigationController popViewControllerAnimated:YES];
         }
         

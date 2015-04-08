@@ -55,27 +55,35 @@
 
     //先移除所有的Mark视图
     [self removeStageViewSubView];
-    
     float  ImageWith=[_StageInfoDict.w intValue];
     float  ImgeHight=[_StageInfoDict.h intValue];
+    float x=0;
+    float y=0;
+    float width=0;
     float hight=0;
-     hight= kDeviceWidth;
-     if(ImgeHight>ImageWith)
-    {
-        hight=  (ImgeHight/ImageWith) *kDeviceWidth;
+    if (ImageWith>ImgeHight) {
+          x=0;
+          width=kDeviceWidth;
+          hight=(ImgeHight/ImageWith)*kDeviceWidth;
+          y=(kDeviceWidth-hight)/2;
+
     }
-  //  if (self.StageInfoDict.stage)
-    //{//计算位置
-#warning 这里如果宽高为0的话会崩溃
-        
-        float   y=(hight-(ImgeHight/ImageWith)*kDeviceWidth)/2;
+    else
+    {
+        y=0;
+          hight=kDeviceWidth;
+        width=(ImageWith/ImgeHight)*kDeviceWidth;
+        x=(kDeviceWidth-width)/2;
+     }
+  
         if (ImageWith==0 && ImgeHight>0) {
             ImageWith=ImgeHight;
         }
         ImgeHight = ImgeHight>0 ? ImgeHight : 1;
         ImageWith = ImageWith>0 ? ImageWith : 1;
         y = y > 0 ? y : 0;
-        _MovieImageView.frame=CGRectMake(0, y, kDeviceWidth, (ImgeHight/ImageWith)*kDeviceWidth);
+
+        _MovieImageView.frame=CGRectMake(x, y,width,hight);
     _MovieImageView.backgroundColor =VStageView_color;
     [_MovieImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w640",kUrlStage,self.StageInfoDict.stage]] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         
@@ -87,6 +95,7 @@
          markView.isAnimation =YES;
          //设置单条微博的参数信息
          markView.weiboDict=self.weiboDict;
+        [markView setValueWithWeiboInfo:self.weiboDict];
          //遵守markView 的协议
          markView.delegate=self;
         //单个气泡的时候，隐约显示的参数
@@ -102,9 +111,9 @@
          // 设置markview 可以动画
          markView.isAnimation = YES;
          markView.alpha=0;
-             //markView.hidden = YES;
          //设置单条微博的参数信息
          markView.weiboDict=self.WeibosArray[i];
+             [markView setValueWithWeiboInfo:self.WeibosArray[i]];
          //遵守markView 的协议
          markView.isShowansHiden=NO;
          markView.delegate=self;
@@ -117,6 +126,7 @@
 #pragma mark 内部创建气泡的方法
 - (MarkView *) createMarkViewWithDict:(WeiboModel *)weibodict andIndex:(NSInteger)index{
             MarkView *markView=[[MarkView alloc]initWithFrame:CGRectZero];
+    
             markView.alpha = 0;
           //设置tag 值为了在下面去取出来循环轮播
             markView.tag=1000+index;
@@ -132,14 +142,15 @@
             CGSize Usize=[UpString boundingRectWithSize:CGSizeMake(40,MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:markView.ZanNumLable.font forKey:NSFontAttributeName] context:nil].size;
           
            // NSLog(@"size= %f %f", Msize.width, Msize.height);
-              float  ImageWith=[self.StageInfoDict.w floatValue];
-              float  ImgeHight=[self.StageInfoDict.h floatValue];
-             float hight=0;
-              hight= kDeviceWidth;  // 计算的事bgview1的高度
-             if(ImgeHight>ImageWith)
-             {
-              hight=  (ImgeHight/ImageWith) *kDeviceWidth;
-             }
+//              float  ImageWith=[self.StageInfoDict.w floatValue];
+//              float  ImgeHight=[self.StageInfoDict.h floatValue];
+             float hight=kDeviceWidth;
+//              hight= kDeviceWidth;  // 计算的事bgview1的高度
+//             if(ImgeHight>ImageWith)
+//             {
+//              hight=  (ImgeHight/ImageWith) *kDeviceWidth;
+//             }
+    
 
             //计算赞数量的长度
             float  Uwidth=[UpString floatValue]==0?0:Usize.width;
@@ -178,10 +189,7 @@
             
         }
     }
-    
 }
-
-
 //1.开始执行动画, 动画入口
 - (void)startAnimation {
     //开始动画之后0.5秒再开始动画
@@ -193,44 +201,6 @@
 #pragma mark ------
 //2.放大动画
 - (void)scaleAnimation {
-       //执行放大动画
-  /*  for (UIView *v in self.subviews) {
-              if ([v isKindOfClass:[MarkView class]]) {
-                MarkView *mv = (MarkView *)v;
-                  self.userInteractionEnabled=YES;
-                  mv.userInteractionEnabled=YES;
-                 CABasicAnimation  *opacityanimation=[CABasicAnimation animationWithKeyPath:@"opacity"];
-                 opacityanimation.fromValue=[NSNumber numberWithFloat:0.0f];
-                 opacityanimation.toValue=[NSNumber numberWithFloat:1.0f];
-                  //opacityanimation.autoreverses=YES;
-                 //opacityanimation.repeatCount=1;
-                 //opacityanimation.delegate=self;
-                 //opacityanimation.removedOnCompletion=NO;
-                 opacityanimation.fillMode=kCAFillModeForwards;
-                 opacityanimation.timingFunction=[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionDefault];  //默认均匀
-                  
-                CABasicAnimation  *scaleanimation=[CABasicAnimation animationWithKeyPath:@"ransform.scale"];
-                 // scaleanimation.repeatCount = 1; // 重复次数
-                  //scaleanimation.autoreverses =YES; // 动画结束时执行逆动画
-                  // 缩放倍数
-                  scaleanimation.fromValue = [NSNumber numberWithFloat:1]; // 开始时的倍率
-                  scaleanimation.toValue = [NSNumber numberWithFloat:1.05]; // 结束时的倍率
-                  // 添加动画
-                  //scaleanimation.delegate=self;
-                  //scaleanimation.fillMode=kCAFillModeForwards;
-                 // scaleanimation.timingFunction=[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
-                  
-                  CAAnimationGroup *animGroup = [CAAnimationGroup animation];
-                  animGroup.animations = [NSArray arrayWithObjects: opacityanimation, scaleanimation, nil];
-                  animGroup.duration =16;
-                  animGroup.repeatCount=1;
-                  animGroup.delegate=self;
-                  animGroup.fillMode=kCAFillModeForwards;
-                  opacityanimation.timingFunction=[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionDefault];
-                  [mv.layer addAnimation:animGroup forKey:nil];
-              }
-    }*/
-    //1.6代表动画弹出到小时的那消失的那段时间
     [UIView animateWithDuration:kalpaOneTime animations:^{
         for (UIView *v in self.subviews) {
             if ([v isKindOfClass:[MarkView class]]) {

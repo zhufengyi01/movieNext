@@ -17,23 +17,17 @@
 @end
 
 @implementation SerViceViewController
+-(void)viewWillAppear:(BOOL)animated
+{
+    self.navigationController.navigationBar.hidden=NO;
 
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
-//   
-//   backBtn=[ZCControl createButtonWithFrame:CGRectMake(10,30, 100, 30) ImageName:nil Target:self Action:@selector(backClick) Title:@""];
-//    //backBtn.backgroundColor =[UIColor redColor];
-//    backBtn.titleLabel.textColor=[UIColor redColor];
-//    [backBtn setTitleColor:VBlue_color forState:UIControlStateNormal];
-//    [backBtn setTitle:@"返 回" forState:UIControlStateNormal];
-//    backBtn.titleLabel.font=[UIFont boldSystemFontOfSize:16];
-//    [backBtn setTitleEdgeInsets:UIEdgeInsetsMake(0, -40, 0, 0)];
-//    [self.view addSubview:backBtn];
-//    
+//
     UILabel  *label= [ZCControl createLabelWithFrame:CGRectMake((kDeviceWidth-200)/2, 30, 200, 30) Font:16 Text:@"《影弹服务使用条款》"];
-    label.font=[UIFont boldSystemFontOfSize:14];
+    label.font=[UIFont boldSystemFontOfSize:16];
     label.textAlignment=NSTextAlignmentCenter;
     label.textColor=VBlue_color;
     self.navigationItem.titleView=label;

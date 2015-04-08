@@ -23,7 +23,7 @@
 #import "UserDataCenter.h"
 #import "ZCControl.h"
 #import "MJRefresh.h"
-@interface NotificationViewController ()<UITableViewDataSource,UITableViewDelegate,LoadingViewDelegate>
+@interface NotificationViewController ()<UITableViewDataSource,UITableViewDelegate,LoadingViewDelegate,NotificationTableViewCellDelegate>
 {
     LoadingView         *loadView;
     UITableView         *_myTableView;
@@ -200,22 +200,38 @@
     }
     if (_dataArray.count>indexPath.row) {
         [cell setValueforCell:[_dataArray  objectAtIndex:indexPath.row] index:indexPath.row];
+        cell.delegate=self;
     }
     return cell;
 }
-//这个方法
--(void)dealHeadClick:(UIButton  *)button
+////这个方法
+//-(void)dealHeadClick:(UIButton  *)button
+//{
+//    NSLog(@"button.tag = %ld", button.tag);
+//    MyViewController  *myVC=[[MyViewController alloc]init];
+//    NSDictionary *dict = [_dataArray objectAtIndex:button.tag-6000];
+//    myVC.author_id = [dict valueForKey:@"user_id"];
+//    NSLog(@"dict = %@", dict);
+//    NSLog(@"dict.user_id = %@", [dict valueForKey:@"user_id"]);
+//    [self.navigationController pushViewController:myVC animated:YES];
+//    
+//}
+//
+#pragma  mark NotificationTableViewCellDelegate ----------------------------
+-(void)NotificationClick:(UIButton *)button indexPath:(NSInteger)index
 {
-    NSLog(@"button.tag = %ld", button.tag);
-    MyViewController  *myVC=[[MyViewController alloc]init];
-    NSDictionary *dict = [_dataArray objectAtIndex:button.tag-6000];
-    myVC.author_id = [dict valueForKey:@"user_id"];
-    NSLog(@"dict = %@", dict);
-    NSLog(@"dict.user_id = %@", [dict valueForKey:@"user_id"]);
-    [self.navigationController pushViewController:myVC animated:YES];
-    
+    if (button.tag==100||button.tag==101) {
+        NSLog(@"button.tag = %ld", button.tag);
+        MyViewController  *myVC=[[MyViewController alloc]init];
+        NSDictionary *dict = [_dataArray objectAtIndex:index];
+        myVC.author_id = [dict valueForKey:@"user_id"];
+        NSLog(@"dict = %@", dict);
+        NSLog(@"dict.user_id = %@", [dict valueForKey:@"user_id"]);
+        [self.navigationController pushViewController:myVC animated:YES];
+        
+    }
+   
 }
-
 -(void)dealloc
 {
     [[NSNotificationCenter defaultCenter]removeObserver:nil name:@"initUser" object:nil];

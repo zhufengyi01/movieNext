@@ -61,31 +61,33 @@
     
     
     
-    checkBtn=[ZCControl createButtonWithFrame:CGRectMake((kDeviceWidth-140)/2,kDeviceHeight-65, 140, 20) ImageName:nil Target:self Action:@selector(checkClick:) Title:@""];
-    checkBtn.titleLabel.textColor=[UIColor redColor];
-    [checkBtn setImage:[UIImage imageNamed:@"dischoice_icon@2x.png"] forState:UIControlStateNormal];
-    [checkBtn setImage:[UIImage imageNamed:@"choice_icon@2x.png"] forState:UIControlStateSelected];
+    checkBtn=[ZCControl createButtonWithFrame:CGRectMake((kDeviceWidth-140)/2,kDeviceHeight-40, 140, 30) ImageName:nil Target:self Action:@selector(checkClick:) Title:@""];
+  //   checkBtn.backgroundColor=[UIColor redColor];
+    [checkBtn setImage:[UIImage imageNamed:@"unselect_icon@2x.png"] forState:UIControlStateNormal];
+    [checkBtn setImage:[UIImage imageNamed:@"selected_icon@2x.png"] forState:UIControlStateSelected];
     //默认勾选状态
     checkBtn.selected=YES;
     checkBtn.tag=100;
     [checkBtn setTitleColor:VGray_color forState:UIControlStateNormal];
     [checkBtn setTitle:@"登录注册成功，即接受" forState:UIControlStateNormal];
     [checkBtn setTitleEdgeInsets:UIEdgeInsetsMake(5, 5, 0, 0)];
-    //checkBtn.backgroundColor=[UIColor redColor];
+   // checkBtn.backgroundColor=[UIColor redColor];
     [checkBtn setImageEdgeInsets:UIEdgeInsetsMake(5, 0, 0, 0)];
     checkBtn.titleLabel.font=[UIFont systemFontOfSize:12];
     [self.view addSubview:checkBtn];
     
     
-    checkBtn2=[ZCControl createButtonWithFrame:CGRectMake((kDeviceWidth-120)/2,checkBtn.frame.origin.y+checkBtn.frame.size.height, 120, 20) ImageName:nil Target:self Action:@selector(checkClick:) Title:@""];
+    checkBtn2=[ZCControl createButtonWithFrame:CGRectMake(checkBtn.frame.origin.x+checkBtn.frame.size.width,checkBtn.frame.origin.y, 120, 30) ImageName:nil Target:self Action:@selector(checkClick:) Title:@""];
     [checkBtn2 setTitleEdgeInsets:UIEdgeInsetsMake(5, 0, 0, 0)];
-    // checkBtn2.backgroundColor=[UIColor blackColor];
+     //checkBtn2.backgroundColor=[UIColor blackColor];
     [checkBtn2 setTitle:@"《影弹服务使用条款》" forState:UIControlStateNormal];
-    [checkBtn2 setTitleColor:VBlue_color forState:UIControlStateNormal];
+    [checkBtn2 setTitleColor:VGray_color forState:UIControlStateNormal];
     checkBtn2.tag=101;
     
     checkBtn2.titleLabel.font=[UIFont systemFontOfSize:12];
     [self.view addSubview:checkBtn2];
+    checkBtn.frame=CGRectMake((kDeviceWidth-checkBtn.frame.size.width-checkBtn2.frame.size.width)/2, checkBtn.frame.origin.y, checkBtn.frame.size.width, checkBtn.frame.size.height);
+    checkBtn2.frame=CGRectMake(checkBtn.frame.origin.x+checkBtn.frame.size.width, checkBtn.frame.origin.y, checkBtn2.frame.size.width, checkBtn2.frame.size.height);
     
 
 
@@ -100,7 +102,7 @@
 //    //[self.view addSubview:qqButton];
 //    
     weiboButton=[UIButton buttonWithType:UIButtonTypeCustom];
-    weiboButton.frame=CGRectMake((kDeviceWidth-231)/2, kDeviceHeight-160, 231, 40);
+    weiboButton.frame=CGRectMake((kDeviceWidth-231)/2, kDeviceHeight-170, 231, 40);
     [weiboButton setBackgroundImage:[UIImage imageNamed:@"login_button_sina.png"] forState:UIControlStateNormal];
     [weiboButton setBackgroundImage:[UIImage imageNamed:@"login_button_sina_press@2x.png"] forState:UIControlStateHighlighted];
     [weiboButton addTarget:self action:@selector(dealloginClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -114,7 +116,7 @@
     
     
     weiChateButton=[UIButton buttonWithType:UIButtonTypeCustom];
-    weiChateButton.frame=CGRectMake((kDeviceWidth-231)/2, kDeviceHeight-110, 231, 40);
+    weiChateButton.frame=CGRectMake((kDeviceWidth-231)/2, kDeviceHeight-120, 231, 40);
     [weiChateButton setBackgroundImage:[UIImage imageNamed:@"login_button_wechat.png"] forState:UIControlStateNormal];
     [weiChateButton setBackgroundImage:[UIImage imageNamed:@"login_button_wechat_press.png"] forState:UIControlStateHighlighted];
    // weiChateButton.userInteractionEnabled=NO;

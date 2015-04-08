@@ -21,6 +21,6 @@
 @property (nonatomic, strong) NSString * username;
 @property (nonatomic, strong) NSString * avatar;
 @property (nonatomic, strong) NSNumber * verified;
-
+@property(nonatomic,strong) NSNumber  *fake; //是不是虚拟用户
 
 @end

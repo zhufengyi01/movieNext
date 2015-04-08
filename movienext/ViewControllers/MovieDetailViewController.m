@@ -41,7 +41,7 @@
 #import "UploadImageViewController.h"
 #import "UpYun.h"
 
-@interface MovieDetailViewController ()<UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UICollectionViewDelegate,MovieHeadViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UMSocialUIDelegate,UMSocialDataDelegate,UMShareViewDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIScrollViewDelegate>
+@interface MovieDetailViewController ()<UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UICollectionViewDelegate,MovieHeadViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UMSocialUIDelegate,UMSocialDataDelegate,UMShareViewDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIScrollViewDelegate,BigImageCollectionViewCellDelegate,AddMarkViewControllerDelegate>
 
 {
     ///UICollectionView    *_myConllectionView;
@@ -226,36 +226,6 @@
     
 
 }
-
-/*
- - (void)setupHeadView
-{
-    page=0;
-    __unsafe_unretained typeof(self) vc = self;
-    if (_dataArray.count>0) {
-        [_dataArray removeAllObjects];
-    }
-    // 添加下拉刷新头部控件
-    [_myConllectionView addHeaderWithCallback:^{
-        // 进入刷新状态就会回调这个Block
-        
-        // 增加5条假数据
-        //for (int i = 0; i<5; i++) {
-        //  [vc.fakeColors insertObject:MJRandomColor atIndex:0];
-        //}
-        [vc requestData];
-        
-        // 模拟延迟加载数据，因此2秒后才调用）
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [vc.myConllectionView reloadData];
-            // 结束刷新
-            [vc.myConllectionView headerEndRefreshing];
-        });
-    }];
-    
-#warning 自动刷新(一进入程序就下拉刷新)
-    [vc.myConllectionView headerBeginRefreshing];
-}*/
 
 - (void)setupFootView
 {
@@ -553,6 +523,7 @@
             cell.WeibosArray=model.weibos;
             cell.backgroundColor=View_BackGround;
             cell.StageInfoDict=model.stageinfo;
+            cell.delegate=self;
             [cell ConfigCellWithIndexPath:indexPath.row];
             cell.StageView.delegate=self;
           
@@ -630,23 +601,23 @@
 
 // 设置每个item的尺寸
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
-    HotMovieModel  *model =[_dataArray objectAtIndex:indexPath.row];
+   // HotMovieModel  *model =[_dataArray objectAtIndex:indexPath.row];
     if (bigModel==YES) {
-        float hight;
-        if (_dataArray.count>indexPath.row) {
-            float  h= [model.stageinfo.h  floatValue];
-            float w=[model.stageinfo.w floatValue];
-             hight= kDeviceWidth+45;
-             if(h>w)
-            {
-                hight=  (h/w) *kDeviceWidth+45;
-            }
-        }
-        return CGSizeMake(kDeviceWidth,hight+10);
+       // float hight;
+        //if (_dataArray.count>indexPath.row) {
+//            float  h= [model.stageinfo.h  floatValue];
+//            float w=[model.stageinfo.w floatValue];
+//             hight= kDeviceWidth+45;
+//             if(h>w)
+//            {
+//                hight=  (h/w) *kDeviceWidth+45;
+//            }
+        //}
+        return CGSizeMake(kDeviceWidth,kDeviceWidth+45+10);
     }
     else
     {
-        return CGSizeMake(( kDeviceWidth-10)/3,(kDeviceWidth-10)/3);
+        return CGSizeMake((kDeviceWidth-10)/3,(kDeviceWidth-10)/3);
 
     }
     return CGSizeMake(0, 0);
@@ -773,40 +744,53 @@
         [self presentViewController:picker animated:YES completion:nil];
     }
 }
-
-//分享
--(void)ScreenButtonClick:(UIButton  *) button
+#pragma  mark  -------BigImageCollectionViewCellToolButtonClick  ---- -- ---------------------
+-(void)BigImageCollectionViewCellToolButtonClick:(UIButton *)button Rowindex:(NSInteger)index
 {
+   
     
-    NSLog(@" ==ScreenButtonClick  ====%ld",button.tag);
-    //获取cell
+    if (button.tag==2000) {
+        //分享
+        //获取cell
 #pragma mark 暂时把sharetext设置成null
-    HotMovieModel  *hotmovie;
-    hotmovie =[_dataArray objectAtIndex:button.tag-2000];
-    float hight= kDeviceWidth;
-    float  ImageWith=[hotmovie.stageinfo.w intValue];
-    float  ImgeHight=[hotmovie.stageinfo.h intValue];
-    if(ImgeHight>ImageWith)
-    {
-        hight=  (ImgeHight/ImageWith) *kDeviceWidth;
-    }
-    BigImageCollectionViewCell *cell = (BigImageCollectionViewCell *)(button.superview.superview.superview);
-    UIImage  *image=[Function getImage:cell.StageView WithSize:CGSizeMake(kDeviceWidth, hight)];
-    
-    //创建UMshareView 后必须配备这三个方法
-    hotmovie.stageinfo.movie_name=[_MovieDict objectForKey:@"name"];
-    shareView.StageInfo=hotmovie.stageinfo;
-    shareView.screenImage=image;
-    [shareView configShareView];
-    [self.view addSubview:shareView];
-    self.tabBarController.tabBar.hidden=YES;
-    if ([shareView respondsToSelector:@selector(showShareButtomView)]) {
-        [shareView showShareButtomView];
+        HotMovieModel  *hotmovie;
+        hotmovie =[_dataArray objectAtIndex:index];
+         BigImageCollectionViewCell *cell = (BigImageCollectionViewCell *)(button.superview.superview.superview);
+        UIImage  *image=[Function getImage:cell.StageView WithSize:CGSizeMake(kDeviceWidth, kDeviceWidth)];
         
+        //创建UMshareView 后必须配备这三个方法
+        hotmovie.stageinfo.movie_name=[_MovieDict objectForKey:@"name"];
+        shareView.StageInfo=hotmovie.stageinfo;
+        shareView.screenImage=image;
+        [shareView configShareView];
+        [self.view addSubview:shareView];
+        self.tabBarController.tabBar.hidden=YES;
+        if ([shareView respondsToSelector:@selector(showShareButtomView)]) {
+            [shareView showShareButtomView];
+            
+        }
+        
+    }
+    else if(button.tag==3000)
+    {
+        
+            AddMarkViewController  *AddMarkVC=[[AddMarkViewController alloc]init];
+            HotMovieModel  *model =[_dataArray objectAtIndex:index];
+            AddMarkVC.stageInfoDict = model.stageinfo;
+            AddMarkVC.model=model;
+            AddMarkVC.delegate=self;
+           // AddMarkVC.pageSoureType=NSAddMarkPageSourceDefault;
+            [self.navigationController pushViewController:AddMarkVC animated:NO];
     }
     
 }
-#pragma  mark  -----UMButtomViewshareViewDlegate-------
+#pragma  mark  -------- AddMarkViewControllerReturn  -----------------------------------------------
+-(void)AddMarkViewControllerReturn
+{
+    [self.myConllectionView reloadData];
+    
+}
+#pragma  mark  -----UMButtomViewshareViewDlegate-----------------------------------------------------
 -(void)UMshareViewHandClick:(UIButton *)button ShareImage:(UIImage *)shareImage MoviewModel:(StageInfoModel *)StageInfo
 {
     NSArray  *sharearray =[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQzone, UMShareToSina, nil];
@@ -868,17 +852,17 @@
 }
 
 
-//点击增加弹幕
--(void)addMarkButtonClick:(UIButton  *) button
-{
-    NSLog(@" ==addMarkButtonClick  ====%d",button.tag);
-    AddMarkViewController  *AddMarkVC=[[AddMarkViewController alloc]init];
-    HotMovieModel  *model =[_dataArray objectAtIndex:button.tag-3000];
-    AddMarkVC.stageInfoDict = model.stageinfo;//[dict valueForKey:@"stageinfo"];
-   // AddMarkVC.pageSoureType=NSAddMarkPageSourceDefault;
-    [self.navigationController pushViewController:AddMarkVC animated:NO];
-    
-}
+////点击增加弹幕
+//-(void)addMarkButtonClick:(UIButton  *) button
+//{
+//    NSLog(@" ==addMarkButtonClick  ====%d",button.tag);
+//    AddMarkViewController  *AddMarkVC=[[AddMarkViewController alloc]init];
+//    HotMovieModel  *model =[_dataArray objectAtIndex:button.tag-3000];
+//    AddMarkVC.stageInfoDict = model.stageinfo;//[dict valueForKey:@"stageinfo"];
+//   // AddMarkVC.pageSoureType=NSAddMarkPageSourceDefault;
+//    [self.navigationController pushViewController:AddMarkVC animated:NO];
+//    
+//}
 
 
 

@@ -10,6 +10,7 @@
 #import "ZCControl.h"
 #import "Constant.h"
 #import "Function.h"
+#import "UserDataCenter.h"
 @implementation MarkView
 -(instancetype)initWithFrame:(CGRect)frame{
     if (self=[super initWithFrame:frame]) {
@@ -31,6 +32,7 @@
     _LeftImageView.layer.masksToBounds=YES;
     _LeftImageView.layer.borderColor=[[UIColor whiteColor] CGColor];
     [self addSubview:_LeftImageView];
+   
     
     //右视图
     _rightView=[[UIView alloc]initWithFrame:CGRectMake(0, 0,0,0)];
@@ -56,12 +58,35 @@
     _ZanNumLable.textColor=[UIColor whiteColor];
     [_rightView addSubview:_ZanNumLable];
     
-    //覆盖了一层buttonview 用于点击
-    //UIView  *buttonView=[[UIView alloc]initWithFrame:self.bounds];
-    //[self addSubview:buttonView];
     
         UITapGestureRecognizer  *tap=[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(dealTapWeiboClick:)];
         [self addGestureRecognizer:tap];
+}
+//获取weiboinfo 信息
+-(void)setValueWithWeiboInfo:(WeiboModel *) weiboInfo
+{
+    //显示虚拟用户
+    UserDataCenter *userCenter=[UserDataCenter shareInstance];
+    
+    for (UIView *v in  _LeftImageView.subviews) {
+        if ([v isKindOfClass:[UIImageView class]]) {
+            [v removeFromSuperview];
+        }
+    }
+    if ([userCenter.is_admin intValue]>0) {
+        if ( [self.weiboDict.fake intValue]==0) {
+            //虚拟用户
+            isfakeView=[[UIImageView alloc]initWithFrame:CGRectMake(_LeftImageView.frame.size.width-6,_LeftImageView.frame.size.height-6, 8, 8)];
+            isfakeView.layer.cornerRadius=4;
+            isfakeView.clipsToBounds=YES;
+            isfakeView.layer.borderColor=[UIColor whiteColor].CGColor;
+            isfakeView.backgroundColor=VBlue_color;
+            isfakeView.layer.borderWidth=1;
+            [_LeftImageView addSubview:isfakeView];
+        }
+        
+    }
+
 }
 
 - (void)layoutSubviews {
@@ -71,8 +96,9 @@
     _LeftImageView.frame=CGRectMake(0, 0, 23, 23);
     if (IsIphone6) {
         _LeftImageView.frame=CGRectMake(0, 0, 28, 28);
-
     }
+    isfakeView.frame= CGRectMake(_LeftImageView.frame.size.width-6,_LeftImageView.frame.size.height-6, 8, 8);
+    
     
     //右视图
     _rightView.frame=CGRectMake(23, 0,self.frame.size.width-23 , self.frame.size.height);
@@ -234,7 +260,7 @@
     self.isShowansHiden=YES;
     _LeftImageView.layer.backgroundColor=[UIColor whiteColor].CGColor;
     _rightView.layer.borderColor=[UIColor clearColor].CGColor;
-    _LeftImageView.layer.borderColor=[UIColor clearColor].CGColor;
+    _LeftImageView.layer.borderColor=[UIColor whiteColor].CGColor;
      _rightView.backgroundColor=[[UIColor blackColor] colorWithAlphaComponent:0.7];
 }
 /*

@@ -43,10 +43,12 @@
     [self.contentView addSubview:BgView2];
     
     
-    ScreenButton =[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-140,10,60,26) ImageName:@"screen_shot share.png" Target:self.superview Action:@selector(ScreenButtonClick:) Title:@""];
+    ScreenButton =[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-140,10,60,26) ImageName:@"screen_shot share.png" Target:self Action:@selector(cellButtonClick:) Title:@""];
+    ScreenButton.tag=2000;
     [BgView2 addSubview:ScreenButton];
     
-    addMarkButton =[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-70,10,60,26) ImageName:@"btn_add_default.png" Target:self.superview Action:@selector(addMarkButtonClick:) Title:@""];
+    addMarkButton =[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-70,10,60,26) ImageName:@"btn_add_default.png" Target:self Action:@selector(cellButtonClick:) Title:@""];
+    addMarkButton.tag=3000;
     [BgView2 addSubview:addMarkButton];
     
     
@@ -55,10 +57,7 @@
     // Initialization code
 }
 -(void)ConfigCellWithIndexPath:(NSInteger)row{
-    //分享
-    ScreenButton.tag=2000+row;
-    // 添加弹幕
-    addMarkButton.tag=3000+row;
+    self.Cellindex=row;
     if (_weiboDict) {
         _StageView.weiboDict = _weiboDict;
     }
@@ -66,46 +65,36 @@
     if (_WeibosArray) {
         _StageView.WeibosArray = self.WeibosArray;
     }
-    ScreenButton.tag=2000+row;  //截屏分享
-    addMarkButton.tag=3000+row;   //添加弹幕
     _StageView.StageInfoDict=self.StageInfoDict;
     [_StageView configStageViewforStageInfoDict];
-    
-    float  ImageWith=[self.StageInfoDict.w floatValue];
-    float  ImgeHight=[self.StageInfoDict.h floatValue];
-    float hight=0;
-    if (ImageWith>ImgeHight) {
-        hight= kDeviceWidth;  // 计算的事bgview1的高度
-    }
-    else
-    {
-        hight=  (ImgeHight/ImageWith) *kDeviceWidth;
-    }
-    _StageView.frame=CGRectMake(0, 0, kDeviceWidth, hight);
-    BgView2.frame=CGRectMake(0, hight, kDeviceWidth, 45);
+    _StageView.frame=CGRectMake(0, 0, kDeviceWidth, kDeviceWidth);
+    BgView2.frame=CGRectMake(0, kDeviceWidth, kDeviceWidth, 45);
     _StageView.isAnimation = YES;
     
 }
 - (void)layoutSubviews {
     [super layoutSubviews];
-    float  ImageWith=[self.StageInfoDict.w floatValue];
-    float  ImgeHight=[self.StageInfoDict.h floatValue];
-    float hight=0;
-    if (ImageWith>ImgeHight) {
-        hight= kDeviceWidth;  // 计算的事bgview1的高度
-    }
-    else
-    {
-        hight=  (ImgeHight/ImageWith) *kDeviceWidth;
-    }
-
-      BgView2.frame=CGRectMake(0, hight, kDeviceWidth, 45);
+      BgView2.frame=CGRectMake(0, kDeviceWidth, kDeviceWidth, 45);
     
 }
 
 #pragma mark ---
 #pragma mark ------下方按钮点击事件
 #pragma mark ------
+
+#pragma mark ---
+#pragma mark ------下方按钮点击事件 ,在父视图中实现具体的方法
+-(void)cellButtonClick:(UIButton*)button
+{
+  
+    if (self.delegate &&[self.delegate respondsToSelector:@selector(BigImageCollectionViewCellToolButtonClick:Rowindex:)]) {
+        [self.delegate BigImageCollectionViewCellToolButtonClick:button Rowindex:self.Cellindex];
+    }
+    
+}
+
+
+
 -(void)ScreenButtonClick:(UIButton  *) button
 {
    //分享

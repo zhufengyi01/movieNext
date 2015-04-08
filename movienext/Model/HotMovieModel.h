@@ -14,7 +14,7 @@
 @property(nonatomic,strong) NSString  *hot_id;
 @property(nonatomic,strong) StageInfoModel  *stageinfo;
 @property(nonatomic,strong) WeiboModel  *weibo;
-@property(nonatomic,strong) NSArray    *weibos;
+@property(nonatomic,strong) NSMutableArray    *weibos;
 @property(nonatomic,strong) NSString  *exists_new;
 @property(nonatomic,strong) NSString  *return_code;
 @property(nonatomic,strong) NSString  *return_desc;

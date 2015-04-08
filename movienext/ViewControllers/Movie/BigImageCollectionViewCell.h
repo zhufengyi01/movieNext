@@ -11,15 +11,21 @@
 #import "StageView.h"
 #import "WeiboModel.h"
 #import "StageInfoModel.h"
+
+@protocol  BigImageCollectionViewCellDelegate <NSObject>
+
+-(void)BigImageCollectionViewCellToolButtonClick:(UIButton *) button Rowindex:(NSInteger) index;
+
+@end
 @interface BigImageCollectionViewCell : UICollectionViewCell
 {
     CGRect        m_frame;
     UIButton      *ScreenButton;  //分享
     UIButton      *addMarkButton;
     UIView        *BgView2;        //放分享的白色背景
-    
-
 }
+@property(assign,nonatomic)id <BigImageCollectionViewCellDelegate> delegate;
+@property(assign,nonatomic)NSInteger Cellindex;
 @property (nonatomic,strong) StageView          *StageView;     //放图片和弹幕的黑色背景图
 @property (nonatomic,strong) NSArray     *WeibosArray;   //小标签的数组，在多个标签的时候使用这个
 @property (nonatomic,strong) WeiboModel       *weiboDict;     //只有一个标签的时候传递这个参数

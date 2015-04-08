@@ -47,7 +47,6 @@
     [_topButtom addTarget:self action:@selector(TouchbuttonClick:) forControlEvents:UIControlEventTouchUpInside];
      [topView addSubview:_topButtom];
   
- 
     _ShareimageView=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth,0)];
     _ShareimageView.backgroundColor=[UIColor whiteColor];
      [topView addSubview:_ShareimageView];
@@ -80,18 +79,18 @@
 {
       _ShareimageView.image =self.screenImage;
      _moviewName.text=self.StageInfo.movie_name;
-    float hight= kDeviceWidth;
-    float  ImageWith=[self.StageInfo.w intValue];
-    float  ImgeHight=[self.StageInfo.h intValue];
-    if (ImageWith>ImgeHight) {
-        //宽大于高的时候
-        hight=kDeviceWidth;
-    }
-    else
-    {
-        hight=  (ImgeHight/ImageWith) *kDeviceWidth;
-    }
-    _ShareimageView.frame=CGRectMake(0, 0,kDeviceWidth, hight);
+//    float hight= kDeviceWidth;
+//    float  ImageWith=[self.StageInfo.w intValue];
+//    float  ImgeHight=[self.StageInfo.h intValue];
+//    if (ImageWith>ImgeHight) {
+//        //宽大于高的时候
+//        hight=kDeviceWidth;
+//    }
+//    else
+//    {
+//        hight=  (ImgeHight/ImageWith) *kDeviceWidth;
+//    }
+    _ShareimageView.frame=CGRectMake(0, 0,kDeviceWidth, kDeviceWidth);
     logosupView.frame=CGRectMake(0, _ShareimageView.frame.origin.y+_ShareimageView.frame.size.height,kDeviceWidth,20);
     
 }
@@ -149,21 +148,19 @@
     }];
 }
 
-
-
 //点击分享
 -(void)handShareButtonClick:(UIButton *) button
 {
 
-    float  ImageWith=[self.StageInfo.w floatValue];
-    float  ImgeHight=[self.StageInfo.h floatValue];
-    float hight=0;
-    hight= kDeviceWidth;  // 计算的事bgview1的高度
-    if(ImgeHight>ImageWith)
-    {
-        hight=  (ImgeHight/ImageWith) *kDeviceWidth;
-    }
-    shareImage=[Function getImage:topView WithSize:CGSizeMake(kDeviceWidth, hight+20)];
+//    float  ImageWith=[self.StageInfo.w floatValue];
+//    float  ImgeHight=[self.StageInfo.h floatValue];
+//    float hight=0;
+//    hight= kDeviceWidth;  // 计算的事bgview1的高度
+//    if(ImgeHight>ImageWith)
+//    {
+//        hight=  (ImgeHight/ImageWith) *kDeviceWidth;
+//    }
+    shareImage=[Function getImage:topView WithSize:CGSizeMake(kDeviceWidth, kDeviceWidth+20)];
  
     //把topview 生成一张图片
     if (self.delegate &&[self.delegate respondsToSelector:@selector(UMshareViewHandClick:ShareImage:MoviewModel:)]) {
@@ -174,18 +171,18 @@
 
 -(void)layoutSubviews
 {
-        float hight= kDeviceWidth;
-        float  ImageWith=[self.StageInfo.w intValue];
-        float  ImgeHight=[self.StageInfo.h intValue];
-       if (ImageWith>ImgeHight) {
-           //宽大于高的时候
-           hight=kDeviceWidth;
-       }
-       else
-        {
-            hight=  (ImgeHight/ImageWith) *kDeviceWidth;
-        }
-         _ShareimageView.frame=CGRectMake(0, 0,kDeviceWidth, hight);
+//        float hight= kDeviceWidth;
+//        float  ImageWith=[self.StageInfo.w intValue];
+//        float  ImgeHight=[self.StageInfo.h intValue];
+//       if (ImageWith>ImgeHight) {
+//           //宽大于高的时候
+//           hight=kDeviceWidth;
+//       }
+//       else
+//        {
+//            hight=  (ImgeHight/ImageWith) *kDeviceWidth;
+//        }
+         _ShareimageView.frame=CGRectMake(0, 0,kDeviceWidth, kDeviceWidth);
         logosupView.frame=CGRectMake(0, _ShareimageView.frame.origin.y+_ShareimageView.frame.size.height,kDeviceWidth, 20);
     
 }

@@ -21,9 +21,12 @@
 #import "UserDataCenter.h"
 #import "MyViewController.h"
 #import "Function.h"
-@interface ShowStageViewController() <UMShareViewDelegate,ButtomToolViewDelegate,StageViewDelegate>
+@interface ShowStageViewController() <UMShareViewDelegate,ButtomToolViewDelegate,StageViewDelegate,AddMarkViewControllerDelegate>
 {
     ButtomToolView *_toolBar;
+    
+    BOOL isMarkViewsShow;
+
 
 }
 @end
@@ -47,6 +50,7 @@
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
+    isMarkViewsShow=YES;
     [self createScrollView];
     //[self createTopView];
     [self createStageView];
@@ -67,18 +71,10 @@
 
 -(void)createStageView
 {
-    float  ImageWith=[self.movieModel.stageinfo.w floatValue];
-    float  ImgeHight=[self.movieModel.stageinfo.h floatValue];
-    float hight=0;
-    hight= kDeviceWidth;  // 计算的事bgview1的高度
-    if(ImgeHight>ImageWith)
-    {
-        hight=  (ImgeHight/ImageWith) *kDeviceWidth;
-    }
-   // float y = hight >= kDeviceHeight ? 0 : (kDeviceHeight - hight)/2;
-    scrollView.contentSize = CGSizeMake(kDeviceWidth, MIN(kDeviceHeight, hight));
 
-    stageView = [[StageView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, hight)];
+   // float y = hight >= kDeviceHeight ? 0 : (kDeviceHeight - hight)/2;
+    scrollView.contentSize = CGSizeMake(kDeviceWidth, MIN(kDeviceHeight, kDeviceWidth));
+    stageView = [[StageView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceWidth)];
     stageView.isAnimation = YES;
     stageView.delegate=self;
     stageView.StageInfoDict=self.movieModel.stageinfo;
@@ -86,9 +82,30 @@
     [stageView configStageViewforStageInfoDict];
      [scrollView addSubview:stageView];
     [stageView startAnimation];
-    //[stageView  performSelector:@selector(startAnimation) withObject:nil afterDelay:1];
+
+    
+    //添加一个手势关闭弹幕
+    UITapGestureRecognizer  *tap =[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(closeMark:)];
+    [stageView addGestureRecognizer:tap];
     
     //创建分享和添加弹幕的的底部试图
+}
+//手势点击显示和隐藏弹幕标志
+
+-(void)closeMark:(UITapGestureRecognizer *) tap
+{
+    if (isMarkViewsShow==YES) {
+        isMarkViewsShow=NO;
+        [stageView hidenAndShowMarkView:YES];
+    }
+    else
+    {
+        isMarkViewsShow=YES;
+        [stageView hidenAndShowMarkView:NO];
+        
+    }
+    
+    
 }
 -(void)createButtonView1
 {
@@ -123,40 +140,7 @@
     shareView.delegate=self;
 }
 
-// 分享
--(void)ScreenButtonClick:(UIButton  *) button
-{
-    float hight= kDeviceWidth;
-    float  ImageWith=[self.movieModel.stageinfo.w intValue];
-    float  ImgeHight=[self.movieModel.stageinfo.h intValue];
-    if(ImgeHight>ImageWith)
-    {
-        hight=  (ImgeHight/ImageWith) *kDeviceWidth;
-    }
-  //  CommonStageCell *cell = (CommonStageCell *)(button.superview.superview.superview);
-   /* UIGraphicsBeginImageContextWithOptions(CGSizeMake(kDeviceWidth,hight), YES, [UIScreen mainScreen].scale);
-    [stageView drawViewHierarchyInRect:stageView.bounds afterScreenUpdates:YES];
-    // old style [self.layer renderInContext:UIGraphicsGetCurrentContext()];
-    
-    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    */
-    
-    UIImage  *image=[Function getImage:stageView WithSize:CGSizeMake(kDeviceWidth, hight)];
-    
 
-    //创建UMshareView 后必须配备这三个方法
-    shareView.StageInfo=self.movieModel.stageinfo;
-    shareView.screenImage=image;
-    [shareView configShareView];
-    [self.view addSubview:shareView];
-    self.tabBarController.tabBar.hidden=YES;
-    if ([shareView respondsToSelector:@selector(showShareButtomView)]) {
-        [shareView showShareButtomView];
-        
-    }
-
-}
 //微博点赞请求
 -(void)LikeRequstData:(WeiboModel  *) weiboDict StageInfo :(StageInfoModel *) stageInfoDict
 {
@@ -223,7 +207,29 @@
     }
     
 }
-
+// 分享
+-(void)ScreenButtonClick:(UIButton  *) button
+{
+    float hight= kDeviceWidth;
+    float  ImageWith=[self.movieModel.stageinfo.w intValue];
+    float  ImgeHight=[self.movieModel.stageinfo.h intValue];
+    if(ImgeHight>ImageWith)
+    {
+        hight=  (ImgeHight/ImageWith) *kDeviceWidth;
+    }
+    UIImage  *image=[Function getImage:stageView WithSize:CGSizeMake(kDeviceWidth, hight)];
+    //创建UMshareView 后必须配备这三个方法
+    shareView.StageInfo=self.movieModel.stageinfo;
+    shareView.screenImage=image;
+    [shareView configShareView];
+    [self.view addSubview:shareView];
+    self.tabBarController.tabBar.hidden=YES;
+    if ([shareView respondsToSelector:@selector(showShareButtomView)]) {
+        [shareView showShareButtomView];
+        
+    }
+    
+}
 //添加弹幕
 -(void)addMarkButtonClick:(UIButton  *) button
 {
@@ -231,15 +237,19 @@
     
     NSLog(@" ==addMarkButtonClick  ====%ld",(long)button.tag);
     AddMarkViewController  *AddMarkVC=[[AddMarkViewController alloc]init];
-    //HotMovieModel  *hotmovie=[[HotMovieModel alloc]init];
-   
+    AddMarkVC.delegate=self;
+    AddMarkVC.model=self.movieModel;
     AddMarkVC.stageInfoDict=self.movieModel.stageinfo;
-    NSLog(@"dict.stageinfo = %@", AddMarkVC.stageInfoDict);
   //  AddMarkVC.pageSoureType=NSAddMarkPageSourceDefault;
     [self.navigationController pushViewController:AddMarkVC animated:NO];
 
 }
-
+#pragma  mark -------AddMarkViewControllerReturn  --Delegete-------------
+-(void)AddMarkViewControllerReturn
+{
+    [stageView configStageViewforStageInfoDict];
+    
+}
 #pragma mark  -----
 #pragma mark  ---//点击了弹幕StaegViewDelegate
 #pragma mark  ----
