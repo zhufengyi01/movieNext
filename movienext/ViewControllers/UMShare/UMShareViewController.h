@@ -7,7 +7,31 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "StageInfoModel.h"
+@protocol UMShareViewControllerDelegate <NSObject>
 
+-(void)UMShareViewControllerHandClick:(UIButton *) button ShareImage:(UIImage *)shareImage StageInfoModel :(StageInfoModel *) StageInfo;
+
+@end
 @interface UMShareViewController : UIViewController
-
+{
+    CGRect  m_frame;
+    UILabel  *logoLable;
+    UIButton  *wechatSessionBtn;
+    UIButton  *wechatTimelineBtn;
+    UIButton  *qzoneBtn;
+    UIButton  *weiboBtn;
+    UIImageView *_ShareimageView;
+    UILabel  *_moviewName;
+    //上部的view
+    //UIView  *topView;
+    //底部视图
+    UIView  *buttomView;
+    UIImage   *shareImage;
+    UIView     *logosupView;
+}
+@property(nonatomic,assign)id<UMShareViewControllerDelegate> delegate;
+@property(nonatomic,strong) StageInfoModel  *StageInfo;
+//截取cell 的图片
+@property(nonatomic,strong)UIImage         *screenImage;
 @end

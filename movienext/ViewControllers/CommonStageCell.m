@@ -116,7 +116,10 @@
         [pressview addGestureRecognizer:longPress];
 
     }
-    
+    //地步2像素的投影
+    UIImageView *lineImage =[[UIImageView alloc]initWithFrame:CGRectMake(0,44, kDeviceWidth, 2)];
+    lineImage.image=[UIImage imageNamed:@"cell_buttom_line.png"];
+    [BgView2 addSubview:lineImage];
 }
 - (void)awakeFromNib {
     // Initialization code
@@ -163,11 +166,14 @@
     else if(_pageType==NSPageSourceTypeMainNewController || _pageType==NSPageSourceTypeMyAddedViewController || _pageType==NSPageSourceTypeMyupedViewController)  //最新
     {
         BgView0.hidden=NO;
+        pressview.hidden=YES;
+        if (_pageType==NSPageSourceTypeMainNewController) {
+            pressview.hidden=NO;
+        }
         BgView0.frame=CGRectMake(0, 0, kDeviceWidth, 45);
         _stageView.frame=CGRectMake(0, 45, kDeviceWidth, kDeviceWidth);
         _stageView.isAnimation=NO;
         BgView2.frame=CGRectMake(0, kDeviceWidth+45,kDeviceWidth,45);
-        pressview.hidden=YES;
         [UserLogoButton sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!thumb", kUrlAvatar, _weiboDict.avatar]] forState:UIControlStateNormal];
         UserNameLable.text = _weiboDict.username;
         TimeLable.text = [Function friendlyTime:_weiboDict.create_time];
@@ -212,7 +218,6 @@
     if(logPress.state==UIGestureRecognizerStateBegan)
     {
         if (self.delegate&&[self.delegate respondsToSelector:@selector(commonStageCellLoogPressClickindex:)]) {
-            //pressView.tag=7000+row
             [self.delegate commonStageCellLoogPressClickindex:pressview.tag];
         }
         

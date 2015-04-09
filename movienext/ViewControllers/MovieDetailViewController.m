@@ -33,15 +33,16 @@
 #import "MyViewController.h"
 #import "ButtomToolView.h"
 #import "HotMovieModel.h"
-#import "UMShareView.h"
+//#import "UMShareView.h"
 #import "MJRefresh.h"
 #import "UserDataCenter.h"
-#import "UMShareView.h"
+//#import "UMShareView.h"
 #import "ShowStageViewController.h"
 #import "UploadImageViewController.h"
+#import "UMShareViewController.h"
 #import "UpYun.h"
 
-@interface MovieDetailViewController ()<UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UICollectionViewDelegate,MovieHeadViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UMSocialUIDelegate,UMSocialDataDelegate,UMShareViewDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIScrollViewDelegate,BigImageCollectionViewCellDelegate,AddMarkViewControllerDelegate>
+@interface MovieDetailViewController ()<UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UICollectionViewDelegate,MovieHeadViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UMSocialUIDelegate,UMSocialDataDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIScrollViewDelegate,BigImageCollectionViewCellDelegate,AddMarkViewControllerDelegate,UMShareViewControllerDelegate>
 
 {
     ///UICollectionView    *_myConllectionView;
@@ -52,8 +53,7 @@
     BOOL bigModel;
     ButtomToolView *_toolBar;
     MarkView       *_mymarkView;
-    BOOL   isMarkViewsShow;
-    UMShareView   *shareView;
+     //UMShareView   *shareView;
     int page;
     //导航条
     UIView *Navview;
@@ -114,7 +114,7 @@
     }
     [self createNavigation];
     [self createToolBar];
-    [self createShareView];
+   // [self createShareView];
   
 }
 
@@ -132,10 +132,10 @@
     backBtn.tag=200;
     [backBtn setImageEdgeInsets:UIEdgeInsetsMake(0, -40, 0, 0)];
     //  backBtn.backgroundColor=[UIColor redColor];
-    [backBtn setImage:[UIImage imageNamed:@"back_Icon@2x.png"] forState:UIControlStateNormal];
+    [backBtn setImage:[UIImage imageNamed:@"back_Icon.png"] forState:UIControlStateNormal];
     [self.view addSubview:backBtn];
     
-    upLoadimageBtn=[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-70,30,60,25) ImageName:@"update_picture_whaite@2x.png" Target:self Action:@selector(NavigationClick:) Title:nil];
+    upLoadimageBtn=[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-70,30,60,25) ImageName:@"update_picture_whaite.png" Target:self Action:@selector(NavigationClick:) Title:nil];
     upLoadimageBtn.tag=201;
     [self.view addSubview:upLoadimageBtn];
 }
@@ -155,7 +155,7 @@
     if ([type isEqualToString:@"public.image"])
     {
         //先把图片转成NSData
-      UIImage* image = [info objectForKey:@"UIImagePickerControllerOriginalImage"];
+      UIImage* image = [info objectForKey:UIImagePickerControllerEditedImage];
     
        // UIImage  *image=[UIImage imageNamed:@"choice_icon@2x.png"];
          NSLog(@" image   =%@=== Imagesize  higth  =%f width ====%f   ",image,image.size.height,image.size.width);
@@ -183,8 +183,7 @@
 {
     //page=0;
     bigModel=YES;
-    isMarkViewsShow=YES;
-    _MovieDict=[[NSMutableDictionary alloc]init];
+     _MovieDict=[[NSMutableDictionary alloc]init];
     _dataArray =[[NSMutableArray alloc]init];
     
 }
@@ -261,12 +260,12 @@
     _toolBar=[[ButtomToolView alloc]initWithFrame:CGRectMake(0,0,kDeviceWidth,kDeviceHeight+64)];
     _toolBar.delegete=self;
 }
--(void)createShareView
-{
-    shareView=[[UMShareView alloc]initWithFrame:CGRectMake(0,0, kDeviceWidth, kDeviceHeight+64)];
-    shareView.delegate=self;
-}
-
+//-(void)createShareView
+//{
+//    shareView=[[UMShareView alloc]initWithFrame:CGRectMake(0,0, kDeviceWidth, kDeviceHeight+64)];
+//    shareView.delegate=self;
+//}
+//
 
 
 #pragma  mark  ----RequestData
@@ -554,15 +553,7 @@
         //点击cell 隐藏弹幕，再点击隐藏
         NSLog(@"didDeselectRowAtIndexPath  =====%ld",indexPath.row);
         BigImageCollectionViewCell   *cell=(BigImageCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
-        if (isMarkViewsShow==YES) {
-            isMarkViewsShow=NO;
-            [cell.StageView  hidenAndShowMarkView:YES];
-            
-        } else{
-            isMarkViewsShow=YES;
-            [cell.StageView  hidenAndShowMarkView:NO];
-        }
-    } else {
+     } else {
         ShowStageViewController *vc = [[ShowStageViewController alloc] init];
         HotMovieModel  *model=[_dataArray objectAtIndex:indexPath.row];
         if ([_MovieDict objectForKey:@"name"]) {
@@ -760,15 +751,23 @@
         
         //创建UMshareView 后必须配备这三个方法
         hotmovie.stageinfo.movie_name=[_MovieDict objectForKey:@"name"];
-        shareView.StageInfo=hotmovie.stageinfo;
-        shareView.screenImage=image;
-        [shareView configShareView];
-        [self.view addSubview:shareView];
-        self.tabBarController.tabBar.hidden=YES;
-        if ([shareView respondsToSelector:@selector(showShareButtomView)]) {
-            [shareView showShareButtomView];
-            
-        }
+//        shareView.StageInfo=hotmovie.stageinfo;
+//        shareView.screenImage=image;
+//        [shareView configShareView];
+//        [self.view addSubview:shareView];
+//        self.tabBarController.tabBar.hidden=YES;
+//        if ([shareView respondsToSelector:@selector(showShareButtomView)]) {
+//            [shareView showShareButtomView];
+//            
+//        }
+        
+        UMShareViewController  *shareVC=[[UMShareViewController alloc]init];
+        shareVC.StageInfo=hotmovie.stageinfo;
+        shareVC.screenImage=image;
+        shareVC.delegate=self;
+        UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:shareVC];
+        [self presentViewController:na animated:YES completion:nil];
+
         
     }
     else if(button.tag==3000)
@@ -791,7 +790,7 @@
     
 }
 #pragma  mark  -----UMButtomViewshareViewDlegate-----------------------------------------------------
--(void)UMshareViewHandClick:(UIButton *)button ShareImage:(UIImage *)shareImage MoviewModel:(StageInfoModel *)StageInfo
+/*-(void)UMshareViewHandClick:(UIButton *)button ShareImage:(UIImage *)shareImage MoviewModel:(StageInfoModel *)StageInfo
 {
     NSArray  *sharearray =[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQzone, UMShareToSina, nil];
     [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
@@ -805,6 +804,23 @@
         [shareView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.5];
         
     }
+}*/
+-(void)UMShareViewControllerHandClick:(UIButton *)button ShareImage:(UIImage *)shareImage StageInfoModel:(StageInfoModel *)StageInfo
+{
+    NSArray  *sharearray =[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQzone, UMShareToSina, nil];
+    [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
+    
+    [[UMSocialControllerService defaultControllerService] setShareText:StageInfo.movie_name shareImage:shareImage socialUIDelegate:self];        //设置分享内容和回调对象
+    [UMSocialSnsPlatformManager getSocialPlatformWithName:[sharearray  objectAtIndex:button.tag-10000]].snsClickHandler(self,[UMSocialControllerService defaultControllerService],YES);
+    NSLog(@"分享到微信");
+    self.tabBarController.tabBar.hidden=YES;
+//    if (shareView) {
+//        [shareView HidenShareButtomView];
+//        [shareView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.5];
+//        
+//    }
+//
+//    
 }
 ///点击分享的屏幕，收回分享的背景
 -(void)SharetopViewTouchBengan
@@ -812,13 +828,13 @@
     NSLog(@"controller touchbegan  中 执行了隐藏工具栏的方法");
     //取消当前的选中的那个气泡
     [_mymarkView CancelMarksetSelect];
-    if (shareView) {
-        [shareView HidenShareButtomView];
-        [shareView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.5];
-        self.tabBarController.tabBar.hidden=YES;
-        
-    }
-    
+//    if (shareView) {
+//        [shareView HidenShareButtomView];
+//        [shareView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.5];
+//        self.tabBarController.tabBar.hidden=YES;
+//        
+//    }
+//    
 }
 #pragma mark  --umShareDelegate
 
@@ -826,28 +842,28 @@
 {
     //返回到app执行的方法，移除的时候应该写在这里
     NSLog(@"didCloseUIViewController第一步执行这个");
-    if (shareView) {
-        [shareView removeFromSuperview];
-        
-    }
-    
+//    if (shareView) {
+//        [shareView removeFromSuperview];
+//        
+//    }
+//    
 }
 //根据有的view 上次一张图片
 -(void)didFinishGetUMSocialDataInViewController:(UMSocialResponseEntity *)response
 {
     NSLog(@"didFinishGetUMSocialDataInViewController第二部执行这个");
-    if (shareView) {
-        [shareView removeFromSuperview];
-    }
+//    if (shareView) {
+//        [shareView removeFromSuperview];
+//    }
     
 }
 -(void)didFinishGetUMSocialDataResponse:(UMSocialResponseEntity *)response;
 {
     NSLog(@"didFinishGetUMSocialDataResponse第二部执行这个");
-    if (shareView) {
-        [shareView removeFromSuperview];
-    }
-    
+  //  if (shareView) {
+//        [shareView removeFromSuperview];
+//    }
+//    
     
 }
 
@@ -950,17 +966,13 @@
     else if (button.tag==10001)
     {
         //点击了分享
-    
-    //    NSString  *shareText=weiboDict.topic;//[weiboDict objectForKey:@"topic"];
-        NSLog(@" 点击了分享按钮");
-        
-        float hight= kDeviceWidth;
-        float  ImageWith=[stageInfoDict.w intValue]; //[[self.StageInfoDict objectForKey:@"w"]  floatValue];
-        float  ImgeHight=[stageInfoDict.h intValue];//[[self.StageInfoDict objectForKey:@"h"]  floatValue];
-        if(ImgeHight>ImageWith)
-        {
-            hight=  (ImgeHight/ImageWith) *kDeviceWidth;
-        }
+          float hight= kDeviceWidth;
+//        float  ImageWith=[stageInfoDict.w intValue]; //[[self.StageInfoDict objectForKey:@"w"]  floatValue];
+//        float  ImgeHight=[stageInfoDict.h intValue];//[[self.StageInfoDict objectForKey:@"h"]  floatValue];
+//        if(ImgeHight>ImageWith)
+//        {
+//            hight=  (ImgeHight/ImageWith) *kDeviceWidth;
+//        }
         
         BigImageCollectionViewCell *cell = (BigImageCollectionViewCell *)(markView.superview.superview.superview);
         UIImage  *image=[Function getImage:cell.StageView WithSize:CGSizeMake(kDeviceWidth, hight)];
@@ -968,17 +980,25 @@
 
         //创建UMshareView 后必须配备这三个方法
         stageInfoDict.movie_name=[_MovieDict objectForKey:@"name"];
-        shareView.StageInfo=stageInfoDict;
-        shareView.screenImage=image;
-        [shareView configShareView];
-        [self.view addSubview:shareView];
-        self.tabBarController.tabBar.hidden=YES;
-        if ([shareView respondsToSelector:@selector(showShareButtomView)]) {
-            [shareView showShareButtomView];
-            
-        }
-
+//        shareView.StageInfo=stageInfoDict;
+//        shareView.screenImage=image;
+//        [shareView configShareView];
+//        [self.view addSubview:shareView];
+//        self.tabBarController.tabBar.hidden=YES;
+//        if ([shareView respondsToSelector:@selector(showShareButtomView)]) {
+//            [shareView showShareButtomView];
+//            
+//        }
         
+        UMShareViewController  *shareVC=[[UMShareViewController alloc]init];
+        shareVC.StageInfo=stageInfoDict;
+        shareVC.screenImage=image;
+        shareVC.delegate=self;
+        UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:shareVC];
+        [self presentViewController:na animated:YES completion:nil];
+        
+        
+
     }
 #pragma mark  ----------点赞--------------
     else  if(button.tag==10002)
@@ -996,11 +1016,8 @@
             //重新给markview 赋值，改变markview的frame
             [self layoutMarkViewWithMarkView:markView WeiboInfo:weiboDict];
             
-            
-            
         }
         else  {
-            
             weiboDict.uped=[NSNumber numberWithInt:0];
             int ups=[weiboDict.ups intValue];
             ups =ups-1;
@@ -1028,9 +1045,7 @@
             ash.tag=504;
             [ash showInView:self.view];
         }
-        
     }
-
 }
 
 #pragma mark  ----actionSheetDelegate--
@@ -1154,15 +1169,15 @@
 -(void)scrollViewDidScrollToTop:(UIScrollView *)scrollView
 {
     Navview.backgroundColor=[[UIColor whiteColor]  colorWithAlphaComponent:0];
-    [backBtn setImage:[UIImage imageNamed:@"back_Icon@2x.png"] forState:UIControlStateNormal];
-    [upLoadimageBtn setImage:[UIImage imageNamed:@"update_picture_whaite@2x.png"] forState:UIControlStateNormal];
+    [backBtn setImage:[UIImage imageNamed:@"back_Icon.png"] forState:UIControlStateNormal];
+    [upLoadimageBtn setImage:[UIImage imageNamed:@"update_picture_whaite.png"] forState:UIControlStateNormal];
 }
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     if (scrollView.contentOffset.y<80) {
         Navview.backgroundColor=[[UIColor whiteColor] colorWithAlphaComponent:0];
-        [backBtn setImage:[UIImage imageNamed:@"back_Icon@2x.png"] forState:UIControlStateNormal];
-        [upLoadimageBtn setImage:[UIImage imageNamed:@"update_picture_whaite@2x.png"] forState:UIControlStateNormal];
+        [backBtn setImage:[UIImage imageNamed:@"back_Icon.png"] forState:UIControlStateNormal];
+        [upLoadimageBtn setImage:[UIImage imageNamed:@"update_picture_whaite.png"] forState:UIControlStateNormal];
 
     }
      else   if (scrollView.contentOffset.y>80&&scrollView.contentOffset.y<scrollView.contentOffset.y<300) {
@@ -1172,15 +1187,15 @@
         
          if (scrollView.contentOffset.y>160) {
              
-             [backBtn setImage:[UIImage imageNamed:@"back_icon_blue@2x.png"] forState:UIControlStateNormal];
-             [upLoadimageBtn setImage:[UIImage imageNamed:@"up_picture_blue@2x.png"] forState:UIControlStateNormal];
+             [backBtn setImage:[UIImage imageNamed:@"back_icon_blue.png"] forState:UIControlStateNormal];
+             [upLoadimageBtn setImage:[UIImage imageNamed:@"up_picture_blue.png"] forState:UIControlStateNormal];
          }
     }
     else
     {
         Navview.backgroundColor=[[UIColor whiteColor] colorWithAlphaComponent:1];
-        [backBtn setImage:[UIImage imageNamed:@"back_icon_blue@2x.png"] forState:UIControlStateNormal];
-        [upLoadimageBtn setImage:[UIImage imageNamed:@"up_picture_blue@2x.png"] forState:UIControlStateNormal];
+        [backBtn setImage:[UIImage imageNamed:@"back_icon_blue.png"] forState:UIControlStateNormal];
+        [upLoadimageBtn setImage:[UIImage imageNamed:@"up_picture_blue.png"] forState:UIControlStateNormal];
     }
 }
 -(void)dealloc

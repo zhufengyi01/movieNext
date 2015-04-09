@@ -67,14 +67,13 @@
 {
     //显示虚拟用户
     UserDataCenter *userCenter=[UserDataCenter shareInstance];
-    
-    for (UIView *v in  _LeftImageView.subviews) {
-        if ([v isKindOfClass:[UIImageView class]]) {
-            [v removeFromSuperview];
-        }
+    for (int i=0; i<_LeftImageView.subviews.count; i++) {
+        UIView  *view=(UIView*)_LeftImageView.subviews[i];
+        [view removeFromSuperview];
     }
+    
     if ([userCenter.is_admin intValue]>0) {
-        if ( [self.weiboDict.fake intValue]==0) {
+        if ( [weiboInfo.fake intValue]==0) {
             //虚拟用户
             isfakeView=[[UIImageView alloc]initWithFrame:CGRectMake(_LeftImageView.frame.size.width-6,_LeftImageView.frame.size.height-6, 8, 8)];
             isfakeView.layer.cornerRadius=4;
@@ -84,7 +83,6 @@
             isfakeView.layer.borderWidth=1;
             [_LeftImageView addSubview:isfakeView];
         }
-        
     }
 
 }

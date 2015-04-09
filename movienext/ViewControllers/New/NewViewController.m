@@ -23,13 +23,14 @@
 #import "HotMovieModel.h"
 #import "Function.h"
 #import "UMSocial.h"
-#import "UMShareView.h"
+//#import "UMShareView.h"
 #import "UMSocialControllerService.h"
 #import "UIImageView+WebCache.h"
 #import "UMShareViewController.h"
+
 //友盟分享
 //#import "UMSocial.h"
-@interface NewViewController ()<UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UIScrollViewDelegate,UMSocialDataDelegate,UMSocialUIDelegate,UMShareViewDelegate,LoadingViewDelegate,UIActionSheetDelegate,CommonStageCellDelegate,AddMarkViewControllerDelegate>
+@interface NewViewController ()<UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UIScrollViewDelegate,UMSocialDataDelegate,UMSocialUIDelegate,LoadingViewDelegate,UIActionSheetDelegate,CommonStageCellDelegate,AddMarkViewControllerDelegate,UMShareViewControllerDelegate>
 {
     AppDelegate  *appdelegate;
     UISegmentedControl *segment;
@@ -40,14 +41,14 @@
     int page;
     ButtomToolView *_toolBar;
     MarkView       *_mymarkView;
-    
-    BOOL isMarkViewsShow;
-    UIImageView   *ShareimageView;
-    UMShareView   *shareView;
+     UIImageView   *ShareimageView;
+   // UMShareView   *shareView;
     StageInfoModel  *_TStageInfo;
     WeiboModel      *_TweiboInfo;
     //用于移除推荐使用
     NSString        *_hot_Id;
+    ///屏蔽剧照使用
+    NSNumber        *_stage_Id;
 }
 @end
 
@@ -65,28 +66,35 @@
     
 }
 
+//遇到上面的问题 最直接的解决方法就是在controller的viewDidAppear里面去调用present。这样可以确保view hierarchy的层次结构不乱。
+
+-(void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:YES];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     appdelegate =(AppDelegate *)[[UIApplication sharedApplication]delegate ];
     UserDataCenter  *userInfo=  [UserDataCenter shareInstance];
-   NSLog(@"-------登陆成功  user=======%@ ",  userInfo.username);
+    NSLog(@"-------登陆成功  user=======%@ ",  userInfo.username);
     [self creatNavigation];
     [self initData];
     [self createHotView];
     [self setupRefresh];
     [self creatLoadView];
-  //  [self requestData];
+    //  [self requestData];
     [self createToolBar];
-    [self createShareView];
+    //  [self createShareView];
+   
     
 }
 -(void)initData{
     _hotDataArray = [[NSMutableArray alloc]init];
     _newDataArray=[[NSMutableArray alloc]init];
     page=0;
-    isMarkViewsShow=YES;
-}
+ }
 #pragma  mark   ------
 #pragma  mark  -------CreatUI;
 -(void)creatNavigation
@@ -207,14 +215,33 @@
  
 }
 //创建分享视图
--(void)createShareView
-{
-    shareView=[[UMShareView alloc]initWithFrame:CGRectMake(0,0, kDeviceWidth, kDeviceHeight)];
-    shareView.delegate=self;
-}
+//-(void)createShareView
+//{
+//    shareView=[[UMShareView alloc]initWithFrame:CGRectMake(0,0, kDeviceWidth, kDeviceHeight)];
+//    shareView.delegate=self;
+//}
 #pragma  mark -----
 #pragma  mark ------  DataRequest －－－－－－－－－－－－－－－－－－－－－－－－－－
 #pragma  mark ----
+//屏幕剧照
+-(void)requestRemoveStage
+{
+    NSDictionary *parameters = @{@"id":_stage_Id};
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    [manager POST:[NSString stringWithFormat:@"%@/movieStage/block", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if ([[responseObject  objectForKey:@"return_code"]  intValue]==10000) {
+            NSLog(@"移除剧照成功=======%@",responseObject);
+            UIAlertView  *Al =[[UIAlertView alloc]initWithTitle:nil message:@"移除剧照成功" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            [Al show];
+            
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+    
+}
+
+
 #warning  举报某人，未实现
 //举报某人
 -(void)requestReport
@@ -222,7 +249,6 @@
     NSString *type=@"1";
     UserDataCenter *userCenter =[UserDataCenter shareInstance];
     NSDictionary *parameters = @{@"reported_user_id":_TweiboInfo.user_id,@"reported_id":_TweiboInfo.Id,@"reason":@"",@"type":type,@"created_by":userCenter.user_id};
-
     
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:[NSString stringWithFormat:@"%@/report/create", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -288,7 +314,7 @@
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
     [manager POST:[NSString stringWithFormat:@"%@/hot/delete", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"return_code"]  intValue]==10000) {
-            NSLog(@"推荐成功=======%@",responseObject);
+            NSLog(@"移除推荐成功=======%@",responseObject);
             UIAlertView  *Al=[[UIAlertView alloc]initWithTitle:nil message:@"移除推荐成功" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
             [Al show];
             [self requestData];
@@ -484,15 +510,7 @@
         
         float hight;
         if (_hotDataArray.count>indexPath.row) {
-            HotMovieModel *hotModel=[_hotDataArray objectAtIndex:indexPath.row];
-
-           // float  h=[hotModel.stageinfo.h floatValue];
-            //float w=  [hotModel.stageinfo.w floatValue];
             hight=kDeviceWidth+45;
-          //  if(h>w)
-          // {
-            // hight=  (h/w) *kDeviceWidth+45;
-            //}
         }
         return hight+10;
     }
@@ -500,16 +518,8 @@
     {
         float hight;
         if (_newDataArray.count>indexPath.row) {
-            HotMovieModel   *hotmodel=[_newDataArray objectAtIndex:indexPath.row];
-           // float  h=[hotmodel.stageinfo.h  floatValue];
-            //float w=[hotmodel.stageinfo.w floatValue];
              hight= kDeviceWidth+90;
-//             if(h>w)
-//            {
-//                hight=  (h/w)*kDeviceWidth+90;
-//            }
         }
-      
         return hight+10;
     }
     return 200.0f;
@@ -575,17 +585,7 @@
 {
         //点击cell 隐藏弹幕，再点击隐藏
         NSLog(@"didDeselectRowAtIndexPath  =====%ld",indexPath.row);
-        CommonStageCell   *cell=(CommonStageCell *)[tableView cellForRowAtIndexPath:indexPath];
-        if (isMarkViewsShow==YES) {
-            isMarkViewsShow=NO;
-            [cell.stageView  hidenAndShowMarkView:YES];
-
-        }
-        else{
-              isMarkViewsShow=YES;
-              [cell.stageView  hidenAndShowMarkView:NO];
-        }
-   
+     //   CommonStageCell   *cell=(CommonStageCell *)[tableView cellForRowAtIndexPath:indexPath];
 }
 -(void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -629,7 +629,6 @@
 
 -(void)commonStageCellToolButtonClick:(UIButton *)button Rowindex:(NSInteger)index
 {
-    
     HotMovieModel  *hotmovie;
     if (segment.selectedSegmentIndex==0) {
         hotmovie =[_hotDataArray objectAtIndex:index];
@@ -647,26 +646,15 @@
     else if (button.tag==2000)
     {
         //分享
-        float hight= kDeviceWidth;
-        float  ImageWith=[hotmovie.stageinfo.w intValue];
-        float  ImgeHight=[hotmovie.stageinfo.h intValue];
-        if(ImgeHight>ImageWith)
-        {
-            hight=  (ImgeHight/ImageWith) *kDeviceWidth;
-        }
         CommonStageCell *cell = (CommonStageCell *)(button.superview.superview.superview);
-        UIImage  *image=[Function getImage:cell.stageView WithSize:CGSizeMake(kDeviceWidth, hight)];
-        //创建UMshareView 后必须配备这三个方法
-        shareView.StageInfo=hotmovie.stageinfo;
-        shareView.screenImage=image;
-        [shareView configShareView];
-        [self.view addSubview:shareView];
-        self.tabBarController.tabBar.hidden=YES;
-        if ([shareView respondsToSelector:@selector(showShareButtomView)]) {
-            [shareView showShareButtomView];
-            
-        }
-
+        UIImage  *image=[Function getImage:cell.stageView WithSize:CGSizeMake(kDeviceWidth, kDeviceWidth)];
+        UMShareViewController  *shareVC=[[UMShareViewController alloc]init];
+        shareVC.StageInfo=hotmovie.stageinfo;
+        shareVC.screenImage=image;
+        shareVC.delegate=self;
+         UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:shareVC];
+        [self presentViewController:na animated:YES completion:nil];
+//        [self.navigationController presentViewController:shareVC animated:YES completion:nil];
     }
     else if(button.tag==3000)
     {
@@ -691,6 +679,29 @@
         
 
     }
+}
+//长按手势事件
+-(void)commonStageCellLoogPressClickindex:(NSInteger)indexrow
+{
+    HotMovieModel  *hotmovie;
+    if  (segment.selectedSegmentIndex==0) {
+        
+        hotmovie =[_hotDataArray objectAtIndex:indexrow];
+        _hot_Id=hotmovie.hot_id;
+        
+        UIActionSheet  *ash =[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"移除推荐" otherButtonTitles:nil, nil];
+        ash.tag=503;
+        [ash showInView:self.view];
+    }
+    else if(segment.selectedSegmentIndex==1)
+    {
+        hotmovie=[_newDataArray objectAtIndex:indexrow];
+        _stage_Id=hotmovie.stageinfo.Id;
+        UIActionSheet  *ash =[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"屏蔽剧照" otherButtonTitles:nil, nil];
+        ash.tag=505;
+        [ash showInView:self.view];
+
+    }
     
 }
 #pragma mark  -----AddMarkViewControllerDelegate----
@@ -702,7 +713,7 @@
 
 
 #pragma  mark  -----UMButtomViewshareViewDlegate------------------------
--(void)UMshareViewHandClick:(UIButton *)button ShareImage:(UIImage *)shareImage MoviewModel:(StageInfoModel *)StageInfo
+/*-(void)UMshareViewHandClick:(UIButton *)button ShareImage:(UIImage *)shareImage MoviewModel:(StageInfoModel *)StageInfo
 {
     NSArray  *sharearray =[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQzone, UMShareToSina, nil];
         [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
@@ -716,50 +727,49 @@
             [shareView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.5];
           
         }
-}
-///点击分享的屏幕，收回分享的背景
--(void)SharetopViewTouchBengan
+}*/
+-(void)UMShareViewControllerHandClick:(UIButton *)button ShareImage:(UIImage *)shareImage StageInfoModel:(StageInfoModel *)StageInfo
 {
-    NSLog(@"controller touchbegan  中 执行了隐藏工具栏的方法");
-    //取消当前的选中的那个气泡
-    //[_mymarkView CancelMarksetSelect];
-    if (shareView) {
-        [shareView HidenShareButtomView];
-        [shareView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.5];
-        self.tabBarController.tabBar.hidden=NO;
+    NSArray  *sharearray =[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQzone, UMShareToSina, nil];
+    
+    [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
+    
+    [[UMSocialControllerService defaultControllerService] setShareText:StageInfo.movie_name shareImage:shareImage socialUIDelegate:self];
+    //设置分享内容和回调对象
+    if (button.tag==10003) {
 
-    }
+         NSArray  *array =[NSArray arrayWithObjects:StageInfo.movie_name,shareImage,nil];
+        [self performSelector:@selector(shareTosinaWithNameAndImage:) withObject:array afterDelay:2];
+     }
+    else {
+    [UMSocialSnsPlatformManager getSocialPlatformWithName:[sharearray  objectAtIndex:button.tag-10000]].snsClickHandler(self,[UMSocialControllerService defaultControllerService],YES);
+    NSLog(@"分享");
+    
+ }
+}
+-(void)shareTosinaWithNameAndImage:(NSArray *)array {
+
+    [[UMSocialControllerService defaultControllerService] setShareText:array[0] shareImage:array[1] socialUIDelegate:self];
+    
+    [UMSocialSnsPlatformManager getSocialPlatformWithName:UMShareToSina].snsClickHandler(self,[UMSocialControllerService defaultControllerService],YES);
+
+    
 
 }
 //#pragma mark  --UMShareDelegate 友盟分享实现的功能
 
 -(void)didCloseUIViewController:(UMSViewControllerType)fromViewControllerType
 {
-    //返回到app执行的方法，移除的时候应该写在这里
-    NSLog(@"didCloseUIViewController第一步执行这个");
-    if (shareView) {
-        [shareView removeFromSuperview];
-
-    }
-    
 }
 //根据有的view 上次一张图片
 -(void)didFinishGetUMSocialDataInViewController:(UMSocialResponseEntity *)response
 {
-    NSLog(@"didFinishGetUMSocialDataInViewController第二部执行这个");
-    if (shareView) {
-        [shareView removeFromSuperview];
-    }
-   
+
 }
 -(void)didFinishGetUMSocialDataResponse:(UMSocialResponseEntity *)response;
 {
     NSLog(@"didFinishGetUMSocialDataResponse第二部执行这个");
-    if (shareView) {
-        [shareView removeFromSuperview];
-    }
 }
-
 
 
 #pragma mark  -----
@@ -841,27 +851,17 @@
     else if (button.tag==10001)
     {
         NSLog(@" 点击了分享按钮");
-        
-        float hight= kDeviceWidth;
-        float  ImageWith=[stageInfoDict.w intValue];
-        float  ImgeHight=[stageInfoDict.h intValue];
-        if(ImgeHight>ImageWith)
-        {
-            hight=  (ImgeHight/ImageWith) *kDeviceWidth;
-        }
         CommonStageCell *cell = (CommonStageCell *)(markView.superview.superview.superview);
-         UIImage  *image=[Function getImage:cell.stageView WithSize:CGSizeMake(kDeviceWidth, hight)];
-       
-        //创建UMshareView 后必须配备这三个方法
-        shareView.StageInfo=stageInfoDict;
-        shareView.screenImage=image;
-        [shareView configShareView];
-        [self.view addSubview:shareView];
-        self.tabBarController.tabBar.hidden=YES;
-        if ([shareView respondsToSelector:@selector(showShareButtomView)]) {
-            [shareView showShareButtomView];
-            
-        }
+         UIImage  *image=[Function getImage:cell.stageView WithSize:CGSizeMake(kDeviceWidth, kDeviceWidth)];
+         UMShareViewController  *shareVC=[[UMShareViewController alloc]init];
+        shareVC.StageInfo=stageInfoDict;
+        shareVC.screenImage=image;
+        shareVC.delegate=self;
+        UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:shareVC];
+        [self presentViewController:na animated:YES completion:nil];
+
+        
+        
     }
 #pragma mark  ----------点赞--------------
     else  if(button.tag==10002)
@@ -969,6 +969,22 @@
             [self requestReport];
          
         }
+    }
+    else if (actionSheet.tag==505)
+    {
+        if (buttonIndex==0) {
+            //删除
+            UIActionSheet   *ash=[[UIActionSheet alloc]initWithTitle:@"确定屏蔽" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"移除" otherButtonTitles:nil,nil];
+            ash.tag=506;
+            [ash showInView:self.view];
+        }
+    }
+    else if (actionSheet.tag==506)
+    {
+        if (buttonIndex==0) {
+        [self requestRemoveStage];
+        }
+        
     }
 }
 

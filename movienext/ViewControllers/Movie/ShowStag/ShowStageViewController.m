@@ -21,13 +21,10 @@
 #import "UserDataCenter.h"
 #import "MyViewController.h"
 #import "Function.h"
-@interface ShowStageViewController() <UMShareViewDelegate,ButtomToolViewDelegate,StageViewDelegate,AddMarkViewControllerDelegate>
+#import "UMShareViewController.h"
+@interface ShowStageViewController() <UMShareViewDelegate,ButtomToolViewDelegate,StageViewDelegate,AddMarkViewControllerDelegate,UMShareViewControllerDelegate,UMSocialDataDelegate,UMSocialUIDelegate>
 {
     ButtomToolView *_toolBar;
-    
-    BOOL isMarkViewsShow;
-
-
 }
 @end
 
@@ -37,7 +34,7 @@
     UIView *BgView2;
     UIButton  *ScreenButton;
     UIButton  *addMarkButton;
-    UMShareView  *shareView;
+ //   UMShareView  *shareView;
     StageView *stageView;
     MarkView       *_mymarkView;
 
@@ -50,16 +47,13 @@
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
-    isMarkViewsShow=YES;
-    [self createScrollView];
+     [self createScrollView];
     //[self createTopView];
     [self createStageView];
     //创建底部的分享
     [self createButtonView1];
     [self createToolBar];
-
-    [self createShareView];
-}
+ }
 
 -(void)createScrollView
 {
@@ -71,9 +65,7 @@
 
 -(void)createStageView
 {
-
-   // float y = hight >= kDeviceHeight ? 0 : (kDeviceHeight - hight)/2;
-    scrollView.contentSize = CGSizeMake(kDeviceWidth, MIN(kDeviceHeight, kDeviceWidth));
+     scrollView.contentSize = CGSizeMake(kDeviceWidth, MIN(kDeviceHeight, kDeviceWidth));
     stageView = [[StageView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceWidth)];
     stageView.isAnimation = YES;
     stageView.delegate=self;
@@ -83,31 +75,9 @@
      [scrollView addSubview:stageView];
     [stageView startAnimation];
 
-    
-    //添加一个手势关闭弹幕
-    UITapGestureRecognizer  *tap =[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(closeMark:)];
-    [stageView addGestureRecognizer:tap];
-    
-    //创建分享和添加弹幕的的底部试图
+ 
 }
-//手势点击显示和隐藏弹幕标志
-
--(void)closeMark:(UITapGestureRecognizer *) tap
-{
-    if (isMarkViewsShow==YES) {
-        isMarkViewsShow=NO;
-        [stageView hidenAndShowMarkView:YES];
-    }
-    else
-    {
-        isMarkViewsShow=YES;
-        [stageView hidenAndShowMarkView:NO];
-        
-    }
-    
-    
-}
--(void)createButtonView1
+ -(void)createButtonView1
 {
     BgView2=[[UIView alloc]initWithFrame:CGRectMake(0, kDeviceHeight-kHeightNavigation-45, kDeviceWidth, 45)];
     //改变toolar 的颜色
@@ -133,12 +103,12 @@
     _toolBar.delegete=self;
     
 }
-
--(void)createShareView
-{
-    shareView=[[UMShareView alloc]initWithFrame:CGRectMake(0,0, kDeviceWidth, kDeviceHeight)];
-    shareView.delegate=self;
-}
+//
+//-(void)createShareView
+//{
+//    shareView=[[UMShareView alloc]initWithFrame:CGRectMake(0,0, kDeviceWidth, kDeviceHeight)];
+//    shareView.delegate=self;
+//}
 
 
 //微博点赞请求
@@ -180,7 +150,7 @@
 
 
 #pragma  mark  -----UMButtomViewshareViewDlegate-------
--(void)UMshareViewHandClick:(UIButton *)button ShareImage:(UIImage *)shareImage MoviewModel:(StageInfoModel *)StageInfo
+/*-(void)UMshareViewHandClick:(UIButton *)button ShareImage:(UIImage *)shareImage MoviewModel:(StageInfoModel *)StageInfo
 {
     NSArray  *sharearray =[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQzone, UMShareToSina, nil];
     [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
@@ -193,41 +163,66 @@
         [shareView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.5];
         
     }
-}
-///点击分享的屏幕，收回分享的背景
--(void)SharetopViewTouchBengan
+}*/
+-(void)UMShareViewControllerHandClick:(UIButton *)button ShareImage:(UIImage *)shareImage StageInfoModel:(StageInfoModel *)StageInfo
 {
-    NSLog(@"controller touchbegan  中 执行了隐藏工具栏的方法");
-    //取消当前的选中的那个气泡
-   // [_mymarkView CancelMarksetSelect];
-    if (shareView) {
-        [shareView HidenShareButtomView];
-        [shareView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.5];
-        
-    }
+    NSArray  *sharearray =[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQzone, UMShareToSina, nil];
+    [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
+    
+    [[UMSocialControllerService defaultControllerService] setShareText:StageInfo.movie_name shareImage:shareImage socialUIDelegate:self];        //设置分享内容和回调对象
+    [UMSocialSnsPlatformManager getSocialPlatformWithName:[sharearray  objectAtIndex:button.tag-10000]].snsClickHandler(self,[UMSocialControllerService defaultControllerService],YES);
+    NSLog(@"分享到微信");
+//    if (shareView) {
+//        [shareView HidenShareButtomView];
+//        [shareView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.5];
+//        
+//    }
+
     
 }
+///点击分享的屏幕，收回分享的背景
+//-(void)SharetopViewTouchBengan
+//{
+//    NSLog(@"controller touchbegan  中 执行了隐藏工具栏的方法");
+//    //取消当前的选中的那个气泡
+//   // [_mymarkView CancelMarksetSelect];
+//    if (shareView) {
+//        [shareView HidenShareButtomView];
+//        [shareView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.5];
+//        
+//    }
+//    
+//}
 // 分享
 -(void)ScreenButtonClick:(UIButton  *) button
 {
-    float hight= kDeviceWidth;
-    float  ImageWith=[self.movieModel.stageinfo.w intValue];
-    float  ImgeHight=[self.movieModel.stageinfo.h intValue];
-    if(ImgeHight>ImageWith)
-    {
-        hight=  (ImgeHight/ImageWith) *kDeviceWidth;
-    }
-    UIImage  *image=[Function getImage:stageView WithSize:CGSizeMake(kDeviceWidth, hight)];
+//    float hight= kDeviceWidth;
+//    float  ImageWith=[self.movieModel.stageinfo.w intValue];
+//    float  ImgeHight=[self.movieModel.stageinfo.h intValue];
+//    if(ImgeHight>ImageWith)
+//    {
+//        hight=  (ImgeHight/ImageWith) *kDeviceWidth;
+//    }
+    UIImage  *image=[Function getImage:stageView WithSize:CGSizeMake(kDeviceWidth, kDeviceWidth)];
     //创建UMshareView 后必须配备这三个方法
-    shareView.StageInfo=self.movieModel.stageinfo;
-    shareView.screenImage=image;
-    [shareView configShareView];
-    [self.view addSubview:shareView];
-    self.tabBarController.tabBar.hidden=YES;
-    if ([shareView respondsToSelector:@selector(showShareButtomView)]) {
-        [shareView showShareButtomView];
-        
-    }
+//    shareView.StageInfo=self.movieModel.stageinfo;
+//    shareView.screenImage=image;
+//    [shareView configShareView];
+//    [self.view addSubview:shareView];
+//    self.tabBarController.tabBar.hidden=YES;
+//    if ([shareView respondsToSelector:@selector(showShareButtomView)]) {
+//        [shareView showShareButtomView];
+//        
+//    }
+    
+    UMShareViewController  *shareVC=[[UMShareViewController alloc]init];
+    shareVC.StageInfo=self.movieModel.stageinfo;
+    shareVC.screenImage=image;
+    shareVC.delegate=self;
+    UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:shareVC];
+    [self presentViewController:na animated:YES completion:nil];
+
+    
     
 }
 //添加弹幕
@@ -330,25 +325,37 @@
         //    NSString  *shareText=weiboDict.topic;//[weiboDict objectForKey:@"topic"];
         NSLog(@" 点击了分享按钮");
         
-        float hight= kDeviceWidth;
-        float  ImageWith=[stageInfoDict.w intValue];
-        float  ImgeHight=[stageInfoDict.h intValue];
-        if(ImgeHight>ImageWith)
-        {
-            hight=  (ImgeHight/ImageWith) *kDeviceWidth;
-        }
-        UIImage  *image=[Function getImage:stageView WithSize:CGSizeMake(kDeviceWidth, hight)];
+//        float hight= kDeviceWidth;
+//        float  ImageWith=[stageInfoDict.w intValue];
+//        float  ImgeHight=[stageInfoDict.h intValue];
+//        if(ImgeHight>ImageWith)
+//        {
+//            hight=  (ImgeHight/ImageWith) *kDeviceWidth;
+//        }
+        UIImage  *image=[Function getImage:stageView WithSize:CGSizeMake(kDeviceWidth, kDeviceWidth)];
         
         //创建UMshareView 后必须配备这三个方法
-        shareView.StageInfo=stageInfoDict;
-        shareView.screenImage=image;
-        [shareView configShareView];
-        [self.view addSubview:shareView];
-        self.tabBarController.tabBar.hidden=YES;
-        if ([shareView respondsToSelector:@selector(showShareButtomView)]) {
-            [shareView showShareButtomView];
-            
-        }
+//        shareView.StageInfo=stageInfoDict;
+//        shareView.screenImage=image;
+//        [shareView configShareView];
+//        [self.view addSubview:shareView];
+//        self.tabBarController.tabBar.hidden=YES;
+//        if ([shareView respondsToSelector:@selector(showShareButtomView)]) {
+//            [shareView showShareButtomView];
+//
+//        }
+        
+        UMShareViewController  *shareVC=[[UMShareViewController alloc]init];
+        shareVC.StageInfo=stageInfoDict;
+        shareVC.screenImage=image;
+        shareVC.delegate=self;
+        UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:shareVC];
+        [self presentViewController:na animated:YES completion:nil];
+        
+        
+
+        
+        
         
     }
 #pragma mark  ----------点赞--------------

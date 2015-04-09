@@ -57,9 +57,9 @@
 #define VGray_color      [UIColor colorWithRed:127.0/255 green:127.0/255 blue:139.0/255 alpha:1]
 //字体蓝色
 #define VBlue_color [UIColor colorWithRed:0/255 green:146.0/255 blue:255.0/255 alpha:1]
-#define VStageView_color [UIColor colorWithRed:35.0/255 green:35.0/255 blue:35.0/255 alpha:1]
+#define VStageView_color [UIColor colorWithRed:23.0/255 green:23.0/255 blue:23.0/255 alpha:1]
 //头像占位图片
-#define HeadImagePlaceholder  [UIImage imageNamed:@"notice_image headloading@2x.png"]
+#define HeadImagePlaceholder  [UIImage imageNamed:@"notice_image headloading.png"]
 
 #define GetAppDelegate()   ((AppDelegate*)[[UIApplication sharedApplication] delegate])
 

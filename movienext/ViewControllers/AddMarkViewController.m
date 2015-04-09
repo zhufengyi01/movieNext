@@ -113,15 +113,15 @@
      [self.view addSubview:_myScorllerView];
     
     
-    tipView =[[UIView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, 30)];
+    tipView =[[UIView alloc]initWithFrame:CGRectMake(0, kDeviceWidth, kDeviceWidth, 30)];
     tipView.backgroundColor=[[UIColor blackColor]colorWithAlphaComponent:0.7];
     UILabel  *tiplable =[[UILabel alloc]initWithFrame:CGRectMake(0,0,kDeviceWidth,30)];
     tiplable.textColor=[UIColor whiteColor];
     tiplable.textAlignment=NSTextAlignmentCenter;
     tiplable.font =[UIFont systemFontOfSize:14];
-    tiplable.text=@"拖动可移动弹幕";
+    tiplable.text=@"弹幕可拖动";
     [tipView addSubview:tiplable];
-    tipView.alpha=0;
+    tipView.alpha=1;
     [self.view addSubview:tipView];
     
     
@@ -129,8 +129,8 @@
 }
 -(void)createStageView
 {
-    float  ImageWith=[self.stageInfoDict.w floatValue];
-    float  ImgeHight=[self.stageInfoDict.h floatValue];
+    //float  ImageWith=[self.stageInfoDict.w floatValue];
+    ///float  ImgeHight=[self.stageInfoDict.h floatValue];
     float hight=0;
     hight= kDeviceWidth;  // 计算的事bgview1的高度
 //    if(ImgeHight>ImageWith)
@@ -273,7 +273,7 @@
 -(void)handelPan:(UIPanGestureRecognizer*)gestureRecognizer{
     
     [UIView animateWithDuration:0.5 animations:^{
-        tipView.alpha=0;
+        tipView.alpha=1;
     } completion:^(BOOL finished) {
         
     }];
@@ -316,7 +316,7 @@
             if (weibomodel) {
                 [weibomodel setValuesForKeysWithDictionary:[responseObject objectForKey:@"detail"]];
             }
-            
+            weibomodel.fake=[NSNumber numberWithInt:1];
             [self.model.weibos addObject:weibomodel];
         }
         
@@ -417,7 +417,6 @@
    // NSLog(@" textView = heigt =====%f ",textView.frame.size.height);
     
     _toolBar.frame=CGRectMake(0,kDeviceHeight-keybordHeight-textView.frame.size.height -kHeightNavigation-20, kDeviceWidth, textView.frame.size.height+20);
-    
 
     if (textView==_myTextView) {
         if ([Function isBlankString:_myTextView.text]==NO) {

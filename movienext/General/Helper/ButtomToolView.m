@@ -126,7 +126,7 @@
     else
     {
         zanbutton.selected=YES;
-        likeimageview.image=[UIImage imageNamed:@"liked_icon_light@2x.png"];
+        likeimageview.image=[UIImage imageNamed:@"liked_icon_light"];
       
     }
     

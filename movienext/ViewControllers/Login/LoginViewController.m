@@ -63,8 +63,8 @@
     
     checkBtn=[ZCControl createButtonWithFrame:CGRectMake((kDeviceWidth-140)/2,kDeviceHeight-40, 140, 30) ImageName:nil Target:self Action:@selector(checkClick:) Title:@""];
   //   checkBtn.backgroundColor=[UIColor redColor];
-    [checkBtn setImage:[UIImage imageNamed:@"unselect_icon@2x.png"] forState:UIControlStateNormal];
-    [checkBtn setImage:[UIImage imageNamed:@"selected_icon@2x.png"] forState:UIControlStateSelected];
+    [checkBtn setImage:[UIImage imageNamed:@"unselect_icon.png"] forState:UIControlStateNormal];
+    [checkBtn setImage:[UIImage imageNamed:@"selected_icon.png"] forState:UIControlStateSelected];
     //默认勾选状态
     checkBtn.selected=YES;
     checkBtn.tag=100;

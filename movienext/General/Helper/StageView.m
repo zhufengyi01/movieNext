@@ -43,15 +43,17 @@
 #pragma mark    设置stageview的值  ，主要是给stagview 添加markview  和添加一张图片
 -(void)configStageViewforStageInfoDict{
     
-    if (tanimageView) {
-        tanimageView.hidden=YES;
-        [tanimageView removeFromSuperview];
-        tanimageView=nil;
+    if (tanlogoButton) {
+         [tanlogoButton removeFromSuperview];
+        tanlogoButton=nil;
     }
-    tanimageView=[[UIImageView alloc]initWithFrame:CGRectMake(kDeviceWidth-30, 10, 20, 20)];
-        tanimageView.image=[UIImage imageNamed:@"dan_closed@2x.png"];
-        tanimageView.hidden=YES;
-        [self addSubview:tanimageView];
+    tanlogoButton =[UIButton buttonWithType:UIButtonTypeCustom];
+    tanlogoButton.frame=CGRectMake(kDeviceWidth-40, 5, 35, 35);
+    [tanlogoButton setImage:[UIImage imageNamed:@"dan_normal"] forState:UIControlStateNormal];
+    [tanlogoButton setImage:[UIImage imageNamed:@"dan_selected"] forState:UIControlStateSelected];
+    [tanlogoButton addTarget:self action:@selector(hidenAndShowMarkView:) forControlEvents:UIControlEventTouchUpInside];
+    [self addSubview:tanlogoButton];
+      
 
     //先移除所有的Mark视图
     [self removeStageViewSubView];
@@ -66,7 +68,6 @@
           width=kDeviceWidth;
           hight=(ImgeHight/ImageWith)*kDeviceWidth;
           y=(kDeviceWidth-hight)/2;
-
     }
     else
     {
@@ -84,6 +85,8 @@
         y = y > 0 ? y : 0;
 
         _MovieImageView.frame=CGRectMake(x, y,width,hight);
+    
+    
     _MovieImageView.backgroundColor =VStageView_color;
     [_MovieImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w640",kUrlStage,self.StageInfoDict.stage]] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         
@@ -140,18 +143,7 @@
             CGSize  Msize=[weiboTitleString boundingRectWithSize:CGSizeMake(kDeviceWidth/2,MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:markView.TitleLable.font forKey:NSFontAttributeName] context:nil].size;
             // 计算赞数量的size
             CGSize Usize=[UpString boundingRectWithSize:CGSizeMake(40,MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:markView.ZanNumLable.font forKey:NSFontAttributeName] context:nil].size;
-          
-           // NSLog(@"size= %f %f", Msize.width, Msize.height);
-//              float  ImageWith=[self.StageInfoDict.w floatValue];
-//              float  ImgeHight=[self.StageInfoDict.h floatValue];
-             float hight=kDeviceWidth;
-//              hight= kDeviceWidth;  // 计算的事bgview1的高度
-//             if(ImgeHight>ImageWith)
-//             {
-//              hight=  (ImgeHight/ImageWith) *kDeviceWidth;
-//             }
-    
-
+              float hight=kDeviceWidth;
             //计算赞数量的长度
             float  Uwidth=[UpString floatValue]==0?0:Usize.width;
             //宽度=字的宽度+左头像图片的宽度＋赞图片的宽度＋赞数量的宽度+中间两个空格2+2
@@ -278,27 +270,28 @@
 
 #pragma mark 点击屏幕显示和隐藏marview
 //显示隐藏markview
--(void)hidenAndShowMarkView:(BOOL) isShow;
+-(void)hidenAndShowMarkView:(UIButton *) button
 {
-    if (isShow==NO) {
+    if (button.selected==NO) {
         NSLog(@"执行了隐藏 view ");
+        button.selected=YES;
         for (UIView  *view  in self.subviews) {
             if  ([view isKindOfClass:[MarkView class]]) {
                 MarkView  *mv =(MarkView *)view;
                 mv.hidden=YES;
-                 tanimageView.hidden=NO;
+             
             }
         }
     }
-    else if (isShow==YES)
+    else if (button.selected==YES)
     {
         NSLog(@"执行了显示view ");
+        button.selected=NO;
         for (UIView  *view  in self.subviews) {
             if  ([view isKindOfClass:[MarkView class]]) {
                 MarkView  *mv =(MarkView *)view;
                 mv.hidden=NO;
-                tanimageView.hidden=YES;
-            }
+             }
         }
     }
 

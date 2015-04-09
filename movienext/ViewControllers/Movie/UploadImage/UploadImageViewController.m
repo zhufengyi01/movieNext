@@ -16,7 +16,7 @@
 #import "UserDataCenter.h"
 @interface UploadImageViewController ()
 {
-    UIScrollView   *_myScrollView;
+  //  UIScrollView   *_myScrollView;
     UploadProgressView  *_myprogress;
     NSMutableDictionary   *upyunDict;
     NSMutableDictionary *_myDict;
@@ -40,7 +40,6 @@
 }
 -(void)createNavigation
 {
-    
     
     UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 120, 20) Font:16 Text:@"上传图片"];
     titleLable.textColor=VBlue_color;
@@ -209,11 +208,7 @@
         Addmark.stageInfoDict=stageInfo;
         Addmark.pageSoureType=NSAddMarkPageSourceUploadImage;
         [self.navigationController pushViewController:Addmark animated:YES];
-        
-        //关闭当前页面
-      //  [self.view removeFromSuperview];
-
-        
+  
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
@@ -221,18 +216,30 @@
 }
 -(void)createUI
 {
-    _myScrollView=[[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight)];
-    [self.view addSubview:_myScrollView];
-    
     UIImageView  *imageView=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, 200)];
     imageView.image=self.upimage;
-    [_myScrollView addSubview:imageView];
+    [self.view addSubview:imageView];
     
     CGSize  Isize=self.upimage.size;
-    float  hight=((Isize.height)/(Isize.width))*kDeviceWidth;
-    
-    _myScrollView.contentSize=CGSizeMake(kDeviceWidth, hight);
-    imageView.frame=CGRectMake(0, 0, kDeviceWidth, hight);
+    float x=0;
+    float y=0;
+    float width=0;
+    float hight=0;
+    if (Isize.width>Isize.height) {
+        x=0;
+        width=kDeviceWidth;
+        hight=(Isize.width/Isize.height)*kDeviceWidth;
+        y=(kDeviceWidth-hight)/2;
+    }
+    else
+    {
+        y=0;
+        hight=kDeviceWidth;
+        width=(Isize.width/Isize.height)*kDeviceWidth;
+        x=(kDeviceWidth-width)/2;
+    }
+
+    imageView.frame=CGRectMake(x,y, width, hight);
     
     
 }

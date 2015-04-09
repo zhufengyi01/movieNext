@@ -68,7 +68,7 @@
     [self addSubview:NullDataView];
     
     UIImageView *smailview=[[UIImageView alloc]initWithFrame:CGRectMake((kDeviceWidth-25)/2, 20, 25, 25)];
-    smailview.image=[UIImage imageNamed:@"notice_icon@2x.png"];
+    smailview.image=[UIImage imageNamed:@"notice_icon.png"];
     [NullDataView addSubview:smailview];
     
     failTitle2=[ZCControl createLabelWithFrame:CGRectMake(0, 60, kDeviceWidth, 20) Font:16 Text:@"亲，没有数据"];

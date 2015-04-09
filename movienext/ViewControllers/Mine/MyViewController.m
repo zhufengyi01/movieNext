@@ -28,9 +28,10 @@
 #import "MJRefresh.h"
 #import "AddMarkViewController.h"
 #import "Function.h"
-#import "UMShareView.h"
+//#import "UMShareView.h"
 #import "ChangeSelfViewController.h"
-@interface MyViewController ()<UITableViewDataSource, UITableViewDelegate,StageViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UIActionSheetDelegate,UMSocialDataDelegate,UMSocialUIDelegate,UMShareViewDelegate,CommonStageCellDelegate>
+#import "UMShareViewController.h"
+@interface MyViewController ()<UITableViewDataSource, UITableViewDelegate,StageViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UIActionSheetDelegate,UMSocialDataDelegate,UMSocialUIDelegate,CommonStageCellDelegate,UMShareViewControllerDelegate>
 {
     //UISegmentedControl *segment;
     UITableView   *_tableView;
@@ -49,9 +50,7 @@
     
     ButtomToolView *_toolBar;
     MarkView       *_mymarkView;
-    BOOL isMarkViewsShow;
-    UMShareView  *shareView;
-    int  productCount;
+     int  productCount;
     //保存头部视图按钮的状态
     NSMutableDictionary  *buttonStateDict;
     NSMutableDictionary  *IsNullStateDict; //纪录添加还是赞的数据为空
@@ -98,9 +97,7 @@
     
     //[self requestData];
     [self createToolBar];
-    [self createShareView];
-
-
+    //[self createShareView];
     if (self.author_id&&![self.author_id isEqualToString:@"0"]) {
         //如果有用户id 并且用户的id 不为0
         self.navigationItem.rightBarButtonItem=nil;
@@ -196,19 +193,21 @@
     
     
     lblUsername = [[UILabel alloc] initWithFrame:CGRectMake(ivAvatar.frame.origin.x+ivAvatar.frame.size.width+10, ivAvatar.frame.origin.y, 200, 20)];
-    lblUsername.font = [UIFont systemFontOfSize:15];
+    lblUsername.font = [UIFont boldSystemFontOfSize:15];
     lblUsername.textColor = VGray_color;
     if (_userInfoDict) {
         lblUsername.text=[NSString stringWithFormat:@"%@",[_userInfoDict objectForKey:@"username"]];
     }
      [viewHeader addSubview:lblUsername];
     
-    UILabel  *lbl1=[ZCControl createLabelWithFrame:CGRectMake(lblUsername.frame.origin.x,lblUsername.frame.origin.y+lblUsername.frame.size.height+5, 40, 20) Font:14 Text:@"内容"];
+    UILabel  *lbl1=[ZCControl createLabelWithFrame:CGRectMake(lblUsername.frame.origin.x,lblUsername.frame.origin.y+lblUsername.frame.size.height+5, 35, 20) Font:14 Text:@"内容"];
     lbl1.textColor=VBlue_color;
+   // lbl1.backgroundColor =[UIColor redColor];
     [viewHeader addSubview:lbl1];
     
     //内容的数量
     lblCount = [[UILabel alloc] initWithFrame:CGRectMake(lbl1.frame.origin.x+lbl1.frame.size.width, lblUsername.frame.origin.y+lblUsername.frame.size.height+5, 25, 20)];
+  //  lblCount.backgroundColor=[UIColor yellowColor];
     lblCount.font = [UIFont systemFontOfSize:14];
 
     if (_userInfoDict) {
@@ -219,13 +218,15 @@
     [viewHeader addSubview:lblCount];
     
     
-    UILabel  *lbl2=[ZCControl createLabelWithFrame:CGRectMake(lblCount.frame.origin.x+lblCount.frame.size.width+10,lblUsername.frame.origin.y+lblUsername.frame.size.height+5, 40, 20) Font:14 Text:@"被赞"];
+    UILabel  *lbl2=[ZCControl createLabelWithFrame:CGRectMake(lblCount.frame.origin.x+lblCount.frame.size.width,lblUsername.frame.origin.y+lblUsername.frame.size.height+5, 35, 20) Font:14 Text:@"被赞"];
     lbl2.textColor=VBlue_color;
+    //lbl2.backgroundColor=[UIColor grayColor];
     [viewHeader addSubview:lbl2];
 
     //赞的数量
-    lblZanCout = [[UILabel alloc] initWithFrame:CGRectMake(lbl2.frame.origin.x+lbl2.frame.size.width+5,lblCount.frame.origin.y , 50, 20)];
+    lblZanCout = [[UILabel alloc] initWithFrame:CGRectMake(lbl2.frame.origin.x+lbl2.frame.size.width,lblCount.frame.origin.y , 50, 20)];
     lblZanCout.font = [UIFont systemFontOfSize:14];
+  //  lblZanCout.backgroundColor=[UIColor blueColor];
     lblZanCout.textColor = VGray_color;
     if (_userInfoDict) {
         lblZanCout.text  =[NSString stringWithFormat:@"%@",[_userInfoDict objectForKey:@"uped_count"]];
@@ -235,7 +236,7 @@
    //简介
     lblBrief = [[UILabel alloc] initWithFrame:CGRectMake(ivAvatar.frame.origin.x+ivAvatar.frame.size.width+10,lblCount.frame.origin.y+lblCount.frame.size.height+10, kDeviceWidth-ivAvatar.frame.origin.x-ivAvatar.frame.size.width-20, 20)];
     lblBrief.numberOfLines=0;
-    lblBrief.font = [UIFont systemFontOfSize:12];
+    lblBrief.font = [UIFont systemFontOfSize:14];
     
     CGSize  Msize= [signature boundingRectWithSize:CGSizeMake(kDeviceWidth-80, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:lblBrief.font forKey:NSFontAttributeName] context:nil].size;
     lblBrief.textColor = VGray_color;
@@ -426,12 +427,12 @@
     
 }
 
--(void)createShareView
-{
-    shareView=[[UMShareView alloc]initWithFrame:CGRectMake(0,0, kDeviceWidth, kDeviceHeight)];
-    shareView.delegate=self;
-}
-
+//-(void)createShareView
+//{
+//    shareView=[[UMShareView alloc]initWithFrame:CGRectMake(0,0, kDeviceWidth, kDeviceHeight)];
+//    shareView.delegate=self;
+//}
+//
 
 
 #pragma  mark -----
@@ -518,7 +519,9 @@
                     WeiboModel  *weibomodel =[[WeiboModel alloc]init];
                     if (weibomodel) {
                         [weibomodel setValuesForKeysWithDictionary:[addDict objectForKey:@"weibo"]];
+                        weibomodel.fake=[NSNumber numberWithInt:1];
                         model.weibo=weibomodel;
+                        
                     }
                       [_addedDataArray addObject:model];
                 }
@@ -554,6 +557,7 @@
                     WeiboModel  *weibomodel =[[WeiboModel alloc]init];
                     if (weibomodel) {
                         [weibomodel setValuesForKeysWithDictionary:[addDict objectForKey:@"weibo"]];
+                        weibomodel.fake=[NSNumber numberWithInt:1];
                         model.weibo=weibomodel;
                     }
                     [_upedDataArray addObject:model];
@@ -728,16 +732,7 @@
 {
     NSLog(@"didDeselectRowAtIndexPath  =====%ld",indexPath.row);
     CommonStageCell   *cell=(CommonStageCell *)[tableView cellForRowAtIndexPath:indexPath];
-    if (isMarkViewsShow==YES) {
-        isMarkViewsShow=NO;
-        [cell.stageView  hidenAndShowMarkView:YES];
-        
-    }
-    else{
-        isMarkViewsShow=YES;
-        [cell.stageView  hidenAndShowMarkView:NO];
-    }
-
+ 
 }
 //设置页面
 -(void)GotoSettingClick:(UIButton  *) button
@@ -748,7 +743,7 @@
 
 #pragma  mark  =====ButtonClick
 #pragma  mark  -----UMButtomViewshareViewDlegate-------
--(void)UMshareViewHandClick:(UIButton *)button ShareImage:(UIImage *)shareImage MoviewModel:(StageInfoModel *)StageInfo
+/*-(void)UMshareViewHandClick:(UIButton *)button ShareImage:(UIImage *)shareImage MoviewModel:(StageInfoModel *)StageInfo
 {
     NSArray  *sharearray =[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQzone, UMShareToSina, nil];
     [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
@@ -762,6 +757,23 @@
         [shareView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.5];
         
     }
+}*/
+-(void)UMShareViewControllerHandClick:(UIButton *)button ShareImage:(UIImage *)shareImage StageInfoModel:(StageInfoModel *)StageInfo
+{
+    NSArray  *sharearray =[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQzone, UMShareToSina, nil];
+    [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
+    
+    [[UMSocialControllerService defaultControllerService] setShareText:StageInfo.movie_name shareImage:shareImage socialUIDelegate:self];        //设置分享内容和回调对象
+    [UMSocialSnsPlatformManager getSocialPlatformWithName:[sharearray  objectAtIndex:button.tag-10000]].snsClickHandler(self,[UMSocialControllerService defaultControllerService],YES);
+    NSLog(@"分享到微信");
+    self.tabBarController.tabBar.hidden=NO;
+//    if (shareView) {
+//        [shareView HidenShareButtomView];
+//        [shareView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.5];
+//        
+//    }
+
+    
 }
 ///点击分享的屏幕，收回分享的背景
 -(void)SharetopViewTouchBengan
@@ -769,39 +781,39 @@
     NSLog(@"controller touchbegan  中 执行了隐藏工具栏的方法");
     //取消当前的选中的那个气泡
     [_mymarkView CancelMarksetSelect];
-    if (shareView) {
-        [shareView HidenShareButtomView];
-        [shareView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.5];
-        self.tabBarController.tabBar.hidden=NO;
-        
-    }
-    
+//    if (shareView) {
+//        [shareView HidenShareButtomView];
+//        [shareView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.5];
+//        self.tabBarController.tabBar.hidden=NO;
+//        
+//    }
+//    
 }
 -(void)didCloseUIViewController:(UMSViewControllerType)fromViewControllerType
 {
     //返回到app执行的方法，移除的时候应该写在这里
     NSLog(@"didCloseUIViewController第一步执行这个");
-    if (shareView) {
-        [shareView removeFromSuperview];
-        
-    }
+//    if (shareView) {
+//        [shareView removeFromSuperview];
+//        
+//    }
     
 }
 //根据有的view 上次一张图片
 -(void)didFinishGetUMSocialDataInViewController:(UMSocialResponseEntity *)response
 {
     NSLog(@"didFinishGetUMSocialDataInViewController第二部执行这个");
-    if (shareView) {
-        [shareView removeFromSuperview];
-    }
-    
+//    if (shareView) {
+//        [shareView removeFromSuperview];
+//    }
+//    
 }
 -(void)didFinishGetUMSocialDataResponse:(UMSocialResponseEntity *)response;
 {
     NSLog(@"didFinishGetUMSocialDataResponse第二部执行这个");
-    if (shareView) {
-        [shareView removeFromSuperview];
-    }
+//    if (shareView) {
+//        [shareView removeFromSuperview];
+//    }
     
     
 }
@@ -831,25 +843,35 @@
     else if(button.tag==2000)
     {
         //分享
-        float hight= kDeviceWidth;
-        float  ImageWith=[hotmovie.stageinfo.w intValue];
-        float  ImgeHight=[hotmovie.stageinfo.h intValue];
-        if(ImgeHight>ImageWith)
-        {
-            hight=  (ImgeHight/ImageWith) *kDeviceWidth;
-        }
+      //  float hight= kDeviceWidth;
+//        float  ImageWith=[hotmovie.stageinfo.w intValue];
+//        float  ImgeHight=[hotmovie.stageinfo.h intValue];
+//        if(ImgeHight>ImageWith)
+//        {
+//            hight=  (ImgeHight/ImageWith) *kDeviceWidth;
+//        }
         CommonStageCell *cell = (CommonStageCell *)(button.superview.superview.superview);
-        UIImage  *image=[Function getImage:cell.stageView WithSize:CGSizeMake(kDeviceWidth, hight)];
+        UIImage  *image=[Function getImage:cell.stageView WithSize:CGSizeMake(kDeviceWidth, kDeviceWidth)];
         //创建UMshareView 后必须配备这三个方法
-        shareView.StageInfo=hotmovie.stageinfo;
-        shareView.screenImage=image;
-        [shareView configShareView];
-        [self.view addSubview:shareView];
-        self.tabBarController.tabBar.hidden=YES;
-        if ([shareView respondsToSelector:@selector(showShareButtomView)]) {
-            [shareView showShareButtomView];
-            
-        }
+//        shareView.StageInfo=hotmovie.stageinfo;
+//        shareView.screenImage=image;
+//        [shareView configShareView];
+//        [self.view addSubview:shareView];
+//        self.tabBarController.tabBar.hidden=YES;
+//        if ([shareView respondsToSelector:@selector(showShareButtomView)]) {
+//            [shareView showShareButtomView];
+//            
+//        }
+        
+        
+        UMShareViewController  *shareVC=[[UMShareViewController alloc]init];
+        shareVC.StageInfo=hotmovie.stageinfo;
+        shareVC.screenImage=image;
+        shareVC.delegate=self;
+        UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:shareVC];
+        [self presentViewController:na animated:YES completion:nil];
+        
+
     }
     else if(button.tag==3000)
     {
@@ -907,8 +929,7 @@
 -(void)StageViewHandClickMark:(WeiboModel *)weiboDict withmarkView:(id)markView StageInfoDict:(StageInfoModel *)stageInfoDict
 {
     ///执行buttonview 弹出
-    //获取markview的指针
-    MarkView   *mv=(MarkView *)markView;
+     MarkView   *mv=(MarkView *)markView;
     //把当前的markview 给存储在了controller 里面
     _mymarkView=mv;
     if (mv.isSelected==YES) {  //当前已经选中的状态
@@ -979,24 +1000,33 @@
         //分享文字
         NSString  *shareText=weiboDict.topic;
         float hight= kDeviceWidth;
-        float  ImageWith=[stageInfoDict.w intValue];
-        float  ImgeHight=[stageInfoDict.h intValue];
-        if(ImgeHight>ImageWith)
-        {
-            hight=  (ImgeHight/ImageWith) *kDeviceWidth;
-        }
+//        float  ImageWith=[stageInfoDict.w intValue];
+//        float  ImgeHight=[stageInfoDict.h intValue];
+//        if(ImgeHight>ImageWith)
+//        {
+//            hight=  (ImgeHight/ImageWith) *kDeviceWidth;
+//        }
         CommonStageCell *cell = (CommonStageCell *)(markView.superview.superview.superview);
         UIImage  *image=[Function getImage:cell.stageView WithSize:CGSizeMake(kDeviceWidth, hight)];
         //创建UMshareView 后必须配备这三个方法
-        shareView.StageInfo=stageInfoDict;
-        shareView.screenImage=image;
-        [shareView configShareView];
-        [self.view addSubview:shareView];
-        self.tabBarController.tabBar.hidden=YES;
-        if ([shareView respondsToSelector:@selector(showShareButtomView)]) {
-            [shareView showShareButtomView];
-            
-        }
+//        shareView.StageInfo=stageInfoDict;
+//        shareView.screenImage=image;
+//        [shareView configShareView];
+//        [self.view addSubview:shareView];
+//        self.tabBarController.tabBar.hidden=YES;
+//        if ([shareView respondsToSelector:@selector(showShareButtomView)]) {
+//            [shareView showShareButtomView];
+//            
+//        }
+        
+        UMShareViewController  *shareVC=[[UMShareViewController alloc]init];
+        shareVC.StageInfo=stageInfoDict;
+        shareVC.screenImage=image;
+        shareVC.delegate=self;
+        UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:shareVC];
+        [self presentViewController:na animated:YES completion:nil];
+        
+
         
     }
 #pragma mark  ----------点赞--------------
