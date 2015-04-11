@@ -8,12 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import "MarkView.h"
-#import "WeiboModel.h"
-#import "StageInfoModel.h"
-
+//#import "WeiboModel.h"
+//#import "StageInfoModel.h"
+#import "weiboInfoModel.h"
+#import "stageInfoModel.h"
 @protocol StageViewDelegate <NSObject>
 //把信息又返回，给controller
--(void)StageViewHandClickMark:(WeiboModel  *) weiboDict withmarkView:(id) markView StageInfoDict:(StageInfoModel *)stageInfoDict;
+-(void)StageViewHandClickMark:(weiboInfoModel  *) weiboDict withmarkView:(id) markView StageInfoDict:(stageInfoModel *)stageInfoDict;
 @end
 @interface StageView : UIView  <MarkViewDelegate>   // 遵守
 {
@@ -23,13 +24,16 @@
    // UIImageView  *tanimageView;
     UIButton      *tanlogoButton;
 }
-@property (nonatomic,strong ) NSArray    *WeibosArray;   //小标签的数组，在多个标签的时候使用这个
-@property (nonatomic,strong ) WeiboModel      *weiboDict;     //只有一个标签的时候传递这个参数
+@property (nonatomic,strong ) NSArray    *weibosArray;   //小标签的数组，在多个标签的时候使用这个
+//@property (nonatomic,strong ) WeiboModel      *weiboDict;     //只有一个标签的时候传递这个参数
+@property (nonatomic,strong ) weiboInfoModel      *weiboinfo;     //只有一个标签的时候传递这个参数
+
 //设置气泡是否可以移动，这个在cell 里面进行了设置
 @property (nonatomic,assign) BOOL isAnimation;   //子视图是否是可以动的动画
-@property(nonatomic,strong) StageInfoModel   *StageInfoDict;
-//- (void)setStageValue:(NSDictionary *)stageDict;
--(void)configStageViewforStageInfoDict;
+//@property(nonatomic,strong) StageInfoModel   *StageInfoDict;
+@property(nonatomic,strong) stageInfoModel   *stageInfo;
+
+ -(void)configStageViewforStageInfoDict;
 @property (nonatomic,assign )id <StageViewDelegate> delegate;
 /**
  *  开始动画

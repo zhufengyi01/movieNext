@@ -24,16 +24,16 @@
 
 + (void) saveUser:(UserDataCenter *)user
 {
-
     NSDictionary *dict = @{
                            @"id":user.user_id,
                            @"username":user.username,
+                           @"sex":user.sex,
+                           @"fake":user.fake,
                            @"level":user.is_admin,
-                           @"avatar":user.avatar,
+                           @"verified":user.verified,
+                           @"logo":user.logo,
                            @"brief":user.signature,
-                           @"update_time":user.update_time,
-                           @"bind_type":user.user_bind_type
-                           };
+};
     
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:kUserKey];
     [[NSUserDefaults standardUserDefaults] setObject:dict forKey:kUserKey];
@@ -329,17 +329,21 @@
             userCenter.is_admin =[userInfo objectForKey:@"level"];
         }
         if ([userInfo objectForKey:@"avatar"]) {
-            userCenter.avatar =[userInfo objectForKey:@"avatar"];
+            userCenter.logo =[userInfo objectForKey:@"avatar"];
         }
         if ([userInfo objectForKey:@"brief"]) {
             userCenter.signature=[userInfo objectForKey:@"brief"];
         }
-        if ([userInfo objectForKey:@"update_time"]) {
-            userCenter.update_time=[userInfo objectForKey:@"update_time"];
+        if ([userInfo objectForKey:@"sex"]) {
+            userCenter.sex=[userInfo objectForKey:@"sex"];
         }
-        if ([userInfo  objectForKey:@"bind_type"]) {
-            userCenter.user_bind_type=[userInfo objectForKey:@"bind_type"];
+        if ([userInfo objectForKey:@"fake"]) {
+            userCenter.fake=[userInfo objectForKey:@"fake"];
         }
+        if ([userInfo objectForKey:@"verified"]) {
+            userCenter.verified=[userInfo objectForKey:@"verified"];
+        }
+        
     }
 
     

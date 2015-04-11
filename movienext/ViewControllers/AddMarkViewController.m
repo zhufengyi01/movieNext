@@ -95,8 +95,8 @@
 -(void)createMyScrollerView
 {
     //计算stagview 的高度
-    float  ImageWith=[self.stageInfoDict.w floatValue];
-    float  ImgeHight=[self.stageInfoDict.h floatValue];
+    float  ImageWith=[self.stageInfo.width floatValue];
+    float  ImgeHight=[self.stageInfo.height floatValue];
     float hight=0;
     hight= kDeviceHeight;  // 计算的事bgview1的高度
     
@@ -140,9 +140,9 @@
 //
     stageView = [[StageView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, hight)];
  //   NSLog(@" 在 添加弹幕页面的   stagedict = %@",_myDict);
-    stageView.StageInfoDict=self.stageInfoDict;
+    stageView.stageInfo=self.stageInfo;
     [stageView configStageViewforStageInfoDict];
-       NSLog(@" 在 添加弹幕页面的   stagedict = %@",self.stageInfoDict);
+       NSLog(@" 在 添加弹幕页面的   stagedict = %@",self.stageInfo);
      [_myScorllerView addSubview:stageView];
 }
 
@@ -236,7 +236,7 @@
      _myMarkView =[[MarkView alloc]initWithFrame:CGRectMake(100,140 , 100, 20)];
     ///显示标签的头像
     UserDataCenter  * userCenter=[UserDataCenter shareInstance];
-    [ _myMarkView.LeftImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@!thumb",kUrlAvatar,    userCenter.avatar]]];
+    [ _myMarkView.LeftImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@!thumb",kUrlAvatar,    userCenter.logo]]];
     _myMarkView.TitleLable.text=InputStr;
     [stageView addSubview:_myMarkView];
     
@@ -303,7 +303,7 @@
         Y=[NSString stringWithFormat:@"%d",100];
     }
     UserDataCenter  *userCenter=[UserDataCenter shareInstance];
-     NSDictionary *parameter = @{@"user_id": userCenter.user_id,@"topic_name":InputStr,@"stage_id":self.stageInfoDict.Id,@"x":X,@"y":Y};
+     NSDictionary *parameter = @{@"user_id": userCenter.user_id,@"topic_name":InputStr,@"stage_id":self.stageInfo.Id,@"x":X,@"y":Y};
    // NSLog(@"==parameter====%@",parameter);
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:[NSString stringWithFormat:@"%@/weibo/create", kApiBaseUrl] parameters:parameter success:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -317,7 +317,7 @@
                 [weibomodel setValuesForKeysWithDictionary:[responseObject objectForKey:@"detail"]];
             }
             weibomodel.fake=[NSNumber numberWithInt:1];
-            [self.model.weibos addObject:weibomodel];
+            [self.model.stageInfo.weibosArray addObject:weibomodel];
         }
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {

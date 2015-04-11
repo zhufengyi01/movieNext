@@ -8,10 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import "RootViewController.h"
-#import "HotMovieModel.h"
-
+//#import "HotMovieModel.h"
+#import "ModelsModel.h"
 @interface ShowStageViewController : RootViewController
 
-@property (nonatomic, strong) HotMovieModel * movieModel;
+@property (nonatomic, strong) ModelsModel * model;
 
 @end

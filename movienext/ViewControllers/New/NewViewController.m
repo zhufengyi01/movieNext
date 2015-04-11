@@ -19,14 +19,23 @@
 #import "AddMarkViewController.h"
 #import "MovieDetailViewController.h"
 #import "MyViewController.h"
-#import "WeiboModel.h"
-#import "HotMovieModel.h"
+//#import "WeiboModel.h"
+//#import "HotMovieModel.h"
+
+#import "ModelsModel.h"
+#import "stageInfoModel.h"
+#import "movieInfoModel.h"
+#import "weiboInfoModel.h"
+#import "weiboUserInfoModel.h"
+#import "UpweiboModel.h"
+
 #import "Function.h"
 #import "UMSocial.h"
 //#import "UMShareView.h"
 #import "UMSocialControllerService.h"
 #import "UIImageView+WebCache.h"
 #import "UMShareViewController.h"
+
 
 //友盟分享
 //#import "UMSocial.h"
@@ -39,11 +48,12 @@
     NSMutableArray    *_hotDataArray;
     NSMutableArray    *_newDataArray;
     int page;
+    int pagesize;
     ButtomToolView *_toolBar;
     MarkView       *_mymarkView;
      UIImageView   *ShareimageView;
    // UMShareView   *shareView;
-    StageInfoModel  *_TStageInfo;
+    stageInfoModel  *_TStageInfo;
     WeiboModel      *_TweiboInfo;
     //用于移除推荐使用
     NSString        *_hot_Id;
@@ -93,7 +103,8 @@
 -(void)initData{
     _hotDataArray = [[NSMutableArray alloc]init];
     _newDataArray=[[NSMutableArray alloc]init];
-    page=0;
+    page=1;
+    pagesize=10;
  }
 #pragma  mark   ------
 #pragma  mark  -------CreatUI;
@@ -142,7 +153,7 @@
     _HotMoVieTableView=[[UITableView alloc]initWithFrame:CGRectMake(0,0, kDeviceWidth, kDeviceHeight-kHeightNavigation)];
     _HotMoVieTableView.delegate=self;
     _HotMoVieTableView.dataSource=self;
-    _HotMoVieTableView.separatorStyle=UITableViewCellSeparatorStyleNone;
+    _HotMoVieTableView.separatorStyle=UITableViewCellSeparatorStyleSingleLine;
     [self.view addSubview:_HotMoVieTableView];
 }
 
@@ -160,7 +171,7 @@
 #pragma mark 开始进入刷新状态
 - (void)headerRereshing
 {
-    page=0;
+    page=1;
     
     if (segment.selectedSegmentIndex==0) {
         if (_hotDataArray.count>0) {
@@ -241,9 +252,7 @@
     
 }
 
-
-#warning  举报某人，未实现
-//举报某人
+ //举报某人
 -(void)requestReport
 {
     NSString *type=@"1";
@@ -365,25 +374,25 @@
     
 }
 //微博点赞请求
--(void)LikeRequstData:(WeiboModel  *) weiboDict StageInfo :(StageInfoModel *) stageInfoDict
+-(void)LikeRequstData:(weiboInfoModel  *) weiboDict StageInfo :(stageInfoModel *) stageInfoDict
 {
     
     UserDataCenter  *userCenter=[UserDataCenter shareInstance];
     NSNumber  *weiboId=weiboDict.Id;
     NSNumber  *stageId=stageInfoDict.Id;
     NSString  *movieId=stageInfoDict.movie_id;
-    NSString  *movieName=stageInfoDict.movie_name;
+    NSString  *movieName=stageInfoDict.movieInfo.name;
     NSString  *userId=userCenter.user_id;
-    NSString  *autorId =weiboDict.user_id;
+    NSString  *autorId =weiboDict.created_by;
     NSNumber  *uped;
     
-    if ([weiboDict.uped  integerValue] ==0) {
-        uped=[NSNumber numberWithInt:0];
-    }
-    else
-    {
-       uped=[NSNumber numberWithInt:1];
-    }
+//    if ([weiboDict.uped  integerValue] ==0) {
+//        uped=[NSNumber numberWithInt:0];
+//    }
+//    else
+//    {
+//       uped=[NSNumber numberWithInt:1];
+//    }
     
     NSDictionary *parameters = @{@"weibo_id":weiboId, @"stage_id":stageId,@"movie_id":movieId,@"movie_name":movieName,@"user_id":userId,@"author_id":autorId,@"operation":uped};
     
@@ -398,50 +407,86 @@
     }];
 
 }
-- (void)requestData{
-  
+-(void)requestData{
     UserDataCenter  *userCenter=[UserDataCenter shareInstance];
-    NSDictionary *parameters = @{@"user_id":userCenter.user_id, @"page":[NSString stringWithFormat:@"%d",page]};
+   // NSDictionary *parameters = @{@"user_id":userCenter.user_id, @"page":[NSString stringWithFormat:@"%d",page]};
+    NSDictionary *parameters = @{@"user_id":userCenter.user_id};
+
     NSString * section;
     if (segment.selectedSegmentIndex==1) {  // 最新
-        section=@"weibo/listRecently";
+        section=@"weibo/listrecently";
     }
     else if(segment.selectedSegmentIndex==0) //热门
     {
         section= @"hot/list";
     }
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager POST:[NSString stringWithFormat:@"%@/%@", kApiBaseUrl, section] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        if ([[responseObject objectForKey:@"return_code"] intValue]==10000) {
+     [manager POST:[NSString stringWithFormat:@"%@/%@?per-page=%d&page=%d", kApiBaseUrl, section,pagesize,page] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        //NSDictionary  *dict=responseObject;
+        //NSLog(@"responseObject  ====%@",dict);
+        //返回0表示返回成功
+        if ([[responseObject objectForKey:@"code"] intValue]==0) {
             [loadView stopAnimation];
             loadView.hidden=YES;
-
-        NSMutableArray  *Detailarray=[responseObject objectForKey:@"detail"];
+        NSMutableArray  *Detailarray=[responseObject objectForKey:@"models"];
+            
         if (segment.selectedSegmentIndex==0) {
             if (_hotDataArray ==nil) {
                 _hotDataArray=[[NSMutableArray alloc]init];
             }
-            NSLog(@"热门数据 JSON: %@", responseObject);
+            NSLog(@"热门数据 gaga JSON: %@", responseObject);
             for (NSDictionary  *hotDict in Detailarray) {
-                HotMovieModel  *hotModel=[[HotMovieModel alloc]init];
-                if (hotModel) {
-                    [hotModel setValuesForKeysWithDictionary:hotDict];
-                    
-                    NSMutableArray  *weibosArray=[[NSMutableArray alloc]init];
-                    for (NSDictionary  *weiboDict in [hotDict objectForKey:@"weibos"]) {
-                        WeiboModel *weiboModel=[[WeiboModel alloc]init];
-                        [weiboModel setValuesForKeysWithDictionary:weiboDict];
-                        [weibosArray addObject:weiboModel];
+             
+                ModelsModel  *model =[[ModelsModel alloc]init];
+                if(model)
+                {
+                    [model setValuesForKeysWithDictionary:hotDict];
+                    //stageinfo
+                    stageInfoModel  *stagemodel =[[stageInfoModel alloc]init];
+                    if (stagemodel) {
+                        if(![[hotDict objectForKey:@"stage"] isKindOfClass:[NSNull class]])
+                     {
+                        [stagemodel setValuesForKeysWithDictionary:[hotDict objectForKey:@"stage"]];
+                        
+                        //weiboinfo
+                        NSMutableArray  *weibosarray=[[NSMutableArray alloc]init];
+                        for (NSDictionary  *weibodict  in [[hotDict objectForKey:@"stage"] objectForKey:@"weibos"]) {
+                            
+                            NSLog(@"=====weibo dict =======%@",weibodict);
+                            weiboInfoModel *weibomodel=[[weiboInfoModel alloc]init];
+                            if (weibomodel) {
+                                [weibomodel setValuesForKeysWithDictionary:weibodict];
+                                
+                                weiboUserInfoModel  *usermodel =[[weiboUserInfoModel alloc]init];
+                                    if (usermodel) {
+                                         [usermodel setValuesForKeysWithDictionary:[weibodict objectForKey:@"user"]];
+                                        weibomodel.uerInfo=usermodel;
+                                   }
+        
+                                [weibosarray addObject:weibomodel];
+                            }
+                        }
+                        stagemodel.weibosArray=weibosarray;
+                        //moviemodel
+                        movieInfoModel *moviemodel =[[movieInfoModel alloc]init];
+                        if (moviemodel) {
+                            [moviemodel setValuesForKeysWithDictionary:[[hotDict objectForKey:@"stage"] objectForKey:@"movie"]];
+                            stagemodel.movieInfo=moviemodel;
+                        }
                     }
-                    hotModel.weibos=weibosArray;
-                     StageInfoModel  *stageModel=[[StageInfoModel alloc]init];
-                    [stageModel setValuesForKeysWithDictionary:[hotDict objectForKey:@"stageinfo"]];
-                    hotModel.stageinfo=stageModel;
+                    model.stageInfo=stagemodel;
                     
-                  //  NSLog(@"热门数据的 hotmodel     ====%@",hotModel);
-                    [_hotDataArray addObject:hotModel];
-                    
+                    }
+                    if(_hotDataArray==nil)
+                    {
+                        _hotDataArray =[[NSMutableArray alloc]init];
+                        
+                    }
+                    [_hotDataArray addObject:model];
                 }
+                NSNumber  *iD=model.stageInfo.Id;
+                NSLog(@"=====%@",iD);
+                
             }
           [_HotMoVieTableView reloadData];
            // NSLog(@"打印出来的热门数据，没有weibo ＝＝====%@",_hotDataArray);
@@ -452,23 +497,34 @@
             if (_newDataArray==nil) {
                 _newDataArray=[[NSMutableArray alloc]init];
             }
-            //NSLog(@"最新数据 JSON: %@", responseObject);
-            for (NSDictionary  *newdict  in Detailarray) {
-                HotMovieModel *model =[[HotMovieModel alloc]init];
-                if (model) {
-                    [model setValuesForKeysWithDictionary:newdict];
-                     StageInfoModel  *stagemodel=[[StageInfoModel alloc]init];
-                    if (stagemodel) {
-                        [stagemodel setValuesForKeysWithDictionary:[newdict objectForKey:@"stageinfo"]];
-                        model.stageinfo=stagemodel;
-                    }
-                     WeiboModel  *weibomodel =[[WeiboModel alloc]init];
-                    if (weibomodel) {
-                        [weibomodel setValuesForKeysWithDictionary:[newdict objectForKey:@"weibo"]];
-                        model.weibo=weibomodel;
-                    }
-                    [_newDataArray addObject:model];
+            NSLog(@"最新数据 JSON: %@", responseObject);
+            
+            for (NSDictionary  *newDict in Detailarray) {
+            weiboInfoModel  *weibomodel =[[weiboInfoModel alloc]init];
+            if(weibomodel)
+            {
+                [weibomodel setValuesForKeysWithDictionary:newDict];
+                
+                weiboUserInfoModel *usermodel =[[weiboUserInfoModel alloc]init];
+                if (usermodel) {
+                    [usermodel setValuesForKeysWithDictionary:[newDict objectForKey:@"user"]];
+                    weibomodel.uerInfo=usermodel;
                 }
+                stageInfoModel  *stageInfo =[[stageInfoModel alloc]init];
+                if (stageInfo) {
+                    [stageInfo setValuesForKeysWithDictionary:[newDict objectForKey:@"stage"]];
+                    movieInfoModel  *moviemodel =[[movieInfoModel alloc]init];
+                    if (moviemodel) {
+                        [moviemodel setValuesForKeysWithDictionary:[[newDict objectForKey:@"stage"] objectForKey:@"movie"]];
+                        stageInfo.movieInfo=moviemodel;
+                    }
+                    weibomodel.stageInfo=stageInfo;
+                }
+                if (_newDataArray==nil) {
+                    _newDataArray =[[NSMutableArray alloc]init];
+                }
+                 [_newDataArray addObject:weibomodel];
+            }
             }
           
            [_HotMoVieTableView reloadData];
@@ -538,16 +594,26 @@
         
         
         if (_hotDataArray.count>indexPath.row) {
-             HotMovieModel  *hotModel=[_hotDataArray objectAtIndex:indexPath.row];
+//             //HotMovieModel  *hotModel=[_hotDataArray objectAtIndex:indexPath.row];
+//            cell.pageType=NSPageSourceTypeMainHotController;
+//            //小闪动标签的数组
+//            cell.WeibosArray =hotModel.weibos;
+//            cell.weiboDict=nil;
+//            cell.delegate=self;
+//            cell.StageInfoDict=hotModel.stageinfo;
+//            [cell ConfigsetCellindexPath:indexPath.row];
+//            //遵守stagview的协议，点击事件在controller里面响应
+//            cell.stageView.delegate=self;
+            ModelsModel  *model =[_hotDataArray objectAtIndex:indexPath.row];
             cell.pageType=NSPageSourceTypeMainHotController;
-            //小闪动标签的数组
-            cell.WeibosArray =hotModel.weibos;
-            cell.weiboDict=nil;
             cell.delegate=self;
-            cell.StageInfoDict=hotModel.stageinfo;
-            [cell ConfigsetCellindexPath:indexPath.row];
-            //遵守stagview的协议，点击事件在controller里面响应
             cell.stageView.delegate=self;
+            cell.cellModel=model;
+            cell.stageInfo=model.stageInfo;
+            cell.weibosArray=model.stageInfo.weibosArray;
+            cell.weiboInfo=nil;
+        
+            [cell ConfigsetCellindexPath:indexPath.row];
         }
         return cell;
     }
@@ -562,19 +628,27 @@
         }
         if (_newDataArray.count>indexPath.row) {
            
-            HotMovieModel   *hotmodel=[_newDataArray  objectAtIndex:indexPath.row];
-            //配置cell的类型。
+//            HotMovieModel   *hotmodel=[_newDataArray  objectAtIndex:indexPath.row];
+//            //配置cell的类型。
+//            cell.pageType=NSPageSourceTypeMainNewController;
+//            //根据类型配置cell的气泡数据
+//            cell.weiboDict =hotmodel.weibo; //[[_newDataArray  objectAtIndex:indexPath.row]  objectForKey:@"weibo"];
+//            //配置stage的数据
+//            cell.WeibosArray=nil;
+//            cell.delegate=self;
+//            cell.StageInfoDict=hotmodel.stageinfo;
+//            [cell ConfigsetCellindexPath:indexPath.row];
+// 
+//            //遵守了stageview的协议，点击事件在这里执行
+//            cell.stageView.delegate=self;
+            weiboInfoModel  *model =[_newDataArray  objectAtIndex:indexPath.row];
             cell.pageType=NSPageSourceTypeMainNewController;
-            //根据类型配置cell的气泡数据
-            cell.weiboDict =hotmodel.weibo; //[[_newDataArray  objectAtIndex:indexPath.row]  objectForKey:@"weibo"];
-            //配置stage的数据
-            cell.WeibosArray=nil;
-            cell.delegate=self;
-            cell.StageInfoDict=hotmodel.stageinfo;
-            [cell ConfigsetCellindexPath:indexPath.row];
- 
-            //遵守了stageview的协议，点击事件在这里执行
+            cell.weiboInfo=model;
             cell.stageView.delegate=self;
+            cell.stageInfo=model.stageInfo;
+            cell.delegate=self;
+            [cell ConfigsetCellindexPath:indexPath.row];
+            
         }
         return  cell;
     }
@@ -629,17 +703,18 @@
 
 -(void)commonStageCellToolButtonClick:(UIButton *)button Rowindex:(NSInteger)index
 {
-    HotMovieModel  *hotmovie;
+  //  HotMovieModel  *hotmovie;
+    ModelsModel  *model;
     if (segment.selectedSegmentIndex==0) {
-        hotmovie =[_hotDataArray objectAtIndex:index];
+        model =[_hotDataArray objectAtIndex:index];
     }
     else  {
-        hotmovie=[_newDataArray objectAtIndex:index];
+        model=[_newDataArray objectAtIndex:index];
     }
     if (button.tag==1000) {
         //电影按钮
         MovieDetailViewController *vc =  [MovieDetailViewController new];
-        vc.movieId =  hotmovie.stageinfo.movie_id;
+        vc.movieId =  model.stageInfo.movie_id;
         [self.navigationController pushViewController:vc animated:YES];
 
     }
@@ -649,7 +724,7 @@
         CommonStageCell *cell = (CommonStageCell *)(button.superview.superview.superview);
         UIImage  *image=[Function getImage:cell.stageView WithSize:CGSizeMake(kDeviceWidth, kDeviceWidth)];
         UMShareViewController  *shareVC=[[UMShareViewController alloc]init];
-        shareVC.StageInfo=hotmovie.stageinfo;
+        shareVC.StageInfo=model.stageInfo;
         shareVC.screenImage=image;
         shareVC.delegate=self;
          UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:shareVC];
@@ -660,11 +735,11 @@
     {
         //添加弹幕
         AddMarkViewController  *AddMarkVC=[[AddMarkViewController alloc]init];
-        AddMarkVC.stageInfoDict=hotmovie.stageinfo;
-        AddMarkVC.model=hotmovie;
+        AddMarkVC.stageInfo=model.stageInfo;
+        AddMarkVC.model=model;
         AddMarkVC.delegate=self;
         //AddMarkVC.pageSoureType=NSAddMarkPageSourceDefault;
-        NSLog(@"dict.stageinfo = %@", AddMarkVC.stageInfoDict);
+        NSLog(@"dict.stageinfo = %@", AddMarkVC.stageInfo);
         [self.navigationController pushViewController:AddMarkVC animated:NO];
         
 
@@ -696,7 +771,7 @@
     else if(segment.selectedSegmentIndex==1)
     {
         hotmovie=[_newDataArray objectAtIndex:indexrow];
-        _stage_Id=hotmovie.stageinfo.Id;
+      //  _stage_Id=hotmovie.stageinfo.Id;
         UIActionSheet  *ash =[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"屏蔽剧照" otherButtonTitles:nil, nil];
         ash.tag=505;
         [ash showInView:self.view];
@@ -711,50 +786,23 @@
     
 }
 
-
 #pragma  mark  -----UMButtomViewshareViewDlegate------------------------
-/*-(void)UMshareViewHandClick:(UIButton *)button ShareImage:(UIImage *)shareImage MoviewModel:(StageInfoModel *)StageInfo
+
+-(void)UMShareViewControllerHandClick:(UIButton *)button ShareImage:(UIImage *)shareImage StageInfoModel:(stageInfoModel *)StageInfo
 {
-    NSArray  *sharearray =[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQzone, UMShareToSina, nil];
-        [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
     
-        [[UMSocialControllerService defaultControllerService] setShareText:StageInfo.movie_name shareImage:shareImage socialUIDelegate:self];        //设置分享内容和回调对象
-        [UMSocialSnsPlatformManager getSocialPlatformWithName:[sharearray  objectAtIndex:button.tag-10000]].snsClickHandler(self,[UMSocialControllerService defaultControllerService],YES);
-        NSLog(@"分享到微信");
-        self.tabBarController.tabBar.hidden=NO;
-        if (shareView) {
-            [shareView HidenShareButtomView];
-            [shareView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.5];
-          
-        }
-}*/
--(void)UMShareViewControllerHandClick:(UIButton *)button ShareImage:(UIImage *)shareImage StageInfoModel:(StageInfoModel *)StageInfo
-{
+    
     NSArray  *sharearray =[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQzone, UMShareToSina, nil];
     
     [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
     
-    [[UMSocialControllerService defaultControllerService] setShareText:StageInfo.movie_name shareImage:shareImage socialUIDelegate:self];
+    [[UMSocialControllerService defaultControllerService] setShareText:StageInfo.movieInfo.name shareImage:shareImage socialUIDelegate:self];
     //设置分享内容和回调对象
-    if (button.tag==10003) {
-
-         NSArray  *array =[NSArray arrayWithObjects:StageInfo.movie_name,shareImage,nil];
-        [self performSelector:@selector(shareTosinaWithNameAndImage:) withObject:array afterDelay:2];
-     }
-    else {
+    
     [UMSocialSnsPlatformManager getSocialPlatformWithName:[sharearray  objectAtIndex:button.tag-10000]].snsClickHandler(self,[UMSocialControllerService defaultControllerService],YES);
     NSLog(@"分享");
     
- }
-}
--(void)shareTosinaWithNameAndImage:(NSArray *)array {
-
-    [[UMSocialControllerService defaultControllerService] setShareText:array[0] shareImage:array[1] socialUIDelegate:self];
-    
-    [UMSocialSnsPlatformManager getSocialPlatformWithName:UMShareToSina].snsClickHandler(self,[UMSocialControllerService defaultControllerService],YES);
-
-    
-
+ 
 }
 //#pragma mark  --UMShareDelegate 友盟分享实现的功能
 
@@ -775,7 +823,7 @@
 #pragma mark  -----
 #pragma mark  ---//点击了弹幕StaegViewDelegate
 #pragma mark  ----
--(void)StageViewHandClickMark:(WeiboModel *)weiboDict withmarkView:(id)markView StageInfoDict:(StageInfoModel *)stageInfoDict
+-(void)StageViewHandClickMark:(weiboInfoModel *)weiboDict withmarkView:(id)markView StageInfoDict:(stageInfoModel *)stageInfoDict
 {
     ///执行buttonview 弹出
     //获取markview的指针
@@ -795,7 +843,7 @@
     
 }
 #pragma mark  ----- toolbar 上面的按钮，执行给toolbar 赋值，显示，弹出工具栏
--(void)SetToolBarValueWithDict:(WeiboModel  *)weiboDict markView:(id) markView isSelect:(BOOL ) isselect StageInfo:(StageInfoModel *) stageInfo
+-(void)SetToolBarValueWithDict:(weiboInfoModel  *)weiboDict markView:(id) markView isSelect:(BOOL ) isselect StageInfo:(stageInfoModel *) stageInfo
 {
    //先对它赋值，然后让他弹出到界面
     if (isselect==YES) {
@@ -803,8 +851,8 @@
         
         //设置工具栏的值
         //[_toolBar setToolBarValue:weiboDict :markView WithStageInfo:stageInfo];
-        _toolBar.weiboDict=weiboDict;
-        _toolBar.StageInfoDict=stageInfo;
+        _toolBar.weiboInfo=weiboDict;
+        _toolBar.stageInfo=stageInfo;
         _toolBar.markView=markView;
         [_toolBar configToolBar];
         
@@ -834,7 +882,7 @@
 #pragma mark   ------
 #pragma mark   -------- ButtomToolViewDelegate－－－－－－－－－－－－－－－－－－－－－
 #pragma  mark  -------
--(void)ToolViewHandClick:(UIButton *)button :(MarkView *)markView weiboDict:(WeiboModel *)weiboDict StageInfo:(StageInfoModel *)stageInfoDict
+-(void)ToolViewHandClick:(UIButton *)button :(MarkView *)markView weiboDict:(weiboInfoModel *)weiboDict StageInfo:(stageInfoModel *)stageInfoDict
 {
     //把值全局化，有利于下面进行一系列的删除变身操作
     _TStageInfo=stageInfoDict;
@@ -844,7 +892,7 @@
     if (button.tag==10000) {
         ///点击了头像//进入个人页面
         MyViewController   *myVc=[[MyViewController alloc]init];
-        myVc.author_id=weiboDict.user_id;
+        myVc.author_id=weiboDict.created_by;
         [self.navigationController pushViewController:myVc animated:YES];
     }
 #pragma mark     -----------分享
@@ -869,10 +917,10 @@
         //改变赞的状态
         //点击了赞
         
-        NSLog(@" 点赞 前 微博dict  ＝====uped====%@    ups===%@",weiboDict.uped,weiboDict.ups);
-       if ([weiboDict.uped intValue]==0)
+      //  NSLog(@" 点赞 前 微博dict  ＝====uped====%@    ups===%@",weiboDict.uped,weiboDict.ups);
+      /* if ([weiboDict.uped intValue]==0)
        {
-          weiboDict.uped=[NSNumber numberWithInt:1];
+         // weiboDict.uped=[NSNumber numberWithInt:1];
           int ups=[weiboDict.ups intValue];
             ups =ups+[weiboDict.uped intValue];
             weiboDict.ups=[NSNumber numberWithInt:ups];
@@ -886,7 +934,7 @@
             ups =ups-1;
             weiboDict.ups=[NSNumber numberWithInt:ups];
             [self layoutMarkViewWithMarkView:markView WeiboInfo:weiboDict];
-        }
+        }*/
        
         ////发送到服务器
         [self LikeRequstData:weiboDict StageInfo:stageInfoDict];
@@ -961,7 +1009,7 @@
             [self requestrecommendDeleteDataWith];
         }
     }
-#warning  确定举报
+
     else if(actionSheet.tag==504)
     {
         if (buttonIndex==0) {

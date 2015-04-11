@@ -9,9 +9,12 @@
 #import "RootViewController.h"
 #import "StageView.h"
 #import "MarkView.h"
-#import "StageInfoModel.h"
-#import "WeiboModel.h"
+//#import "StageInfoModel.h"
+//#import "WeiboModel.h"
+#import "stageInfoModel.h"
+#import "weiboInfoModel.h"
 #import "HotMovieModel.h"
+#import "ModelsModel.h"
 typedef NS_ENUM(NSInteger,NSAddMarkPageSource)
 {
     NSAddMarkPageSourceDefault,
@@ -29,8 +32,9 @@ typedef NS_ENUM(NSInteger,NSAddMarkPageSource)
 @property(assign,nonatomic)id<AddMarkViewControllerDelegate> delegate;
 
 @property(assign,nonatomic) NSAddMarkPageSource  pageSoureType;
-@property (nonatomic, strong) StageInfoModel  *stageInfoDict;
+@property (nonatomic, strong) stageInfoModel  *stageInfo;
 
-@property (nonatomic,strong) HotMovieModel    *model;
+//@property (nonatomic,strong) HotMovieModel    *model;
+@property(nonatomic,strong) ModelsModel     *model;
 
 @end

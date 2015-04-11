@@ -197,15 +197,15 @@
         }
         _myDict=[responseObject objectForKey:@"detail"];
         //上传成功后跳转到添加弹幕页面
-        StageInfoModel   *stageInfo =[[StageInfoModel alloc]init];
+        stageInfoModel   *stageInfo =[[stageInfoModel alloc]init];
         if (stageInfo) {
             [stageInfo setValuesForKeysWithDictionary:_myDict];
-            stageInfo.stage=[parameter objectForKey:@"stage"];
+            stageInfo.photo=[parameter objectForKey:@"photo"];
         }
         
         
         AddMarkViewController  *Addmark =[[AddMarkViewController alloc]init];
-        Addmark.stageInfoDict=stageInfo;
+        Addmark.stageInfo=stageInfo;
         Addmark.pageSoureType=NSAddMarkPageSourceUploadImage;
         [self.navigationController pushViewController:Addmark animated:YES];
   

@@ -57,8 +57,14 @@
 
     //先移除所有的Mark视图
     [self removeStageViewSubView];
-    float  ImageWith=[_StageInfoDict.w intValue];
-    float  ImgeHight=[_StageInfoDict.h intValue];
+    float  ImageWith=[self.stageInfo.width intValue];
+    float  ImgeHight=[self.stageInfo.height intValue];
+    if (ImageWith==0) {
+        ImageWith=kDeviceWidth;
+    }
+    if (ImgeHight==0) {
+        ImgeHight=kDeviceWidth;
+    }
     float x=0;
     float y=0;
     float width=0;
@@ -66,6 +72,7 @@
     if (ImageWith>ImgeHight) {
           x=0;
           width=kDeviceWidth;
+        
           hight=(ImgeHight/ImageWith)*kDeviceWidth;
           y=(kDeviceWidth-hight)/2;
     }
@@ -77,28 +84,28 @@
         x=(kDeviceWidth-width)/2;
      }
   
-        if (ImageWith==0 && ImgeHight>0) {
-            ImageWith=ImgeHight;
-        }
-        ImgeHight = ImgeHight>0 ? ImgeHight : 1;
-        ImageWith = ImageWith>0 ? ImageWith : 1;
-        y = y > 0 ? y : 0;
+//        if (ImageWith==0 && ImgeHight>0) {
+//            ImageWith=ImgeHight;
+//        }
+//        ImgeHight = ImgeHight>0 ? ImgeHight : 1;
+//        ImageWith = ImageWith>0 ? ImageWith : 1;
+//        y = y > 0 ? y : 0;
 
         _MovieImageView.frame=CGRectMake(x, y,width,hight);
     
     
     _MovieImageView.backgroundColor =VStageView_color;
-    [_MovieImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w640",kUrlStage,self.StageInfoDict.stage]] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+    [_MovieImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w640",kUrlStage,self.stageInfo.photo]] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         
 #pragma  mark  是静态的, 气泡是不动的
-         if ( _weiboDict) {
-         MarkView *markView = [self createMarkViewWithDict:_weiboDict andIndex:2000];
+         if ( self.weiboinfo) {
+         MarkView *markView = [self createMarkViewWithDict:self.weiboinfo andIndex:2000];
          markView.alpha = 1.0;
          //设置是否markview 不可以动画
          markView.isAnimation =YES;
          //设置单条微博的参数信息
-         markView.weiboDict=self.weiboDict;
-        [markView setValueWithWeiboInfo:self.weiboDict];
+         markView.weiboInfo=self.weiboinfo;
+        [markView setValueWithWeiboInfo:self.weiboinfo];
          //遵守markView 的协议
          markView.delegate=self;
         //单个气泡的时候，隐约显示的参数
@@ -108,15 +115,15 @@
          
          }
 #pragma  mark  有很多气泡，气泡循环播放
-         if (self.WeibosArray&&self.WeibosArray.count>0) {
-         for ( int i=0;i<self.WeibosArray.count ; i++) {
-         MarkView *markView = [self createMarkViewWithDict:self.WeibosArray[i] andIndex:i];
+         if (self.weibosArray&&self.weibosArray.count>0) {
+         for ( int i=0;i<self.weibosArray.count ; i++) {
+         MarkView *markView = [self createMarkViewWithDict:self.weibosArray[i] andIndex:i];
          // 设置markview 可以动画
          markView.isAnimation = YES;
          markView.alpha=0;
          //设置单条微博的参数信息
-         markView.weiboDict=self.WeibosArray[i];
-             [markView setValueWithWeiboInfo:self.WeibosArray[i]];
+         markView.weiboInfo=self.weibosArray[i];
+             [markView setValueWithWeiboInfo:self.weibosArray[i]];
          //遵守markView 的协议
          markView.isShowansHiden=NO;
          markView.delegate=self;
@@ -127,7 +134,7 @@
 
 }
 #pragma mark 内部创建气泡的方法
-- (MarkView *) createMarkViewWithDict:(WeiboModel *)weibodict andIndex:(NSInteger)index{
+- (MarkView *) createMarkViewWithDict:(weiboInfoModel *)weibodict andIndex:(NSInteger)index{
             MarkView *markView=[[MarkView alloc]initWithFrame:CGRectZero];
     
             markView.alpha = 0;
@@ -135,10 +142,10 @@
             markView.tag=1000+index;
     
             NSLog(@"stageview  ＝＝=====weiboDict====%@",weibodict);
-             float  x=[weibodict.x floatValue];   //位置的百分比
-             float  y=[weibodict.y floatValue];
-             NSString  *weiboTitleString=weibodict.topic;
-             NSString  *UpString=[NSString stringWithFormat:@"%@",weibodict.ups];//weibodict.ups;
+             float  x=[weibodict.x_percent floatValue];   //位置的百分比
+             float  y=[weibodict.y_percent floatValue];
+             NSString  *weiboTitleString=weibodict.content;
+             NSString  *UpString=[NSString stringWithFormat:@"%@",weibodict.like_count];//weibodict.ups;
             //计算标题的size
             CGSize  Msize=[weiboTitleString boundingRectWithSize:CGSizeMake(kDeviceWidth/2,MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:markView.TitleLable.font forKey:NSFontAttributeName] context:nil].size;
             // 计算赞数量的size
@@ -166,8 +173,8 @@
 #pragma mark 设置标签的内容
             markView.TitleLable.text=weiboTitleString;
             ///显示标签的头像
-            [ markView.LeftImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kUrlAvatar,weibodict.avatar]]];
-    markView.ZanNumLable.text=[NSString stringWithFormat:@"%@",weibodict.ups];
+            [ markView.LeftImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kUrlAvatar,weibodict.uerInfo.logo]]];
+    markView.ZanNumLable.text=[NSString stringWithFormat:@"%@",weibodict.like_count];
     return markView;
 }
 //防止cell服用导致的原来的内容存在,移除原来的markview
@@ -240,7 +247,7 @@
      if (!_isAnimation) {
         return;
     }
-    if (currentMarkIndex<self.WeibosArray.count) {
+    if (currentMarkIndex<self.weibosArray.count) {
         MarkView  *markView=(MarkView *)[self viewWithTag:1000+currentMarkIndex];
         markView.userInteractionEnabled=YES;
         [markView startAnimation];
@@ -301,12 +308,12 @@
 #pragma mark   ---markView   Delegate
 #pragma  mark -----
 //实现markview 的代理
--(void)MarkViewClick:(WeiboModel *)weiboDict withMarkView:(id)markView
+-(void)MarkViewClick:(weiboInfoModel *)weiboDict withMarkView:(id)markView
 {
     
-    NSLog(@"点击了 stageview 的微博操作 ＝＝＝%@   %@",weiboDict,self.StageInfoDict);
+   // NSLog(@"点击了 stageview 的微博操作 ＝＝＝%@   %@",weiboDict,self.stage);
     if (self.delegate &&[self.delegate respondsToSelector:@selector(StageViewHandClickMark:withmarkView:StageInfoDict:)]) {
-        [self.delegate StageViewHandClickMark:weiboDict withmarkView:markView StageInfoDict:self.StageInfoDict];
+        [self.delegate StageViewHandClickMark:weiboDict withmarkView:markView StageInfoDict:self.stageInfo];
     }
 
 }

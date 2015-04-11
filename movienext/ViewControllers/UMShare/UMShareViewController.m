@@ -100,7 +100,7 @@
     _moviewName= [ZCControl createLabelWithFrame:CGRectMake(10,0, kDeviceWidth-70, 20) Font:12 Text:@""];
     _moviewName.textColor=VLight_GrayColor;
     _moviewName.numberOfLines=0;
-    _moviewName.text=self.StageInfo.movie_name;
+    _moviewName.text=self.StageInfo.movieInfo.name;
     //_moviewName.lineBreakMode=NSLineBreakByTruncatingTail
     [logosupView addSubview:_moviewName];
     
@@ -109,17 +109,19 @@
     logoLable.textColor=VLight_GrayColor;
     [logosupView addSubview:logoLable];
     
-
-
 }
 //点击分享
 -(void)handShareButtonClick:(UIButton *) button
 {
     
-    shareImage=[Function getImage:shareView WithSize:CGSizeMake(kDeviceWidth, kDeviceWidth+20)];
-    if (self.delegate &&[self.delegate respondsToSelector:@selector(UMShareViewControllerHandClick:ShareImage:StageInfoModel:)]) {
-        [self.delegate UMShareViewControllerHandClick:button ShareImage:shareImage StageInfoModel:self.StageInfo];
-    }
+    
+    [self dismissViewControllerAnimated:YES completion:^{
+        shareImage=[Function getImage:shareView WithSize:CGSizeMake(kDeviceWidth, kDeviceWidth+20)];
+        if (self.delegate &&[self.delegate respondsToSelector:@selector(UMShareViewControllerHandClick:ShareImage:StageInfoModel:)]) {
+            [self.delegate UMShareViewControllerHandClick:button ShareImage:shareImage StageInfoModel:self.StageInfo];
+        }
+
+    }];
     
 }
 - (void)didReceiveMemoryWarning {

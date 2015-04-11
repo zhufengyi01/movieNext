@@ -12,7 +12,7 @@
 
 @interface HotMovieModel : NSObject
 @property(nonatomic,strong) NSString  *hot_id;
-@property(nonatomic,strong) StageInfoModel  *stageinfo;
+//@property(nonatomic,strong) StageInfoModel  *stageinfo;
 @property(nonatomic,strong) WeiboModel  *weibo;
 @property(nonatomic,strong) NSMutableArray    *weibos;
 @property(nonatomic,strong) NSString  *exists_new;

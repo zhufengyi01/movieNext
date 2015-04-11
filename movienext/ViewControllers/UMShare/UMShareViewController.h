@@ -7,10 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "StageInfoModel.h"
+//#import "StageInfoModel.h"
+#import "stageInfoModel.h"
 @protocol UMShareViewControllerDelegate <NSObject>
 
--(void)UMShareViewControllerHandClick:(UIButton *) button ShareImage:(UIImage *)shareImage StageInfoModel :(StageInfoModel *) StageInfo;
+-(void)UMShareViewControllerHandClick:(UIButton *) button ShareImage:(UIImage *)shareImage StageInfoModel :(stageInfoModel *) StageInfo;
 
 @end
 @interface UMShareViewController : UIViewController
@@ -31,7 +32,7 @@
     UIView     *logosupView;
 }
 @property(nonatomic,assign)id<UMShareViewControllerDelegate> delegate;
-@property(nonatomic,strong) StageInfoModel  *StageInfo;
+@property(nonatomic,strong) stageInfoModel  *StageInfo;
 //截取cell 的图片
 @property(nonatomic,strong)UIImage         *screenImage;
 @end

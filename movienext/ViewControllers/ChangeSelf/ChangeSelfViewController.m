@@ -74,7 +74,7 @@
 {
      AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:[NSString stringWithFormat:@"%@/user/fakeList", kApiBaseUrl] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        if ([[responseObject  objectForKey:@"return_code"]  intValue]==10000) {
+        if ([[responseObject  objectForKey:@"return_code"]  intValue]==0) {
             NSLog(@"虚拟用户请求成功=======%@",responseObject);
             if (_DataArray ==nil) {
                 _DataArray=[[NSMutableArray alloc]init];
@@ -203,10 +203,11 @@
         NSDictionary   *dict =[_DataArray objectAtIndex:actionSheet.tag-100];
         UserDataCenter *userCenter=[UserDataCenter shareInstance];
         userCenter.user_id=[dict objectForKey:@"id"];
-        userCenter.avatar=[dict objectForKey:@"avatar"];
+        userCenter.logo=[dict objectForKey:@"logo"];
         userCenter.is_admin=[dict objectForKey:@"level"];
         userCenter.verified=[dict objectForKey:@"verified"];
-        userCenter.update_time=[dict objectForKey:@"update_time"];
+        userCenter.fake=[dict objectForKey:@"fake"];
+        userCenter.sex=[dict objectForKey:@"sex"];
         userCenter.signature =[dict objectForKey:@"brief"];
         //需要使用通知去刷新个人页的信息，这里同时需要去更改本地存储的用户
         [[NSNotificationCenter defaultCenter]  postNotificationName:@"initUser" object:nil];

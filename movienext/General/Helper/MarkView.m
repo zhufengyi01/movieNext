@@ -63,7 +63,7 @@
         [self addGestureRecognizer:tap];
 }
 //获取weiboinfo 信息
--(void)setValueWithWeiboInfo:(WeiboModel *) weiboInfo
+-(void)setValueWithWeiboInfo:(weiboInfoModel *) weiboInfo
 {
     //显示虚拟用户
     UserDataCenter *userCenter=[UserDataCenter shareInstance];
@@ -73,7 +73,7 @@
     }
     
     if ([userCenter.is_admin intValue]>0) {
-        if ( [weiboInfo.fake intValue]==0) {
+        if ( [weiboInfo.uerInfo.fake intValue]==0) {
             //虚拟用户
             isfakeView=[[UIImageView alloc]initWithFrame:CGRectMake(_LeftImageView.frame.size.width-6,_LeftImageView.frame.size.height-6, 8, 8)];
             isfakeView.layer.cornerRadius=4;
@@ -206,7 +206,7 @@
         [self setMaskViewSelected];
        if (self.delegate &&[self.delegate respondsToSelector:@selector(MarkViewClick:withMarkView:)]) {
             // 传递markview  当前的字典数据和的指针到了stageview。在stagview 中再传递到controller
-            [self.delegate MarkViewClick:self.weiboDict withMarkView:self];
+            [self.delegate MarkViewClick:self.weiboInfo withMarkView:self];
         }
     }
 }

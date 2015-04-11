@@ -193,60 +193,89 @@
         if (response.responseCode == UMSResponseCodeSuccess) {
             [[UMSocialDataService defaultDataService] requestSnsInformation:ssoName completion:^(UMSocialResponseEntity *response) {
                 if (response.responseCode == UMSResponseCodeSuccess) {
-                    NSLog(@"====  weixxin  =response ======%@",[response valueForKey:@"data"]);
+                    NSLog(@"====  login sucess  =response ======%@",[response valueForKey:@"data"]);
                     NSDictionary *data = [response valueForKey:@"data"];
-                    NSString * uid            = [data valueForKey:@"uid"];
+                   //openid
+                    NSString  *openid;
+                    if ([ssoName isEqualToString:UMShareToSina]) {
+                         openid   = [data valueForKey:@"uid"];
 
-                    NSString *description    = [data valueForKey:@"description"];
-                    NSString *profile_image_url = [data valueForKey:@"profile_image_url"];
-                    NSString *screen_name    = [data valueForKey:@"screen_name"];
+                    }
+                    else{
+                        openid =[data valueForKey:@"openid"];
+
+                    }
+                    //token
                     NSString *access_token   = [data valueForKey:@"access_token"];
-                    NSString *gender = [[data valueForKeyPath:@"gender"] isKindOfClass:[NSString class]] ? [data valueForKey:@"gender"] : [[data valueForKey:@"gender"] stringValue];
-                    gender = [gender isEqualToString:@"男"] ? @"1" : ([gender isEqualToString:@"女"] ? @"0" : gender);
-                    NSString *verified = [data valueForKeyPath:@"verified"];
-                     if ([ssoName isEqualToString:UMShareToWechatSession]) {
-                       uid =[data valueForKey:@"openid"];
-                         
+                   //username
+                    NSString *screen_name    = [data valueForKey:@"screen_name"];
+                  //brief
+                    NSString *brief=@"";
+                    if ([ssoName isEqualToString:UMShareToSina]) {
+                        brief= [data valueForKey:@"description"];
                     }
-
-                    NSMutableDictionary * parameters = [NSMutableDictionary dictionaryWithCapacity:0];
-                    [parameters setObject:screen_name ? screen_name : @""  forKey:@"username"];
-                    [parameters setObject:uid ? uid : @"" forKey:@"weiboId"];
-                    if ([ssoName isEqualToString:UMShareToWechatSession]) {
-                        [parameters setObject:[data objectForKey:@"openid"] forKey:@"weiboId"];
-                    }
-                    [parameters setObject:profile_image_url ? profile_image_url : @"" forKey:@"profile_image_url"];
-                    [parameters setObject:access_token ? access_token : @"" forKey:@"accessToKen"];
-                    if (![ssoName isEqualToString:UMShareToWechatSession]) {
-                    [parameters setObject:description forKey:@"description"];
-                    }
-                    [parameters setObject:ssoName forKey:@"bindtype"];
-                    [parameters setObject:gender forKey:@"gender"];
-                    if (![ssoName isEqualToString:UMShareToWechatSession]) {
-                        [parameters setObject:verified forKey:@"verified"];
-
-                    }
+                    //sex
+                    NSString  *sex=[data objectForKey:@"gender"];
+                    NSString  *verified=@"0";
+                    NSString *bingdtype=ssoName;
+                    //logo
+                    NSString  *logo=[data objectForKey:@"profile_image_url"];
+                    
+                    
+                    
+//                    NSString *profile_image_url = [data valueForKey:@"profile_image_url"];
+//                    NSString *gender = [[data valueForKeyPath:@"gender"] isKindOfClass:[NSString class]] ? [data valueForKey:@"gender"] : [[data valueForKey:@"gender"] stringValue];
+//                    gender = [gender isEqualToString:@"男"] ? @"1" : ([gender isEqualToString:@"女"] ? @"0" : gender);
+//                    NSString *verified = [data valueForKeyPath:@"verified"];
+//                    
+//                    
+//                    NSMutableDictionary * parameters = [NSMutableDictionary dictionaryWithCapacity:0];
+//                    //用户名
+//                    [parameters setObject:screen_name ? screen_name : @""  forKey:@"username"];
+//                    //openid
+//                    [parameters setObject:uid ? uid : @"" forKey:@"openid"];
+//                    
+//                    if ([ssoName isEqualToString:UMShareToWechatSession]) {
+//                        [parameters setObject:[data objectForKey:@"openid"] forKey:@"openid"];
+//                    }
+//                    //头像
+//                    [parameters setObject:profile_image_url ? profile_image_url : @"" forKey:@"logo"];
+//                    
+//                    //token
+//                    [parameters setObject:access_token ? access_token : @"" forKey:@"token"];
+//                    
+//                 
+//                    if (![ssoName isEqualToString:UMShareToWechatSession]) {
+//                    [parameters setObject:description forKey:@"brief"];
+//                    }
+//                    
+//                    //绑定类型
+//                    [parameters setObject:ssoName forKey:@"bindtype"];
+//                    ///性别
+//                    [parameters setObject:gender forKey:@"gender"];
+//                    
+//                    if (![ssoName isEqualToString:UMShareToWechatSession]) {
+//                        [parameters setObject:verified forKey:@"verified"];
+//
+//                    }
                   //  NSLog(@"打印参数=== weixin =======%@",parameters);
+                    NSDictionary  *parameters=@{@"openid":openid,@"token":access_token,@"username":screen_name,@"brief":brief,@"sex":sex,@"verified":verified,@"bindtype":bingdtype,@"logo":logo};
                     
                     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
                     [manager POST:[NSString stringWithFormat:@"%@/user/login", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
                         NSLog(@"登陆完成后的     JSON: %@", responseObject);
-                        NSDictionary *detail    = [responseObject objectForKey:@"detail"];
+                        NSDictionary *detail    = [responseObject objectForKey:@"model"];
                         if (![detail isEqual:@""]) {
                             UserDataCenter  *userCenter=[UserDataCenter shareInstance];
-                            if([detail objectForKey:@"id"])
-                            {
-                                userCenter.user_id=[detail objectForKey:@"id"];
-                            }
+                            userCenter.user_id=[detail objectForKey:@"id"];
                             userCenter.username=[detail objectForKey:@"username"];
-                            userCenter.avatar =[detail objectForKey:@"avatar"];
-                            userCenter.is_admin =[detail objectForKey:@"level"];
+                            userCenter.logo =[detail objectForKey:@"logo"];
+                            userCenter.is_admin =[detail objectForKey:@"role_id"];
                             userCenter.verified=[detail objectForKey:@"verified"];
+                            userCenter.sex=[detail objectForKey:@"sex"];
                             userCenter.signature=[detail objectForKey:@"brief"];
-                            userCenter.update_time=[detail objectForKey:@"update_time"];
-                            userCenter.user_bind_type=[detail objectForKey:@"bind_type"];
-
-                            NSLog(@"usercenter.avatar = %@", userCenter.avatar);
+                            userCenter.fake=[detail objectForKey:@"fake"];
+                            
                             [Function saveUser:userCenter];
                             //登陆成功后把根
                             [self.navigationController pushViewController:[UserHeadChangeViewController new] animated:YES];

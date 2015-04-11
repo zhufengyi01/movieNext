@@ -132,24 +132,24 @@
     UserLogoButton.tag=4000;
     deletButton.tag=5000;
    //单个标签的时候用这个
-     if (_weiboDict) {
-         _stageView.weiboDict = _weiboDict;
+     if (self.weiboInfo) {
+         _stageView.weiboinfo = self.weiboInfo;
      }
     // 多个标签用这个
-     if (_WeibosArray.count>0) {
-         _stageView.WeibosArray = _WeibosArray;
+     if (self.weibosArray.count>0) {
+         _stageView.weibosArray = self.weibosArray;
      }
-    _stageView.StageInfoDict=self.StageInfoDict;
+    _stageView.stageInfo=self.stageInfo;
     [_stageView configStageViewforStageInfoDict];
     //这里计算hight 图片的高度，主要是为了计算toolbar 的y轴坐标，真实赋值是在stageview
  #pragma mark 设置底部tool的图片，名字
     //设置底部
-    if (self.StageInfoDict.movie_name) {  //电影名字，这里设置title 偏移
-        [leftButtomButton setTitle:self.StageInfoDict.movie_name forState:UIControlStateNormal];
+    if (self.stageInfo.movieInfo.name) {  //电影名字，这里设置title 偏移
+        [leftButtomButton setTitle:self.stageInfo.movieInfo.name forState:UIControlStateNormal];
     }
     
-    if (self.StageInfoDict.stage) {
-        [MovieLogoImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w100h100",kUrlMoviePoster,self.StageInfoDict.movie_poster] ] placeholderImage:[ UIImage imageNamed:@"loading_image_all.png"]];
+    if (self.stageInfo.movieInfo.logo) {
+        [MovieLogoImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w100h100",kUrlMoviePoster,self.stageInfo.movieInfo.logo] ] placeholderImage:[ UIImage imageNamed:@"loading_image_all.png"]];
     }
     
 #pragma  mark  热门cell
@@ -174,17 +174,20 @@
         _stageView.frame=CGRectMake(0, 45, kDeviceWidth, kDeviceWidth);
         _stageView.isAnimation=NO;
         BgView2.frame=CGRectMake(0, kDeviceWidth+45,kDeviceWidth,45);
-        [UserLogoButton sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!thumb", kUrlAvatar, _weiboDict.avatar]] forState:UIControlStateNormal];
-        UserNameLable.text = _weiboDict.username;
-        TimeLable.text = [Function friendlyTime:_weiboDict.create_time];
-        // 点赞按钮的状态
-        if ([self.weiboDict.uped  intValue]==0) {
-            ZanButton.selected=NO;
-        }
-        else
-        {
-            ZanButton.selected=YES;
-        }
+        
+        [UserLogoButton sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!thumb", kUrlAvatar, self.weiboInfo.uerInfo.logo]] forState:UIControlStateNormal];
+        UserNameLable.text = self.weiboInfo.uerInfo.username;
+        TimeLable.text = [Function friendlyTime:self.weiboInfo.created_at];
+        
+//#warning  注意。这里需要赞还是没有赞
+//        // 点赞按钮的状态
+//      //  if ([self.weiboDict.uped  intValue]==0) {
+////            ZanButton.selected=NO;
+////        }
+////        else
+////        {
+////            ZanButton.selected=YES;
+////        }
 #pragma mark 区分于个人页面是来源于自己还是他人
         if (self.userPage==NSUserPageTypeMySelfController ) {  //进来的页面是从我自己的页面进来的
             deletButton.hidden=NO;
@@ -194,7 +197,6 @@
             deletButton.hidden=YES;
         }
     }
-    
 }
 
 - (void)layoutSubviews {

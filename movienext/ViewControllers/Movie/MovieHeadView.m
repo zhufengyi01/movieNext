@@ -80,12 +80,12 @@
 
     
 }
--(void)setCollectionHeaderValue:(NSDictionary *)dict
+-(void)setCollectionHeaderValue
 {
     //NSLog(@ "在头部设置的信息  =====%@",dict);
     
-    //[movieLogoImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kUrlMoviePoster,[dict objectForKey:@"logo"]]] placeholderImage:[UIImage imageNamed:@"loading_image_all"]];
-    [movieLogoImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kUrlMoviePoster,[dict objectForKey:@"logo"]]] placeholderImage:[UIImage imageNamed:@""] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+   
+    [movieLogoImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kUrlMoviePoster,self.movieInfo.logo]] placeholderImage:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         //设置头部的北京图片
         // jpeg quality image data
         float quality = 0.00001f;
@@ -97,15 +97,14 @@
         bgImageView.image = blurredImage;
     }];
   
-    if ([dict objectForKey:@"name"]) {
-        titleLable.text=[NSString stringWithFormat:@"%@",[dict objectForKey:@"name"]];
+    if (self.movieInfo.name ) {
+        titleLable.text=[NSString stringWithFormat:@"%@",self.movieInfo.name];
     }
-    if ([dict objectForKey:@"director"]) {
-        derectorLable.text=[NSString stringWithFormat:@"导演 :%@",[dict objectForKey:@"director"]];
+    if (self.movieInfo.director) {
+        derectorLable.text=[NSString stringWithFormat:@"导演 :%@",self.movieInfo.director];
     }
-      NSLog(@"导演 ＝＝＝＝＝＝＝xianshi ＝＝%@",[dict objectForKey:@"director"]);
-    if ([dict objectForKey:@"other_name"]) {
-        performerLable.text=[NSString stringWithFormat:@"演员:%@",[dict objectForKey:@"actors"]];
+     if (self.movieInfo.actors) {
+        performerLable.text=[NSString stringWithFormat:@"演员:%@",self.movieInfo.actors];
     }
     
 }

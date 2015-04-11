@@ -7,11 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "movieInfoModel.h"
+
 @protocol MovieHeadViewDelegate <NSObject>
 //改变显示大图和小图的状态
 //button.tag==1000 大图  button.tag==1000 小图
 -(void)ChangeCollectionModel:(UIButton  *) button;
-//-(void)NavigationClick:(UIButton *) button;
 @end
 @interface MovieHeadView : UICollectionReusableView
 {
@@ -22,7 +23,9 @@
     UILabel      *performerLable;
     CGRect       m_frame;
 }
-//@property(nonatomic,strong) UILabel  
--(void)setCollectionHeaderValue:(NSDictionary *) dict;
+//@property(nonatomic,strong) UILabel
+@property(nonatomic,strong)movieInfoModel  *movieInfo;
+-(void)setCollectionHeaderValue;
+
 @property (nonatomic,assign) id <MovieHeadViewDelegate> delegate;
 @end

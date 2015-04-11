@@ -13,7 +13,7 @@
 #import "ZCControl.h"
 #import "Constant.h"
 #import "AddMarkViewController.h"
-#import "UMShareView.h"
+
 #import "UMSocial.h"
 #import "StageView.h"
 #import "ButtomToolView.h"
@@ -22,7 +22,7 @@
 #import "MyViewController.h"
 #import "Function.h"
 #import "UMShareViewController.h"
-@interface ShowStageViewController() <UMShareViewDelegate,ButtomToolViewDelegate,StageViewDelegate,AddMarkViewControllerDelegate,UMShareViewControllerDelegate,UMSocialDataDelegate,UMSocialUIDelegate>
+@interface ShowStageViewController() <ButtomToolViewDelegate,StageViewDelegate,AddMarkViewControllerDelegate,UMShareViewControllerDelegate,UMSocialDataDelegate,UMSocialUIDelegate>
 {
     ButtomToolView *_toolBar;
 }
@@ -69,8 +69,8 @@
     stageView = [[StageView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceWidth)];
     stageView.isAnimation = YES;
     stageView.delegate=self;
-    stageView.StageInfoDict=self.movieModel.stageinfo;
-    stageView.WeibosArray = self.movieModel.weibos;
+    stageView.stageInfo=self.model.stageInfo;
+    stageView.WeibosArray = self.model.stageInfo.weibosArray;
     [stageView configStageViewforStageInfoDict];
      [scrollView addSubview:stageView];
     [stageView startAnimation];
@@ -112,27 +112,24 @@
 
 
 //微博点赞请求
--(void)LikeRequstData:(WeiboModel  *) weiboDict StageInfo :(StageInfoModel *) stageInfoDict
+-(void)LikeRequstData:(weiboInfoModel  *) weiboDict StageInfo :(stageInfoModel *) stageInfoDict
 {
     
     UserDataCenter  *userCenter=[UserDataCenter shareInstance];
     NSNumber  *weiboId=weiboDict.Id;  //[upDict objectForKey:@"id"];
-    NSNumber  *stageId=self.movieModel.stageinfo.Id;//[stageInfoDict objectForKey:@"id"];
-    NSString  *movieId=self.movieModel.stageinfo.movie_id; //[stageInfoDict objectForKey:@"movie_id"];
-    NSString  *movieName=stageInfoDict.movie_name;//[stageInfoDict objectForKey:@"movie_name"];
+    NSNumber  *stageId=self.model.stageInfo.Id;//[stageInfoDict objectForKey:@"id"];
+    NSString  *movieId=self.model.stageInfo.movieInfo.Id; //[stageInfoDict objectForKey:@"movie_id"];
+    NSString  *movieName=stageInfoDict.movieInfo.name;//[stageInfoDict objectForKey:@"movie_name"];
     NSString  *userId=userCenter.user_id;
-    NSString  *autorId =weiboDict.user_id; // [upDict objectForKey:@"user_id"];
+    NSString  *autorId =weiboDict.created_by; // [upDict objectForKey:@"user_id"];
     NSNumber  *uped;
-    //if ([[upDict objectForKey:@"uped"]  intValue]==0) {
-    //uped =[NSString stringWithFormat:@"%d",1];
-    //}
-    if ([weiboDict.uped  integerValue] ==0) {
-        uped=[NSNumber numberWithInt:0];
-    }
-    else
-    {
-        uped=[NSNumber numberWithInt:1];
-    }
+//     if ([weiboDict.uped  integerValue] ==0) {
+//        uped=[NSNumber numberWithInt:0];
+//    }
+//    else
+//    {
+//        uped=[NSNumber numberWithInt:1];
+//    }
     
     NSDictionary *parameters = @{@"weibo_id":weiboId, @"stage_id":stageId,@"movie_id":movieId,@"movie_name":movieName,@"user_id":userId,@"author_id":autorId,@"operation":uped};
     
@@ -164,12 +161,12 @@
         
     }
 }*/
--(void)UMShareViewControllerHandClick:(UIButton *)button ShareImage:(UIImage *)shareImage StageInfoModel:(StageInfoModel *)StageInfo
+-(void)UMShareViewControllerHandClick:(UIButton *)button ShareImage:(UIImage *)shareImage StageInfoModel:(stageInfoModel *)StageInfo
 {
     NSArray  *sharearray =[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQzone, UMShareToSina, nil];
     [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
     
-    [[UMSocialControllerService defaultControllerService] setShareText:StageInfo.movie_name shareImage:shareImage socialUIDelegate:self];        //设置分享内容和回调对象
+    [[UMSocialControllerService defaultControllerService] setShareText:StageInfo.movieInfo.name shareImage:shareImage socialUIDelegate:self];        //设置分享内容和回调对象
     [UMSocialSnsPlatformManager getSocialPlatformWithName:[sharearray  objectAtIndex:button.tag-10000]].snsClickHandler(self,[UMSocialControllerService defaultControllerService],YES);
     NSLog(@"分享到微信");
 //    if (shareView) {
@@ -216,7 +213,7 @@
 //    }
     
     UMShareViewController  *shareVC=[[UMShareViewController alloc]init];
-    shareVC.StageInfo=self.movieModel.stageinfo;
+    shareVC.StageInfo=self.model.stageInfo;
     shareVC.screenImage=image;
     shareVC.delegate=self;
     UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:shareVC];
@@ -233,8 +230,8 @@
     NSLog(@" ==addMarkButtonClick  ====%ld",(long)button.tag);
     AddMarkViewController  *AddMarkVC=[[AddMarkViewController alloc]init];
     AddMarkVC.delegate=self;
-    AddMarkVC.model=self.movieModel;
-    AddMarkVC.stageInfoDict=self.movieModel.stageinfo;
+    AddMarkVC.model=self.model;
+    AddMarkVC.stageInfo=self.model.stageInfo;
   //  AddMarkVC.pageSoureType=NSAddMarkPageSourceDefault;
     [self.navigationController pushViewController:AddMarkVC animated:NO];
 
@@ -248,7 +245,7 @@
 #pragma mark  -----
 #pragma mark  ---//点击了弹幕StaegViewDelegate
 #pragma mark  ----
--(void)StageViewHandClickMark:(WeiboModel *)weiboDict withmarkView:(id)markView StageInfoDict:(StageInfoModel *)stageInfoDict
+-(void)StageViewHandClickMark:(WeiboModel *)weiboDict withmarkView:(id)markView StageInfoDict:(stageInfoModel *)stageInfoDict
 {
     ///执行buttonview 弹出
     //获取markview的指针
@@ -268,7 +265,7 @@
     
 }
 #pragma mark  ----- toolbar 上面的按钮，执行给toolbar 赋值，显示，弹出工具栏
--(void)SetToolBarValueWithDict:(WeiboModel  *)weiboDict markView:(id) markView isSelect:(BOOL ) isselect StageInfo:(StageInfoModel *) stageInfo
+-(void)SetToolBarValueWithDict:(weiboInfoModel  *)weiboDict markView:(id) markView isSelect:(BOOL ) isselect StageInfo:(stageInfoModel *) stageInfo
 {
     //先对它赋值，然后让他弹出到界面
     if (isselect==YES) {
@@ -276,8 +273,8 @@
         
         //设置工具栏的值
         //[_toolBar setToolBarValue:weiboDict :markView WithStageInfo:stageInfo];
-        _toolBar.weiboDict=weiboDict;
-        _toolBar.StageInfoDict=stageInfo;
+        _toolBar.weiboInfo=weiboDict;
+        _toolBar.stageInfo=stageInfo;
         _toolBar.markView=markView;
         [_toolBar configToolBar];
         
@@ -307,7 +304,7 @@
 #pragma mark   ------
 #pragma mark   -------- ButtomToolViewDelegate
 #pragma  mark  -------
--(void)ToolViewHandClick:(UIButton *)button :(MarkView *)markView weiboDict:(WeiboModel *)weiboDict StageInfo:(StageInfoModel *)stageInfoDict
+-(void)ToolViewHandClick:(UIButton *)button :(MarkView *)markView weiboDict:(WeiboModel *)weiboDict StageInfo:(stageInfoModel *)stageInfoDict
 {
     
     if (button.tag==10000) {

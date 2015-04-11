@@ -33,7 +33,7 @@
 }
 -(void)configCellWithdict :(NSDictionary *) dict
 {
-    [headImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!thumb",kUrlAvatar,[dict objectForKey:@"avatar"]]] placeholderImage:HeadImagePlaceholder];
+    [headImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!thumb",kUrlAvatar,[dict objectForKey:@"logo"]]] placeholderImage:HeadImagePlaceholder];
     nameLable.text=[dict objectForKey:@"username"];
 
 }

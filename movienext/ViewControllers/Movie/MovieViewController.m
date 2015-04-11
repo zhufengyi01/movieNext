@@ -33,7 +33,8 @@
     //UICollectionView    *_myConllectionView;
     LoadingView         *loadView;
     NSMutableArray      *_dataArray;
-    //int page;
+    int page;
+    int pageSize;
     NSString  *startId;
 }
 
@@ -105,7 +106,8 @@
 }
 -(void)initData
 {
-    //page=0;
+    page=0;
+    pageSize=12;
     _dataArray=[[NSMutableArray alloc]init];
 }
 -(void)initUI
@@ -132,6 +134,10 @@
 }
 - (void)setupHeadView
 {
+    page=1;
+    if (_dataArray.count>0) {
+        [_dataArray removeAllObjects];
+    }
     __unsafe_unretained typeof(self) vc = self;
     // 添加下拉刷新头部控件
     [_myConllectionView addHeaderWithCallback:^{
@@ -152,6 +158,10 @@
 
 - (void)setupFootView
 {
+    page++;
+    if (_dataArray.count==0) {
+        page=0;
+    }
     __unsafe_unretained typeof(self) vc = self;
     // 添加上拉刷新尾部控件
     [vc.myConllectionView addFooterWithCallback:^{
@@ -185,20 +195,12 @@
 #pragma  mark  ---
 -(void)requestData
 {
+    NSString  *urlString=[NSString stringWithFormat:@"%@/feed/list?per-page=%d&page=%d",kApiBaseUrl,pageSize,page];
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    //NSString  *startid =[[_dataArray lastObject]  objectForKey:@"create_time"];
-    NSDictionary  *parameter;
-    if (_dataArray.count==0) {
-        parameter=nil;
-    }
-    else
-    {
-        parameter=@{@"start_id":startId};
-
-    }
-    [manager POST:[NSString stringWithFormat:@"%@/feed/list", kApiBaseUrl] parameters:parameter success:^(AFHTTPRequestOperation *operation, id responseObject) {
+     NSDictionary  *parameter;
+    [manager POST:urlString parameters:parameter success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
-        if ([[responseObject objectForKey:@"return_code"] intValue]==10000) {
+        if ([[responseObject objectForKey:@"return_code"] intValue]==0) {
 
         NSLog(@"  电影首页数据JSON: %@", responseObject);
             [loadView stopAnimation];
@@ -206,19 +208,10 @@
         if (_dataArray==nil) {
             _dataArray=[[NSMutableArray alloc]init];
         }
-        if ([responseObject objectForKey:@"detail"]) {
-            
-        }
-        if ([[responseObject objectForKey:@"detail"] lastObject]) {
-            startId=[[[responseObject objectForKey:@"detail"] lastObject] objectForKey:@"create_time"];
-         
-            NSArray  *detailarray=[responseObject objectForKey:@"detail"];
+            NSArray  *detailarray=[responseObject objectForKey:@"models"];
             if (detailarray.count>0) {
                 [_dataArray addObjectsFromArray:detailarray];
-                //NSLog(@"=-=======dataArray =====%@",_dataArray);
                 [_myConllectionView reloadData];
-                
-            }
 
         }
         }
@@ -280,9 +273,7 @@
 {
     NSLog(@"=====点击了那个cell ===%ld",indexPath.row);
     [self hidesBottomBarWhenPushed];
-    
     MovieDetailViewController *vc =  [MovieDetailViewController new];
-  //  MovieCollectionViewCell    *cell=(MovieCollectionViewCell*)[collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
     if (_dataArray.count > indexPath.row) {
          NSDictionary *dict = [_dataArray  objectAtIndex:(long)indexPath.row];
         vc.movieId = [dict objectForKey:@"movie_id"];

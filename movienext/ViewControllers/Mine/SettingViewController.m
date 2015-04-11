@@ -116,11 +116,9 @@
     UserDataCenter  *userCenter=[UserDataCenter shareInstance];
     userCenter.user_id=nil;
     userCenter.username=nil;
-    userCenter.avatar =nil;
+    userCenter.logo =nil;
     userCenter.signature=nil;
-    userCenter.update_time=nil;
-    userCenter.user_bind_type=nil;
-    NSUserDefaults  *userDefualt=[NSUserDefaults standardUserDefaults];
+     NSUserDefaults  *userDefualt=[NSUserDefaults standardUserDefaults];
     [userDefualt removeObjectForKey:kUserKey];
     [userDefualt synchronize];
     

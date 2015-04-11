@@ -45,8 +45,8 @@
     headImag.clipsToBounds=YES;
     headImag.backgroundColor=[UIColor redColor];
     NSURL   *imageURL;
-    if (userCenter.avatar) {
-        imageURL =[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!thumb",kUrlAvatar,userCenter.avatar]];
+    if (userCenter.logo) {
+        imageURL =[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!thumb",kUrlAvatar,userCenter.logo]];
     }
     [headImag addTarget:self action:@selector(changeHeadImage) forControlEvents:UIControlEventTouchUpInside];
     [headImag sd_setBackgroundImageWithURL:imageURL forState:UIControlStateNormal placeholderImage:HeadImagePlaceholder];

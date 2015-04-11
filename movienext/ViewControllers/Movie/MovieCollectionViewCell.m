@@ -32,9 +32,9 @@
 }
 -(void)setValueforCell:(NSDictionary  *) dict;
 {
-    if ([dict objectForKey:@"picture"])
+    if ([dict objectForKey:@"photo"])
     {
-        NSURL *urlString=[NSURL URLWithString:  [NSString stringWithFormat:@"%@%@!poster",kUrlFeed,[dict objectForKey:@"picture"]]];
+        NSURL *urlString=[NSURL URLWithString:  [NSString stringWithFormat:@"%@%@!poster",kUrlFeed,[dict objectForKey:@"photo"]]];
         [LogoImage sd_setImageWithURL:urlString placeholderImage:[UIImage imageNamed:@"loading_image_all.png"]];
     }
     if ([dict objectForKey:@"title"]) {

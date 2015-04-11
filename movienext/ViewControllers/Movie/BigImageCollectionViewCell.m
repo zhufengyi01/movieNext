@@ -58,14 +58,10 @@
 }
 -(void)ConfigCellWithIndexPath:(NSInteger)row{
     self.Cellindex=row;
-    if (_weiboDict) {
-        _StageView.weiboDict = _weiboDict;
+    if (self.weibosArray) {
+        _StageView.weibosArray = self.weibosArray;
     }
-    
-    if (_WeibosArray) {
-        _StageView.WeibosArray = self.WeibosArray;
-    }
-    _StageView.StageInfoDict=self.StageInfoDict;
+    _StageView.stageInfo=self.stageInfo;
     [_StageView configStageViewforStageInfoDict];
     _StageView.frame=CGRectMake(0, 0, kDeviceWidth, kDeviceWidth);
     BgView2.frame=CGRectMake(0, kDeviceWidth, kDeviceWidth, 45);

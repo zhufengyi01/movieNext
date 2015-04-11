@@ -118,17 +118,17 @@
 // 设置toolbar 的值
 -(void)configToolBar
 {
-    if ([self.weiboDict.uped  intValue]==0) {
-        //没有赞的时候
-         zanbutton.selected=NO;
-        likeimageview.image=[UIImage imageNamed:@"ic_menu_like_default.png"];
-    }
-    else
-    {
-        zanbutton.selected=YES;
-        likeimageview.image=[UIImage imageNamed:@"liked_icon_light"];
-      
-    }
+//    if ([self.weiboInfo.uped  intValue]==0) {
+//        //没有赞的时候
+//         zanbutton.selected=NO;
+//        likeimageview.image=[UIImage imageNamed:@"ic_menu_like_default.png"];
+//    }
+//    else
+//    {
+//        zanbutton.selected=YES;
+//        likeimageview.image=[UIImage imageNamed:@"liked_icon_light"];
+//      
+//    }
     
 }
 #pragma mark
@@ -156,7 +156,7 @@
     }
     }
     if (self.delegete &&[self.delegete respondsToSelector:@selector(ToolViewHandClick::weiboDict:StageInfo:)]) {
-        [self.delegete ToolViewHandClick:button :_markView weiboDict:self.weiboDict StageInfo:self.StageInfoDict];
+        [self.delegete ToolViewHandClick:button :_markView weiboDict:self.weiboInfo StageInfo:self.stageInfo];
     }
 }
 

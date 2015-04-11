@@ -10,7 +10,8 @@
 #define movienext_Constant_h
 
 #pragma mark   服务器设置
-#define kApiBaseUrl @"http://182.92.214.199"
+//#define kApiBaseUrl @"http://182.92.214.199"
+#define kApiBaseUrl  @"http://api.ying233.com"
 
 #define kUrlWeibo @"http://next-weibo.b0.upaiyun.com/"
 #define kUrlAvatar @"http://next-avatar.b0.upaiyun.com/"   

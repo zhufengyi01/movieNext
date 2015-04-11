@@ -7,11 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "WeiboModel.h"
-#import "StageInfoModel.h"
+//#import "WeiboModel.h"
+//#import "StageInfoModel.h"
+#import "weiboInfoModel.h"
+#import "stageInfoModel.h"
 @protocol MarkViewDelegate <NSObject> 
 //标签的点击事件，对stageview 提供接口，传递微博对象
--(void)MarkViewClick:(WeiboModel  *) weiboDict withMarkView:(id) markView;
+-(void)MarkViewClick:(weiboInfoModel  *) weiboDict withMarkView:(id) markView;
 @end
 @interface MarkView : UIView
 {
@@ -28,13 +30,14 @@
 @property (nonatomic,assign) BOOL  isSelected;   // 是否被选中
 
 //从stagview传递过来的微博字典对象，这个对象中包含微博的详细信息
-@property (nonatomic,strong)WeiboModel  *weiboDict;
-
+//@property (nonatomic,strong)WeiboModel  *weiboDict;
+@property(nonatomic,strong)weiboInfoModel *weiboInfo;
+//
 @property (nonatomic,assign) id <MarkViewDelegate> delegate;
 @property (nonatomic,assign) BOOL isAnimation;   //是否是可以动的动画
 @property(nonatomic,assign) BOOL  isShowansHiden;  //是否可以闪现
 
--(void)setValueWithWeiboInfo:(WeiboModel *) weiboInfo;
+-(void)setValueWithWeiboInfo:(weiboInfoModel *) weiboInfo;
 //最新页面的markview 闪现
 -(void)StartShowAndhiden;
 //在controller 里面实现的方法，点击屏幕，让当前的的气泡取消选中

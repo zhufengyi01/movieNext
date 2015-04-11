@@ -8,14 +8,16 @@
 
 #import <UIKit/UIKit.h>
 #import "MarkView.h"
-#import "WeiboModel.h"
-#import "StageInfoModel.h"
+//#import "WeiboModel.h"
+//#import "StageInfoModel.h"
+#import "weiboInfoModel.h"
+#import "stageInfoModel.h"
 @protocol ButtomToolViewDelegate <NSObject>
 //点击底部视图的方法，根据tag值判断是点击了那一个按钮
 //button.tag=10000; 头像
 //button.tag=10001;  分享
 //button.tag=10002  赞
--(void)ToolViewHandClick:(UIButton  *) button :(MarkView *) markView weiboDict:(WeiboModel*) weiboDict StageInfo:(StageInfoModel *)stageInfoDict;
+-(void)ToolViewHandClick:(UIButton  *) button :(MarkView *) markView weiboDict:(weiboInfoModel*) weiboDict StageInfo:(stageInfoModel *)stageInfoDict;
 
 ///点击屏幕的透明颜色时候，弹回上面
 -(void)topViewTouchBengan;
@@ -39,8 +41,8 @@
     UIImageView  *likeimageview;
 }
 #pragma mark  ------外部方法
-@property(nonatomic,strong) WeiboModel   *weiboDict;
-@property(nonatomic,strong) StageInfoModel   *StageInfoDict;
+@property(nonatomic,strong) weiboInfoModel   *weiboInfo;
+@property(nonatomic,strong) stageInfoModel   *stageInfo;
 @property(nonatomic,strong) id markView;
 -(void)configToolBar;
 
