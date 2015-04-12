@@ -69,8 +69,8 @@
     stageView = [[StageView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceWidth)];
     stageView.isAnimation = YES;
     stageView.delegate=self;
-    stageView.stageInfo=self.model.stageInfo;
-    stageView.WeibosArray = self.model.stageInfo.weibosArray;
+    stageView.stageInfo=self.stageInfo;
+    stageView.weibosArray = self.stageInfo.weibosArray;
     [stageView configStageViewforStageInfoDict];
      [scrollView addSubview:stageView];
     [stageView startAnimation];
@@ -117,8 +117,8 @@
     
     UserDataCenter  *userCenter=[UserDataCenter shareInstance];
     NSNumber  *weiboId=weiboDict.Id;  //[upDict objectForKey:@"id"];
-    NSNumber  *stageId=self.model.stageInfo.Id;//[stageInfoDict objectForKey:@"id"];
-    NSString  *movieId=self.model.stageInfo.movieInfo.Id; //[stageInfoDict objectForKey:@"movie_id"];
+    NSNumber  *stageId=self.stageInfo.Id;//[stageInfoDict objectForKey:@"id"];
+    NSString  *movieId=self.stageInfo.movieInfo.Id; //[stageInfoDict objectForKey:@"movie_id"];
     NSString  *movieName=stageInfoDict.movieInfo.name;//[stageInfoDict objectForKey:@"movie_name"];
     NSString  *userId=userCenter.user_id;
     NSString  *autorId =weiboDict.created_by; // [upDict objectForKey:@"user_id"];
@@ -213,7 +213,7 @@
 //    }
     
     UMShareViewController  *shareVC=[[UMShareViewController alloc]init];
-    shareVC.StageInfo=self.model.stageInfo;
+    shareVC.StageInfo=self.stageInfo;
     shareVC.screenImage=image;
     shareVC.delegate=self;
     UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:shareVC];
@@ -230,8 +230,8 @@
     NSLog(@" ==addMarkButtonClick  ====%ld",(long)button.tag);
     AddMarkViewController  *AddMarkVC=[[AddMarkViewController alloc]init];
     AddMarkVC.delegate=self;
-    AddMarkVC.model=self.model;
-    AddMarkVC.stageInfo=self.model.stageInfo;
+   // AddMarkVC.model=self.stageInfo;
+    AddMarkVC.stageInfo=self.stageInfo;
   //  AddMarkVC.pageSoureType=NSAddMarkPageSourceDefault;
     [self.navigationController pushViewController:AddMarkVC animated:NO];
 

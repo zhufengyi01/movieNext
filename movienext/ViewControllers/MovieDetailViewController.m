@@ -369,11 +369,6 @@
     
 }
 
-
-
-
-
-
 //根据豆瓣id  请求movieid
 -(void)requestMovieIdWithdoubanId
 {
@@ -405,9 +400,7 @@
     NSDictionary *parameter = @{@"id": self.movieId};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:[NSString stringWithFormat:@"%@/movie/info", kApiBaseUrl] parameters:parameter success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        
         NSLog(@"  电影详情页面的电影信息数据JSON: %@", responseObject);
-
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
              [moviedetailmodel setValuesForKeysWithDictionary:[responseObject objectForKey:@"model"]];
         
@@ -543,13 +536,13 @@
     } else {
         SmallImageCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"smallcell" forIndexPath:indexPath];
         cell.imageView.backgroundColor=VStageView_color;
-//        [cell.imageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w340h340",kUrlStage,model.stageinfo.stage]] placeholderImage:[UIImage imageNamed:nil]];
-//        if (model.stageinfo.marks && [model.stageinfo.marks intValue]>0) {
-//            cell.titleLab.hidden = NO;
-//            cell.titleLab.text=[NSString stringWithFormat:@"%@",  model.stageinfo.marks];
-//        } else {
-//            cell.titleLab.hidden = YES;
-//        }
+        [cell.imageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w340h340",kUrlStage,model.photo]] placeholderImage:[UIImage imageNamed:nil]];
+        if ( model.weibosArray.count>0) {
+            cell.titleLab.hidden = NO;
+            cell.titleLab.text=[NSString stringWithFormat:@"%ld", model.weibosArray.count];
+        } else {
+            cell.titleLab.hidden = YES;
+        }
         
         return cell;
     }
@@ -565,14 +558,16 @@
         BigImageCollectionViewCell   *cell=(BigImageCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
      } else {
         ShowStageViewController *vc = [[ShowStageViewController alloc] init];
-        HotMovieModel  *model=[_dataArray objectAtIndex:indexPath.row];
+//        HotMovieModel  *model=[_dataArray objectAtIndex:indexPath.row];
 //        if ([_MovieDict objectForKey:@"name"]) {
 //            model.stageinfo.movie_name=[_MovieDict objectForKey:@"name"];
 //        }
 //        if ([_MovieDict objectForKey:@"id"]) {
 //            model.stageinfo.movie_id=[_MovieDict objectForKey:@"id"];
 //        }
-   //     vc.model = model;
+         stageInfoModel *stagemodel=[_dataArray objectAtIndex:indexPath.row];
+         
+        vc.stageInfo = stagemodel;
         [self.navigationController pushViewController:vc animated:YES];
      }
 }

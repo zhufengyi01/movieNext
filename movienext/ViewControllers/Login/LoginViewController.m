@@ -221,44 +221,6 @@
                     //logo
                     NSString  *logo=[data objectForKey:@"profile_image_url"];
                     
-                    
-                    
-//                    NSString *profile_image_url = [data valueForKey:@"profile_image_url"];
-//                    NSString *gender = [[data valueForKeyPath:@"gender"] isKindOfClass:[NSString class]] ? [data valueForKey:@"gender"] : [[data valueForKey:@"gender"] stringValue];
-//                    gender = [gender isEqualToString:@"男"] ? @"1" : ([gender isEqualToString:@"女"] ? @"0" : gender);
-//                    NSString *verified = [data valueForKeyPath:@"verified"];
-//                    
-//                    
-//                    NSMutableDictionary * parameters = [NSMutableDictionary dictionaryWithCapacity:0];
-//                    //用户名
-//                    [parameters setObject:screen_name ? screen_name : @""  forKey:@"username"];
-//                    //openid
-//                    [parameters setObject:uid ? uid : @"" forKey:@"openid"];
-//                    
-//                    if ([ssoName isEqualToString:UMShareToWechatSession]) {
-//                        [parameters setObject:[data objectForKey:@"openid"] forKey:@"openid"];
-//                    }
-//                    //头像
-//                    [parameters setObject:profile_image_url ? profile_image_url : @"" forKey:@"logo"];
-//                    
-//                    //token
-//                    [parameters setObject:access_token ? access_token : @"" forKey:@"token"];
-//                    
-//                 
-//                    if (![ssoName isEqualToString:UMShareToWechatSession]) {
-//                    [parameters setObject:description forKey:@"brief"];
-//                    }
-//                    
-//                    //绑定类型
-//                    [parameters setObject:ssoName forKey:@"bindtype"];
-//                    ///性别
-//                    [parameters setObject:gender forKey:@"gender"];
-//                    
-//                    if (![ssoName isEqualToString:UMShareToWechatSession]) {
-//                        [parameters setObject:verified forKey:@"verified"];
-//
-//                    }
-                  //  NSLog(@"打印参数=== weixin =======%@",parameters);
                     NSDictionary  *parameters=@{@"openid":openid,@"token":access_token,@"username":screen_name,@"brief":brief,@"sex":sex,@"verified":verified,@"bindtype":bingdtype,@"logo":logo};
                     
                     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
