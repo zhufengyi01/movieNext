@@ -95,7 +95,8 @@
     
     
     _MovieImageView.backgroundColor =VStageView_color;
-    [_MovieImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w640",kUrlStage,self.stageInfo.photo]] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+    NSString *photostring=[NSString stringWithFormat:@"%@%@!w640",kUrlStage,self.stageInfo.photo];
+    [_MovieImageView sd_setImageWithURL:[NSURL URLWithString:photostring] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         
 #pragma  mark  是静态的, 气泡是不动的
          if ( self.weiboinfo) {

@@ -17,7 +17,15 @@
 
 @property(nonatomic,strong) NSString  *verified;
 
-@property(nonatomic,strong) NSString  *fake;
+@property(nonatomic,strong) NSNumber  *fake;
+
+@property(nonatomic,strong) NSString  *role_id;
+
+@property(nonatomic,strong) NSString  *brief;
+
+@property(nonatomic,strong) NSString  *weibo_count;
+
+@property(nonatomic,strong) NSString  *liked_count;
 
 
 

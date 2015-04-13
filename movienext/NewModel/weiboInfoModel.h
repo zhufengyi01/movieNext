@@ -12,7 +12,7 @@
 #import <UIKit/UIKit.h>
 #import "stageInfoModel.h"
  @interface weiboInfoModel : NSObject
-@property(nonatomic,strong) NSString  *Id;
+@property(nonatomic,strong) NSNumber  *Id;
 @property(nonatomic,strong) NSString  *stage_id;
 
 @property(nonatomic,strong) stageInfoModel  *stageInfo;
@@ -23,7 +23,7 @@
 @property(nonatomic,strong) NSString  *y_percent;
 
 
-@property(nonatomic,strong) NSString  *like_count;
+@property(nonatomic,strong) NSNumber  *like_count;
 
 @property(nonatomic,strong) NSString  *content;
 

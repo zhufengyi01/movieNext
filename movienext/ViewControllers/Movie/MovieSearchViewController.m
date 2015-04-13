@@ -50,9 +50,7 @@
     [self createNavigation];
     [self initData];
     [self initUI];
-    
-  //  [self requestData];
-    
+ 
 
 }
 -(void)createNavigation

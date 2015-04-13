@@ -67,15 +67,13 @@ typedef NS_ENUM(NSInteger,NSUserPageType)
 @property(assign,nonatomic) NSInteger   Cellindex;
 @property(nonatomic,strong)StageView    *stageView;
 
-//@property(nonatomic,strong) StageInfoModel   *StageInfoDict;
-//@property (nonatomic,strong) NSArray       *WeibosArray;   //小标签的数组，在多个标签的时候使用这个
-//@property (nonatomic,strong) WeiboModel       *weiboDict;     //只有一个标签的时候传递这个参数
 @property (nonatomic,assign) NSPageSourceType    pageType;      //页面来源
 @property(nonatomic,assign) NSUserPageType       userPage;  //  是自己的首页还是别人的首页
 @property(nonatomic,strong) ModelsModel          *cellModel;
 @property(nonatomic,strong) stageInfoModel       *stageInfo;
 @property(nonatomic,strong) NSMutableArray       *weibosArray;
 @property(nonatomic,strong) weiboInfoModel       *weiboInfo;
+@property(nonatomic,strong)NSMutableArray        *upweibosArray;   //微博点赞
 //设置stageview的背景图片
 -(void)ConfigsetCellindexPath:(NSInteger) row;
 

@@ -10,4 +10,5 @@
 
 @interface MovieViewController : UIViewController
 @property(nonatomic,strong)UICollectionView  *myConllectionView;
+ @property(nonatomic,strong) NSMutableArray      *dataArray;
 @end

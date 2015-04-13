@@ -328,8 +328,8 @@
         if ([userInfo objectForKey:@"level"]) {
             userCenter.is_admin =[userInfo objectForKey:@"level"];
         }
-        if ([userInfo objectForKey:@"avatar"]) {
-            userCenter.logo =[userInfo objectForKey:@"avatar"];
+        if ([userInfo objectForKey:@"logo"]) {
+            userCenter.logo =[userInfo objectForKey:@"logo"];
         }
         if ([userInfo objectForKey:@"brief"]) {
             userCenter.signature=[userInfo objectForKey:@"brief"];

@@ -11,7 +11,7 @@
 @interface UpweiboModel : NSObject
 @property(nonatomic,strong) NSString  *Id;
 
-@property(nonatomic,strong) NSString  *weibo_id;
+@property(nonatomic,strong) NSNumber  *weibo_id;
 
 @property(nonatomic,strong) NSString  *author_id;
 

@@ -151,6 +151,7 @@
 		0043E9671AB2DAF500209C3A /* login_button_wechat.png in Resources */ = {isa = PBXBuildFile; fileRef = 0043E9611AB2DAF500209C3A /* login_button_wechat.png */; };
 		0043E9681AB2DAF500209C3A /* login_button_wechat@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0043E9621AB2DAF500209C3A /* login_button_wechat@2x.png */; };
 		0043E9691AB2DAF500209C3A /* login_button_wechat@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0043E9631AB2DAF500209C3A /* login_button_wechat@3x.png */; };
+		0047F7641ADB9E25007DDC1A /* userAddmodel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0047F7631ADB9E25007DDC1A /* userAddmodel.m */; };
 		0049CA951AD531DB008EC587 /* cell_buttom_line.png in Resources */ = {isa = PBXBuildFile; fileRef = 0049CA941AD531DB008EC587 /* cell_buttom_line.png */; };
 		004DD1E51AAFDD0F00394A9D /* Back__Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 004DD1E41AAFDD0F00394A9D /* Back__Icon.png */; };
 		004DD1E81AB028B000394A9D /* ButtomToolView.m in Sources */ = {isa = PBXBuildFile; fileRef = 004DD1E71AB028B000394A9D /* ButtomToolView.m */; };
@@ -524,6 +525,8 @@
 		0043E9611AB2DAF500209C3A /* login_button_wechat.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = login_button_wechat.png; sourceTree = "<group>"; };
 		0043E9621AB2DAF500209C3A /* login_button_wechat@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_button_wechat@2x.png"; sourceTree = "<group>"; };
 		0043E9631AB2DAF500209C3A /* login_button_wechat@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_button_wechat@3x.png"; sourceTree = "<group>"; };
+		0047F7621ADB9E25007DDC1A /* userAddmodel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = userAddmodel.h; sourceTree = "<group>"; };
+		0047F7631ADB9E25007DDC1A /* userAddmodel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = userAddmodel.m; sourceTree = "<group>"; };
 		0049CA941AD531DB008EC587 /* cell_buttom_line.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cell_buttom_line.png; sourceTree = "<group>"; };
 		004DD1E41AAFDD0F00394A9D /* Back__Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Back__Icon.png; sourceTree = "<group>"; };
 		004DD1E61AB028B000394A9D /* ButtomToolView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ButtomToolView.h; sourceTree = "<group>"; };
@@ -1757,6 +1760,8 @@
 				00B168B61AD77EB4002265CD /* stageInfoModel.m */,
 				00B168B81AD78176002265CD /* weiboUserInfoModel.h */,
 				00B168B91AD78176002265CD /* weiboUserInfoModel.m */,
+				0047F7621ADB9E25007DDC1A /* userAddmodel.h */,
+				0047F7631ADB9E25007DDC1A /* userAddmodel.m */,
 			);
 			path = NewModel;
 			sourceTree = "<group>";
@@ -2079,6 +2084,7 @@
 				00AA54341AA2C525004096F8 /* UIImage+WebP.m in Sources */,
 				006739551AA491250087C240 /* MJRefreshConst.m in Sources */,
 				00354C5E1ABF030C00F650AA /* AFURLResponseSerialization.m in Sources */,
+				0047F7641ADB9E25007DDC1A /* userAddmodel.m in Sources */,
 				0064CE321AB3BE12005E0762 /* HotMovieModel.m in Sources */,
 				00B168B71AD77EB4002265CD /* stageInfoModel.m in Sources */,
 				00AA54271AA2C525004096F8 /* View+MASAdditions.m in Sources */,

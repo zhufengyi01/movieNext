@@ -12,6 +12,7 @@
 #import "UIButton+WebCache.h"
 #import "Function.h"
 #import "UserDataCenter.h"
+#import "UpweiboModel.h"
 @implementation ButtomToolView
 
 /*
@@ -79,7 +80,6 @@
     [buttomView addSubview:shareButton];
     
     
-    
 
     zanbutton =[ZCControl createButtonWithFrame:CGRectMake((kDeviceWidth/3)*2, 0, kDeviceWidth/3, 50) ImageName:nil Target:self Action:@selector(dealButtomClick:) Title:@"点赞"];
     zanbutton.tag=10002;
@@ -129,6 +129,21 @@
 //        likeimageview.image=[UIImage imageNamed:@"liked_icon_light"];
 //      
 //    }
+    //获取了当前微博对象，如果当前的微博对象在数组中有的话，那就需要显示为已赞
+    
+    for (int i=0; i<self.upweiboArray.count; i++) {
+        UpweiboModel *upmodel=self.upweiboArray[i];
+        if ([upmodel.weibo_id intValue]==[self.weiboInfo.Id intValue]) {
+            zanbutton.selected=YES;
+            likeimageview.image=[UIImage imageNamed:@"liked_icon_light"];
+            break;
+        }
+        else{
+            zanbutton.selected=NO;
+            likeimageview.image=[UIImage imageNamed:@"ic_menu_like_default.png"];
+
+        }
+    }
     
 }
 #pragma mark
@@ -143,7 +158,7 @@
         zanbutton.selected=NO;
         likeimageview.image=[UIImage imageNamed:@"ic_menu_like_default.png"];
       }
-    else if (zanbutton.selected==NO)
+      else if (zanbutton.selected==NO)
     {
         zanbutton.selected=YES;
         //如果按钮点击的是赞的话

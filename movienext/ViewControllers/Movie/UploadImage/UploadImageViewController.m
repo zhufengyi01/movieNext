@@ -183,15 +183,12 @@
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:[NSString stringWithFormat:@"%@/movieStage/uploadStage", kApiBaseUrl] parameters:parameter success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"  发布图片的请求    JSON: %@", responseObject);
+        if ([[responseObject objectForKey:@"code"] intValue]==0) {
         
         [_myprogress setProgressTitle:@"上传成功"];
         [_myprogress removeFromSuperview];
         _myprogress=nil;
 
-        //if ([responseObject  objectForKey:@"detail"]) {
-          //  UIAlertView  *Al=[[UIAlertView alloc]initWithTitle:@"发布成功" message:@"恭喜你发布成功" delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
-            //[Al show];
-       // }
         if (_myDict ==nil) {
             _myDict =[[NSMutableDictionary alloc]init];
         }
@@ -208,6 +205,12 @@
         Addmark.stageInfo=stageInfo;
         Addmark.pageSoureType=NSAddMarkPageSourceUploadImage;
         [self.navigationController pushViewController:Addmark animated:YES];
+        }
+        else
+        {
+            NSLog(@"Error:");
+
+         }
   
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);

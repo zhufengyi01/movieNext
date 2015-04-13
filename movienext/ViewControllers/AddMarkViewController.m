@@ -13,7 +13,7 @@
 #import "UserDataCenter.h"
 #import "UIImageView+WebCache.h"
 #import "AFNetworking.h"
-
+#import "weiboInfoModel.h"
 #import "MovieDetailViewController.h"
 #define  BOOKMARK_WORD_LIMIT 1000
 @interface AddMarkViewController ()<UITextFieldDelegate,UIAlertViewDelegate,UIScrollViewDelegate,UITextViewDelegate>
@@ -237,6 +237,7 @@
     ///显示标签的头像
     UserDataCenter  * userCenter=[UserDataCenter shareInstance];
     [ _myMarkView.LeftImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@!thumb",kUrlAvatar,    userCenter.logo]]];
+    
     _myMarkView.TitleLable.text=InputStr;
     [stageView addSubview:_myMarkView];
     
@@ -302,22 +303,28 @@
         X =[NSString stringWithFormat:@"%d",100];
         Y=[NSString stringWithFormat:@"%d",100];
     }
+    
+    int x_percent=[X intValue];
+    int y_percent=[Y intValue];
+    
     UserDataCenter  *userCenter=[UserDataCenter shareInstance];
-     NSDictionary *parameter = @{@"user_id": userCenter.user_id,@"topic_name":InputStr,@"stage_id":self.stageInfo.Id,@"x":X,@"y":Y};
-   // NSLog(@"==parameter====%@",parameter);
+     NSDictionary *parameter = @{@"user_id": userCenter.user_id,@"content":InputStr,@"stage_id":self.stageInfo.Id,@"x_percent":[NSString stringWithFormat:@"%d",x_percent],@"y_percent":[NSString stringWithFormat:@"%d",y_percent]};
+    
+    NSString *urlString =[NSString stringWithFormat:@"%@/weibo/create", kApiBaseUrl];
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager POST:[NSString stringWithFormat:@"%@/weibo/create", kApiBaseUrl] parameters:parameter success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [manager POST:urlString parameters:parameter success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"  添加弹幕发布请求    JSON: %@", responseObject);
-        if ([[responseObject  objectForKey:@"return_code"] intValue]==10000) {
+        if ([[responseObject  objectForKey:@"code"] intValue]==0) {
             UIAlertView  *Al=[[UIAlertView alloc]initWithTitle:nil message:@"发布成功" delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
             [Al show];
             
-            WeiboModel *weibomodel =[[WeiboModel alloc]init];
+            weiboInfoModel *weibomodel =[[weiboInfoModel alloc]init];
             if (weibomodel) {
-                [weibomodel setValuesForKeysWithDictionary:[responseObject objectForKey:@"detail"]];
+                [weibomodel setValuesForKeysWithDictionary:[responseObject objectForKey:@"model"]];
             }
-            weibomodel.fake=[NSNumber numberWithInt:1];
-            [self.model.stageInfo.weibosArray addObject:weibomodel];
+         //   weibomodel.uerInfo.fake=[NSNumber numberWithInt:1];
+            [self.stageInfo.weibosArray addObject:weibomodel];
+        
         }
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {

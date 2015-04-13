@@ -62,9 +62,10 @@
     // 返回按钮
     UIButton  *backBtn;
     stageInfoModel  *_TStageInfo;
-    WeiboModel      *_TweiboInfo;
+    weiboInfoModel      *_TweiboInfo;
     //电影详细信息
     movieInfoModel   * moviedetailmodel;
+    int pageCount;
 
 
 }
@@ -185,8 +186,10 @@
 {
     page=1;
     pageSize=12;
+    pageCount=0;
     bigModel=YES;
     _dataArray =[[NSMutableArray alloc]init];
+    moviedetailmodel=[[movieInfoModel alloc]init];
     
 }
 -(void)initUI
@@ -235,13 +238,12 @@
     // 添加上拉刷新尾部控件
     [vc.myConllectionView addFooterWithCallback:^{
         // 进入刷新状态就会回调这个Block
-        
-        // 增加5条假数据
-        ///  for (int i = 0; i<5; i++) {
-        //   [vc.fakeColors addObject:MJRandomColor];
-        //}
-        page=page+1;
-        //[vc requestData];
+        if (pageCount>page) {
+            page=page+1;
+            [vc requestData];
+
+         
+        }
         // 模拟延迟加载数据，因此2秒后才调用）
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
           //  [vc.myConllectionView reloadData];
@@ -262,13 +264,6 @@
     _toolBar=[[ButtomToolView alloc]initWithFrame:CGRectMake(0,0,kDeviceWidth,kDeviceHeight+64)];
     _toolBar.delegete=self;
 }
-//-(void)createShareView
-//{
-//    shareView=[[UMShareView alloc]initWithFrame:CGRectMake(0,0, kDeviceWidth, kDeviceHeight+64)];
-//    shareView.delegate=self;
-//}
-//
-
 
 #pragma  mark  ----RequestData
 #pragma  mark  ---
@@ -277,12 +272,12 @@
 {
     NSString *type=@"1";
     UserDataCenter *userCenter =[UserDataCenter shareInstance];
-    NSDictionary *parameters = @{@"reported_user_id":_TweiboInfo.user_id,@"reported_id":_TweiboInfo.Id,@"reason":@"",@"type":type,@"created_by":userCenter.user_id};
+    NSDictionary *parameters = @{@"reported_user_id":_TweiboInfo.uerInfo.Id ,@"reported_id":_TweiboInfo.Id,@"reason":@"",@"type":type,@"created_by":userCenter.user_id};
     
     
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:[NSString stringWithFormat:@"%@/report/create", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        if ([[responseObject  objectForKey:@"return_code"]  intValue]==10000) {
+        if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
             NSLog(@"随机数种子请求成功=======%@",responseObject);
             UIAlertView  *Al =[[UIAlertView alloc]initWithTitle:nil message:@"你的举报已成功,我们会在24小时内处理" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
             [Al show];
@@ -316,11 +311,11 @@
     NSDictionary *parameters = @{@"weibo_id":_TweiboInfo.Id,@"user_id":[dict objectForKey:@"id"]};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:[NSString stringWithFormat:@"%@/weibo/switch", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        if ([[responseObject  objectForKey:@"return_code"]  intValue]==10000) {
+        if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
             NSLog(@"推荐成功=======%@",responseObject);
             UIAlertView  *Al=[[UIAlertView alloc]initWithTitle:nil message:@"变身成功" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
             [Al show];
-            _TweiboInfo.user_id=[dict objectForKey:@"id"];
+            _TweiboInfo.uerInfo.Id=[dict objectForKey:@"id"];
             [ _mymarkView.LeftImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kUrlAvatar, [dict objectForKey:@"avatar"] ]]];
             
         }
@@ -376,14 +371,16 @@
     NSDictionary *parameters = @{@"douban_id": self.douban_Id};
     
     [manager POST:[NSString stringWithFormat:@"%@/movie/create", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if ([[responseObject  objectForKey:@"code"] intValue]==0) {
+        
         NSLog(@"responseobject = %@", responseObject);
-        NSDictionary *detail = [responseObject objectForKey:@"detail"];
+        NSDictionary *detail = [responseObject objectForKey:@"model"];
         NSString * movie_id = [detail objectForKey:@"id"];
         if (movie_id && [movie_id intValue]>0) {
             self.movieId = movie_id;
         }
         [self requestMovieInfoData];
-        ///[self requestData];
+        }
 
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
@@ -402,9 +399,9 @@
     [manager POST:[NSString stringWithFormat:@"%@/movie/info", kApiBaseUrl] parameters:parameter success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"  电影详情页面的电影信息数据JSON: %@", responseObject);
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
-             [moviedetailmodel setValuesForKeysWithDictionary:[responseObject objectForKey:@"model"]];
-        
+            [moviedetailmodel setValuesForKeysWithDictionary:[responseObject objectForKey:@"model"]];
         [self requestData];
+            [self.myConllectionView reloadData];
         }
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -430,6 +427,7 @@
         NSLog(@"  电影详情页面数据JSON: %@", responseObject);
         
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
+            pageCount=[[responseObject objectForKey:@"pageCount"] intValue];
             
         NSMutableArray  *detailArray=[responseObject objectForKey:@"models"];
         [loadView stopAnimation];
@@ -555,7 +553,7 @@
     if (bigModel==YES&&collectionView==_myConllectionView) {
         //点击cell 隐藏弹幕，再点击隐藏
         NSLog(@"didDeselectRowAtIndexPath  =====%ld",indexPath.row);
-        BigImageCollectionViewCell   *cell=(BigImageCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
+      //  BigImageCollectionViewCell   *cell=(BigImageCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
      } else {
         ShowStageViewController *vc = [[ShowStageViewController alloc] init];
 //        HotMovieModel  *model=[_dataArray objectAtIndex:indexPath.row];
@@ -741,13 +739,13 @@
 -(void)BigImageCollectionViewCellToolButtonClick:(UIButton *)button Rowindex:(NSInteger)index
 {
    
-    
+    stageInfoModel   *stagemodel;
+    stagemodel =[_dataArray objectAtIndex:index];
     if (button.tag==2000) {
         //分享
         //获取cell
 #pragma mark 暂时把sharetext设置成null
-        HotMovieModel  *hotmovie;
-        hotmovie =[_dataArray objectAtIndex:index];
+      
          BigImageCollectionViewCell *cell = (BigImageCollectionViewCell *)(button.superview.superview.superview);
         UIImage  *image=[Function getImage:cell.StageView WithSize:CGSizeMake(kDeviceWidth, kDeviceWidth)];
         
@@ -763,25 +761,24 @@
 //            
 //        }
 //        
-//        UMShareViewController  *shareVC=[[UMShareViewController alloc]init];
-//        shareVC.StageInfo=hotmovie.stageinfo;
-//        shareVC.screenImage=image;
-//        shareVC.delegate=self;
-//        UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:shareVC];
-//        [self presentViewController:na animated:YES completion:nil];
-//
-//        
+        UMShareViewController  *shareVC=[[UMShareViewController alloc]init];
+        shareVC.StageInfo=stagemodel;
+        shareVC.screenImage=image;
+        shareVC.delegate=self;
+        UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:shareVC];
+        [self presentViewController:na animated:YES completion:nil];
+
+        
     }
     else if(button.tag==3000)
     {
         
-//            AddMarkViewController  *AddMarkVC=[[AddMarkViewController alloc]init];
-//            HotMovieModel  *model =[_dataArray objectAtIndex:index];
-//            AddMarkVC.stageInfo = model.stageinfo;
-//            AddMarkVC.model=model;
-//            AddMarkVC.delegate=self;
-//           // AddMarkVC.pageSoureType=NSAddMarkPageSourceDefault;
-//            [self.navigationController pushViewController:AddMarkVC animated:NO];
+            AddMarkViewController  *AddMarkVC=[[AddMarkViewController alloc]init];
+            AddMarkVC.stageInfo = stagemodel;
+            //AddMarkVC.model=model;
+            AddMarkVC.delegate=self;
+           // AddMarkVC.pageSoureType=NSAddMarkPageSourceDefault;
+            [self.navigationController pushViewController:AddMarkVC animated:NO];
     }
     
 }
@@ -969,29 +966,12 @@
     {
         //点击了分享
           float hight= kDeviceWidth;
-//        float  ImageWith=[stageInfoDict.w intValue]; //[[self.StageInfoDict objectForKey:@"w"]  floatValue];
-//        float  ImgeHight=[stageInfoDict.h intValue];//[[self.StageInfoDict objectForKey:@"h"]  floatValue];
-//        if(ImgeHight>ImageWith)
-//        {
-//            hight=  (ImgeHight/ImageWith) *kDeviceWidth;
-//        }
-        
         BigImageCollectionViewCell *cell = (BigImageCollectionViewCell *)(markView.superview.superview.superview);
         UIImage  *image=[Function getImage:cell.StageView WithSize:CGSizeMake(kDeviceWidth, hight)];
         
 
         //创建UMshareView 后必须配备这三个方法
-        //stageInfoDict.movie_name=[_MovieDict objectForKey:@"name"];
-//        shareView.StageInfo=stageInfoDict;
-//        shareView.screenImage=image;
-//        [shareView configShareView];
-//        [self.view addSubview:shareView];
-//        self.tabBarController.tabBar.hidden=YES;
-//        if ([shareView respondsToSelector:@selector(showShareButtomView)]) {
-//            [shareView showShareButtomView];
-//            
-//        }
-        
+    
         UMShareViewController  *shareVC=[[UMShareViewController alloc]init];
         shareVC.StageInfo=stageInfoDict;
         shareVC.screenImage=image;

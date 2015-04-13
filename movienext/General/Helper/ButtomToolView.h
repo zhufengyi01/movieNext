@@ -44,8 +44,8 @@
 @property(nonatomic,strong) weiboInfoModel   *weiboInfo;
 @property(nonatomic,strong) stageInfoModel   *stageInfo;
 @property(nonatomic,strong) id markView;
+@property(nonatomic,strong) NSMutableArray   *upweiboArray;
 -(void)configToolBar;
-
 //显示底部试图.用于动画
 -(void)ShowButtomView;
 //隐藏底部试图

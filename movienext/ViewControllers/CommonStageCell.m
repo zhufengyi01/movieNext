@@ -116,7 +116,7 @@
         [pressview addGestureRecognizer:longPress];
 
     }
-    //地步2像素的投影
+    //底部2像素的投影
     UIImageView *lineImage =[[UIImageView alloc]initWithFrame:CGRectMake(0,44, kDeviceWidth, 2)];
     lineImage.image=[UIImage imageNamed:@"cell_buttom_line.png"];
     [BgView2 addSubview:lineImage];
@@ -144,12 +144,13 @@
     //这里计算hight 图片的高度，主要是为了计算toolbar 的y轴坐标，真实赋值是在stageview
  #pragma mark 设置底部tool的图片，名字
     //设置底部
-    if (self.stageInfo.movieInfo.name) {  //电影名字，这里设置title 偏移
+    if (self.stageInfo.movieInfo.name) {  //电影名字，s这里设置title 偏移
         [leftButtomButton setTitle:self.stageInfo.movieInfo.name forState:UIControlStateNormal];
     }
     
     if (self.stageInfo.movieInfo.logo) {
-        [MovieLogoImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w100h100",kUrlMoviePoster,self.stageInfo.movieInfo.logo] ] placeholderImage:[ UIImage imageNamed:@"loading_image_all.png"]];
+        NSString  *logoString =[NSString stringWithFormat:@"%@%@!w100h100",kUrlMoviePoster,self.stageInfo.movieInfo.logo];
+        [MovieLogoImageView sd_setImageWithURL:[NSURL URLWithString:logoString] placeholderImage:[UIImage imageNamed:@"loading_image_all.png"]];
     }
     
 #pragma  mark  热门cell

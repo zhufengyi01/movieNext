@@ -26,16 +26,14 @@
 #import "MovieCollectionViewCell.h"
 #import "MovieDetailViewController.h"
 #import "MJRefresh.h"
-
-//#import  "SearchMovieViewController.h"
 @interface MovieViewController ()<UISearchBarDelegate,UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout,LoadingViewDelegate>
 {
-    //UICollectionView    *_myConllectionView;
     LoadingView         *loadView;
-    NSMutableArray      *_dataArray;
+   /// NSMutableArray      *_dataArray;
     int page;
     int pageSize;
     NSString  *startId;
+    int pageCount;
 }
 
 @end
@@ -135,15 +133,18 @@
 - (void)setupHeadView
 {
     page=1;
-    if (_dataArray.count>0) {
-        [_dataArray removeAllObjects];
-    }
+    
+
     __unsafe_unretained typeof(self) vc = self;
     // 添加下拉刷新头部控件
     [_myConllectionView addHeaderWithCallback:^{
+        page=1;
+        if (_dataArray.count>0) {
+            [vc.dataArray removeAllObjects];
+        }
         // 进入刷新状态就会回调这个Block
         [vc requestData];
-        
+
         // 模拟延迟加载数据，因此2秒后才调用）
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [vc.myConllectionView reloadData];
@@ -158,16 +159,19 @@
 
 - (void)setupFootView
 {
-    page++;
-    if (_dataArray.count==0) {
-        page=0;
-    }
+    
+   
     __unsafe_unretained typeof(self) vc = self;
     // 添加上拉刷新尾部控件
     [vc.myConllectionView addFooterWithCallback:^{
+        if (pageCount>page) {
+            page ++;
+            [vc requestData];
+
+        }
         // 进入刷新状态就会回调这个Block
-        
-        [vc requestData];
+        //page++;
+
         // 增加5条假数据
       ///  for (int i = 0; i<5; i++) {
          //   [vc.fakeColors addObject:MJRandomColor];
@@ -179,8 +183,11 @@
             // 结束刷新
             [vc.myConllectionView footerEndRefreshing];
         });
+        
     }];
-}
+    
+    
+     }
 
 /**
  为了保证内部不泄露，在dealloc中释放占用的内存
@@ -209,6 +216,7 @@
             _dataArray=[[NSMutableArray alloc]init];
         }
             NSArray  *detailarray=[responseObject objectForKey:@"models"];
+            pageCount =[[responseObject objectForKey:@"pageCount"] intValue];
             if (detailarray.count>0) {
                 [_dataArray addObjectsFromArray:detailarray];
                 [_myConllectionView reloadData];
