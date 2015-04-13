@@ -506,6 +506,8 @@
                     weibomodel.uerInfo=usermodel;
                 }
                 stageInfoModel  *stageInfo =[[stageInfoModel alloc]init];
+                if(![[newDict  objectForKey:@"stage"]isKindOfClass:[NSNull class]])
+                {
                 if (stageInfo) {
                     [stageInfo setValuesForKeysWithDictionary:[newDict objectForKey:@"stage"]];
                     movieInfoModel  *moviemodel =[[movieInfoModel alloc]init];
@@ -514,6 +516,7 @@
                         stageInfo.movieInfo=moviemodel;
                     }
                     weibomodel.stageInfo=stageInfo;
+                }
                 }
                 if (_newDataArray==nil) {
                     _newDataArray =[[NSMutableArray alloc]init];
@@ -940,7 +943,7 @@
         for (int i=0; i<_upWeiboArray.count; i++) {
             //已赞的
             UpweiboModel *upmodel =_upWeiboArray[i];
-            if ([upmodel.Id intValue]==[weiboDict.Id intValue]) {
+            if ([upmodel.weibo_id intValue]==[weiboDict.Id intValue]) {
                 tag=1;
                 operation =[NSNumber numberWithInt:0];
                 int like=[weiboDict.like_count intValue];

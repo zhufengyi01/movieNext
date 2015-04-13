@@ -321,6 +321,13 @@
             weiboInfoModel *weibomodel =[[weiboInfoModel alloc]init];
             if (weibomodel) {
                 [weibomodel setValuesForKeysWithDictionary:[responseObject objectForKey:@"model"]];
+                
+                  UserDataCenter  *useCenter=[UserDataCenter shareInstance];
+                  weiboUserInfoModel  *weibouser=[[weiboUserInfoModel alloc]init];
+                  weibouser.logo=useCenter.logo;
+                  weibouser.username=useCenter.username;
+                weibomodel.uerInfo=weibouser;
+                
             }
          //   weibomodel.uerInfo.fake=[NSNumber numberWithInt:1];
             [self.stageInfo.weibosArray addObject:weibomodel];
@@ -382,6 +389,7 @@
     //[_myTextView resignFirstResponder];
 }
  //有时候我们要控件自适应输入的文本的内容的高度，只要在textViewDidChange的代理方法中加入调整控件大小的代理即可
+
 
 
 -(void)textViewDidChange:(UITextView *)textView{

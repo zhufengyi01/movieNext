@@ -7,11 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "weiboUserInfoModel.h"
 
 @interface ChangeSelfTableViewCell : UITableViewCell
 {
     UIImageView  *headImageView;
     UILabel      *nameLable;
 }
--(void)configCellWithdict :(NSDictionary *) dict ;
+-(void)configCellWithdict :(weiboUserInfoModel *) userInfo;
 @end

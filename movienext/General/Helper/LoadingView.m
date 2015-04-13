@@ -53,7 +53,7 @@
     failTitle.textColor=VGray_color;
     [failLoadView addSubview:failTitle];
     
-    UIButton  *failBtn=[ZCControl createButtonWithFrame:CGRectMake((kDeviceWidth-80)/2, 40, 60, 40) ImageName:@"loginoutbackgroundcolor.png" Target:self Action:@selector(reloadDataClick:) Title:@"重试"];
+    UIButton  *failBtn=[ZCControl createButtonWithFrame:CGRectMake((kDeviceWidth-80)/2, 40, 80, 40) ImageName:@"loginoutbackgroundcolor.png" Target:self Action:@selector(reloadDataClick:) Title:@"重试"];
     failBtn.layer.cornerRadius=4;
     failBtn.clipsToBounds=YES;
     [failLoadView addSubview:failBtn];

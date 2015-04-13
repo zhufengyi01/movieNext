@@ -233,7 +233,6 @@
 
 - (void)setupFootView
 {
-    
     __unsafe_unretained typeof(self) vc = self;
     // 添加上拉刷新尾部控件
     [vc.myConllectionView addFooterWithCallback:^{
@@ -241,8 +240,6 @@
         if (pageCount>page) {
             page=page+1;
             [vc requestData];
-
-         
         }
         // 模拟延迟加载数据，因此2秒后才调用）
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
