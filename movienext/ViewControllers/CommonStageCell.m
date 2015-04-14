@@ -179,16 +179,7 @@
         [UserLogoButton sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!thumb", kUrlAvatar, self.weiboInfo.uerInfo.logo]] forState:UIControlStateNormal];
         UserNameLable.text = self.weiboInfo.uerInfo.username;
         TimeLable.text = [Function friendlyTime:self.weiboInfo.created_at];
-        
-//#warning  注意。这里需要赞还是没有赞
-//        // 点赞按钮的状态
-//      //  if ([self.weiboDict.uped  intValue]==0) {
-////            ZanButton.selected=NO;
-////        }
-////        else
-////        {
-////            ZanButton.selected=YES;
-////        }
+  
 #pragma mark 区分于个人页面是来源于自己还是他人
         if (self.userPage==NSUserPageTypeMySelfController ) {  //进来的页面是从我自己的页面进来的
             deletButton.hidden=NO;
@@ -197,6 +188,10 @@
         {
             deletButton.hidden=YES;
         }
+    }
+    else
+    {
+        
     }
 }
 

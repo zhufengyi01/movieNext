@@ -13,5 +13,6 @@
 @interface ShowStageViewController : RootViewController
 
 @property (nonatomic, strong) stageInfoModel *stageInfo;
+@property(nonatomic,strong) NSMutableArray   *upweiboArray;
 
 @end

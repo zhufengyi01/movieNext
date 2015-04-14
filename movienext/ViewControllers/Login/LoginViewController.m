@@ -23,8 +23,10 @@
 #import "ZCControl.h"
 #import "SerViceViewController.h"
 #import "UserHeadChangeViewController.h"
+#import "WXApi.h"
 //#define kSegueLoginToIndex @"LoginToIndex"
-
+#import "Login2_1ViewController.h"
+#import "Register_1ViewController.h"
 @interface LoginViewController ()<UMSocialUIDelegate>
 {
     AppDelegate  *appdelegate;
@@ -126,13 +128,39 @@
     //[weiChateButton setTitle:@"登陆" forState:UIControlStateNormal];
     [weiChateButton addTarget:self action:@selector(dealloginClick:) forControlEvents:UIControlEventTouchUpInside];
     weiChateButton.tag=1002;
-    
     [self.view addSubview:weiChateButton];
+    
+    
+    //在
+    //emaillogin
+    UIButton  *emaillogin =[ZCControl createButtonWithFrame:CGRectMake(0, kDeviceHeight-50, kDeviceWidth/2, 50) ImageName:@"login_alpa_backgroundcolor.png" Target:self Action:@selector(dealloginClick:) Title:@"邮箱登陆"];
+    emaillogin.tag=1003;
+    emaillogin.hidden=YES;
+    [emaillogin setTitleColor:VBlue_color forState:UIControlStateNormal];
+    emaillogin.titleLabel.font=[UIFont boldSystemFontOfSize:16];
+
+    [self.view addSubview:emaillogin];
+    
+    UIButton  *emailregister =[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth/2, kDeviceHeight-50, kDeviceWidth/2, 50) ImageName:@"login_alpa_backgroundcolor.png" Target:self Action:@selector(dealloginClick:) Title:@"邮箱注册"];
+    emailregister.tag=1004;
+    [emailregister setTitleColor:VBlue_color forState:UIControlStateNormal];
+    emailregister.titleLabel.font=[UIFont boldSystemFontOfSize:16];
+    emailregister.hidden=YES;
+    [self.view addSubview:emailregister];
+    
+    
+    //判断是否安装了微信
+    if ([WXApi  isWXAppInstalled]==NO) {
+        weiboButton.hidden=YES;
+        weiChateButton.hidden=YES;
+        checkBtn.hidden=YES;
+        checkBtn2.hidden=YES;
+        emaillogin.hidden=NO;
+        emailregister.hidden=NO;
+    }
 
     
-    
-    
-    
+
 
 }
 //服务条款按钮
@@ -181,6 +209,20 @@
         ssoName=UMShareToWechatSession;
         [self loginSocialPlatformWithName];
     }
+    else if(btn.tag==1003)
+    {
+//      邮箱登陆
+        UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:[Login2_1ViewController new]];
+        [self presentViewController:na animated:YES completion:nil];
+    }
+    else if (btn.tag==1004)
+    {
+        //邮箱注册
+        UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:[Register_1ViewController new]];
+        [self presentViewController:na animated:YES completion:nil];
+
+        
+    }
 }
 /**
  *  用SOS登录
@@ -210,7 +252,7 @@
                    //username
                     NSString *screen_name    = [data valueForKey:@"screen_name"];
                   //brief
-                    NSString *brief=@"";
+                    NSString *brief=@" ";
                     if ([ssoName isEqualToString:UMShareToSina]) {
                         brief= [data valueForKey:@"description"];
                     }
@@ -236,6 +278,7 @@
                             userCenter.verified=[detail objectForKey:@"verified"];
                             userCenter.sex=[detail objectForKey:@"sex"];
                             userCenter.signature=[detail objectForKey:@"brief"];
+                           
                             userCenter.fake=[detail objectForKey:@"fake"];
                             
                             [Function saveUser:userCenter];

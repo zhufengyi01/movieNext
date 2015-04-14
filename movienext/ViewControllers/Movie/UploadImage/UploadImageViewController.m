@@ -174,14 +174,15 @@
 -(void)publicImage
 {
     UserDataCenter *usreCenter=[UserDataCenter shareInstance];
-    NSString  *w=[NSString stringWithFormat:@"%f",self.upimage.size.width];
-    NSString  *h=[NSString stringWithFormat:@"%f",self.upimage.size.height];
-
-    NSDictionary *parameter = @{@"stage":[upyunDict objectForKey:@"url"],@"movie_id":self.movie_Id,@"user_id":usreCenter.user_id,@"w":w,@"h":h};
+   // NSString  *w=[NSString stringWithFormat:@"%f",self.upimage.size.width];
+   // NSString  *h=[NSString stringWithFormat:@"%f",self.upimage.size.height];
+    int width=self.upimage.size.width;
+    int heigth=self.upimage.size.height;
+    NSDictionary *parameter = @{@"photo":[upyunDict objectForKey:@"url"],@"movie_id":self.movie_Id,@"user_id":usreCenter.user_id,@"width":[NSString stringWithFormat:@"%d",width],@"height":[NSString stringWithFormat:@"%d",heigth]};
     
     NSLog(@"==parameter====%@",parameter);
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager POST:[NSString stringWithFormat:@"%@/movieStage/uploadStage", kApiBaseUrl] parameters:parameter success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [manager POST:[NSString stringWithFormat:@"%@/stage/create", kApiBaseUrl] parameters:parameter success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"  发布图片的请求    JSON: %@", responseObject);
         if ([[responseObject objectForKey:@"code"] intValue]==0) {
         
@@ -199,7 +200,6 @@
             [stageInfo setValuesForKeysWithDictionary:_myDict];
             stageInfo.photo=[parameter objectForKey:@"photo"];
         }
-        
         
         AddMarkViewController  *Addmark =[[AddMarkViewController alloc]init];
         Addmark.stageInfo=stageInfo;

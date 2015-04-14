@@ -29,6 +29,8 @@
     UITableView         *_myTableView;
     NSMutableArray      *_dataArray;
     int page;
+    int pageSize;
+    int pageCount;
 }
 @end
 
@@ -75,7 +77,9 @@
 }
 -(void)initData
 {
-    page=0;
+    page=1;
+    pageSize=20;
+    pageCount=1;
     _dataArray=[[NSMutableArray alloc]init];
 }
 -(void)initUI
@@ -103,7 +107,7 @@
 #pragma mark 开始进入刷新状态
 - (void)headerRereshing
 {
-    page=0;
+    page=1;
     if (_dataArray.count>0) {
         [_dataArray removeAllObjects];
     }
@@ -120,8 +124,10 @@
 
 - (void)footerRereshing
 {
+    if (pageCount>page) {
     page++;
     [self  requestData];
+    }
     // 2.2秒后刷新表格UI
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         // 刷新表格
@@ -136,25 +142,25 @@
 -(void)requestData
 {
     UserDataCenter *userCenter=[UserDataCenter shareInstance];
-    NSDictionary *parameters = @{@"author_id":userCenter.user_id,@"page":[NSString stringWithFormat:@"%d",page]};
+    NSDictionary *parameters = @{@"user_id":userCenter.user_id};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager POST:[NSString stringWithFormat:@"%@/notiUp/list", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        if ([[responseObject objectForKey:@"return_code"] intValue]==10000) {
+     NSString  *urlString=[NSString stringWithFormat:@"%@/noti-up/list?per-page=%d&page=%d", kApiBaseUrl,pageSize,page];
+    [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if ([[responseObject objectForKey:@"code"] intValue]==0) {
             NSLog(@"消息通知返回的数据====%@",responseObject);
             if (_dataArray==nil) {
                 _dataArray=[[NSMutableArray alloc]init];
             }
-            [_dataArray addObjectsFromArray:[responseObject objectForKey:@"detail"]];
+            [_dataArray addObjectsFromArray:[responseObject objectForKey:@"models"]];
             if ([_dataArray count]==0) {
                 [loadView showNullView:@"还没有消息"];
                 return ;
             }
             else
             {
-            //if (page==0) {
               [loadView stopAnimation];
               [loadView removeFromSuperview];
-            //}
+            
               [_myTableView reloadData];
           }
         }

@@ -31,10 +31,11 @@
     [self.contentView addSubview:nameLable];
     
 }
--(void)configCellWithdict:(weiboUserInfoModel *)userInfo
+-(void)configCellWithdict :(NSDictionary *) dict
 {
-    [headImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!thumb",kUrlAvatar,userInfo.logo]] placeholderImage:HeadImagePlaceholder];
-    nameLable.text=userInfo.username;
+    [headImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!thumb",kUrlAvatar,[dict objectForKey:@"logo"]]] placeholderImage:HeadImagePlaceholder];
+    nameLable.text=[dict objectForKey:@"username"];
+
 }
 - (void)awakeFromNib {
     // Initialization code

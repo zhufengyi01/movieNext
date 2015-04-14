@@ -15,7 +15,6 @@
 #import "AddUserViewController.h"
 #import "UserDataCenter.h"
 #import "Function.h"
-#import "weiboUserInfoModel.h"
 #import "ChangeSelfTableViewCell.h"
 @interface ChangeSelfViewController ()<UISearchBarDelegate,UITableViewDataSource,UITableViewDelegate,UIActionSheetDelegate>
 {
@@ -69,34 +68,29 @@
     
 }
 #pragma  mark  -----
-#pragma  mark  -------requstData------------------------------
+#pragma  mark  -------requstData
 #pragma  mark  ---
 -(void)requestData
 {
+    UserDataCenter *userCenter=[UserDataCenter shareInstance];
      AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    NSString *urlString =[NSString stringWithFormat:@"%@/user/fakelist", kApiBaseUrl];
-    [manager POST:urlString parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        if ([[responseObject  objectForKey:@"code"] intValue]==0) {
+    NSDictionary  *parameters=@{@"user_id":userCenter.user_id};
+    NSString  *urlString =[NSString stringWithFormat:@"%@/user/fakelist", kApiBaseUrl];
+    [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if ([[responseObject  objectForKey:@"return_code"]  intValue]==0) {
             NSLog(@"虚拟用户请求成功=======%@",responseObject);
-            
-            for (NSDictionary  *userdict  in [responseObject objectForKey:@"models"]) {
-                weiboUserInfoModel *usermodel =[[weiboUserInfoModel alloc]init];
-                if (usermodel) {
-                    [usermodel setValuesForKeysWithDictionary:userdict];
-                }
-                
-                if (_detailArray ==nil) {
-                    _detailArray=[[NSMutableArray alloc]init];
-                }
-                [_detailArray addObject:usermodel];
+            if (_DataArray ==nil) {
+                _DataArray=[[NSMutableArray alloc]init];
             }
-            _DataArray=_detailArray;
+            _detailArray =[responseObject objectForKey:@"models"];
+            _DataArray=[NSMutableArray arrayWithArray:_detailArray];
              [_myTableView reloadData];
+            
         }
         else
         {
             NSLog(@"Error: ");
-            
+
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
@@ -146,9 +140,9 @@
             if (!cell) {
                 cell=[[ChangeSelfTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
             }
-            weiboUserInfoModel   *usermodel =[_DataArray objectAtIndex:indexPath.row];
-
-            [cell configCellWithdict:usermodel];
+            
+            NSDictionary  *dict =[_DataArray objectAtIndex:indexPath.row];
+            [cell configCellWithdict:dict];
             
         }
     }
@@ -216,7 +210,7 @@
         UserDataCenter *userCenter=[UserDataCenter shareInstance];
         userCenter.user_id=[dict objectForKey:@"id"];
         userCenter.logo=[dict objectForKey:@"logo"];
-        userCenter.is_admin=[dict objectForKey:@"level"];
+      //  userCenter.is_admin=[dict objectForKey:@"level"];
         userCenter.verified=[dict objectForKey:@"verified"];
         userCenter.fake=[dict objectForKey:@"fake"];
         userCenter.sex=[dict objectForKey:@"sex"];

@@ -72,7 +72,6 @@
     if (ImageWith>ImgeHight) {
           x=0;
           width=kDeviceWidth;
-        
           hight=(ImgeHight/ImageWith)*kDeviceWidth;
           y=(kDeviceWidth-hight)/2;
     }
@@ -96,6 +95,7 @@
     
     _MovieImageView.backgroundColor =VStageView_color;
     NSString *photostring=[NSString stringWithFormat:@"%@%@!w640",kUrlStage,self.stageInfo.photo];
+    NSLog(@"====photostring=%@",photostring);
     [_MovieImageView sd_setImageWithURL:[NSURL URLWithString:photostring] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         
 #pragma  mark  是静态的, 气泡是不动的

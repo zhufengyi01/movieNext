@@ -129,18 +129,8 @@
 }
 -(void)createStageView
 {
-    //float  ImageWith=[self.stageInfoDict.w floatValue];
-    ///float  ImgeHight=[self.stageInfoDict.h floatValue];
-    float hight=0;
-    hight= kDeviceWidth;  // 计算的事bgview1的高度
-//    if(ImgeHight>ImageWith)
-//    {
-//        hight=  (ImgeHight/ImageWith) *kDeviceWidth;
-//    }
-//
-    stageView = [[StageView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, hight)];
- //   NSLog(@" 在 添加弹幕页面的   stagedict = %@",_myDict);
-    stageView.stageInfo=self.stageInfo;
+     stageView = [[StageView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceWidth)];
+     stageView.stageInfo=self.stageInfo;
     [stageView configStageViewforStageInfoDict];
        NSLog(@" 在 添加弹幕页面的   stagedict = %@",self.stageInfo);
      [_myScorllerView addSubview:stageView];
@@ -255,7 +245,7 @@
     }
     int  kw=kDeviceWidth;
     int  x=arc4random()%(kw-markViewWidth);  //要求x在0~~~（宽度-markViewWidth）
-    int  y=arc4random()%(kw-markViewHeight/2)+markViewHeight/2;  //要求y在markviewheight.y/2 ~~~~~~~(高度--markViewheigth/2)
+    int  y=arc4random()%((kw-markViewHeight/2)+markViewHeight/2);  //要求y在markviewheight.y/2 ~~~~~~~(高度--markViewheigth/2)
     
     _myMarkView.frame=CGRectMake(x,y, markViewWidth, markViewHeight);
     
@@ -442,10 +432,7 @@
             publishBtn.enabled=NO;
         }
     }
- //   if (_myTextView.text.length>BOOKMARK_WORD_LIMIT) {
-   //      textView.text = [textView.text substringToIndex:BOOKMARK_WORD_LIMIT];
-    //}
-}
+ }
 
 
 //控制输入文字的长度和内容，可通调用以下代理方法实现

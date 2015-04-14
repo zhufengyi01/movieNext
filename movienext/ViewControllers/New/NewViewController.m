@@ -25,7 +25,7 @@
 #import "weiboInfoModel.h"
 #import "weiboUserInfoModel.h"
 #import "UpweiboModel.h"
-
+#import "UserDataCenter.h"
 #import "Function.h"
 #import "UMSocial.h"
 //#import "UMShareView.h"
@@ -251,12 +251,12 @@
  //举报某人
 -(void)requestReport
 {
-    NSString *type=@"1";
+   // NSString *type=@"1";
     UserDataCenter *userCenter =[UserDataCenter shareInstance];
-    NSDictionary *parameters = @{@"reported_user_id":_TweiboInfo.uerInfo.Id,@"reported_id":_TweiboInfo.Id,@"reason":@"",@"type":type,@"created_by":userCenter.user_id};
+    NSDictionary *parameters = @{@"reported_user_id":_TweiboInfo.uerInfo.Id,@"stage_id":_TStageInfo.Id,@"reason":@"",@"user_id":userCenter.user_id};
     
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager POST:[NSString stringWithFormat:@"%@/report/create", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [manager POST:[NSString stringWithFormat:@"%@/report-stage/create", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
             NSLog(@"随机数种子请求成功=======%@",responseObject);
             UIAlertView  *Al =[[UIAlertView alloc]initWithTitle:nil message:@"你的举报已成功,我们会在24小时内处理" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
@@ -273,13 +273,15 @@
 
 //变身请求的随机数种子
 -(void)requestChangeUserRand4
-{    
+{
+
+    UserDataCenter  *userCenter=[UserDataCenter shareInstance];
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager POST:[NSString stringWithFormat:@"%@/user/fakeUser", kApiBaseUrl] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    NSDictionary *parameters=@{@"user_id":userCenter.user_id};
+    [manager POST:[NSString stringWithFormat:@"%@/user/fakeuserid", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
             NSLog(@"随机数种子请求成功=======%@",responseObject);
-            
-            [self  requestChangeUser:[responseObject objectForKey:@"detail"]];
+            [self  requestChangeUser:[responseObject objectForKey:@"user_id"]];
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
@@ -287,18 +289,27 @@
     
 }
 //跟换用户的数据请求
--(void)requestChangeUser:(NSDictionary  *) dict
+-(void)requestChangeUser:( NSString *) author_id
  {
-    
-     NSDictionary *parameters = @{@"weibo_id":_TweiboInfo.Id,@"user_id":[dict objectForKey:@"id"]};
+     UserDataCenter  *userCenter =[UserDataCenter shareInstance];
+     NSDictionary *parameters = @{@"id":_TweiboInfo.Id,@"user_id":userCenter.user_id,@"author_id":author_id};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager POST:[NSString stringWithFormat:@"%@/weibo/switch", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
-            NSLog(@"推荐成功=======%@",responseObject);
+     NSString  *urlString =[NSString stringWithFormat:@"%@/weibo/switch", kApiBaseUrl];
+    [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+          if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
+              weiboUserInfoModel  *usermodel=[[weiboUserInfoModel alloc]init];
+              if (usermodel) {
+                  [usermodel setValuesForKeysWithDictionary:[responseObject objectForKey:@"model"]];
+              }
+            NSLog(@"变身成功=======%@",responseObject);
             UIAlertView  *Al=[[UIAlertView alloc]initWithTitle:nil message:@"变身成功" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
             [Al show];
-            _TweiboInfo.uerInfo.Id=[dict objectForKey:@"id"];
-             [ _mymarkView.LeftImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kUrlAvatar, [dict objectForKey:@"avatar"] ]]];
+        
+            int Id=[author_id intValue];
+            _TweiboInfo.uerInfo.Id=[NSNumber numberWithInt:Id];
+              _TweiboInfo.uerInfo.logo=usermodel.logo;
+              NSString  *urlString =[NSString stringWithFormat:@"%@%@",kUrlAvatar,usermodel.logo];
+             [_mymarkView.LeftImageView sd_setImageWithURL:[NSURL URLWithString:urlString]];
            
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -311,14 +322,15 @@
 //移除微博推荐接口
 -(void)requestrecommendDeleteDataWith
 {
-    //  NSLog(@"hotmodel  ==weibiid ==%@   hotmodel stageinfo id ==%@ ",hotmodel.weibo.Id,hotmodel.stageinfo.Id);
-    NSDictionary *parameters = @{@"id":_hot_Id};
+
+    UserDataCenter  *userCenter=[UserDataCenter shareInstance];
+    NSDictionary *parameters = @{@"id":_hot_Id,@"user_id":userCenter.user_id};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     //manager.requestSerializer=[AFHTTPRequestSerializer serializer];
    // manager.responseSerializer=[AFHTTPResponseSerializer serializer];
-    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
+  //  manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
     [manager POST:[NSString stringWithFormat:@"%@/hot/delete", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        if ([[responseObject  objectForKey:@"return_code"]  intValue]==10000) {
+        if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
             NSLog(@"移除推荐成功=======%@",responseObject);
             UIAlertView  *Al=[[UIAlertView alloc]initWithTitle:nil message:@"移除推荐成功" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
             [Al show];
@@ -334,11 +346,11 @@
 //推荐微博的接口
 -(void)requestrecommendData
 {
-    //  NSLog(@"hotmodel  ==weibiid ==%@   hotmodel stageinfo id ==%@ ",hotmodel.weibo.Id,hotmodel.stageinfo.Id);
-    NSDictionary *parameters = @{@"id":_TweiboInfo.Id,@"stage_id":_TStageInfo.Id};
+    UserDataCenter  *userCenter =[UserDataCenter shareInstance];
+    NSDictionary *parameters = @{@"weibo_id":_TweiboInfo.Id,@"stage_id":_TStageInfo.Id,@"user_id":userCenter.user_id};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:[NSString stringWithFormat:@"%@/hot/create", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        if ([[responseObject  objectForKey:@"return_code"]  intValue]==10000) {
+        if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
             NSLog(@"推荐成功=======%@",responseObject);
             UIAlertView  *Al=[[UIAlertView alloc]initWithTitle:nil message:@"推荐成功" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
             [Al show];
@@ -354,11 +366,11 @@
 //删除微博的接口
 -(void)requestDelectData
 {
-    //  NSLog(@"hotmodel  ==weibiid ==%@   hotmodel stageinfo id ==%@ ",hotmodel.weibo.Id,hotmodel.stageinfo.Id);
-    NSDictionary *parameters = @{@"id":_TweiboInfo.Id,@"stage_id":_TStageInfo.Id};
+    UserDataCenter *userCenter=[UserDataCenter shareInstance];
+     NSDictionary *parameters = @{@"id":_TweiboInfo.Id,@"user_id":userCenter.user_id};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:[NSString stringWithFormat:@"%@/weibo/remove", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        if ([[responseObject  objectForKey:@"return_code"]  intValue]==10000) {
+        if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
             NSLog(@"删除数据成功=======%@",responseObject);
             UIAlertView  *Al=[[UIAlertView alloc]initWithTitle:nil message:@"删除成功" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
             [Al show];
@@ -372,31 +384,28 @@
 //微博点赞请求
 -(void)LikeRequstData:(weiboInfoModel  *) weiboInfo withOperation:(NSNumber *) operation
 {
-    
     UserDataCenter  *userCenter=[UserDataCenter shareInstance];
     NSNumber  *weiboId=weiboInfo.Id;
-    NSString  *userId=@"18";
-    
-   
-    NSDictionary *parameters=@{@"weibo_id":weiboId,@"user_id":userId,@"operation":operation};
+    NSString  *userId=userCenter.user_id;
+    NSNumber  *author_id=weiboInfo.uerInfo.Id;
+    NSDictionary *parameters=@{@"weibo_id":weiboId,@"user_id":userId,@"author_id":author_id,@"operation":operation};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    NSString *urlString = [NSString stringWithFormat:@"%@/weiboUp/up", kApiBaseUrl];
+    //manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
+    NSString *urlString = [NSString stringWithFormat:@"%@/weibo/up", kApiBaseUrl];
     [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
             NSLog(@"点赞成功========%@",responseObject);
-          
-         }
+        }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
-
+    
 }
+
 -(void)requestData{
     UserDataCenter  *userCenter=[UserDataCenter shareInstance];
      NSString *userId=userCenter.user_id;
-    
     NSDictionary *parameters = @{@"user_id":userId};
-
     NSString * section;
     if (segment.selectedSegmentIndex==1) {  // 最新
         section=@"weibo/listrecently";
@@ -407,6 +416,7 @@
     }
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     NSString *urlString=[NSString stringWithFormat:@"%@/%@?per-page=%d&page=%d", kApiBaseUrl, section,pagesize,page];
+    
      [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
        
         //返回0表示返回成功
@@ -570,7 +580,7 @@
         
         float hight;
         if (_hotDataArray.count>indexPath.row) {
-            hight=kDeviceWidth+45;
+            hight=kDeviceWidth+45+45;
         }
         return hight+10;
     }
@@ -598,16 +608,6 @@
         
         
         if (_hotDataArray.count>indexPath.row) {
-//             //HotMovieModel  *hotModel=[_hotDataArray objectAtIndex:indexPath.row];
-//            cell.pageType=NSPageSourceTypeMainHotController;
-//            //小闪动标签的数组
-//            cell.WeibosArray =hotModel.weibos;
-//            cell.weiboDict=nil;
-//            cell.delegate=self;
-//            cell.StageInfoDict=hotModel.stageinfo;
-//            [cell ConfigsetCellindexPath:indexPath.row];
-//            //遵守stagview的协议，点击事件在controller里面响应
-//            cell.stageView.delegate=self;
             ModelsModel  *model =[_hotDataArray objectAtIndex:indexPath.row];
             cell.pageType=NSPageSourceTypeMainHotController;
             cell.delegate=self;
@@ -616,7 +616,6 @@
             cell.stageInfo=model.stageInfo;
             cell.weibosArray=model.stageInfo.weibosArray;
             cell.weiboInfo=nil;
-        
             [cell ConfigsetCellindexPath:indexPath.row];
         }
         return cell;
@@ -631,20 +630,6 @@
             cell.backgroundColor=View_BackGround;
         }
         if (_newDataArray.count>indexPath.row) {
-           
-//            HotMovieModel   *hotmodel=[_newDataArray  objectAtIndex:indexPath.row];
-//            //配置cell的类型。
-//            cell.pageType=NSPageSourceTypeMainNewController;
-//            //根据类型配置cell的气泡数据
-//            cell.weiboDict =hotmodel.weibo; //[[_newDataArray  objectAtIndex:indexPath.row]  objectForKey:@"weibo"];
-//            //配置stage的数据
-//            cell.WeibosArray=nil;
-//            cell.delegate=self;
-//            cell.StageInfoDict=hotmodel.stageinfo;
-//            [cell ConfigsetCellindexPath:indexPath.row];
-// 
-//            //遵守了stageview的协议，点击事件在这里执行
-//            cell.stageView.delegate=self;
             weiboInfoModel  *model =[_newDataArray  objectAtIndex:indexPath.row];
             cell.pageType=NSPageSourceTypeMainNewController;
             cell.weiboInfo=model;
@@ -752,8 +737,8 @@
     {
         //点击用户头像
         MyViewController  *myVC=[[MyViewController alloc]init];
-        HotMovieModel *hotMovieModel = [_newDataArray objectAtIndex:index];
-        myVC.author_id = hotMovieModel.weibo.user_id;
+        weiboInfoModel *model = [_newDataArray objectAtIndex:index];
+        myVC.author_id =[NSString stringWithFormat:@"%@",model.uerInfo.Id];
         [self.navigationController pushViewController:myVC animated:YES];
         
 
@@ -920,23 +905,6 @@
     else  if(button.tag==10002)
     {
          //点击了赞
-    /* if ([weiboDict.uped intValue]==0)
-       {
-         // weiboDict.uped=[NSNumber numberWithInt:1];
-          int ups=[weiboDict.ups intValue];
-            ups =ups+[weiboDict.uped intValue];
-            weiboDict.ups=[NSNumber numberWithInt:ups];
-           //重新给markview 赋值，改变markview的frame
-           [self layoutMarkViewWithMarkView:markView WeiboInfo:weiboDict];
-       }
-        else  {
-
-            weiboDict.uped=[NSNumber numberWithInt:0];
-            int ups=[weiboDict.ups intValue];
-            ups =ups-1;
-            weiboDict.ups=[NSNumber numberWithInt:ups];
-            [self layoutMarkViewWithMarkView:markView WeiboInfo:weiboDict];
-        }*/
         //点赞遍历，如果能在数组中能发现这个weibo，那么删除掉，如果没有发现这个微博，那么添加这个微博
         NSNumber  *operation;
         int tag=0;// 标志是否含有weiboid
@@ -966,12 +934,9 @@
             int like=[weiboDict.like_count intValue];
             like=like+1;
             weiboDict.like_count=[NSNumber numberWithInt:like];
-         
             [_upWeiboArray addObject:upmodel];
-            
         }
         [self layoutMarkViewWithMarkView:markView WeiboInfo:weiboDict];
-        
         ////发送到服务器
         [self LikeRequstData:weiboDict withOperation:operation];
         

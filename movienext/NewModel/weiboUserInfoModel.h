@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 @interface weiboUserInfoModel : NSObject
-@property(nonatomic,strong) NSString  *Id;
+@property(nonatomic,strong) NSNumber  *Id;
 
 @property(nonatomic,strong) NSString  *username;
 
@@ -26,6 +26,31 @@
 @property(nonatomic,strong) NSString  *weibo_count;
 
 @property(nonatomic,strong) NSString  *liked_count;
+
+@property(nonatomic,strong) NSString  *auth_key;
+
+
+@property(nonatomic,strong) NSString  *password_hash;
+
+
+@property(nonatomic,strong) NSString  *password_reset_token;
+
+
+@property(nonatomic,strong) NSString  *email;
+
+
+@property(nonatomic,strong) NSString  *created_at;
+
+
+@property(nonatomic,strong) NSString  *updated_at;
+
+
+@property(nonatomic,strong) NSString  *status;
+
+
+
+
+
 
 
 

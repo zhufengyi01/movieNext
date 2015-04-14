@@ -115,5 +115,6 @@ float getHeightByWidthAndHeight(float width, float height){
 //动画效果，根据传递进来的view 初始值，时间
 +(void)BasicAnimationwithkey:(NSString *)string  Duration:(float) duration repeatcont:(int )repeat autoresverses:(BOOL) resverse fromValue:(float)fromValue toValue:(float)toValue View:(UIView *) view;
 
-
+//验证输入的是否是邮箱
++(BOOL) validateEmail: (NSString *) candidate;
 @end

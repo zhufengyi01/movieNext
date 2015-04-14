@@ -68,24 +68,24 @@
 
 {
     _index=index;
-    if ([dict objectForKey:@"avatar"]) {
-    [logoButton sd_setBackgroundImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", kUrlAvatar, [dict objectForKey:@"avatar"] ]] forState:UIControlStateNormal placeholderImage:HeadImagePlaceholder];
+    if ([dict objectForKey:@"user"]) {
+        NSString *logoString=[NSString stringWithFormat:@"%@%@", kUrlAvatar, [[dict objectForKey:@"user"] objectForKey:@"logo"]];
+    [logoButton sd_setBackgroundImageWithURL:[NSURL URLWithString:logoString ] forState:UIControlStateNormal placeholderImage:HeadImagePlaceholder];
      }
-    if ([dict objectForKey:@"stageinfo"]) {
-        
-    [stageImage sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w340h340",kUrlStage,[[dict objectForKey:@"stageinfo"]  objectForKey:@"stage"]]] placeholderImage:[UIImage imageNamed:@"loading_image_all.png"] options:SDWebImageRetryFailed];
-    }
-    if ([dict objectForKey:@"username"]) {
-        titleLable.text =[NSString stringWithFormat:@"%@",[dict objectForKey:@"username"]];
-       
-    }
     
-    NSString  *nameStr=[dict objectForKey:@"username"];
+    if (![[dict objectForKey:@"weibo"]  isKindOfClass:[NSNull class]]) {
+        NSString *urlString =[NSString stringWithFormat:@"%@%@!w340h340",kUrlStage,[[[dict objectForKey:@"weibo"]  objectForKey:@"stage"] objectForKey:@"photo"]];
+        
+    [stageImage sd_setImageWithURL:[NSURL URLWithString:urlString] placeholderImage:[UIImage imageNamed:@"loading_image_all.png"] options:SDWebImageRetryFailed];
+    }
+    NSString  *nameStr=[[dict objectForKey:@"user"] objectForKey:@"username"];
+    titleLable.text =nameStr;
     CGSize  Namesize =[nameStr boundingRectWithSize:CGSizeMake(kDeviceWidth-100-50, MAXFLOAT) options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes:[NSDictionary dictionaryWithObject:titleLable.font forKey:NSFontAttributeName] context:nil].size;
+    
     titleLable.frame=CGRectMake(titleLable.frame.origin.x, titleLable.frame.origin.y, Namesize.width, Namesize.height);
     titleButon.frame=titleLable.frame;
     Zanlable.frame=CGRectMake(titleLable.frame.origin.x+Namesize.width+0, titleLable.frame.origin.y, 60,titleLable.frame.size.height);
-    if ([dict objectForKey:@"create_time"]) {
+    if ([dict objectForKey:@"created_at"]) {
         NSString  *dateStr=[Function friendlyTime:[dict objectForKey:@"create_time"]];
         dateLable.text=dateStr;
     }
