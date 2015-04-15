@@ -42,6 +42,14 @@
     BgView2.backgroundColor=View_ToolBar;
     [self.contentView addSubview:BgView2];
     
+    //更多
+    moreButton=[ZCControl createButtonWithFrame:CGRectMake(10, 9, 40, 27) ImageName:@"btn_delete.png" Target:self Action:@selector(cellButtonClick:) Title:@""];
+    moreButton.layer.cornerRadius=2;
+    moreButton.hidden=NO;
+    moreButton.tag=4000;
+    [BgView2 addSubview:moreButton];
+
+    
     
     ScreenButton =[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-140,10,60,26) ImageName:@"screen_shot share.png" Target:self Action:@selector(cellButtonClick:) Title:@""];
     ScreenButton.tag=2000;
@@ -73,10 +81,6 @@
       BgView2.frame=CGRectMake(0, kDeviceWidth, kDeviceWidth, 45);
     
 }
-
-#pragma mark ---
-#pragma mark ------下方按钮点击事件
-#pragma mark ------
 
 #pragma mark ---
 #pragma mark ------下方按钮点击事件 ,在父视图中实现具体的方法

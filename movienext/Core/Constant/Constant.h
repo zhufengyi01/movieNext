@@ -49,8 +49,9 @@
 #define kAppTintColor [UIColor colorWithRed:0.0/255.0 green:146.0/255.0 blue:255.0/255.0 alpha:1]
 //项目背景颜色
 #define View_BackGround [UIColor colorWithRed:231.0/255 green:231.0/255 blue:231.0/255 alpha:1]
-#define View_ToolBar   [UIColor colorWithRed:247.0/255 green:247.0/255 blue:247.0/255 alpha:1]
-
+#define View_ToolBar   [UIColor colorWithRed:250.0/255 green:250.0/255 blue:250.0/255 alpha:1]
+//tabbar 上面的一根线
+#define tabBar_line   [UIColor colorWithRed:240.0/255 green:240.0/255 blue:240.0/255 alpha:1]
 
 //字体浅灰色
 #define VLight_GrayColor [UIColor colorWithRed:188.0/255 green:188.0/255 blue:188.0/255 alpha:1]

@@ -115,7 +115,10 @@
     CGSize  Msize=[_ZanNumLable.text boundingRectWithSize:CGSizeMake(kDeviceWidth/2,MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:_ZanNumLable.font forKey:NSFontAttributeName] context:nil].size;
     
     int zanWidth = [_ZanNumLable.text intValue]>0 ? Msize.width: 0;
-    _ZanNumLable.frame=CGRectMake(_ZanImageView.frame.origin.x+_ZanImageView.frame.size.width+2, _ZanImageView.frame.origin.y-2, zanWidth, 15);
+    _ZanNumLable.frame=CGRectMake(_ZanImageView.frame.origin.x+_ZanImageView.frame.size.width+2, _ZanImageView.frame.origin.y-2, zanWidth+3, 15);
+    if (zanWidth==0) {
+        _ZanNumLable.hidden=YES;
+    }
     
     //如果是静态的, 则将边框描一下
     if (!_isAnimation) {
@@ -150,43 +153,6 @@
     }
 }
 
-
-
-/*
--(void)startAnimation
-{
-    if (self.isAnimation==YES) {
-    CAKeyframeAnimation *keyAnima=[CAKeyframeAnimation animation];
-    keyAnima.keyPath=@"opacity";
-    
-    NSValue  *value1=@0;
-    NSValue  *value2=@1;
-    NSValue  *value3=@1;
-    NSValue  *value4=@1;
-    NSValue  *value5=@1;
-    NSValue  *value6=@1;
-    NSValue  *value7=@0;
-    
-    keyAnima.values=@[value1,value2,value3,value4,value5,value6,value7];
-    //   keyAnima.keyTimes=@[@0.9,@0.9,@0.9,@0.9,@0.9,@0.9,@0.9];
-    //keyAnima.keyTimes=[NSArray arrayWithObjects:[NSNumber numberWithFloat:0.9],[NSNumber numberWithFloat:0.9],[NSNumber numberWithFloat:0.9],[NSNumber numberWithFloat:0.9],[NSNumber numberWithFloat:0.9],[NSNumber numberWithFloat:0.9],[NSNumber numberWithFloat:0.9], nil];
-    //1.2设置动画执行完毕后，不删除动画
-    keyAnima.removedOnCompletion=NO;
-    //1.3设置保存动画的最新状态
-    keyAnima.autoreverses=NO;
-    keyAnima.repeatCount=1;
-    keyAnima.fillMode=kCAFillModeForwards;
-    //1.4设置动画执行的时间
-    keyAnima.duration=7.0;
-    //1.5设置动画的节奏
-    //   keyAnima.timingFunction=[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-    //设置代理，开始—结束
-    keyAnima.delegate=self;
-    //2.添加核心动画
-    [self.layer addAnimation:keyAnima forKey:nil];
-    }
-
-}*/
 
 
 

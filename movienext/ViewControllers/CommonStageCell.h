@@ -52,12 +52,14 @@ typedef NS_ENUM(NSInteger,NSUserPageType)
     UILabel   *UserNameLable;
     UILabel   *TimeLable;
     UIButton   *deletButton;
+    UIButton   *moreButton;
    // UIButton  *ZanButton;
    // NSMutableArray   *_MarkMuatableArray;
     
     //下面工具的子视图
     UIView        *BgView2;   //放分享的白色背景
     UIButton      *leftButtomButton;   //左下边按钮
+    UILabel       *movieNameLable;
     UIImageView   *MovieLogoImageView;  // 电影的小图片
     UIButton      *ScreenButton;
     UIButton      *addMarkButton;

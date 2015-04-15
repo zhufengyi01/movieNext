@@ -22,9 +22,13 @@
 #import "MyViewController.h"
 #import "Function.h"
 #import "UMShareViewController.h"
-@interface ShowStageViewController() <ButtomToolViewDelegate,StageViewDelegate,AddMarkViewControllerDelegate,UMShareViewControllerDelegate,UMSocialDataDelegate,UMSocialUIDelegate>
+#import <MessageUI/MessageUI.h>
+#import <MessageUI/MFMailComposeViewController.h>
+
+@interface ShowStageViewController() <ButtomToolViewDelegate,StageViewDelegate,AddMarkViewControllerDelegate,UMShareViewControllerDelegate,UMSocialDataDelegate,UMSocialUIDelegate,UIActionSheetDelegate>
 {
     ButtomToolView *_toolBar;
+    UIButton  *moreButton;
 }
 @end
 
@@ -66,7 +70,7 @@
 -(void)createStageView
 {
      scrollView.contentSize = CGSizeMake(kDeviceWidth, MIN(kDeviceHeight, kDeviceWidth));
-    stageView = [[StageView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceWidth)];
+    stageView = [[StageView alloc] initWithFrame:CGRectMake(0,(kDeviceHeight-45-kDeviceWidth-kHeightNavigation)/2,kDeviceWidth, kDeviceWidth) ];
     stageView.isAnimation = YES;
     stageView.delegate=self;
     stageView.stageInfo=self.stageInfo;
@@ -81,11 +85,18 @@
 {
     BgView2=[[UIView alloc]initWithFrame:CGRectMake(0, kDeviceHeight-kHeightNavigation-45, kDeviceWidth, 45)];
     //改变toolar 的颜色
-    
     BgView2.backgroundColor=View_ToolBar;
     [self.view bringSubviewToFront:BgView2];
     [self.view addSubview:BgView2];
 
+    //更多
+    moreButton=[ZCControl createButtonWithFrame:CGRectMake(10, 9, 40, 27) ImageName:@"btn_delete.png" Target:self Action:@selector(cellButtonClick:) Title:@""];
+    moreButton.layer.cornerRadius=2;
+    moreButton.hidden=NO;
+    [BgView2 addSubview:moreButton];
+    
+
+    
     ScreenButton =[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-140,10,60,26) ImageName:@"btn_share_default.png" Target:self Action:@selector(ScreenButtonClick:) Title:@""];
     [ScreenButton setBackgroundImage:[UIImage imageNamed:@"btn_share_select.png"] forState:UIControlStateHighlighted];
     [BgView2 addSubview:ScreenButton];
@@ -123,23 +134,32 @@
     }];
     
 }
-
-
-#pragma  mark  -----UMButtomViewshareViewDlegate-------
-/*-(void)UMshareViewHandClick:(UIButton *)button ShareImage:(UIImage *)shareImage MoviewModel:(StageInfoModel *)StageInfo
+-(void)requestReportSatge
 {
-    NSArray  *sharearray =[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQzone, UMShareToSina, nil];
-    [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
+    // NSString *type=@"1";
+    NSString  *stageId;
+    NSString  *author_id;
+    UserDataCenter *userCenter =[UserDataCenter shareInstance];
+    NSDictionary *parameters = @{@"reported_user_id":author_id,@"stage_id":stageId,@"reason":@"",@"user_id":userCenter.user_id};
     
-    [[UMSocialControllerService defaultControllerService] setShareText:StageInfo.movie_name shareImage:shareImage socialUIDelegate:self];        //设置分享内容和回调对象
-    [UMSocialSnsPlatformManager getSocialPlatformWithName:[sharearray  objectAtIndex:button.tag-10000]].snsClickHandler(self,[UMSocialControllerService defaultControllerService],YES);
-    NSLog(@"分享到微信");
-     if (shareView) {
-        [shareView HidenShareButtomView];
-        [shareView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.5];
-        
-    }
-}*/
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    [manager POST:[NSString stringWithFormat:@"%@/report-stage/create", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
+            NSLog(@"随机数种子请求成功=======%@",responseObject);
+            UIAlertView  *Al =[[UIAlertView alloc]initWithTitle:nil message:@"你的举报已成功,我们会在24小时内处理" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            [Al show];
+            
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+    
+}
+
+
+
+
+
 -(void)UMShareViewControllerHandClick:(UIButton *)button ShareImage:(UIImage *)shareImage StageInfoModel:(stageInfoModel *)StageInfo
 {
     NSArray  *sharearray =[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQzone, UMShareToSina, nil];
@@ -148,49 +168,11 @@
     [[UMSocialControllerService defaultControllerService] setShareText:StageInfo.movieInfo.name shareImage:shareImage socialUIDelegate:self];        //设置分享内容和回调对象
     [UMSocialSnsPlatformManager getSocialPlatformWithName:[sharearray  objectAtIndex:button.tag-10000]].snsClickHandler(self,[UMSocialControllerService defaultControllerService],YES);
     NSLog(@"分享到微信");
-//    if (shareView) {
-//        [shareView HidenShareButtomView];
-//        [shareView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.5];
-//        
-//    }
-
-    
-}
-///点击分享的屏幕，收回分享的背景
-//-(void)SharetopViewTouchBengan
-//{
-//    NSLog(@"controller touchbegan  中 执行了隐藏工具栏的方法");
-//    //取消当前的选中的那个气泡
-//   // [_mymarkView CancelMarksetSelect];
-//    if (shareView) {
-//        [shareView HidenShareButtomView];
-//        [shareView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.5];
-//        
-//    }
-//    
-//}
+ }
 // 分享
 -(void)ScreenButtonClick:(UIButton  *) button
 {
-//    float hight= kDeviceWidth;
-//    float  ImageWith=[self.movieModel.stageinfo.w intValue];
-//    float  ImgeHight=[self.movieModel.stageinfo.h intValue];
-//    if(ImgeHight>ImageWith)
-//    {
-//        hight=  (ImgeHight/ImageWith) *kDeviceWidth;
-//    }
     UIImage  *image=[Function getImage:stageView WithSize:CGSizeMake(kDeviceWidth, kDeviceWidth)];
-    //创建UMshareView 后必须配备这三个方法
-//    shareView.StageInfo=self.movieModel.stageinfo;
-//    shareView.screenImage=image;
-//    [shareView configShareView];
-//    [self.view addSubview:shareView];
-//    self.tabBarController.tabBar.hidden=YES;
-//    if ([shareView respondsToSelector:@selector(showShareButtomView)]) {
-//        [shareView showShareButtomView];
-//        
-//    }
-    
     UMShareViewController  *shareVC=[[UMShareViewController alloc]init];
     shareVC.StageInfo=self.stageInfo;
     shareVC.screenImage=image;
@@ -215,6 +197,14 @@
     [self.navigationController pushViewController:AddMarkVC animated:NO];
 
 }
+-(void)cellButtonClick:(UIButton  *) button
+{
+    //点击了更多
+    UIActionSheet  *Act=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"举报",@"版权问题",@"查看图片信息", nil];
+    Act.tag=507;
+    [Act showInView:Act];
+
+}
 #pragma  mark -------AddMarkViewControllerReturn  --Delegete-------------
 -(void)AddMarkViewControllerReturn
 {
@@ -224,7 +214,7 @@
 #pragma mark  -----
 #pragma mark  ---//点击了弹幕StaegViewDelegate
 #pragma mark  ----
--(void)StageViewHandClickMark:(WeiboModel *)weiboDict withmarkView:(id)markView StageInfoDict:(stageInfoModel *)stageInfoDict
+-(void)StageViewHandClickMark:(weiboInfoModel *)weiboDict withmarkView:(id)markView StageInfoDict:(stageInfoModel *)stageInfoDict
 {
     ///执行buttonview 弹出
     //获取markview的指针
@@ -309,35 +299,7 @@
 #pragma mark  ----------点赞--------------
     else  if(button.tag==10002)
     {
-        //改变赞的状态
-//        //点击了赞
-//        
-//        NSLog(@" 点赞 前 微博dict  ＝====uped====%@    ups===%@",weiboDict.uped,weiboDict.ups);
-//        if ([weiboDict.uped intValue]==0)
-//        {
-//            weiboDict.uped=[NSNumber numberWithInt:1];
-//            int ups=[weiboDict.ups intValue];
-//            ups =ups+[weiboDict.uped intValue];
-//            weiboDict.ups=[NSNumber numberWithInt:ups];
-//            //重新给markview 赋值，改变markview的frame
-//            [self layoutMarkViewWithMarkView:markView WeiboInfo:weiboDict];
-//            
-//            
-//            
-//        }
-//        else  {
-//            
-//            weiboDict.uped=[NSNumber numberWithInt:0];
-//            int ups=[weiboDict.ups intValue];
-//            ups =ups-1;
-//            weiboDict.ups=[NSNumber numberWithInt:ups];
-//            [self layoutMarkViewWithMarkView:markView WeiboInfo:weiboDict];
-//        }
-//        
-//        ////发送到服务器
-//        [self LikeRequstData:weiboDict StageInfo:stageInfoDict];
-//
-        
+
         NSNumber  *operation;
         int tag=0;// 标志是否含有weiboid
         for (int i=0; i<self.upweiboArray.count; i++) {
@@ -374,6 +336,124 @@
         
     }
 }
+-(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (actionSheet.tag==507) {
+        if (buttonIndex==0) {
+            //举报剧情
+            [self requestReportSatge];
+            
+        }
+        else if(buttonIndex==1)
+        {
+            //版权问题
+            [self sendFeedBack];
+            
+        }
+        else if(buttonIndex==2)
+        {
+            //           查看图片信息
+        }
+
+    }
+}
+
+- (void)sendFeedBack
+{
+    //    [self showNativeFeedbackWithAppkey:UMENT_APP_KEY];
+    Class mailClass = (NSClassFromString(@"MFMailComposeViewController"));
+    if (mailClass != nil)
+    {
+        // We must always check whether the current device is configured for sending emails
+        if ([mailClass canSendMail])
+        {
+            [self displayComposerSheet];
+        }
+        else
+        {
+            [self launchMailAppOnDevice];
+        }
+    }
+    else
+    {
+        [self launchMailAppOnDevice];
+    }
+    
+}
+-(void)displayComposerSheet
+{
+    MFMailComposeViewController *picker = [[MFMailComposeViewController alloc] init];/*MFMailComposeViewController邮件发送选择器*/
+    picker.mailComposeDelegate = self;
+    
+    // Custom NavgationBar background And set the backgroup picture
+    picker.navigationBar.tintColor = [UIColor colorWithRed:0.0f/255.0f green:0.0f/255.0f blue:0.0f/255.0f alpha:0.5];
+    //    picker.navigationBar.tintColor = [UIColor colorWithRed:178.0/255 green:173.0/255 blue:170.0/255 alpha:1.0]; //    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 5.0) {
+    //        [picker.navigationBar setBackgroundImage:[UIImage imageNamed:@"nav_bg.png"] forBarMetrics:UIBarMetricsDefault];
+    //    }
+    //    NSArray *ccRecipients = [NSArray arrayWithObjects:@"dcj3sjt@gmail.com", nil];
+    //    NSArray *bccRecipients = [NSArray arrayWithObjects:@"dcj3sjt@163.com", nil];
+    //    [picker setCcRecipients:ccRecipients];
+    //    [picker setBccRecipients:bccRecipients];
+    
+    // Set up recipients
+    NSArray *toRecipients = [NSArray arrayWithObject:@"feedback@immovie.me"];
+    [picker setToRecipients:toRecipients];
+    // Fill out the email body text
+    //struct utsname device_info;
+    //uname(&device_info);
+    
+    NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
+    NSString *appCurName = [infoDictionary objectForKey:@"CFBundleDisplayName"];
+    NSString *appCurVersion = [infoDictionary objectForKey:@"CFBundleShortVersionString"];
+    NSString *appCurVersionNum = [infoDictionary objectForKey:@"CFBundleVersion"];
+    
+    UIDevice * myDevice = [UIDevice currentDevice];
+    NSString * sysVersion = [myDevice systemVersion];
+    // NSString *emailBody = [NSString stringWithFormat:@"\n\n\n\n附属信息：\n\n%@ %@(%@)\n%@ / %@ / %@ IOS%@", appCurName, appCurVersion, appCurVersionNum, @"", @"", @"",  sysVersion];
+    [picker setMessageBody:@"" isHTML:NO];
+    [picker setSubject:[NSString stringWithFormat:@"反馈：我是电影%@(%@)", appCurVersion, appCurVersionNum]];/*emailpicker标题主题行*/
+    
+    [self presentViewController:picker animated:YES completion:nil];
+    //        [self.navigationController presentViewController:picker animated:YES completion:nil];
+    //        [self.navigationController pushViewController:picker animated:YES];
+}
+-(void)launchMailAppOnDevice
+{
+    NSString *recipients = @"mailto:dcj3sjt@gmail.com&subject=Pocket Truth or Dare Support";
+    NSString *body = @"&body=email body!";
+    NSString *email = [NSString stringWithFormat:@"%@%@", recipients, body];
+    email = [email stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:email]];
+}
+// 2. Displays an email composition interface inside the application. Populates all the Mail fields.
+
+#pragma mark - 协议的委托方法
+
+- (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error
+{
+    NSString *msg;
+    switch (result)
+    {
+        case MFMailComposeResultCancelled:
+            msg = @"邮件发送取消";//@"邮件发送取消";
+            break;
+        case MFMailComposeResultSaved:
+            msg = @"邮件保存成功";//@"邮件保存成功";
+            break;
+        case MFMailComposeResultSent:
+            msg = @"邮件发送成功";//@"邮件发送成功";
+            break;
+        case MFMailComposeResultFailed:
+            msg = @"邮件发送失败";//@"邮件发送失败";
+            break;
+        default:
+            msg = @"邮件未发送";
+            break;
+    }
+    [controller dismissViewControllerAnimated:YES completion:nil];
+}
+
+
 //重新布局markview
 -(void)layoutMarkViewWithMarkView:(MarkView  *) markView WeiboInfo:(weiboInfoModel *) weibodict
 {

@@ -20,9 +20,11 @@
 @interface BigImageCollectionViewCell : UICollectionViewCell
 {
     CGRect        m_frame;
+    UIButton   *moreButton;
     UIButton      *ScreenButton;  //分享
     UIButton      *addMarkButton;
     UIView        *BgView2;        //放分享的白色背景
+
 }
 @property(assign,nonatomic)id <BigImageCollectionViewCellDelegate> delegate;
 @property(assign,nonatomic)NSInteger Cellindex;

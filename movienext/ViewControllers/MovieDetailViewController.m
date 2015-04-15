@@ -41,6 +41,10 @@
 #import "UpYun.h"
 #import "stageInfoModel.h"
 #import "movieInfoModel.h"
+#import <MessageUI/MessageUI.h>
+#import <MessageUI/MFMailComposeViewController.h>
+
+
 @interface MovieDetailViewController ()<UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UICollectionViewDelegate,MovieHeadViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UMSocialUIDelegate,UMSocialDataDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIScrollViewDelegate,BigImageCollectionViewCellDelegate,AddMarkViewControllerDelegate,UMShareViewControllerDelegate>
 
 {
@@ -267,10 +271,50 @@
     _toolBar.delegete=self;
 }
 
+
+
 #pragma  mark  ----RequestData
 #pragma  mark  ---
+
+-(void)requestReportSatge
+{
+    // NSString *type=@"1";
+    NSString  *stageId;
+    NSString  *author_id;
+//    if (segment.selectedSegmentIndex==0) {
+//        ModelsModel  *model =[_hotDataArray objectAtIndex:Rowindex];
+//        stageId=model.stage_id;
+//        author_id=@"";
+//        
+//    }
+//    else if (segment.selectedSegmentIndex==1)
+//    {
+//        weiboInfoModel  *weibomodel =[_newDataArray objectAtIndex:Rowindex];
+//        stageId=weibomodel.stage_id;
+//        author_id=[NSString stringWithFormat:@"%@",weibomodel.uerInfo.Id];
+//    }
+    UserDataCenter *userCenter =[UserDataCenter shareInstance];
+    NSDictionary *parameters = @{@"reported_user_id":author_id,@"stage_id":stageId,@"reason":@"",@"user_id":userCenter.user_id};
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    [manager POST:[NSString stringWithFormat:@"%@/report-stage/create", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
+            NSLog(@"随机数种子请求成功=======%@",responseObject);
+            UIAlertView  *Al =[[UIAlertView alloc]initWithTitle:nil message:@"你的举报已成功,我们会在24小时内处理" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            [Al show];
+            
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+    
+}
+
+
+
+
 //举报某人
--(void)requestReport
+-(void)requestReportweibo
 {
     //NSString *type=@"1";
     UserDataCenter *userCenter =[UserDataCenter shareInstance];
@@ -792,6 +836,14 @@
            // AddMarkVC.pageSoureType=NSAddMarkPageSourceDefault;
             [self.navigationController pushViewController:AddMarkVC animated:NO];
     }
+    else if (button.tag==4000)
+    {
+        //点击了更多
+        UIActionSheet  *Act=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"举报",@"版权问题",@"查看图片信息", nil];
+        Act.tag=507;
+        [Act showInView:Act];
+
+    }
     
 }
 #pragma  mark  -------- AddMarkViewControllerReturn  -----------------------------------------------
@@ -1108,11 +1160,127 @@
     {
         if (buttonIndex==0) {
             //弹出确认举报
-            [self requestReport];
+            [self requestReportSatge];
             
         }
     }
+    else if (actionSheet.tag==507)
+    {
+        if (buttonIndex==0) {
+            //举报剧情
+            [self requestReportSatge];
+            
+        }
+        else if(buttonIndex==1)
+        {
+            //版权问题
+            [self sendFeedBack];
+            
+        }
+        else if(buttonIndex==2)
+        {
+            //           查看图片信息
+        }
+
+    }
 }
+- (void)sendFeedBack
+{
+    //    [self showNativeFeedbackWithAppkey:UMENT_APP_KEY];
+    Class mailClass = (NSClassFromString(@"MFMailComposeViewController"));
+    if (mailClass != nil)
+    {
+        // We must always check whether the current device is configured for sending emails
+        if ([mailClass canSendMail])
+        {
+            [self displayComposerSheet];
+        }
+        else
+        {
+            [self launchMailAppOnDevice];
+        }
+    }
+    else
+    {
+        [self launchMailAppOnDevice];
+    }
+    
+}
+-(void)displayComposerSheet
+{
+    MFMailComposeViewController *picker = [[MFMailComposeViewController alloc] init];/*MFMailComposeViewController邮件发送选择器*/
+    picker.mailComposeDelegate = self;
+    
+    // Custom NavgationBar background And set the backgroup picture
+    picker.navigationBar.tintColor = [UIColor colorWithRed:0.0f/255.0f green:0.0f/255.0f blue:0.0f/255.0f alpha:0.5];
+    //    picker.navigationBar.tintColor = [UIColor colorWithRed:178.0/255 green:173.0/255 blue:170.0/255 alpha:1.0]; //    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 5.0) {
+    //        [picker.navigationBar setBackgroundImage:[UIImage imageNamed:@"nav_bg.png"] forBarMetrics:UIBarMetricsDefault];
+    //    }
+    //    NSArray *ccRecipients = [NSArray arrayWithObjects:@"dcj3sjt@gmail.com", nil];
+    //    NSArray *bccRecipients = [NSArray arrayWithObjects:@"dcj3sjt@163.com", nil];
+    //    [picker setCcRecipients:ccRecipients];
+    //    [picker setBccRecipients:bccRecipients];
+    
+    // Set up recipients
+    NSArray *toRecipients = [NSArray arrayWithObject:@"feedback@immovie.me"];
+    [picker setToRecipients:toRecipients];
+    // Fill out the email body text
+    //struct utsname device_info;
+    //uname(&device_info);
+    
+    NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
+    NSString *appCurName = [infoDictionary objectForKey:@"CFBundleDisplayName"];
+    NSString *appCurVersion = [infoDictionary objectForKey:@"CFBundleShortVersionString"];
+    NSString *appCurVersionNum = [infoDictionary objectForKey:@"CFBundleVersion"];
+    
+    UIDevice * myDevice = [UIDevice currentDevice];
+    NSString * sysVersion = [myDevice systemVersion];
+    // NSString *emailBody = [NSString stringWithFormat:@"\n\n\n\n附属信息：\n\n%@ %@(%@)\n%@ / %@ / %@ IOS%@", appCurName, appCurVersion, appCurVersionNum, @"", @"", @"",  sysVersion];
+    [picker setMessageBody:@"" isHTML:NO];
+    [picker setSubject:[NSString stringWithFormat:@"反馈：我是电影%@(%@)", appCurVersion, appCurVersionNum]];/*emailpicker标题主题行*/
+    
+    [self presentViewController:picker animated:YES completion:nil];
+    //        [self.navigationController presentViewController:picker animated:YES completion:nil];
+    //        [self.navigationController pushViewController:picker animated:YES];
+}
+-(void)launchMailAppOnDevice
+{
+    NSString *recipients = @"mailto:dcj3sjt@gmail.com&subject=Pocket Truth or Dare Support";
+    NSString *body = @"&body=email body!";
+    NSString *email = [NSString stringWithFormat:@"%@%@", recipients, body];
+    email = [email stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:email]];
+}
+// 2. Displays an email composition interface inside the application. Populates all the Mail fields.
+
+#pragma mark - 协议的委托方法
+
+- (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error
+{
+    NSString *msg;
+    switch (result)
+    {
+        case MFMailComposeResultCancelled:
+            msg = @"邮件发送取消";//@"邮件发送取消";
+            break;
+        case MFMailComposeResultSaved:
+            msg = @"邮件保存成功";//@"邮件保存成功";
+            break;
+        case MFMailComposeResultSent:
+            msg = @"邮件发送成功";//@"邮件发送成功";
+            break;
+        case MFMailComposeResultFailed:
+            msg = @"邮件发送失败";//@"邮件发送失败";
+            break;
+        default:
+            msg = @"邮件未发送";
+            break;
+    }
+    [controller dismissViewControllerAnimated:YES completion:nil];
+}
+
+
+
 
 //重新布局markview
 -(void)layoutMarkViewWithMarkView:(MarkView  *) markView WeiboInfo:(weiboInfoModel *) weibodict

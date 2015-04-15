@@ -32,7 +32,9 @@
 #import "UMSocialControllerService.h"
 #import "UIImageView+WebCache.h"
 #import "UMShareViewController.h"
+#import <MessageUI/MessageUI.h>
 
+#import <MessageUI/MFMailComposeViewController.h>
 
 //友盟分享
 //#import "UMSocial.h"
@@ -57,6 +59,7 @@
     ///屏蔽剧照使用
     NSNumber        *_stage_Id;
     NSMutableArray  *_upWeiboArray;
+    NSInteger Rowindex;
 }
 @end
 
@@ -72,7 +75,10 @@
       //  [self setupRefresh];
     //}
     
+    
 }
+
+
 
 //遇到上面的问题 最直接的解决方法就是在controller的viewDidAppear里面去调用present。这样可以确保view hierarchy的层次结构不乱。
 
@@ -152,7 +158,7 @@
     _HotMoVieTableView=[[UITableView alloc]initWithFrame:CGRectMake(0,0, kDeviceWidth, kDeviceHeight-kHeightNavigation)];
     _HotMoVieTableView.delegate=self;
     _HotMoVieTableView.dataSource=self;
-    _HotMoVieTableView.separatorStyle=UITableViewCellSeparatorStyleSingleLine;
+    _HotMoVieTableView.separatorStyle=UITableViewCellSeparatorStyleNone;
     [self.view addSubview:_HotMoVieTableView];
 }
 
@@ -248,12 +254,25 @@
     
 }
 
- //举报某人
--(void)requestReport
+ //举报剧情
+-(void)requestReportSatge
 {
    // NSString *type=@"1";
+    NSString  *stageId;
+    NSString  *author_id;
+    if (segment.selectedSegmentIndex==0) {
+        ModelsModel  *model =[_hotDataArray objectAtIndex:Rowindex];
+        stageId=model.stage_id;
+        author_id=@"";
+    }
+    else if (segment.selectedSegmentIndex==1)
+    {
+        weiboInfoModel  *weibomodel =[_newDataArray objectAtIndex:Rowindex];
+        stageId=weibomodel.stage_id;
+        author_id=[NSString stringWithFormat:@"%@",weibomodel.uerInfo.Id];
+    }
     UserDataCenter *userCenter =[UserDataCenter shareInstance];
-    NSDictionary *parameters = @{@"reported_user_id":_TweiboInfo.uerInfo.Id,@"stage_id":_TStageInfo.Id,@"reason":@"",@"user_id":userCenter.user_id};
+    NSDictionary *parameters = @{@"reported_user_id":author_id,@"stage_id":stageId,@"reason":@"",@"user_id":userCenter.user_id};
     
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:[NSString stringWithFormat:@"%@/report-stage/create", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -268,6 +287,30 @@
     }];
     
 }
+
+
+//举报剧情
+-(void)requestReportweibo
+{
+    // NSString *type=@"1";
+    UserDataCenter *userCenter =[UserDataCenter shareInstance];
+    NSDictionary *parameters = @{@"reported_user_id":_TweiboInfo.uerInfo.Id,@"weibo_id":_TweiboInfo.Id,@"reason":@"",@"user_id":userCenter.user_id};
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    [manager POST:[NSString stringWithFormat:@"%@/report-weibo/create", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
+            NSLog(@"随机数种子请求成功=======%@",responseObject);
+            UIAlertView  *Al =[[UIAlertView alloc]initWithTitle:nil message:@"你的举报已成功,我们会在24小时内处理" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            [Al show];
+            
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+    
+}
+
+
 
 
 
@@ -582,7 +625,7 @@
         if (_hotDataArray.count>indexPath.row) {
             hight=kDeviceWidth+45+45;
         }
-        return hight+10;
+        return hight+0;
     }
     else if (segment.selectedSegmentIndex==1)
     {
@@ -590,7 +633,7 @@
         if (_newDataArray.count>indexPath.row) {
              hight= kDeviceWidth+90;
         }
-        return hight+10;
+        return hight+0;
     }
     return 200.0f;
 }
@@ -692,8 +735,10 @@
 
 -(void)commonStageCellToolButtonClick:(UIButton *)button Rowindex:(NSInteger)index
 {
-  //  HotMovieModel  *hotmovie;
-    ModelsModel  *model;
+    Rowindex=index;
+     ModelsModel  *model;
+   // weiboInfoModel  *weibomodel;
+    Rowindex=index;
     if (segment.selectedSegmentIndex==0) {
         model =[_hotDataArray objectAtIndex:index];
     }
@@ -740,8 +785,15 @@
         weiboInfoModel *model = [_newDataArray objectAtIndex:index];
         myVC.author_id =[NSString stringWithFormat:@"%@",model.uerInfo.Id];
         [self.navigationController pushViewController:myVC animated:YES];
+    
+    }
+    else if (button.tag==6000)
+    {
+        //点击了更多
+        UIActionSheet  *Act=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"举报",@"版权问题",@"查看图片信息", nil];
+        Act.tag=507;
+        [Act showInView:Act];
         
-
     }
 }
 //长安剧情推荐和剧情移除
@@ -907,7 +959,7 @@
          //点击了赞
         //点赞遍历，如果能在数组中能发现这个weibo，那么删除掉，如果没有发现这个微博，那么添加这个微博
         NSNumber  *operation;
-        int tag=0;// 标志是否含有weiboid
+        int tag=0;//已经赞的走这里
         for (int i=0; i<_upWeiboArray.count; i++) {
             //已赞的
             UpweiboModel *upmodel =_upWeiboArray[i];
@@ -917,6 +969,7 @@
                 int like=[weiboDict.like_count intValue];
                 like=like-1;
                 weiboDict.like_count=[NSNumber numberWithInt:like];
+                //从数组中移除当前对象
                  [_upWeiboArray removeObjectAtIndex:i];
                 break;
             }
@@ -1015,7 +1068,7 @@
     {
         if (buttonIndex==0) {
             //确认举报
-            [self requestReport];
+            [self requestReportweibo];
          
         }
     }
@@ -1035,7 +1088,121 @@
         }
         
     }
+    else if (actionSheet.tag==507)
+    {
+        if (buttonIndex==0) {
+            //举报剧情
+            [self requestReportSatge];
+          
+        }
+        else if(buttonIndex==1)
+        {
+            //版权问题
+            [self sendFeedBack];
+
+        }
+        else if(buttonIndex==2)
+        {
+//           查看图片信息
+        }
+    }
 }
+
+- (void)sendFeedBack
+{
+    //    [self showNativeFeedbackWithAppkey:UMENT_APP_KEY];
+    Class mailClass = (NSClassFromString(@"MFMailComposeViewController"));
+    if (mailClass != nil)
+    {
+        // We must always check whether the current device is configured for sending emails
+        if ([mailClass canSendMail])
+        {
+            [self displayComposerSheet];
+        }
+        else
+        {
+            [self launchMailAppOnDevice];
+        }
+    }
+    else
+    {
+        [self launchMailAppOnDevice];
+    }
+    
+}
+-(void)displayComposerSheet
+{
+    MFMailComposeViewController *picker = [[MFMailComposeViewController alloc] init];/*MFMailComposeViewController邮件发送选择器*/
+    picker.mailComposeDelegate = self;
+    
+    // Custom NavgationBar background And set the backgroup picture
+    picker.navigationBar.tintColor = [UIColor colorWithRed:0.0f/255.0f green:0.0f/255.0f blue:0.0f/255.0f alpha:0.5];
+    //    picker.navigationBar.tintColor = [UIColor colorWithRed:178.0/255 green:173.0/255 blue:170.0/255 alpha:1.0]; //    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 5.0) {
+    //        [picker.navigationBar setBackgroundImage:[UIImage imageNamed:@"nav_bg.png"] forBarMetrics:UIBarMetricsDefault];
+    //    }
+    //    NSArray *ccRecipients = [NSArray arrayWithObjects:@"dcj3sjt@gmail.com", nil];
+    //    NSArray *bccRecipients = [NSArray arrayWithObjects:@"dcj3sjt@163.com", nil];
+    //    [picker setCcRecipients:ccRecipients];
+    //    [picker setBccRecipients:bccRecipients];
+    
+    // Set up recipients
+    NSArray *toRecipients = [NSArray arrayWithObject:@"feedback@immovie.me"];
+    [picker setToRecipients:toRecipients];
+    // Fill out the email body text
+    //struct utsname device_info;
+    //uname(&device_info);
+    
+    NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
+    NSString *appCurName = [infoDictionary objectForKey:@"CFBundleDisplayName"];
+    NSString *appCurVersion = [infoDictionary objectForKey:@"CFBundleShortVersionString"];
+    NSString *appCurVersionNum = [infoDictionary objectForKey:@"CFBundleVersion"];
+    
+    UIDevice * myDevice = [UIDevice currentDevice];
+    NSString * sysVersion = [myDevice systemVersion];
+   // NSString *emailBody = [NSString stringWithFormat:@"\n\n\n\n附属信息：\n\n%@ %@(%@)\n%@ / %@ / %@ IOS%@", appCurName, appCurVersion, appCurVersionNum, @"", @"", @"",  sysVersion];
+    [picker setMessageBody:@"" isHTML:NO];
+    [picker setSubject:[NSString stringWithFormat:@"反馈：我是电影%@(%@)", appCurVersion, appCurVersionNum]];/*emailpicker标题主题行*/
+    
+    [self presentViewController:picker animated:YES completion:nil];
+    //        [self.navigationController presentViewController:picker animated:YES completion:nil];
+    //        [self.navigationController pushViewController:picker animated:YES];
+}
+-(void)launchMailAppOnDevice
+{
+    NSString *recipients = @"mailto:dcj3sjt@gmail.com&subject=Pocket Truth or Dare Support";
+    NSString *body = @"&body=email body!";
+    NSString *email = [NSString stringWithFormat:@"%@%@", recipients, body];
+    email = [email stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:email]];
+}
+// 2. Displays an email composition interface inside the application. Populates all the Mail fields.
+
+#pragma mark - 协议的委托方法
+
+- (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error
+{
+    NSString *msg;
+    switch (result)
+    {
+        case MFMailComposeResultCancelled:
+            msg = @"邮件发送取消";//@"邮件发送取消";
+            break;
+        case MFMailComposeResultSaved:
+            msg = @"邮件保存成功";//@"邮件保存成功";
+            break;
+        case MFMailComposeResultSent:
+            msg = @"邮件发送成功";//@"邮件发送成功";
+            break;
+        case MFMailComposeResultFailed:
+            msg = @"邮件发送失败";//@"邮件发送失败";
+            break;
+        default:
+            msg = @"邮件未发送";
+            break;
+    }
+    [controller dismissViewControllerAnimated:YES completion:nil];
+}
+
 
 //重新布局markview
 -(void)layoutMarkViewWithMarkView:(MarkView  *) markView WeiboInfo:(weiboInfoModel *) weibodict
@@ -1043,20 +1210,16 @@
     
 #pragma mark   缩放整体的弹幕大小
     [Function BasicAnimationwithkey:@"transform.scale" Duration:0.25 repeatcont:1 autoresverses:YES fromValue:1.0 toValue:1.05 View:markView];
-
     
-    //NSLog(@" 点赞 后 微博dict  ＝====uped====%@    ups===%@",weibodict.uped,weibodict.ups);
-
       NSString  *weiboTitleString=weibodict.content;
       NSString  *UpString=[NSString stringWithFormat:@"%@",weibodict.like_count];//weibodict.ups;
      //计算标题的size
       CGSize  Msize=[weiboTitleString boundingRectWithSize:CGSizeMake(kDeviceWidth/2,MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:markView.TitleLable.font forKey:NSFontAttributeName] context:nil].size;
     // 计算赞数量的size
       CGSize Usize=[UpString boundingRectWithSize:CGSizeMake(40,MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:markView.ZanNumLable.font forKey:NSFontAttributeName] context:nil].size;
-    
-    // NSLog(@"size= %f %f", Msize.width, Msize.height);
-    //计算赞数量的长度
+     //计算赞数量的长度
     float  Uwidth=[UpString floatValue]==0?0:Usize.width;
+    
     //宽度=字的宽度+左头像图片的宽度＋赞图片的宽度＋赞数量的宽度+中间两个空格2+2
     float markViewWidth = Msize.width+23+Uwidth+5+5+11+5;
     float markViewHeight = Msize.height+6;

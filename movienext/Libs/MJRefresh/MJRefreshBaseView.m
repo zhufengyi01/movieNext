@@ -46,7 +46,8 @@
 - (UIImageView *)arrowImage
 {
     if (!_arrowImage) {
-        UIImageView *arrowImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:MJRefreshSrcName(@"arrow.png")]];
+      //  UIImageView *arrowImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:MJRefreshSrcName(@"arrow.png")]];
+        UIImageView *arrowImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:MJRefreshSrcName(@"")]];
         arrowImage.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
         [self addSubview:_arrowImage = arrowImage];
     }
@@ -61,10 +62,12 @@
     if (!_activityView) {
         UIActivityIndicatorView *activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
         activityView.bounds = self.arrowImage.bounds;
+        activityView.hidden=YES;
         activityView.autoresizingMask = self.arrowImage.autoresizingMask;
         [self addSubview:_activityView = activityView];
     }
-    return _activityView;
+  //  return _activityView;
+    return nil;
 }
 
 #pragma mark - 初始化方法
@@ -205,6 +208,8 @@
 
 - (void)setState:(MJRefreshState)state
 {
+#warning  隐藏菊花的方法
+    
     // 0.存储当前的contentInset
     if (self.state != MJRefreshStateRefreshing) {
         _scrollViewOriginalInset = self.scrollView.contentInset;
@@ -225,8 +230,10 @@
         {
             if (oldState == MJRefreshStateRefreshing) {
                 // 正在结束刷新
+ 
                 _endingRefresh = YES;
                 
+#warning
                 [UIView animateWithDuration:MJRefreshSlowAnimationDuration * 0.6 animations:^{
                     self.activityView.alpha = 0.0;
                 } completion:^(BOOL finished) {
@@ -266,6 +273,9 @@
             
 		case MJRefreshStateRefreshing:
         {
+            
+            self.activityView.hidden=YES;
+
             // 开始转圈圈
 			[self.activityView startAnimating];
             // 隐藏箭头
