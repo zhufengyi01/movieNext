@@ -56,7 +56,7 @@ typedef NS_ENUM(NSInteger,NSUserPageType)
    // UIButton  *ZanButton;
    // NSMutableArray   *_MarkMuatableArray;
     
-    //下面工具的子视图
+     //下面工具的子视图
     UIView        *BgView2;   //放分享的白色背景
     UIButton      *leftButtomButton;   //左下边按钮
     UILabel       *movieNameLable;
@@ -64,6 +64,7 @@ typedef NS_ENUM(NSInteger,NSUserPageType)
     UIButton      *ScreenButton;
     UIButton      *addMarkButton;
     UIView  *pressview;
+
  }
 @property (assign,nonatomic)id <CommonStageCellDelegate>  delegate;
 @property(assign,nonatomic) NSInteger   Cellindex;
@@ -76,7 +77,9 @@ typedef NS_ENUM(NSInteger,NSUserPageType)
 @property(nonatomic,strong) NSMutableArray       *weibosArray;
 @property(nonatomic,strong) weiboInfoModel       *weiboInfo;
 @property(nonatomic,strong)NSMutableArray        *upweibosArray;   //微博点赞
+@property(nonatomic,strong)UIButton              *tanlogoButton;
 //设置stageview的背景图片
 -(void)ConfigsetCellindexPath:(NSInteger) row;
+
 
 @end

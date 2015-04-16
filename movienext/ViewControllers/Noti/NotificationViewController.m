@@ -114,7 +114,7 @@
     
     [self requestData];
     // 2.2秒后刷新表格UI
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         // 刷新表格
         //[_myTableView reloadData];
         // (最好在刷新表格后调用)调用endRefreshing可以结束刷新状态
@@ -129,7 +129,7 @@
     [self  requestData];
     }
     // 2.2秒后刷新表格UI
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         // 刷新表格
         //[_myTableView reloadData];
         
@@ -230,10 +230,8 @@
         NSLog(@"button.tag = %ld", button.tag);
         MyViewController  *myVC=[[MyViewController alloc]init];
         NSDictionary *dict = [_dataArray objectAtIndex:index];
-        myVC.author_id = [dict valueForKey:@"user_id"];
-        NSLog(@"dict = %@", dict);
-        NSLog(@"dict.user_id = %@", [dict valueForKey:@"user_id"]);
-        [self.navigationController pushViewController:myVC animated:YES];
+        myVC.author_id = [[dict valueForKey:@"user"] objectForKey:@"id"];
+         [self.navigationController pushViewController:myVC animated:YES];
         
     }
    

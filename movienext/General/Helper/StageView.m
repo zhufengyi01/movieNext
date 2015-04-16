@@ -43,17 +43,17 @@
 #pragma mark    设置stageview的值  ，主要是给stagview 添加markview  和添加一张图片
 -(void)configStageViewforStageInfoDict{
     
-    if (tanlogoButton) {
-         [tanlogoButton removeFromSuperview];
-        tanlogoButton=nil;
-    }
-    tanlogoButton =[UIButton buttonWithType:UIButtonTypeCustom];
-    tanlogoButton.frame=CGRectMake(kDeviceWidth-40, 5, 35, 35);
-    [tanlogoButton setImage:[UIImage imageNamed:@"dan_normal"] forState:UIControlStateNormal];
-    [tanlogoButton setImage:[UIImage imageNamed:@"dan_selected"] forState:UIControlStateSelected];
-    [tanlogoButton addTarget:self action:@selector(hidenAndShowMarkView:) forControlEvents:UIControlEventTouchUpInside];
-    [self addSubview:tanlogoButton];
-      
+//    if (tanlogoButton) {
+//         [tanlogoButton removeFromSuperview];
+//        tanlogoButton=nil;
+//    }
+//    tanlogoButton =[UIButton buttonWithType:UIButtonTypeCustom];
+//    tanlogoButton.frame=CGRectMake(kDeviceWidth-40, 5, 35, 35);
+//    [tanlogoButton setImage:[UIImage imageNamed:@"dan_normal"] forState:UIControlStateNormal];
+//    [tanlogoButton setImage:[UIImage imageNamed:@"dan_selected"] forState:UIControlStateSelected];
+//    [tanlogoButton addTarget:self action:@selector(hidenAndShowMarkView:) forControlEvents:UIControlEventTouchUpInside];
+//    [self addSubview:tanlogoButton];
+//      
 
     //先移除所有的Mark视图
     [self removeStageViewSubView];
@@ -174,7 +174,8 @@
 #pragma mark 设置标签的内容
             markView.TitleLable.text=weiboTitleString;
             ///显示标签的头像
-            [ markView.LeftImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kUrlAvatar,weibodict.uerInfo.logo]]];
+          NSString   *headurl =[NSString stringWithFormat:@"%@%@",kUrlAvatar,weibodict.uerInfo.logo];
+          [markView.LeftImageView sd_setImageWithURL:[NSURL URLWithString:headurl] placeholderImage:[UIImage imageNamed:@"user_normal"]];
     markView.ZanNumLable.text=[NSString stringWithFormat:@"%@",weibodict.like_count];
     return markView;
 }
@@ -275,35 +276,6 @@
 
 
 
-
-#pragma mark 点击屏幕显示和隐藏marview
-//显示隐藏markview
--(void)hidenAndShowMarkView:(UIButton *) button
-{
-    if (button.selected==NO) {
-        NSLog(@"执行了隐藏 view ");
-        button.selected=YES;
-        for (UIView  *view  in self.subviews) {
-            if  ([view isKindOfClass:[MarkView class]]) {
-                MarkView  *mv =(MarkView *)view;
-                mv.hidden=YES;
-             
-            }
-        }
-    }
-    else if (button.selected==YES)
-    {
-        NSLog(@"执行了显示view ");
-        button.selected=NO;
-        for (UIView  *view  in self.subviews) {
-            if  ([view isKindOfClass:[MarkView class]]) {
-                MarkView  *mv =(MarkView *)view;
-                mv.hidden=NO;
-             }
-        }
-    }
-
-}
 
 #pragma mark  ----
 #pragma mark   ---markView   Delegate

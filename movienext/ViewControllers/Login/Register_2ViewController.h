@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface Register_2ViewController : UIViewController
-
+@property (nonatomic,strong) NSString  *email;
+@property(nonatomic,strong) NSString   *password;
 @end

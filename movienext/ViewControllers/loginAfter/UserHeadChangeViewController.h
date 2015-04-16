@@ -7,7 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+typedef NS_ENUM(NSInteger,NSHeadChangePageType)
+{
+    NSHeadChangePageTypeSetting =100,
+    NSHeadChangePageTypeFirstLogin =101
+};
+
 
 @interface UserHeadChangeViewController : UIViewController
-
+@property(nonatomic,assign) NSHeadChangePageType   pageType;
 @end

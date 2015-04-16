@@ -24,6 +24,7 @@
     UIButton      *ScreenButton;  //分享
     UIButton      *addMarkButton;
     UIView        *BgView2;        //放分享的白色背景
+    UIView        *BgView0;
 
 }
 @property(assign,nonatomic)id <BigImageCollectionViewCellDelegate> delegate;

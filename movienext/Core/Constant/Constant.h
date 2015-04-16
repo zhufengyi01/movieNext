@@ -12,7 +12,7 @@
 #pragma mark   服务器设置
 //#define kApiBaseUrl @"http://182.92.214.199"
 #define kApiBaseUrl  @"http://api.ying233.com"
-
+ 
 #define kUrlWeibo @"http://next-weibo.b0.upaiyun.com/"
 #define kUrlAvatar @"http://next-avatar.b0.upaiyun.com/"   
 #define kUrlFeed @"http://next-feed.b0.upaiyun.com/"
@@ -51,7 +51,7 @@
 #define View_BackGround [UIColor colorWithRed:231.0/255 green:231.0/255 blue:231.0/255 alpha:1]
 #define View_ToolBar   [UIColor colorWithRed:250.0/255 green:250.0/255 blue:250.0/255 alpha:1]
 //tabbar 上面的一根线
-#define tabBar_line   [UIColor colorWithRed:240.0/255 green:240.0/255 blue:240.0/255 alpha:1]
+#define tabBar_line   [UIColor colorWithRed:220.0/255 green:220.0/255 blue:220.0/255 alpha:1]
 
 //字体浅灰色
 #define VLight_GrayColor [UIColor colorWithRed:188.0/255 green:188.0/255 blue:188.0/255 alpha:1]

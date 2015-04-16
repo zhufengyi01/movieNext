@@ -659,17 +659,7 @@
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
    // HotMovieModel  *model =[_dataArray objectAtIndex:indexPath.row];
     if (bigModel==YES) {
-       // float hight;
-        //if (_dataArray.count>indexPath.row) {
-//            float  h= [model.stageinfo.h  floatValue];
-//            float w=[model.stageinfo.w floatValue];
-//             hight= kDeviceWidth+45;
-//             if(h>w)
-//            {
-//                hight=  (h/w) *kDeviceWidth+45;
-//            }
-        //}
-        return CGSizeMake(kDeviceWidth,kDeviceWidth+45+10);
+         return CGSizeMake(kDeviceWidth,kDeviceWidth+45+45+0);
     }
     else
     {

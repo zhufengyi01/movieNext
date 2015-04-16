@@ -13,6 +13,7 @@
 #import "LoginViewController.h"
 #import "UMSocial.h"
 #import <MessageUI/MessageUI.h>
+#import "UserHeadChangeViewController.h"
 #import "ThanksViewController.h"
 #import <MessageUI/MFMailComposeViewController.h>
 @interface SettingViewController ()<UITableViewDataSource,UITableViewDelegate,UMSocialUIDelegate>
@@ -26,10 +27,15 @@
 @end
 
 @implementation SettingViewController
-
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:YES];
+    self.tabBarController.tabBar.hidden=YES;
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationController.navigationItem.title=@"设置";
+
     self.view.backgroundColor=View_BackGround;
     appdelegate = [[UIApplication sharedApplication]delegate ];
     window=appdelegate.window;
@@ -38,7 +44,7 @@
 }
 -(void)createUI
 {
-    _dataArray =[[NSMutableArray alloc]initWithObjects:@"分享给好小伙伴",@"清空缓存",@"意见反馈",@"特别感谢",nil];
+    _dataArray =[[NSMutableArray alloc]initWithObjects:@"修改个人资料",@"分享给好小伙伴",@"清空缓存",@"意见反馈",@"特别感谢",nil];
     _myTableView =[[UITableView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, 220) style:UITableViewStylePlain];
     _myTableView.delegate=self;
     _myTableView.dataSource=self;
@@ -88,8 +94,14 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
     if (indexPath.row==0) {
+        
+        UserHeadChangeViewController  *vc =[UserHeadChangeViewController new];
+        vc.pageType=NSHeadChangePageTypeSetting;
+        [self.navigationController pushViewController:vc animated:YES];
+        
+    }
+     else if (indexPath.row==1) {
         [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeApp;
         [UMSocialSnsService presentSnsIconSheetView:self
                                              appKey:kUmengKey
@@ -97,13 +109,13 @@
                                          shareImage:[UIImage imageNamed:@"icon.png"]
                                     shareToSnsNames:[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQzone, UMShareToSina, nil]
                                            delegate:self];
-    } else if (indexPath.row==1) {
+    } else if (indexPath.row==2) {
         UIAlertView  *Al =[[UIAlertView alloc]initWithTitle:nil message:@"恭喜你，缓存清理成功" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
         [Al show];
-    } else if (indexPath.row==2) {
+    } else if (indexPath.row==3) {
         [self sendFeedBack];
     }
-    else if (indexPath.row==3)
+    else if (indexPath.row==4)
     {
         [self.navigationController pushViewController:[ThanksViewController new] animated:YES];
         

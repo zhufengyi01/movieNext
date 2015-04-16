@@ -79,12 +79,8 @@
         [self.view addSubview:_myprogress];
         //执行上传的方法
          UpYun *uy = [[UpYun alloc] init];
-         uy.successBlocker = ^(id data)
+          uy.successBlocker = ^(id data)
          {
-          
-             //上传成功后，移除上传提示
-                   //UIAlertView * alert = [[UIAlertView alloc]initWithTitle:@"" message:@"上传成功" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
-         //[alert show];
              
          NSLog(@"图片上传成功%@",data);
              if (upyunDict==nil) {
@@ -92,7 +88,7 @@
              }
              upyunDict=data;
              //发布图片和跳转页面
-                [self publicImage];
+                [self requstepublicImage];
             
          };
          uy.failBlocker = ^(NSError * error)
@@ -134,6 +130,7 @@
     
 }
 
+
 -(NSString * )getSaveKey {
     /**
      *	@brief	方式1 由开发者生成saveKey
@@ -171,7 +168,9 @@
     int month = [comps month];
     return month;
 }
--(void)publicImage
+
+
+-(void)requstepublicImage
 {
     UserDataCenter *usreCenter=[UserDataCenter shareInstance];
    // NSString  *w=[NSString stringWithFormat:@"%f",self.upimage.size.width];

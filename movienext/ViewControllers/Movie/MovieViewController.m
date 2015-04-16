@@ -132,7 +132,6 @@
 }
 - (void)setupHeadView
 {
-    page=1;
     
 
     __unsafe_unretained typeof(self) vc = self;
@@ -146,7 +145,7 @@
         [vc requestData];
 
         // 模拟延迟加载数据，因此2秒后才调用）
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [vc.myConllectionView reloadData];
             // 结束刷新
             [vc.myConllectionView headerEndRefreshing];

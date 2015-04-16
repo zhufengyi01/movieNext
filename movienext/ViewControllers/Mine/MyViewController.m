@@ -29,6 +29,9 @@
 #import "ChangeSelfViewController.h"
 #import "UMShareViewController.h"
 #import "userAddmodel.h"
+#import <MessageUI/MessageUI.h>
+#import <MessageUI/MFMailComposeViewController.h>
+
 @interface MyViewController ()<UITableViewDataSource, UITableViewDelegate,StageViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UIActionSheetDelegate,UMSocialDataDelegate,UMSocialUIDelegate,CommonStageCellDelegate,UMShareViewControllerDelegate>
 {
     //UISegmentedControl *segment;
@@ -56,6 +59,10 @@
    // HotMovieModel  *_Tmodel;  ///用户删除的时候存储的model
     NSInteger  Rowindex;
     weiboUserInfoModel  *userInfomodel;
+    stageInfoModel  *_TStageInfo;
+    weiboInfoModel      *_TweiboInfo;
+
+    
 }
 @end
 
@@ -179,7 +186,7 @@
     if (userInfomodel) {
         imageURL =[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!thumb",kUrlAvatar,userInfomodel.logo]];
     }
-    [ivAvatar sd_setImageWithURL:imageURL placeholderImage:[UIImage imageNamed:@"loading_image_all.png"]];
+    [ivAvatar sd_setImageWithURL:imageURL placeholderImage:[UIImage imageNamed:@"user_normal.png"]];
    
     [viewHeader addSubview:ivAvatar];
     
@@ -332,7 +339,7 @@
     }
     [self requestData];
     // 2.2秒后刷新表格UI
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         // 刷新表格
         [_tableView reloadData];
         // (最好在刷新表格后调用)调用endRefreshing可以结束刷新状态
@@ -349,7 +356,7 @@
     }
     
     // 2.2秒后刷新表格UI
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         // 刷新表格
         [_tableView reloadData];
         // (最好在刷新表格后调用)调用endRefreshing可以结束刷新状态
@@ -439,6 +446,53 @@
 #pragma  mark -----
 #pragma  mark ------  DataRequest 
 #pragma  mark ----
+//举报剧情
+-(void)requestReportweibo
+{
+     NSDictionary *parameters = @{@"reported_user_id":_TweiboInfo.uerInfo.Id,@"weibo_id":_TweiboInfo.Id,@"reason":@"",@"user_id":userCenter.user_id};
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    [manager POST:[NSString stringWithFormat:@"%@/report-weibo/create", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
+            NSLog(@"随机数种子请求成功=======%@",responseObject);
+            UIAlertView  *Al =[[UIAlertView alloc]initWithTitle:nil message:@"你的举报已成功,我们会在24小时内处理" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            [Al show];
+            
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+    
+}
+
+
+
+//举报剧情
+-(void)requestReportSatge
+{
+    // NSString *type=@"1";
+    NSString  *stageId;
+    NSString  *author_id;
+    UserDataCenter *userCenter =[UserDataCenter shareInstance];
+    NSDictionary *parameters = @{@"reported_user_id":author_id,@"stage_id":stageId,@"reason":@"",@"user_id":userCenter.user_id};
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    [manager POST:[NSString stringWithFormat:@"%@/report-stage/create", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
+            NSLog(@"随机数种子请求成功=======%@",responseObject);
+            UIAlertView  *Al =[[UIAlertView alloc]initWithTitle:nil message:@"你的举报已成功,我们会在24小时内处理" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            [Al show];
+            
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+    
+}
+
+
+
+
 -(void)requestUserInfo
 {
     NSString  *userId;
@@ -511,20 +565,27 @@
             for (NSDictionary  *addDict  in Detailarray) {
                 userAddmodel  *model=[[userAddmodel alloc]init];
                 if (model) {
+                    
                     [model setValuesForKeysWithDictionary:addDict];
                     weiboInfoModel *weibomodel =[[weiboInfoModel alloc]init];
-                    if (weibomodel) {
+                    if (![[addDict objectForKey:@"weibo"] isKindOfClass:[NSNull class]]) {
                         [weibomodel setValuesForKeysWithDictionary:[addDict objectForKey:@"weibo"]];
                         
                         stageInfoModel  *stagemodel =[[stageInfoModel alloc]init];
                         if (stagemodel) {
+                            if ([addDict objectForKey:@"weibo"]) {
+                                
                             [stagemodel setValuesForKeysWithDictionary:[[addDict objectForKey:@"weibo"] objectForKey:@"stage"]];
                             movieInfoModel *moviemodel =[[movieInfoModel alloc]init];
                             if (moviemodel) {
+                                if (![[[[addDict objectForKey:@"weibo"] objectForKey:@"stage"] objectForKey:@"movie"] isKindOfClass:[NSNull class]]) {
+                                
                                 [moviemodel setValuesForKeysWithDictionary:[[[addDict objectForKey:@"weibo"] objectForKey:@"stage"] objectForKey:@"movie"]];
                                 stagemodel.movieInfo=moviemodel;
+                                }
                             }
                             weibomodel.stageInfo=stagemodel;
+                            }
                         }
                         weiboUserInfoModel *usermodel =[[weiboUserInfoModel alloc]init];
                         if (usermodel) {
@@ -857,12 +918,22 @@
     {
      //个人头像
     }
-    else if(button.tag==5000)
+    else if(button.tag==6000)
     {
         //删除
-        UIActionSheet   *ash=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"删除弹幕" otherButtonTitles:nil, nil];
-        ash.tag=200;
-        [ash showInView:self.view];
+        if ([self.author_id intValue]==0||[self.author_id intValue]==[userCenter.user_id intValue]) {
+            UIActionSheet   *ash=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"删除弹幕" otherButtonTitles:nil, nil];
+            ash.tag=200;
+            [ash showInView:self.view];
+        }
+        else
+        {
+            //点击了更多
+            UIActionSheet  *Act=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"举报",@"版权问题",@"查看图片信息", nil];
+            Act.tag=507;
+            [Act showInView:Act];
+        }
+
         
     }
     
@@ -877,6 +948,27 @@
             ash.tag=300;
             [ash showInView:self.view];
         }
+    }
+    else if (actionSheet.tag==507) {
+        //点击了更多
+        if (buttonIndex==0) {
+            //举报剧情
+            [self requestReportSatge];
+            
+        }
+        else if(buttonIndex==1)
+        {
+            //版权问题
+            [self sendFeedBack];
+            
+        }
+        else if(buttonIndex==2)
+        {
+            //           查看图片信息
+        }
+
+        
+        
     }
     else
     {
@@ -893,6 +985,102 @@
     }
     
 }
+
+- (void)sendFeedBack
+{
+    //    [self showNativeFeedbackWithAppkey:UMENT_APP_KEY];
+    Class mailClass = (NSClassFromString(@"MFMailComposeViewController"));
+    if (mailClass != nil)
+    {
+        // We must always check whether the current device is configured for sending emails
+        if ([mailClass canSendMail])
+        {
+            [self displayComposerSheet];
+        }
+        else
+        {
+            [self launchMailAppOnDevice];
+        }
+    }
+    else
+    {
+        [self launchMailAppOnDevice];
+    }
+    
+}
+-(void)displayComposerSheet
+{
+    MFMailComposeViewController *picker = [[MFMailComposeViewController alloc] init];/*MFMailComposeViewController邮件发送选择器*/
+    picker.mailComposeDelegate = self;
+    
+    // Custom NavgationBar background And set the backgroup picture
+    picker.navigationBar.tintColor = [UIColor colorWithRed:0.0f/255.0f green:0.0f/255.0f blue:0.0f/255.0f alpha:0.5];
+    //    picker.navigationBar.tintColor = [UIColor colorWithRed:178.0/255 green:173.0/255 blue:170.0/255 alpha:1.0]; //    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 5.0) {
+    //        [picker.navigationBar setBackgroundImage:[UIImage imageNamed:@"nav_bg.png"] forBarMetrics:UIBarMetricsDefault];
+    //    }
+    //    NSArray *ccRecipients = [NSArray arrayWithObjects:@"dcj3sjt@gmail.com", nil];
+    //    NSArray *bccRecipients = [NSArray arrayWithObjects:@"dcj3sjt@163.com", nil];
+    //    [picker setCcRecipients:ccRecipients];
+    //    [picker setBccRecipients:bccRecipients];
+    
+    // Set up recipients
+    NSArray *toRecipients = [NSArray arrayWithObject:@"feedback@immovie.me"];
+    [picker setToRecipients:toRecipients];
+    // Fill out the email body text
+    //struct utsname device_info;
+    //uname(&device_info);
+    
+    NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
+    NSString *appCurName = [infoDictionary objectForKey:@"CFBundleDisplayName"];
+    NSString *appCurVersion = [infoDictionary objectForKey:@"CFBundleShortVersionString"];
+    NSString *appCurVersionNum = [infoDictionary objectForKey:@"CFBundleVersion"];
+    
+    UIDevice * myDevice = [UIDevice currentDevice];
+    NSString * sysVersion = [myDevice systemVersion];
+    // NSString *emailBody = [NSString stringWithFormat:@"\n\n\n\n附属信息：\n\n%@ %@(%@)\n%@ / %@ / %@ IOS%@", appCurName, appCurVersion, appCurVersionNum, @"", @"", @"",  sysVersion];
+    [picker setMessageBody:@"" isHTML:NO];
+    [picker setSubject:[NSString stringWithFormat:@"反馈：我是电影%@(%@)", appCurVersion, appCurVersionNum]];/*emailpicker标题主题行*/
+    
+    [self presentViewController:picker animated:YES completion:nil];
+    //        [self.navigationController presentViewController:picker animated:YES completion:nil];
+    //        [self.navigationController pushViewController:picker animated:YES];
+}
+-(void)launchMailAppOnDevice
+{
+    NSString *recipients = @"mailto:dcj3sjt@gmail.com&subject=Pocket Truth or Dare Support";
+    NSString *body = @"&body=email body!";
+    NSString *email = [NSString stringWithFormat:@"%@%@", recipients, body];
+    email = [email stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:email]];
+}
+// 2. Displays an email composition interface inside the application. Populates all the Mail fields.
+
+#pragma mark - 协议的委托方法
+
+- (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error
+{
+    NSString *msg;
+    switch (result)
+    {
+        case MFMailComposeResultCancelled:
+            msg = @"邮件发送取消";//@"邮件发送取消";
+            break;
+        case MFMailComposeResultSaved:
+            msg = @"邮件保存成功";//@"邮件保存成功";
+            break;
+        case MFMailComposeResultSent:
+            msg = @"邮件发送成功";//@"邮件发送成功";
+            break;
+        case MFMailComposeResultFailed:
+            msg = @"邮件发送失败";//@"邮件发送失败";
+            break;
+        default:
+            msg = @"邮件未发送";
+            break;
+    }
+    [controller dismissViewControllerAnimated:YES completion:nil];
+}
+
 #pragma mark   ---
 #pragma mark   ----stageViewDelegate   -----------
 #pragma mark    ---
@@ -954,8 +1142,12 @@
 #pragma mark   ------
 #pragma mark   -------- ButtomToolViewDelegate
 #pragma  mark  -------
--(void)ToolViewHandClick:(UIButton *)button :(MarkView *)markView weiboDict:(WeiboModel *)weiboDict StageInfo:(stageInfoModel *)stageInfoDict
+-(void)ToolViewHandClick:(UIButton *)button :(MarkView *)markView weiboDict:(weiboInfoModel *)weiboDict StageInfo:(stageInfoModel *)stageInfoDict
 {
+    //把值全局化，有利于下面进行一系列的删除变身操作
+    _TStageInfo=stageInfoDict;
+    _TweiboInfo=weiboDict;
+
     NSLog(@"点击头像  微博dict  ＝====%@ ======出现的stageinfo  ＝＝＝＝＝＝%@",weiboDict,stageInfoDict);
     
     if (button.tag==10000) {

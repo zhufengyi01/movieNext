@@ -12,6 +12,9 @@
 #import "NotificationViewController.h"
 #import "MyViewController.h"
 #import "CustomTabBar.h"
+#import "ZCControl.h"
+#import "UIImage+ImageWithColor.h"
+#import "Constant.h"
 
 @interface CustmoTabBarController ()<CustomTabBarDelegate>
 @property (nonatomic, strong) CustomTabBar * m_tabBar;
@@ -52,6 +55,14 @@
     UINavigationController * fouthNav = [[UINavigationController alloc] initWithRootViewController:myVC];
     NSArray * controllerArr = [NSArray arrayWithObjects:fristNav, secondNav, thirdNav, fouthNav, nil];
     self.viewControllers = controllerArr;
+    
+    
+    ///if ([UINavigationBar instancesRespondToSelector:@selector(setShadowImage:)])
+    //{
+    [[UINavigationBar appearance] setShadowImage:[UIImage imageWithColor:tabBar_line size:CGSizeMake(kDeviceWidth, 1)]];
+    
+    //}
+
 }
 
 -(void)createCustomTabBar

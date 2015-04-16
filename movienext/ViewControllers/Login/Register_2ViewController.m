@@ -9,11 +9,21 @@
 #import "Register_2ViewController.h"
 #import "ZCControl.h"
 #import "Constant.h"
-
+#import "AFNetworking.h"
+#import "Function.h"
+#import "UpYun.h"
+#import "AppDelegate.h"
+#import "CustmoTabBarController.h"
 @interface Register_2ViewController ()<UINavigationControllerDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UITextFieldDelegate>
 {
+    AppDelegate  *appdelegate;
+    UIWindow     *window;
+
     UIButton  *headImag;
     UITextField  *nameTextfield;
+    NSMutableDictionary   *upyunDict;
+    UIImage  *_upImage;
+
 }
 @end
 
@@ -21,7 +31,11 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    appdelegate = [[UIApplication sharedApplication]delegate];
+    window=appdelegate.window;
     // Do any additional setup after loading the view.
+    upyunDict= [[NSMutableDictionary alloc]init];
+
     [self createNavigition];
     [self createUI];
 }
@@ -54,11 +68,14 @@
     bgView.userInteractionEnabled=YES;
     [self.view addSubview:bgView];
     
+    
+    //默认使用了默认头像
+    _upImage =[UIImage imageNamed:@"user_normal.png"];
     headImag=[[UIButton alloc]initWithFrame:CGRectMake((kDeviceWidth-60)/2,140, 60, 60)];
     headImag.layer.cornerRadius=30;
     headImag.layer.borderColor=VBlue_color.CGColor;
     headImag.layer.borderWidth=4;
-    [headImag setBackgroundImage:[UIImage imageNamed:@"user_normal@2x.png"] forState:UIControlStateNormal];
+    [headImag setBackgroundImage:_upImage forState:UIControlStateNormal];
     headImag.clipsToBounds=YES;
     headImag.tag=100;
     [headImag addTarget:self action:@selector(dealregiterClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -69,10 +86,11 @@
     
     UIView  *left1=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 10, 20)];
 
-    nameTextfield=[ZCControl createTextFieldWithFrame:CGRectMake((kDeviceWidth-200)/2,headImag.frame.origin.y+headImag.frame.size.height+20, 200,40) placeholder:@"请输入昵称" passWord:NO leftImageView:nil rightImageView:nil Font:15];
+    nameTextfield=[ZCControl createTextFieldWithFrame:CGRectMake((kDeviceWidth-240)/2,headImag.frame.origin.y+headImag.frame.size.height+20, 240,40) placeholder:@"请输入昵称" passWord:NO leftImageView:nil rightImageView:nil Font:15];
     nameTextfield.backgroundColor=[UIColor whiteColor];
     nameTextfield.layer.cornerRadius=4;
     nameTextfield.delegate=self;
+    ///nameTextfield.text=@"qq";
     nameTextfield.leftView=left1;
     nameTextfield.leftViewMode=UITextFieldViewModeAlways;
     nameTextfield.clipsToBounds=YES;
@@ -87,18 +105,60 @@
     
     
 }
+-(void)requestRegisterData
+{
+    
+    NSString  *logo=@"";
+    if ([upyunDict  objectForKey:@"url"]) {
+        logo =[upyunDict objectForKey:@"url"];
+  
+    // 如果用户没有使用相机，直接使用默认的头像,也是要用
+    }
+     //NSString *username=[[nameTextfield text] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSString  *username=[nameTextfield text];
+    NSDictionary *parameters = @{@"email":self.email,@"password_hash":self.password,@"username":username,@"logo":logo};
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    [manager POST:[NSString stringWithFormat:@"%@/user/register-with-email", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
+           //注册成功
+            NSDictionary *detail    = [responseObject objectForKey:@"model"];
+            if (![detail isEqual:@""]) {
+                UserDataCenter  *userCenter=[UserDataCenter shareInstance];
+                userCenter.user_id=[detail objectForKey:@"id"];
+                userCenter.username=[detail objectForKey:@"username"];
+                userCenter.logo =[detail objectForKey:@"logo"];
+                
+                userCenter.is_admin =[detail objectForKey:@"role_id"];
+                userCenter.verified=[detail objectForKey:@"verified"];
+                userCenter.sex=[detail objectForKey:@"sex"];
+                userCenter.signature=[detail objectForKey:@"brief"];
+                userCenter.email=[detail objectForKey:@"email"];
+                userCenter.fake=[detail objectForKey:@"fake"];
+                
+                [Function saveUser:userCenter];
+                //登陆成功后把根
+                     window.rootViewController=[CustmoTabBarController new];
+            }
+        }
+        else
+        {
+            UIAlertView  *Al=[[UIAlertView alloc]initWithTitle:nil message:@"注册失败，请稍候重试，或检查网络设置" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            [Al show];
+            
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+    
+}
 
 
 -(void)dealregiterClick:(UIButton *) button
 {
-    if (button.tag==99) {
-        [self dismissViewControllerAnimated:YES completion:nil];
-    }
-    else if (button.tag==100)
+    if (button.tag==100)
     {
         //头像
-        
-        
         UIActionSheet  *sheet =[[UIActionSheet alloc]initWithTitle:@"更换头像" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"相册",@"相机", nil];
         [sheet showInView:self.view];
 
@@ -107,6 +167,18 @@
     {
         // 完成
         //完成之后执行切换根试图控制器
+        if ([Function isBlankString:nameTextfield.text]==YES) {
+            UIAlertView  *Al=[[UIAlertView alloc]initWithTitle:nil message:@"对不起，昵称不能为空" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            [Al show];
+            return;
+        }
+        else
+        {
+            //开始注册
+            [nameTextfield resignFirstResponder];
+            [self requestRegisterData];
+            
+        }
     }
     
 }
@@ -129,19 +201,111 @@
     if ([type isEqualToString:@"public.image"])
     {
         //先把图片转成NSData
-        UIImage* image = [info objectForKey:UIImagePickerControllerEditedImage];
-        
-        
-        [headImag setBackgroundImage:image forState:UIControlStateNormal];
-        NSData   *dataImage =UIImageJPEGRepresentation(image, 0.7);
-        
-#warning   发送服务器请求
-        [self dismissViewControllerAnimated:YES completion:nil];
+         _upImage = [info objectForKey:UIImagePickerControllerEditedImage];
+       // NSData   *dataImage =UIImageJPEGRepresentation(image, 0.7);
+
+         [self dismissViewControllerAnimated:YES completion:^{
+             [headImag setBackgroundImage:_upImage forState:UIControlStateNormal];
+             [self uploadImageToyun];
+            
+        }];
         
     }
     
     
 }
+-(void)uploadImageToyun
+{
+   
+    //执行上传的方法
+    UpYun *uy = [[UpYun alloc] init];
+    uy.bucket=@"next-avatar";
+    uy.passcode=@"doQ8Atczh0OWH2uMXz6SarL5eac=";
+    uy.successBlocker = ^(id data)
+    {
+        
+        NSLog(@"图片上传成功%@",data);
+        if (upyunDict==nil) {
+            upyunDict=[[NSMutableDictionary alloc]init];
+        }
+        upyunDict=data;
+        //发布图片和跳转页面
+        
+    };
+    uy.failBlocker = ^(NSError * error)
+    {
+        NSString *message = [error.userInfo objectForKey:@"message"];
+        UIAlertView * alert = [[UIAlertView alloc]initWithTitle:@"error" message:message delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+        [alert show];
+        NSLog(@"图片上传失败%@",error);
+    };
+    uy.progressBlocker = ^(CGFloat percent, long long requestDidSendBytes)
+    {
+        //进度
+        ////[_pv setProgress:percent];
+        
+    };
+    
+    /**
+     *	@brief	根据 UIImage 上传
+     */
+    // UIImage * image = [UIImage imageNamed:@"image.jpg"];
+    //[uy uploadFile:self.upimage saveKey:[self getSaveKey]];
+    /**
+     *	@brief	根据 文件路径 上传
+     */
+    //    NSString* resourcePath = [[NSBundle mainBundle] resourcePath];
+    //    NSString* filePath = [resourcePath stringByAppendingPathComponent:@"fileTest.file"];
+    //    [uy uploadFile:filePath saveKey:[self getSaveKey]];
+    
+    /**
+     *	@brief	根据 NSDate  上传
+     */
+    float kCompressionQuality = 0.3;
+    NSData *photo = UIImageJPEGRepresentation(_upImage, kCompressionQuality);
+    //  NSData * fileData = [NSData dataWithContentsOfFile:filePath];
+    [uy uploadFile:photo saveKey:[self getSaveKey]];
+
+    
+}
+-(NSString * )getSaveKey {
+    /**
+     *	@brief	方式1 由开发者生成saveKey
+     */
+    NSDate *d = [NSDate date];
+    return [NSString stringWithFormat:@"/%d/%d/%.0f.jpg",[self getYear:d],[self getMonth:d],[[NSDate date] timeIntervalSince1970]];
+    
+    /**
+     *	@brief	方式2 由服务器生成saveKey
+     */
+    //    return [NSString stringWithFormat:@"/{year}/{mon}/{filename}{.suffix}"];
+    
+    /**
+     *	@brief	更多方式 参阅 http://wiki.upyun.com/index.php?title=Policy_%E5%86%85%E5%AE%B9%E8%AF%A6%E8%A7%A3
+     */
+    
+}
+
+- (int)getYear:(NSDate *) date{
+    NSDateFormatter *formatter =[[NSDateFormatter alloc] init];
+    [formatter setTimeStyle:NSDateFormatterMediumStyle];
+    NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+    NSInteger unitFlags = NSYearCalendarUnit;
+    NSDateComponents *comps = [calendar components:unitFlags fromDate:date];
+    int year=[comps year];
+    return year;
+}
+
+- (int)getMonth:(NSDate *) date{
+    NSDateFormatter *formatter =[[NSDateFormatter alloc] init];
+    [formatter setTimeStyle:NSDateFormatterMediumStyle];
+    NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+    NSInteger unitFlags = NSMonthCalendarUnit;
+    NSDateComponents *comps = [calendar components:unitFlags fromDate:date];
+    int month = [comps month];
+    return month;
+}
+
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
 {
     NSLog(@"您取消了选择图片");

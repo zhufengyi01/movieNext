@@ -9,6 +9,8 @@
 #import "ChangeUsernameViewController.h"
 #import "ZCControl.h"
 #import "Constant.h"
+#import "AFNetworking.h"
+#import "Function.h"
 @interface ChangeUsernameViewController ()<UITextFieldDelegate>
 {
     UITextField  *nanmeText;
@@ -40,10 +42,41 @@
     [self createTextField];
 
 }
+
+#pragma mark  ------requestData   --------
+-(void)requestChangeUserName
+{
+    
+     UserDataCenter  *userCenter =[UserDataCenter shareInstance];
+    NSString * user_id = userCenter.user_id;
+    NSDictionary *parameters = @{@"username":[nanmeText text],@"user_id":user_id};
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    [manager POST:[NSString stringWithFormat:@"%@/user/change-username", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@" succuss");
+        
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+    
+}
+
+
 //点击确定
 -(void)ChangeUserNameClick
 {
+    
+    if ([Function isBlankString:[nanmeText text]]==YES) {
+        UIAlertView  *Al=[[UIAlertView alloc]initWithTitle:nil message:@"昵称不能为空" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+        [Al show];
+        return;
+     
+    }
     if (self.delegate&&[self.delegate respondsToSelector:@selector(changeUserName:)]) {
+        
+        
+        [self requestChangeUserName];
+        
         [self.delegate changeUserName:nanmeText.text];
         [self.navigationController popViewControllerAnimated:YES];
     }

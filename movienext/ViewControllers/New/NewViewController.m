@@ -32,8 +32,8 @@
 #import "UMSocialControllerService.h"
 #import "UIImageView+WebCache.h"
 #import "UMShareViewController.h"
+#import "UIImage+ImageWithColor.h"
 #import <MessageUI/MessageUI.h>
-
 #import <MessageUI/MFMailComposeViewController.h>
 
 //友盟分享
@@ -74,11 +74,18 @@
     //if (_HotMoVieTableView) {
       //  [self setupRefresh];
     //}
+    //修改tabbar 的黑色线的颜色
+    NSArray  *tabArray=self.tabBarController.tabBar.subviews;
+    for ( id obj  in tabArray) {
+        if ([obj isKindOfClass:[UIImageView class]]) {
+            UIImageView *imageView=(UIImageView *) obj;
+            imageView.backgroundColor=tabBar_line;
+        }
+    }
     
+ 
     
 }
-
-
 
 //遇到上面的问题 最直接的解决方法就是在controller的viewDidAppear里面去调用present。这样可以确保view hierarchy的层次结构不乱。
 
@@ -191,7 +198,7 @@
     }
     [self requestData];
     // 2.2秒后刷新表格UI
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         // 刷新表格
      //   [_HotMoVieTableView reloadData];
         // (最好在刷新表格后调用)调用endRefreshing可以结束刷新状态
@@ -204,7 +211,7 @@
     page++;
     [self  requestData];
     // 2.2秒后刷新表格UI
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         // 刷新表格
       //  [_HotMoVieTableView reloadData];
         
@@ -565,8 +572,10 @@
                     [stageInfo setValuesForKeysWithDictionary:[newDict objectForKey:@"stage"]];
                     movieInfoModel  *moviemodel =[[movieInfoModel alloc]init];
                     if (moviemodel) {
+                        if (![[[newDict objectForKey:@"stage"] objectForKey:@"movie"] isKindOfClass:[NSNull class]]) {
                         [moviemodel setValuesForKeysWithDictionary:[[newDict objectForKey:@"stage"] objectForKey:@"movie"]];
                         stageInfo.movieInfo=moviemodel;
+                        }
                     }
                     weibomodel.stageInfo=stageInfo;
                 }

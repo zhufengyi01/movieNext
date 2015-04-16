@@ -148,20 +148,18 @@
     emailregister.hidden=YES;
     [self.view addSubview:emailregister];
     
-    
+
     //判断是否安装了微信
-    if ([WXApi  isWXAppInstalled]==NO) {
-        weiboButton.hidden=YES;
-        weiChateButton.hidden=YES;
-        checkBtn.hidden=YES;
-        checkBtn2.hidden=YES;
-        emaillogin.hidden=NO;
-        emailregister.hidden=NO;
-    }
-
+//    if ([WXApi  isWXAppInstalled]==NO) {
+//        weiboButton.hidden=YES;
+//        weiChateButton.hidden=YES;
+//        checkBtn.hidden=YES;
+//        checkBtn2.hidden=YES;
+//        emaillogin.hidden=NO;
+//        emailregister.hidden=NO;
+//    }
+//
     
-
-
 }
 //服务条款按钮
 -(void)checkClick:(UIButton *) button
@@ -268,9 +266,12 @@
                     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
                     [manager POST:[NSString stringWithFormat:@"%@/user/login", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
                         NSLog(@"登陆完成后的     JSON: %@", responseObject);
+                        UserDataCenter  *userCenter=[UserDataCenter shareInstance];
+                        userCenter.first_login=[responseObject objectForKey:@"first_login"];
+
                         NSDictionary *detail    = [responseObject objectForKey:@"model"];
                         if (![detail isEqual:@""]) {
-                            UserDataCenter  *userCenter=[UserDataCenter shareInstance];
+                    
                             userCenter.user_id=[detail objectForKey:@"id"];
                             userCenter.username=[detail objectForKey:@"username"];
                             userCenter.logo =[detail objectForKey:@"logo"];
@@ -283,9 +284,14 @@
                             
                             [Function saveUser:userCenter];
                             //登陆成功后把根
-                            [self.navigationController pushViewController:[UserHeadChangeViewController new] animated:YES];
-                          //  [self presentViewController:[UserHeadChangeViewController new ] animated:YES completion:nil];
-                           // window.rootViewController=[CustmoTabBarController new];
+                            if ([[responseObject objectForKey:@"first_login"] intValue]==0) {
+                                window.rootViewController=[CustmoTabBarController new];
+                            }
+                            else {
+                                UserHeadChangeViewController *vc=[UserHeadChangeViewController new];
+                                vc.pageType=NSHeadChangePageTypeFirstLogin;
+                            [self.navigationController pushViewController:vc animated:YES];
+                            }
                         }
                     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                         NSLog(@"Error: %@", error);

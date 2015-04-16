@@ -9,8 +9,10 @@
 #import "Register_1ViewController.h"
 #import "ZCControl.h"
 #import "Constant.h"
+#import "Function.h"
 #import "Register_2ViewController.h"
-@interface Register_1ViewController ()<UITextFieldDelegate>
+#import "AFNetworking.h"
+@interface Register_1ViewController ()<UITextFieldDelegate,UIAlertViewDelegate>
 {
     UITextField  *emailTextfield;
     UITextField  *PassworfTextfield;
@@ -69,6 +71,7 @@
     emailTextfield.backgroundColor=[UIColor whiteColor];
     emailTextfield.layer.cornerRadius=4;
     emailTextfield.clipsToBounds=YES;
+   // emailTextfield.text=@"673229963@qq.com";
     emailTextfield.delegate=self;
     emailTextfield.leftView=left1;
     [self.view addSubview:emailTextfield];
@@ -77,8 +80,8 @@
     
     UIButton  *rightButton =[ZCControl createButtonWithFrame:CGRectMake(0,0, 24, 16) ImageName:nil Target:self Action:@selector(dealregiterClick:) Title:nil];
     //[rightButton setBackgroundImage:[UIImage imageNamed:@"login_password_close.png"] forState:UIControlStateSelected];
-    [rightButton setImage:[UIImage imageNamed:@"login_password_open@2x.png"] forState:UIControlStateNormal];
-    [rightButton setImage:[UIImage imageNamed:@"ogin_password_close.png"] forState:UIControlStateSelected];
+    [rightButton setImage:[UIImage imageNamed:@"login_password_open.png"] forState:UIControlStateNormal];
+    [rightButton setImage:[UIImage imageNamed:@"login_password_close.png"] forState:UIControlStateSelected];
     rightButton.tag=100;
     
     
@@ -88,6 +91,7 @@
     PassworfTextfield.layer.cornerRadius=4;
     PassworfTextfield.clipsToBounds=YES;
     PassworfTextfield.delegate=self;
+   // PassworfTextfield.text=@"123";
     PassworfTextfield.backgroundColor=[UIColor whiteColor];
     PassworfTextfield.rightViewMode=UITextFieldViewModeAlways;
     PassworfTextfield.leftView=left2;
@@ -99,6 +103,36 @@
 
     
 }
+#pragma mark  ---------------requestData
+
+//验证邮箱是否可用
+-(void)requestemailvalidateData
+{
+    NSDictionary *parameters = @{@"email":emailTextfield.text};
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    [manager POST:[NSString stringWithFormat:@"%@/user/checkemailvalid", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+#warning  需要替换成exists
+        
+        if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
+            Register_2ViewController  *reg =[[Register_2ViewController alloc]init];
+            reg.email=[emailTextfield text];
+            reg.password=[PassworfTextfield text];
+            [self.navigationController pushViewController:reg animated:YES];
+
+        }
+        else
+        {
+            UIAlertView  *Al=[[UIAlertView alloc]initWithTitle:nil message:@"对不起，该邮箱已注册" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            [Al show];
+
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+    
+}
+
+
 -(void)dealregiterClick:(UIButton *) button
 {
     if (button.tag==99) {
@@ -106,14 +140,47 @@
     }
     else if (button.tag==100)
     {
-        
+        //显示密码隐藏密码
+        if (button.selected==YES) {
+            button.selected=NO;
+            PassworfTextfield.secureTextEntry=YES;
+            
+        }
+        else
+        {
+            button.selected=YES;
+            PassworfTextfield.secureTextEntry=NO;
+        }
+
     }
     else if(button.tag==101)
     {
-      
-        Register_2ViewController  *reg =[[Register_2ViewController alloc]init];
-        [self.navigationController pushViewController:reg animated:YES];
+        
+        if ([Function isBlankString:emailTextfield.text]==YES||[Function isBlankString:[PassworfTextfield text]]==YES) {
+            
+            UIAlertView  *Al=[[UIAlertView alloc]initWithTitle:nil message:@"对不起，邮箱或密码不能为空" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            [Al show];
+            return;
+
+            
+        }
+        if ([Function validateEmail:emailTextfield.text]==NO) {
+            
+            
+            UIAlertView  *Al=[[UIAlertView alloc]initWithTitle:nil message:@"对不起，请输入正确的邮箱" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            [Al show];
+            return;
+            
+        }
+         else
+        {
+            [self requestemailvalidateData];
+        }
     }
+    
+}
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
     
 }
 -(BOOL)textFieldShouldReturn:(UITextField *)textField

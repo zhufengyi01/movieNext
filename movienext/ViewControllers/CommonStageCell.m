@@ -57,22 +57,12 @@
     movieNameLable.lineBreakMode=NSLineBreakByTruncatingTail;
     [BgView0 addSubview:movieNameLable];
     
-    
-    
-    
     leftButtomButton=[UIButton buttonWithType:UIButtonTypeCustom];
     leftButtomButton.frame=CGRectMake(10, 5, 200, 35);
     //leftButtomButton.backgroundColor=[[UIColor redColor]colorWithAlphaComponent:0.2];
      [leftButtomButton addTarget:self action:@selector(cellButtonClick:) forControlEvents:UIControlEventTouchUpInside];
      [BgView0 addSubview:leftButtomButton];
     
-    
-    deletButton=[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-50, 9, 40, 27) ImageName:@"btn_delete.png" Target:self Action:@selector(cellButtonClick:) Title:@""];
-    deletButton.layer.cornerRadius=2;
-     deletButton.hidden=YES;
-    [BgView0 addSubview:deletButton];
-    
-   
 }
 
 -(void)CreateSatageView
@@ -136,6 +126,19 @@
     deletButton.tag=5000;
     moreButton.tag=6000;
     
+        if (_tanlogoButton) {
+             [_tanlogoButton removeFromSuperview];
+            _tanlogoButton=nil;
+        }
+        _tanlogoButton =[UIButton buttonWithType:UIButtonTypeCustom];
+        _tanlogoButton.frame=CGRectMake(kDeviceWidth-40, 5, 35, 35);
+        [_tanlogoButton setImage:[UIImage imageNamed:@"close_danmu.png"] forState:UIControlStateNormal];
+        [_tanlogoButton setImage:[UIImage imageNamed:@"open_danmu.png"] forState:UIControlStateSelected];
+        [_tanlogoButton addTarget:self action:@selector(hidenAndShowMarkView:) forControlEvents:UIControlEventTouchUpInside];
+       // [_tanlogoButton setTitleEdgeInsets:UIEdgeInsetsMake(10, 10, 10, 10)];
+        [self addSubview:_tanlogoButton];
+          
+
 #pragma mark  configDatawithSatgeView------------------------------
    //单个标签的时候用这个
      if (self.weiboInfo) {
@@ -161,8 +164,6 @@
     }
     
     
-    
-    
 #pragma  mark  根据不同cell 配置cell 的样式------------------------------
 #pragma  mark  热门cell
     if (_pageType==NSPageSourceTypeMainHotController) {  //热门
@@ -177,19 +178,50 @@
         }
          _stageView.isAnimation=NO;
  #pragma mark 区分于个人页面是来源于自己还是他人
-        if (self.userPage==NSUserPageTypeMySelfController ) {  //进来的页面是从我自己的页面进来的
-            deletButton.hidden=NO;
-        }
-        else
-        {
-            deletButton.hidden=YES;
-        }
+//        if (self.userPage==NSUserPageTypeMySelfController ) {  //进来的页面是从我自己的页面进来的
+//            deletButton.hidden=NO;
+//        }
+//        else
+//        {
+//            deletButton.hidden=YES;
+//        }
     }
     else
     {
         
     }
 }
+
+
+#pragma mark 点击屏幕显示和隐藏marview
+//显示隐藏markview
+-(void)hidenAndShowMarkView:(UIButton *) button
+{
+    if (button.selected==NO) {
+        NSLog(@"执行了隐藏 view ");
+        button.selected=YES;
+        for (UIView  *view  in self.stageView.subviews) {
+            if  ([view isKindOfClass:[MarkView class]]) {
+                MarkView  *mv =(MarkView *)view;
+                mv.hidden=YES;
+                
+            }
+        }
+    }
+    else if (button.selected==YES)
+    {
+        NSLog(@"执行了显示view ");
+        button.selected=NO;
+        for (UIView  *view  in self.stageView.subviews) {
+            if  ([view isKindOfClass:[MarkView class]]) {
+                MarkView  *mv =(MarkView *)view;
+                mv.hidden=NO;
+            }
+        }
+    }
+    
+}
+
 
 - (void)layoutSubviews {
     [super layoutSubviews];

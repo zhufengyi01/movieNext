@@ -25,21 +25,29 @@
 {
     self.backgroundColor =[UIColor blackColor];
     [self CreateTopView];
+    [self CreateSatageView];
     [self createButtonView];
 
 }
 -(void)CreateTopView
 {
-    _StageView=[[StageView alloc]initWithFrame:CGRectMake(0, 45, kDeviceWidth, 200)];
+    BgView0 =[[UIView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth,45)];
+    BgView0.backgroundColor=View_ToolBar;
+    BgView0.userInteractionEnabled=YES;
+    [self.contentView addSubview:BgView0];
+}
+
+-(void)CreateSatageView
+{
+    _StageView=[[StageView alloc]initWithFrame:CGRectMake(0, 45, kDeviceWidth,kDeviceWidth)];
     _StageView.backgroundColor=VStageView_color;
     [self.contentView addSubview:_StageView];
     
 }
-
 -(void)createButtonView
 {
-    BgView2=[[UIView alloc]initWithFrame:CGRectMake(0, kDeviceWidth, kDeviceWidth, 45)];
-    BgView2.backgroundColor=View_ToolBar;
+    BgView2=[[UIView alloc]initWithFrame:CGRectMake(0, kDeviceWidth+45, kDeviceWidth, 45)];
+    BgView2.backgroundColor=[UIColor whiteColor];
     [self.contentView addSubview:BgView2];
     
     //更多
@@ -49,6 +57,8 @@
     moreButton.tag=4000;
     [BgView2 addSubview:moreButton];
 
+    
+    
     
     
     ScreenButton =[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-140,10,60,26) ImageName:@"screen_shot share.png" Target:self Action:@selector(cellButtonClick:) Title:@""];
@@ -71,14 +81,12 @@
     }
     _StageView.stageInfo=self.stageInfo;
     [_StageView configStageViewforStageInfoDict];
-    _StageView.frame=CGRectMake(0, 0, kDeviceWidth, kDeviceWidth);
-    BgView2.frame=CGRectMake(0, kDeviceWidth, kDeviceWidth, 45);
     _StageView.isAnimation = YES;
     
 }
 - (void)layoutSubviews {
     [super layoutSubviews];
-      BgView2.frame=CGRectMake(0, kDeviceWidth, kDeviceWidth, 45);
+      BgView2.frame=CGRectMake(0, kDeviceWidth+45, kDeviceWidth, 45);
     
 }
 
@@ -86,14 +94,11 @@
 #pragma mark ------下方按钮点击事件 ,在父视图中实现具体的方法
 -(void)cellButtonClick:(UIButton*)button
 {
-  
     if (self.delegate &&[self.delegate respondsToSelector:@selector(BigImageCollectionViewCellToolButtonClick:Rowindex:)]) {
         [self.delegate BigImageCollectionViewCellToolButtonClick:button Rowindex:self.Cellindex];
     }
     
 }
-
-
 
 -(void)ScreenButtonClick:(UIButton  *) button
 {

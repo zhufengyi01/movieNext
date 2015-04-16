@@ -40,6 +40,9 @@
 /** 用户绑定的类型：sina 或 qzone */
 //@property (nonatomic, strong) NSString * user_bind_type;
 
+@property (nonatomic,strong) NSString *first_login;
+@property(nonatomic,strong) NSString  *email;
+
 +(id)shareInstance;
 
 @end
