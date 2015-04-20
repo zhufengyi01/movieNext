@@ -28,6 +28,7 @@
 #import "UserDataCenter.h"
 #import "Function.h"
 #import "UMSocial.h"
+#import "NSDate+Additions.h"
 //#import "UMShareView.h"
 #import "UMSocialControllerService.h"
 #import "UIImageView+WebCache.h"
@@ -35,10 +36,13 @@
 #import "UIImage+ImageWithColor.h"
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
+#import "ScanMovieInfoViewController.h"
+#import "netRequest.h"
+
 
 //友盟分享
 //#import "UMSocial.h"
-@interface NewViewController ()<UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UIScrollViewDelegate,UMSocialDataDelegate,UMSocialUIDelegate,LoadingViewDelegate,UIActionSheetDelegate,CommonStageCellDelegate,AddMarkViewControllerDelegate,UMShareViewControllerDelegate>
+@interface NewViewController ()<UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UIScrollViewDelegate,UMSocialDataDelegate,UMSocialUIDelegate,LoadingViewDelegate,UIActionSheetDelegate,CommonStageCellDelegate,AddMarkViewControllerDelegate,UMShareViewControllerDelegate,MFMailComposeViewControllerDelegate>
 {
     AppDelegate  *appdelegate;
     UISegmentedControl *segment;
@@ -164,6 +168,7 @@
 {
     _HotMoVieTableView=[[UITableView alloc]initWithFrame:CGRectMake(0,0, kDeviceWidth, kDeviceHeight-kHeightNavigation)];
     _HotMoVieTableView.delegate=self;
+    _HotMoVieTableView.backgroundColor = View_BackGround;
     _HotMoVieTableView.dataSource=self;
     _HotMoVieTableView.separatorStyle=UITableViewCellSeparatorStyleNone;
     [self.view addSubview:_HotMoVieTableView];
@@ -245,7 +250,7 @@
 {
     UserDataCenter *usercenter=[UserDataCenter shareInstance];
     
-    NSDictionary *parameters = @{@"id":_stage_Id,@"user_id":usercenter.user_id};
+    NSDictionary *parameters = @{@"stage_id":_stage_Id,@"user_id":usercenter.user_id};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     NSString *urlString =[NSString stringWithFormat:@"%@/stage/block", kApiBaseUrl];
     [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -264,13 +269,12 @@
  //举报剧情
 -(void)requestReportSatge
 {
-   // NSString *type=@"1";
-    NSString  *stageId;
-    NSString  *author_id;
+     NSString  *stageId=@"";
+    NSString  *author_id=@"";
     if (segment.selectedSegmentIndex==0) {
         ModelsModel  *model =[_hotDataArray objectAtIndex:Rowindex];
         stageId=model.stage_id;
-        author_id=@"";
+        author_id=model.stageInfo.created_by;
     }
     else if (segment.selectedSegmentIndex==1)
     {
@@ -284,7 +288,6 @@
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:[NSString stringWithFormat:@"%@/report-stage/create", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
-            NSLog(@"随机数种子请求成功=======%@",responseObject);
             UIAlertView  *Al =[[UIAlertView alloc]initWithTitle:nil message:@"你的举报已成功,我们会在24小时内处理" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
             [Al show];
             
@@ -342,7 +345,7 @@
 -(void)requestChangeUser:( NSString *) author_id
  {
      UserDataCenter  *userCenter =[UserDataCenter shareInstance];
-     NSDictionary *parameters = @{@"id":_TweiboInfo.Id,@"user_id":userCenter.user_id,@"author_id":author_id};
+     NSDictionary *parameters = @{@"weibo_id":_TweiboInfo.Id,@"user_id":userCenter.user_id,@"author_id":author_id};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
      NSString  *urlString =[NSString stringWithFormat:@"%@/weibo/switch", kApiBaseUrl];
     [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -361,6 +364,10 @@
               NSString  *urlString =[NSString stringWithFormat:@"%@%@",kUrlAvatar,usermodel.logo];
              [_mymarkView.LeftImageView sd_setImageWithURL:[NSURL URLWithString:urlString]];
            
+          }
+        else
+        {
+            NSLog(@"error ===%@",[responseObject objectForKey:@"message"]);
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
@@ -374,7 +381,7 @@
 {
 
     UserDataCenter  *userCenter=[UserDataCenter shareInstance];
-    NSDictionary *parameters = @{@"id":_hot_Id,@"user_id":userCenter.user_id};
+    NSDictionary *parameters = @{@"hot_id":_hot_Id,@"user_id":userCenter.user_id};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     //manager.requestSerializer=[AFHTTPRequestSerializer serializer];
    // manager.responseSerializer=[AFHTTPResponseSerializer serializer];
@@ -412,12 +419,11 @@
     
 }
 
-
 //删除微博的接口
 -(void)requestDelectData
 {
     UserDataCenter *userCenter=[UserDataCenter shareInstance];
-     NSDictionary *parameters = @{@"id":_TweiboInfo.Id,@"user_id":userCenter.user_id};
+     NSDictionary *parameters = @{@"weibo_id":_TweiboInfo.Id,@"user_id":userCenter.user_id};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:[NSString stringWithFormat:@"%@/weibo/remove", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
@@ -455,7 +461,17 @@
 -(void)requestData{
     UserDataCenter  *userCenter=[UserDataCenter shareInstance];
      NSString *userId=userCenter.user_id;
-    NSDictionary *parameters = @{@"user_id":userId};
+    
+    NSDictionary *parameters;
+    if (Review==1) {
+        parameters = @{@"user_id":userId,@"review":@"1"};
+
+    }
+    else
+    {
+        parameters = @{@"user_id":userId};
+
+    }
     NSString * section;
     if (segment.selectedSegmentIndex==1) {  // 最新
         section=@"weibo/listrecently";
@@ -480,7 +496,6 @@
             }
             NSLog(@"热门数据 gaga JSON: %@", responseObject);
             for (NSDictionary  *hotDict in Detailarray) {
-             
                 ModelsModel  *model =[[ModelsModel alloc]init];
                 if(model)
                 {
@@ -555,6 +570,7 @@
             NSLog(@"最新数据 JSON: %@", responseObject);
             
             for (NSDictionary  *newDict in Detailarray) {
+                
             weiboInfoModel  *weibomodel =[[weiboInfoModel alloc]init];
             if(weibomodel)
             {
@@ -634,7 +650,7 @@
         if (_hotDataArray.count>indexPath.row) {
             hight=kDeviceWidth+45+45;
         }
-        return hight+0;
+        return hight+10;
     }
     else if (segment.selectedSegmentIndex==1)
     {
@@ -642,7 +658,7 @@
         if (_newDataArray.count>indexPath.row) {
              hight= kDeviceWidth+90;
         }
-        return hight+0;
+        return hight+10;
     }
     return 200.0f;
 }
@@ -764,7 +780,8 @@
     else if (button.tag==2000)
     {
         //分享
-        CommonStageCell *cell = (CommonStageCell *)(button.superview.superview.superview);
+        CommonStageCell *cell = (CommonStageCell *)(button.superview.superview.superview.superview);
+       // CommonStageCell  *cell=(CommonStageCell *)[_HotMoVieTableView cellForRowAtIndexPath:index];
         UIImage  *image=[Function getImage:cell.stageView WithSize:CGSizeMake(kDeviceWidth, kDeviceWidth)];
         UMShareViewController  *shareVC=[[UMShareViewController alloc]init];
         shareVC.StageInfo=model.stageInfo;
@@ -772,8 +789,8 @@
         shareVC.delegate=self;
          UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:shareVC];
         [self presentViewController:na animated:YES completion:nil];
-//        [self.navigationController presentViewController:shareVC animated:YES completion:nil];
-    }
+        
+     }
     else if(button.tag==3000)
     {
         //添加弹幕
@@ -783,6 +800,9 @@
         AddMarkVC.delegate=self;
         //AddMarkVC.pageSoureType=NSAddMarkPageSourceDefault;
         NSLog(@"dict.stageinfo = %@", AddMarkVC.stageInfo);
+        //UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:AddMarkVC];
+        //na.modalTransitionStyle=UIModalTransitionStyleCrossDissolve;
+        //[self presentViewController:na animated:YES completion:nil];
         [self.navigationController pushViewController:AddMarkVC animated:NO];
         
 
@@ -799,7 +819,7 @@
     else if (button.tag==6000)
     {
         //点击了更多
-        UIActionSheet  *Act=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"举报",@"版权问题",@"查看图片信息", nil];
+        UIActionSheet  *Act=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"内容投诉",@"版权投诉",@"图片信息", nil];
         Act.tag=507;
         [Act showInView:Act];
         
@@ -950,7 +970,7 @@
     else if (button.tag==10001)
     {
         NSLog(@" 点击了分享按钮");
-        CommonStageCell *cell = (CommonStageCell *)(markView.superview.superview.superview);
+        CommonStageCell *cell = (CommonStageCell *)(markView.superview.superview.superview.superview);
          UIImage  *image=[Function getImage:cell.stageView WithSize:CGSizeMake(kDeviceWidth, kDeviceWidth)];
          UMShareViewController  *shareVC=[[UMShareViewController alloc]init];
         shareVC.StageInfo=stageInfoDict;
@@ -1106,18 +1126,49 @@
         }
         else if(buttonIndex==1)
         {
+            
+            stageInfoModel  *stageInfo;
+            if (segment.selectedSegmentIndex==0) {
+                ModelsModel   *model =[_hotDataArray objectAtIndex:Rowindex];
+                stageInfo=model.stageInfo;
+
+             }
+            else if (segment.selectedSegmentIndex==1)
+            {
+                weiboInfoModel  *weibomodel =[_newDataArray objectAtIndex:Rowindex];
+                stageInfo=weibomodel.stageInfo;
+
+       
+             }
+        
+
             //版权问题
-            [self sendFeedBack];
+            [self sendFeedBackWithStageInfo: stageInfo];
 
         }
         else if(buttonIndex==2)
         {
-//           查看图片信息
+          // 查看图片信息
+            ScanMovieInfoViewController * scanvc =[ScanMovieInfoViewController new];
+            if (segment.selectedSegmentIndex==0) {
+                ModelsModel   *model =[_hotDataArray objectAtIndex:Rowindex];
+                scanvc.stageInfo=model.stageInfo;
+            
+            }
+            else if (segment.selectedSegmentIndex==1)
+            {
+             
+                weiboInfoModel  *weibomodel =[_newDataArray objectAtIndex:Rowindex];
+                scanvc.stageInfo=weibomodel.stageInfo;
+            }
+            
+            [self presentViewController:scanvc animated:YES completion:nil];
+            
         }
     }
 }
 
-- (void)sendFeedBack
+- (void)sendFeedBackWithStageInfo:(stageInfoModel *)stageInfo
 {
     //    [self showNativeFeedbackWithAppkey:UMENT_APP_KEY];
     Class mailClass = (NSClassFromString(@"MFMailComposeViewController"));
@@ -1126,7 +1177,7 @@
         // We must always check whether the current device is configured for sending emails
         if ([mailClass canSendMail])
         {
-            [self displayComposerSheet];
+            [self displayComposerSheet:stageInfo];
         }
         else
         {
@@ -1139,7 +1190,7 @@
     }
     
 }
--(void)displayComposerSheet
+-(void)displayComposerSheet:(stageInfoModel *) stageInfo
 {
     MFMailComposeViewController *picker = [[MFMailComposeViewController alloc] init];/*MFMailComposeViewController邮件发送选择器*/
     picker.mailComposeDelegate = self;
@@ -1155,7 +1206,7 @@
     //    [picker setBccRecipients:bccRecipients];
     
     // Set up recipients
-    NSArray *toRecipients = [NSArray arrayWithObject:@"feedback@immovie.me"];
+    NSArray *toRecipients = [NSArray arrayWithObject:@"feedback@redianying.com"];
     [picker setToRecipients:toRecipients];
     // Fill out the email body text
     //struct utsname device_info;
@@ -1168,9 +1219,13 @@
     
     UIDevice * myDevice = [UIDevice currentDevice];
     NSString * sysVersion = [myDevice systemVersion];
-   // NSString *emailBody = [NSString stringWithFormat:@"\n\n\n\n附属信息：\n\n%@ %@(%@)\n%@ / %@ / %@ IOS%@", appCurName, appCurVersion, appCurVersionNum, @"", @"", @"",  sysVersion];
-    [picker setMessageBody:@"" isHTML:NO];
-    [picker setSubject:[NSString stringWithFormat:@"反馈：我是电影%@(%@)", appCurVersion, appCurVersionNum]];/*emailpicker标题主题行*/
+   // NSString *emailBody = [NSString stringWithFormat:@"\n附属信息：\n\n%@ %@(%@)\n%@ / %@ / %@ IOS%@", appCurName, appCurVersion, appCurVersionNum, @"", @"", @"",  sysVersion];
+    UserDataCenter  *usercenter=[UserDataCenter shareInstance];
+    
+    NSString *emailBody = [NSString stringWithFormat:@"\n您的名字：\n联系电话:\n投诉内容:\n\n\n\n\n-------\n请勿删除以下信息，并提交你拥有此版权的证明--------\n\n 电影:%@\n剧情id:%@\n投诉人id:%@\n投诉昵称:%@\n",stageInfo.movieInfo.name,stageInfo.Id,usercenter.user_id,usercenter.username];
+    [picker setTitle:@"@版权问题"];
+    [picker setMessageBody:emailBody isHTML:NO];
+    [picker setSubject:[NSString stringWithFormat:@"版权投诉"]];/*emailpicker标题主题行*/
     
     [self presentViewController:picker animated:YES completion:nil];
     //        [self.navigationController presentViewController:picker animated:YES completion:nil];

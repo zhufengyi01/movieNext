@@ -43,6 +43,13 @@
 
 @implementation MovieSearchViewController
 
+ -(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:YES];
+    if (search) {
+        [search becomeFirstResponder];
+    }
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -99,6 +106,7 @@
                 _dataArray = doubanInfos;
                 NSLog(@"------_dataArray -=====%@",_dataArray);
                 [_myTableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
+                //[_myTableView reloadData];  //用这个方法加载不出来tableview
             } else {
                 NSLog(@"error");
             }
@@ -145,9 +153,7 @@
     if (_dataArray.count > indexPath.row) {
      [cell setCellValue:[_dataArray  objectAtIndex:(long)indexPath.row]];
     }
-    NSLog(@"======== cell for row  =====%@",[_dataArray  objectAtIndex:indexPath.row]);
-    
-    return cell;
+     return cell;
 }
 
 //选择了cell之后
@@ -174,7 +180,7 @@
 }
 -(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
-    [self requestData];
+   // [self requestData];
 }
 -(void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
 {

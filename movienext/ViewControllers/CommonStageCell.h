@@ -46,6 +46,7 @@ typedef NS_ENUM(NSInteger,NSUserPageType)
 @interface CommonStageCell : UITableViewCell <StageViewDelegate>
 {
     CGRect        m_frame;
+    UIImageView       *BgView;
     UIView        *BgView0;   //最新顶上的view
     //BgView0的子视图
     UIButton  *UserLogoButton;

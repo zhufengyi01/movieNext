@@ -10,6 +10,6 @@
 
 @interface NSDate (Additions)
 
-- (long long int)getCurrentTimeInterval;
++(long long int)getCurrentTimeInterval;
 
 @end

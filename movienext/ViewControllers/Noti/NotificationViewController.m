@@ -87,6 +87,7 @@
     _myTableView =[[UITableView alloc]initWithFrame:CGRectMake(0, 0,kDeviceWidth, kDeviceHeight-kHeightNavigation)];
     _myTableView.delegate=self;
     _myTableView.dataSource=self;
+    _myTableView.backgroundColor=View_BackGround;
     //_myTableView.separatorInset=UIEdgeInsetsMake(0, -110, 0, 0);
     [self.view addSubview:_myTableView];
     //集成mjrefresh

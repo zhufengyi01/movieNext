@@ -30,26 +30,21 @@
 #import "HotMovieModel.h"
 #import "MyViewController.h"
 #import "ButtomToolView.h"
-//#import "HotMovieModel.h"
-//#import "UMShareView.h"
 #import "MJRefresh.h"
 #import "UserDataCenter.h"
-//#import "UMShareView.h"
 #import "ShowStageViewController.h"
 #import "UploadImageViewController.h"
 #import "UMShareViewController.h"
 #import "UpYun.h"
 #import "stageInfoModel.h"
 #import "movieInfoModel.h"
+#import "ScanMovieInfoViewController.h"
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
-
-
-@interface MovieDetailViewController ()<UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UICollectionViewDelegate,MovieHeadViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UMSocialUIDelegate,UMSocialDataDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIScrollViewDelegate,BigImageCollectionViewCellDelegate,AddMarkViewControllerDelegate,UMShareViewControllerDelegate>
+@interface MovieDetailViewController ()<UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UICollectionViewDelegate,MovieHeadViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UMSocialUIDelegate,UMSocialDataDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIScrollViewDelegate,BigImageCollectionViewCellDelegate,AddMarkViewControllerDelegate,UMShareViewControllerDelegate,MFMailComposeViewControllerDelegate>
 
 {
-    ///UICollectionView    *_myConllectionView;
-    UICollectionViewFlowLayout    *layout;
+     UICollectionViewFlowLayout    *layout;
     LoadingView         *loadView;
     NSMutableArray      *_dataArray;
    // NSDictionary       *_MovieDict;
@@ -72,8 +67,8 @@
     int pageCount;
     
     NSMutableArray  *_upWeiboArray;
-
-
+    NSInteger  Rowindex;
+    
 
 }
 
@@ -102,7 +97,7 @@
     if (_dataArray.count >0) {
         [_dataArray removeAllObjects];
     }
-    //[self requestData];
+    [self requestData];
     
 }
 - (void)viewDidLoad {
@@ -124,8 +119,7 @@
     }
     [self createNavigation];
     [self createToolBar];
-   // [self createShareView];
-  
+   
 }
 
 //创建可以显示隐藏的导航条
@@ -165,7 +159,7 @@
     if ([type isEqualToString:@"public.image"])
     {
         //先把图片转成NSData
-      UIImage* image = [info objectForKey:UIImagePickerControllerEditedImage];
+      UIImage* image = [info objectForKey:UIImagePickerControllerOriginalImage];
     
        // UIImage  *image=[UIImage imageNamed:@"choice_icon@2x.png"];
          NSLog(@" image   =%@=== Imagesize  higth  =%f width ====%f   ",image,image.size.height,image.size.width);
@@ -279,20 +273,12 @@
 -(void)requestReportSatge
 {
     // NSString *type=@"1";
-    NSString  *stageId;
-    NSString  *author_id;
-//    if (segment.selectedSegmentIndex==0) {
-//        ModelsModel  *model =[_hotDataArray objectAtIndex:Rowindex];
-//        stageId=model.stage_id;
-//        author_id=@"";
-//        
-//    }
-//    else if (segment.selectedSegmentIndex==1)
-//    {
-//        weiboInfoModel  *weibomodel =[_newDataArray objectAtIndex:Rowindex];
-//        stageId=weibomodel.stage_id;
-//        author_id=[NSString stringWithFormat:@"%@",weibomodel.uerInfo.Id];
-//    }
+    NSNumber  *stageId;
+    NSString  *author_id=@"";
+    
+    stageInfoModel  *stageInfo =[_dataArray objectAtIndex:Rowindex];
+    stageId=stageInfo.Id;
+    author_id=stageInfo.created_by;
     UserDataCenter *userCenter =[UserDataCenter shareInstance];
     NSDictionary *parameters = @{@"reported_user_id":author_id,@"stage_id":stageId,@"reason":@"",@"user_id":userCenter.user_id};
     
@@ -395,7 +381,7 @@
 -(void)requestDelectData
 {
     //  NSLog(@"hotmodel  ==weibiid ==%@   hotmodel stageinfo id ==%@ ",hotmodel.weibo.Id,hotmodel.stageinfo.Id);
-    NSDictionary *parameters = @{@"id":_TweiboInfo.Id,@"stage_id":_TStageInfo.Id};
+    NSDictionary *parameters = @{@"weibo_id":_TweiboInfo.Id,@"stage_id":_TStageInfo.Id};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:[NSString stringWithFormat:@"%@/weibo/remove", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"return_code"]  intValue]==10000) {
@@ -440,7 +426,7 @@
     if (!_movieId || _movieId<=0) {
         return;
     }
-    NSDictionary *parameter = @{@"id": self.movieId};
+    NSDictionary *parameter = @{@"movie_id": self.movieId};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:[NSString stringWithFormat:@"%@/movie/info", kApiBaseUrl] parameters:parameter success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"  电影详情页面的电影信息数据JSON: %@", responseObject);
@@ -466,8 +452,14 @@
     }
     UserDataCenter  *userCenter =[UserDataCenter shareInstance];
     NSString  *urlString =[NSString stringWithFormat:@"%@/stage/list?per-page=%d&page=%d",kApiBaseUrl,pageSize,page];
+    NSDictionary *parameter;
+    if (Review==1) {
+        parameter = @{@"movie_id": _movieId, @"user_id": userCenter.user_id,@"review":@"1"};
+    }
+    else {
+         parameter = @{@"movie_id": _movieId, @"user_id": userCenter.user_id};
+    }
     
-    NSDictionary *parameter = @{@"movie_id": _movieId, @"user_id": userCenter.user_id};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:urlString parameters:parameter success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"  电影详情页面数据JSON: %@", responseObject);
@@ -483,7 +475,6 @@
             stageInfoModel  *stagemodel =[[stageInfoModel alloc]init];
             if (stagemodel) {
                 [stagemodel setValuesForKeysWithDictionary:stageDict];
-                
                 
                 NSMutableArray  *weibos=[[NSMutableArray alloc]init];
                 for (NSDictionary *weiboDict in [stageDict objectForKey:@"weibos"]) {
@@ -581,6 +572,7 @@
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     //在这里先将内容给清除一下, 然后再加载新的, 添加完内容之后先动画, 在cell消失的时候做清理工作
+    if (_dataArray.count>indexPath.row) {
     stageInfoModel  *model=[_dataArray objectAtIndex:indexPath.row];
     if (bigModel ==YES) {
         BigImageCollectionViewCell *cell = (BigImageCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"bigcell" forIndexPath:indexPath];
@@ -591,7 +583,7 @@
             cell.delegate=self;
             [cell ConfigCellWithIndexPath:indexPath.row];
             cell.StageView.delegate=self;
-            
+    
           
         }
         [cell.StageView startAnimation];
@@ -609,7 +601,7 @@
         
         return cell;
     }
-    
+    }
     return nil;
 }
 //点击小图模式的时候，跳转到大图模式
@@ -659,7 +651,7 @@
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
    // HotMovieModel  *model =[_dataArray objectAtIndex:indexPath.row];
     if (bigModel==YES) {
-         return CGSizeMake(kDeviceWidth,kDeviceWidth+45+45+0);
+         return CGSizeMake(kDeviceWidth,kDeviceWidth+45+45+10);
     }
     else
     {
@@ -794,6 +786,7 @@
 -(void)BigImageCollectionViewCellToolButtonClick:(UIButton *)button Rowindex:(NSInteger)index
 {
    
+    Rowindex =index;
     stageInfoModel   *stagemodel;
     stagemodel =[_dataArray objectAtIndex:index];
     if (button.tag==2000) {
@@ -801,7 +794,7 @@
         //获取cell
 #pragma mark 暂时把sharetext设置成null
       
-         BigImageCollectionViewCell *cell = (BigImageCollectionViewCell *)(button.superview.superview.superview);
+         BigImageCollectionViewCell *cell = (BigImageCollectionViewCell *)(button.superview.superview.superview.superview);
         UIImage  *image=[Function getImage:cell.StageView WithSize:CGSizeMake(kDeviceWidth, kDeviceWidth)];
         UMShareViewController  *shareVC=[[UMShareViewController alloc]init];
         movieInfoModel  *moviemodel =[[movieInfoModel alloc]init];
@@ -818,7 +811,6 @@
     }
     else if(button.tag==3000)
     {
-        
             AddMarkViewController  *AddMarkVC=[[AddMarkViewController alloc]init];
             AddMarkVC.stageInfo = stagemodel;
             //AddMarkVC.model=model;
@@ -829,7 +821,7 @@
     else if (button.tag==4000)
     {
         //点击了更多
-        UIActionSheet  *Act=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"举报",@"版权问题",@"查看图片信息", nil];
+        UIActionSheet  *Act=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"内容投诉",@"版权投诉",@"查看图片信息", nil];
         Act.tag=507;
         [Act showInView:Act];
 
@@ -842,22 +834,6 @@
     [self.myConllectionView reloadData];
     
 }
-#pragma  mark  -----UMButtomViewshareViewDlegate-----------------------------------------------------
-/*-(void)UMshareViewHandClick:(UIButton *)button ShareImage:(UIImage *)shareImage MoviewModel:(StageInfoModel *)StageInfo
-{
-    NSArray  *sharearray =[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQzone, UMShareToSina, nil];
-    [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
-    
-    [[UMSocialControllerService defaultControllerService] setShareText:StageInfo.movie_name shareImage:shareImage socialUIDelegate:self];        //设置分享内容和回调对象
-    [UMSocialSnsPlatformManager getSocialPlatformWithName:[sharearray  objectAtIndex:button.tag-10000]].snsClickHandler(self,[UMSocialControllerService defaultControllerService],YES);
-    NSLog(@"分享到微信");
-    self.tabBarController.tabBar.hidden=YES;
-    if (shareView) {
-        [shareView HidenShareButtomView];
-        [shareView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.5];
-        
-    }
-}*/
 -(void)UMShareViewControllerHandClick:(UIButton *)button ShareImage:(UIImage *)shareImage StageInfoModel:(stageInfoModel *)StageInfo
 {
     NSArray  *sharearray =[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQzone, UMShareToSina, nil];
@@ -867,13 +843,7 @@
     [UMSocialSnsPlatformManager getSocialPlatformWithName:[sharearray  objectAtIndex:button.tag-10000]].snsClickHandler(self,[UMSocialControllerService defaultControllerService],YES);
     NSLog(@"分享到微信");
     self.tabBarController.tabBar.hidden=YES;
-//    if (shareView) {
-//        [shareView HidenShareButtomView];
-//        [shareView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.5];
-//        
-//    }
-//
-//    
+
 }
 ///点击分享的屏幕，收回分享的背景
 -(void)SharetopViewTouchBengan
@@ -881,13 +851,6 @@
     NSLog(@"controller touchbegan  中 执行了隐藏工具栏的方法");
     //取消当前的选中的那个气泡
     [_mymarkView CancelMarksetSelect];
-//    if (shareView) {
-//        [shareView HidenShareButtomView];
-//        [shareView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.5];
-//        self.tabBarController.tabBar.hidden=YES;
-//        
-//    }
-//    
 }
 #pragma mark  --umShareDelegate
 
@@ -895,44 +858,18 @@
 {
     //返回到app执行的方法，移除的时候应该写在这里
     NSLog(@"didCloseUIViewController第一步执行这个");
-//    if (shareView) {
-//        [shareView removeFromSuperview];
-//        
-//    }
-//    
 }
 //根据有的view 上次一张图片
 -(void)didFinishGetUMSocialDataInViewController:(UMSocialResponseEntity *)response
 {
     NSLog(@"didFinishGetUMSocialDataInViewController第二部执行这个");
-//    if (shareView) {
-//        [shareView removeFromSuperview];
-//    }
     
 }
 -(void)didFinishGetUMSocialDataResponse:(UMSocialResponseEntity *)response;
 {
     NSLog(@"didFinishGetUMSocialDataResponse第二部执行这个");
-  //  if (shareView) {
-//        [shareView removeFromSuperview];
-//    }
-//    
-    
+  
 }
-
-
-////点击增加弹幕
-//-(void)addMarkButtonClick:(UIButton  *) button
-//{
-//    NSLog(@" ==addMarkButtonClick  ====%d",button.tag);
-//    AddMarkViewController  *AddMarkVC=[[AddMarkViewController alloc]init];
-//    HotMovieModel  *model =[_dataArray objectAtIndex:button.tag-3000];
-//    AddMarkVC.stageInfoDict = model.stageinfo;//[dict valueForKey:@"stageinfo"];
-//   // AddMarkVC.pageSoureType=NSAddMarkPageSourceDefault;
-//    [self.navigationController pushViewController:AddMarkVC animated:NO];
-//    
-//}
-
 
 
 #pragma mark  -----
@@ -1020,10 +957,9 @@
     {
         //点击了分享
           float hight= kDeviceWidth;
-        BigImageCollectionViewCell *cell = (BigImageCollectionViewCell *)(markView.superview.superview.superview);
+        BigImageCollectionViewCell *cell = (BigImageCollectionViewCell *)(markView.superview.superview.superview.superview);
         UIImage  *image=[Function getImage:cell.StageView WithSize:CGSizeMake(kDeviceWidth, hight)];
         
-
         //创建UMshareView 后必须配备这三个方法
     
         UMShareViewController  *shareVC=[[UMShareViewController alloc]init];
@@ -1150,7 +1086,7 @@
     {
         if (buttonIndex==0) {
             //弹出确认举报
-            [self requestReportSatge];
+            [self requestReportweibo];
             
         }
     }
@@ -1163,18 +1099,25 @@
         }
         else if(buttonIndex==1)
         {
+            
+            stageInfoModel  *stagemodel =[_dataArray objectAtIndex:Rowindex];
             //版权问题
-            [self sendFeedBack];
+            [self sendFeedBackWithStageInfo:stagemodel];
             
         }
         else if(buttonIndex==2)
         {
             //           查看图片信息
-        }
+            ScanMovieInfoViewController * scanvc =[ScanMovieInfoViewController new];
+                stageInfoModel  *stagemodel =[_dataArray objectAtIndex:Rowindex];
+                scanvc.stageInfo=stagemodel;
+              [self presentViewController:scanvc animated:YES completion:nil];
+            
+         }
 
     }
 }
-- (void)sendFeedBack
+- (void)sendFeedBackWithStageInfo:(stageInfoModel *)stageInfo
 {
     //    [self showNativeFeedbackWithAppkey:UMENT_APP_KEY];
     Class mailClass = (NSClassFromString(@"MFMailComposeViewController"));
@@ -1183,7 +1126,7 @@
         // We must always check whether the current device is configured for sending emails
         if ([mailClass canSendMail])
         {
-            [self displayComposerSheet];
+            [self displayComposerSheet:stageInfo];
         }
         else
         {
@@ -1196,7 +1139,7 @@
     }
     
 }
--(void)displayComposerSheet
+-(void)displayComposerSheet:(stageInfoModel *) stageInfo
 {
     MFMailComposeViewController *picker = [[MFMailComposeViewController alloc] init];/*MFMailComposeViewController邮件发送选择器*/
     picker.mailComposeDelegate = self;
@@ -1212,7 +1155,7 @@
     //    [picker setBccRecipients:bccRecipients];
     
     // Set up recipients
-    NSArray *toRecipients = [NSArray arrayWithObject:@"feedback@immovie.me"];
+    NSArray *toRecipients = [NSArray arrayWithObject:@"feedback@redianying.com"];
     [picker setToRecipients:toRecipients];
     // Fill out the email body text
     //struct utsname device_info;
@@ -1225,10 +1168,14 @@
     
     UIDevice * myDevice = [UIDevice currentDevice];
     NSString * sysVersion = [myDevice systemVersion];
-    // NSString *emailBody = [NSString stringWithFormat:@"\n\n\n\n附属信息：\n\n%@ %@(%@)\n%@ / %@ / %@ IOS%@", appCurName, appCurVersion, appCurVersionNum, @"", @"", @"",  sysVersion];
-    [picker setMessageBody:@"" isHTML:NO];
-    [picker setSubject:[NSString stringWithFormat:@"反馈：我是电影%@(%@)", appCurVersion, appCurVersionNum]];/*emailpicker标题主题行*/
+//*emailpicker标题主题行*/
+    UserDataCenter  *usercenter=[UserDataCenter shareInstance];
     
+    NSString *emailBody = [NSString stringWithFormat:@"\n您的名字：\n联系电话:\n投诉内容:\n\n\n\n\n-------\n请勿删除以下信息，并提交你拥有此版权的证明--------\n\n 电影:%@\n剧情id:%@\n投诉人id:%@\n投诉昵称:%@\n",stageInfo.movieInfo.name,stageInfo.Id,usercenter.user_id,usercenter.username];
+
+    [picker setTitle:@"@版权问题"];
+    [picker setSubject:@"版权投诉"];
+    [picker setMessageBody:emailBody isHTML:NO];
     [self presentViewController:picker animated:YES completion:nil];
     //        [self.navigationController presentViewController:picker animated:YES completion:nil];
     //        [self.navigationController pushViewController:picker animated:YES];

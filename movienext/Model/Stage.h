@@ -27,6 +27,7 @@
 /** 电影海报 */
 @property (nonatomic, strong) NSString * movie_poster;
 
+
 -(id)initWithDictionary:(NSDictionary *)dict;
 
 @end

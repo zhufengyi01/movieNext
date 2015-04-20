@@ -10,7 +10,7 @@
 
 @implementation NSDate (Additions)
 
-- (long long int)getCurrentTimeInterval {
++(long long int)getCurrentTimeInterval {
     NSTimeInterval time = [[NSDate date] timeIntervalSince1970];
     long long int date = (long long int)time;
     return date;

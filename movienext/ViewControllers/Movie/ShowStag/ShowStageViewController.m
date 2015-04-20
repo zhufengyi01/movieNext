@@ -22,6 +22,7 @@
 #import "MyViewController.h"
 #import "Function.h"
 #import "UMShareViewController.h"
+#import "ScanMovieInfoViewController.h"
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
 
@@ -90,18 +91,18 @@
     [self.view addSubview:BgView2];
 
     //更多
-    moreButton=[ZCControl createButtonWithFrame:CGRectMake(10, 9, 40, 27) ImageName:@"btn_delete.png" Target:self Action:@selector(cellButtonClick:) Title:@""];
+    moreButton=[ZCControl createButtonWithFrame:CGRectMake(10, 9, 30, 25) ImageName:@"more_icon.png" Target:self Action:@selector(cellButtonClick:) Title:@""];
     moreButton.layer.cornerRadius=2;
     moreButton.hidden=NO;
     [BgView2 addSubview:moreButton];
     
 
     
-    ScreenButton =[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-140,10,60,26) ImageName:@"btn_share_default.png" Target:self Action:@selector(ScreenButtonClick:) Title:@""];
+    ScreenButton =[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-120,10,45,25) ImageName:@"btn_share_default.png" Target:self Action:@selector(ScreenButtonClick:) Title:@""];
     [ScreenButton setBackgroundImage:[UIImage imageNamed:@"btn_share_select.png"] forState:UIControlStateHighlighted];
     [BgView2 addSubview:ScreenButton];
     
-    addMarkButton =[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-70,10,60,26) ImageName:@"btn_add_default.png" Target:self Action:@selector(addMarkButtonClick:) Title:@""];
+    addMarkButton =[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-55,10,45,25) ImageName:@"btn_add_default.png" Target:self Action:@selector(addMarkButtonClick:) Title:@""];
     [addMarkButton setBackgroundImage:[UIImage imageNamed:@"btn_add_select.png"] forState:UIControlStateHighlighted];
     [BgView2 addSubview:addMarkButton];
     
@@ -137,16 +138,15 @@
 -(void)requestReportSatge
 {
     // NSString *type=@"1";
-    NSString  *stageId;
-    NSString  *author_id;
+    NSNumber  *stageId=self.stageInfo.Id;
+    NSString  *author_id=@"";
     UserDataCenter *userCenter =[UserDataCenter shareInstance];
     NSDictionary *parameters = @{@"reported_user_id":author_id,@"stage_id":stageId,@"reason":@"",@"user_id":userCenter.user_id};
     
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:[NSString stringWithFormat:@"%@/report-stage/create", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
-            NSLog(@"随机数种子请求成功=======%@",responseObject);
-            UIAlertView  *Al =[[UIAlertView alloc]initWithTitle:nil message:@"你的举报已成功,我们会在24小时内处理" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+        if ([[responseObject  objectForKey:@"code"] intValue]==0) {
+             UIAlertView  *Al =[[UIAlertView alloc]initWithTitle:nil message:@"你的举报已成功,我们会在24小时内处理" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
             [Al show];
             
         }
@@ -200,7 +200,7 @@
 -(void)cellButtonClick:(UIButton  *) button
 {
     //点击了更多
-    UIActionSheet  *Act=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"举报",@"版权问题",@"查看图片信息", nil];
+    UIActionSheet  *Act=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"内容投诉",@"版权投诉",@"查看图片信息", nil];
     Act.tag=507;
     [Act showInView:Act];
 
@@ -347,18 +347,27 @@
         else if(buttonIndex==1)
         {
             //版权问题
-            [self sendFeedBack];
+            
+            [self sendFeedBackWithStageInfo:self.stageInfo];
             
         }
         else if(buttonIndex==2)
         {
             //           查看图片信息
+            
+            ScanMovieInfoViewController * scanvc =[ScanMovieInfoViewController new];
+            scanvc.stageInfo=self.stageInfo;
+            [self presentViewController:scanvc animated:YES completion:nil];
+            
+
         }
 
     }
 }
 
-- (void)sendFeedBack
+
+- (void)sendFeedBackWithStageInfo:(stageInfoModel *)stageInfo
+
 {
     //    [self showNativeFeedbackWithAppkey:UMENT_APP_KEY];
     Class mailClass = (NSClassFromString(@"MFMailComposeViewController"));
@@ -367,7 +376,7 @@
         // We must always check whether the current device is configured for sending emails
         if ([mailClass canSendMail])
         {
-            [self displayComposerSheet];
+            [self displayComposerSheet:stageInfo];
         }
         else
         {
@@ -380,7 +389,8 @@
     }
     
 }
--(void)displayComposerSheet
+-(void)displayComposerSheet:(stageInfoModel *) stageInfo
+
 {
     MFMailComposeViewController *picker = [[MFMailComposeViewController alloc] init];/*MFMailComposeViewController邮件发送选择器*/
     picker.mailComposeDelegate = self;
@@ -396,7 +406,7 @@
     //    [picker setBccRecipients:bccRecipients];
     
     // Set up recipients
-    NSArray *toRecipients = [NSArray arrayWithObject:@"feedback@immovie.me"];
+    NSArray *toRecipients = [NSArray arrayWithObject:@"feedback@redianying.com"];
     [picker setToRecipients:toRecipients];
     // Fill out the email body text
     //struct utsname device_info;
@@ -410,8 +420,13 @@
     UIDevice * myDevice = [UIDevice currentDevice];
     NSString * sysVersion = [myDevice systemVersion];
     // NSString *emailBody = [NSString stringWithFormat:@"\n\n\n\n附属信息：\n\n%@ %@(%@)\n%@ / %@ / %@ IOS%@", appCurName, appCurVersion, appCurVersionNum, @"", @"", @"",  sysVersion];
-    [picker setMessageBody:@"" isHTML:NO];
-    [picker setSubject:[NSString stringWithFormat:@"反馈：我是电影%@(%@)", appCurVersion, appCurVersionNum]];/*emailpicker标题主题行*/
+
+    UserDataCenter  *usercenter=[UserDataCenter shareInstance];
+    
+    NSString *emailBody = [NSString stringWithFormat:@"\n您的名字：\n联系电话:\n投诉内容:\n\n\n\n\n-------\n请勿删除以下信息，并提交你拥有此版权的证明--------\n\n 电影:%@\n剧情id:%@\n投诉人id:%@\n投诉昵称:%@\n",stageInfo.movieInfo.name,stageInfo.Id,usercenter.user_id,usercenter.username];
+    [picker setTitle:@"@版权问题"];
+    [picker setMessageBody:emailBody isHTML:NO];
+    [picker setSubject:[NSString stringWithFormat:@"版权投诉"]];/*emailpicker标题主题行*/
     
     [self presentViewController:picker animated:YES completion:nil];
     //        [self.navigationController presentViewController:picker animated:YES completion:nil];

@@ -25,16 +25,7 @@
     self.userInteractionEnabled=YES;
     //默认最开始没有选中
     self.isSelected=NO;
-    //左视图
-    _LeftImageView =[[UIImageView alloc]initWithFrame:CGRectMake(0, 0,20, 20)];
-    _LeftImageView.layer.borderWidth=2;
-    _LeftImageView.layer.cornerRadius=MarkViewCornerRed;
-    _LeftImageView.layer.masksToBounds=YES;
-    _LeftImageView.layer.borderColor=[[UIColor whiteColor] CGColor];
-    [self addSubview:_LeftImageView];
-   
-    
-    //右视图
+       //右视图
     _rightView=[[UIView alloc]initWithFrame:CGRectMake(0, 0,0,0)];
     _rightView.backgroundColor=[[UIColor blackColor] colorWithAlphaComponent:0.7];
     _rightView.layer.cornerRadius=MarkViewCornerRed;
@@ -42,6 +33,17 @@
     _rightView.layer.masksToBounds=YES;
     [self addSubview:_rightView];
     
+    
+    //左视图
+    _LeftImageView =[[UIImageView alloc]initWithFrame:CGRectMake(0, 0,20, 20)];
+    _LeftImageView.layer.borderWidth=2;
+    _LeftImageView.layer.cornerRadius=MarkViewCornerRed;
+    _LeftImageView.layer.masksToBounds=YES;
+    _LeftImageView.layer.borderColor=[[UIColor whiteColor] CGColor];
+    [self addSubview:_LeftImageView];
+    
+    
+
     //标题，点赞的view
     _TitleLable=[ZCControl createLabelWithFrame:CGRectMake(0,0, 0,0) Font:12 Text:@""];
     _TitleLable.font=[UIFont systemFontOfSize:MarkTextFont14];
@@ -99,9 +101,9 @@
     
     
     //右视图
-    _rightView.frame=CGRectMake(23, 0,self.frame.size.width-23 , self.frame.size.height);
+    _rightView.frame=CGRectMake(21, 0,self.frame.size.width-23 , self.frame.size.height);
     if (IsIphone6) {
-         _rightView.frame=CGRectMake(28, 0,self.frame.size.width-28 , self.frame.size.height);
+         _rightView.frame=CGRectMake(26, 0,self.frame.size.width-28 , self.frame.size.height);
     }
     
     //标题

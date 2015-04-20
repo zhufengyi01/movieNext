@@ -23,7 +23,16 @@
 }
 -(void)CreateUI
 {
-    self.backgroundColor =[UIColor blackColor];
+   
+    self.backgroundColor=View_BackGround;
+    BgView =[[UIImageView alloc]initWithFrame:CGRectMake(5, 0, kDeviceWidth-10, kDeviceWidth+90)];
+    
+    BgView.clipsToBounds=YES;
+    BgView.layer.cornerRadius=4;
+    BgView.clipsToBounds=YES;
+    BgView.userInteractionEnabled=YES;
+    [self.contentView addSubview:BgView];
+
     [self CreateTopView];
     [self CreateSatageView];
     [self createButtonView];
@@ -34,40 +43,43 @@
     BgView0 =[[UIView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth,45)];
     BgView0.backgroundColor=View_ToolBar;
     BgView0.userInteractionEnabled=YES;
-    [self.contentView addSubview:BgView0];
+    [BgView addSubview:BgView0];
 }
 
 -(void)CreateSatageView
 {
     _StageView=[[StageView alloc]initWithFrame:CGRectMake(0, 45, kDeviceWidth,kDeviceWidth)];
     _StageView.backgroundColor=VStageView_color;
-    [self.contentView addSubview:_StageView];
+    [BgView addSubview:_StageView];
     
 }
 -(void)createButtonView
 {
     BgView2=[[UIView alloc]initWithFrame:CGRectMake(0, kDeviceWidth+45, kDeviceWidth, 45)];
     BgView2.backgroundColor=[UIColor whiteColor];
-    [self.contentView addSubview:BgView2];
+    [BgView addSubview:BgView2];
     
     //更多
-    moreButton=[ZCControl createButtonWithFrame:CGRectMake(10, 9, 40, 27) ImageName:@"btn_delete.png" Target:self Action:@selector(cellButtonClick:) Title:@""];
+    moreButton=[ZCControl createButtonWithFrame:CGRectMake(10, 9, 30, 25) ImageName:@"more_icon.png" Target:self Action:@selector(cellButtonClick:) Title:@""];
     moreButton.layer.cornerRadius=2;
     moreButton.hidden=NO;
     moreButton.tag=4000;
     [BgView2 addSubview:moreButton];
 
     
-    
-    
-    
-    ScreenButton =[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-140,10,60,26) ImageName:@"screen_shot share.png" Target:self Action:@selector(cellButtonClick:) Title:@""];
+
+    ScreenButton =[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-120,10,45,25) ImageName:@"btn_share_default.png" Target:self Action:@selector(cellButtonClick:) Title:@""];
     ScreenButton.tag=2000;
     [BgView2 addSubview:ScreenButton];
     
-    addMarkButton =[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-70,10,60,26) ImageName:@"btn_add_default.png" Target:self Action:@selector(cellButtonClick:) Title:@""];
+    addMarkButton =[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-65,10,45,25) ImageName:@"btn_add_default.png" Target:self Action:@selector(cellButtonClick:) Title:@""];
     addMarkButton.tag=3000;
     [BgView2 addSubview:addMarkButton];
+    //底部2像素的投影
+    UIImageView *lineImage =[[UIImageView alloc]initWithFrame:CGRectMake(0,44, kDeviceWidth, 2)];
+    lineImage.image=[UIImage imageNamed:@"cell_buttom_line.png"];
+    [BgView2 addSubview:lineImage];
+
     
     
 }
@@ -76,6 +88,21 @@
 }
 -(void)ConfigCellWithIndexPath:(NSInteger)row{
     self.Cellindex=row;
+    
+    if (_tanlogoButton) {
+        [_tanlogoButton removeFromSuperview];
+        _tanlogoButton=nil;
+    }
+    _tanlogoButton =[UIButton buttonWithType:UIButtonTypeCustom];
+    _tanlogoButton.frame=CGRectMake(kDeviceWidth-45, 5, 35, 35);
+    [_tanlogoButton setImage:[UIImage imageNamed:@"close_danmu.png"] forState:UIControlStateNormal];
+    [_tanlogoButton setImage:[UIImage imageNamed:@"open_danmu.png"] forState:UIControlStateSelected];
+    [_tanlogoButton addTarget:self action:@selector(hidenAndShowMarkView:) forControlEvents:UIControlEventTouchUpInside];
+    // [_tanlogoButton setTitleEdgeInsets:UIEdgeInsetsMake(10, 10, 10, 10)];
+    [BgView0 addSubview:_tanlogoButton];
+    
+    
+    
     if (self.weibosArray) {
         _StageView.weibosArray = self.weibosArray;
     }
@@ -84,6 +111,35 @@
     _StageView.isAnimation = YES;
     
 }
+#pragma mark 点击屏幕显示和隐藏marview
+//显示隐藏markview
+-(void)hidenAndShowMarkView:(UIButton *) button
+{
+    if (button.selected==NO) {
+        NSLog(@"执行了隐藏 view ");
+        button.selected=YES;
+        for (UIView  *view  in self.StageView.subviews) {
+            if  ([view isKindOfClass:[MarkView class]]) {
+                MarkView  *mv =(MarkView *)view;
+                mv.hidden=YES;
+                
+            }
+        }
+    }
+    else if (button.selected==YES)
+    {
+        NSLog(@"执行了显示view ");
+        button.selected=NO;
+        for (UIView  *view  in self.StageView.subviews) {
+            if  ([view isKindOfClass:[MarkView class]]) {
+                MarkView  *mv =(MarkView *)view;
+                mv.hidden=NO;
+            }
+        }
+    }
+    
+}
+
 - (void)layoutSubviews {
     [super layoutSubviews];
       BgView2.frame=CGRectMake(0, kDeviceWidth+45, kDeviceWidth, 45);

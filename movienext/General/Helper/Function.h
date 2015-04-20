@@ -66,6 +66,9 @@ float getHeightByWidthAndHeight(float width, float height){
  */
 + (NSString *)friendlyTime:(NSString *)datetime;
 
+//根据服务器返回的时间差，返回日期
++(NSString *)getTimewithInterval:(NSString *)timeIneterval;
+
 /**
  *  获取一个微博标签图像,根据标签信息以及位置信息
  *
@@ -117,4 +120,10 @@ float getHeightByWidthAndHeight(float width, float height){
 
 //验证输入的是否是邮箱
 +(BOOL) validateEmail: (NSString *) candidate;
+
+//时间转化为当前字符串
++(NSString *)dateToString:(NSDate *)date;
+// MD5 加密
++(NSString *)md5:(NSString *)str;
+
 @end

@@ -58,8 +58,8 @@
     inputView.image =[UIImage imageNamed:@"login_email_password.png"];
     [self.view addSubview:inputView];
     
-    emailTextfield=[ZCControl createTextFieldWithFrame:CGRectMake(10, 2, 220,37) placeholder:@"请输入邮箱" passWord:NO leftImageView:nil rightImageView:nil Font:15];
-    emailTextfield.text=@"673229963@qq.com";
+    emailTextfield=[ZCControl createTextFieldWithFrame:CGRectMake(10, 2, 230,37) placeholder:@"请输入邮箱" passWord:NO leftImageView:nil rightImageView:nil Font:15];
+    //emailTextfield.text=@"673229963@qq.com";
     [inputView addSubview:emailTextfield];
     
     
@@ -74,7 +74,7 @@
     
     PassworfTextfield=[ZCControl createTextFieldWithFrame:CGRectMake(10, 39, 230,39) placeholder:@"请输入密码" passWord:YES leftImageView:nil rightImageView:nil Font:15];
     PassworfTextfield.rightView=rightButton;
-    PassworfTextfield.text=@"123";
+    //PassworfTextfield.text=@"123";
     PassworfTextfield.rightViewMode=UITextFieldViewModeAlways;
     [inputView addSubview:PassworfTextfield];
     
@@ -90,19 +90,24 @@
 }
 
 
-//验证邮箱是否可用
+//用户登录
 -(void)requesteLogin
 {
     NSString  *email=[[emailTextfield text]stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     NSString *password =[[PassworfTextfield text] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    
-    NSDictionary *parameters = @{@"email":email,@"password_hash":password};
+    NSString  *passstr=[NSString stringWithFormat:@"%@movienext%@",email,password];
+      NSString  *pass_hash=[Function  md5:passstr];
+    //NSString  *abc=[Function md5:@"abc@qq.commovienext123456"];
+ 
+    NSDictionary *parameters = @{@"email":email,@"password_hash":pass_hash};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:[NSString stringWithFormat:@"%@/user/login-with-email", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"esdksdhhsd=====%@",responseObject);
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
-            //注册成功
+            //登陆成功
+            window.rootViewController=[CustmoTabBarController new];
             NSDictionary *detail    = [responseObject objectForKey:@"model"];
-            if (![detail isEqual:@""]) {
+        
                 UserDataCenter  *userCenter=[UserDataCenter shareInstance];
                 userCenter.user_id=[detail objectForKey:@"id"];
                 userCenter.username=[detail objectForKey:@"username"];
@@ -113,16 +118,13 @@
                 userCenter.signature=[detail objectForKey:@"brief"];
                 userCenter.email=[detail objectForKey:@"email"];
                 userCenter.fake=[detail objectForKey:@"fake"];
-                
                 [Function saveUser:userCenter];
-                window.rootViewController=[CustmoTabBarController new];
-            }
+                
+        }
         else
         {
             UIAlertView  *Al=[[UIAlertView alloc]initWithTitle:nil message:@"对不起，用户名或密码错误，请重新输入" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
             [Al show];
-            
-        }
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);

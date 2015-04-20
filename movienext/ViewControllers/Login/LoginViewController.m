@@ -27,6 +27,9 @@
 //#define kSegueLoginToIndex @"LoginToIndex"
 #import "Login2_1ViewController.h"
 #import "Register_1ViewController.h"
+
+#define  IsInstallWechat   1
+
 @interface LoginViewController ()<UMSocialUIDelegate>
 {
     AppDelegate  *appdelegate;
@@ -148,17 +151,36 @@
     emailregister.hidden=YES;
     [self.view addSubview:emailregister];
     
-
-    //判断是否安装了微信
-//    if ([WXApi  isWXAppInstalled]==NO) {
-//        weiboButton.hidden=YES;
-//        weiChateButton.hidden=YES;
+#warning   上线前一定要注视掉
+//    if (IsInstallWechat==1) {
+//        //已经安装了微信
+//            weiboButton.hidden=NO;
+//            weiChateButton.hidden=NO;
+//             checkBtn.hidden=NO;
+//             checkBtn2.hidden=NO;
+//            emaillogin.hidden=YES;
+//            emailregister.hidden=YES;
+//        
+//    }
+//    else if (IsInstallWechat==0)
+//    {
+//       weiboButton.hidden=YES;
+//      weiChateButton.hidden=YES;
 //        checkBtn.hidden=YES;
 //        checkBtn2.hidden=YES;
-//        emaillogin.hidden=NO;
-//        emailregister.hidden=NO;
+//      emaillogin.hidden=NO;
+//      emailregister.hidden=NO;
 //    }
-//
+    //判断是否安装了微信
+    if ([WXApi  isWXAppInstalled]==NO) {
+        weiboButton.hidden=YES;
+        weiChateButton.hidden=YES;
+        checkBtn.hidden=YES;
+        checkBtn2.hidden=YES;
+        emaillogin.hidden=NO;
+        emailregister.hidden=NO;
+    }
+
     
 }
 //服务条款按钮
@@ -187,6 +209,10 @@
 //登陆按钮
 -(void)dealloginClick:(UIButton *) btn
 {
+    weiboButton.hidden=YES;
+    weiChateButton.hidden=YES;
+    checkBtn.hidden=YES;
+    checkBtn2.hidden=YES;
     if (btn.tag==1000) {
         //qq  登陆
         //window.rootViewController=[CustmoTabBarController new];
@@ -234,16 +260,18 @@
             [[UMSocialDataService defaultDataService] requestSnsInformation:ssoName completion:^(UMSocialResponseEntity *response) {
                 if (response.responseCode == UMSResponseCodeSuccess) {
                     NSLog(@"====  login sucess  =response ======%@",[response valueForKey:@"data"]);
+                    weiboButton.hidden=YES;
+                    weiChateButton.hidden=YES;
+                    checkBtn.hidden=YES;
+                    checkBtn2.hidden=YES;
                     NSDictionary *data = [response valueForKey:@"data"];
                    //openid
                     NSString  *openid;
                     if ([ssoName isEqualToString:UMShareToSina]) {
                          openid   = [data valueForKey:@"uid"];
-
                     }
                     else{
                         openid =[data valueForKey:@"openid"];
-
                     }
                     //token
                     NSString *access_token   = [data valueForKey:@"access_token"];
@@ -284,10 +312,10 @@
                             
                             [Function saveUser:userCenter];
                             //登陆成功后把根
-                            if ([[responseObject objectForKey:@"first_login"] intValue]==0) {
+                             if ([[responseObject objectForKey:@"first_login"] intValue]==0) {
                                 window.rootViewController=[CustmoTabBarController new];
-                            }
-                            else {
+                             }
+                              else {
                                 UserHeadChangeViewController *vc=[UserHeadChangeViewController new];
                                 vc.pageType=NSHeadChangePageTypeFirstLogin;
                             [self.navigationController pushViewController:vc animated:YES];

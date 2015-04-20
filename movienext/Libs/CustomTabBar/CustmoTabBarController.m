@@ -69,7 +69,7 @@
 {
     
     CGRect frame = [[UIScreen mainScreen] bounds];
-    self.m_tabBar = [[CustomTabBar alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, 49)];
+    self.m_tabBar = [[CustomTabBar alloc] initWithFrame:CGRectMake(0, 1, frame.size.width, 48)];
     self.m_tabBar.m_delegate = self;
     self.m_tabBar.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"tabbar_backgroud_color.png"]]; // 设置tabar 的背景图片
     [self.tabBar addSubview:self.m_tabBar];

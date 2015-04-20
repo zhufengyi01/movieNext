@@ -222,11 +222,11 @@
             [view removeFromSuperview];
         }
     }
- 
      _myMarkView =[[MarkView alloc]initWithFrame:CGRectMake(100,140 , 100, 20)];
     ///显示标签的头像
     UserDataCenter  * userCenter=[UserDataCenter shareInstance];
-    [ _myMarkView.LeftImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@!thumb",kUrlAvatar,    userCenter.logo]]];
+    NSURL *logourl= [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",kUrlAvatar,userCenter.logo]];
+    [_myMarkView.LeftImageView sd_setImageWithURL:logourl placeholderImage:[UIImage imageNamed:@"user_normal"]];
     
     _myMarkView.TitleLable.text=InputStr;
     [stageView addSubview:_myMarkView];
@@ -235,7 +235,6 @@
      CGSize  Msize= [InputStr  boundingRectWithSize:CGSizeMake(kDeviceWidth/2, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:_myMarkView.TitleLable.font forKey:NSFontAttributeName] context:nil].size;
     
     //宽度=字的宽度+左头像图片的宽度＋赞图片的宽度＋赞数量的宽度+中间两个空格2+2
-    //位置=
      int  markViewWidth = (int)Msize.width+23+5+5+11+5;
      int markViewHeight =(int) Msize.height+6;
     if(IsIphone6)
@@ -245,7 +244,7 @@
     }
     int  kw=kDeviceWidth;
     int  x=arc4random()%(kw-markViewWidth);  //要求x在0~~~（宽度-markViewWidth）
-    int  y=arc4random()%((kw-markViewHeight/2)+markViewHeight/2);  //要求y在markviewheight.y/2 ~~~~~~~(高度--markViewheigth/2)
+    int  y=arc4random()%((kw-markViewHeight/2)+markViewHeight/2-markViewHeight);  //要求y在markviewheight.y/2 ~~~~~~~(高度--markViewheigth/2)
     
     _myMarkView.frame=CGRectMake(x,y, markViewWidth, markViewHeight);
     
@@ -253,7 +252,6 @@
     float  markviewHight2 =_myMarkView.frame.size.height/2;
     X =[NSString stringWithFormat:@"%f",((_myMarkView.frame.origin.x+_myMarkView.frame.size.width)/kDeviceWidth)*100];
     Y=[NSString stringWithFormat:@"%f",((markViewY+markviewHight2)/kDeviceWidth)*100];
-    
     
     //在标签上添加一个手势
      UIPanGestureRecognizer   *pan=[[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(handelPan:)];
@@ -289,16 +287,21 @@
 -(void)PublicRuqest
 {
     RighttBtn.enabled=NO;
-    if (X==nil||Y==nil) {
+    if ([X intValue]==0||[Y intValue]==0) {
         X =[NSString stringWithFormat:@"%d",100];
         Y=[NSString stringWithFormat:@"%d",100];
     }
     
     int x_percent=[X intValue];
+    X=[NSString stringWithFormat:@"%d",x_percent];
     int y_percent=[Y intValue];
-    
+    Y =[NSString stringWithFormat:@"%d",y_percent];
     UserDataCenter  *userCenter=[UserDataCenter shareInstance];
-     NSDictionary *parameter = @{@"user_id": userCenter.user_id,@"content":InputStr,@"stage_id":self.stageInfo.Id,@"x_percent":[NSString stringWithFormat:@"%d",x_percent],@"y_percent":[NSString stringWithFormat:@"%d",y_percent]};
+    NSString  *userid=userCenter.user_id;
+    NSNumber  *stageId=self.stageInfo.Id;
+    
+     NSDictionary *parameter = @{@"user_id": userid,@"content":InputStr,@"stage_id":stageId,@"x_percent":X,@"y_percent":Y};
+    
     
     NSString *urlString =[NSString stringWithFormat:@"%@/weibo/create", kApiBaseUrl];
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
@@ -384,7 +387,7 @@
 
 -(void)textViewDidChange:(UITextView *)textView{
     //防止光标抖动
-   /* CGRect line = [textView caretRectForPosition:
+    /*CGRect line = [textView caretRectForPosition:
                    textView.selectedTextRange.start];
     CGFloat overflow = line.origin.y + line.size.height
     - ( textView.contentOffset.y + textView.bounds.size.height
@@ -399,7 +402,7 @@
             [textView setContentOffset:offset];
         }];
     }
-    */
+ 
 //    CGSize  tSize=textView.contentSize;
 //    CGPoint  tPoint =textView.contentOffset;
 //    tPoint.y=tSize.height;
@@ -422,7 +425,7 @@
    // NSLog(@" textView = heigt =====%f ",textView.frame.size.height);
     
     _toolBar.frame=CGRectMake(0,kDeviceHeight-keybordHeight-textView.frame.size.height -kHeightNavigation-20, kDeviceWidth, textView.frame.size.height+20);
-
+*/
     if (textView==_myTextView) {
         if ([Function isBlankString:_myTextView.text]==NO) {
             publishBtn.enabled=YES;

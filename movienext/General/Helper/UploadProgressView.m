@@ -29,7 +29,7 @@
 -(void)createUI
 {
     self.backgroundColor=[[UIColor blackColor]colorWithAlphaComponent:0.4];
-    UIView  *progressBg=[[UIView alloc]initWithFrame:CGRectMake((kDeviceWidth-240)/2, (kDeviceHeight-70)/2, 240, 70)];
+    UIView  *progressBg=[[UIView alloc]initWithFrame:CGRectMake((kDeviceWidth-240)/2, (kDeviceWidth-70)/2, 240, 70)];
     progressBg.backgroundColor=[UIColor whiteColor];
     progressBg.layer.cornerRadius=6;
     progressBg.clipsToBounds=YES;

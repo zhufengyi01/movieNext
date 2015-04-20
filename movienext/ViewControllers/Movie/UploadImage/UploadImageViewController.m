@@ -124,12 +124,10 @@
         float kCompressionQuality = 0.7;
         NSData *photo = UIImageJPEGRepresentation(self.upimage, kCompressionQuality);
           //  NSData * fileData = [NSData dataWithContentsOfFile:filePath];
-           [uy uploadFile:photo saveKey:[self getSaveKey]];
-    
+        [uy uploadFile:photo saveKey:[self getSaveKey]];
     }
     
 }
-
 
 -(NSString * )getSaveKey {
     /**
@@ -184,15 +182,13 @@
     [manager POST:[NSString stringWithFormat:@"%@/stage/create", kApiBaseUrl] parameters:parameter success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"  发布图片的请求    JSON: %@", responseObject);
         if ([[responseObject objectForKey:@"code"] intValue]==0) {
-        
         [_myprogress setProgressTitle:@"上传成功"];
         [_myprogress removeFromSuperview];
         _myprogress=nil;
-
         if (_myDict ==nil) {
             _myDict =[[NSMutableDictionary alloc]init];
         }
-        _myDict=[responseObject objectForKey:@"detail"];
+        _myDict=[responseObject objectForKey:@"model"];
         //上传成功后跳转到添加弹幕页面
         stageInfoModel   *stageInfo =[[stageInfoModel alloc]init];
         if (stageInfo) {
@@ -208,6 +204,11 @@
         else
         {
             NSLog(@"Error:");
+            [_myprogress setProgressTitle:@"上传成功"];
+            [_myprogress removeFromSuperview];
+            _myprogress=nil;
+            UIAlertView  *al =[[UIAlertView alloc]initWithTitle:@"发布失败，请重新发布" message:nil delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            [al show];
 
          }
   
@@ -218,11 +219,15 @@
 }
 -(void)createUI
 {
+    UIView  *bgView=[[UIView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceWidth)];
+    bgView.backgroundColor=VStageView_color;
+    [self.view addSubview:bgView];
+    
     UIImageView  *imageView=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, 200)];
     imageView.image=self.upimage;
-    [self.view addSubview:imageView];
+    [bgView addSubview:imageView];
     
-    CGSize  Isize=self.upimage.size;
+     CGSize  Isize=self.upimage.size;
     float x=0;
     float y=0;
     float width=0;
@@ -230,7 +235,7 @@
     if (Isize.width>Isize.height) {
         x=0;
         width=kDeviceWidth;
-        hight=(Isize.width/Isize.height)*kDeviceWidth;
+        hight=(Isize.height/Isize.width)*kDeviceWidth;
         y=(kDeviceWidth-hight)/2;
     }
     else
@@ -241,7 +246,7 @@
         x=(kDeviceWidth-width)/2;
     }
 
-    imageView.frame=CGRectMake(x,y, width, hight);
+    imageView.frame=CGRectMake(x,y,width,hight);
     
     
 }

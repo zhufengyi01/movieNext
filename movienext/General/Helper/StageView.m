@@ -261,9 +261,6 @@
    if (currentMarkIndex > MAX(self.subviews.count,6) ) {
         currentMarkIndex = 0;
    }
-//    if (self.WeibosArray.count-currentMarkIndex) {
-//        <#statements#>
-//    }
 }
 
 //7.停止动画

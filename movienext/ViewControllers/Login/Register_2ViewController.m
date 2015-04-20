@@ -96,8 +96,6 @@
     nameTextfield.clipsToBounds=YES;
     [self.view addSubview:nameTextfield];
     
-    
-    
     UIButton  *loginButton =[ZCControl createButtonWithFrame:CGRectMake((kDeviceWidth-200)/2,nameTextfield.frame.origin.y+nameTextfield.frame.size.height+20, 200, 40) ImageName:@"signup_done_press.png" Target:self Action:@selector(dealregiterClick:) Title:nil];
     loginButton.tag=101;
     [self.view addSubview:loginButton];
@@ -116,7 +114,9 @@
     }
      //NSString *username=[[nameTextfield text] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     NSString  *username=[nameTextfield text];
-    NSDictionary *parameters = @{@"email":self.email,@"password_hash":self.password,@"username":username,@"logo":logo};
+    NSString  *passstr=[NSString stringWithFormat:@"%@movienext%@",self.email,self.password];
+    NSString  *pass_hash=[Function  md5:passstr];
+    NSDictionary *parameters = @{@"email":self.email,@"password_hash":pass_hash,@"username":username,@"logo":logo};
     
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:[NSString stringWithFormat:@"%@/user/register-with-email", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -261,7 +261,7 @@
     /**
      *	@brief	根据 NSDate  上传
      */
-    float kCompressionQuality = 0.3;
+    float kCompressionQuality = 0.6;
     NSData *photo = UIImageJPEGRepresentation(_upImage, kCompressionQuality);
     //  NSData * fileData = [NSData dataWithContentsOfFile:filePath];
     [uy uploadFile:photo saveKey:[self getSaveKey]];

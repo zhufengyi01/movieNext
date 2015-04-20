@@ -7,6 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+@protocol MovieCollectionViewCellDelegate <NSObject>
+-(void)MovieCollectionViewlongPress:(NSInteger) cellRowIndex;
+@end
 
 @interface MovieCollectionViewCell : UICollectionViewCell
 {
@@ -14,7 +17,8 @@
     UIImageView    *LogoImage;
     UILabel        *TitleLable;
 }
-//-(void)setCellValue:(NSDictionary  *) dict;
--(void)setValueforCell:(NSDictionary  *) dict;
+@property (nonatomic,assign)id <MovieCollectionViewCellDelegate> delegate;
+@property (nonatomic,assign) NSInteger Cellindex;
+-(void)setValueforCell:(NSDictionary  *) dict inRow:(NSInteger) inrow;
 
 @end

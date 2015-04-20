@@ -29,6 +29,8 @@
 #import "ChangeSelfViewController.h"
 #import "UMShareViewController.h"
 #import "userAddmodel.h"
+#import "Function.h"
+#import "ScanMovieInfoViewController.h"
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
 
@@ -61,7 +63,7 @@
     weiboUserInfoModel  *userInfomodel;
     stageInfoModel  *_TStageInfo;
     weiboInfoModel      *_TweiboInfo;
-
+ 
     
 }
 @end
@@ -159,6 +161,7 @@
 -(void)createTableView
 {
     _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight-kHeightNavigation-kHeigthTabBar+10)];
+    _tableView.backgroundColor=View_BackGround;
     _tableView.separatorStyle=UITableViewCellSeparatorStyleNone;
     _tableView.delegate = self;
     _tableView.dataSource = self;
@@ -314,7 +317,9 @@
     // 1.下拉刷新(进入刷新状态就会调用self的headerRereshing)
     [_tableView addHeaderWithTarget:self action:@selector(headerRereshing)];
     //  #warning 自动刷新(一进入程序就下拉刷新)
-    [_tableView headerBeginRefreshing];
+    //if (!self.author_id &&[self.author_id isEqualToString:@""]) {
+            [_tableView headerBeginRefreshing];
+    //}
     // 2.上拉加载更多(进入刷新状态就会调用self的footerRereshing)
     [_tableView addFooterWithTarget:self action:@selector(footerRereshing)];
 }
@@ -470,10 +475,28 @@
 //举报剧情
 -(void)requestReportSatge
 {
+    
+    
     // NSString *type=@"1";
-    NSString  *stageId;
+    NSNumber  *stageId;
     NSString  *author_id;
-    UserDataCenter *userCenter =[UserDataCenter shareInstance];
+    for (int i=100; i<102;i++ ) {
+        UIButton  *btn =(UIButton *)[self.view viewWithTag:i];
+        if (btn.tag==101&&btn.selected==YES) {
+            userAddmodel *model =[_addedDataArray objectAtIndex:Rowindex];
+            stageId=model.weiboInfo.stageInfo.Id;
+            author_id=model.weiboInfo.stageInfo.created_by;
+
+        }
+        else if (btn.tag==100&&btn.selected==YES)
+        {
+         
+            userAddmodel *model =[_upedDataArray objectAtIndex:Rowindex];
+            stageId=model.weiboInfo.stageInfo.Id;
+            author_id=model.weiboInfo.stageInfo.created_by;
+
+        }
+    }
     NSDictionary *parameters = @{@"reported_user_id":author_id,@"stage_id":stageId,@"reason":@"",@"user_id":userCenter.user_id};
     
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
@@ -504,7 +527,7 @@
         UserDataCenter  *user=[UserDataCenter shareInstance];
         userId=user.user_id;
     }
-    NSDictionary *parameters = @{@"id":userId};
+    NSDictionary *parameters = @{@"user_id":userId};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:[NSString stringWithFormat:@"%@/user/info", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
@@ -573,7 +596,7 @@
                         
                         stageInfoModel  *stagemodel =[[stageInfoModel alloc]init];
                         if (stagemodel) {
-                            if ([addDict objectForKey:@"weibo"]) {
+                            if (![[[addDict objectForKey:@"weibo"] objectForKey:@"stage"] isKindOfClass:[NSNull class]]) {
                                 
                             [stagemodel setValuesForKeysWithDictionary:[[addDict objectForKey:@"weibo"] objectForKey:@"stage"]];
                             movieInfoModel *moviemodel =[[movieInfoModel alloc]init];
@@ -676,7 +699,7 @@
 -(void)requestDelectDatawithRowindex:(NSInteger) index
 {
     userAddmodel  *model =[_addedDataArray objectAtIndex:index];
-    NSDictionary *parameters = @{@"id":model.weibo_id,@"user_id":userCenter.user_id};
+    NSDictionary *parameters = @{@"weibo_id":model.weibo_id,@"user_id":userCenter.user_id};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:[NSString stringWithFormat:@"%@/weibo/remove", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
@@ -748,7 +771,7 @@
 }
 
 -(CGFloat )tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return kDeviceWidth+90+0;
+    return kDeviceWidth+90+10;
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -869,6 +892,7 @@
 #pragma mark   -----commonStageCelldelegate  ---------------------------------------------
 -(void)commonStageCellToolButtonClick:(UIButton *)button Rowindex:(NSInteger)index
 {
+    Rowindex=index;
      userAddmodel  *addmodel;
     Rowindex =index;
 
@@ -885,14 +909,14 @@
     {
         // 电影
         MovieDetailViewController *vc =  [MovieDetailViewController new];
-     ///   vc.movieId =  hotmovie.stageinfo.s;
+        vc.movieId = addmodel.weiboInfo.stageInfo.movieInfo.Id;
         [self.navigationController pushViewController:vc animated:YES];
 
     }
     else if(button.tag==2000)
     {
         //分享
-        CommonStageCell *cell = (CommonStageCell *)(button.superview.superview.superview);
+        CommonStageCell *cell = (CommonStageCell *)(button.superview.superview.superview.superview);
         UIImage  *image=[Function getImage:cell.stageView WithSize:CGSizeMake(kDeviceWidth, kDeviceWidth)];
         //创建UMshareView 后必须配备这三个方法
        UMShareViewController  *shareVC=[[UMShareViewController alloc]init];
@@ -959,12 +983,49 @@
         else if(buttonIndex==1)
         {
             //版权问题
-            [self sendFeedBack];
+            //[self sendFeedBack];
             
+            stageInfoModel  *stageInfo;
+            for (int i=100; i<102;i++ ) {
+                UIButton  *btn =(UIButton *)[self.view viewWithTag:i];
+                if (btn.tag==100&&btn.selected==YES) {
+                    userAddmodel   *model =[_addedDataArray objectAtIndex:Rowindex];
+                    stageInfo=model.weiboInfo.stageInfo;
+                    
+                }
+                else if (btn.tag==101&&btn.selected==YES)
+                {
+                    userAddmodel   *model =[_addedDataArray objectAtIndex:Rowindex];
+                    stageInfo=model.weiboInfo.stageInfo;
+                    
+                }
+            }
+            //版权问题
+            [self sendFeedBackWithStageInfo: stageInfo];
+
         }
         else if(buttonIndex==2)
         {
             //           查看图片信息
+            
+            // 查看图片信息
+            ScanMovieInfoViewController * scanvc =[ScanMovieInfoViewController new];
+            for (int i=100; i<102;i++ ) {
+                UIButton  *btn =(UIButton *)[self.view viewWithTag:i];
+                if (btn.tag==100&&btn.selected==YES) {
+                    userAddmodel   *model =[_addedDataArray objectAtIndex:Rowindex];
+                    scanvc.stageInfo=model.weiboInfo.stageInfo;
+
+                }
+                else if (btn.tag==101&&btn.selected==YES)
+                {
+                    userAddmodel   *model =[_addedDataArray objectAtIndex:Rowindex];
+                    scanvc.stageInfo=model.weiboInfo.stageInfo;
+
+                 }
+            }
+            
+            [self presentViewController:scanvc animated:YES completion:nil];
         }
 
         
@@ -986,7 +1047,7 @@
     
 }
 
-- (void)sendFeedBack
+- (void)sendFeedBackWithStageInfo:(stageInfoModel *)stageInfo
 {
     //    [self showNativeFeedbackWithAppkey:UMENT_APP_KEY];
     Class mailClass = (NSClassFromString(@"MFMailComposeViewController"));
@@ -995,7 +1056,7 @@
         // We must always check whether the current device is configured for sending emails
         if ([mailClass canSendMail])
         {
-            [self displayComposerSheet];
+            [self displayComposerSheet:stageInfo];
         }
         else
         {
@@ -1008,7 +1069,7 @@
     }
     
 }
--(void)displayComposerSheet
+-(void)displayComposerSheet:(stageInfoModel *) stageInfo
 {
     MFMailComposeViewController *picker = [[MFMailComposeViewController alloc] init];/*MFMailComposeViewController邮件发送选择器*/
     picker.mailComposeDelegate = self;
@@ -1024,7 +1085,7 @@
     //    [picker setBccRecipients:bccRecipients];
     
     // Set up recipients
-    NSArray *toRecipients = [NSArray arrayWithObject:@"feedback@immovie.me"];
+    NSArray *toRecipients = [NSArray arrayWithObject:@"feedback@redianying.com"];
     [picker setToRecipients:toRecipients];
     // Fill out the email body text
     //struct utsname device_info;
@@ -1038,8 +1099,12 @@
     UIDevice * myDevice = [UIDevice currentDevice];
     NSString * sysVersion = [myDevice systemVersion];
     // NSString *emailBody = [NSString stringWithFormat:@"\n\n\n\n附属信息：\n\n%@ %@(%@)\n%@ / %@ / %@ IOS%@", appCurName, appCurVersion, appCurVersionNum, @"", @"", @"",  sysVersion];
-    [picker setMessageBody:@"" isHTML:NO];
-    [picker setSubject:[NSString stringWithFormat:@"反馈：我是电影%@(%@)", appCurVersion, appCurVersionNum]];/*emailpicker标题主题行*/
+    UserDataCenter  *usercenter=[UserDataCenter shareInstance];
+    
+    NSString *emailBody = [NSString stringWithFormat:@"\n您的名字：\n联系电话:\n投诉内容:\n\n\n\n\n-------\n请勿删除以下信息，并提交你拥有此版权的证明--------\n\n 电影:%@\n剧情id:%@\n投诉人id:%@\n投诉昵称:%@\n",stageInfo.movieInfo.name,stageInfo.Id,usercenter.user_id,usercenter.username];
+    [picker setTitle:@"@版权问题"];
+    [picker setMessageBody:emailBody isHTML:NO];
+    [picker setSubject:[NSString stringWithFormat:@"版权投诉"]];/*emailpicker标题主题行*/
     
     [self presentViewController:picker animated:YES completion:nil];
     //        [self.navigationController presentViewController:picker animated:YES completion:nil];
@@ -1147,8 +1212,6 @@
     //把值全局化，有利于下面进行一系列的删除变身操作
     _TStageInfo=stageInfoDict;
     _TweiboInfo=weiboDict;
-
-    NSLog(@"点击头像  微博dict  ＝====%@ ======出现的stageinfo  ＝＝＝＝＝＝%@",weiboDict,stageInfoDict);
     
     if (button.tag==10000) {
         ///点击了头像//进入个人页面
@@ -1159,10 +1222,9 @@
     else if (button.tag==10001)
     {
         //点击了分享
-        //分享文字
-     //   NSString  *shareText=weiboDict.topic;
-        float hight= kDeviceWidth;
-         CommonStageCell *cell = (CommonStageCell *)(markView.superview.superview.superview);
+        
+         float hight= kDeviceWidth;
+        CommonStageCell *cell = (CommonStageCell *)(markView.superview.superview.superview.superview);
         UIImage  *image=[Function getImage:cell.stageView WithSize:CGSizeMake(kDeviceWidth, hight)];
         //创建UMshareView 后必须配备这三个方法
         

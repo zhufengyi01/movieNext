@@ -53,7 +53,7 @@
         imageURL =[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!thumb",kUrlAvatar,userCenter.logo]];
     }
     [headImag addTarget:self action:@selector(changeHeadImage) forControlEvents:UIControlEventTouchUpInside];
-    [headImag sd_setBackgroundImageWithURL:imageURL forState:UIControlStateNormal placeholderImage:HeadImagePlaceholder];
+    [headImag sd_setBackgroundImageWithURL:imageURL forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"user_normal.png"]];
     [self.view addSubview:headImag];
     
     nickButton=[ZCControl createButtonWithFrame:CGRectMake((kDeviceWidth-200)/2, headImag.frame.origin.y+headImag.frame.size.height+40, 200, 30) ImageName:nil Target:self Action:@selector(changeNickClick) Title:userCenter.username];
@@ -109,6 +109,7 @@
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:[NSString stringWithFormat:@"%@/user/change-user-logo", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@" succuss");
+        userCenter.logo=[upyunDict objectForKey:@"url"];
         
      
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {

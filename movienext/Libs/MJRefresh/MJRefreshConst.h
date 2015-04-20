@@ -21,6 +21,10 @@
 // 文字颜色
 #define MJRefreshLabelTextColor MJColor(150, 150, 150)
 
+//刷新的headerview 的颜色
+#define  MJBackgroundColor  [UIColor colorWithRed:231.0/255 green:231.0/255 blue:231.0/255 alpha:1]
+
+
 // 图片路径
 #define MJRefreshSrcName(file) [@"MJRefresh.bundle" stringByAppendingPathComponent:file]
 

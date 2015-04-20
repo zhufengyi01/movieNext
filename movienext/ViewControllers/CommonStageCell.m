@@ -27,7 +27,15 @@
 }
 -(void)CreateUI
 {
-    self.backgroundColor =[UIColor blackColor];
+    self.backgroundColor=View_BackGround;
+     BgView =[[UIImageView alloc]initWithFrame:CGRectMake(5, 0, kDeviceWidth-10, kDeviceWidth+90)];
+    
+     BgView.clipsToBounds=YES;
+    BgView.layer.cornerRadius=4;
+    BgView.clipsToBounds=YES;
+    BgView.userInteractionEnabled=YES;
+    [self.contentView addSubview:BgView];
+    
     //上部视图，包含头像，点赞
     [self CreateTopView];
     //中间的stageview 视图
@@ -38,19 +46,18 @@
 }
 -(void)CreateTopView
 {
-    BgView0 =[[UIView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth,45)];
+    BgView0 =[[UIView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth-10,45)];
     BgView0.backgroundColor=View_ToolBar;
     BgView0.userInteractionEnabled=YES;
-    [self.contentView addSubview:BgView0];
+    [BgView addSubview:BgView0];
     
     
-    MovieLogoImageView=[[UIImageView alloc]initWithFrame:CGRectMake(10,10,30, 26)];
+    MovieLogoImageView=[[UIImageView alloc]initWithFrame:CGRectMake(10,7.5,30, 30)];
     MovieLogoImageView.layer.cornerRadius=4;
     MovieLogoImageView.layer.masksToBounds = YES;
     [BgView0 addSubview:MovieLogoImageView];
     
-    //movieNameLable=[ZCControl createLabelWithFrame:CGRectMake(50, 10, 120, 30) Font:16 Text:@""];
-    movieNameLable =[[UILabel alloc]initWithFrame:CGRectMake(45, 10, 120, 26)];
+    movieNameLable =[[UILabel alloc]initWithFrame:CGRectMake(45, 7.5, 120, 30)];
     movieNameLable.font=[UIFont systemFontOfSize:16];
     movieNameLable.textColor=VGray_color;
    // movieNameLable.numberOfLines=1;
@@ -67,23 +74,26 @@
 
 -(void)CreateSatageView
 {
-    _stageView=[[StageView alloc]initWithFrame:CGRectMake(0, 45, kDeviceWidth, kDeviceWidth)];
+    _stageView=[[StageView alloc]initWithFrame:CGRectMake(0, 45, kDeviceWidth-10, kDeviceWidth)];
     _stageView.backgroundColor=VStageView_color;
+   // _stageView.layer.cornerRadius=4;
+    //_stageView.clipsToBounds=YES;
     _stageView.delegate=self;
     _stageView.userInteractionEnabled=YES;
-    [self.contentView addSubview:_stageView];
+    [BgView addSubview:_stageView];
   
 }
 
 -(void)createButtomView
 {
-    BgView2=[[UIView alloc]initWithFrame:CGRectMake(0, kDeviceWidth+45, kDeviceWidth, 45)];
+    BgView2=[[UIView alloc]initWithFrame:CGRectMake(0, kDeviceWidth+45, kDeviceWidth-10, 45)];
     //改变toolar 的颜色
     BgView2.backgroundColor=[UIColor whiteColor];
-    [self.contentView addSubview:BgView2];
+    [BgView addSubview:BgView2];
  
     //更多
-    moreButton=[ZCControl createButtonWithFrame:CGRectMake(10, 9, 40, 27) ImageName:@"btn_delete.png" Target:self Action:@selector(cellButtonClick:) Title:@""];
+    moreButton=[ZCControl createButtonWithFrame:CGRectMake(10, 9, 30, 25) ImageName:@"more_icon.png" Target:self Action:@selector(cellButtonClick:) Title:@""];
+    //moreButton.backgroundColor=VBlue_color;
     moreButton.layer.cornerRadius=2;
      moreButton.hidden=NO;
     [BgView2 addSubview:moreButton];
@@ -91,12 +101,12 @@
     
     
     //分享
-    ScreenButton =[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-140,9,60,27) ImageName:@"btn_share_default.png" Target:self Action:@selector(cellButtonClick:) Title:@""];
+    ScreenButton =[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-120,9,45,25) ImageName:@"btn_share_default.png" Target:self Action:@selector(cellButtonClick:) Title:@""];
     [ScreenButton setBackgroundImage:[UIImage imageNamed:@"btn_share_select.png"] forState:UIControlStateHighlighted];
     [BgView2 addSubview:ScreenButton];
 
     //添加弹幕
-    addMarkButton =[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-70,9,60,27) ImageName:@"btn_add_default.png" Target:self Action:@selector(cellButtonClick:) Title:@""];
+    addMarkButton =[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-65,9,45,25) ImageName:@"btn_add_default.png" Target:self Action:@selector(cellButtonClick:) Title:@""];
     [addMarkButton setBackgroundImage:[UIImage imageNamed:@"btn_add_select.png"] forState:UIControlStateHighlighted];
     [BgView2 addSubview:addMarkButton];
     
@@ -112,7 +122,7 @@
     //底部2像素的投影
     UIImageView *lineImage =[[UIImageView alloc]initWithFrame:CGRectMake(0,44, kDeviceWidth, 2)];
     lineImage.image=[UIImage imageNamed:@"cell_buttom_line.png"];
-    [BgView2 addSubview:lineImage];
+    //[BgView2 addSubview:lineImage];
 }
 - (void)awakeFromNib {
     // Initialization code
@@ -131,14 +141,13 @@
             _tanlogoButton=nil;
         }
         _tanlogoButton =[UIButton buttonWithType:UIButtonTypeCustom];
-        _tanlogoButton.frame=CGRectMake(kDeviceWidth-40, 5, 35, 35);
+        _tanlogoButton.frame=CGRectMake(kDeviceWidth-45, 5, 35, 35);
         [_tanlogoButton setImage:[UIImage imageNamed:@"close_danmu.png"] forState:UIControlStateNormal];
         [_tanlogoButton setImage:[UIImage imageNamed:@"open_danmu.png"] forState:UIControlStateSelected];
         [_tanlogoButton addTarget:self action:@selector(hidenAndShowMarkView:) forControlEvents:UIControlEventTouchUpInside];
        // [_tanlogoButton setTitleEdgeInsets:UIEdgeInsetsMake(10, 10, 10, 10)];
-        [self addSubview:_tanlogoButton];
+        [BgView0 addSubview:_tanlogoButton];
           
-
 #pragma mark  configDatawithSatgeView------------------------------
    //单个标签的时候用这个
      if (self.weiboInfo) {
@@ -232,6 +241,7 @@
 #pragma mark ------下方按钮点击事件 ,在父视图中实现具法代理方法
 -(void)cellButtonClick:(UIButton*)button
 {
+    
     if (self.delegate &&[self.delegate respondsToSelector:@selector(commonStageCellToolButtonClick:Rowindex:)]) {
         [self.delegate commonStageCellToolButtonClick:button Rowindex:self.Cellindex];
     }
