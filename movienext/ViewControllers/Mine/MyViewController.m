@@ -30,6 +30,7 @@
 #import "UMShareViewController.h"
 #import "userAddmodel.h"
 #import "Function.h"
+#import "UIImage-Helpers.h"
 #import "ScanMovieInfoViewController.h"
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
@@ -63,8 +64,7 @@
     weiboUserInfoModel  *userInfomodel;
     stageInfoModel  *_TStageInfo;
     weiboInfoModel      *_TweiboInfo;
- 
-    
+
 }
 @end
 
@@ -84,7 +84,9 @@
     }
     [[NSNotificationCenter defaultCenter]  addObserver:self selector:@selector(changeUser) name:@"initUser" object:nil];
     //NSNotificationCenter  *c= [NSNotificationCenter defaultCenter];
-   
+    [[UINavigationBar appearance] setShadowImage:[UIImage imageWithColor:tabBar_line size:CGSizeMake(kDeviceWidth, 1)]];
+    
+
     
  }
 -(void)changeUser
@@ -161,7 +163,7 @@
 -(void)createTableView
 {
     _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight-kHeightNavigation-kHeigthTabBar+10)];
-    _tableView.backgroundColor=View_BackGround;
+    _tableView.backgroundColor=[UIColor whiteColor];
     _tableView.separatorStyle=UITableViewCellSeparatorStyleNone;
     _tableView.delegate = self;
     _tableView.dataSource = self;
@@ -177,6 +179,7 @@
         signature=@"";
     }
      UIView *viewHeader = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, 130)];
+    viewHeader.backgroundColor =[UIColor whiteColor];
      int ivAvatarWidth = 50;
     ivAvatar = [[UIImageView alloc] initWithFrame:CGRectMake(20, 20, ivAvatarWidth, ivAvatarWidth)];
     ivAvatar.layer.cornerRadius = ivAvatarWidth * 0.5;
@@ -191,6 +194,7 @@
     }
     [ivAvatar sd_setImageWithURL:imageURL placeholderImage:[UIImage imageNamed:@"user_normal.png"]];
    
+    
     [viewHeader addSubview:ivAvatar];
     
       if ([userCenter.is_admin  intValue]>0) {
@@ -354,9 +358,9 @@
 
 - (void)footerRereshing
 {
-    page++;
 
-    if (page<=pageCount) {
+    if (page<pageCount) {
+        page++;
      [self  requestData];
     }
     
@@ -582,10 +586,7 @@
         for (int i=100; i<102;i++ ) {
             UIButton  *btn =(UIButton *)[self.view viewWithTag:i];
         if (btn.tag==100&&btn.selected==YES) {
-            if (_addedDataArray ==nil) {
-                _addedDataArray=[[NSMutableArray alloc]init];
-            }
-            for (NSDictionary  *addDict  in Detailarray) {
+                for (NSDictionary  *addDict  in Detailarray) {
                 userAddmodel  *model=[[userAddmodel alloc]init];
                 if (model) {
                     
@@ -593,7 +594,7 @@
                     weiboInfoModel *weibomodel =[[weiboInfoModel alloc]init];
                     if (![[addDict objectForKey:@"weibo"] isKindOfClass:[NSNull class]]) {
                         [weibomodel setValuesForKeysWithDictionary:[addDict objectForKey:@"weibo"]];
-                        
+                    
                         stageInfoModel  *stagemodel =[[stageInfoModel alloc]init];
                         if (stagemodel) {
                             if (![[[addDict objectForKey:@"weibo"] objectForKey:@"stage"] isKindOfClass:[NSNull class]]) {
@@ -616,6 +617,10 @@
                             weibomodel.uerInfo=usermodel;
                         }
                         model.weiboInfo=weibomodel;
+                        if (_addedDataArray ==nil) {
+                            _addedDataArray=[[NSMutableArray alloc]init];
+                        }
+
                         [_addedDataArray addObject:model];
                     }
                 }
@@ -652,8 +657,11 @@
                             [stagemodel setValuesForKeysWithDictionary:[[addDict objectForKey:@"weibo"] objectForKey:@"stage"]];
                             movieInfoModel *moviemodel =[[movieInfoModel alloc]init];
                             if (moviemodel) {
+                                if (![[[[addDict objectForKey:@"weibo"]  objectForKey:@"stage"] objectForKey:@"movie"] isKindOfClass:[NSNull class]]) {
+                                
                                 [moviemodel setValuesForKeysWithDictionary:[[[addDict objectForKey:@"weibo"] objectForKey:@"stage"] objectForKey:@"movie"]];
                                 stagemodel.movieInfo=moviemodel;
+                                }
                             }
                             weibomodel.stageInfo=stagemodel;
                             }
@@ -677,7 +685,7 @@
             }
             else
             {
-                  [IsNullStateDict setValue:@"NO" forKey:@"TWO"];
+                [IsNullStateDict setValue:@"NO" forKey:@"TWO"];
                 [loadView stopAnimation];
                 [loadView removeFromSuperview];
                 [_tableView reloadData];
@@ -695,15 +703,16 @@
     }];
 }
 
-
 -(void)requestDelectDatawithRowindex:(NSInteger) index
 {
     userAddmodel  *model =[_addedDataArray objectAtIndex:index];
-    NSDictionary *parameters = @{@"weibo_id":model.weibo_id,@"user_id":userCenter.user_id};
+    NSDictionary *parameters = @{@"weibo_id":model.weiboInfo.Id,@"user_id":userCenter.user_id};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:[NSString stringWithFormat:@"%@/weibo/remove", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
             NSLog(@"删除数据成功=======%@",responseObject);
+            [_addedDataArray removeObjectAtIndex:index];
+            [_tableView reloadData];
             
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -715,7 +724,7 @@
 -(void)LikeRequstData:(WeiboModel  *) weiboDict StageInfo :(stageInfoModel *) stageInfoDict
 {
     
-    UserDataCenter  *userCenter=[UserDataCenter shareInstance];
+    //UserDataCenter  *userCenter=[UserDataCenter shareInstance];
     NSNumber  *weiboId=weiboDict.Id;
     NSNumber  *stageId=stageInfoDict.Id;
     NSString  *movieId=stageInfoDict.movie_id;
@@ -892,7 +901,7 @@
 #pragma mark   -----commonStageCelldelegate  ---------------------------------------------
 -(void)commonStageCellToolButtonClick:(UIButton *)button Rowindex:(NSInteger)index
 {
-    Rowindex=index;
+    
      userAddmodel  *addmodel;
     Rowindex =index;
 
@@ -1034,12 +1043,12 @@
     else
     {
         if (buttonIndex==0) {
-            [_addedDataArray removeObjectAtIndex:Rowindex];
+//            [_addedDataArray removeObjectAtIndex:Rowindex];
             if (productCount>=1) {
               productCount=productCount-1;
             }
             lblCount.text=[NSString stringWithFormat:@"%d",productCount];
-            [_tableView reloadData];
+           // [_tableView reloadData];
             [self requestDelectDatawithRowindex:Rowindex];
         }
         

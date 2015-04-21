@@ -66,8 +66,13 @@ float getHeightByWidthAndHeight(float width, float height){
  */
 + (NSString *)friendlyTime:(NSString *)datetime;
 
-//根据服务器返回的时间差，返回日期
+//根据服务器返回的时间戳，返回年月日
 +(NSString *)getTimewithInterval:(NSString *)timeIneterval;
+//根据传进来的时间戳,返回距离当前时间天，时，分，秒
+
++(NSString  *)getTimeIntervalfromInerterval:(NSString *) timeInerval;
+//返回时分秒
++(NSString *)getHourMinuteTime:(NSString *)timeIneterval;
 
 /**
  *  获取一个微博标签图像,根据标签信息以及位置信息

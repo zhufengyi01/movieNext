@@ -73,7 +73,7 @@
     //默认勾选状态
     checkBtn.selected=YES;
     checkBtn.tag=100;
-    [checkBtn setTitleColor:VGray_color forState:UIControlStateNormal];
+    [checkBtn setTitleColor:[UIColor colorWithRed:216.0/255 green:216.0/255 blue:216.0/255 alpha:216.0/255] forState:UIControlStateNormal];
     [checkBtn setTitle:@"登录注册成功，即接受" forState:UIControlStateNormal];
     [checkBtn setTitleEdgeInsets:UIEdgeInsetsMake(5, 5, 0, 0)];
    // checkBtn.backgroundColor=[UIColor redColor];
@@ -86,7 +86,7 @@
     [checkBtn2 setTitleEdgeInsets:UIEdgeInsetsMake(5, 0, 0, 0)];
      //checkBtn2.backgroundColor=[UIColor blackColor];
     [checkBtn2 setTitle:@"《影弹服务使用条款》" forState:UIControlStateNormal];
-    [checkBtn2 setTitleColor:VGray_color forState:UIControlStateNormal];
+    [checkBtn2 setTitleColor:[UIColor colorWithRed:216.0/255 green:216.0/255 blue:216.0/255 alpha:216.0/255] forState:UIControlStateNormal];
     checkBtn2.tag=101;
     
     checkBtn2.titleLabel.font=[UIFont systemFontOfSize:12];
@@ -209,10 +209,10 @@
 //登陆按钮
 -(void)dealloginClick:(UIButton *) btn
 {
-    weiboButton.hidden=YES;
-    weiChateButton.hidden=YES;
-    checkBtn.hidden=YES;
-    checkBtn2.hidden=YES;
+//    weiboButton.hidden=YES;
+//    weiChateButton.hidden=YES;
+//    checkBtn.hidden=YES;
+//    checkBtn2.hidden=YES;
     if (btn.tag==1000) {
         //qq  登陆
         //window.rootViewController=[CustmoTabBarController new];
@@ -259,7 +259,7 @@
         if (response.responseCode == UMSResponseCodeSuccess) {
             [[UMSocialDataService defaultDataService] requestSnsInformation:ssoName completion:^(UMSocialResponseEntity *response) {
                 if (response.responseCode == UMSResponseCodeSuccess) {
-                    NSLog(@"====  login sucess  =response ======%@",[response valueForKey:@"data"]);
+                   // NSLog(@"====  login sucess  =response ======%@",[response valueForKey:@"data"]);
                     weiboButton.hidden=YES;
                     weiChateButton.hidden=YES;
                     checkBtn.hidden=YES;

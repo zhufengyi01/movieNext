@@ -48,7 +48,7 @@
     failLoadView.userInteractionEnabled=YES;
     [self addSubview:failLoadView];
     
-    UILabel * failTitle=[ZCControl createLabelWithFrame:CGRectMake(0, 10, kDeviceWidth, 20) Font:16 Text:@"糟糕，网络连接失败"];
+    UILabel * failTitle=[ZCControl createLabelWithFrame:CGRectMake(0, 10, kDeviceWidth, 20) Font:16 Text:@"加载失败，请重新加载!"];
     failTitle.textAlignment=NSTextAlignmentCenter;
     failTitle.textColor=VGray_color;
     [failLoadView addSubview:failTitle];

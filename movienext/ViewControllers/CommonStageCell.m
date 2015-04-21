@@ -18,9 +18,6 @@
 {
     if (self=[ super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         m_frame=self.frame;
-       // NSLog(@"=========打印cell 的frame ====%f");
-        // 初始化放置标签的数组，每次创建的时候讲markview 添加到这个数组中
-       // _MarkMuatableArray =[[NSMutableArray alloc]init];
         [self CreateUI];
     }
     return self;
@@ -28,7 +25,7 @@
 -(void)CreateUI
 {
     self.backgroundColor=View_BackGround;
-     BgView =[[UIImageView alloc]initWithFrame:CGRectMake(5, 0, kDeviceWidth-10, kDeviceWidth+90)];
+     BgView =[[UIImageView alloc]initWithFrame:CGRectMake(5, 5, kDeviceWidth-10, kDeviceWidth+90)];
     
      BgView.clipsToBounds=YES;
     BgView.layer.cornerRadius=4;

@@ -96,13 +96,13 @@
     //高亮显示
     [buttomView addSubview:zanbutton];
     
-    UIView  *lineView1=[[UIView alloc]initWithFrame:CGRectMake(kDeviceWidth/3, 15, 1, 20)];
-    lineView1.backgroundColor=VLight_GrayColor;
-    [buttomView addSubview:lineView1];
-    
-    UIView  *lineView2=[[UIView alloc]initWithFrame:CGRectMake((kDeviceWidth/3)*2, 15,1, 20)];
-    lineView2.backgroundColor=VLight_GrayColor;
-    [buttomView addSubview:lineView2];
+//    UIView  *lineView1=[[UIView alloc]initWithFrame:CGRectMake(kDeviceWidth/3, 15, 1, 20)];
+//    lineView1.backgroundColor=VLight_GrayColor;
+//    [buttomView addSubview:lineView1];
+//    
+//    UIView  *lineView2=[[UIView alloc]initWithFrame:CGRectMake((kDeviceWidth/3)*2, 15,1, 20)];
+//    lineView2.backgroundColor=VLight_GrayColor;
+//    [buttomView addSubview:lineView2];
   
     UserDataCenter  *userCenter =[UserDataCenter shareInstance];
   //  if ([userCenter.is_admin  intValue]>0) {

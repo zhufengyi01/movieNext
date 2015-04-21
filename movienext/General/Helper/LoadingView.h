@@ -8,7 +8,14 @@
 
 #import <UIKit/UIKit.h>
 @protocol LoadingViewDelegate <NSObject>
+/*
+ 点击重新加载按钮，重新加载数据
+ 
+ */
+@required
+
 -(void)reloadDataClick;
+
 @end
 @interface LoadingView : UIView
 {
@@ -16,9 +23,6 @@
     BOOL  isanimal;
     double angle;
     CGRect  m_frame;
-   // UIImageView  *imageView;
-    //加载失败的view
-    
     UIView  *failLoadView;
     //没有数据的view
     UIView   *NullDataView;
@@ -30,9 +34,11 @@
 -(void)startAnimation;
 //结束动画
 -(void)stopAnimation;
+
+
 //显示加载失败
 -(void)showFailLoadData;
-//隐藏加载失败。同时显示旋转动画
+//重复加载数据,隐藏加载失败，同时显示加载等待
 -(void)hidenFailLoadAndShowAnimation;
 //现实没有数据
 -(void)showNullView:(NSString *) failString;

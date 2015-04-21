@@ -41,7 +41,7 @@
 #import "ScanMovieInfoViewController.h"
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
-@interface MovieDetailViewController ()<UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UICollectionViewDelegate,MovieHeadViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UMSocialUIDelegate,UMSocialDataDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIScrollViewDelegate,BigImageCollectionViewCellDelegate,AddMarkViewControllerDelegate,UMShareViewControllerDelegate,MFMailComposeViewControllerDelegate>
+@interface MovieDetailViewController ()<UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UICollectionViewDelegate,MovieHeadViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UMSocialUIDelegate,UMSocialDataDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIScrollViewDelegate,BigImageCollectionViewCellDelegate,AddMarkViewControllerDelegate,UMShareViewControllerDelegate,MFMailComposeViewControllerDelegate,LoadingViewDelegate>
 
 {
      UICollectionViewFlowLayout    *layout;
@@ -65,11 +65,9 @@
     //电影详细信息
     movieInfoModel   * moviedetailmodel;
     int pageCount;
-    
     NSMutableArray  *_upWeiboArray;
     NSInteger  Rowindex;
     
-
 }
 
 @end
@@ -81,7 +79,6 @@
   ///  self.navigationController.navigationBar.alpha=0.4;
     self.navigationController.navigationBar.hidden=YES;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(requestMovieData) name:@"RefreshMovieDeatail" object:nil];
-
 
 }
 -(void)viewDidAppear:(BOOL)animated
@@ -105,7 +102,7 @@
     // Do any additional setup after loading the view.
     [self initData];
     [self initUI];
-    [self creatLoadView];
+    
     if (self.pageSourceType==NSMovieSourcePageSearchListController) { //电影搜索页面进来的
         page=1;
         [self requestMovieIdWithdoubanId];
@@ -115,10 +112,10 @@
         // 从电影列表页进来的
         page=1;
         [self requestMovieInfoData];
-        //[self requestData];
-    }
+     }
     [self createNavigation];
     [self createToolBar];
+    [self creatLoadView];
    
 }
 
@@ -129,6 +126,9 @@
     Navview=[[UIView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, 64)];
     Navview.userInteractionEnabled=YES;
     Navview.backgroundColor=[[UIColor whiteColor] colorWithAlphaComponent:0];
+   //Navview.layer.shadowColor=VGray_color.CGColor;
+   //Navview.layer.shadowOffset=CGSizeMake(kDeviceWidth, 1);
+
     [_myConllectionView bringSubviewToFront:Navview];
     [self.view addSubview:Navview];
     
@@ -192,7 +192,6 @@
     _dataArray =[[NSMutableArray alloc]init];
     moviedetailmodel=[[movieInfoModel alloc]init];
     _upWeiboArray=[[NSMutableArray alloc]init];
-
     
 }
 -(void)initUI
@@ -210,10 +209,9 @@
 
         layout.sectionInset=UIEdgeInsetsMake(0,0,64, 0); //整个偏移量 上左下右
     }
-    //kDeviceHeight/3-45+44
     
     _myConllectionView =[[UICollectionView alloc]initWithFrame:CGRectMake(0, -200,kDeviceWidth, kDeviceHeight+kHeightNavigation+180) collectionViewLayout:layout];
-    [layout setHeaderReferenceSize:CGSizeMake(_myConllectionView.frame.size.width, kDeviceHeight/3+64+180)];
+    [layout setHeaderReferenceSize:CGSizeMake(_myConllectionView.frame.size.width, kDeviceHeight/3+64+110)];
 
     _myConllectionView.backgroundColor=View_BackGround;
     //注册大图模式
@@ -256,6 +254,7 @@
 -(void)creatLoadView
 {
     loadView =[[LoadingView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight)];
+    loadView.delegate=self;
     [self.view addSubview:loadView];
 }
 //创建底部的视图
@@ -416,9 +415,12 @@
 
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
+        [loadView showNullView:@"没有数据..."];
+        
     }];
 
 }
+
 
 //根据电影id 请求电影的详细信息
 -(void)requestMovieInfoData
@@ -437,6 +439,7 @@
         }
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
         NSLog(@"Error: %@", error);
     }];
 }
@@ -450,6 +453,7 @@
         return;
         
     }
+    
     UserDataCenter  *userCenter =[UserDataCenter shareInstance];
     NSString  *urlString =[NSString stringWithFormat:@"%@/stage/list?per-page=%d&page=%d",kApiBaseUrl,pageSize,page];
     NSDictionary *parameter;
@@ -463,14 +467,12 @@
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:urlString parameters:parameter success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"  电影详情页面数据JSON: %@", responseObject);
-        
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
-            pageCount=[[responseObject objectForKey:@"pageCount"] intValue];
-            
+        pageCount=[[responseObject objectForKey:@"pageCount"] intValue];
         NSMutableArray  *detailArray=[responseObject objectForKey:@"models"];
+        if (detailArray.count>0) {
         [loadView stopAnimation];
         [loadView removeFromSuperview];
-        
         for (NSDictionary  *stageDict in detailArray) {
             stageInfoModel  *stagemodel =[[stageInfoModel alloc]init];
             if (stagemodel) {
@@ -486,22 +488,25 @@
                            [usermodel setValuesForKeysWithDictionary:[weiboDict objectForKey:@"user"]];
                            weibomodel.uerInfo=usermodel;
                        }
-                       
                        [weibos addObject:weibomodel];
                     }
                 }
                 stagemodel.weibosArray=weibos;
                 
+                movieInfoModel  *moviemodel =[[movieInfoModel alloc]init];
+                if (moviemodel) {
+                    [moviemodel setValuesForKeysWithDictionary:[stageDict objectForKey:@"movie"]];
+                    stagemodel.movieInfo=moviemodel;
+                }
                 if (_dataArray==nil) {
                     _dataArray=[[NSMutableArray alloc]init];
                 }
                 [_dataArray addObject:stagemodel];
             }
         }
-            
             //点赞的数组
-            for (NSDictionary  *updict in [responseObject objectForKey:@"upweibos"]) {
-                UpweiboModel *upmodel =[[UpweiboModel alloc]init];
+        for (NSDictionary  *updict in [responseObject objectForKey:@"upweibos"]) {
+            UpweiboModel *upmodel =[[UpweiboModel alloc]init];
                 if (upmodel) {
                     [upmodel setValuesForKeysWithDictionary:updict];
                     
@@ -509,19 +514,28 @@
                         _upWeiboArray =[[NSMutableArray alloc]init];
                     }
                     [_upWeiboArray addObject:upmodel];
-                }
-                
-            }
-    
+                }}
             
-        
-        [_myConllectionView reloadData];
+          [_myConllectionView reloadData];
         }
+        else if(detailArray.count==0)
+        {
+            [loadView showNullView:@"没有数据..."];
+        }
+    }
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Error: %@", error);
+        NSLog(@"Error     地方: %@", error);
+        [loadView showFailLoadData];
+        
     }];
     
+}
+//数据加载失败
+-(void)reloadDataClick
+{
+    [self requestData];
+    [loadView hidenFailLoadAndShowAnimation];
 }
 #pragma  mark -----
 #pragma  mark ------  DataRequest
@@ -613,16 +627,10 @@
       //  BigImageCollectionViewCell   *cell=(BigImageCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
      } else {
         ShowStageViewController *vc = [[ShowStageViewController alloc] init];
-//        HotMovieModel  *model=[_dataArray objectAtIndex:indexPath.row];
-//        if ([_MovieDict objectForKey:@"name"]) {
-//            model.stageinfo.movie_name=[_MovieDict objectForKey:@"name"];
-//        }
-//        if ([_MovieDict objectForKey:@"id"]) {
-//            model.stageinfo.movie_id=[_MovieDict objectForKey:@"id"];
-//        }
          stageInfoModel *stagemodel=[_dataArray objectAtIndex:indexPath.row];
          vc.upweiboArray=_upWeiboArray;
-        vc.stageInfo = stagemodel;
+    
+         vc.stageInfo = stagemodel;
         [self.navigationController pushViewController:vc animated:YES];
      }
 }
@@ -651,7 +659,7 @@
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
    // HotMovieModel  *model =[_dataArray objectAtIndex:indexPath.row];
     if (bigModel==YES) {
-         return CGSizeMake(kDeviceWidth,kDeviceWidth+45+45+10);
+         return CGSizeMake(kDeviceWidth,kDeviceWidth+45+10);
     }
     else
     {
@@ -1301,14 +1309,14 @@
          if (scrollView.contentOffset.y>160) {
              
              [backBtn setImage:[UIImage imageNamed:@"back_icon_blue.png"] forState:UIControlStateNormal];
-             [upLoadimageBtn setImage:[UIImage imageNamed:@"up_picture_blue.png"] forState:UIControlStateNormal];
+             [upLoadimageBtn setImage:[UIImage imageNamed:@"up_picture_blue@2x.png"] forState:UIControlStateNormal];
          }
     }
     else
     {
         Navview.backgroundColor=[[UIColor whiteColor] colorWithAlphaComponent:1];
         [backBtn setImage:[UIImage imageNamed:@"back_icon_blue.png"] forState:UIControlStateNormal];
-        [upLoadimageBtn setImage:[UIImage imageNamed:@"up_picture_blue.png"] forState:UIControlStateNormal];
+        [upLoadimageBtn setImage:[UIImage imageNamed:@"up_picture_blue@2x.png"] forState:UIControlStateNormal];
     }
 }
 -(void)dealloc

@@ -13,7 +13,7 @@
 #import "ZCControl.h"
 #import "Constant.h"
 #import "AddMarkViewController.h"
-
+#import <QuartzCore/QuartzCore.h>
 #import "UMSocial.h"
 #import "StageView.h"
 #import "ButtomToolView.h"
@@ -42,6 +42,7 @@
  //   UMShareView  *shareView;
     StageView *stageView;
     MarkView       *_mymarkView;
+    UIImageView *BgView;
 
 }
 -(void)viewWillAppear:(BOOL)animated
@@ -52,6 +53,7 @@
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self createNav];
      [self createScrollView];
     //[self createTopView];
     [self createStageView];
@@ -60,35 +62,62 @@
     [self createToolBar];
  }
 
+-(void)createNav
+{
+    UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:self.stageInfo.movieInfo.name];
+    titleLable.textColor=VBlue_color;
+    
+    titleLable.font=[UIFont boldSystemFontOfSize:16];
+    titleLable.textAlignment=NSTextAlignmentCenter;
+    //self.navigationItem.titleView=titleLable;
+    
+   // UIBarButtonItem  *barbutton =[[UIBarButtonItem alloc]initWithCustomView:titleLable];
+    //self.navigationItem.backBarButtonItem = barbutton;
+   
+
+}
 -(void)createScrollView
 {
-    scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight-45)];
-    scrollView.backgroundColor = [UIColor whiteColor];
+    scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight)];
+    scrollView.backgroundColor =View_BackGround;
+    scrollView.contentSize = CGSizeMake(kDeviceWidth, kDeviceHeight);
     [self.view addSubview:scrollView];
 }
 
 
 -(void)createStageView
 {
-     scrollView.contentSize = CGSizeMake(kDeviceWidth, MIN(kDeviceHeight, kDeviceWidth));
-    stageView = [[StageView alloc] initWithFrame:CGRectMake(0,(kDeviceHeight-45-kDeviceWidth-kHeightNavigation)/2,kDeviceWidth, kDeviceWidth) ];
+    BgView =[[UIImageView alloc]initWithFrame:CGRectMake(5,5,kDeviceWidth-10, kDeviceWidth+45)];
+    BgView.clipsToBounds=YES;
+    [BgView.layer setShadowOffset:CGSizeMake(kDeviceWidth, 20)];
+    [BgView.layer setShadowColor:[UIColor blackColor].CGColor];
+    [BgView.layer setShadowRadius:10];
+    BgView.layer.cornerRadius=4;
+    BgView.clipsToBounds=YES;
+    BgView.userInteractionEnabled=YES;
+    [scrollView addSubview:BgView];
+    
+
+    
+    
+    stageView = [[StageView alloc] initWithFrame:CGRectMake(0,0,kDeviceWidth, kDeviceWidth)];
     stageView.isAnimation = YES;
     stageView.delegate=self;
     stageView.stageInfo=self.stageInfo;
     stageView.weibosArray = self.stageInfo.weibosArray;
     [stageView configStageViewforStageInfoDict];
-     [scrollView addSubview:stageView];
+     [BgView addSubview:stageView];
     [stageView startAnimation];
 
  
 }
  -(void)createButtonView1
 {
-    BgView2=[[UIView alloc]initWithFrame:CGRectMake(0, kDeviceHeight-kHeightNavigation-45, kDeviceWidth, 45)];
+    BgView2=[[UIView alloc]initWithFrame:CGRectMake(0,stageView.frame.origin.y+stageView.frame.size.height, kDeviceWidth, 45)];
     //改变toolar 的颜色
     BgView2.backgroundColor=View_ToolBar;
     [self.view bringSubviewToFront:BgView2];
-    [self.view addSubview:BgView2];
+    [BgView addSubview:BgView2];
 
     //更多
     moreButton=[ZCControl createButtonWithFrame:CGRectMake(10, 9, 30, 25) ImageName:@"more_icon.png" Target:self Action:@selector(cellButtonClick:) Title:@""];
@@ -139,7 +168,8 @@
 {
     // NSString *type=@"1";
     NSNumber  *stageId=self.stageInfo.Id;
-    NSString  *author_id=@"";
+    NSString  *author_id=self.stageInfo.created_by;
+    
     UserDataCenter *userCenter =[UserDataCenter shareInstance];
     NSDictionary *parameters = @{@"reported_user_id":author_id,@"stage_id":stageId,@"reason":@"",@"user_id":userCenter.user_id};
     

@@ -8,7 +8,7 @@
 
 #import "RootViewController.h"
 #import "Constant.h"
-
+#import "UIImage-Helpers.h"
 @interface RootViewController ()
 
 @end
@@ -21,6 +21,8 @@
 //    self.navigationController.navigationBar.alpha=1;
     //设置半透明。
 //    self.navigationController.navigationBar.translucent=NO;
+    [[UINavigationBar appearance] setShadowImage:[UIImage imageWithColor:tabBar_line size:CGSizeMake(kDeviceWidth, 1)]];
+    
 
     self.navigationController.navigationBar.hidden=NO;
 }

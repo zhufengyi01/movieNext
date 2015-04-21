@@ -166,6 +166,7 @@
             mvdetail.douban_Id=[[_dataArray objectAtIndex:indexPath.row]  objectForKey:@"doubanId"];
             mvdetail.pageSourceType=NSMovieSourcePageSearchListController; //从电影列表页今日电影详细页面
             [self.navigationController pushViewController:mvdetail animated:YES];
+        
         }
     }
  

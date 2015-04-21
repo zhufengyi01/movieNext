@@ -26,6 +26,7 @@
 #import "MovieCollectionViewCell.h"
 #import "MovieDetailViewController.h"
 #import "MJRefresh.h"
+#import "UIImage-Helpers.h"
 #define  BUTTON_COUNT  3
 @interface MovieViewController ()<UISearchBarDelegate,UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout,LoadingViewDelegate,MovieCollectionViewCellDelegate,UIActionSheetDelegate>
 {
@@ -50,6 +51,8 @@
    // if (self.myConllectionView) {
      //[  self.myConllectionView headerBeginRefreshing];
     //}
+   // [[UINavigationBar appearance] setShadowImage:[UIImage imageWithColor:[UIColor clearColor] size:CGSizeMake(kDeviceWidth, 1)]];
+
 }
 -(void)viewDidAppear:(BOOL)animated
 {
@@ -78,12 +81,9 @@
     search.placeholder=@"搜索电影";
     search.delegate=self;
     search.searchBarStyle = UISearchBarStyleMinimal;
-    //search.barStyle=UIBarStyleDefault;
-    //search.barTintColor=VGray_color;
-    //search.alpha=0.3;
+   
      search.backgroundColor=[UIColor clearColor];
-//    [[search.subviews objectAtIndex:0]removeFromSuperview];
-    self.navigationItem.titleView=search;
+     self.navigationItem.titleView=search;
     
 }
 -(void)createSegmentView
@@ -203,7 +203,7 @@
     layout.sectionInset=UIEdgeInsetsMake(10, 20, 10, 20); //整个偏移量 上左下右
     
     _myConllectionView =[[UICollectionView alloc]initWithFrame:CGRectMake(0, 40,kDeviceWidth, kDeviceHeight-40-kHeightNavigation-kHeigthTabBar) collectionViewLayout:layout];
-    _myConllectionView.backgroundColor=View_BackGround;
+    _myConllectionView.backgroundColor=[UIColor whiteColor];
     [_myConllectionView registerClass:[MovieCollectionViewCell class] forCellWithReuseIdentifier:@"cell"];
     _myConllectionView.delegate=self;
     _myConllectionView.dataSource=self;
@@ -487,7 +487,7 @@
      [cell setValueforCell:[array  objectAtIndex:(long)indexPath.row] inRow:indexPath.row];
       cell.delegate=self;
      cell.Cellindex=indexPath.row;
-     cell.backgroundColor=[UIColor clearColor];
+     cell.backgroundColor=[UIColor whiteColor];
     }
     return cell;
 }

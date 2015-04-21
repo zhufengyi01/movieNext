@@ -97,7 +97,8 @@
     
     time_t delta = current_time - this_time;
     
-    if (delta <= 0) {
+    
+    if (delta <= 5) {
         return @"刚刚";
     }
     else if (delta <60)
@@ -127,8 +128,79 @@
     NSDateFormatter  *formater=[[NSDateFormatter alloc]init];
     [formater setDateFormat:@"yyyy-MM-dd"];
     return   [formater stringFromDate:date];
-    
 }
+
+
++(NSString  *)getTimeIntervalfromInerterval:(NSString *) timeInerval
+{
+    NSDateFormatter  *formatter =[[NSDateFormatter alloc]init];
+    [formatter setDateFormat:@"YYYY-MM--DD HH:mm:ss"];
+    
+    //把当前时间变成时间戳
+    NSDate *datenow = [NSDate date];//现在时间,你可以输出来看下是什么格式
+    NSTimeZone *zone = [NSTimeZone defaultTimeZone];
+    NSInteger interval = [zone secondsFromGMTForDate:datenow];
+    NSDate *localeDate = [datenow  dateByAddingTimeInterval: interval];
+    NSLog(@"%@当前时间", localeDate);
+    NSString *timeSp = [NSString stringWithFormat:@"%ld", (long)[localeDate timeIntervalSince1970]];
+    NSLog(@"当前时间戳timeSp:%@",timeSp); //时间戳的值
+    
+    
+    long  int inter =[timeSp intValue] -[timeInerval intValue];
+    if (inter<=10) {
+         return @"刚刚";
+    }
+    else if (inter <=60)
+    {
+         return @"1分钟内";
+    }
+    else if(inter <=60*60)
+    {
+         return @"1小时内";
+    }
+    else if(inter<=60*60*2)
+    {
+        return @"2小时内";
+    }
+    else if (inter<=60*60*24)
+    {
+      // return   [self getHourMinuteTime:timeInerval];
+        NSDateFormatter  *formatter =[[NSDateFormatter alloc]init];
+        [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+        formatter.timeZone=[NSTimeZone defaultTimeZone];
+        NSDate *olddate =[NSDate dateWithTimeIntervalSince1970:[timeInerval intValue]];
+        NSString  *dateString =[formatter stringFromDate:olddate];
+        return dateString;
+
+    }
+    else if (inter<=60*60*24*2)
+    {
+         return @"昨天";
+    }
+    else if (inter<66*60*24*3)
+    {
+        return @"2天前";
+    }
+    else if(inter <60*60*24*7)
+    {
+        return @"一周内";
+    }
+    else
+    {
+        return   [self getTimewithInterval:timeInerval];
+    }
+ 
+    return 0;
+}
+//时间时分秒方法
++(NSString *)getHourMinuteTime:(NSString *)timeIneterval
+{
+    NSDate  *date =[NSDate dateWithTimeIntervalSince1970:[timeIneterval intValue]];
+    NSDateFormatter  *formater=[[NSDateFormatter alloc]init];
+    [formater setDateFormat:@"yyyy-MM-DD:HH:MM"];
+    return   [formater stringFromDate:date];
+}
+
 
 /**
  *  标签视图

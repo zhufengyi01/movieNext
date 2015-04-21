@@ -43,17 +43,6 @@
 #pragma mark    设置stageview的值  ，主要是给stagview 添加markview  和添加一张图片
 -(void)configStageViewforStageInfoDict{
     
-//    if (tanlogoButton) {
-//         [tanlogoButton removeFromSuperview];
-//        tanlogoButton=nil;
-//    }
-//    tanlogoButton =[UIButton buttonWithType:UIButtonTypeCustom];
-//    tanlogoButton.frame=CGRectMake(kDeviceWidth-40, 5, 35, 35);
-//    [tanlogoButton setImage:[UIImage imageNamed:@"dan_normal"] forState:UIControlStateNormal];
-//    [tanlogoButton setImage:[UIImage imageNamed:@"dan_selected"] forState:UIControlStateSelected];
-//    [tanlogoButton addTarget:self action:@selector(hidenAndShowMarkView:) forControlEvents:UIControlEventTouchUpInside];
-//    [self addSubview:tanlogoButton];
-//      
 
     //先移除所有的Mark视图
     [self removeStageViewSubView];
@@ -83,19 +72,18 @@
         x=(kDeviceWidth-width)/2;
      }
   
-//        if (ImageWith==0 && ImgeHight>0) {
-//            ImageWith=ImgeHight;
-//        }
-//        ImgeHight = ImgeHight>0 ? ImgeHight : 1;
-//        ImageWith = ImageWith>0 ? ImageWith : 1;
-//        y = y > 0 ? y : 0;
-
         _MovieImageView.frame=CGRectMake(x, y,width,hight);
-    
     
     _MovieImageView.backgroundColor =VStageView_color;
     NSString *photostring=[NSString stringWithFormat:@"%@%@!w640",kUrlStage,self.stageInfo.photo];
-    NSLog(@"====photostring=%@",photostring);
+    //可监视下载进入的方法
+   /* [_MovieImageView sd_setImageWithURL:[NSURL URLWithString:photostring] placeholderImage:nil options:SDWebImageProgressiveDownload progress:^(NSInteger receivedSize, NSInteger expectedSize)  {
+        NSLog(@"====receivedSize  ==%ld =====%ld",receivedSize,expectedSize);
+        
+    } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+    
+    }];
+    */
     [_MovieImageView sd_setImageWithURL:[NSURL URLWithString:photostring] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         
 #pragma  mark  是静态的, 气泡是不动的

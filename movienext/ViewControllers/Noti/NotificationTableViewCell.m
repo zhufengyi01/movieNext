@@ -25,7 +25,7 @@
 -(void)createUI
 {
     logoButton =[ZCControl createButtonWithFrame:CGRectMake(15, 10, 30, 30) ImageName:@"" Target:self Action:@selector(dealCellClick:) Title:@""];
-    logoButton.layer.cornerRadius=4;
+    logoButton.layer.cornerRadius=15;
     logoButton.clipsToBounds=YES;
     logoButton.tag=100;
     [self.contentView addSubview:logoButton];
@@ -41,7 +41,6 @@
     titleButon.tag=101;
     [self.contentView addSubview:titleButon];
     
-  //  UITapGestureRecognizer  *tap =[UITapGestureRecognizer alloc]initWithTarget:self.superview action:@selector(<#selector#>)
     
     Zanlable=[ZCControl createLabelWithFrame:CGRectMake(0, 10, 0, 0) Font:14 Text:@"赞了你"];
     Zanlable.textColor=VGray_color;
@@ -52,7 +51,7 @@
     dateLable.textAlignment=NSTextAlignmentLeft;
     [self.contentView addSubview:dateLable];
     
-   stageImage =[ZCControl createImageViewWithFrame:CGRectMake(kDeviceWidth-55, 5, 50, 50) ImageName:nil];
+   stageImage =[ZCControl createImageViewWithFrame:CGRectMake(kDeviceWidth-50, 10, 40, 40) ImageName:nil];
     stageImage.layer.cornerRadius=4;
     stageImage.clipsToBounds=YES;
     [self.contentView addSubview:stageImage];
@@ -85,25 +84,22 @@
     titleLable.frame=CGRectMake(titleLable.frame.origin.x, titleLable.frame.origin.y, Namesize.width, Namesize.height);
     titleButon.frame=titleLable.frame;
     Zanlable.frame=CGRectMake(titleLable.frame.origin.x+Namesize.width+0, titleLable.frame.origin.y, 60,titleLable.frame.size.height);
-    if ([dict objectForKey:@"created_at"]) {
-        NSString  *dateStr=[Function friendlyTime:[dict objectForKey:@"create_time"]];
+    
+    if ([dict objectForKey:@"updated_at"]) {
+       // NSString  *dateStr=[Function friendlyTime:[dict objectForKey:@"create_time"]];
+        NSString *dateStr=[Function getTimeIntervalfromInerterval:[dict objectForKey:@"updated_at"]];
         dateLable.text=dateStr;
     }
     
 }
 -(void)dealCellClick:(UIButton *) button
 {
-    if (self.delegate&&[self.delegate respondsToSelector:@selector(NotificationClick:indexPath:)]) {
-#warning  有问题的要解决
+    if (self.delegate&&[self.delegate respondsToSelector:@selector(NotificationClick:indexPath:)])
+    {
         [self.delegate NotificationClick:button indexPath:_index];
     }
     
 }
-/*
--(void)dealHeadClick:(UIButton  *)button
-{
-    NSLog(@" logo  but  click");
-}*/
 - (void)awakeFromNib {
     // Initialization code
 }

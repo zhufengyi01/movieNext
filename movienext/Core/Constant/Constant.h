@@ -45,8 +45,7 @@
 #define weiChatShareSecret @"ce1e16a6fa8b594e614eda18903cd22c"
 
 
-
-#define   Review   0    ///上传appstore版本  1 为审核
+#define   Review   0   ///上传appstore版本  1 为审核
 #pragma  mark 颜色设置
 #define kAppTintColor [UIColor colorWithRed:0.0/255.0 green:146.0/255.0 blue:255.0/255.0 alpha:1]
 //项目背景颜色

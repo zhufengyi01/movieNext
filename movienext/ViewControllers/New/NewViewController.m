@@ -39,7 +39,6 @@
 #import "ScanMovieInfoViewController.h"
 #import "netRequest.h"
 
-
 //友盟分享
 //#import "UMSocial.h"
 @interface NewViewController ()<UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UIScrollViewDelegate,UMSocialDataDelegate,UMSocialUIDelegate,LoadingViewDelegate,UIActionSheetDelegate,CommonStageCellDelegate,AddMarkViewControllerDelegate,UMShareViewControllerDelegate,MFMailComposeViewControllerDelegate>
@@ -52,6 +51,8 @@
     NSMutableArray    *_newDataArray;
     int page;
     int pagesize;
+    int pageCount;
+    
     ButtomToolView *_toolBar;
     MarkView       *_mymarkView;
      UIImageView   *ShareimageView;
@@ -111,8 +112,7 @@
     [self creatLoadView];
     //  [self requestData];
     [self createToolBar];
-    //  [self createShareView];
-   
+    
     
 }
 -(void)initData{
@@ -121,6 +121,7 @@
     _upWeiboArray=[[NSMutableArray alloc]init];
     page=1;
     pagesize=10;
+    pageCount=1;
  }
 #pragma  mark   ------
 #pragma  mark  -------CreatUI;
@@ -129,7 +130,7 @@
     [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color.png"] forBarMetrics:UIBarMetricsDefault];
     NSArray *segmentedArray = [[NSArray alloc] initWithObjects:@"热门", @"最新", nil];
     segment = [[UISegmentedControl alloc] initWithItems:segmentedArray];
-    segment.frame = CGRectMake(kDeviceWidth/4, 0, kDeviceWidth/2, 30);
+    segment.frame = CGRectMake(kDeviceWidth/4, 0, kDeviceWidth/2, 28);
     segment.selectedSegmentIndex = 0;
     segment.backgroundColor = [UIColor clearColor];
     segment.tintColor = kAppTintColor;
@@ -189,7 +190,7 @@
 - (void)headerRereshing
 {
     page=1;
-    
+
     if (segment.selectedSegmentIndex==0) {
         if (_hotDataArray.count>0) {
             [_hotDataArray removeAllObjects];
@@ -213,8 +214,11 @@
 
 - (void)footerRereshing
 {
-    page++;
+    
+    if (pageCount>page) {
+     page++;
     [self  requestData];
+    }
     // 2.2秒后刷新表格UI
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         // 刷新表格
@@ -490,6 +494,8 @@
             [loadView stopAnimation];
             loadView.hidden=YES;
         NSMutableArray  *Detailarray=[responseObject objectForKey:@"models"];
+        pageCount=[[responseObject objectForKey:@"pageCount"] intValue];
+            
         if (segment.selectedSegmentIndex==0) {
             if (_hotDataArray ==nil) {
                 _hotDataArray=[[NSMutableArray alloc]init];
@@ -610,7 +616,8 @@
          //请求失败
          else
          {
-          [loadView showFailLoadData];
+         // [loadView showFailLoadData];'
+             [loadView  showNullView:@"没有数据..."];
          }
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -799,12 +806,7 @@
         AddMarkVC.model=model;
         AddMarkVC.delegate=self;
         //AddMarkVC.pageSoureType=NSAddMarkPageSourceDefault;
-        NSLog(@"dict.stageinfo = %@", AddMarkVC.stageInfo);
-        //UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:AddMarkVC];
-        //na.modalTransitionStyle=UIModalTransitionStyleCrossDissolve;
-        //[self presentViewController:na animated:YES completion:nil];
         [self.navigationController pushViewController:AddMarkVC animated:NO];
-        
 
     }
     else if (button.tag==4000)

@@ -23,9 +23,8 @@
 }
 -(void)CreateUI
 {
-   
     self.backgroundColor=View_BackGround;
-    BgView =[[UIImageView alloc]initWithFrame:CGRectMake(5, 0, kDeviceWidth-10, kDeviceWidth+90)];
+    BgView =[[UIImageView alloc]initWithFrame:CGRectMake(5, 5, kDeviceWidth-10, kDeviceWidth+90)];
     
     BgView.clipsToBounds=YES;
     BgView.layer.cornerRadius=4;
@@ -33,29 +32,30 @@
     BgView.userInteractionEnabled=YES;
     [self.contentView addSubview:BgView];
 
-    [self CreateTopView];
+    //[self CreateTopView];
     [self CreateSatageView];
     [self createButtonView];
 
 }
+/*
 -(void)CreateTopView
 {
     BgView0 =[[UIView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth,45)];
     BgView0.backgroundColor=View_ToolBar;
     BgView0.userInteractionEnabled=YES;
     [BgView addSubview:BgView0];
-}
+}*/
 
 -(void)CreateSatageView
 {
-    _StageView=[[StageView alloc]initWithFrame:CGRectMake(0, 45, kDeviceWidth,kDeviceWidth)];
+    _StageView=[[StageView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth,kDeviceWidth)];
     _StageView.backgroundColor=VStageView_color;
     [BgView addSubview:_StageView];
     
 }
 -(void)createButtonView
 {
-    BgView2=[[UIView alloc]initWithFrame:CGRectMake(0, kDeviceWidth+45, kDeviceWidth, 45)];
+    BgView2=[[UIView alloc]initWithFrame:CGRectMake(0, kDeviceWidth, kDeviceWidth, 45)];
     BgView2.backgroundColor=[UIColor whiteColor];
     [BgView addSubview:BgView2];
     
@@ -65,7 +65,6 @@
     moreButton.hidden=NO;
     moreButton.tag=4000;
     [BgView2 addSubview:moreButton];
-
     
 
     ScreenButton =[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-120,10,45,25) ImageName:@"btn_share_default.png" Target:self Action:@selector(cellButtonClick:) Title:@""];
@@ -88,18 +87,16 @@
 }
 -(void)ConfigCellWithIndexPath:(NSInteger)row{
     self.Cellindex=row;
-    
     if (_tanlogoButton) {
         [_tanlogoButton removeFromSuperview];
         _tanlogoButton=nil;
     }
     _tanlogoButton =[UIButton buttonWithType:UIButtonTypeCustom];
-    _tanlogoButton.frame=CGRectMake(kDeviceWidth-45, 5, 35, 35);
+    _tanlogoButton.frame=CGRectMake(moreButton.frame.origin.x+moreButton.frame.size.width+10, 5, 35, 35);
     [_tanlogoButton setImage:[UIImage imageNamed:@"close_danmu.png"] forState:UIControlStateNormal];
     [_tanlogoButton setImage:[UIImage imageNamed:@"open_danmu.png"] forState:UIControlStateSelected];
     [_tanlogoButton addTarget:self action:@selector(hidenAndShowMarkView:) forControlEvents:UIControlEventTouchUpInside];
-    // [_tanlogoButton setTitleEdgeInsets:UIEdgeInsetsMake(10, 10, 10, 10)];
-    [BgView0 addSubview:_tanlogoButton];
+    [BgView2 addSubview:_tanlogoButton];
     
     
     
@@ -142,7 +139,7 @@
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-      BgView2.frame=CGRectMake(0, kDeviceWidth+45, kDeviceWidth, 45);
+     // BgView2.frame=CGRectMake(0, kDeviceWidth, kDeviceWidth, 45);
     
 }
 
