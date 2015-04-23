@@ -53,6 +53,16 @@
     _TitleLable.textColor=[UIColor whiteColor];
     [_rightView addSubview:_TitleLable];
     
+    
+    
+    
+    //标题
+    self.contentLable =[[M80AttributedLabel alloc]initWithFrame:CGRectMake(0, 0, 0, 0)];
+    self.contentLable.lineSpacing=5.0;
+  //  [_rightView addSubview:self.contentLable];
+    
+   
+    
     _ZanImageView=[ZCControl createImageViewWithFrame:CGRectMake(0, 0, 0,0) ImageName:@"tag_like_icon.png"];
     [_rightView addSubview:_ZanImageView];
     
@@ -61,7 +71,7 @@
     [_rightView addSubview:_ZanNumLable];
     
     
-        UITapGestureRecognizer  *tap=[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(dealTapWeiboClick:)];
+    UITapGestureRecognizer  *tap=[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(dealTapWeiboClick:)];
         [self addGestureRecognizer:tap];
 }
 //获取weiboinfo 信息

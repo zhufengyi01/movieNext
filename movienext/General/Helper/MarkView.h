@@ -11,6 +11,7 @@
 //#import "StageInfoModel.h"
 #import "weiboInfoModel.h"
 #import "stageInfoModel.h"
+#import "M80AttributedLabel.h"
 @protocol MarkViewDelegate <NSObject> 
 //标签的点击事件，对stageview 提供接口，传递微博对象
 -(void)MarkViewClick:(weiboInfoModel  *) weiboDict withMarkView:(id) markView;
@@ -24,6 +25,7 @@
 @property (nonatomic,strong) UIImageView    *LeftImageView;
 @property (nonatomic,strong) UIView         *rightView;  //又视图.包含titlelable 和赞的图片，赞的个数。
 @property (nonatomic,strong) UILabel        *TitleLable;
+@property(nonatomic,strong)  M80AttributedLabel  *contentLable;
 @property (nonatomic,strong) UILabel        *ZanNumLable;
 @property (nonatomic,strong) UIImageView    *ZanImageView;
 //点击的状态

@@ -358,6 +358,11 @@
 		00CCEC001AE13CEF0072E1B3 /* more_icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 00CCEBF91AE13CEF0072E1B3 /* more_icon@3x.png */; };
 		00DF5E601AE5F7CB0063CCBC /* unselect_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 00DF5E5E1AE5F7CB0063CCBC /* unselect_icon@2x.png */; };
 		00DF5E611AE5F7CB0063CCBC /* unselect_icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 00DF5E5F1AE5F7CB0063CCBC /* unselect_icon@3x.png */; };
+		00DF5EFA1AE64FDF0063CCBC /* M80AttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 00DF5EF21AE64FDF0063CCBC /* M80AttributedLabel.m */; };
+		00DF5EFB1AE64FDF0063CCBC /* M80AttributedLabelAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 00DF5EF41AE64FDF0063CCBC /* M80AttributedLabelAttachment.m */; };
+		00DF5EFC1AE64FDF0063CCBC /* M80AttributedLabelURL.m in Sources */ = {isa = PBXBuildFile; fileRef = 00DF5EF71AE64FDF0063CCBC /* M80AttributedLabelURL.m */; };
+		00DF5EFD1AE64FDF0063CCBC /* NSMutableAttributedString+M80.m in Sources */ = {isa = PBXBuildFile; fileRef = 00DF5EF91AE64FDF0063CCBC /* NSMutableAttributedString+M80.m */; };
+		00DF5EFF1AE64FF70063CCBC /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00DF5EFE1AE64FF70063CCBC /* CoreText.framework */; };
 		00E0D47D1AB54A3D00048399 /* btn_delete.png in Resources */ = {isa = PBXBuildFile; fileRef = 00E0D47A1AB54A3D00048399 /* btn_delete.png */; };
 		00E0D47E1AB54A3D00048399 /* btn_delete@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 00E0D47B1AB54A3D00048399 /* btn_delete@2x.png */; };
 		00E0D47F1AB54A3D00048399 /* btn_delete@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 00E0D47C1AB54A3D00048399 /* btn_delete@3x.png */; };
@@ -886,6 +891,16 @@
 		00CCEBF91AE13CEF0072E1B3 /* more_icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "more_icon@3x.png"; sourceTree = "<group>"; };
 		00DF5E5E1AE5F7CB0063CCBC /* unselect_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "unselect_icon@2x.png"; sourceTree = "<group>"; };
 		00DF5E5F1AE5F7CB0063CCBC /* unselect_icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "unselect_icon@3x.png"; sourceTree = "<group>"; };
+		00DF5EF11AE64FDF0063CCBC /* M80AttributedLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = M80AttributedLabel.h; sourceTree = "<group>"; };
+		00DF5EF21AE64FDF0063CCBC /* M80AttributedLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = M80AttributedLabel.m; sourceTree = "<group>"; };
+		00DF5EF31AE64FDF0063CCBC /* M80AttributedLabelAttachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = M80AttributedLabelAttachment.h; sourceTree = "<group>"; };
+		00DF5EF41AE64FDF0063CCBC /* M80AttributedLabelAttachment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = M80AttributedLabelAttachment.m; sourceTree = "<group>"; };
+		00DF5EF51AE64FDF0063CCBC /* M80AttributedLabelDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = M80AttributedLabelDefines.h; sourceTree = "<group>"; };
+		00DF5EF61AE64FDF0063CCBC /* M80AttributedLabelURL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = M80AttributedLabelURL.h; sourceTree = "<group>"; };
+		00DF5EF71AE64FDF0063CCBC /* M80AttributedLabelURL.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = M80AttributedLabelURL.m; sourceTree = "<group>"; };
+		00DF5EF81AE64FDF0063CCBC /* NSMutableAttributedString+M80.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableAttributedString+M80.h"; sourceTree = "<group>"; };
+		00DF5EF91AE64FDF0063CCBC /* NSMutableAttributedString+M80.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableAttributedString+M80.m"; sourceTree = "<group>"; };
+		00DF5EFE1AE64FF70063CCBC /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		00E0D47A1AB54A3D00048399 /* btn_delete.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_delete.png; sourceTree = "<group>"; };
 		00E0D47B1AB54A3D00048399 /* btn_delete@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_delete@2x.png"; sourceTree = "<group>"; };
 		00E0D47C1AB54A3D00048399 /* btn_delete@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_delete@3x.png"; sourceTree = "<group>"; };
@@ -907,6 +922,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				00DF5EFF1AE64FF70063CCBC /* CoreText.framework in Frameworks */,
 				00E609FE1AABF1B900E2F53B /* Foundation.framework in Frameworks */,
 				00E609FC1AABF1AC00E2F53B /* UIKit.framework in Frameworks */,
 				00AA544E1AA2C526004096F8 /* TencentOpenAPI.framework in Frameworks */,
@@ -1634,6 +1650,7 @@
 		00AA53511AA2C525004096F8 /* Libs */ = {
 			isa = PBXGroup;
 			children = (
+				00DF5EF01AE64FDF0063CCBC /* M80AttributedLabel */,
 				00AA53491AA2C525004096F8 /* CustomUI */,
 				00354C301ABF030C00F650AA /* AFNetworking */,
 				00354C1E1ABF004100F650AA /* UPYun */,
@@ -1918,6 +1935,7 @@
 		00AA546B1AA2C630004096F8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				00DF5EFE1AE64FF70063CCBC /* CoreText.framework */,
 				00E609FD1AABF1B900E2F53B /* Foundation.framework */,
 				00E609FB1AABF1AC00E2F53B /* UIKit.framework */,
 				00AA546E1AA2D5B0004096F8 /* Security.framework */,
@@ -1978,6 +1996,22 @@
 			);
 			name = View;
 			path = General/View;
+			sourceTree = "<group>";
+		};
+		00DF5EF01AE64FDF0063CCBC /* M80AttributedLabel */ = {
+			isa = PBXGroup;
+			children = (
+				00DF5EF11AE64FDF0063CCBC /* M80AttributedLabel.h */,
+				00DF5EF21AE64FDF0063CCBC /* M80AttributedLabel.m */,
+				00DF5EF31AE64FDF0063CCBC /* M80AttributedLabelAttachment.h */,
+				00DF5EF41AE64FDF0063CCBC /* M80AttributedLabelAttachment.m */,
+				00DF5EF51AE64FDF0063CCBC /* M80AttributedLabelDefines.h */,
+				00DF5EF61AE64FDF0063CCBC /* M80AttributedLabelURL.h */,
+				00DF5EF71AE64FDF0063CCBC /* M80AttributedLabelURL.m */,
+				00DF5EF81AE64FDF0063CCBC /* NSMutableAttributedString+M80.h */,
+				00DF5EF91AE64FDF0063CCBC /* NSMutableAttributedString+M80.m */,
+			);
+			path = M80AttributedLabel;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -2312,6 +2346,7 @@
 				00AA545D1AA2C526004096F8 /* LoginViewController.m in Sources */,
 				00AA542C1AA2C525004096F8 /* SDWebImageDecoder.m in Sources */,
 				00AA542F1AA2C525004096F8 /* SDWebImageManager.m in Sources */,
+				00DF5EFA1AE64FDF0063CCBC /* M80AttributedLabel.m in Sources */,
 				00354C601ABF030C00F650AA /* AFNetworkActivityIndicatorManager.m in Sources */,
 				004DD1E81AB028B000394A9D /* ButtomToolView.m in Sources */,
 				00AA54131AA2C525004096F8 /* NSDateFunction.m in Sources */,
@@ -2320,6 +2355,7 @@
 				00354C5D1ABF030C00F650AA /* AFURLRequestSerialization.m in Sources */,
 				00E3581E1AA3DCD000577239 /* NotificationTableViewCell.m in Sources */,
 				00AA54281AA2C525004096F8 /* MKAnnotationView+WebCache.m in Sources */,
+				00DF5EFD1AE64FDF0063CCBC /* NSMutableAttributedString+M80.m in Sources */,
 				00AA541D1AA2C525004096F8 /* CustmoTabBarController.m in Sources */,
 				4076AF011AA9B0D2006DC466 /* StageView.m in Sources */,
 				000B091A1AA2F40E00B8D13A /* UserDataCenter.m in Sources */,
@@ -2354,6 +2390,7 @@
 				00AA542B1AA2C525004096F8 /* SDWebImageCompat.m in Sources */,
 				00ABFC711AAAAB2200980824 /* BigImageCollectionViewCell.m in Sources */,
 				00AA545A1AA2C526004096F8 /* Topic.m in Sources */,
+				00DF5EFC1AE64FDF0063CCBC /* M80AttributedLabelURL.m in Sources */,
 				00B168AE1AD77D64002265CD /* UpweiboModel.m in Sources */,
 				00AA54111AA2C525004096F8 /* DoubanService.m in Sources */,
 				00ABFC741AAAAB3F00980824 /* SmallImageCollectionViewCell.m in Sources */,
@@ -2385,6 +2422,7 @@
 				000B091D1AA3004E00B8D13A /* RootViewController.m in Sources */,
 				00354C581ABF030C00F650AA /* AFHTTPRequestOperationManager.m in Sources */,
 				00AA54261AA2C525004096F8 /* NSLayoutConstraint+MASDebugAdditions.m in Sources */,
+				00DF5EFB1AE64FDF0063CCBC /* M80AttributedLabelAttachment.m in Sources */,
 				0053E9251ACBDD8300C11CB4 /* ChangeSelfViewController.m in Sources */,
 				006739591AA491250087C240 /* UIScrollView+MJRefresh.m in Sources */,
 				00354C641ABF030C00F650AA /* UIImageView+AFNetworking.m in Sources */,

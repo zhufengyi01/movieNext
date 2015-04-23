@@ -57,6 +57,7 @@
 //长按删除
 -(void)longPress:(UILongPressGestureRecognizer *) longPress
 {
+    
     if (longPress.state==UIGestureRecognizerStateBegan) {
         if (self.delegate &&[self.delegate respondsToSelector:@selector(MovieCollectionViewlongPress:)]) {
             [self.delegate MovieCollectionViewlongPress:self.Cellindex];
