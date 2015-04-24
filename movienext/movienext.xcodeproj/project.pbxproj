@@ -258,6 +258,8 @@
 		009A27BA1AA6DBDA0001690C /* movie_icon_backgroud_color@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 009A27B71AA6DBDA0001690C /* movie_icon_backgroud_color@2x.png */; };
 		009A27BB1AA6DBDA0001690C /* movie_icon_backgroud_color@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 009A27B81AA6DBDA0001690C /* movie_icon_backgroud_color@3x.png */; };
 		009A27BE1AA6F7520001690C /* MarkView.m in Sources */ = {isa = PBXBuildFile; fileRef = 009A27BD1AA6F7520001690C /* MarkView.m */; };
+		009BF7BF1AE9CA5E00199CAF /* TagModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 009BF7BE1AE9CA5E00199CAF /* TagModel.m */; };
+		009BF7C21AE9CAA400199CAF /* TagDetailModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 009BF7C11AE9CAA400199CAF /* TagDetailModel.m */; };
 		00AA53091AA2C3F4004096F8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 00AA53081AA2C3F4004096F8 /* main.m */; };
 		00AA530C1AA2C3F4004096F8 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 00AA530B1AA2C3F4004096F8 /* AppDelegate.m */; };
 		00AA530F1AA2C3F4004096F8 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00AA530E1AA2C3F4004096F8 /* ViewController.m */; };
@@ -704,6 +706,10 @@
 		009A27B81AA6DBDA0001690C /* movie_icon_backgroud_color@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "movie_icon_backgroud_color@3x.png"; sourceTree = "<group>"; };
 		009A27BC1AA6F7520001690C /* MarkView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MarkView.h; path = ../MarkView.h; sourceTree = "<group>"; };
 		009A27BD1AA6F7520001690C /* MarkView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MarkView.m; path = ../MarkView.m; sourceTree = "<group>"; };
+		009BF7BD1AE9CA5E00199CAF /* TagModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagModel.h; sourceTree = "<group>"; };
+		009BF7BE1AE9CA5E00199CAF /* TagModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagModel.m; sourceTree = "<group>"; };
+		009BF7C01AE9CAA400199CAF /* TagDetailModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagDetailModel.h; sourceTree = "<group>"; };
+		009BF7C11AE9CAA400199CAF /* TagDetailModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagDetailModel.m; sourceTree = "<group>"; };
 		00AA53031AA2C3F4004096F8 /* movienext.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = movienext.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		00AA53071AA2C3F4004096F8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00AA53081AA2C3F4004096F8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -1981,6 +1987,10 @@
 				00B168B91AD78176002265CD /* weiboUserInfoModel.m */,
 				0047F7621ADB9E25007DDC1A /* userAddmodel.h */,
 				0047F7631ADB9E25007DDC1A /* userAddmodel.m */,
+				009BF7BD1AE9CA5E00199CAF /* TagModel.h */,
+				009BF7BE1AE9CA5E00199CAF /* TagModel.m */,
+				009BF7C01AE9CAA400199CAF /* TagDetailModel.h */,
+				009BF7C11AE9CAA400199CAF /* TagDetailModel.m */,
 			);
 			path = NewModel;
 			sourceTree = "<group>";
@@ -2359,6 +2369,7 @@
 				00AA541D1AA2C525004096F8 /* CustmoTabBarController.m in Sources */,
 				4076AF011AA9B0D2006DC466 /* StageView.m in Sources */,
 				000B091A1AA2F40E00B8D13A /* UserDataCenter.m in Sources */,
+				009BF7BF1AE9CA5E00199CAF /* TagModel.m in Sources */,
 				005AFB5A1AA5F41900D80CFB /* CommonStageCell.m in Sources */,
 				00AA54341AA2C525004096F8 /* UIImage+WebP.m in Sources */,
 				006739551AA491250087C240 /* MJRefreshConst.m in Sources */,
@@ -2373,6 +2384,7 @@
 				00AA530C1AA2C3F4004096F8 /* AppDelegate.m in Sources */,
 				00AA54331AA2C525004096F8 /* UIImage+MultiFormat.m in Sources */,
 				00AA54541AA2C526004096F8 /* Feed.m in Sources */,
+				009BF7C21AE9CAA400199CAF /* TagDetailModel.m in Sources */,
 				00AA545C1AA2C526004096F8 /* Weibo.m in Sources */,
 				00354C5A1ABF030C00F650AA /* AFNetworkReachabilityManager.m in Sources */,
 				00AA54571AA2C526004096F8 /* MovieList.m in Sources */,

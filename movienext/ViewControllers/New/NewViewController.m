@@ -38,6 +38,7 @@
 #import <MessageUI/MFMailComposeViewController.h>
 #import "ScanMovieInfoViewController.h"
 #import "netRequest.h"
+#import "TagModel.h"
 
 //友盟分享
 //#import "UMSocial.h"
@@ -570,9 +571,6 @@
         }
         else if(segment.selectedSegmentIndex==1)
         {
-            if (_newDataArray==nil) {
-                _newDataArray=[[NSMutableArray alloc]init];
-            }
             NSLog(@"最新数据 JSON: %@", responseObject);
             
             for (NSDictionary  *newDict in Detailarray) {
@@ -600,8 +598,29 @@
                         }
                     }
                     weibomodel.stageInfo=stageInfo;
+                  }
                 }
+                
+                TagModel  *tagmodel =[[TagModel alloc]init];
+                NSMutableArray  *tagArray =[[NSMutableArray alloc]init];
+                if (![[newDict objectForKey:@"tags"] isKindOfClass:[NSNull class]]) {
+                    for (NSDictionary  *tagDict  in [newDict objectForKey:@"tags"]) {
+                        [tagmodel setValuesForKeysWithDictionary:tagDict];
+                        TagDetailModel  *tagDetailmodel =[[TagDetailModel alloc]init];
+                        if (tagDetailmodel) {
+                            [tagDetailmodel setValuesForKeysWithDictionary:[tagDict objectForKey:@"tag"]];
+                            tagmodel.tagDetailInfo=tagDetailmodel;
+                        }
+                        [tagArray addObject:tagmodel];
+                        
+                    }
+                    
                 }
+                
+                weibomodel.tagArray=tagArray;
+                
+                
+
                 if (_newDataArray==nil) {
                     _newDataArray =[[NSMutableArray alloc]init];
                 }
@@ -929,10 +948,10 @@
         _toolBar.markView=markView;
         _toolBar.upweiboArray=_upWeiboArray;
         [_toolBar configToolBar];
-    
-        //把工具栏添加到当前视图
-        self.tabBarController.tabBar.hidden=YES;
-        [self.view addSubview:_toolBar];
+        
+        [AppView addSubview:_toolBar];
+        
+        //[self.view addSubview:_toolBar];
         //弹出工具栏
         [_toolBar ShowButtomView];
         
@@ -941,7 +960,7 @@
     {
         //隐藏toolbar
         NSLog(@" 执行了隐藏工具栏的方法");
-        self.tabBarController.tabBar.hidden=NO;
+        //self.tabBarController.tabBar.hidden=NO;
         //隐藏工具栏
         if (_toolBar) {
         [_toolBar HidenButtomView];
@@ -964,6 +983,13 @@
     NSLog(@"ToolViewHandClick  weibo dict ===%@",weiboDict);
     if (button.tag==10000) {
         ///点击了头像//进入个人页面
+        [_mymarkView CancelMarksetSelect];
+        if (_toolBar) {
+            [_toolBar HidenButtomView];
+            [_toolBar removeFromSuperview];
+            
+        }
+        
         MyViewController   *myVc=[[MyViewController alloc]init];
         myVc.author_id=weiboDict.created_by;
         [self.navigationController pushViewController:myVc animated:YES];
@@ -971,6 +997,15 @@
 #pragma mark     -----------分享
     else if (button.tag==10001)
     {
+        
+        
+        [_mymarkView CancelMarksetSelect];
+         if (_toolBar) {
+            [_toolBar HidenButtomView];
+            [_toolBar removeFromSuperview];
+            
+        }
+        
         NSLog(@" 点击了分享按钮");
         CommonStageCell *cell = (CommonStageCell *)(markView.superview.superview.superview.superview);
          UIImage  *image=[Function getImage:cell.stageView WithSize:CGSizeMake(kDeviceWidth, kDeviceWidth)];
@@ -981,8 +1016,6 @@
         UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:shareVC];
         [self presentViewController:na animated:YES completion:nil];
 
-        
-        
     }
 #pragma mark  ----------点赞--------------
     else  if(button.tag==10002)
@@ -1312,7 +1345,6 @@
 #pragma mark  ------ToolbuttomView隐藏工具栏的方法
 #pragma mark  -------
 //点击屏幕，隐藏工具栏
-
 -(void)topViewTouchBengan
 {
     NSLog(@"controller touchbegan  中 执行了隐藏工具栏的方法");
@@ -1321,8 +1353,7 @@
     self.tabBarController.tabBar.hidden=NO;
     if (_toolBar) {
         [_toolBar HidenButtomView];
-       //  [_toolBar performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.5];
-        [_toolBar removeFromSuperview];
+         [_toolBar removeFromSuperview];
         
     }
 }

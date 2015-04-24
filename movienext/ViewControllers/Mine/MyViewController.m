@@ -1191,8 +1191,9 @@
         [_toolBar configToolBar];
         
         //把工具栏添加到当前视图
-        self.tabBarController.tabBar.hidden=YES;
-        [self.view addSubview:_toolBar];
+        self.tabBarController.tabBar.hidden=NO;
+        [AppView addSubview:_toolBar];
+        //[self.view addSubview:_toolBar];
         //弹出工具栏
         [_toolBar ShowButtomView];
         

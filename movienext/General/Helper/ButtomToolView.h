@@ -26,7 +26,7 @@
 @interface ButtomToolView : UIView
 {
     UIButton  *headButton;
-    UILabel   *nameLable;
+    //UILabel   *nameLable;
     UIButton  *shareButton;
     UIButton  *zanbutton;
     UIButton    *morebuton;
@@ -36,7 +36,12 @@
     //上面的透明的试图，点击的按钮
     UIButton   *_topButtom;
     //底部的弹出视图
-    UIView   *buttomView;
+    UIView   *alertView;
+    UILabel  *userNamelabel;
+    UILabel  *timelabel;
+    UILabel  *contentLable;
+
+    UIView *buttomShareView;
     int  zanNum;
     UIImageView  *likeimageview;
 }

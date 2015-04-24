@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "weiboUserInfoModel.h"
 #import "stageInfoModel.h"
+#import "TagModel.h"
 #import <UIKit/UIKit.h>
 #import "stageInfoModel.h"
  @interface weiboInfoModel : NSObject
@@ -42,6 +43,8 @@
 
 
 @property(nonatomic,strong) NSString  *status;
+
+@property (nonatomic,strong)  NSMutableArray  *tagArray;
 
 
 
