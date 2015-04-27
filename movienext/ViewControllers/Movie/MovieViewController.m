@@ -31,7 +31,6 @@
 @interface MovieViewController ()<UISearchBarDelegate,UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout,LoadingViewDelegate,MovieCollectionViewCellDelegate,UIActionSheetDelegate>
 {
     LoadingView         *loadView;
-   /// NSMutableArray      *_dataArray;
     int page;
     int pageSize;
     NSString  *startId;
@@ -218,7 +217,6 @@
 - (void)setupHeadView
 {
     
-
     __unsafe_unretained typeof(self) vc = self;
     // 添加下拉刷新头部控件
     [_myConllectionView addHeaderWithCallback:^{

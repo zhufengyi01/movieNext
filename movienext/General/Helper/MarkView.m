@@ -44,7 +44,7 @@
     
     
 
-    //标题，点赞的view
+//    //标题，点赞的view
     _TitleLable=[ZCControl createLabelWithFrame:CGRectMake(0,0, 0,0) Font:12 Text:@""];
     _TitleLable.font=[UIFont systemFontOfSize:MarkTextFont14];
     if (IsIphone6) {
@@ -58,10 +58,16 @@
     
     //标题
     self.contentLable =[[M80AttributedLabel alloc]initWithFrame:CGRectMake(0, 0, 0, 0)];
+    self.contentLable.font=[UIFont systemFontOfSize:MarkTextFont14];
+    if (IsIphone6) {
+        self.contentLable.font=[UIFont systemFontOfSize:MarkTextFont16];
+    }
+    self.contentLable.textColor=[UIColor whiteColor];
     self.contentLable.lineSpacing=5.0;
-  //  [_rightView addSubview:self.contentLable];
+    [_rightView addSubview:self.contentLable];
     
-   
+    
+    
     _ZanImageView=[ZCControl createImageViewWithFrame:CGRectMake(0, 0, 0,0) ImageName:@"tag_like_icon.png"];
     [_rightView addSubview:_ZanImageView];
     
@@ -104,10 +110,9 @@
         //[self.tagLable appendText:@"haha"];
         for (int i=0; i<self.weiboInfo.tagArray.count; i++) {
             TagView *tagview = [self createTagViewWithtagInfo:self.weiboInfo.tagArray[i] andIndex:i];
-            [self.tagLable appendView:tagview margin:UIEdgeInsetsMake(0, 10, 0, 0)];
+            [self.tagLable appendView:tagview margin:UIEdgeInsetsMake(0, 0, 0, 5)];
         }
-        //[self.tagLable appendText:@"sdsd"];
-        [self.rightView addSubview:self.tagLable];
+         [self.rightView addSubview:self.tagLable];
     }
 }
 //创建标签的方法
@@ -140,13 +145,13 @@
     if (IsIphone6) {
          _rightView.frame=CGRectMake(26, 0,self.frame.size.width-28 , self.frame.size.height);
     }
-    
-    //标题
+   
+   // 标题
     CGSize Tsize=[_TitleLable.text boundingRectWithSize:CGSizeMake(kDeviceWidth/2,MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:_TitleLable.font forKey:NSFontAttributeName] context:nil].size;
-    _TitleLable.frame=CGRectMake(5,0,Tsize.width, Tsize.height);
+    _TitleLable.frame=CGRectMake(5,3,Tsize.width, Tsize.height);
     
     //赞的图片
-    _ZanImageView.frame=CGRectMake(_TitleLable.frame.origin.x + _TitleLable.frame.size.width + 5, (self.frame.size.height-11)/2,11,11 );
+    _ZanImageView.frame=CGRectMake(_TitleLable.frame.origin.x + _TitleLable.frame.size.width + 5,5,11,11 );
     
     //赞的数量
     CGSize  Msize=[_ZanNumLable.text boundingRectWithSize:CGSizeMake(kDeviceWidth/2,MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:_ZanNumLable.font forKey:NSFontAttributeName] context:nil].size;
@@ -157,12 +162,15 @@
         _ZanNumLable.hidden=YES;
     }
     
+    
     //标签
     if (self.weiboInfo.tagArray.count!=0) {
-        self.tagLable.frame=CGRectMake(self.TitleLable.frame.origin.x, self.TitleLable.frame.origin.y+self.TitleLable.frame.size.height,self.rightView.frame.size.width-10, TagHeight);
+         self.tagLable.frame=CGRectMake(self.TitleLable.frame.origin.x, self.TitleLable.frame.origin.y+self.TitleLable.frame.size.height+5,self.rightView.frame.size.width-10, TagHeight);
     }
-
-    
+//    if (self.tagLable.frame.size.width<self.rightView.frame.size.width) {
+//        
+//    }
+//    
     //如果是静态的, 则将边框描一下
     if (!_isAnimation) {
         _LeftImageView.layer.borderColor = kAppTintColor.CGColor;

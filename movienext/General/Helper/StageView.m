@@ -123,7 +123,7 @@
           //设置tag 值为了在下面去取出来循环轮播
             markView.tag=1000+index;
     
-            NSLog(@"stageview  ＝＝=====weiboDict====%@",weibodict);
+    //        NSLog(@"stageview  ＝＝=====weiboDict====%@",weibodict);
              float  x=[weibodict.x_percent floatValue];   //位置的百分比
              float  y=[weibodict.y_percent floatValue];
              NSString  *weiboTitleString=weibodict.content;
@@ -132,30 +132,42 @@
             CGSize  Msize=[weiboTitleString boundingRectWithSize:CGSizeMake(kDeviceWidth/2,MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:markView.TitleLable.font forKey:NSFontAttributeName] context:nil].size;
             // 计算赞数量的size
             CGSize Usize=[UpString boundingRectWithSize:CGSizeMake(40,MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:markView.ZanNumLable.font forKey:NSFontAttributeName] context:nil].size;
-              float hight=kDeviceWidth;
+              float hight=kStageWidth;
             //计算赞数量的长度
             float  Uwidth=[UpString floatValue]==0?0:Usize.width;
             //宽度=字的宽度+左头像图片的宽度＋赞图片的宽度＋赞数量的宽度+中间两个空格2+2
             float markViewWidth = Msize.width+23+Uwidth+5+5+11+5;
             float markViewHeight = Msize.height+6;
+            if (weibodict.tagArray.count>0) {
+                markViewHeight=markViewHeight+25;
+        
+            }
+    
            if(IsIphone6)
            {
                markViewWidth=markViewWidth+10;
                markViewHeight=markViewHeight+4;
            }
-            float markViewX = (x*kDeviceWidth)/100-markViewWidth;
-            markViewX = MIN(MAX(markViewX, 1.0f), kDeviceWidth-markViewWidth-1);
+            float markViewX = (x*kStageWidth)/100-markViewWidth;
+            markViewX = MIN(MAX(markViewX, 5.0f), kStageWidth-markViewWidth-5);
             
-            float markViewY = (y*hight)/100 - markViewHeight/2;      
-            markViewY = MIN(MAX(markViewY, 1.0f), hight-markViewHeight-1);
+            float markViewY = (y*hight)/100 - markViewHeight/2;
+            markViewY = MIN(MAX(markViewY, 5.0f), hight-markViewHeight-5);
 #pragma mark 设置气泡的大小和位置
             markView.frame=CGRectMake(markViewX, markViewY, markViewWidth, markViewHeight);
        ///表示有标签
-          if(weibodict.tagArray.count>0) {
-              markView.frame=CGRectMake(markViewX, markViewY, markViewWidth, markViewHeight+35);
-           
-         }
+//           if(weibodict.tagArray.count>0) {
+//               markView.frame=CGRectMake(markViewX, markViewY, markViewWidth, markViewHeight+25);
+//             
+//           }
+    
+    
+          //[markView.contentLable appendText:weiboTitleString];
+         // [markView.contentLable appendImage:[UIImage imageNamed:@"tag_like_icon.png"] maxSize:CGSizeMake(11, 11) margin:UIEdgeInsetsMake(0, 0, 0, 0) alignment:M80ImageAlignmentBottom];
+        // [markView.contentLable appendText:[NSString stringWithFormat:@"%@",weibodict.like_count]];
+    
             markView.TitleLable.text=weiboTitleString;
+        
           NSString   *headurl =[NSString stringWithFormat:@"%@%@",kUrlAvatar,weibodict.uerInfo.logo];
             [markView.LeftImageView sd_setImageWithURL:[NSURL URLWithString:headurl] placeholderImage:[UIImage imageNamed:@"user_normal"]];
            markView.ZanNumLable.text=[NSString stringWithFormat:@"%@",weibodict.like_count];

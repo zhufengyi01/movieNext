@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "stageInfoModel.h"
 #import "TagDetailModel.h"
 
 @interface TagModel : NSObject
@@ -20,6 +21,7 @@
 @property(nonatomic,strong) NSString  *weibo_id;
 
 
+//@property(nonatomic,strong)NSNumber  *stage_id;
 
 @property(nonatomic,strong) NSString  *status;
 
@@ -30,7 +32,7 @@
 @property(nonatomic,strong) NSString  *updated_at;
 
 
-
 @property (nonatomic,strong) TagDetailModel  *tagDetailInfo;
+
 
 @end

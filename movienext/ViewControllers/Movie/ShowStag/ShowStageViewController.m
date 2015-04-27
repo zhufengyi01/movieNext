@@ -503,7 +503,7 @@
 -(void)layoutMarkViewWithMarkView:(MarkView  *) markView WeiboInfo:(weiboInfoModel *) weibodict
 {
 #pragma mark   缩放整体的弹幕大小
-    [Function BasicAnimationwithkey:@"transform.scale" Duration:0.25 repeatcont:1 autoresverses:YES fromValue:1.0 toValue:1.05 View:markView];
+   /* [Function BasicAnimationwithkey:@"transform.scale" Duration:0.25 repeatcont:1 autoresverses:YES fromValue:1.0 toValue:1.05 View:markView];
     
     
     //NSLog(@" 点赞 后 微博dict  ＝====uped====%@    ups===%@",weibodict.uped,weibodict.ups);
@@ -537,7 +537,7 @@
     else
     {
         markView.ZanNumLable.hidden=NO;
-    }
+    }*/
     
 
     

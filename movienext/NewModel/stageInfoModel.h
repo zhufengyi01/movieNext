@@ -26,6 +26,7 @@
 @property(nonatomic,strong) NSString  *status;
 
 @property(nonatomic,strong) NSMutableArray  *weibosArray;
+
 @property(nonatomic,strong) movieInfoModel  *movieInfo;
 
 @end

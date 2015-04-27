@@ -14,8 +14,8 @@
 #import "UserDataCenter.h"
 #import "UpweiboModel.h"
 #import "UIButton+WebCache.h"
-#import "TagView.h"
-@implementation ButtomToolView
+
+@implementation ButtomToolView 
 
 /*
 // Only override drawRect: if you perform custom drawing.
@@ -55,6 +55,12 @@
     alertView.userInteractionEnabled=YES;
     [self addSubview:alertView];
     
+    //在alertview上添加手势用来截获点击屏幕事件
+    
+    UITapGestureRecognizer  *tapalert =[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(alertViewTap:)];
+    [alertView addGestureRecognizer:tapalert];
+
+    
     
     //头像
     headButton=[UIButton buttonWithType:UIButtonTypeCustom];
@@ -77,6 +83,8 @@
     [alertView addSubview:userNamelabel];
     
     
+    
+    
     timelabel =[ZCControl createLabelWithFrame:CGRectMake(userNamelabel.frame.origin.x,userNamelabel.frame.origin.y+userNamelabel.frame.size.height,200, 20) Font:12 Text:@"刚刚"];
     timelabel.textColor=VGray_color;
     [alertView addSubview:timelabel];
@@ -85,6 +93,7 @@
     
     contentLable =[ZCControl createLabelWithFrame:CGRectMake(headButton.frame.origin.x,headButton.frame.origin.y+headButton.frame.size.height+0,alertView.frame.size.width-20, 50) Font:16 Text:@"刚刚"];
     contentLable.numberOfLines=2;
+
     contentLable.adjustsFontSizeToFitWidth=NO;
     contentLable.lineBreakMode=NSLineBreakByTruncatingTail;
     contentLable.textColor=VGray_color;
@@ -157,16 +166,19 @@
     timelabel.text=timeStr;
     //内容
     contentLable.text =self.weiboInfo.content;
-    
+   
 
    ////标签
-    //[self removeTagViewFromSuperView];
+    [self removeTagViewFromSuperView];
     leadWidth=0;
+    
+    
     if (self.weiboInfo.tagArray&&self.weiboInfo.tagArray.count) {
-          tagLable =[[M80AttributedLabel alloc]initWithFrame:CGRectMake(contentLable.frame.origin.x, contentLable.frame.origin.y+contentLable.frame.size.height, alertView.frame.size.width-20, TagHeight)];
+          tagLable =[[M80AttributedLabel alloc]initWithFrame:CGRectMake(contentLable.frame.origin.x, contentLable.frame.origin.y+contentLable.frame.size.height, alertView.frame.size.width-20, TagHeight+10)];
+        
         for (int i=0; i<self.weiboInfo.tagArray.count; i++) {
             TagView *tagview = [self createTagViewWithtagInfo:self.weiboInfo.tagArray[i] andIndex:i];
-            [tagLable appendView:tagview margin:UIEdgeInsetsMake(0, 10, 0, 0)];
+            [tagLable appendView:tagview margin:UIEdgeInsetsMake(0, 0, 0, 10)];
         }
         [alertView addSubview:tagLable];
      }
@@ -184,7 +196,6 @@
         else{
             zanbutton.selected=NO;
             likeimageview.image=[UIImage imageNamed:@"opened_like_icon.png"];
-
         }
     }
     
@@ -192,18 +203,30 @@
 //创建标签的方法
 -(TagView *)createTagViewWithtagInfo:(TagModel *) tagmodel andIndex:(NSInteger ) index
 {
+    
     TagView *tagview =[[TagView alloc]initWithFrame:CGRectZero];
     tagview.tag=1000+index;
+    tagview.delegete=self;
+    tagview.tagInfo=tagmodel;
     tagview.weiboInfo=self.weiboInfo;
-    
+    NSLog(@"tag model ===%@ ----%ld",tagmodel.Id,index);
     NSString *titleStr = tagmodel.tagDetailInfo.title;
     tagview.titleLable.text=titleStr;
     CGSize  Tsize =[titleStr boundingRectWithSize:CGSizeMake(MAXFLOAT, TagHeight) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:[NSDictionary dictionaryWithObject:tagview.titleLable.font forKey:NSFontAttributeName] context:nil].size;
     //纪录前面一个标签的宽度
-     tagview.frame=CGRectMake(0,0, Tsize.width+10, TagHeight);
+     tagview.frame=CGRectMake(0,0, Tsize.width+10, TagHeight+10);
     
     return tagview;
 }
+
+
+-(void)alertViewTap:(UITapGestureRecognizer *) tap
+{
+    
+    
+    //
+}
+
 #pragma mark
 #pragma mark  －－－－底部视图的点击事件
 //底部视图的点击事件
@@ -262,12 +285,23 @@
 -(void)removeTagViewFromSuperView
 {
     //移除标签
-    for (id view in tagFatherView.subviews) {
-        if ([view isKindOfClass:[TagView class]]) {
+    for (id view in alertView.subviews) {
+        if ([view isKindOfClass:[M80AttributedLabel class]]) {
             [view removeFromSuperview];
             
         }
     }
+    
+}
+#pragma mark -------TapViewClickDelegete---------------------------------------------
+-(void)handTapViewClick:(weiboInfoModel *)weiboInfo withTagInfo:(TagModel *)tagInfo
+{
+    
+    
+    if (self.delegete &&[self.delegete respondsToSelector:@selector(ToolViewTagHandClick:WithTagInfo:)]) {
+        [self.delegete ToolViewTagHandClick:weiboInfo WithTagInfo:tagInfo];
+    }
+    
     
 }
 

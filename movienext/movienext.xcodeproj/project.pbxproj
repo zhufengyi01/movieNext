@@ -266,6 +266,8 @@
 		00A52F7E1AEDE40000760275 /* opened_liked_icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 00A52F7A1AEDE40000760275 /* opened_liked_icon@3x.png */; };
 		00A52F811AEDE5E700760275 /* opened_share_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 00A52F7F1AEDE5E700760275 /* opened_share_icon@2x.png */; };
 		00A52F821AEDE5E700760275 /* opened_share_icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 00A52F801AEDE5E700760275 /* opened_share_icon@3x.png */; };
+		00A52F861AEE460500760275 /* TagToStageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00A52F851AEE460500760275 /* TagToStageViewController.m */; };
+		00A52F891AEE4EEC00760275 /* TapStageCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00A52F881AEE4EEC00760275 /* TapStageCollectionViewCell.m */; };
 		00AA53091AA2C3F4004096F8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 00AA53081AA2C3F4004096F8 /* main.m */; };
 		00AA530C1AA2C3F4004096F8 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 00AA530B1AA2C3F4004096F8 /* AppDelegate.m */; };
 		00AA530F1AA2C3F4004096F8 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00AA530E1AA2C3F4004096F8 /* ViewController.m */; };
@@ -723,6 +725,10 @@
 		00A52F7A1AEDE40000760275 /* opened_liked_icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "opened_liked_icon@3x.png"; sourceTree = "<group>"; };
 		00A52F7F1AEDE5E700760275 /* opened_share_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "opened_share_icon@2x.png"; sourceTree = "<group>"; };
 		00A52F801AEDE5E700760275 /* opened_share_icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "opened_share_icon@3x.png"; sourceTree = "<group>"; };
+		00A52F841AEE460500760275 /* TagToStageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagToStageViewController.h; sourceTree = "<group>"; };
+		00A52F851AEE460500760275 /* TagToStageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagToStageViewController.m; sourceTree = "<group>"; };
+		00A52F871AEE4EEC00760275 /* TapStageCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TapStageCollectionViewCell.h; sourceTree = "<group>"; };
+		00A52F881AEE4EEC00760275 /* TapStageCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TapStageCollectionViewCell.m; sourceTree = "<group>"; };
 		00AA53031AA2C3F4004096F8 /* movienext.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = movienext.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		00AA53071AA2C3F4004096F8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00AA53081AA2C3F4004096F8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -1542,6 +1548,18 @@
 			path = "UIImage-Helpers";
 			sourceTree = "<group>";
 		};
+		00A52F831AEE453A00760275 /* TagToStage */ = {
+			isa = PBXGroup;
+			children = (
+				00A52F841AEE460500760275 /* TagToStageViewController.h */,
+				00A52F851AEE460500760275 /* TagToStageViewController.m */,
+				00A52F871AEE4EEC00760275 /* TapStageCollectionViewCell.h */,
+				00A52F881AEE4EEC00760275 /* TapStageCollectionViewCell.m */,
+			);
+			name = TagToStage;
+			path = TagStageViewConteroller;
+			sourceTree = "<group>";
+		};
 		00AA52FA1AA2C3F4004096F8 = {
 			isa = PBXGroup;
 			children = (
@@ -1896,6 +1914,7 @@
 		00AA53FA1AA2C525004096F8 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				00A52F831AEE453A00760275 /* TagToStage */,
 				00218C6B1AE0A199006B79B4 /* findMovieInfo */,
 				0067CFEC1AD4183700148561 /* UMShare */,
 				0053E9261ACBE8AD00C11CB4 /* AddUser */,
@@ -2385,6 +2404,7 @@
 				008363181AE4F86E00806897 /* Function.m in Sources */,
 				00354C5C1ABF030C00F650AA /* AFURLConnectionOperation.m in Sources */,
 				006739561AA491250087C240 /* MJRefreshFooterView.m in Sources */,
+				00A52F861AEE460500760275 /* TagToStageViewController.m in Sources */,
 				00AA54561AA2C526004096F8 /* Movie.m in Sources */,
 				00AA54551AA2C526004096F8 /* Mark.m in Sources */,
 				00354C621ABF030C00F650AA /* UIAlertView+AFNetworking.m in Sources */,
@@ -2414,6 +2434,7 @@
 				00354C5E1ABF030C00F650AA /* AFURLResponseSerialization.m in Sources */,
 				0047F7641ADB9E25007DDC1A /* userAddmodel.m in Sources */,
 				0064CE321AB3BE12005E0762 /* HotMovieModel.m in Sources */,
+				00A52F891AEE4EEC00760275 /* TapStageCollectionViewCell.m in Sources */,
 				00B168B71AD77EB4002265CD /* stageInfoModel.m in Sources */,
 				00AA54271AA2C525004096F8 /* View+MASAdditions.m in Sources */,
 				00AA542A1AA2C525004096F8 /* SDImageCache.m in Sources */,
@@ -2647,8 +2668,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-2";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Beijing Zuijiao Technology Company";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Beijing Zuijiao Technology Company";
 				ENABLE_STRICT_OBJC_MSGSEND = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2665,7 +2686,7 @@
 					"$(PROJECT_DIR)/Libs/UMSocial_Sdk_Extra_Frameworks/Wechat",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "ca993ee7-8f71-4e27-bc13-4e2338226631";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -2677,8 +2698,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-2";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Beijing Zuijiao Technology Company";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Beijing Zuijiao Technology Company";
 				ENABLE_STRICT_OBJC_MSGSEND = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2695,7 +2716,7 @@
 					"$(PROJECT_DIR)/Libs/UMSocial_Sdk_Extra_Frameworks/Wechat",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "ca993ee7-8f71-4e27-bc13-4e2338226631";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;

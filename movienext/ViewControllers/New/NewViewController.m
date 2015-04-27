@@ -39,6 +39,7 @@
 #import "ScanMovieInfoViewController.h"
 #import "netRequest.h"
 #import "TagModel.h"
+#import "TagToStageViewController.h"
 
 //友盟分享
 //#import "UMSocial.h"
@@ -590,17 +591,20 @@
             NSLog(@"最新数据 JSON: %@", responseObject);
             
             for (NSDictionary  *newDict in Detailarray) {
-                
             weiboInfoModel  *weibomodel =[[weiboInfoModel alloc]init];
             if(weibomodel)
             {
                 [weibomodel setValuesForKeysWithDictionary:newDict];
                 
+                //1.userInfo
                 weiboUserInfoModel *usermodel =[[weiboUserInfoModel alloc]init];
                 if (usermodel) {
                     [usermodel setValuesForKeysWithDictionary:[newDict objectForKey:@"user"]];
                     weibomodel.uerInfo=usermodel;
                 }
+                
+                
+                //2.stageInfo
                 stageInfoModel  *stageInfo =[[stageInfoModel alloc]init];
                 if(![[newDict  objectForKey:@"stage"]isKindOfClass:[NSNull class]])
                 {
@@ -617,11 +621,15 @@
                   }
                 }
                 
-                TagModel  *tagmodel =[[TagModel alloc]init];
+                
+                //3.tagsInfo
                 NSMutableArray  *tagArray =[[NSMutableArray alloc]init];
+
                 if (![[newDict objectForKey:@"tags"] isKindOfClass:[NSNull class]]) {
                     for (NSDictionary  *tagDict  in [newDict objectForKey:@"tags"]) {
+                        TagModel  *tagmodel =[[TagModel alloc]init];
                         [tagmodel setValuesForKeysWithDictionary:tagDict];
+                        
                         TagDetailModel  *tagDetailmodel =[[TagDetailModel alloc]init];
                         if (tagDetailmodel) {
                             [tagDetailmodel setValuesForKeysWithDictionary:[tagDict objectForKey:@"tag"]];
@@ -982,7 +990,7 @@
     
 }
 #pragma mark   ------
-#pragma mark   -------- ButtomToolViewDelegate－－－－－－－－－－－－－－－－－－－－－
+#pragma mark   -------- ButtomToolViewDelegate－－－－－－－－－－－－－－－－－－－－－-----------
 #pragma  mark  -------
 -(void)ToolViewHandClick:(UIButton *)button :(MarkView *)markView weiboDict:(weiboInfoModel *)weiboDict StageInfo:(stageInfoModel *)stageInfoDict
 {
@@ -1087,7 +1095,23 @@
     }
 }
 
-#pragma mark  ----actionSheetDelegate--
+-(void)ToolViewTagHandClick:(weiboInfoModel *)weiboInfo WithTagInfo:(TagModel *)tagInfo
+{
+    
+    if (_toolBar) {
+        [_toolBar removeFromSuperview];
+        
+    }
+    TagToStageViewController  *vc=[[TagToStageViewController alloc]init];
+    vc.weiboInfo=weiboInfo;
+    vc.tagInfo=tagInfo;
+    [self.navigationController pushViewController:vc animated:YES];
+    
+    
+}
+
+
+#pragma mark  ----actionSheetDelegate----------------------------------------------
 -(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     
@@ -1339,6 +1363,10 @@
     }
 #pragma mark 设置气泡的大小和位置
     markView.frame=CGRectMake(markView.frame.origin.x, markView.frame.origin.y, markViewWidth, markViewHeight);
+    
+    if (weibodict.tagArray.count>0) {
+        markView.frame=CGRectMake(markView.frame.origin.x, markView.frame.origin.y, markViewWidth, markViewHeight+35);
+    }
 #pragma mark 设置标签的内容
    // markView.TitleLable.text=weiboTitleString;
     markView.ZanNumLable.text =[NSString stringWithFormat:@"%@",weibodict.like_count];

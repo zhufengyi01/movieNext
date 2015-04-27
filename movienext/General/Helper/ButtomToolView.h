@@ -13,6 +13,7 @@
 #import "weiboInfoModel.h"
 #import "stageInfoModel.h"
 #import "M80AttributedLabel.h"
+#import "TagView.h"
 
 @protocol ButtomToolViewDelegate <NSObject>
 //点击底部视图的方法，根据tag值判断是点击了那一个按钮
@@ -24,8 +25,12 @@
 ///点击屏幕的透明颜色时候，弹回上面
 -(void)topViewTouchBengan;
 
+//点击标签，跳转到含有标签的剧情列表
+-(void)ToolViewTagHandClick:(weiboInfoModel *) weiboInfo WithTagInfo:(TagModel *) tagInfo;
+
+
 @end
-@interface ButtomToolView : UIView
+@interface ButtomToolView : UIView  <TagViewDelegate>
 {
     UIButton  *headButton;
     //UILabel   *nameLable;

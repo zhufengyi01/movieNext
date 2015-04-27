@@ -96,7 +96,7 @@
 #define  TagTextFont14 14
 #define  TagTextFont16 16
 #define  TagViewConrnerRed 4
-#define  TagHeight   30
+#define  TagHeight   20
 
 
 #endif
