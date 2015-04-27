@@ -62,7 +62,6 @@
   //  [_rightView addSubview:self.contentLable];
     
    
-    
     _ZanImageView=[ZCControl createImageViewWithFrame:CGRectMake(0, 0, 0,0) ImageName:@"tag_like_icon.png"];
     [_rightView addSubview:_ZanImageView];
     
@@ -70,6 +69,7 @@
     _ZanNumLable.textColor=[UIColor whiteColor];
     [_rightView addSubview:_ZanNumLable];
     
+
     
     UITapGestureRecognizer  *tap=[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(dealTapWeiboClick:)];
         [self addGestureRecognizer:tap];
@@ -96,7 +96,32 @@
             [_LeftImageView addSubview:isfakeView];
         }
     }
-
+    
+    //创建标签
+    if (self.weiboInfo.tagArray&&self.weiboInfo.tagArray.count) {
+        self.tagLable =[[M80AttributedLabel alloc]initWithFrame:CGRectMake(0, 0, 100, 30)];
+        self.tagLable.backgroundColor=[[UIColor blackColor] colorWithAlphaComponent:0];
+        //[self.tagLable appendText:@"haha"];
+        for (int i=0; i<self.weiboInfo.tagArray.count; i++) {
+            TagView *tagview = [self createTagViewWithtagInfo:self.weiboInfo.tagArray[i] andIndex:i];
+            [self.tagLable appendView:tagview margin:UIEdgeInsetsMake(0, 10, 0, 0)];
+        }
+        //[self.tagLable appendText:@"sdsd"];
+        [self.rightView addSubview:self.tagLable];
+    }
+}
+//创建标签的方法
+-(TagView *)createTagViewWithtagInfo:(TagModel *) tagmodel andIndex:(NSInteger ) index
+{
+    TagView *tagview =[[TagView alloc]initWithFrame:CGRectZero];
+    tagview.tag=1000+index;
+    tagview.weiboInfo=self.weiboInfo;
+    NSString *titleStr = tagmodel.tagDetailInfo.title;
+    tagview.titleLable.text=titleStr;
+     CGSize  Tsize =[titleStr boundingRectWithSize:CGSizeMake(MAXFLOAT, TagHeight) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:[NSDictionary dictionaryWithObject:tagview.titleLable.font forKey:NSFontAttributeName] context:nil].size;
+    //纪录前面一个标签的宽度
+    tagview.frame=CGRectMake(0,0, Tsize.width+10, TagHeight);
+    return tagview;
 }
 
 - (void)layoutSubviews {
@@ -118,7 +143,7 @@
     
     //标题
     CGSize Tsize=[_TitleLable.text boundingRectWithSize:CGSizeMake(kDeviceWidth/2,MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:_TitleLable.font forKey:NSFontAttributeName] context:nil].size;
-    _TitleLable.frame=CGRectMake(5,0,Tsize.width, self.frame.size.height);
+    _TitleLable.frame=CGRectMake(5,0,Tsize.width, Tsize.height);
     
     //赞的图片
     _ZanImageView.frame=CGRectMake(_TitleLable.frame.origin.x + _TitleLable.frame.size.width + 5, (self.frame.size.height-11)/2,11,11 );
@@ -132,6 +157,12 @@
         _ZanNumLable.hidden=YES;
     }
     
+    //标签
+    if (self.weiboInfo.tagArray.count!=0) {
+        self.tagLable.frame=CGRectMake(self.TitleLable.frame.origin.x, self.TitleLable.frame.origin.y+self.TitleLable.frame.size.height,self.rightView.frame.size.width-10, TagHeight);
+    }
+
+    
     //如果是静态的, 则将边框描一下
     if (!_isAnimation) {
         _LeftImageView.layer.borderColor = kAppTintColor.CGColor;
@@ -139,6 +170,8 @@
         _rightView.layer.borderColor = kAppTintColor.CGColor;
         _rightView.layer.borderWidth = 1;
     }
+    
+    
 }
 
 //子视图本身的动画

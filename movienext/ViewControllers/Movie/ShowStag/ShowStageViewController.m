@@ -555,7 +555,6 @@
     self.tabBarController.tabBar.hidden=YES;
     if (_toolBar) {
         [_toolBar HidenButtomView];
-        //  [_toolBar performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.5];
         [_toolBar removeFromSuperview];
         
     }

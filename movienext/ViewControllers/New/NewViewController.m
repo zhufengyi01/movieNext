@@ -517,17 +517,33 @@
                         //weiboinfo
                         NSMutableArray  *weibosarray=[[NSMutableArray alloc]init];
                         for (NSDictionary  *weibodict  in [[hotDict objectForKey:@"stage"] objectForKey:@"weibos"]) {
-                            
-                            NSLog(@"=====weibo dict =======%@",weibodict);
-                            weiboInfoModel *weibomodel=[[weiboInfoModel alloc]init];
+                             weiboInfoModel *weibomodel=[[weiboInfoModel alloc]init];
                             if (weibomodel) {
                                 [weibomodel setValuesForKeysWithDictionary:weibodict];
                                 
+                                //weibouserInfo
                                 weiboUserInfoModel  *usermodel =[[weiboUserInfoModel alloc]init];
                                     if (usermodel) {
                                          [usermodel setValuesForKeysWithDictionary:[weibodict objectForKey:@"user"]];
                                         weibomodel.uerInfo=usermodel;
                                    }
+                                
+                                //tag
+                                NSMutableArray  *tagArray = [[NSMutableArray alloc]init];
+                                for (NSDictionary  *tagDict  in [weibodict objectForKey:@"tags"]) {
+                                  TagModel *tagmodel =[[TagModel alloc]init];
+                                  if (tagmodel) {
+                                      [tagmodel setValuesForKeysWithDictionary:tagDict];
+                                      TagDetailModel *tagedetail = [[TagDetailModel alloc]init];
+                                      if (tagedetail) {
+                                          [tagedetail setValuesForKeysWithDictionary:[tagDict  objectForKey:@"tag"]];
+                                          tagmodel.tagDetailInfo=tagedetail;
+                                      }
+                                      
+                                      [tagArray addObject:tagmodel];
+                                  }
+                                }
+                                weibomodel.tagArray=tagArray;
         
                                 [weibosarray addObject:weibomodel];
                             }
@@ -616,11 +632,8 @@
                     }
                     
                 }
-                
                 weibomodel.tagArray=tagArray;
                 
-                
-
                 if (_newDataArray==nil) {
                     _newDataArray =[[NSMutableArray alloc]init];
                 }
@@ -674,7 +687,7 @@
         
         float hight;
         if (_hotDataArray.count>indexPath.row) {
-            hight=kDeviceWidth+45+45;
+            hight=kStageWidth+45+45;
         }
         return hight+10;
     }
@@ -682,7 +695,7 @@
     {
         float hight;
         if (_newDataArray.count>indexPath.row) {
-             hight= kDeviceWidth+90;
+             hight= kStageWidth+90;
         }
         return hight+10;
     }
@@ -948,10 +961,7 @@
         _toolBar.markView=markView;
         _toolBar.upweiboArray=_upWeiboArray;
         [_toolBar configToolBar];
-        
         [AppView addSubview:_toolBar];
-        
-        //[self.view addSubview:_toolBar];
         //弹出工具栏
         [_toolBar ShowButtomView];
         

@@ -24,6 +24,13 @@
 @property(nonatomic,strong) NSString  *status;
 
 
+@property(nonatomic,strong) NSString  *created_at;
+
+
+@property(nonatomic,strong) NSString  *updated_at;
+
+
+
 @property (nonatomic,strong) TagDetailModel  *tagDetailInfo;
 
 @end

@@ -77,13 +77,7 @@
     _MovieImageView.backgroundColor =VStageView_color;
     NSString *photostring=[NSString stringWithFormat:@"%@%@!w640",kUrlStage,self.stageInfo.photo];
     //可监视下载进入的方法
-   /* [_MovieImageView sd_setImageWithURL:[NSURL URLWithString:photostring] placeholderImage:nil options:SDWebImageProgressiveDownload progress:^(NSInteger receivedSize, NSInteger expectedSize)  {
-        NSLog(@"====receivedSize  ==%ld =====%ld",receivedSize,expectedSize);
-        
-    } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-    
-    }];
-    */
+
     [_MovieImageView sd_setImageWithURL:[NSURL URLWithString:photostring] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         
 #pragma  mark  是静态的, 气泡是不动的
@@ -125,7 +119,6 @@
 #pragma mark 内部创建气泡的方法
 - (MarkView *) createMarkViewWithDict:(weiboInfoModel *)weibodict andIndex:(NSInteger)index{
             MarkView *markView=[[MarkView alloc]initWithFrame:CGRectZero];
-    
             markView.alpha = 0;
           //设置tag 值为了在下面去取出来循环轮播
             markView.tag=1000+index;
@@ -153,18 +146,21 @@
             float markViewX = (x*kDeviceWidth)/100-markViewWidth;
             markViewX = MIN(MAX(markViewX, 1.0f), kDeviceWidth-markViewWidth-1);
             
-            float markViewY = (y*hight)/100 - markViewHeight/2;
-#warning    kDeviceWidth 目前计算的是正方形的，当图片高度>屏幕的宽度的实际，需要使用图片的高度
-      
+            float markViewY = (y*hight)/100 - markViewHeight/2;      
             markViewY = MIN(MAX(markViewY, 1.0f), hight-markViewHeight-1);
 #pragma mark 设置气泡的大小和位置
             markView.frame=CGRectMake(markViewX, markViewY, markViewWidth, markViewHeight);
-#pragma mark 设置标签的内容
+       ///表示有标签
+          if(weibodict.tagArray.count>0) {
+              markView.frame=CGRectMake(markViewX, markViewY, markViewWidth, markViewHeight+35);
+           
+         }
             markView.TitleLable.text=weiboTitleString;
-            ///显示标签的头像
           NSString   *headurl =[NSString stringWithFormat:@"%@%@",kUrlAvatar,weibodict.uerInfo.logo];
-          [markView.LeftImageView sd_setImageWithURL:[NSURL URLWithString:headurl] placeholderImage:[UIImage imageNamed:@"user_normal"]];
-    markView.ZanNumLable.text=[NSString stringWithFormat:@"%@",weibodict.like_count];
+            [markView.LeftImageView sd_setImageWithURL:[NSURL URLWithString:headurl] placeholderImage:[UIImage imageNamed:@"user_normal"]];
+           markView.ZanNumLable.text=[NSString stringWithFormat:@"%@",weibodict.like_count];
+    
+       //设置标签
     return markView;
 }
 //防止cell服用导致的原来的内容存在,移除原来的markview

@@ -25,7 +25,7 @@
 -(void)CreateUI
 {
     self.backgroundColor=View_BackGround;
-     BgView =[[UIImageView alloc]initWithFrame:CGRectMake(5, 5, kDeviceWidth-10, kDeviceWidth+90)];
+     BgView =[[UIImageView alloc]initWithFrame:CGRectMake(5, 5, kDeviceWidth-10, kStageWidth+90)];
     
      BgView.clipsToBounds=YES;
     BgView.layer.cornerRadius=4;
@@ -43,7 +43,7 @@
 }
 -(void)CreateTopView
 {
-    BgView0 =[[UIView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth-10,45)];
+    BgView0 =[[UIView alloc]initWithFrame:CGRectMake(0, 0, kStageWidth,45)];
     BgView0.backgroundColor=View_ToolBar;
     BgView0.userInteractionEnabled=YES;
     [BgView addSubview:BgView0];
@@ -71,7 +71,7 @@
 
 -(void)CreateSatageView
 {
-    _stageView=[[StageView alloc]initWithFrame:CGRectMake(0, 45, kDeviceWidth-10, kDeviceWidth)];
+    _stageView=[[StageView alloc]initWithFrame:CGRectMake(0, 45, kStageWidth, kStageWidth)];
     _stageView.backgroundColor=VStageView_color;
    // _stageView.layer.cornerRadius=4;
     //_stageView.clipsToBounds=YES;
@@ -83,7 +83,7 @@
 
 -(void)createButtomView
 {
-    BgView2=[[UIView alloc]initWithFrame:CGRectMake(0, kDeviceWidth+45, kDeviceWidth-10, 45)];
+    BgView2=[[UIView alloc]initWithFrame:CGRectMake(0, kStageWidth+45, kStageWidth, 45)];
     //改变toolar 的颜色
     BgView2.backgroundColor=[UIColor whiteColor];
     [BgView addSubview:BgView2];

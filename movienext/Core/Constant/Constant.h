@@ -30,6 +30,7 @@
 #pragma  mark    宽高设置
 #define kDeviceWidth        [UIScreen mainScreen].bounds.size.width
 #define kDeviceHeight       [UIScreen mainScreen].bounds.size.height
+#define kStageWidth         kDeviceWidth-10
 #define IsIphone6            [UIScreen mainScreen].bounds.size.height>700
 
 #define kHeightNavigation 64
@@ -89,4 +90,13 @@
 #define MarkTextFont14  14
 #define MarkTextFont16  16
 #define MarkViewCornerRed 6
+
+
+//标签相关定义
+#define  TagTextFont14 14
+#define  TagTextFont16 16
+#define  TagViewConrnerRed 4
+#define  TagHeight   30
+
+
 #endif

@@ -12,6 +12,8 @@
 //#import "StageInfoModel.h"
 #import "weiboInfoModel.h"
 #import "stageInfoModel.h"
+#import "M80AttributedLabel.h"
+
 @protocol ButtomToolViewDelegate <NSObject>
 //点击底部视图的方法，根据tag值判断是点击了那一个按钮
 //button.tag=10000; 头像
@@ -40,6 +42,11 @@
     UILabel  *userNamelabel;
     UILabel  *timelabel;
     UILabel  *contentLable;
+    UIView *tagFatherView;
+    M80AttributedLabel *tagLable;
+    
+    //前面标签的宽度
+    double  leadWidth;
 
     UIView *buttomShareView;
     int  zanNum;

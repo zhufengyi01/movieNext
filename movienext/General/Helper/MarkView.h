@@ -7,11 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-//#import "WeiboModel.h"
-//#import "StageInfoModel.h"
 #import "weiboInfoModel.h"
 #import "stageInfoModel.h"
+#import "TagView.h"
 #import "M80AttributedLabel.h"
+
 @protocol MarkViewDelegate <NSObject> 
 //标签的点击事件，对stageview 提供接口，传递微博对象
 -(void)MarkViewClick:(weiboInfoModel  *) weiboDict withMarkView:(id) markView;
@@ -20,6 +20,7 @@
 {
     CGRect  m_frame;
     UIImageView  *isfakeView;
+    
 }
 
 @property (nonatomic,strong) UIImageView    *LeftImageView;
@@ -28,16 +29,22 @@
 @property(nonatomic,strong)  M80AttributedLabel  *contentLable;
 @property (nonatomic,strong) UILabel        *ZanNumLable;
 @property (nonatomic,strong) UIImageView    *ZanImageView;
+
 //点击的状态
 @property (nonatomic,assign) BOOL  isSelected;   // 是否被选中
 
 //从stagview传递过来的微博字典对象，这个对象中包含微博的详细信息
-//@property (nonatomic,strong)WeiboModel  *weiboDict;
 @property(nonatomic,strong)weiboInfoModel *weiboInfo;
-//
 @property (nonatomic,assign) id <MarkViewDelegate> delegate;
 @property (nonatomic,assign) BOOL isAnimation;   //是否是可以动的动画
 @property(nonatomic,assign) BOOL  isShowansHiden;  //是否可以闪现
+
+//@property (nonatomic,strong) M80AttributedLabel *contentLable;
+
+
+//标签文本器
+@property(nonatomic,strong) M80AttributedLabel  *tagLable;
+
 
 -(void)setValueWithWeiboInfo:(weiboInfoModel *) weiboInfo;
 //最新页面的markview 闪现
