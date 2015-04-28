@@ -7,6 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "stageInfoModel.h"
+#import "weiboInfoModel.h"
 
 @interface TapStageCollectionViewCell : UICollectionViewCell
  {

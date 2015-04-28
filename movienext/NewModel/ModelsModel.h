@@ -11,6 +11,7 @@
 @interface ModelsModel : NSObject
 @property(nonatomic,strong) NSString  *Id;
 @property(nonatomic,strong) NSString  *stage_id;
+@property(nonatomic,strong)  NSString  *tag_id;
 @property(nonatomic,strong) stageInfoModel  *stageInfo;
 
 @end

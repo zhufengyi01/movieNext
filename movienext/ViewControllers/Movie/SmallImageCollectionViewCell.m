@@ -26,7 +26,7 @@
     _imageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, m_frame.size.width, m_frame.size.height)];
     //_imageView.image=[UIImage imageNamed:@"loading_image_all"];
     _imageView.backgroundColor = [UIColor clearColor];
-    [self addSubview:_imageView];
+    [self.contentView addSubview:_imageView];
     
     _titleLab = [[UILabel alloc]initWithFrame:CGRectMake(m_frame.size.width-20, m_frame.size.height-20, 20, 20)];
     _titleLab.backgroundColor = [UIColor colorWithRed:0.0f/255.0f green:0.0f/255.0f blue:0.0f/255.0f alpha:0.5];
@@ -34,7 +34,7 @@
     _titleLab.textAlignment = NSTextAlignmentCenter;
     _titleLab.textColor = [UIColor whiteColor];
     _titleLab.font = [UIFont systemFontOfSize:12];
-    [self addSubview:_titleLab];
+    [self.contentView addSubview:_titleLab];
 }
 
 @end

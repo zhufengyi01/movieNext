@@ -17,6 +17,7 @@
 #import "UserDataCenter.h"
 #import "TapStageCollectionViewCell.h"
 #import "ModelsModel.h"
+#import "ShowStageViewController.h"
 @interface TagToStageViewController ()<UICollectionViewDelegateFlowLayout,UICollectionViewDataSource,UICollectionViewDelegate>
 {
     LoadingView   *loadView;
@@ -42,12 +43,19 @@
 -(void)createNavigation
 {
     
+    UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:self.tagInfo.tagDetailInfo.title];
+    titleLable.textColor=VBlue_color;
+    
+    titleLable.font=[UIFont boldSystemFontOfSize:16];
+    titleLable.textAlignment=NSTextAlignmentCenter;
+    self.navigationItem.titleView=titleLable;
+    
 }
 -(void)initData
 {
     page=1;
     pageSize=12;
-    _dataArray=[[NSMutableArray alloc]init];
+    self.dataArray=[[NSMutableArray alloc]init];
     
     
 }
@@ -55,14 +63,14 @@
 {
     
     UICollectionViewFlowLayout    *layout=[[UICollectionViewFlowLayout alloc]init];
-    layout.minimumInteritemSpacing=20; //cell之间左右的
-    layout.minimumLineSpacing=20;      //cell上下间隔
+    layout.minimumInteritemSpacing=0; //cell之间左右的
+    layout.minimumLineSpacing=0;      //cell上下间隔
     //layout.itemSize=CGSizeMake(80,140);  //cell的大小
-    layout.sectionInset=UIEdgeInsetsMake(10, 20, 10, 20); //整个偏移量 上左下右
+    layout.sectionInset=UIEdgeInsetsMake(10, 0, 0, 0); //整个偏移量 上左下右
     
-    _myConllectionView =[[UICollectionView alloc]initWithFrame:CGRectMake(0, 40,kDeviceWidth, kDeviceHeight-40-kHeightNavigation-kHeigthTabBar) collectionViewLayout:layout];
+    _myConllectionView =[[UICollectionView alloc]initWithFrame:CGRectMake(0, 0,kDeviceWidth, kDeviceHeight-kHeightNavigation) collectionViewLayout:layout];
     _myConllectionView.backgroundColor=[UIColor whiteColor];
-    [_myConllectionView registerClass:[TagToStageViewController class] forCellWithReuseIdentifier:@"tagCell"];
+    [_myConllectionView registerClass:[TapStageCollectionViewCell class] forCellWithReuseIdentifier:@"Cell"];
     _myConllectionView.delegate=self;
     _myConllectionView.dataSource=self;
     [self.view addSubview:_myConllectionView];
@@ -72,26 +80,28 @@
 -(void)requestData
 {
     UserDataCenter *usercenter=[UserDataCenter shareInstance];
-    
     NSDictionary *parameters = @{@"tag_id":self.tagInfo.tagDetailInfo.Id,@"user_id":usercenter.user_id};
     
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     NSString *urlString =[NSString stringWithFormat:@"%@/tag-stage/list?per-page=%d&page=%d", kApiBaseUrl,pageSize,page];
     [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
-            if ([[responseObject objectForKey:@"models"] count]>0) {
-                NSMutableArray  *detailArray =[responseObject objectForKey:@"models"];
+            
+            //NSLog(@"  responseObject  ===%@ ",responseObject);
+            
+            NSMutableArray  *detailArray =[responseObject objectForKey:@"models"];
+
+            if (detailArray.count>0) {
+                
                 for (NSDictionary  *modelDict in detailArray) {
-                    
                   ModelsModel  *model =[[ModelsModel alloc]init];
                     if (model) {
                         [model setValuesForKeysWithDictionary:modelDict];
-                        
-                        
                         stageInfoModel *stagemodel =[[stageInfoModel alloc]init];
                         if (stagemodel) {
-                            
                             [stagemodel setValuesForKeysWithDictionary:[modelDict objectForKey:@"stage"]];
+                            
+                            
                             movieInfoModel *moviemodel=[[movieInfoModel alloc]init];
                             if (moviemodel) {
                                 [moviemodel setValuesForKeysWithDictionary:[[modelDict objectForKey:@"stage"] objectForKey:@"movie"]];
@@ -103,8 +113,8 @@
                             {
                                 weiboInfoModel *weibomodel =[[weiboInfoModel alloc]init];
                                 if (weibomodel) {
-                                    
                                     [weibomodel setValuesForKeysWithDictionary:weibodict];
+                                    
                                    
                                     NSMutableArray  *tagArray =[[NSMutableArray alloc]init];
                                     for (NSDictionary *tagDict in [weibodict objectForKey:@"tags"]) {
@@ -117,7 +127,6 @@
                                                 [tagDetail setValuesForKeysWithDictionary:[tagDict objectForKey:@"tag"]];
                                                 tagmodel.tagDetailInfo=tagDetail;
                                             }
-                                            
                                             [tagArray addObject:tagmodel];
                                         }
                                     }
@@ -128,26 +137,33 @@
                                         [usermoel setValuesForKeysWithDictionary:[weibodict objectForKey:@"user"]];
                                         weibomodel.uerInfo=usermoel;
                                     }
-                                    
-                                    [weiboarray addObject:weiboarray];
+                                    [weiboarray addObject:weibomodel];
                                 }
-                                
                             }
-                            
+                            stagemodel.weibosArray=weiboarray;
                             model.stageInfo=stagemodel;
                             
                         }
                         
+                        if(self.dataArray==nil)
+                        {
+                            self.dataArray=[[NSMutableArray alloc]init];
+                        }
                         [self.dataArray addObject:model];
                     }
-                
                 }
+              //  [self.myConllectionView reloadData];
+
             }
+            ///数据为空
             else
             {
                 
+                
+                
             }
-            
+            [self.myConllectionView reloadData];
+
         
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -158,31 +174,34 @@
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
-    if (collectionView==_myConllectionView) {
-        return 1;
-    }
-    return 0;
+    return 1;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    if (collectionView==_myConllectionView) {
-        return _dataArray.count;
-    }
-    return 0;
+     return self.dataArray.count;
+    //return 12;
+    
 }
+
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     
-    TapStageCollectionViewCell   *cell=(TapStageCollectionViewCell*)[collectionView dequeueReusableCellWithReuseIdentifier:@"tagCell" forIndexPath:indexPath];
-    if (self.dataArray.count > indexPath.row) {
-        
-         cell.imageView.backgroundColor=VStageView_color;
-//        [cell.imageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w340h340",kUrlStage,model.photo]] placeholderImage:[UIImage imageNamed:nil]];
-//        if ( model.weibosArray.count>0) {
-//            cell.titleLab.hidden = NO;
-//            cell.titleLab.text=[NSString stringWithFormat:@"%ld", model.weibosArray.count];
+    TapStageCollectionViewCell   *cell=(TapStageCollectionViewCell*)[collectionView dequeueReusableCellWithReuseIdentifier:@"Cell" forIndexPath:indexPath];
+    cell.backgroundColor=[UIColor blackColor];
+      if (self.dataArray.count > indexPath.row) {
+        ModelsModel  *model =[self.dataArray objectAtIndex:indexPath.row];
+          cell.imageView.backgroundColor=VStageView_color;
+          NSURL  *photourl=[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w340h340",kUrlStage,model.stageInfo.photo]];
+         [cell.imageView sd_setImageWithURL:photourl placeholderImage:nil];
+          weiboInfoModel  *weibomodel =[model.stageInfo.weibosArray objectAtIndex:0];
+          if(weibomodel.content.length==0)
+          {
+              cell.titleLab.hidden=YES;
+          }
+          cell.titleLab.text=[NSString stringWithFormat:@"%@",weibomodel.content];
+          
     }
     return cell;
     
@@ -194,7 +213,7 @@
 }
 -(UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
 {
-     return UIEdgeInsetsMake(0,0, 5,0);
+     return UIEdgeInsetsMake(0,0,5,0);
 }
 
 //上下
@@ -202,6 +221,18 @@
 {
      return 5;
 }
+
+-(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+        ShowStageViewController *vc = [[ShowStageViewController alloc] init];
+        ModelsModel *model=[_dataArray objectAtIndex:indexPath.row];
+        //vc.upweiboArray=_upWeiboArray;
+        vc.stageInfo =model.stageInfo;
+        [self.navigationController pushViewController:vc animated:YES];
+    
+}
+
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
