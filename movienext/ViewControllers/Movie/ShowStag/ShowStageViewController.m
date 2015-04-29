@@ -366,6 +366,20 @@
         
     }
 }
+-(void)ToolViewTagHandClickTagView:(TagView *)tagView withweiboinfo:(weiboInfoModel *)weiboInfo WithTagInfo:(TagModel *)tagInfo
+{
+         [_mymarkView CancelMarksetSelect];
+        if (_toolBar) {
+            [_toolBar  HidenButtomView];
+            [_toolBar removeFromSuperview];
+            
+        }
+        TagToStageViewController  *vc=[[TagToStageViewController alloc]init];
+        vc.weiboInfo=weiboInfo;
+        vc.tagInfo=tagInfo;
+        [self.navigationController pushViewController:vc animated:YES];
+    
+}
 -(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (actionSheet.tag==507) {
@@ -503,7 +517,7 @@
 -(void)layoutMarkViewWithMarkView:(MarkView  *) markView WeiboInfo:(weiboInfoModel *) weibodict
 {
 #pragma mark   缩放整体的弹幕大小
-   /* [Function BasicAnimationwithkey:@"transform.scale" Duration:0.25 repeatcont:1 autoresverses:YES fromValue:1.0 toValue:1.05 View:markView];
+    [Function BasicAnimationwithkey:@"transform.scale" Duration:0.25 repeatcont:1 autoresverses:YES fromValue:1.0 toValue:1.05 View:markView];
     
     
     //NSLog(@" 点赞 后 微博dict  ＝====uped====%@    ups===%@",weibodict.uped,weibodict.ups);
@@ -528,6 +542,11 @@
     }
 #pragma mark 设置气泡的大小和位置
     markView.frame=CGRectMake(markView.frame.origin.x, markView.frame.origin.y, markViewWidth, markViewHeight);
+    
+    if (weibodict.tagArray.count>0) {
+        markView.frame=CGRectMake(markView.frame.origin.x, markView.frame.origin.y, markViewWidth, markViewHeight+TagHeight+6);
+    }
+
 #pragma mark 设置标签的内容
     // markView.TitleLable.text=weiboTitleString;
     markView.ZanNumLable.text =[NSString stringWithFormat:@"%@",weibodict.like_count];
@@ -537,7 +556,7 @@
     else
     {
         markView.ZanNumLable.hidden=NO;
-    }*/
+    }
     
 
     

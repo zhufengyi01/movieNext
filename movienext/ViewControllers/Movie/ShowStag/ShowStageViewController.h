@@ -10,7 +10,9 @@
 #import "RootViewController.h"
 //#import "HotMovieModel.h"
 #import "stageInfoModel.h"
-@interface ShowStageViewController : RootViewController
+#import "TagView.h"
+#import "TagToStageViewController.h"
+@interface ShowStageViewController : RootViewController <TagViewDelegate>
 
 @property (nonatomic, strong) stageInfoModel *stageInfo;
 @property(nonatomic,strong) NSMutableArray   *upweiboArray;

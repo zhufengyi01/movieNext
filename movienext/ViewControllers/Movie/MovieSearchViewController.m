@@ -105,6 +105,8 @@
                 NSMutableArray *doubanInfos = [[DoubanService shareInstance] getDoubanInfosByResponse:responseString];
                 _dataArray = doubanInfos;
                 NSLog(@"------_dataArray -=====%@",_dataArray);
+                
+                
                 [_myTableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
                 //[_myTableView reloadData];  //用这个方法加载不出来tableview
             } else {

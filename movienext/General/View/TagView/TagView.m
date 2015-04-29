@@ -23,13 +23,19 @@
     if ([super  initWithFrame:frame]) {
         self.layer.cornerRadius=TagViewConrnerRed;
         self.clipsToBounds=YES;
-        self.backgroundColor =VBlue_color;
+        //self.backgroundColor =VBlue_color;
         [self createUI];
     }
     return self;
 }
 -(void)createUI
 {
+    //添加背景图片
+    self.tagBgImageview =[[UIImageView alloc]initWithFrame:CGRectMake(0, 0,self.frame.size.width , self.frame.size.height)];
+    self.tagBgImageview.backgroundColor = VBlue_color;
+    [self addSubview:self.tagBgImageview];
+    
+    //添加文字
     self.titleLable=[ZCControl createLabelWithFrame:CGRectMake(0,0, 60, 30) Font:TagTextFont14 Text:@"标签"];
     self.titleLable.textColor=[UIColor whiteColor];
     self.titleLable.font =[UIFont systemFontOfSize:TagTextFont14];
@@ -37,8 +43,9 @@
         self.titleLable.font=[UIFont systemFontOfSize:TagTextFont16];
     }
     self.titleLable.adjustsFontSizeToFitWidth=NO;
-    [self addSubview:self.titleLable];
+    [self.tagBgImageview addSubview:self.titleLable];
     
+    //添加点击手势
     UITapGestureRecognizer  *tapself =[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(dealTapSelf:)];
     [self addGestureRecognizer:tapself];
 }
@@ -46,16 +53,21 @@
 -(void)dealTapSelf:(UITapGestureRecognizer *) tap
 {
     
-    if(self.delegete &&[self.delegete respondsToSelector:@selector(handTapViewClick:withTagInfo:)])
-    {
-        [self.delegete handTapViewClick:self.weiboInfo withTagInfo:self.tagInfo];
+//    if(self.delegete &&[self.delegete respondsToSelector:@selector(handTapViewClick:withTagInfo:)])
+//    {
+//        [self.delegete handTapViewClick:self.weiboInfo withTagInfo:self.tagInfo];
+//    }
+    if (self.delegete &&[self.delegete respondsToSelector:@selector(TapViewClick:Withweibo:withTagInfo:)]) {
+        [self.delegete TapViewClick:self Withweibo:self.weiboInfo withTagInfo:self.tagInfo];
     }
+    
+    
 }
 
 -(void)layoutSubviews
 {
     [super layoutSubviews];
-    
+    self.tagBgImageview.frame=CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
     self.titleLable.frame=CGRectMake(5,0, self.frame.size.width-10,self.frame.size.height);
     
 }

@@ -83,7 +83,6 @@
    
      search.backgroundColor=[UIColor clearColor];
      self.navigationItem.titleView=search;
-    
 }
 -(void)createSegmentView
 {

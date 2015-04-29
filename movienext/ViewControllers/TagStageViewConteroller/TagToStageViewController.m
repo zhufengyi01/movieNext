@@ -18,6 +18,7 @@
 #import "TapStageCollectionViewCell.h"
 #import "ModelsModel.h"
 #import "ShowStageViewController.h"
+
 @interface TagToStageViewController ()<UICollectionViewDelegateFlowLayout,UICollectionViewDataSource,UICollectionViewDelegate>
 {
     LoadingView   *loadView;
@@ -26,6 +27,11 @@
     int pageCount;
 
 }
+//私有的
+@property(nonatomic,strong)UICollectionView  *myConllectionView;
+@property(nonatomic,strong) NSMutableArray      *dataArray;
+
+
 @end
 
 @implementation TagToStageViewController
@@ -195,12 +201,12 @@
           cell.imageView.backgroundColor=VStageView_color;
           NSURL  *photourl=[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w340h340",kUrlStage,model.stageInfo.photo]];
          [cell.imageView sd_setImageWithURL:photourl placeholderImage:nil];
-          weiboInfoModel  *weibomodel =[model.stageInfo.weibosArray objectAtIndex:0];
-          if(weibomodel.content.length==0)
+          
+          if(model.stageInfo.movieInfo.name.length==0)
           {
               cell.titleLab.hidden=YES;
           }
-          cell.titleLab.text=[NSString stringWithFormat:@"%@",weibomodel.content];
+          cell.titleLab.text=[NSString stringWithFormat:@"%@",model.stageInfo.movieInfo.name];
           
     }
     return cell;
@@ -231,8 +237,6 @@
         [self.navigationController pushViewController:vc animated:YES];
     
 }
-
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

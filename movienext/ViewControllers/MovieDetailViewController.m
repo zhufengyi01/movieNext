@@ -29,7 +29,7 @@
 #import "AddMarkViewController.h"
 #import "HotMovieModel.h"
 #import "MyViewController.h"
-#import "ButtomToolView.h"
+//#import "ButtomToolView.h"
 #import "MJRefresh.h"
 #import "UserDataCenter.h"
 #import "ShowStageViewController.h"
@@ -39,6 +39,7 @@
 #import "stageInfoModel.h"
 #import "movieInfoModel.h"
 #import "ScanMovieInfoViewController.h"
+#import "TagToStageViewController.h"
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
 @interface MovieDetailViewController ()<UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UICollectionViewDelegate,MovieHeadViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UMSocialUIDelegate,UMSocialDataDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIScrollViewDelegate,BigImageCollectionViewCellDelegate,AddMarkViewControllerDelegate,UMShareViewControllerDelegate,MFMailComposeViewControllerDelegate,LoadingViewDelegate>
@@ -260,7 +261,7 @@
 //创建底部的视图
 -(void)createToolBar
 {
-    _toolBar=[[ButtomToolView alloc]initWithFrame:CGRectMake(0,0,kDeviceWidth,kDeviceHeight+64)];
+    _toolBar=[[ButtomToolView alloc]initWithFrame:CGRectMake(0,0,kDeviceWidth,kDeviceHeight)];
     _toolBar.delegete=self;
 }
 
@@ -488,6 +489,26 @@
                            [usermodel setValuesForKeysWithDictionary:[weiboDict objectForKey:@"user"]];
                            weibomodel.uerInfo=usermodel;
                        }
+                       
+                       //tag
+                       NSMutableArray  *tagArray = [[NSMutableArray alloc]init];
+                       for (NSDictionary  *tagDict  in [weiboDict objectForKey:@"tags"]) {
+                           TagModel *tagmodel =[[TagModel alloc]init];
+                           if (tagmodel) {
+                               [tagmodel setValuesForKeysWithDictionary:tagDict];
+                               TagDetailModel *tagedetail = [[TagDetailModel alloc]init];
+                               if (tagedetail) {
+                                   [tagedetail setValuesForKeysWithDictionary:[tagDict  objectForKey:@"tag"]];
+                                   tagmodel.tagDetailInfo=tagedetail;
+                               }
+                               
+                               [tagArray addObject:tagmodel];
+                           }
+                       }
+                       weibomodel.tagArray=tagArray;
+
+                       
+                       
                        [weibos addObject:weibomodel];
                     }
                 }
@@ -939,8 +960,6 @@
             [_toolBar removeFromSuperview];
         }
     }
-    
-    
 }
 #pragma mark   ------
 #pragma mark   -------- ButtomToolViewDelegate
@@ -955,6 +974,13 @@
 
     if (button.tag==10000) {
         ///点击了头像//进入个人页面
+        [_mymarkView CancelMarksetSelect];
+        if (_toolBar) {
+            [_toolBar HidenButtomView];
+            [_toolBar removeFromSuperview];
+            
+        }
+
         NSLog(@"点击头像  微博dict  ＝====%@ ======出现的stageinfo  ＝＝＝＝＝＝%@",weiboDict,stageInfoDict);
         MyViewController   *myVc=[[MyViewController alloc]init];
         myVc.author_id=weiboDict.created_by;
@@ -1045,6 +1071,19 @@
             [ash showInView:self.view];
         }
     }
+}
+-(void)ToolViewTagHandClick:(weiboInfoModel *)weiboInfo WithTagInfo:(TagModel *)tagInfo
+{
+    
+    if (_toolBar) {
+        [_toolBar removeFromSuperview];
+        
+    }
+    TagToStageViewController  *vc=[[TagToStageViewController alloc]init];
+    vc.weiboInfo=weiboInfo;
+    vc.tagInfo=tagInfo;
+    [self.navigationController pushViewController:vc animated:YES];
+    
 }
 
 #pragma mark  ----actionSheetDelegate--
@@ -1257,6 +1296,10 @@
     }
 #pragma mark 设置气泡的大小和位置
     markView.frame=CGRectMake(markView.frame.origin.x, markView.frame.origin.y, markViewWidth, markViewHeight);
+    if (weibodict.tagArray.count>0) {
+        markView.frame=CGRectMake(markView.frame.origin.x, markView.frame.origin.y, markViewWidth, markViewHeight+TagHeight+6);
+    }
+
 #pragma mark 设置标签的内容
     // markView.TitleLable.text=weiboTitleString;
     markView.ZanNumLable.text =[NSString stringWithFormat:@"%@",weibodict.like_count];

@@ -13,12 +13,14 @@
 
 @protocol TagViewDelegate <NSObject>
 
--(void)handTapViewClick:(weiboInfoModel *) weiboInfo withTagInfo:(TagModel *) tagInfo;
+-(void)TapViewClick:(id) tagView Withweibo:(weiboInfoModel *) weiboInfo withTagInfo:(TagModel *) tagInfo;
 
 @end
 @interface TagView : UIView
 
 @property (nonatomic,strong) UILabel  *titleLable;
+@property(nonatomic,strong) UIImageView *tagBgImageview;  //标签的背景图片
+
 @property(nonatomic,strong) weiboInfoModel  *weiboInfo;
 @property(nonatomic,strong) TagModel   *tagInfo;
 

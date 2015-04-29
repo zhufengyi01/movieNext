@@ -7,13 +7,14 @@
 //
 
 #import "RootViewController.h"
+#import "ButtomToolView.h"
 //个人页面来源，区分于那个
 typedef NS_ENUM(NSInteger,NSMovieSourcePage)
 {
     NSMovieSourcePageMovieListController =100,
     NSMovieSourcePageSearchListController  =101,
 };
-@interface MovieDetailViewController : RootViewController
+@interface MovieDetailViewController : RootViewController <ButtomToolViewDelegate>
 {
         
 }

@@ -242,7 +242,6 @@
 
 //创建底部的视图
 -(void)createToolBar
-
 {
     _toolBar=[[ButtomToolView alloc]initWithFrame:CGRectMake(0,0,kDeviceWidth,kDeviceHeight)];
     _toolBar.delegete=self;
@@ -255,7 +254,6 @@
 -(void)requestRemoveStage
 {
     UserDataCenter *usercenter=[UserDataCenter shareInstance];
-    
     NSDictionary *parameters = @{@"stage_id":_stage_Id,@"user_id":usercenter.user_id};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     NSString *urlString =[NSString stringWithFormat:@"%@/stage/block", kApiBaseUrl];
@@ -545,7 +543,7 @@
                                   }
                                 }
                                 weibomodel.tagArray=tagArray;
-        
+                                
                                 [weibosarray addObject:weibomodel];
                             }
                         }
@@ -1095,10 +1093,12 @@
     }
 }
 
--(void)ToolViewTagHandClick:(weiboInfoModel *)weiboInfo WithTagInfo:(TagModel *)tagInfo
+-(void)ToolViewTagHandClickTagView:(TagView *)tagView withweiboinfo:(weiboInfoModel *)weiboInfo WithTagInfo:(TagModel *)tagInfo
 {
     
+    [_mymarkView CancelMarksetSelect];
     if (_toolBar) {
+        [_toolBar  HidenButtomView];
         [_toolBar removeFromSuperview];
         
     }
@@ -1106,7 +1106,6 @@
     vc.weiboInfo=weiboInfo;
     vc.tagInfo=tagInfo;
     [self.navigationController pushViewController:vc animated:YES];
-    
     
 }
 
@@ -1365,7 +1364,7 @@
     markView.frame=CGRectMake(markView.frame.origin.x, markView.frame.origin.y, markViewWidth, markViewHeight);
     
     if (weibodict.tagArray.count>0) {
-        markView.frame=CGRectMake(markView.frame.origin.x, markView.frame.origin.y, markViewWidth, markViewHeight+35);
+        markView.frame=CGRectMake(markView.frame.origin.x, markView.frame.origin.y, markViewWidth, markViewHeight+TagHeight+6);
     }
 #pragma mark 设置标签的内容
    // markView.TitleLable.text=weiboTitleString;

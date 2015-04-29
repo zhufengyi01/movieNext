@@ -15,6 +15,7 @@
 #import "weiboInfoModel.h"
 #import "HotMovieModel.h"
 #import "ModelsModel.h"
+#import "AddTagViewController.h"
 typedef NS_ENUM(NSInteger,NSAddMarkPageSource)
 {
     NSAddMarkPageSourceDefault,
@@ -25,7 +26,7 @@ typedef NS_ENUM(NSInteger,NSAddMarkPageSource)
 -(void)AddMarkViewControllerReturn;
 @end
 
-@interface AddMarkViewController : RootViewController
+@interface AddMarkViewController : RootViewController <AddTagViewControllerDelegate>
 {
     StageView *stageView;
 }

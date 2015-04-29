@@ -616,6 +616,28 @@
                             [usermodel setValuesForKeysWithDictionary:[[addDict objectForKey:@"weibo"] objectForKey:@"user"]];
                             weibomodel.uerInfo=usermodel;
                         }
+                        
+                        //tag
+                        NSMutableArray  *tagArray = [[NSMutableArray alloc]init];
+                        for (NSDictionary  *tagDict  in [[addDict objectForKey:@"weibo"] objectForKey:@"tags"]) {
+                            TagModel *tagmodel =[[TagModel alloc]init];
+                            if (tagmodel) {
+                                [tagmodel setValuesForKeysWithDictionary:tagDict];
+                                TagDetailModel *tagedetail = [[TagDetailModel alloc]init];
+                                if (tagedetail) {
+                                    [tagedetail setValuesForKeysWithDictionary:[tagDict  objectForKey:@"tag"]];
+                                    tagmodel.tagDetailInfo=tagedetail;
+                                }
+                                
+                                [tagArray addObject:tagmodel];
+                            }
+                        }
+                        weibomodel.tagArray=tagArray;
+
+                        
+                        
+                        
+                        
                         model.weiboInfo=weibomodel;
                         if (_addedDataArray ==nil) {
                             _addedDataArray=[[NSMutableArray alloc]init];
@@ -671,6 +693,25 @@
                             [usermodel setValuesForKeysWithDictionary:[[addDict objectForKey:@"weibo"] objectForKey:@"user"]];
                             weibomodel.uerInfo=usermodel;
                         }
+                        
+                        //tag
+                        NSMutableArray  *tagArray = [[NSMutableArray alloc]init];
+                        for (NSDictionary  *tagDict  in [[addDict objectForKey:@"weibo"] objectForKey:@"tags"]) {
+                            TagModel *tagmodel =[[TagModel alloc]init];
+                            if (tagmodel) {
+                                [tagmodel setValuesForKeysWithDictionary:tagDict];
+                                TagDetailModel *tagedetail = [[TagDetailModel alloc]init];
+                                if (tagedetail) {
+                                    [tagedetail setValuesForKeysWithDictionary:[tagDict  objectForKey:@"tag"]];
+                                    tagmodel.tagDetailInfo=tagedetail;
+                                }
+                                
+                                [tagArray addObject:tagmodel];
+                            }
+                        }
+                        weibomodel.tagArray=tagArray;
+
+                        
                         model.weiboInfo=weibomodel;
                         [_upedDataArray addObject:model];
                     }

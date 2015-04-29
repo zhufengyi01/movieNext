@@ -64,7 +64,7 @@
     }
     self.contentLable.textColor=[UIColor whiteColor];
     self.contentLable.lineSpacing=5.0;
-    [_rightView addSubview:self.contentLable];
+    //[_rightView addSubview:self.contentLable];
     
     
     
@@ -102,13 +102,11 @@
             [_LeftImageView addSubview:isfakeView];
         }
     }
-    
-    //创建标签
+//创建标签
     if (self.weiboInfo.tagArray&&self.weiboInfo.tagArray.count) {
         self.tagLable =[[M80AttributedLabel alloc]initWithFrame:CGRectMake(0, 0, 100, 30)];
         self.tagLable.backgroundColor=[[UIColor blackColor] colorWithAlphaComponent:0];
-        //[self.tagLable appendText:@"haha"];
-        for (int i=0; i<self.weiboInfo.tagArray.count; i++) {
+         for (int i=0; i<self.weiboInfo.tagArray.count; i++) {
             TagView *tagview = [self createTagViewWithtagInfo:self.weiboInfo.tagArray[i] andIndex:i];
             [self.tagLable appendView:tagview margin:UIEdgeInsetsMake(0, 0, 0, 5)];
         }
@@ -119,6 +117,7 @@
 -(TagView *)createTagViewWithtagInfo:(TagModel *) tagmodel andIndex:(NSInteger ) index
 {
     TagView *tagview =[[TagView alloc]initWithFrame:CGRectZero];
+    tagview.clipsToBounds=YES;
     tagview.tag=1000+index;
     tagview.weiboInfo=self.weiboInfo;
     NSString *titleStr = tagmodel.tagDetailInfo.title;
@@ -129,8 +128,32 @@
     return tagview;
 }
 
+
 - (void)layoutSubviews {
     [super layoutSubviews];
+    
+    
+    //布局之前先比较标签文字的长度跟标签弹幕文字的长度，这样去改变标签标签的长度
+//计算标签长度文字的长度
+    NSMutableString  *tagStr=[[NSMutableString alloc]init];
+    for (int i=0;i<self.weiboInfo.tagArray.count;i++)
+    {
+        TagModel  *tagmodel =[self.weiboInfo.tagArray objectAtIndex:i];
+        [ tagStr appendString:tagmodel.tagDetailInfo.title];
+    }
+    
+    CGSize  Tagsize=[tagStr boundingRectWithSize:CGSizeMake(kDeviceWidth/2, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:[UIFont systemFontOfSize:14] forKey:NSFontAttributeName] context:nil].size;
+    
+//计算文字的长度
+    NSString  *weiboTitleString=self.weiboInfo.content;
+   // NSString  *UpString=[NSString stringWithFormat:@"%@",self.weiboInfo.like_count];
+    //计算标题的size
+    CGSize  Zsize=[weiboTitleString boundingRectWithSize:CGSizeMake(kDeviceWidth/2,MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:self.TitleLable.font forKey:NSFontAttributeName] context:nil].size;
+    if (Tagsize.width+5>Zsize.width) {
+        self.frame=CGRectMake(self.frame.origin.x, self.frame.origin.y, Tagsize.width+23+5+5+11+5+10+5, self.frame.size.height);
+    }
+    
+    
     
     //头像
     _LeftImageView.frame=CGRectMake(0, 0, 23, 23);
@@ -138,7 +161,6 @@
         _LeftImageView.frame=CGRectMake(0, 0, 28, 28);
     }
     isfakeView.frame= CGRectMake(_LeftImageView.frame.size.width-6,_LeftImageView.frame.size.height-6, 8, 8);
-    
     
     //右视图
     _rightView.frame=CGRectMake(21, 0,self.frame.size.width-23 , self.frame.size.height);

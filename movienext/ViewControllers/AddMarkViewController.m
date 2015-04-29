@@ -15,12 +15,17 @@
 #import "AFNetworking.h"
 #import "weiboInfoModel.h"
 #import "MovieDetailViewController.h"
+#import "TagView.h"
+//#import "AddTagViewController.h"
 #define  BOOKMARK_WORD_LIMIT 1000
-@interface AddMarkViewController ()<UITextFieldDelegate,UIAlertViewDelegate,UIScrollViewDelegate,UITextViewDelegate>
+@interface AddMarkViewController ()<UITextFieldDelegate,UIAlertViewDelegate,UIScrollViewDelegate,UITextViewDelegate,TagViewDelegate,UIAlertViewDelegate>
 {
     UIScrollView  *_myScorllerView;
     UIToolbar  *_toolBar;
-     UITextView   *_myTextView;
+
+    UIButton  *textLeftButton;
+    
+    UITextView   *_myTextView;
     MarkView  *_myMarkView;
     NSString    *X;
     NSString    *Y;
@@ -30,6 +35,11 @@
     UIView   *tipView;
     UIButton  *publishBtn;
     NSString  *InputStr;
+     //标签的lable
+    M80AttributedLabel  *taglable;
+    UserDataCenter *userCenter;
+    weiboInfoModel  *weibomodel;
+    NSMutableArray  *TAGArray;        //把第一个标签和第二个标签存储在数组中
 }
 @end
 
@@ -55,8 +65,11 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
    // _myDict =[NSDictionary dictionaryWithDictionary:_stageDict];
+    
+    
     keybordHeight=0;
     [self createNavigation];
+    [self initData];
     //键盘将要显示
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardDidShowNotification object:nil];
      //键盘将要隐藏
@@ -91,6 +104,12 @@
     self.navigationItem.rightBarButtonItem=[[UIBarButtonItem alloc]initWithCustomView:RighttBtn];
     
 
+}
+-(void)initData
+{
+    userCenter=[UserDataCenter shareInstance];
+    TAGArray =[[NSMutableArray alloc]init];
+    
 }
 -(void)createMyScrollerView
 {
@@ -144,12 +163,22 @@
      [_toolBar setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color.png"] forToolbarPosition:UIBarPositionAny barMetrics:UIBarMetricsDefault];
      _toolBar.tintColor=VGray_color;  //内容颜色
     
-     _myTextView=[[UITextView alloc]initWithFrame:CGRectMake(10, 10, kDeviceWidth-80, 30)];
+    
+    
+    //添加一个按钮到标签搜索页
+    textLeftButton =[ZCControl createButtonWithFrame:CGRectMake(8, 13, 25, 25) ImageName:@"add_tag_icon@2x.png" Target:self Action:@selector(dealNavClick:) Title:nil];
+    textLeftButton.tag=102;
+    [_toolBar addSubview:textLeftButton];
+    
+    
+     _myTextView=[[UITextView alloc]initWithFrame:CGRectMake(40, 10, kDeviceWidth-110, 30)];
     _myTextView.delegate=self;
     _myTextView.textColor=VGray_color;
     _myTextView.font= [UIFont systemFontOfSize:16];
     _myTextView.backgroundColor=[UIColor clearColor];
     _myTextView.layer.cornerRadius=4;
+    
+    
     _myTextView.layer.borderWidth=0.5;
     _myTextView.layer.borderColor=VLight_GrayColor.CGColor;
     _myTextView.maximumZoomScale=3;
@@ -162,16 +191,15 @@
     [_toolBar addSubview:_myTextView];
     
     
-    
      publishBtn=[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-60, 10, 50, 28) ImageName:@"loginoutbackgroundcolor.png" Target:self Action:@selector(dealNavClick:) Title:@"确定"];
      publishBtn.enabled=NO;
      publishBtn.titleLabel.font=[UIFont systemFontOfSize:14];
      publishBtn.layer.cornerRadius=4;
      publishBtn.tag=99;
      publishBtn.clipsToBounds=YES;
+
      [_toolBar addSubview:publishBtn];
-    
-    [self.view addSubview:_toolBar];
+     [self.view addSubview:_toolBar];
 }
 
 
@@ -193,11 +221,32 @@
          [self  PushlicInScreen];
         
     }
+    else if (button.tag==102)
+    {
+        //点击进入搜索添加标签页面
+//        
+//        UINavigationController  *addtag=[[UINavigationController alloc]initWithRootViewController:[AddTagViewController new]];
+//        addtag.modalTransitionStyle=UIModalTransitionStyleCrossDissolve;
+//        [self presentViewController:addtag animated:YES completion:nil];
+//
+        if (TAGArray.count==2) {
+            UIAlertView  *al =[[UIAlertView alloc]initWithTitle:nil message:@"最多可以添加两个标签" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:nil, nil];
+            al.tag=1001;
+            [al show];
+            return;
+
+        }
+        AddTagViewController  *addtag =[[AddTagViewController alloc]init];
+        addtag.delegate=self;
+        [self.navigationController pushViewController:addtag animated:NO];
+        
+        
+    }
 }
 //把markview 添加到屏幕
 -(void)PushlicInScreen
 {
-      //方法只是去掉左右两边的空格；
+    //方法只是去掉左右两边的空格；
     InputStr = [_myTextView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     //发布到屏幕之后需要把输入框退回去
     [_myTextView resignFirstResponder];
@@ -222,41 +271,196 @@
             [view removeFromSuperview];
         }
     }
-     _myMarkView =[[MarkView alloc]initWithFrame:CGRectMake(100,140 , 100, 20)];
-    ///显示标签的头像
-    UserDataCenter  * userCenter=[UserDataCenter shareInstance];
-    NSURL *logourl= [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",kUrlAvatar,userCenter.logo]];
-    [_myMarkView.LeftImageView sd_setImageWithURL:logourl placeholderImage:[UIImage imageNamed:@"user_normal"]];
     
-    _myMarkView.TitleLable.text=InputStr;
+    //创建微博对象
+    [self createWeibomodel];
+    
+   _myMarkView = [self createMarkViewWithDict:weibomodel andIndex:1000];
+    _myMarkView.weiboInfo=weibomodel;
+    _myMarkView.isAnimation=YES;
+    [_myMarkView setValueWithWeiboInfo:weibomodel];
+  //  _myMarkView.delegate=self;
     [stageView addSubview:_myMarkView];
     
-   //计算stagview 的高度
+    
+    
+    /* _myMarkView =[[MarkView alloc]initWithFrame:CGRectMake(100,140 , 100, 20)];
+    ///显示标签的头像
+    NSURL *logourl= [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",kUrlAvatar,userCenter.logo]];
+    [_myMarkView.LeftImageView sd_setImageWithURL:logourl placeholderImage:[UIImage imageNamed:@"user_normal"]];
+    //显示标题
+    _myMarkView.TitleLable.text=InputStr;
+ 
+   
+    //显示标签
+    M80AttributedLabel  *screentaglable =[[M80AttributedLabel alloc]initWithFrame:CGRectZero];
+    screentaglable.backgroundColor =[UIColor clearColor];
+    screentaglable.font=[UIFont systemFontOfSize:MarkTextFont14];
+    if (IsIphone6) {
+        screentaglable.font =[UIFont systemFontOfSize:MarkTextFont16];
+    }
+    
+    NSString  *tagStr =[NSString stringWithFormat:@"%@%@",TAG1,TAG2];
+ //标签的长度
+    CGSize  Tsize =[tagStr boundingRectWithSize:CGSizeMake(MAXFLOAT, 20) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:[NSDictionary dictionaryWithObject:screentaglable.font forKey:NSFontAttributeName] context:nil].size;
+    
+    
+    //位置和大小
+    screentaglable.frame=CGRectMake(0,20,Tsize.width+20, TagHeight+10);
+     if(TAG1.length>0) {
+        TagView *tagview1 = [self createTagViewWithtagText:TAG1 withBgImage:nil];
+        [screentaglable appendView:tagview1 margin:UIEdgeInsetsMake(0, 10, 0, 0)];
+    }
+    if (TAG2.length>0) {
+        TagView *tagview2 = [self createTagViewWithtagText:TAG2 withBgImage:nil];
+        [screentaglable appendView:tagview2 margin:UIEdgeInsetsMake(0, 10, 0, 0)];
+    }
+    [_myMarkView.rightView addSubview:screentaglable];
+
+    
+    [stageView addSubview:_myMarkView];
+    
+   //计算弹幕的长度
      CGSize  Msize= [InputStr  boundingRectWithSize:CGSizeMake(kDeviceWidth/2, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:_myMarkView.TitleLable.font forKey:NSFontAttributeName] context:nil].size;
+    
+//改变标签的位置
+    
+    //如果弹幕字的宽度小于标签字的总宽度，则弹幕的的宽度登录标签的宽度
+    if (Msize.width<Tsize.width) {
+        Msize.width=Tsize.width;
+    }
     
     //宽度=字的宽度+左头像图片的宽度＋赞图片的宽度＋赞数量的宽度+中间两个空格2+2
      int  markViewWidth = (int)Msize.width+23+5+5+11+5;
      int markViewHeight =(int) Msize.height+6;
+    if (TAG1.length>0||TAG2.length>0) {
+        markViewHeight=markViewHeight+25;
+    }
+    
     if(IsIphone6)
     {
         markViewWidth=markViewWidth+10;
         markViewHeight=markViewHeight+4;
     }
     int  kw=kDeviceWidth;
+    
     int  x=arc4random()%(kw-markViewWidth);  //要求x在0~~~（宽度-markViewWidth）
     int  y=arc4random()%((kw-markViewHeight/2)+markViewHeight/2-markViewHeight);  //要求y在markviewheight.y/2 ~~~~~~~(高度--markViewheigth/2)
-    
     _myMarkView.frame=CGRectMake(x,y, markViewWidth, markViewHeight);
+
     
+
     float  markViewY=_myMarkView.frame.origin.y;
     float  markviewHight2 =_myMarkView.frame.size.height/2;
     X =[NSString stringWithFormat:@"%f",((_myMarkView.frame.origin.x+_myMarkView.frame.size.width)/kDeviceWidth)*100];
     Y=[NSString stringWithFormat:@"%f",((markViewY+markviewHight2)/kDeviceWidth)*100];
     
+    */
     //在标签上添加一个手势
      UIPanGestureRecognizer   *pan=[[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(handelPan:)];
     [_myMarkView addGestureRecognizer:pan];
 
+}
+//手动创建微博对象
+-(void)createWeibomodel
+{
+
+    //计算弹幕的长度
+    CGSize  Msize= [InputStr  boundingRectWithSize:CGSizeMake(kDeviceWidth/2, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:[UIFont systemFontOfSize:14] forKey:NSFontAttributeName] context:nil].size;
+    
+    int  markViewWidth = (int)Msize.width+23+5+5+11+5;
+    int markViewHeight =(int) Msize.height+6;
+    int  kw=kDeviceWidth;
+    int  x=arc4random()%(kw-markViewWidth);//要求x在0~~~（宽度-markViewWidth）
+    int  y=arc4random()%((kw-markViewHeight/2)+markViewHeight/2-markViewHeight);  //要求y在markviewheight.y/2 ~~~~~~~(高度--markViewheigth/2)
+    X =[NSString stringWithFormat:@"%f",((x+markViewWidth)/kDeviceWidth)*100];
+    Y=[NSString stringWithFormat:@"%f",((y+markViewHeight/2)/kDeviceWidth)*100];
+    
+    
+    //开始创建weibo对象
+      weibomodel =[[weiboInfoModel alloc]init];
+    if (weibomodel) {
+        //添加微博信息
+        weibomodel.content=InputStr;
+        weibomodel.x_percent=X;
+        weibomodel.y_percent=Y;
+        //1.添加用户信息
+        weiboUserInfoModel *usermodel = [[weiboUserInfoModel alloc]init];
+        if (usermodel) {
+            usermodel.username=userCenter.username;
+            usermodel.logo=userCenter.logo;
+            usermodel.Id= [NSNumber numberWithInt: [userCenter.user_id intValue]];
+            weibomodel.uerInfo=usermodel;
+        }
+        
+        //2.添加stage信息
+        weibomodel.stageInfo=self.stageInfo;
+        NSMutableArray  *tagArray =[[NSMutableArray alloc]init];
+        //添加标签数组
+        for (int i=0; i<TAGArray.count; i++) {
+            TagModel  *tagmodel =[[TagModel alloc]init];
+            if (tagmodel) {
+                TagDetailModel  *tagdetail =[[TagDetailModel alloc]init];
+                if (tagdetail) {
+                    tagdetail.title = [[TAGArray  objectAtIndex:i] objectForKey:@"TAG"];
+                    tagmodel.tagDetailInfo=tagdetail;
+                }
+                [tagArray addObject:tagmodel];
+            }
+            
+        }
+        //标签数组
+        weibomodel.tagArray=tagArray;
+    }
+    
+}
+
+
+
+#pragma mark 内部弹幕的方法
+- (MarkView *) createMarkViewWithDict:(weiboInfoModel *)weibodict andIndex:(NSInteger)index{
+    MarkView *markView=[[MarkView alloc]initWithFrame:CGRectZero];
+    //设置tag 值为了在下面去取出来循环轮播
+    markView.tag=1000+index;
+    float  x=[weibodict.x_percent floatValue];   //位置的百分比
+    float  y=[weibodict.y_percent floatValue];
+    NSString  *weiboTitleString=weibodict.content;
+    NSString  *UpString=[NSString stringWithFormat:@"%@",weibodict.like_count];//weibodict.ups;
+    //计算标题的size
+    CGSize  Msize=[weiboTitleString boundingRectWithSize:CGSizeMake(kDeviceWidth/2,MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:markView.TitleLable.font forKey:NSFontAttributeName] context:nil].size;
+    // 计算赞数量的size
+    CGSize Usize=[UpString boundingRectWithSize:CGSizeMake(40,MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:markView.ZanNumLable.font forKey:NSFontAttributeName] context:nil].size;
+    float hight=kStageWidth;
+    //计算赞数量的长度
+    float  Uwidth=[UpString floatValue]==0?0:Usize.width;
+    //宽度=字的宽度+左头像图片的宽度＋赞图片的宽度＋赞数量的宽度+中间两个空格2+2
+    float markViewWidth = Msize.width+23+Uwidth+5+5+11+5;
+    float markViewHeight = Msize.height+6;
+    if (weibodict.tagArray.count>0) {
+        markViewHeight=markViewHeight+25;
+        
+    }
+    
+    if(IsIphone6)
+    {
+        markViewWidth=markViewWidth+10;
+        markViewHeight=markViewHeight+4;
+    }
+    float markViewX = (x*kStageWidth)/100-markViewWidth;
+    markViewX = MIN(MAX(markViewX, 5.0f), kStageWidth-markViewWidth-5);
+    
+    float markViewY = (y*hight)/100 - markViewHeight/2;
+    markViewY = MIN(MAX(markViewY, 5.0f), hight-markViewHeight-5);
+#pragma mark 设置气泡的大小和位置
+    markView.frame=CGRectMake(markViewX, markViewY, markViewWidth, markViewHeight);
+    markView.TitleLable.text=weiboTitleString;
+    
+    NSString   *headurl =[NSString stringWithFormat:@"%@%@",kUrlAvatar,weibodict.uerInfo.logo];
+    [markView.LeftImageView sd_setImageWithURL:[NSURL URLWithString:headurl] placeholderImage:[UIImage imageNamed:@"user_normal"]];
+    markView.ZanNumLable.text=[NSString stringWithFormat:@"%@",weibodict.like_count];
+    
+    //设置标签
+    return markView;
 }
 
 -(void)handelPan:(UIPanGestureRecognizer*)gestureRecognizer{
@@ -268,7 +472,7 @@
     }];
 
    //获取平移手势对象在stageView的位置点，并将这个点作为self.aView的center,这样就实现了拖动的效果
-    CGPoint curPoint = [gestureRecognizer locationInView:stageView];    
+    CGPoint curPoint = [gestureRecognizer locationInView:stageView];
     CGFloat xoffset = _myMarkView.frame.size.width/2.0;
     CGFloat yoffset = _myMarkView.frame.size.height/2.0;
     CGFloat x = MIN(kDeviceWidth-xoffset,  MAX(xoffset, curPoint.x) );
@@ -296,12 +500,28 @@
     X=[NSString stringWithFormat:@"%d",x_percent];
     int y_percent=[Y intValue];
     Y =[NSString stringWithFormat:@"%d",y_percent];
-    UserDataCenter  *userCenter=[UserDataCenter shareInstance];
+   // UserDataCenter  *userCenter=[UserDataCenter shareInstance];
     NSString  *userid=userCenter.user_id;
     NSNumber  *stageId=self.stageInfo.Id;
     
-     NSDictionary *parameter = @{@"user_id": userid,@"content":InputStr,@"stage_id":stageId,@"x_percent":X,@"y_percent":Y};
     
+    NSDictionary *parameter;
+    if (TAGArray.count==0) {
+     parameter = @{@"user_id": userid,@"content":InputStr,@"stage_id":stageId,@"x_percent":X,@"y_percent":Y};
+    }
+    else if (TAGArray.count==1)
+    {
+        NSString  *tag1 =[[TAGArray objectAtIndex:0] objectForKey:@"TAG"];
+        parameter = @{@"user_id": userid,@"content":InputStr,@"stage_id":stageId,@"x_percent":X,@"y_percent":Y,@"tags[0]":tag1};
+
+    }
+    else if(TAGArray.count==2)
+    {
+        NSString  *tag1 =[[TAGArray objectAtIndex:0] objectForKey:@"TAG"];
+        NSString  *tag2 =[[TAGArray objectAtIndex:1] objectForKey:@"TAG"];
+        parameter = @{@"user_id": userid,@"content":InputStr,@"stage_id":stageId,@"x_percent":X,@"y_percent":Y,@"tags[0]":tag1,@"tags[1]":tag2};
+
+    }
     
     NSString *urlString =[NSString stringWithFormat:@"%@/weibo/create", kApiBaseUrl];
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
@@ -309,21 +529,38 @@
         NSLog(@"  添加弹幕发布请求    JSON: %@", responseObject);
         if ([[responseObject  objectForKey:@"code"] intValue]==0) {
             UIAlertView  *Al=[[UIAlertView alloc]initWithTitle:nil message:@"发布成功" delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
+            Al.tag=1000;
             [Al show];
-            
-            weiboInfoModel *weibomodel =[[weiboInfoModel alloc]init];
-            if (weibomodel) {
-                [weibomodel setValuesForKeysWithDictionary:[responseObject objectForKey:@"model"]];
+           // UserDataCenter  *useCenter=[UserDataCenter shareInstance];
+            weiboInfoModel *weibo =[[weiboInfoModel alloc]init];
+            if (weibo) {
+                [weibo setValuesForKeysWithDictionary:[responseObject objectForKey:@"model"]];
+                weiboUserInfoModel  *weibouser=[[weiboUserInfoModel alloc]init];
+                if (weibouser) {
+                  weibouser.logo=userCenter.logo;
+                  weibouser.username=userCenter.username;
+                  weibo.uerInfo=weibouser;
+                }
                 
-                  UserDataCenter  *useCenter=[UserDataCenter shareInstance];
-                  weiboUserInfoModel  *weibouser=[[weiboUserInfoModel alloc]init];
-                  weibouser.logo=useCenter.logo;
-                  weibouser.username=useCenter.username;
-                weibomodel.uerInfo=weibouser;
-                
+                NSMutableArray  *tagarray =[[NSMutableArray alloc]init];
+                for (NSDictionary  *tagDict in [[responseObject objectForKey:@"model"] objectForKey:@"tags"]) {
+                    
+                    TagModel  *tagmodel =[[TagModel alloc]init];
+                    if (tagmodel) {
+                        [tagmodel  setValuesForKeysWithDictionary:tagDict];
+                        
+                        TagDetailModel  *tagdeltail =[[TagDetailModel alloc]init];
+                        if (tagdeltail) {
+                            [tagdeltail setValuesForKeysWithDictionary:[tagDict objectForKey:@"tag"]];
+                            tagmodel.tagDetailInfo=tagdeltail;
+                        }
+                        [tagarray addObject:tagmodel];
+                    }
+                }
+                weibo.tagArray=tagarray;
             }
          //   weibomodel.uerInfo.fake=[NSNumber numberWithInt:1];
-            [self.stageInfo.weibosArray addObject:weibomodel];
+            [self.stageInfo.weibosArray addObject:weibo];
         
         }
         
@@ -336,6 +573,7 @@
 #pragma mark 键盘的通知事件
 -(void)keyboardWillShow:(NSNotification * )  notification
 {
+        _myTextView.frame=CGRectMake(_myTextView.frame.origin.x, _myTextView.frame.origin.y, _myTextView.frame.size.width, 30);
         NSDictionary *info = [notification userInfo];
         NSValue *value = [info objectForKey:UIKeyboardFrameEndUserInfoKey];
          keyboardSize = [value CGRectValue].size;
@@ -343,18 +581,25 @@
         NSLog(@"keyBoard   height  :%f", keyboardSize.height);
     //第一次需要计算键盘的高度
     if (keybordHeight==0) {
-    keybordHeight=keyboardSize.height;
+       keybordHeight=keyboardSize.height;
     }
+    
+    
     [UIView  animateWithDuration:timeInterval animations:^{
         CGRect  tframe=_toolBar.frame;
         tframe.origin.y=kDeviceHeight -keyboardSize.height-kHeightNavigation-50;
+        if (TAGArray.count>0) {
+            tframe.origin.y=kDeviceHeight-keyboardSize.height-kHeightNavigation-80;
+        }
         _toolBar.frame=tframe;
+        
     } completion:^(BOOL finished) {
         
     }];
 }
 -(void)keyboardWillHiden:(NSNotification *) notification
 {
+        _myTextView.frame=CGRectMake(_myTextView.frame.origin.x, _myTextView.frame.origin.y, _myTextView.frame.size.width, 30);
     [UIView  animateWithDuration:0.1 animations:^{
         CGRect  tframe=_toolBar.frame;
         tframe.origin.y=kDeviceHeight-50-kHeightNavigation;
@@ -468,6 +713,8 @@
 #pragma  mark  ----UIAlertViewdelegate  ---
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
+    if (alertView.tag==1000) {
+        //发布弹幕成功的返回
     if (buttonIndex==0) {
         if (self.pageSoureType==NSAddMarkPageSourceUploadImage) {
             //返回电影详细页面的时候需要去刷新一下
@@ -488,10 +735,115 @@
         }
         
     }
+    }
+    else if (alertView.tag==1001)
+    {
+        //标签个数大于2的时候返回
+        
+    }
 }
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
    // [_myTextView resignFirstResponder];
+}
+
+-(void)AddTagViewHandClickWithTag:(NSString *)tag
+{
+    
+    //改变_toolBar的高度;
+    _myTextView.frame=CGRectMake(_myTextView.frame.origin.x, _myTextView.frame.origin.y, _myTextView.frame.size.width, 30);
+    _toolBar.frame=CGRectMake(_toolBar.frame.origin.x, _toolBar.frame.origin.y-30,_toolBar.frame.size.width, 80);
+
+    //如果第一个标签为空
+    if (TAGArray.count==0) {
+        NSMutableDictionary  *tag1Dict =[NSMutableDictionary dictionaryWithObject:tag forKey:@"TAG"];
+        if (TAGArray==nil) {
+            TAGArray =[[NSMutableArray alloc]init];
+        }
+        [TAGArray insertObject:tag1Dict atIndex:0];
+    }
+    else
+    {
+        NSMutableDictionary  *tag2Dict =[NSMutableDictionary dictionaryWithObject:tag forKey:@"TAG"];
+        if (TAGArray==nil) {
+            TAGArray =[[NSMutableArray alloc]init];
+        }
+        [TAGArray insertObject:tag2Dict atIndex:1];
+    }
+    
+    NSLog(@"======%@",TAGArray);
+    
+//创建标签文本
+    taglable =[[M80AttributedLabel alloc]initWithFrame:CGRectZero];
+    taglable.backgroundColor =[UIColor clearColor];
+    taglable.font=[UIFont systemFontOfSize:MarkTextFont14];
+    if (IsIphone6) {
+        taglable.font =[UIFont systemFontOfSize:MarkTextFont16];
+    }
+    //位置和大小
+    taglable.frame=CGRectMake(10,50,kDeviceWidth-20, TagHeight+10);
+    
+    for (int i=0; i<TAGArray.count; i++) {
+        NSDictionary  *dict =[TAGArray objectAtIndex:i];
+         TagView   *tagview =[self createTagViewWithtagText:[dict objectForKey:@"TAG"] withIndex:i withBgImage:[UIImage imageNamed:@"tag_backgroud_color.png"]];
+        [taglable appendView:tagview margin:UIEdgeInsetsMake(0, 10, 0, 0)];
+    }
+    
+    [_toolBar addSubview:taglable];
+    
+}
+
+//创建标签的方法
+-(TagView *)createTagViewWithtagText:(NSString *) tagText withIndex:(NSInteger) index withBgImage:(UIImage *) imagename
+{
+    TagView *tagview =[[TagView alloc]initWithFrame:CGRectZero];
+    tagview.tag=1000+index;
+    tagview.delegete=self;
+    tagview.titleLable.text=tagText;
+    CGSize  Tsize =[tagText boundingRectWithSize:CGSizeMake(MAXFLOAT, TagHeight) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:[NSDictionary dictionaryWithObject:tagview.titleLable.font forKey:NSFontAttributeName] context:nil].size;
+    
+    tagview.tagBgImageview.image =[imagename stretchableImageWithLeftCapWidth:15 topCapHeight:15];
+    tagview.frame=CGRectMake(0,0, Tsize.width+10, TagHeight+6);
+    return tagview;
+}
+//点击标签，删除操作
+-(void)TapViewClick:(TagView *)tagView Withweibo:(weiboInfoModel *)weiboInfo withTagInfo:(TagModel *)tagInfo
+{
+    
+    if(TAGArray.count>0)
+    {
+    [TAGArray  removeObjectAtIndex:tagView.tag-1000];
+    }
+    //删除完成后，清除所有的布局
+    [taglable removeFromSuperview];
+    taglable=nil;
+    
+    taglable =[[M80AttributedLabel alloc]initWithFrame:CGRectZero];
+    taglable.backgroundColor =[UIColor clearColor];
+    taglable.font=[UIFont systemFontOfSize:MarkTextFont14];
+    if (IsIphone6) {
+        taglable.font =[UIFont systemFontOfSize:MarkTextFont16];
+    }
+    //位置和大小
+    taglable.frame=CGRectMake(10,50,kDeviceWidth-20, TagHeight+10);
+    [_toolBar addSubview:taglable];
+    
+    
+    //然后从新开始渲染布局
+    for (int i=0; i<TAGArray.count; i++) {
+        NSDictionary  *dict =[TAGArray objectAtIndex:i];
+        TagView   *tagview =[self createTagViewWithtagText:[dict objectForKey:@"TAG"] withIndex:i withBgImage:[UIImage imageNamed:@"tag_backgroud_color.png"]];
+        [taglable appendView:tagview margin:UIEdgeInsetsMake(0, 10, 0, 0)];
+    }
+    
+    
+    if (TAGArray.count==0) {
+        _toolBar.frame=CGRectMake(_toolBar.frame.origin.x, _toolBar.frame.origin.y+30,_toolBar.frame.size.width, 50);
+        _myTextView.frame=CGRectMake(_myTextView.frame.origin.x,10, _myTextView.frame.size.width, 30);
+
+    }
+    NSLog(@"删除之后的数组====%@",TAGArray);
+
 }
 /*
 #pragma mark - Navigation

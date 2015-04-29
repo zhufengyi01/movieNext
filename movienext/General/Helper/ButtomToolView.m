@@ -46,7 +46,6 @@
     
     
     //弹出框
-    
     alertView =[[UIView alloc]initWithFrame:CGRectMake(15,180, kDeviceWidth-30, 180)];
     alertView.backgroundColor=[UIColor whiteColor];
     alertView.alpha=0;
@@ -56,7 +55,6 @@
     [self addSubview:alertView];
     
     //在alertview上添加手势用来截获点击屏幕事件
-    
     UITapGestureRecognizer  *tapalert =[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(alertViewTap:)];
     [alertView addGestureRecognizer:tapalert];
 
@@ -69,11 +67,6 @@
     headButton.clipsToBounds=YES;
     [headButton addTarget:self action:@selector(dealButtomClick:) forControlEvents:UIControlEventTouchUpInside];
     headButton.tag=10000;
-    //headButton.titleLabel.font=[UIFont systemFontOfSize:14];
-   // [headButton setImage:[UIImage imageNamed:@"ic_menu_person_default.png"] forState:UIControlStateNormal];
-    //[headButton setBackgroundImage:[UIImage imageNamed:@"loginoutbackgroundcolor.png"] forState:UIControlStateNormal];
-    //[headButton setTitle:@"主页" forState:UIControlStateNormal];
-    //[headButton setTitleEdgeInsets:UIEdgeInsetsMake(10, 25, 10, 10)];
     [alertView addSubview:headButton];
     
      userNamelabel =[ZCControl createLabelWithFrame:CGRectMake(headButton.frame.origin.x+headButton.frame.size.width+10,headButton.frame.origin.y, 200, 20) Font:14 Text:@"名字"];
@@ -91,11 +84,10 @@
     
     
     
-    contentLable =[ZCControl createLabelWithFrame:CGRectMake(headButton.frame.origin.x,headButton.frame.origin.y+headButton.frame.size.height+0,alertView.frame.size.width-20, 50) Font:16 Text:@"刚刚"];
-    contentLable.numberOfLines=2;
-
-    contentLable.adjustsFontSizeToFitWidth=NO;
-    contentLable.lineBreakMode=NSLineBreakByTruncatingTail;
+    contentLable =[ZCControl createLabelWithFrame:CGRectMake(headButton.frame.origin.x,headButton.frame.origin.y+headButton.frame.size.height+0,alertView.frame.size.width-20, 50) Font:16 Text:@"内容"];
+    contentLable.numberOfLines=0;
+   //contentLable.adjustsFontSizeToFitWidth=NO;
+   // contentLable.lineBreakMode=NSLineBreakByTruncatingTail;
     contentLable.textColor=VGray_color;
     [alertView addSubview:contentLable];
     
@@ -206,6 +198,7 @@
     
     TagView *tagview =[[TagView alloc]initWithFrame:CGRectZero];
     tagview.tag=1000+index;
+    tagview.clipsToBounds=YES;
     tagview.delegete=self;
     tagview.tagInfo=tagmodel;
     tagview.weiboInfo=self.weiboInfo;
@@ -294,18 +287,13 @@
     
 }
 #pragma mark -------TapViewClickDelegete---------------------------------------------
--(void)handTapViewClick:(weiboInfoModel *)weiboInfo withTagInfo:(TagModel *)tagInfo
+-(void)TapViewClick:(id)tagView Withweibo:(weiboInfoModel *)weiboInfo withTagInfo:(TagModel *)tagInfo
 {
-    
-    
-    if (self.delegete &&[self.delegete respondsToSelector:@selector(ToolViewTagHandClick:WithTagInfo:)]) {
-        [self.delegete ToolViewTagHandClick:weiboInfo WithTagInfo:tagInfo];
+    if (self.delegete &&[self.delegete respondsToSelector:@selector(ToolViewTagHandClickTagView:withweiboinfo:WithTagInfo:)]) {
+        [self.delegete ToolViewTagHandClickTagView:tagView withweiboinfo:weiboInfo WithTagInfo:tagInfo];
     }
     
-    
 }
-
-
 
 //点击屏幕
 -(void)TouchbuttonClick:(UITapGestureRecognizer *) tap
@@ -315,6 +303,18 @@
     if (self.delegete &&[self.delegete respondsToSelector:@selector(topViewTouchBengan)]) {
         [self.delegete topViewTouchBengan];
     }
+}
+
+
+//布局子视图
+-(void)layoutSubviews
+{
+    [super layoutSubviews];
+    NSString *weiboString = self.weiboInfo.content;
+    CGSize  Wsize=[weiboString boundingRectWithSize:CGSizeMake(kStageWidth-40, MAXFLOAT) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:[NSDictionary dictionaryWithObject:contentLable.font forKey:NSFontAttributeName] context:nil].size;
+    
+    
+    
 }
 
 

@@ -26,7 +26,7 @@
 -(void)topViewTouchBengan;
 
 //点击标签，跳转到含有标签的剧情列表
--(void)ToolViewTagHandClick:(weiboInfoModel *) weiboInfo WithTagInfo:(TagModel *) tagInfo;
+-(void)ToolViewTagHandClickTagView:(TagView*)tagView  withweiboinfo:(weiboInfoModel *) weiboInfo WithTagInfo:(TagModel *) tagInfo;
 
 
 @end

@@ -26,9 +26,14 @@
 @property (nonatomic,strong) UIImageView    *LeftImageView;
 @property (nonatomic,strong) UIView         *rightView;  //又视图.包含titlelable 和赞的图片，赞的个数。
 @property (nonatomic,strong) UILabel        *TitleLable;
-@property(nonatomic,strong)  M80AttributedLabel  *contentLable;
+@property(nonatomic,strong)  M80AttributedLabel  *contentLable;  //标题的lable包含文字 点赞图片  点赞的数量
 @property (nonatomic,strong) UILabel        *ZanNumLable;
 @property (nonatomic,strong) UIImageView    *ZanImageView;
+
+
+//标签文本器
+@property(nonatomic,strong) M80AttributedLabel  *tagLable;
+
 
 //点击的状态
 @property (nonatomic,assign) BOOL  isSelected;   // 是否被选中
@@ -41,9 +46,6 @@
 
 //@property (nonatomic,strong) M80AttributedLabel *contentLable;
 
-
-//标签文本器
-@property(nonatomic,strong) M80AttributedLabel  *tagLable;
 
 
 -(void)setValueWithWeiboInfo:(weiboInfoModel *) weiboInfo;
