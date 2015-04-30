@@ -99,6 +99,7 @@
 		000C03141AEF32E000AB52D2 /* AddTagViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 000C03131AEF32E000AB52D2 /* AddTagViewController.m */; };
 		001244141ABAE4B5005B0AB5 /* SerViceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 001244131ABAE4B5005B0AB5 /* SerViceViewController.m */; };
 		0014E3091AC55B370078CABD /* ThanksViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0014E3081AC55B370078CABD /* ThanksViewController.m */; };
+		001F0D4B1AF1D652004BE754 /* UMShareViewController2.m in Sources */ = {isa = PBXBuildFile; fileRef = 001F0D4A1AF1D652004BE754 /* UMShareViewController2.m */; };
 		00218C701AE0A230006B79B4 /* ScanMovieInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00218C6F1AE0A230006B79B4 /* ScanMovieInfoViewController.m */; };
 		00218C8B1AE0E5EE006B79B4 /* netRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 00218C8A1AE0E5EE006B79B4 /* netRequest.m */; };
 		002E39171AC9439C00666AD0 /* liked_icon_light@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 002E39151AC9439C00666AD0 /* liked_icon_light@2x.png */; };
@@ -253,6 +254,10 @@
 		007B5C9C1AB8276A001D2D25 /* tan@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 007B5C991AB8276A001D2D25 /* tan@3x.png */; };
 		008363181AE4F86E00806897 /* Function.m in Sources */ = {isa = PBXBuildFile; fileRef = 00AA534E1AA2C525004096F8 /* Function.m */; };
 		008363521AE51F8200806897 /* up_picture_blue@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 008363511AE51F8200806897 /* up_picture_blue@3x.png */; };
+		0087940A1AF0E1BE007313CB /* alert_close@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 008794061AF0E1BE007313CB /* alert_close@2x.png */; };
+		0087940B1AF0E1BE007313CB /* alert_close@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 008794071AF0E1BE007313CB /* alert_close@3x.png */; };
+		0087940C1AF0E1BE007313CB /* alert_more@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 008794081AF0E1BE007313CB /* alert_more@2x.png */; };
+		0087940D1AF0E1BE007313CB /* alert_more@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 008794091AF0E1BE007313CB /* alert_more@3x.png */; };
 		008B0B0B1AB307CD0054767E /* login out.png in Resources */ = {isa = PBXBuildFile; fileRef = 008B0B081AB307CD0054767E /* login out.png */; };
 		008B0B0C1AB307CD0054767E /* login out@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 008B0B091AB307CD0054767E /* login out@2x.png */; };
 		008B0B0D1AB307CD0054767E /* login out@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 008B0B0A1AB307CD0054767E /* login out@3x.png */; };
@@ -504,6 +509,8 @@
 		001244131ABAE4B5005B0AB5 /* SerViceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SerViceViewController.m; sourceTree = "<group>"; };
 		0014E3071AC55B370078CABD /* ThanksViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThanksViewController.h; sourceTree = "<group>"; };
 		0014E3081AC55B370078CABD /* ThanksViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThanksViewController.m; sourceTree = "<group>"; };
+		001F0D491AF1D652004BE754 /* UMShareViewController2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UMShareViewController2.h; sourceTree = "<group>"; };
+		001F0D4A1AF1D652004BE754 /* UMShareViewController2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UMShareViewController2.m; sourceTree = "<group>"; };
 		00218C6E1AE0A230006B79B4 /* ScanMovieInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScanMovieInfoViewController.h; sourceTree = "<group>"; };
 		00218C6F1AE0A230006B79B4 /* ScanMovieInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScanMovieInfoViewController.m; sourceTree = "<group>"; };
 		00218C891AE0E5EE006B79B4 /* netRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = netRequest.h; sourceTree = "<group>"; };
@@ -717,6 +724,10 @@
 		007B5C981AB8276A001D2D25 /* tan@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tan@2x.png"; sourceTree = "<group>"; };
 		007B5C991AB8276A001D2D25 /* tan@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tan@3x.png"; sourceTree = "<group>"; };
 		008363511AE51F8200806897 /* up_picture_blue@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "up_picture_blue@3x.png"; sourceTree = "<group>"; };
+		008794061AF0E1BE007313CB /* alert_close@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "alert_close@2x.png"; sourceTree = "<group>"; };
+		008794071AF0E1BE007313CB /* alert_close@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "alert_close@3x.png"; sourceTree = "<group>"; };
+		008794081AF0E1BE007313CB /* alert_more@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "alert_more@2x.png"; sourceTree = "<group>"; };
+		008794091AF0E1BE007313CB /* alert_more@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "alert_more@3x.png"; sourceTree = "<group>"; };
 		008B0B081AB307CD0054767E /* login out.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login out.png"; sourceTree = "<group>"; };
 		008B0B091AB307CD0054767E /* login out@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login out@2x.png"; sourceTree = "<group>"; };
 		008B0B0A1AB307CD0054767E /* login out@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login out@3x.png"; sourceTree = "<group>"; };
@@ -1025,6 +1036,10 @@
 				00431FC81ADD086700416E1F /* Login */,
 				0053E8ED1ACBA08D00C11CB4 /* tababar */,
 				002E39151AC9439C00666AD0 /* liked_icon_light@2x.png */,
+				008794061AF0E1BE007313CB /* alert_close@2x.png */,
+				008794071AF0E1BE007313CB /* alert_close@3x.png */,
+				008794081AF0E1BE007313CB /* alert_more@2x.png */,
+				008794091AF0E1BE007313CB /* alert_more@3x.png */,
 				006BC73D1ADE5C1500DE0C0D /* close_danmu@2x.png */,
 				000C030D1AEF31F900AB52D2 /* add_tag_icon@2x.png */,
 				000C030E1AEF31F900AB52D2 /* add_tag_icon@3x.png */,
@@ -1555,13 +1570,16 @@
 			path = Searchmovie;
 			sourceTree = "<group>";
 		};
-		0067CFEC1AD4183700148561 /* UMShare */ = {
+		0067CFEC1AD4183700148561 /* UMShareView */ = {
 			isa = PBXGroup;
 			children = (
 				0067CFED1AD4186200148561 /* UMShareViewController.h */,
 				0067CFEE1AD4186200148561 /* UMShareViewController.m */,
+				001F0D491AF1D652004BE754 /* UMShareViewController2.h */,
+				001F0D4A1AF1D652004BE754 /* UMShareViewController2.m */,
 			);
-			path = UMShare;
+			name = UMShareView;
+			path = ../../ViewControllers/UMShare;
 			sourceTree = "<group>";
 		};
 		007427331AADAB9B0034047D /* UIImage-Helpers */ = {
@@ -1947,7 +1965,6 @@
 				000C03111AEF32C300AB52D2 /* AddAndSearchTag */,
 				00A52F831AEE453A00760275 /* TagToStage */,
 				00218C6B1AE0A199006B79B4 /* ScanMovieInfo */,
-				0067CFEC1AD4183700148561 /* UMShare */,
 				0053E9261ACBE8AD00C11CB4 /* AddUser */,
 				0053E9221ACBDD6700C11CB4 /* ChangeSelf */,
 				000B08F71AA2EA1800B8D13A /* Movie */,
@@ -2078,6 +2095,7 @@
 		00DF5E5D1AE5E3BE0063CCBC /* View */ = {
 			isa = PBXGroup;
 			children = (
+				0067CFEC1AD4183700148561 /* UMShareView */,
 				00C604001AED1773008493D0 /* TagView */,
 				00218C911AE0E683006B79B4 /* LoadView */,
 				00218C8C1AE0E60B006B79B4 /* MarView */,
@@ -2231,6 +2249,7 @@
 				000B09B41AA3029800B8D13A /* Moments@3x.png in Resources */,
 				4093904C1AB2D2C700FABA50 /* first_screen_slogan@2x.png in Resources */,
 				00AA53121AA2C3F4004096F8 /* Main.storyboard in Resources */,
+				0087940A1AF0E1BE007313CB /* alert_close@2x.png in Resources */,
 				003E74F51AB1A29F0080F7A8 /* btn_like_select@3x.png in Resources */,
 				00BA5F741AC13D3600BC3039 /* back_Icon@3x.png in Resources */,
 				000B09AB1AA3029800B8D13A /* logo_first screem@3x.png in Resources */,
@@ -2247,6 +2266,7 @@
 				000B09CB1AA3029800B8D13A /* setting@2x.png in Resources */,
 				0053E91B1ACBA08D00C11CB4 /* notice_tab_butten_press.png in Resources */,
 				003E74F81AB1A29F0080F7A8 /* btn_share_default@3x.png in Resources */,
+				0087940D1AF0E1BE007313CB /* alert_more@3x.png in Resources */,
 				000B098B1AA3029800B8D13A /* icon@76.png in Resources */,
 				003E75031AB1A29F0080F7A8 /* ic_menu_share_default@2x.png in Resources */,
 				0053E9181ACBA08D00C11CB4 /* notice_tab_butten_normal.png in Resources */,
@@ -2273,6 +2293,7 @@
 				000B09D21AA3029800B8D13A /* single_switch@3x.png in Resources */,
 				00431FDA1ADD0FAA00416E1F /* login_password_open@2x.png in Resources */,
 				00431FCB1ADD088900416E1F /* login_email_password.png in Resources */,
+				0087940C1AF0E1BE007313CB /* alert_more@2x.png in Resources */,
 				00AA54451AA2C525004096F8 /* UMSCommentInputControlleriPad.xib in Resources */,
 				000221D91ABFF79E00FC0D65 /* qzone_share_icon@3x.png in Resources */,
 				000B09D11AA3029800B8D13A /* single_switch@2x.png in Resources */,
@@ -2399,6 +2420,7 @@
 				003E74F71AB1A29F0080F7A8 /* btn_share_default@2x.png in Resources */,
 				00431FCC1ADD088900416E1F /* login_email_password@2x.png in Resources */,
 				008B0B0C1AB307CD0054767E /* login out@2x.png in Resources */,
+				0087940B1AF0E1BE007313CB /* alert_close@3x.png in Resources */,
 				0053E9131ACBA08D00C11CB4 /* movie_tab_butten_normal@2x.png in Resources */,
 				000B09831AA3029800B8D13A /* add@2x.png in Resources */,
 				00572C861AA405F50041D451 /* loading_roll_image@3x.png in Resources */,
@@ -2445,6 +2467,7 @@
 				00AA54561AA2C526004096F8 /* Movie.m in Sources */,
 				00AA54551AA2C526004096F8 /* Mark.m in Sources */,
 				00354C621ABF030C00F650AA /* UIAlertView+AFNetworking.m in Sources */,
+				001F0D4B1AF1D652004BE754 /* UMShareViewController2.m in Sources */,
 				0067395A1AA491250087C240 /* UIView+MJExtension.m in Sources */,
 				0067CFEF1AD4186200148561 /* UMShareViewController.m in Sources */,
 				00AA545D1AA2C526004096F8 /* LoginViewController.m in Sources */,

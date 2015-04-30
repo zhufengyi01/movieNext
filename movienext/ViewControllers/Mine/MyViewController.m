@@ -28,14 +28,16 @@
 #import "Function.h"
 #import "ChangeSelfViewController.h"
 #import "UMShareViewController.h"
+#import "UMShareViewController2.h"
 #import "userAddmodel.h"
 #import "Function.h"
 #import "UIImage-Helpers.h"
 #import "ScanMovieInfoViewController.h"
+
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
 
-@interface MyViewController ()<UITableViewDataSource, UITableViewDelegate,StageViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UIActionSheetDelegate,UMSocialDataDelegate,UMSocialUIDelegate,CommonStageCellDelegate,UMShareViewControllerDelegate>
+@interface MyViewController ()<UITableViewDataSource, UITableViewDelegate,StageViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UIActionSheetDelegate,UMSocialDataDelegate,UMSocialUIDelegate,CommonStageCellDelegate,UMShareViewControllerDelegate,UMShareViewController2Delegate>
 {
     //UISegmentedControl *segment;
     UITableView   *_tableView;
@@ -909,9 +911,21 @@
     
     [[UMSocialControllerService defaultControllerService] setShareText:StageInfo.movieInfo.name shareImage:shareImage socialUIDelegate:self];        //设置分享内容和回调对象
     [UMSocialSnsPlatformManager getSocialPlatformWithName:[sharearray  objectAtIndex:button.tag-10000]].snsClickHandler(self,[UMSocialControllerService defaultControllerService],YES);
-    NSLog(@"分享到微信");
-    self.tabBarController.tabBar.hidden=NO;
+ 
 }
+-(void)UMShareViewController2HandClick:(UIButton *)button ShareImage:(UIImage *)shareImage StageInfoModel:(stageInfoModel *)StageInfo
+{
+    
+    NSArray  *sharearray =[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQzone, UMShareToSina, nil];
+    [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
+    [[UMSocialControllerService defaultControllerService] setShareText:StageInfo.movieInfo.name shareImage:shareImage socialUIDelegate:self];
+    //设置分享内容和回调对象
+    
+    [UMSocialSnsPlatformManager getSocialPlatformWithName:[sharearray  objectAtIndex:button.tag-10000]].snsClickHandler(self,[UMSocialControllerService defaultControllerService],YES);
+    
+}
+
+
 ///点击分享的屏幕，收回分享的背景
 -(void)SharetopViewTouchBengan
 {
@@ -1222,10 +1236,7 @@
 {
     //先对它赋值，然后让他弹出到界面
     if (isselect==YES) {
-        NSLog(@" new viewController SetToolBarValueWithDict  执行了出现工具栏的方法");
-        
-        //设置工具栏的值
-        //[_toolBar setToolBarValue:weiboDict :markView WithStageInfo:stageInfo];
+        _toolBar.alertView.frame=CGRectMake(15,0,kStageWidth-20, 100);
         _toolBar.weiboInfo=weiboDict;
         _toolBar.stageInfo=stageInfo;
         _toolBar.markView=markView;
@@ -1274,14 +1285,21 @@
     {
         //点击了分享
         
-         float hight= kDeviceWidth;
-        CommonStageCell *cell = (CommonStageCell *)(markView.superview.superview.superview.superview);
-        UIImage  *image=[Function getImage:cell.stageView WithSize:CGSizeMake(kDeviceWidth, hight)];
-        //创建UMshareView 后必须配备这三个方法
-        
-        UMShareViewController  *shareVC=[[UMShareViewController alloc]init];
+//         float hight= kDeviceWidth;
+//        CommonStageCell *cell = (CommonStageCell *)(markView.superview.superview.superview.superview);
+//        UIImage  *image=[Function getImage:cell.stageView WithSize:CGSizeMake(kDeviceWidth, hight)];
+//        //创建UMshareView 后必须配备这三个方法
+//        
+        [_mymarkView CancelMarksetSelect];
+        if (_toolBar) {
+            [_toolBar HidenButtomView];
+            [_toolBar removeFromSuperview];
+            
+        }
+
+        UMShareViewController2  *shareVC=[[UMShareViewController2 alloc]init];
         shareVC.StageInfo=stageInfoDict;
-        shareVC.screenImage=image;
+        shareVC.weiboInfo=weiboDict;
         shareVC.delegate=self;
         UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:shareVC];
         [self presentViewController:na animated:YES completion:nil];
@@ -1357,23 +1375,6 @@
     else
     {
         markView.ZanNumLable.hidden=NO;
-    }
-    
-}
-#pragma mark  -----
-#pragma mark  -------隐藏工具栏的方法
-#pragma mark  -------
-//点击屏幕，隐藏工具栏
-
--(void)topViewTouchBengan
-{
-    NSLog(@"controller touchbegan  中 执行了隐藏工具栏的方法");
-    //取消当前的选中的那个气泡
-    [_mymarkView CancelMarksetSelect];
-    self.tabBarController.tabBar.hidden=NO;
-    if (_toolBar) {
-        [_toolBar HidenButtomView];
-        [_toolBar removeFromSuperview];
     }
     
 }

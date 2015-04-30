@@ -33,7 +33,6 @@
     _rightView.layer.masksToBounds=YES;
     [self addSubview:_rightView];
     
-    
     //左视图
     _LeftImageView =[[UIImageView alloc]initWithFrame:CGRectMake(0, 0,20, 20)];
     _LeftImageView.layer.borderWidth=2;
@@ -75,10 +74,10 @@
     _ZanNumLable.textColor=[UIColor whiteColor];
     [_rightView addSubview:_ZanNumLable];
     
-
+    UITapGestureRecognizer  *tap =[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(dealTapWeiboClick:)];
+    [self addGestureRecognizer:tap];
     
-    UITapGestureRecognizer  *tap=[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(dealTapWeiboClick:)];
-        [self addGestureRecognizer:tap];
+
 }
 //获取weiboinfo 信息
 -(void)setValueWithWeiboInfo:(weiboInfoModel *) weiboInfo
@@ -112,6 +111,7 @@
         }
          [self.rightView addSubview:self.tagLable];
     }
+    
 }
 //创建标签的方法
 -(TagView *)createTagViewWithtagInfo:(TagModel *) tagmodel andIndex:(NSInteger ) index

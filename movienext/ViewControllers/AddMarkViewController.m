@@ -282,80 +282,6 @@
   //  _myMarkView.delegate=self;
     [stageView addSubview:_myMarkView];
     
-    
-    
-    /* _myMarkView =[[MarkView alloc]initWithFrame:CGRectMake(100,140 , 100, 20)];
-    ///显示标签的头像
-    NSURL *logourl= [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",kUrlAvatar,userCenter.logo]];
-    [_myMarkView.LeftImageView sd_setImageWithURL:logourl placeholderImage:[UIImage imageNamed:@"user_normal"]];
-    //显示标题
-    _myMarkView.TitleLable.text=InputStr;
- 
-   
-    //显示标签
-    M80AttributedLabel  *screentaglable =[[M80AttributedLabel alloc]initWithFrame:CGRectZero];
-    screentaglable.backgroundColor =[UIColor clearColor];
-    screentaglable.font=[UIFont systemFontOfSize:MarkTextFont14];
-    if (IsIphone6) {
-        screentaglable.font =[UIFont systemFontOfSize:MarkTextFont16];
-    }
-    
-    NSString  *tagStr =[NSString stringWithFormat:@"%@%@",TAG1,TAG2];
- //标签的长度
-    CGSize  Tsize =[tagStr boundingRectWithSize:CGSizeMake(MAXFLOAT, 20) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:[NSDictionary dictionaryWithObject:screentaglable.font forKey:NSFontAttributeName] context:nil].size;
-    
-    
-    //位置和大小
-    screentaglable.frame=CGRectMake(0,20,Tsize.width+20, TagHeight+10);
-     if(TAG1.length>0) {
-        TagView *tagview1 = [self createTagViewWithtagText:TAG1 withBgImage:nil];
-        [screentaglable appendView:tagview1 margin:UIEdgeInsetsMake(0, 10, 0, 0)];
-    }
-    if (TAG2.length>0) {
-        TagView *tagview2 = [self createTagViewWithtagText:TAG2 withBgImage:nil];
-        [screentaglable appendView:tagview2 margin:UIEdgeInsetsMake(0, 10, 0, 0)];
-    }
-    [_myMarkView.rightView addSubview:screentaglable];
-
-    
-    [stageView addSubview:_myMarkView];
-    
-   //计算弹幕的长度
-     CGSize  Msize= [InputStr  boundingRectWithSize:CGSizeMake(kDeviceWidth/2, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:_myMarkView.TitleLable.font forKey:NSFontAttributeName] context:nil].size;
-    
-//改变标签的位置
-    
-    //如果弹幕字的宽度小于标签字的总宽度，则弹幕的的宽度登录标签的宽度
-    if (Msize.width<Tsize.width) {
-        Msize.width=Tsize.width;
-    }
-    
-    //宽度=字的宽度+左头像图片的宽度＋赞图片的宽度＋赞数量的宽度+中间两个空格2+2
-     int  markViewWidth = (int)Msize.width+23+5+5+11+5;
-     int markViewHeight =(int) Msize.height+6;
-    if (TAG1.length>0||TAG2.length>0) {
-        markViewHeight=markViewHeight+25;
-    }
-    
-    if(IsIphone6)
-    {
-        markViewWidth=markViewWidth+10;
-        markViewHeight=markViewHeight+4;
-    }
-    int  kw=kDeviceWidth;
-    
-    int  x=arc4random()%(kw-markViewWidth);  //要求x在0~~~（宽度-markViewWidth）
-    int  y=arc4random()%((kw-markViewHeight/2)+markViewHeight/2-markViewHeight);  //要求y在markviewheight.y/2 ~~~~~~~(高度--markViewheigth/2)
-    _myMarkView.frame=CGRectMake(x,y, markViewWidth, markViewHeight);
-
-    
-
-    float  markViewY=_myMarkView.frame.origin.y;
-    float  markviewHight2 =_myMarkView.frame.size.height/2;
-    X =[NSString stringWithFormat:@"%f",((_myMarkView.frame.origin.x+_myMarkView.frame.size.width)/kDeviceWidth)*100];
-    Y=[NSString stringWithFormat:@"%f",((markViewY+markviewHight2)/kDeviceWidth)*100];
-    
-    */
     //在标签上添加一个手势
      UIPanGestureRecognizer   *pan=[[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(handelPan:)];
     [_myMarkView addGestureRecognizer:pan];
@@ -583,7 +509,6 @@
     if (keybordHeight==0) {
        keybordHeight=keyboardSize.height;
     }
-    
     
     [UIView  animateWithDuration:timeInterval animations:^{
         CGRect  tframe=_toolBar.frame;

@@ -35,6 +35,7 @@
 #import "ShowStageViewController.h"
 #import "UploadImageViewController.h"
 #import "UMShareViewController.h"
+#import "UMShareViewController2.h"
 #import "UpYun.h"
 #import "stageInfoModel.h"
 #import "movieInfoModel.h"
@@ -42,7 +43,7 @@
 #import "TagToStageViewController.h"
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
-@interface MovieDetailViewController ()<UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UICollectionViewDelegate,MovieHeadViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UMSocialUIDelegate,UMSocialDataDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIScrollViewDelegate,BigImageCollectionViewCellDelegate,AddMarkViewControllerDelegate,UMShareViewControllerDelegate,MFMailComposeViewControllerDelegate,LoadingViewDelegate>
+@interface MovieDetailViewController ()<UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UICollectionViewDelegate,MovieHeadViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UMSocialUIDelegate,UMSocialDataDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIScrollViewDelegate,BigImageCollectionViewCellDelegate,AddMarkViewControllerDelegate,UMShareViewControllerDelegate,UMShareViewController2Delegate,MFMailComposeViewControllerDelegate,LoadingViewDelegate>
 
 {
      UICollectionViewFlowLayout    *layout;
@@ -269,11 +270,42 @@
 
 #pragma  mark  ----RequestData
 #pragma  mark  ---
+-(void)requestmoveReviewToNormal:(NSString *) stageId
+{
+    UserDataCenter *usercenter=[UserDataCenter shareInstance];
+    NSString  *review;
+    if ([Version  isEqualToString:@"1.0.1"]) {
+        //从审核版到正常
+        review=@"0";
+    }
+    else
+    {
+        review=@"1";
+        
+    }
+    NSDictionary *parameters = @{@"stage_id":stageId,@"user_id":usercenter.user_id,@"review":review};
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    NSString *urlString =[NSString stringWithFormat:@"%@/stage/move-to-review", kApiBaseUrl];
+    [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
+            NSLog(@"移除剧照成功=======%@",responseObject);
+            UIAlertView  *Al =[[UIAlertView alloc]initWithTitle:nil message:@"审核（正常）切换成功" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            [Al show];
+            
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+    
+}
+
+
+
 
 -(void)requestReportSatge
 {
-    // NSString *type=@"1";
-    NSNumber  *stageId;
+     NSNumber  *stageId;
     NSString  *author_id=@"";
     
     stageInfoModel  *stageInfo =[_dataArray objectAtIndex:Rowindex];
@@ -454,17 +486,11 @@
         return;
         
     }
-    
+
     UserDataCenter  *userCenter =[UserDataCenter shareInstance];
     NSString  *urlString =[NSString stringWithFormat:@"%@/stage/list?per-page=%d&page=%d",kApiBaseUrl,pageSize,page];
     NSDictionary *parameter;
-    if (Review==1) {
-        parameter = @{@"movie_id": _movieId, @"user_id": userCenter.user_id,@"review":@"1"};
-    }
-    else {
-         parameter = @{@"movie_id": _movieId, @"user_id": userCenter.user_id};
-    }
-    
+     parameter = @{@"movie_id": _movieId, @"user_id": userCenter.user_id,@"Version":Version};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:urlString parameters:parameter success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"  电影详情页面数据JSON: %@", responseObject);
@@ -849,10 +875,22 @@
     }
     else if (button.tag==4000)
     {
+
+        UserDataCenter  *userCenter =[UserDataCenter shareInstance];
         //点击了更多
-        UIActionSheet  *Act=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"内容投诉",@"版权投诉",@"查看图片信息", nil];
-        Act.tag=507;
-        [Act showInView:Act];
+        
+        if ([userCenter.is_admin intValue]>0) {
+            
+            UIActionSheet  *Act=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"内容投诉",@"版权投诉",@"图片信息",@"切换剧照到（审核/正式）", nil];
+            Act.tag=507;
+            [Act showInView:Act];
+        }
+        else
+        {
+            UIActionSheet  *Act=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"内容投诉",@"版权投诉",@"图片信息", nil];
+            Act.tag=507;
+            [Act showInView:Act];
+        }
 
     }
     
@@ -874,6 +912,18 @@
     self.tabBarController.tabBar.hidden=YES;
 
 }
+-(void)UMShareViewController2HandClick:(UIButton *)button ShareImage:(UIImage *)shareImage StageInfoModel:(stageInfoModel *)StageInfo
+{
+    
+    NSArray  *sharearray =[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQzone, UMShareToSina, nil];
+    [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
+    [[UMSocialControllerService defaultControllerService] setShareText:StageInfo.movieInfo.name shareImage:shareImage socialUIDelegate:self];
+    //设置分享内容和回调对象
+    
+    [UMSocialSnsPlatformManager getSocialPlatformWithName:[sharearray  objectAtIndex:button.tag-10000]].snsClickHandler(self,[UMSocialControllerService defaultControllerService],YES);
+    
+}
+
 ///点击分享的屏幕，收回分享的背景
 -(void)SharetopViewTouchBengan
 {
@@ -929,10 +979,7 @@
     
     //先对它赋值，然后让他弹出到界面
     if (isselect==YES) {
-        NSLog(@" new viewController SetToolBarValueWithDict  执行了出现工具栏的方法");
-        
-        //设置工具栏的值
-        //[_toolBar setToolBarValue:weiboDict :markView WithStageInfo:stageInfo];
+        _toolBar.alertView.frame=CGRectMake(15,0,kStageWidth-20, 100);
         _toolBar.weiboInfo=weiboDict;
         _toolBar.stageInfo=stageInfo;
         _toolBar.markView=markView;
@@ -990,19 +1037,12 @@
 #pragma mark     -----------分享
     else if (button.tag==10001)
     {
-        //点击了分享
-          float hight= kDeviceWidth;
-        BigImageCollectionViewCell *cell = (BigImageCollectionViewCell *)(markView.superview.superview.superview.superview);
-        UIImage  *image=[Function getImage:cell.StageView WithSize:CGSizeMake(kDeviceWidth, hight)];
-        
-        //创建UMshareView 后必须配备这三个方法
-    
-        UMShareViewController  *shareVC=[[UMShareViewController alloc]init];
+        UMShareViewController2  *shareVC=[[UMShareViewController2 alloc]init];
         movieInfoModel  *moviemodel =[[movieInfoModel alloc]init];
         moviemodel.name=moviedetailmodel.name;
         stageInfoDict.movieInfo=moviemodel;
         shareVC.StageInfo=stageInfoDict;
-        shareVC.screenImage=image;
+        shareVC.weiboInfo=weiboDict;
         shareVC.delegate=self;
         UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:shareVC];
         [self presentViewController:na animated:YES completion:nil];
@@ -1162,6 +1202,16 @@
               [self presentViewController:scanvc animated:YES completion:nil];
             
          }
+        else if (buttonIndex==3)
+        {
+            NSString  *stageId;
+                stageInfoModel *model=[_dataArray objectAtIndex:Rowindex];
+               stageId=model.Id;
+            //移动到审核版或者正常
+            [self requestmoveReviewToNormal:stageId];
+            
+        }
+
 
     }
 }
@@ -1312,23 +1362,6 @@
     }
     
 }
-#pragma mark  -----
-#pragma mark  -------隐藏工具栏的方法
-#pragma mark  -------
-//点击屏幕，隐藏工具栏
-
--(void)topViewTouchBengan
-{
-    NSLog(@"controller touchbegan  中 执行了隐藏工具栏的方法");
-    //取消当前的选中的那个气泡
-    [_mymarkView CancelMarksetSelect];
-    self.tabBarController.tabBar.hidden=YES;
-    if (_toolBar) {
-        [_toolBar HidenButtomView];
-        //  [_toolBar performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.5];
-        [_toolBar removeFromSuperview];
-    }
-}
 #pragma mark ---UIScrollerViewDelegate
 //滑倒最顶部的时候执行这个
 -(void)scrollViewDidScrollToTop:(UIScrollView *)scrollView
@@ -1345,7 +1378,7 @@
         [upLoadimageBtn setImage:[UIImage imageNamed:@"update_picture_whaite.png"] forState:UIControlStateNormal];
 
     }
-     else   if (scrollView.contentOffset.y>80&&scrollView.contentOffset.y<scrollView.contentOffset.y<300) {
+     else if (scrollView.contentOffset.y>80&&scrollView.contentOffset.y<scrollView.contentOffset.y<300) {
         //在80的时候为0 在300的时候为1
         float compoent =((scrollView.contentOffset.y)-80)/220;
         Navview.backgroundColor=[[UIColor whiteColor] colorWithAlphaComponent:compoent];

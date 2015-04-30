@@ -23,10 +23,11 @@
 #import "Function.h"
 #import "UMShareViewController.h"
 #import "ScanMovieInfoViewController.h"
+#import "UMShareViewController2.h"
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
 
-@interface ShowStageViewController() <ButtomToolViewDelegate,StageViewDelegate,AddMarkViewControllerDelegate,UMShareViewControllerDelegate,UMSocialDataDelegate,UMSocialUIDelegate,UIActionSheetDelegate>
+@interface ShowStageViewController() <ButtomToolViewDelegate,StageViewDelegate,AddMarkViewControllerDelegate,UMShareViewControllerDelegate,UMSocialDataDelegate,UMSocialUIDelegate,UIActionSheetDelegate,UMShareViewController2Delegate>
 {
     ButtomToolView *_toolBar;
     UIButton  *moreButton;
@@ -198,7 +199,19 @@
     [[UMSocialControllerService defaultControllerService] setShareText:StageInfo.movieInfo.name shareImage:shareImage socialUIDelegate:self];        //设置分享内容和回调对象
     [UMSocialSnsPlatformManager getSocialPlatformWithName:[sharearray  objectAtIndex:button.tag-10000]].snsClickHandler(self,[UMSocialControllerService defaultControllerService],YES);
     NSLog(@"分享到微信");
- }
+}
+-(void)UMShareViewController2HandClick:(UIButton *)button ShareImage:(UIImage *)shareImage StageInfoModel:(stageInfoModel *)StageInfo
+{
+    
+    NSArray  *sharearray =[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQzone, UMShareToSina, nil];
+    [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
+    [[UMSocialControllerService defaultControllerService] setShareText:StageInfo.movieInfo.name shareImage:shareImage socialUIDelegate:self];
+    //设置分享内容和回调对象
+    
+    [UMSocialSnsPlatformManager getSocialPlatformWithName:[sharearray  objectAtIndex:button.tag-10000]].snsClickHandler(self,[UMSocialControllerService defaultControllerService],YES);
+    
+}
+
 // 分享
 -(void)ScreenButtonClick:(UIButton  *) button
 {
@@ -210,8 +223,6 @@
     UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:shareVC];
     [self presentViewController:na animated:YES completion:nil];
 
-    
-    
 }
 //添加弹幕
 -(void)addMarkButtonClick:(UIButton  *) button
@@ -279,8 +290,8 @@
         
         //把工具栏添加到当前视图
         self.tabBarController.tabBar.hidden=YES;
-        [self.view addSubview:_toolBar];
-        //弹出工具栏
+        [AppView addSubview:_toolBar];
+         //弹出工具栏
         [_toolBar ShowButtomView];
         
     }
@@ -317,10 +328,10 @@
     {
         //点击了分享
         //分享文字
-         UIImage  *image=[Function getImage:stageView WithSize:CGSizeMake(kDeviceWidth, kDeviceWidth)];
-        UMShareViewController  *shareVC=[[UMShareViewController alloc]init];
+      //   UIImage  *image=[Function getImage:stageView WithSize:CGSizeMake(kDeviceWidth, kDeviceWidth)];
+        UMShareViewController2  *shareVC=[[UMShareViewController2 alloc]init];
         shareVC.StageInfo=stageInfoDict;
-        shareVC.screenImage=image;
+        shareVC.weiboInfo=weiboDict;
         shareVC.delegate=self;
         UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:shareVC];
         [self presentViewController:na animated:YES completion:nil];
@@ -556,26 +567,6 @@
     else
     {
         markView.ZanNumLable.hidden=NO;
-    }
-    
-
-    
-}
-#pragma mark  -----
-#pragma mark  ------ToolbuttomView隐藏工具栏的方法
-#pragma mark  -------
-//点击屏幕，隐藏工具栏
-
--(void)topViewTouchBengan
-{
-    NSLog(@"controller touchbegan  中 执行了隐藏工具栏的方法");
-    //取消当前的选中的那个气泡
-    [_mymarkView CancelMarksetSelect];
-    self.tabBarController.tabBar.hidden=YES;
-    if (_toolBar) {
-        [_toolBar HidenButtomView];
-        [_toolBar removeFromSuperview];
-        
     }
     
 }

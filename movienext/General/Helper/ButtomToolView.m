@@ -28,37 +28,38 @@
 {
     if (self =[super initWithFrame:frame]) {
         m_frame=frame;
-        self.backgroundColor=[[UIColor blackColor]colorWithAlphaComponent:0.2];
+        self.backgroundColor=[[UIColor blackColor]colorWithAlphaComponent:0.4];
         [self createButtomView];
     }
     return self;
 }
 -(void)createButtomView
 {
-    //self.backgroundColor = VBlue_color;
-    //self.userInteractionEnabled=YES;
-    
-    
     //添加手势去回收alertview
-    UITapGestureRecognizer *tap =[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(TouchbuttonClick:)];
+    UITapGestureRecognizer *tap =[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(closeAlertViewClick)];
     [self addGestureRecognizer:tap];
     
-    
-    
     //弹出框
-    alertView =[[UIView alloc]initWithFrame:CGRectMake(15,180, kDeviceWidth-30, 180)];
-    alertView.backgroundColor=[UIColor whiteColor];
-    alertView.alpha=0;
-    alertView.layer.cornerRadius=4;
-    alertView.clipsToBounds=YES;
-    alertView.userInteractionEnabled=YES;
-    [self addSubview:alertView];
+    _alertView =[[UIView alloc]initWithFrame:CGRectMake(15,0, kDeviceWidth-30, 50)];
+    _alertView.backgroundColor=[UIColor whiteColor];
+    _alertView.alpha=0;
+    _alertView.layer.cornerRadius=4;
+    _alertView.clipsToBounds=YES;
+    _alertView.userInteractionEnabled=YES;
+    [self addSubview:_alertView];
+    
+    closealertView=[[UIButton alloc]initWithFrame:CGRectMake(_alertView.frame.size.width-36,0, 36, 36)];
+    //closealertView.image=[UIImage imageNamed:@"alert_close"];
+    [closealertView setImage:[UIImage imageNamed:@"alert_close"] forState:UIControlStateNormal];
+    [closealertView addTarget:self action:@selector(closeAlertViewClick) forControlEvents:UIControlEventTouchUpInside];
+    [_alertView addSubview:closealertView];
+    
+    
     
     //在alertview上添加手势用来截获点击屏幕事件
     UITapGestureRecognizer  *tapalert =[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(alertViewTap:)];
-    [alertView addGestureRecognizer:tapalert];
+    [_alertView addGestureRecognizer:tapalert];
 
-    
     
     //头像
     headButton=[UIButton buttonWithType:UIButtonTypeCustom];
@@ -67,61 +68,60 @@
     headButton.clipsToBounds=YES;
     [headButton addTarget:self action:@selector(dealButtomClick:) forControlEvents:UIControlEventTouchUpInside];
     headButton.tag=10000;
-    [alertView addSubview:headButton];
+    [_alertView addSubview:headButton];
     
      userNamelabel =[ZCControl createLabelWithFrame:CGRectMake(headButton.frame.origin.x+headButton.frame.size.width+10,headButton.frame.origin.y, 200, 20) Font:14 Text:@"名字"];
     userNamelabel.textColor=VBlue_color;
     userNamelabel.adjustsFontSizeToFitWidth=NO;
     userNamelabel.lineBreakMode=NSLineBreakByTruncatingTail;
-    [alertView addSubview:userNamelabel];
+    [_alertView addSubview:userNamelabel];
     
     
     
     
     timelabel =[ZCControl createLabelWithFrame:CGRectMake(userNamelabel.frame.origin.x,userNamelabel.frame.origin.y+userNamelabel.frame.size.height,200, 20) Font:12 Text:@"刚刚"];
     timelabel.textColor=VGray_color;
-    [alertView addSubview:timelabel];
+    [_alertView addSubview:timelabel];
     
     
     
-    contentLable =[ZCControl createLabelWithFrame:CGRectMake(headButton.frame.origin.x,headButton.frame.origin.y+headButton.frame.size.height+0,alertView.frame.size.width-20, 50) Font:16 Text:@"内容"];
-    contentLable.numberOfLines=0;
-   //contentLable.adjustsFontSizeToFitWidth=NO;
-   // contentLable.lineBreakMode=NSLineBreakByTruncatingTail;
+    contentLable =[ZCControl createLabelWithFrame:CGRectMake(headButton.frame.origin.x,headButton.frame.origin.y+headButton.frame.size.height+0,_alertView.frame.size.width-20, 0) Font:16 Text:@"内容"];
+    //contentLable.numberOfLines=0;
+   contentLable.adjustsFontSizeToFitWidth=NO;
+    contentLable.lineBreakMode=NSLineBreakByTruncatingTail;
     contentLable.textColor=VGray_color;
-    [alertView addSubview:contentLable];
+    [_alertView addSubview:contentLable];
     
     
     //放置分享点赞按钮
-    buttomShareView= [[UIView alloc]initWithFrame:CGRectMake(0, alertView.frame.size.height-40, alertView.frame.size.width, 45)];
+    buttomShareView= [[UIView alloc]initWithFrame:CGRectMake(0, _alertView.frame.size.height-40, _alertView.frame.size.width, 45)];
     buttomShareView.userInteractionEnabled=YES;
-    [alertView addSubview:buttomShareView];
+    [_alertView addSubview:buttomShareView];
     
     
     
-    shareButton =[ZCControl createButtonWithFrame:CGRectMake(0,0,alertView.frame.size.width/2,45) ImageName:nil Target:self Action:@selector(dealButtomClick:) Title:@""];
+    shareButton =[ZCControl createButtonWithFrame:CGRectMake(0,0,_alertView.frame.size.width/2,45) ImageName:nil Target:self Action:@selector(dealButtomClick:) Title:@""];
     [shareButton setTitleColor:VBlue_color forState:UIControlStateNormal];
     shareButton.titleLabel.font=[UIFont systemFontOfSize:14];
     [shareButton setTitleEdgeInsets:UIEdgeInsetsMake(10, 25, 10, 10)];
 
     [shareButton setImage:[UIImage imageNamed:@"opened_share_icon.png"] forState:UIControlStateNormal];
-    [shareButton setBackgroundImage:[UIImage imageNamed:@"login_alpa_backgroundcolor.png"] forState:UIControlStateNormal];
+    shareButton.backgroundColor=View_ToolBar;
+    //[shareButton setBackgroundImage:[UIImage imageNamed:@"login_alpa_backgroundcolor.png"] forState:UIControlStateNormal];
     shareButton.tag=10001;
     [buttomShareView addSubview:shareButton];
     
     
 
-    zanbutton =[ZCControl createButtonWithFrame:CGRectMake(alertView.frame.size.width/2, 0,alertView.frame.size.width/2, 45) ImageName:nil Target:self Action:@selector(dealButtomClick:) Title:@""];
+    zanbutton =[ZCControl createButtonWithFrame:CGRectMake(_alertView.frame.size.width/2, 0,_alertView.frame.size.width/2, 45) ImageName:nil Target:self Action:@selector(dealButtomClick:) Title:@""];
     [zanbutton setTitleColor:VBlue_color forState:UIControlStateNormal];
     zanbutton.tag=10002;
-    //[zanbutton setImage:[UIImage imageNamed:@"ic_menu_like_default.png"] forState:UIControlStateNormal];
-    [zanbutton setBackgroundImage:[UIImage imageNamed:@"login_alpa_backgroundcolor.png"] forState:UIControlStateNormal];
-    //[zanbutton setTitle:@"已赞" forState:UIControlStateSelected];
+    zanbutton.backgroundColor=View_ToolBar;
     [zanbutton setTitleEdgeInsets:UIEdgeInsetsMake(10, 25, 10, 10)];
     zanbutton.titleLabel.font=[UIFont systemFontOfSize:14];
     
     // 在赞上面添加一个大拇指
-    likeimageview=[[UIImageView alloc]initWithFrame:CGRectMake((zanbutton.frame.size.width)/2-15,zanbutton.frame.size.height/2-15, 25, 25)];
+    likeimageview=[[UIImageView alloc]initWithFrame:CGRectMake((zanbutton.frame.size.width)/2-15,zanbutton.frame.size.height/2-10, 25, 25)];
     likeimageview.image=[UIImage imageNamed:@"opened_like_icon.png"];
     [zanbutton addSubview:likeimageview];
     
@@ -135,7 +135,7 @@
 //    
     
     morebuton=[ZCControl createButtonWithFrame:CGRectMake(0,0,30,45) ImageName:nil Target:self Action:@selector(dealButtomClick:) Title:@""];
-    [morebuton setImage:[UIImage imageNamed:@"single_switch(gray).png"] forState:UIControlStateNormal];
+    [morebuton setImage:[UIImage imageNamed:@"alert_more"] forState:UIControlStateNormal];
     morebuton.tag=10003;
     [buttomShareView addSubview:morebuton];
 
@@ -158,23 +158,19 @@
     timelabel.text=timeStr;
     //内容
     contentLable.text =self.weiboInfo.content;
-   
-
    ////标签
     [self removeTagViewFromSuperView];
     leadWidth=0;
     
-    
     if (self.weiboInfo.tagArray&&self.weiboInfo.tagArray.count) {
-          tagLable =[[M80AttributedLabel alloc]initWithFrame:CGRectMake(contentLable.frame.origin.x, contentLable.frame.origin.y+contentLable.frame.size.height, alertView.frame.size.width-20, TagHeight+10)];
-        
+          tagLable =[[M80AttributedLabel alloc]initWithFrame:CGRectMake(contentLable.frame.origin.x, contentLable.frame.origin.y+contentLable.frame.size.height, _alertView.frame.size.width-20, TagHeight+10)];
+        tagLable.backgroundColor =[UIColor clearColor];
         for (int i=0; i<self.weiboInfo.tagArray.count; i++) {
             TagView *tagview = [self createTagViewWithtagInfo:self.weiboInfo.tagArray[i] andIndex:i];
             [tagLable appendView:tagview margin:UIEdgeInsetsMake(0, 0, 0, 10)];
         }
-        [alertView addSubview:tagLable];
+        [_alertView addSubview:tagLable];
      }
-    
     
     
     
@@ -208,7 +204,6 @@
     CGSize  Tsize =[titleStr boundingRectWithSize:CGSizeMake(MAXFLOAT, TagHeight) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:[NSDictionary dictionaryWithObject:tagview.titleLable.font forKey:NSFontAttributeName] context:nil].size;
     //纪录前面一个标签的宽度
      tagview.frame=CGRectMake(0,0, Tsize.width+10, TagHeight+10);
-    
     return tagview;
 }
 
@@ -251,11 +246,12 @@
 //显示底部试图
 -(void)ShowButtomView;
 {
-    [UIView animateWithDuration:0.5 animations:^{
+    [UIView animateWithDuration:0.2 animations:^{
 //        CGRect  Bframe=alertView.frame;
 //        Bframe.origin.y=m_frame.size.height-kHeightNavigation-50;
 //        alertView.frame=Bframe;
-        alertView.alpha=1;
+        _alertView.alpha=1;
+        
         
     } completion:^(BOOL finished) {
     }];
@@ -263,11 +259,11 @@
 //隐藏底部试图
 -(void)HidenButtomView;
 {
-    [UIView animateWithDuration:0.5 animations:^{
+    [UIView animateWithDuration:0.2 animations:^{
 //        CGRect  Bframe=alertView.frame;
 //        Bframe.origin.y=m_frame.size.height-kHeightNavigation;
 //        alertView.frame=Bframe;
-        alertView.alpha=0;
+        _alertView.alpha=0;
     } completion:^(BOOL finished) {
         
     }];
@@ -278,7 +274,7 @@
 -(void)removeTagViewFromSuperView
 {
     //移除标签
-    for (id view in alertView.subviews) {
+    for (id view in _alertView.subviews) {
         if ([view isKindOfClass:[M80AttributedLabel class]]) {
             [view removeFromSuperview];
             
@@ -295,25 +291,34 @@
     
 }
 
-//点击屏幕
--(void)TouchbuttonClick:(UITapGestureRecognizer *) tap
+-(void)closeAlertViewClick
 {
-    
-    
-    if (self.delegete &&[self.delegete respondsToSelector:@selector(topViewTouchBengan)]) {
-        [self.delegete topViewTouchBengan];
-    }
+    [self.markView CancelMarksetSelect];
+    [self removeFromSuperview];
 }
-
 
 //布局子视图
 -(void)layoutSubviews
 {
     [super layoutSubviews];
+    //文字的高度
     NSString *weiboString = self.weiboInfo.content;
     CGSize  Wsize=[weiboString boundingRectWithSize:CGSizeMake(kStageWidth-40, MAXFLOAT) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:[NSDictionary dictionaryWithObject:contentLable.font forKey:NSFontAttributeName] context:nil].size;
+    //10+头像高度＋文字高度＋10+标签高度＋10+分享的高度
+    float  tagHeight=0;
+    if (self.weiboInfo.tagArray.count>0) {
+        tagHeight=tagHeight+30;
+    }
+    float  alertHeight = 10+headButton.frame.size.height+10+Wsize.height+tagHeight+buttomShareView.frame.size.height+10;
+    float  y=(kDeviceHeight-alertHeight)/2;
     
+    _alertView.frame=CGRectMake(_alertView.frame.origin.x,y,kStageWidth-20, alertHeight);
+     //文字的高度
+    contentLable.frame=CGRectMake(headButton.frame.origin.x, headButton.frame.origin.y+headButton.frame.size.height+10, _alertView.frame.size.width-20, Wsize.height);
     
+    tagLable.frame=CGRectMake(tagLable.frame.origin.x, contentLable.frame.origin.y+contentLable.frame.size.height+5, tagLable.frame.size.width, tagLable.frame.size.height);
+    
+    buttomShareView.frame=CGRectMake(buttomShareView.frame.origin.x, _alertView.frame.size.height-45,_alertView.frame.size.width, 45);
     
 }
 

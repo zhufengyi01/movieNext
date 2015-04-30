@@ -113,8 +113,9 @@ float getHeightByWidthAndHeight(float width, float height){
 
 //根据图片一个view 把这个view按照指定的大小绘画出来
 +(UIImage *)getImage:(UIView *) imageview WithSize:(CGSize) size;
-//根据一张大的图片，把这个大的图片截取成一张小的图片
 
+
+//根据一张大的图片，把这个大的图片截取成一张小的图片
 +(UIImage *)getImageFromImage:(UIImage *) BigImage;
 //进入appdelegate页面时候，根据磁盘信息把磁盘信息复制给usercenter
 +(void)getUserInfoWith:(NSDictionary  *) userInfo;

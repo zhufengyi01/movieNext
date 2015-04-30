@@ -33,6 +33,7 @@
 #import "UMSocialControllerService.h"
 #import "UIImageView+WebCache.h"
 #import "UMShareViewController.h"
+#import "UMShareViewController2.h"
 #import "UIImage+ImageWithColor.h"
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
@@ -43,7 +44,7 @@
 
 //友盟分享
 //#import "UMSocial.h"
-@interface NewViewController ()<UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UIScrollViewDelegate,UMSocialDataDelegate,UMSocialUIDelegate,LoadingViewDelegate,UIActionSheetDelegate,CommonStageCellDelegate,AddMarkViewControllerDelegate,UMShareViewControllerDelegate,MFMailComposeViewControllerDelegate>
+@interface NewViewController ()<UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UIScrollViewDelegate,UMSocialDataDelegate,UMSocialUIDelegate,LoadingViewDelegate,UIActionSheetDelegate,CommonStageCellDelegate,AddMarkViewControllerDelegate,UMShareViewControllerDelegate,UMShareViewController2Delegate,MFMailComposeViewControllerDelegate>
 {
     AppDelegate  *appdelegate;
     UISegmentedControl *segment;
@@ -250,6 +251,37 @@
 #pragma  mark -----
 #pragma  mark ------  DataRequest －－－－－－－－－－－－－－－－－－－－－－－－－－
 #pragma  mark ----
+-(void)requestmoveReviewToNormal:(NSString *) stageId
+{
+    UserDataCenter *usercenter=[UserDataCenter shareInstance];
+    NSString  *review;
+    if ([Version  isEqualToString:@"1.0.1"]) {
+        //从审核版到正常
+        review=@"0";
+    }
+    else
+    {
+        review=@"1";
+        
+    }
+    NSDictionary *parameters = @{@"stage_id":stageId,@"user_id":usercenter.user_id,@"review":review};
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    NSString *urlString =[NSString stringWithFormat:@"%@/stage/move-to-review", kApiBaseUrl];
+    [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
+            NSLog(@"移除剧照成功=======%@",responseObject);
+            UIAlertView  *Al =[[UIAlertView alloc]initWithTitle:nil message:@"审核（正常）切换成功" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            [Al show];
+            
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+    
+}
+
+
 //屏幕剧照
 -(void)requestRemoveStage
 {
@@ -467,15 +499,7 @@
      NSString *userId=userCenter.user_id;
     
     NSDictionary *parameters;
-    if (Review==1) {
-        parameters = @{@"user_id":userId,@"review":@"1"};
-
-    }
-    else
-    {
-        parameters = @{@"user_id":userId};
-
-    }
+    parameters = @{@"user_id":userId,@"Version":Version};
     NSString * section;
     if (segment.selectedSegmentIndex==1) {  // 最新
         section=@"weibo/listrecently";
@@ -807,8 +831,6 @@
 {
     Rowindex=index;
      ModelsModel  *model;
-   // weiboInfoModel  *weibomodel;
-    Rowindex=index;
     if (segment.selectedSegmentIndex==0) {
         model =[_hotDataArray objectAtIndex:index];
     }
@@ -858,10 +880,21 @@
     }
     else if (button.tag==6000)
     {
+        UserDataCenter  *userCenter =[UserDataCenter shareInstance];
         //点击了更多
-        UIActionSheet  *Act=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"内容投诉",@"版权投诉",@"图片信息", nil];
-        Act.tag=507;
-        [Act showInView:Act];
+    
+        if ([userCenter.is_admin intValue]>0) {
+            
+            UIActionSheet  *Act=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"内容投诉",@"版权投诉",@"图片信息",@"切换剧照到（审核/正式）", nil];
+            Act.tag=507;
+            [Act showInView:Act];
+        }
+        else
+        {
+            UIActionSheet  *Act=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"内容投诉",@"版权投诉",@"图片信息", nil];
+            Act.tag=507;
+            [Act showInView:Act];
+        }
         
     }
 }
@@ -911,10 +944,20 @@
     //设置分享内容和回调对象
     
     [UMSocialSnsPlatformManager getSocialPlatformWithName:[sharearray  objectAtIndex:button.tag-10000]].snsClickHandler(self,[UMSocialControllerService defaultControllerService],YES);
-    NSLog(@"分享");
-    
  
 }
+-(void)UMShareViewController2HandClick:(UIButton *)button ShareImage:(UIImage *)shareImage StageInfoModel:(stageInfoModel *)StageInfo
+{
+    
+    NSArray  *sharearray =[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQzone, UMShareToSina, nil];
+    [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
+    [[UMSocialControllerService defaultControllerService] setShareText:StageInfo.movieInfo.name shareImage:shareImage socialUIDelegate:self];
+    //设置分享内容和回调对象
+    
+    [UMSocialSnsPlatformManager getSocialPlatformWithName:[sharearray  objectAtIndex:button.tag-10000]].snsClickHandler(self,[UMSocialControllerService defaultControllerService],YES);
+    
+}
+
 //#pragma mark  --UMShareDelegate 友盟分享实现的功能
 
 -(void)didCloseUIViewController:(UMSViewControllerType)fromViewControllerType
@@ -943,7 +986,6 @@
      _mymarkView=mv;
     if (mv.isSelected==YES) {  //当前已经选中的状态
         //设置工具栏的值，并且，弹出工具栏
-         // NSLog(@"出现工具栏,   ======stageinfo =====%@",stageInfoDict);
         [self SetToolBarValueWithDict:weiboDict markView:markView isSelect:YES StageInfo:stageInfoDict];
     }
     else if(mv.isSelected==NO)
@@ -958,10 +1000,8 @@
 {
    //先对它赋值，然后让他弹出到界面
     if (isselect==YES) {
-        NSLog(@" new viewController SetToolBarValueWithDict  执行了出现工具栏的方法");
-        
         //设置工具栏的值
-        //[_toolBar setToolBarValue:weiboDict :markView WithStageInfo:stageInfo];
+        _toolBar.alertView.frame=CGRectMake(15,0,kStageWidth-20, 100);
         _toolBar.weiboInfo=weiboDict;
         _toolBar.stageInfo=stageInfo;
         _toolBar.markView=markView;
@@ -974,10 +1014,6 @@
     }
     else if (isselect==NO)
     {
-        //隐藏toolbar
-        NSLog(@" 执行了隐藏工具栏的方法");
-        //self.tabBarController.tabBar.hidden=NO;
-        //隐藏工具栏
         if (_toolBar) {
         [_toolBar HidenButtomView];
         //从父视图中除掉工具栏
@@ -1014,20 +1050,15 @@
     else if (button.tag==10001)
     {
         
-        
         [_mymarkView CancelMarksetSelect];
          if (_toolBar) {
             [_toolBar HidenButtomView];
             [_toolBar removeFromSuperview];
             
         }
-        
-        NSLog(@" 点击了分享按钮");
-        CommonStageCell *cell = (CommonStageCell *)(markView.superview.superview.superview.superview);
-         UIImage  *image=[Function getImage:cell.stageView WithSize:CGSizeMake(kDeviceWidth, kDeviceWidth)];
-         UMShareViewController  *shareVC=[[UMShareViewController alloc]init];
+        UMShareViewController2  *shareVC=[[UMShareViewController2 alloc]init];
         shareVC.StageInfo=stageInfoDict;
-        shareVC.screenImage=image;
+        shareVC.weiboInfo=weiboDict;
         shareVC.delegate=self;
         UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:shareVC];
         [self presentViewController:na animated:YES completion:nil];
@@ -1209,7 +1240,6 @@
        
              }
         
-
             //版权问题
             [self sendFeedBackWithStageInfo: stageInfo];
 
@@ -1232,6 +1262,22 @@
             
             [self presentViewController:scanvc animated:YES completion:nil];
             
+        }
+        else if (buttonIndex==3)
+        {
+            NSString  *stageId;
+            if (segment.selectedSegmentIndex==0) {
+              ModelsModel  * model =[_hotDataArray objectAtIndex:Rowindex];
+                stageId=model.stage_id;
+            }
+            else if  (segment.selectedSegmentIndex==1) {
+                weiboInfoModel *   model=[_newDataArray objectAtIndex:Rowindex];
+                stageId=model.stage_id;
+            }
+
+            //移动到审核版或者正常
+            [self requestmoveReviewToNormal:stageId];
+        
         }
     }
 }
@@ -1274,6 +1320,8 @@
     //    [picker setBccRecipients:bccRecipients];
     
     // Set up recipients
+    
+    //feedback@redianying.comfeedback@redianying.com
     NSArray *toRecipients = [NSArray arrayWithObject:@"feedback@redianying.com"];
     [picker setToRecipients:toRecipients];
     // Fill out the email body text
@@ -1381,19 +1429,19 @@
 #pragma mark  -----
 #pragma mark  ------ToolbuttomView隐藏工具栏的方法
 #pragma mark  -------
-//点击屏幕，隐藏工具栏
--(void)topViewTouchBengan
-{
-    NSLog(@"controller touchbegan  中 执行了隐藏工具栏的方法");
-    //取消当前的选中的那个气泡
-    [_mymarkView CancelMarksetSelect];
-    self.tabBarController.tabBar.hidden=NO;
-    if (_toolBar) {
-        [_toolBar HidenButtomView];
-         [_toolBar removeFromSuperview];
-        
-    }
-}
+////点击屏幕，隐藏工具栏
+//-(void)topViewTouchBengan
+//{
+//    NSLog(@"controller touchbegan  中 执行了隐藏工具栏的方法");
+//    //取消当前的选中的那个气泡
+//    [_mymarkView CancelMarksetSelect];
+//    self.tabBarController.tabBar.hidden=NO;
+//    if (_toolBar) {
+//        [_toolBar HidenButtomView];
+//         [_toolBar removeFromSuperview];
+//        
+//    }
+//}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

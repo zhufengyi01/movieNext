@@ -45,8 +45,9 @@
 #define weiChatShareKey  @"wxf2ee2163c0aceaa0"
 #define weiChatShareSecret @"ce1e16a6fa8b594e614eda18903cd22c"
 
+//#define   Review   1          ///上传appstore版本  1 为审核
+#define   Version  @"1.0"     //版本信息  1.0.1 审核版         1.0 正常版
 
-#define   Review   0   ///上传appstore版本  1 为审核
 #pragma  mark 颜色设置
 #define kAppTintColor [UIColor colorWithRed:0.0/255.0 green:146.0/255.0 blue:255.0/255.0 alpha:1]
 //项目背景颜色
@@ -54,7 +55,6 @@
 #define View_ToolBar   [UIColor colorWithRed:250.0/255 green:250.0/255 blue:250.0/255 alpha:1]
 //tabbar 上面的一根线
 #define tabBar_line   [UIColor colorWithRed:220.0/255 green:220.0/255 blue:220.0/255 alpha:1]
-
 //字体浅灰色
 #define VLight_GrayColor [UIColor colorWithRed:188.0/255 green:188.0/255 blue:188.0/255 alpha:1]
 //字体深灰色
@@ -62,6 +62,9 @@
 //字体蓝色
 #define VBlue_color [UIColor colorWithRed:0/255 green:146.0/255 blue:255.0/255 alpha:1]
 #define VStageView_color [UIColor colorWithRed:23.0/255 green:23.0/255 blue:23.0/255 alpha:1]
+#define ShareLogo_color  [UIColor colorWithRed:210.0/255 green:202.0/255 blue:187.0/255 alpha:1]
+
+
 //头像占位图片
 #define HeadImagePlaceholder  [UIImage imageNamed:@"notice_image headloading.png"]
 

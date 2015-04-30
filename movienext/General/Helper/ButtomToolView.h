@@ -43,9 +43,10 @@
     //上面的透明的试图，点击的按钮
     UIButton   *_topButtom;
     //底部的弹出视图
-    UIView   *alertView;
+    //UIView   *alertView;
     UILabel  *userNamelabel;
     UILabel  *timelabel;
+    UIButton  *closealertView;
     UILabel  *contentLable;
     UIView *tagFatherView;
     M80AttributedLabel *tagLable;
@@ -56,12 +57,15 @@
     UIView *buttomShareView;
     int  zanNum;
     UIImageView  *likeimageview;
+    
 }
 #pragma mark  ------外部方法
 @property(nonatomic,strong) weiboInfoModel   *weiboInfo;
 @property(nonatomic,strong) stageInfoModel   *stageInfo;
 @property(nonatomic,strong) id markView;
 @property(nonatomic,strong) NSMutableArray   *upweiboArray;
+
+@property(nonatomic,strong) UIView  *alertView;
 -(void)configToolBar;
 //显示底部试图.用于动画
 -(void)ShowButtomView;

@@ -250,7 +250,7 @@
         [markView startAnimation];
     }
     currentMarkIndex =currentMarkIndex +1;
-#warning  疑点，为什么是13  的最大值
+//#warning  疑点，为什么是13  的最大值
     //执行完成一轮动画之后，实行，重新再动第一个执行
     
    if (currentMarkIndex > MAX(self.subviews.count,6) ) {
