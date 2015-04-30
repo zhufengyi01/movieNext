@@ -158,7 +158,7 @@
     
     self.contentLable=[ZCControl createLabelWithFrame:CGRectMake(_moviewName.frame.origin.x,_moviewName.frame.origin.y+_moviewName.frame.size.height+10, kDeviceWidth-30, 40) Font:MarkTextFont14 Text:self.weiboInfo.content];
     self.contentLable.adjustsFontSizeToFitWidth=NO;
-    if (IsIphone6) {
+    if (IsIphone6plus) {
         self.contentLable.font=[UIFont systemFontOfSize:MarkTextFont16];
     }
     self.contentLable.numberOfLines=0;
@@ -199,7 +199,7 @@
     logoView.backgroundColor =View_ToolBar;
     [shareView addSubview:logoView];
     
-    self.logoName=[ZCControl createLabelWithFrame:CGRectMake(_moviewName.frame.origin.x,0, kDeviceWidth-20,logoView.frame.size.height) Font:14 Text:@"Powered By 影弹"];
+    self.logoName=[ZCControl createLabelWithFrame:CGRectMake(_moviewName.frame.origin.x,0, kDeviceWidth-20,logoView.frame.size.height) Font:12 Text:@"Powered By 影弹"];
     self.logoName.adjustsFontSizeToFitWidth=NO;
     self.logoName.numberOfLines=1;
     self.logoName.textAlignment=NSTextAlignmentLeft;

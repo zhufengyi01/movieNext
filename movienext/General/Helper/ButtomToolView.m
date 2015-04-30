@@ -13,6 +13,7 @@
 #import "Function.h"
 #import "UserDataCenter.h"
 #import "UpweiboModel.h"
+#import "Function.h"
 #import "UIButton+WebCache.h"
 
 @implementation ButtomToolView 
@@ -43,7 +44,7 @@
     _alertView =[[UIView alloc]initWithFrame:CGRectMake(15,0, kDeviceWidth-30, 50)];
     _alertView.backgroundColor=[UIColor whiteColor];
     _alertView.alpha=0;
-    _alertView.layer.cornerRadius=4;
+    _alertView.layer.cornerRadius=8;
     _alertView.clipsToBounds=YES;
     _alertView.userInteractionEnabled=YES;
     [self addSubview:_alertView];
@@ -111,8 +112,6 @@
     shareButton.tag=10001;
     [buttomShareView addSubview:shareButton];
     
-    
-
     zanbutton =[ZCControl createButtonWithFrame:CGRectMake(_alertView.frame.size.width/2, 0,_alertView.frame.size.width/2, 45) ImageName:nil Target:self Action:@selector(dealButtomClick:) Title:@""];
     [zanbutton setTitleColor:VBlue_color forState:UIControlStateNormal];
     zanbutton.tag=10002;
@@ -124,8 +123,7 @@
     likeimageview=[[UIImageView alloc]initWithFrame:CGRectMake((zanbutton.frame.size.width)/2-15,zanbutton.frame.size.height/2-10, 25, 25)];
     likeimageview.image=[UIImage imageNamed:@"opened_like_icon.png"];
     [zanbutton addSubview:likeimageview];
-    
-    
+
     //高亮显示
     [buttomShareView addSubview:zanbutton];
     
@@ -171,8 +169,6 @@
         }
         [_alertView addSubview:tagLable];
      }
-    
-    
     
     for (int i=0; i<self.upweiboArray.count; i++) {
         UpweiboModel *upmodel=self.upweiboArray[i];
@@ -246,14 +242,15 @@
 //显示底部试图
 -(void)ShowButtomView;
 {
-    [UIView animateWithDuration:0.2 animations:^{
+    [UIView animateWithDuration:0.1 animations:^{
 //        CGRect  Bframe=alertView.frame;
 //        Bframe.origin.y=m_frame.size.height-kHeightNavigation-50;
 //        alertView.frame=Bframe;
         _alertView.alpha=1;
         
-        
     } completion:^(BOOL finished) {
+        [Function BasicAnimationwithkey:@"transform.scale" Duration:0.20 repeatcont:1 autoresverses:YES fromValue:1.0 toValue:1.02 View:self.alertView];
+
     }];
 }
 //隐藏底部试图
@@ -309,16 +306,27 @@
     if (self.weiboInfo.tagArray.count>0) {
         tagHeight=tagHeight+30;
     }
-    float  alertHeight = 10+headButton.frame.size.height+10+Wsize.height+tagHeight+buttomShareView.frame.size.height+10;
+    float  alertHeight = 10+headButton.frame.size.height+10+Wsize.height+tagHeight+buttomShareView.frame.size.height+15;
     float  y=(kDeviceHeight-alertHeight)/2;
-    
-    _alertView.frame=CGRectMake(_alertView.frame.origin.x,y,kStageWidth-20, alertHeight);
+    float  x=15;
+    if (IsIphone6) {
+        x=25;
+    }
+    if (IsIphone6plus) {
+        x=35;
+    }
+    _alertView.frame=CGRectMake(x,y,kDeviceWidth-(2*x), alertHeight);
+    //关闭按钮
+    closealertView.frame=CGRectMake(_alertView.frame.size.width-36,0, 36, 36);
      //文字的高度
-    contentLable.frame=CGRectMake(headButton.frame.origin.x, headButton.frame.origin.y+headButton.frame.size.height+10, _alertView.frame.size.width-20, Wsize.height);
+    contentLable.frame=CGRectMake(userNamelabel.frame.origin.x, headButton.frame.origin.y+headButton.frame.size.height+10, _alertView.frame.size.width-userNamelabel.frame.origin.x-10, Wsize.height);
     
-    tagLable.frame=CGRectMake(tagLable.frame.origin.x, contentLable.frame.origin.y+contentLable.frame.size.height+5, tagLable.frame.size.width, tagLable.frame.size.height);
-    
+
+    tagLable.frame=CGRectMake(userNamelabel.frame.origin.x, contentLable.frame.origin.y+contentLable.frame.size.height+5, tagLable.frame.size.width, tagLable.frame.size.height);
     buttomShareView.frame=CGRectMake(buttomShareView.frame.origin.x, _alertView.frame.size.height-45,_alertView.frame.size.width, 45);
+    shareButton.frame=CGRectMake(0,0,buttomShareView.frame.size.width/2, 45);
+    zanbutton.frame=CGRectMake(buttomShareView.frame.size.width/2, 0, buttomShareView.frame.size.width/2, 45);
+ //  likeimageview.frame=CGRectMake(<#CGFloat x#>, <#CGFloat y#>, <#CGFloat width#>, <#CGFloat height#>)
     
 }
 

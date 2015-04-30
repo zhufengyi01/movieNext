@@ -31,7 +31,10 @@
 #define kDeviceWidth        [UIScreen mainScreen].bounds.size.width
 #define kDeviceHeight       [UIScreen mainScreen].bounds.size.height
 #define kStageWidth         kDeviceWidth-10
-#define IsIphone6            [UIScreen mainScreen].bounds.size.height>700
+
+#define IsIphone6                [UIScreen mainScreen].bounds.size.height==667
+#define IsIphone6plus            [UIScreen mainScreen].bounds.size.height==736
+
 
 #define kHeightNavigation 64
 #define kHeigthTabBar     49
@@ -46,7 +49,7 @@
 #define weiChatShareSecret @"ce1e16a6fa8b594e614eda18903cd22c"
 
 //#define   Review   1          ///上传appstore版本  1 为审核
-#define   Version  @"1.0"     //版本信息  1.0.1 审核版         1.0 正常版
+#define   Version  @"1.0"       //版本信息  1.0.1 审核版         1.0 正常版
 
 #pragma  mark 颜色设置
 #define kAppTintColor [UIColor colorWithRed:0.0/255.0 green:146.0/255.0 blue:255.0/255.0 alpha:1]

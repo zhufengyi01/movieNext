@@ -46,7 +46,7 @@
 //    //标题，点赞的view
     _TitleLable=[ZCControl createLabelWithFrame:CGRectMake(0,0, 0,0) Font:12 Text:@""];
     _TitleLable.font=[UIFont systemFontOfSize:MarkTextFont14];
-    if (IsIphone6) {
+    if (IsIphone6plus) {
         _TitleLable.font=[UIFont systemFontOfSize:MarkTextFont16];
     }
     _TitleLable.textColor=[UIColor whiteColor];
@@ -58,7 +58,7 @@
     //标题
     self.contentLable =[[M80AttributedLabel alloc]initWithFrame:CGRectMake(0, 0, 0, 0)];
     self.contentLable.font=[UIFont systemFontOfSize:MarkTextFont14];
-    if (IsIphone6) {
+    if (IsIphone6plus) {
         self.contentLable.font=[UIFont systemFontOfSize:MarkTextFont16];
     }
     self.contentLable.textColor=[UIColor whiteColor];
@@ -157,14 +157,14 @@
     
     //头像
     _LeftImageView.frame=CGRectMake(0, 0, 23, 23);
-    if (IsIphone6) {
+    if (IsIphone6plus) {
         _LeftImageView.frame=CGRectMake(0, 0, 28, 28);
     }
     isfakeView.frame= CGRectMake(_LeftImageView.frame.size.width-6,_LeftImageView.frame.size.height-6, 8, 8);
     
     //右视图
     _rightView.frame=CGRectMake(21, 0,self.frame.size.width-23 , self.frame.size.height);
-    if (IsIphone6) {
+    if (IsIphone6plus) {
          _rightView.frame=CGRectMake(26, 0,self.frame.size.width-28 , self.frame.size.height);
     }
    

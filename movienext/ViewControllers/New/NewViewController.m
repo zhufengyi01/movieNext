@@ -717,7 +717,7 @@
         
         float hight;
         if (_hotDataArray.count>indexPath.row) {
-            hight=kStageWidth+45+45;
+            hight=kStageWidth+45;
         }
         return hight+10;
     }
@@ -725,7 +725,7 @@
     {
         float hight;
         if (_newDataArray.count>indexPath.row) {
-             hight= kStageWidth+90;
+             hight= kStageWidth+45;
         }
         return hight+10;
     }
@@ -841,6 +841,15 @@
         //电影按钮
         MovieDetailViewController *vc =  [MovieDetailViewController new];
         vc.movieId =  model.stageInfo.movie_id;
+        NSMutableString  *backstr=[[NSMutableString alloc]initWithString:model.stageInfo.movieInfo.name];
+        NSString *str;
+        if(backstr.length>5)
+        {
+            str=[backstr substringToIndex:5];
+            str =[NSString stringWithFormat:@"%@...",str];
+        }
+        UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:str style:UIBarButtonItemStylePlain target:nil action:nil];
+        self.navigationItem.backBarButtonItem=item;
         [self.navigationController pushViewController:vc animated:YES];
 
     }
@@ -882,7 +891,6 @@
     {
         UserDataCenter  *userCenter =[UserDataCenter shareInstance];
         //点击了更多
-    
         if ([userCenter.is_admin intValue]>0) {
             
             UIActionSheet  *Act=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"内容投诉",@"版权投诉",@"图片信息",@"切换剧照到（审核/正式）", nil];
@@ -1002,6 +1010,7 @@
     if (isselect==YES) {
         //设置工具栏的值
         _toolBar.alertView.frame=CGRectMake(15,0,kStageWidth-20, 100);
+        
         _toolBar.weiboInfo=weiboDict;
         _toolBar.stageInfo=stageInfo;
         _toolBar.markView=markView;
@@ -1403,7 +1412,7 @@
     //宽度=字的宽度+左头像图片的宽度＋赞图片的宽度＋赞数量的宽度+中间两个空格2+2
     float markViewWidth = Msize.width+23+Uwidth+5+5+11+5;
     float markViewHeight = Msize.height+6;
-    if(IsIphone6)
+    if(IsIphone6plus)
     {
         markViewWidth=markViewWidth+10;
         markViewHeight=markViewHeight+4;

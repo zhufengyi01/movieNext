@@ -34,7 +34,7 @@
     [self.contentView addSubview:BgView];
     
     //上部视图，包含头像，点赞
-    [self CreateTopView];
+    //[self CreateTopView];
     //中间的stageview 视图
     [self CreateSatageView];
       //底部视图
@@ -49,29 +49,29 @@
     [BgView addSubview:BgView0];
     
     
-    MovieLogoImageView=[[UIImageView alloc]initWithFrame:CGRectMake(10,7.5,30, 30)];
-    MovieLogoImageView.layer.cornerRadius=4;
-    MovieLogoImageView.layer.masksToBounds = YES;
-    [BgView0 addSubview:MovieLogoImageView];
-    
-    movieNameLable =[[UILabel alloc]initWithFrame:CGRectMake(45, 7.5, 120, 30)];
-    movieNameLable.font=[UIFont systemFontOfSize:16];
-    movieNameLable.textColor=VGray_color;
-   // movieNameLable.numberOfLines=1;
-    movieNameLable.lineBreakMode=NSLineBreakByTruncatingTail;
-    [BgView0 addSubview:movieNameLable];
-    
-    leftButtomButton=[UIButton buttonWithType:UIButtonTypeCustom];
-    leftButtomButton.frame=CGRectMake(10, 5, 200, 35);
-    //leftButtomButton.backgroundColor=[[UIColor redColor]colorWithAlphaComponent:0.2];
-     [leftButtomButton addTarget:self action:@selector(cellButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-     [BgView0 addSubview:leftButtomButton];
+//    MovieLogoImageView=[[UIImageView alloc]initWithFrame:CGRectMake(10,7.5,30, 30)];
+//    MovieLogoImageView.layer.cornerRadius=4;
+//    MovieLogoImageView.layer.masksToBounds = YES;
+//    [BgView0 addSubview:MovieLogoImageView];
+//    
+//    movieNameLable =[[UILabel alloc]initWithFrame:CGRectMake(45, 7.5, 120, 30)];
+//    movieNameLable.font=[UIFont systemFontOfSize:16];
+//    movieNameLable.textColor=VGray_color;
+//   // movieNameLable.numberOfLines=1;
+//    movieNameLable.lineBreakMode=NSLineBreakByTruncatingTail;
+//    [BgView0 addSubview:movieNameLable];
+//    
+//    leftButtomButton=[UIButton buttonWithType:UIButtonTypeCustom];
+//    leftButtomButton.frame=CGRectMake(10, 5, 200, 35);
+//    //leftButtomButton.backgroundColor=[[UIColor redColor]colorWithAlphaComponent:0.2];
+//     [leftButtomButton addTarget:self action:@selector(cellButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+//     [BgView0 addSubview:leftButtomButton];
     
 }
 
 -(void)CreateSatageView
 {
-    _stageView=[[StageView alloc]initWithFrame:CGRectMake(0, 45, kStageWidth, kStageWidth)];
+    _stageView=[[StageView alloc]initWithFrame:CGRectMake(0,0, kStageWidth, kStageWidth)];
     _stageView.backgroundColor=VStageView_color;
    // _stageView.layer.cornerRadius=4;
     //_stageView.clipsToBounds=YES;
@@ -83,13 +83,33 @@
 
 -(void)createButtomView
 {
-    BgView2=[[UIView alloc]initWithFrame:CGRectMake(0, kStageWidth+45, kStageWidth, 45)];
+    BgView2=[[UIView alloc]initWithFrame:CGRectMake(0, kStageWidth, kStageWidth, 45)];
     //改变toolar 的颜色
     BgView2.backgroundColor=[UIColor whiteColor];
     [BgView addSubview:BgView2];
  
+    MovieLogoImageView=[[UIImageView alloc]initWithFrame:CGRectMake(10,7.5,30, 30)];
+    MovieLogoImageView.layer.cornerRadius=4;
+    MovieLogoImageView.layer.masksToBounds = YES;
+    [BgView2 addSubview:MovieLogoImageView];
+    
+    movieNameLable =[[UILabel alloc]initWithFrame:CGRectMake(45, 7.5, 120, 30)];
+    movieNameLable.font=[UIFont systemFontOfSize:16];
+    movieNameLable.textColor=VGray_color;
+    // movieNameLable.numberOfLines=1;
+    movieNameLable.lineBreakMode=NSLineBreakByTruncatingTail;
+    [BgView2 addSubview:movieNameLable];
+    
+    leftButtomButton=[UIButton buttonWithType:UIButtonTypeCustom];
+    leftButtomButton.frame=CGRectMake(10, 5, 140, 35);
+    //leftButtomButton.backgroundColor=[[UIColor redColor]colorWithAlphaComponent:0.2];
+    [leftButtomButton addTarget:self action:@selector(cellButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    [BgView2 addSubview:leftButtomButton];
+    
+    
+    
     //更多
-    moreButton=[ZCControl createButtonWithFrame:CGRectMake(10, 9, 30, 25) ImageName:@"more_icon.png" Target:self Action:@selector(cellButtonClick:) Title:@""];
+    moreButton=[ZCControl createButtonWithFrame:CGRectMake(kStageWidth-130, 9, 30, 25) ImageName:@"more_icon.png" Target:self Action:@selector(cellButtonClick:) Title:@""];
     //moreButton.backgroundColor=VBlue_color;
     moreButton.layer.cornerRadius=2;
      moreButton.hidden=NO;
@@ -97,13 +117,25 @@
 
     
     
-    //分享
-    ScreenButton =[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-120,9,45,25) ImageName:@"btn_share_default.png" Target:self Action:@selector(cellButtonClick:) Title:@""];
-    [ScreenButton setBackgroundImage:[UIImage imageNamed:@"btn_share_select.png"] forState:UIControlStateHighlighted];
-    [BgView2 addSubview:ScreenButton];
+//    //分享
+//    ScreenButton =[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-120,9,45,25) ImageName:@"btn_share_default.png" Target:self Action:@selector(cellButtonClick:) Title:@""];
+//    [ScreenButton setBackgroundImage:[UIImage imageNamed:@"btn_share_select.png"] forState:UIControlStateHighlighted];
+//    [BgView2 addSubview:ScreenButton];
+
+    
+    if (_tanlogoButton) {
+        [_tanlogoButton removeFromSuperview];
+        _tanlogoButton=nil;
+    }
+    _tanlogoButton =[UIButton buttonWithType:UIButtonTypeCustom];
+    _tanlogoButton.frame=CGRectMake(kStageWidth-100, 9, 45, 25);
+    [_tanlogoButton setImage:[UIImage imageNamed:@"close_danmu.png"] forState:UIControlStateNormal];
+    [_tanlogoButton setImage:[UIImage imageNamed:@"open_danmu.png.png"] forState:UIControlStateSelected];
+    [_tanlogoButton addTarget:self action:@selector(hidenAndShowMarkView:) forControlEvents:UIControlEventTouchUpInside];
+    [BgView2 addSubview:_tanlogoButton];
 
     //添加弹幕
-    addMarkButton =[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-65,9,45,25) ImageName:@"btn_add_default.png" Target:self Action:@selector(cellButtonClick:) Title:@""];
+    addMarkButton =[ZCControl createButtonWithFrame:CGRectMake(kStageWidth-55,9,45,25) ImageName:@"btn_add_default.png" Target:self Action:@selector(cellButtonClick:) Title:@""];
     [addMarkButton setBackgroundImage:[UIImage imageNamed:@"btn_add_select.png"] forState:UIControlStateHighlighted];
     [BgView2 addSubview:addMarkButton];
     
@@ -132,19 +164,17 @@
     UserLogoButton.tag=4000;
     deletButton.tag=5000;
     moreButton.tag=6000;
+//        if (_tanlogoButton) {
+//             [_tanlogoButton removeFromSuperview];
+//            _tanlogoButton=nil;
+//        }
+//        _tanlogoButton =[UIButton buttonWithType:UIButtonTypeCustom];
+//        _tanlogoButton.frame=CGRectMake(kDeviceWidth-120, 9, 45, 25);
+//        [_tanlogoButton setImage:[UIImage imageNamed:@"close_danmu.png"] forState:UIControlStateNormal];
+//        [_tanlogoButton setImage:[UIImage imageNamed:@"open_danmu.png"] forState:UIControlStateSelected];
+//        [_tanlogoButton addTarget:self action:@selector(hidenAndShowMarkView:) forControlEvents:UIControlEventTouchUpInside];
+//        [BgView2 addSubview:_tanlogoButton];
     
-        if (_tanlogoButton) {
-             [_tanlogoButton removeFromSuperview];
-            _tanlogoButton=nil;
-        }
-        _tanlogoButton =[UIButton buttonWithType:UIButtonTypeCustom];
-        _tanlogoButton.frame=CGRectMake(kDeviceWidth-45, 5, 35, 35);
-        [_tanlogoButton setImage:[UIImage imageNamed:@"close_danmu.png"] forState:UIControlStateNormal];
-        [_tanlogoButton setImage:[UIImage imageNamed:@"open_danmu.png"] forState:UIControlStateSelected];
-        [_tanlogoButton addTarget:self action:@selector(hidenAndShowMarkView:) forControlEvents:UIControlEventTouchUpInside];
-       // [_tanlogoButton setTitleEdgeInsets:UIEdgeInsetsMake(10, 10, 10, 10)];
-        [BgView0 addSubview:_tanlogoButton];
-          
 #pragma mark  configDatawithSatgeView------------------------------
    //单个标签的时候用这个
      if (self.weiboInfo) {
@@ -183,14 +213,6 @@
             pressview.hidden=NO;
         }
          _stageView.isAnimation=NO;
- #pragma mark 区分于个人页面是来源于自己还是他人
-//        if (self.userPage==NSUserPageTypeMySelfController ) {  //进来的页面是从我自己的页面进来的
-//            deletButton.hidden=NO;
-//        }
-//        else
-//        {
-//            deletButton.hidden=YES;
-//        }
     }
     else
     {

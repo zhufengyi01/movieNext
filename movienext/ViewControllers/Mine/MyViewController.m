@@ -823,7 +823,7 @@
 }
 
 -(CGFloat )tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return kDeviceWidth+90+0;
+    return kStageWidth+45+10;
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -1359,7 +1359,7 @@
     //宽度=字的宽度+左头像图片的宽度＋赞图片的宽度＋赞数量的宽度+中间两个空格2+2
     float markViewWidth = Msize.width+23+Uwidth+5+5+11+5;
     float markViewHeight = Msize.height+6;
-    if(IsIphone6)
+    if(IsIphone6plus)
     {
         markViewWidth=markViewWidth+10;
         markViewHeight=markViewHeight+4;

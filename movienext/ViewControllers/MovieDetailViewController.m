@@ -79,14 +79,15 @@
 {
     //下面透明度的设置，效果是设置了导航条的高度的多少倍，不是透明度多少
   ///  self.navigationController.navigationBar.alpha=0.4;
-    self.navigationController.navigationBar.hidden=YES;
+    self.navigationController.navigationBar.hidden=NO;
+    self.tabBarController.tabBar.hidden=YES;
+
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(requestMovieData) name:@"RefreshMovieDeatail" object:nil];
 
 }
 -(void)viewDidAppear:(BOOL)animated
 {
-    self.tabBarController.tabBar.hidden=YES;
-    self.navigationController.navigationBar.hidden=YES;
+    self.navigationController.navigationBar.hidden=NO;
 
 
 }
@@ -125,27 +126,32 @@
 -(void)createNavigation
 {
     
-    Navview=[[UIView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, 64)];
-    Navview.userInteractionEnabled=YES;
-    Navview.backgroundColor=[[UIColor whiteColor] colorWithAlphaComponent:0];
-   //Navview.layer.shadowColor=VGray_color.CGColor;
-   //Navview.layer.shadowOffset=CGSizeMake(kDeviceWidth, 1);
-
-    [_myConllectionView bringSubviewToFront:Navview];
-    [self.view addSubview:Navview];
+//    Navview=[[UIView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, 64)];
+//    Navview.userInteractionEnabled=YES;
+//    Navview.backgroundColor=[[UIColor whiteColor] colorWithAlphaComponent:1];
+//    [_myConllectionView bringSubviewToFront:Navview];
+//    [self.view addSubview:Navview];
+//    
+//    backBtn=[ZCControl createButtonWithFrame:CGRectMake(10,26,60,32) ImageName:nil Target:self Action:@selector(NavigationClick:) Title:nil];
+//    backBtn.tag=200;
+//    [backBtn setImageEdgeInsets:UIEdgeInsetsMake(0, -40, 0, 0)];
+//    [backBtn setImage:[UIImage imageNamed:@"back_icon_blue.png"] forState:UIControlStateNormal];
+//    [self.view addSubview:backBtn];
     
-    backBtn=[ZCControl createButtonWithFrame:CGRectMake(10,26,60,32) ImageName:nil Target:self Action:@selector(NavigationClick:) Title:nil];
-    backBtn.tag=200;
-    [backBtn setImageEdgeInsets:UIEdgeInsetsMake(0, -40, 0, 0)];
-    //  backBtn.backgroundColor=[UIColor redColor];
-    [backBtn setImage:[UIImage imageNamed:@"back_Icon.png"] forState:UIControlStateNormal];
-    [self.view addSubview:backBtn];
+    //创建头部view
+//    UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:self.moviename];
+//    titleLable.textColor=VBlue_color;
+//    titleLable.font=[UIFont boldSystemFontOfSize:16];
+//    titleLable.textAlignment=NSTextAlignmentCenter;
+//    self.navigationItem.titleView=titleLable;
     
-    upLoadimageBtn=[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-70,30,60,25) ImageName:@"update_picture_whaite.png" Target:self Action:@selector(NavigationClick:) Title:nil];
+    
+    upLoadimageBtn=[ZCControl createButtonWithFrame:CGRectMake(0,0,40,40) ImageName:nil Target:self Action:@selector(NavigationClick:) Title:nil];
     upLoadimageBtn.tag=201;
-    [self.view addSubview:upLoadimageBtn];
+    [upLoadimageBtn setImage:[UIImage imageNamed:@"up_picture_blue.png"] forState:UIControlStateNormal];
+    UIBarButtonItem  *rigthbar =[[UIBarButtonItem alloc]initWithCustomView:upLoadimageBtn];
+    self.navigationItem.rightBarButtonItem=rigthbar;
 }
-
 
 #pragma mark  ---
 #pragma mark  -----imagePickerControlldelegate
@@ -190,7 +196,7 @@
     page=1;
     pageSize=12;
     pageCount=0;
-    bigModel=YES;
+    bigModel=NO;
     _dataArray =[[NSMutableArray alloc]init];
     moviedetailmodel=[[movieInfoModel alloc]init];
     _upWeiboArray=[[NSMutableArray alloc]init];
@@ -212,8 +218,8 @@
         layout.sectionInset=UIEdgeInsetsMake(0,0,64, 0); //整个偏移量 上左下右
     }
     
-    _myConllectionView =[[UICollectionView alloc]initWithFrame:CGRectMake(0, -200,kDeviceWidth, kDeviceHeight+kHeightNavigation+180) collectionViewLayout:layout];
-    [layout setHeaderReferenceSize:CGSizeMake(_myConllectionView.frame.size.width, kDeviceHeight/3+64+110)];
+    _myConllectionView =[[UICollectionView alloc]initWithFrame:CGRectMake(0,0,kDeviceWidth, kDeviceHeight+kHeightNavigation) collectionViewLayout:layout];
+    //[layout setHeaderReferenceSize:CGSizeMake(_myConllectionView.frame.size.width, kDeviceHeight/3+64+110)];
 
     _myConllectionView.backgroundColor=View_BackGround;
     //注册大图模式
@@ -222,7 +228,7 @@
     //注册小图模式
     [_myConllectionView registerClass:[SmallImageCollectionViewCell class] forCellWithReuseIdentifier:@"smallcell"];
     // 注册头部视图
-    [_myConllectionView registerClass:[MovieHeadView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"headerView"];
+    //[_myConllectionView registerClass:[MovieHeadView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"headerView"];
     _myConllectionView.delegate=self;
     _myConllectionView.dataSource=self;
     
@@ -479,14 +485,9 @@
 
 -(void)requestData
 {
-#warning  这里需要写参数
-    
-    //NSDictionary *parameter = @{@"movie_id": @"859357", @"start_id":@"0", @"user_id": @"18"};
     if (!_movieId || _movieId<=0) {
         return;
-        
     }
-
     UserDataCenter  *userCenter =[UserDataCenter shareInstance];
     NSString  *urlString =[NSString stringWithFormat:@"%@/stage/list?per-page=%d&page=%d",kApiBaseUrl,pageSize,page];
     NSDictionary *parameter;
@@ -544,6 +545,7 @@
                 if (moviemodel) {
                     [moviemodel setValuesForKeysWithDictionary:[stageDict objectForKey:@"movie"]];
                     stagemodel.movieInfo=moviemodel;
+                
                 }
                 if (_dataArray==nil) {
                     _dataArray=[[NSMutableArray alloc]init];
@@ -673,18 +675,31 @@
         NSLog(@"didDeselectRowAtIndexPath  =====%ld",indexPath.row);
       //  BigImageCollectionViewCell   *cell=(BigImageCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
      } else {
+         
+
         ShowStageViewController *vc = [[ShowStageViewController alloc] init];
          stageInfoModel *stagemodel=[_dataArray objectAtIndex:indexPath.row];
          vc.upweiboArray=_upWeiboArray;
-    
          vc.stageInfo = stagemodel;
+         
+         NSMutableString  *backstr=[[NSMutableString alloc]initWithString:stagemodel.movieInfo.name];
+         NSString *str;
+         if(backstr.length>5)
+         {
+             str=[backstr substringToIndex:5];
+             str =[NSString stringWithFormat:@"%@...",str];
+         }
+
+         UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:str style:UIBarButtonItemStylePlain target:nil action:nil];
+         self.navigationItem.backBarButtonItem=item;
+
         [self.navigationController pushViewController:vc animated:YES];
      }
 }
 
 
 //设置头尾部内容
--(UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
+/*-(UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
 {
     UICollectionReusableView *reusableView = nil;
     
@@ -697,7 +712,7 @@
          reusableView = headerV;
     }
     return reusableView;
-}
+}*/
 #pragma  mark ----
 #pragma  mark -----UICollectionViewLayoutDelegate
 #pragma  mark ----
@@ -1053,10 +1068,6 @@
 #pragma mark  ----------点赞--------------
     else  if(button.tag==10002)
     {
-        //改变赞的状态
-
-        //点击了赞
-        //点赞遍历，如果能在数组中能发现这个weibo，那么删除掉，如果没有发现这个微博，那么添加这个微博
         NSNumber  *operation;
         int tag=0;// 标志是否含有weiboid
         for (int i=0; i<_upWeiboArray.count; i++) {
@@ -1091,9 +1102,6 @@
         ////发送到服务器
         [self LikeRequstData:weiboDict withOperation:operation];
 
-        
-        
-        
     }
     else if(button.tag==10003)
     {
@@ -1339,7 +1347,7 @@
     //宽度=字的宽度+左头像图片的宽度＋赞图片的宽度＋赞数量的宽度+中间两个空格2+2
     float markViewWidth = Msize.width+23+Uwidth+5+5+11+5;
     float markViewHeight = Msize.height+6;
-    if(IsIphone6)
+    if(IsIphone6plus)
     {
         markViewWidth=markViewWidth+10;
         markViewHeight=markViewHeight+4;
@@ -1364,7 +1372,7 @@
 }
 #pragma mark ---UIScrollerViewDelegate
 //滑倒最顶部的时候执行这个
--(void)scrollViewDidScrollToTop:(UIScrollView *)scrollView
+/*-(void)scrollViewDidScrollToTop:(UIScrollView *)scrollView
 {
     Navview.backgroundColor=[[UIColor whiteColor]  colorWithAlphaComponent:0];
     [backBtn setImage:[UIImage imageNamed:@"back_Icon.png"] forState:UIControlStateNormal];
@@ -1395,7 +1403,7 @@
         [backBtn setImage:[UIImage imageNamed:@"back_icon_blue.png"] forState:UIControlStateNormal];
         [upLoadimageBtn setImage:[UIImage imageNamed:@"up_picture_blue@2x.png"] forState:UIControlStateNormal];
     }
-}
+}*/
 -(void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"RefreshMovieDeatail" object:nil];

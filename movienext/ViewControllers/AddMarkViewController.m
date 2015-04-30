@@ -367,7 +367,7 @@
         
     }
     
-    if(IsIphone6)
+    if(IsIphone6plus)
     {
         markViewWidth=markViewWidth+10;
         markViewHeight=markViewHeight+4;
@@ -702,7 +702,7 @@
     taglable =[[M80AttributedLabel alloc]initWithFrame:CGRectZero];
     taglable.backgroundColor =[UIColor clearColor];
     taglable.font=[UIFont systemFontOfSize:MarkTextFont14];
-    if (IsIphone6) {
+    if (IsIphone6plus) {
         taglable.font =[UIFont systemFontOfSize:MarkTextFont16];
     }
     //位置和大小
@@ -746,7 +746,7 @@
     taglable =[[M80AttributedLabel alloc]initWithFrame:CGRectZero];
     taglable.backgroundColor =[UIColor clearColor];
     taglable.font=[UIFont systemFontOfSize:MarkTextFont14];
-    if (IsIphone6) {
+    if (IsIphone6plus) {
         taglable.font =[UIFont systemFontOfSize:MarkTextFont16];
     }
     //位置和大小

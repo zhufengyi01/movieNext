@@ -148,7 +148,7 @@
             float markViewHeight = Msize.height+6;
             if (weibodict.tagArray.count>0) {
                 markViewHeight=markViewHeight+25;}
-           if(IsIphone6)
+           if(IsIphone6plus)
            {
                markViewWidth=markViewWidth+10;
                markViewHeight=markViewHeight+4;

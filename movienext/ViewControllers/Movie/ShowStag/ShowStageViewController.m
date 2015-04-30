@@ -21,9 +21,11 @@
 #import "UserDataCenter.h"
 #import "MyViewController.h"
 #import "Function.h"
+#import "UIImageView+WebCache.h"
 #import "UMShareViewController.h"
 #import "ScanMovieInfoViewController.h"
 #import "UMShareViewController2.h"
+#import "MovieDetailViewController.h"
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
 
@@ -44,6 +46,12 @@
     StageView *stageView;
     MarkView       *_mymarkView;
     UIImageView *BgView;
+    UIButton  *_tanlogoButton;
+    
+    UIButton      *leftButtomButton;   //左下边按钮
+    UILabel       *movieNameLable;
+    UIImageView   *MovieLogoImageView;  // 电影的小图片
+
 
 }
 -(void)viewWillAppear:(BOOL)animated
@@ -120,19 +128,60 @@
     [self.view bringSubviewToFront:BgView2];
     [BgView addSubview:BgView2];
 
+    
+    MovieLogoImageView=[[UIImageView alloc]initWithFrame:CGRectMake(10,7.5,30, 30)];
+    MovieLogoImageView.layer.cornerRadius=4;
+    if (self.stageInfo.movieInfo.logo) {
+        NSString  *logoString =[NSString stringWithFormat:@"%@%@!w100h100",kUrlMoviePoster,self.stageInfo.movieInfo.logo];
+        [MovieLogoImageView sd_setImageWithURL:[NSURL URLWithString:logoString] placeholderImage:[UIImage imageNamed:@"loading_image_all.png"]];
+    }
+    
+    MovieLogoImageView.layer.masksToBounds = YES;
+    [BgView2 addSubview:MovieLogoImageView];
+    
+    movieNameLable =[[UILabel alloc]initWithFrame:CGRectMake(45, 7.5, 120, 30)];
+    movieNameLable.font=[UIFont systemFontOfSize:16];
+    movieNameLable.textColor=VGray_color;
+    movieNameLable.text=self.stageInfo.movieInfo.name;
+    // movieNameLable.numberOfLines=1;
+    movieNameLable.lineBreakMode=NSLineBreakByTruncatingTail;
+    [BgView2 addSubview:movieNameLable];
+    
+    leftButtomButton=[UIButton buttonWithType:UIButtonTypeCustom];
+    leftButtomButton.frame=CGRectMake(10, 5, 140, 35);
+    //leftButtomButton.backgroundColor=[[UIColor redColor]colorWithAlphaComponent:0.2];
+    [leftButtomButton addTarget:self action:@selector(StageMovieButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    [BgView2 addSubview:leftButtomButton];
+    
+
+    
+    
     //更多
-    moreButton=[ZCControl createButtonWithFrame:CGRectMake(10, 9, 30, 25) ImageName:@"more_icon.png" Target:self Action:@selector(cellButtonClick:) Title:@""];
+    moreButton=[ZCControl createButtonWithFrame:CGRectMake(kStageWidth-130, 9, 30, 25) ImageName:@"more_icon.png" Target:self Action:@selector(cellButtonClick:) Title:@""];
     moreButton.layer.cornerRadius=2;
     moreButton.hidden=NO;
     [BgView2 addSubview:moreButton];
     
 
     
-    ScreenButton =[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-120,10,45,25) ImageName:@"btn_share_default.png" Target:self Action:@selector(ScreenButtonClick:) Title:@""];
-    [ScreenButton setBackgroundImage:[UIImage imageNamed:@"btn_share_select.png"] forState:UIControlStateHighlighted];
-    [BgView2 addSubview:ScreenButton];
     
-    addMarkButton =[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-55,10,45,25) ImageName:@"btn_add_default.png" Target:self Action:@selector(addMarkButtonClick:) Title:@""];
+//    ScreenButton =[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-110,10,45,25) ImageName:@"btn_share_default.png" Target:self Action:@selector(ScreenButtonClick:) Title:@""];
+//    [ScreenButton setBackgroundImage:[UIImage imageNamed:@"btn_share_select.png"] forState:UIControlStateHighlighted];
+//    [BgView2 addSubview:ScreenButton];
+    
+    if (_tanlogoButton) {
+        [_tanlogoButton removeFromSuperview];
+        _tanlogoButton=nil;
+    }
+    _tanlogoButton =[UIButton buttonWithType:UIButtonTypeCustom];
+    _tanlogoButton.frame=CGRectMake(kStageWidth-100, 9, 45, 25);
+    [_tanlogoButton setImage:[UIImage imageNamed:@"close_danmu.png"] forState:UIControlStateNormal];
+    [_tanlogoButton setImage:[UIImage imageNamed:@"open_danmu.png.png"] forState:UIControlStateSelected];
+    [_tanlogoButton addTarget:self action:@selector(hidenAndShowMarkView:) forControlEvents:UIControlEventTouchUpInside];
+    [BgView2 addSubview:_tanlogoButton];
+
+    
+    addMarkButton =[ZCControl createButtonWithFrame:CGRectMake(kStageWidth-55,10,45,25) ImageName:@"btn_add_default.png" Target:self Action:@selector(addMarkButtonClick:) Title:@""];
     [addMarkButton setBackgroundImage:[UIImage imageNamed:@"btn_add_select.png"] forState:UIControlStateHighlighted];
     [BgView2 addSubview:addMarkButton];
     
@@ -143,6 +192,36 @@
 {
     _toolBar=[[ButtomToolView alloc]initWithFrame:CGRectMake(0,0,kDeviceWidth,kDeviceHeight)];
     _toolBar.delegete=self;
+    
+}
+
+
+#pragma mark 点击屏幕显示和隐藏marview
+//显示隐藏markview
+-(void)hidenAndShowMarkView:(UIButton *) button
+{
+    if (button.selected==NO) {
+        NSLog(@"执行了隐藏 view ");
+        button.selected=YES;
+        for (UIView  *view  in stageView.subviews) {
+            if  ([view isKindOfClass:[MarkView class]]) {
+                MarkView  *mv =(MarkView *)view;
+                mv.hidden=YES;
+                
+            }
+        }
+    }
+    else if (button.selected==YES)
+    {
+        NSLog(@"执行了显示view ");
+        button.selected=NO;
+        for (UIView  *view  in stageView.subviews) {
+            if  ([view isKindOfClass:[MarkView class]]) {
+                MarkView  *mv =(MarkView *)view;
+                mv.hidden=NO;
+            }
+        }
+    }
     
 }
  //微博点赞请求
@@ -188,9 +267,6 @@
 }
 
 
-
-
-
 -(void)UMShareViewControllerHandClick:(UIButton *)button ShareImage:(UIImage *)shareImage StageInfoModel:(stageInfoModel *)StageInfo
 {
     NSArray  *sharearray =[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQzone, UMShareToSina, nil];
@@ -202,7 +278,6 @@
 }
 -(void)UMShareViewController2HandClick:(UIButton *)button ShareImage:(UIImage *)shareImage StageInfoModel:(stageInfoModel *)StageInfo
 {
-    
     NSArray  *sharearray =[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQzone, UMShareToSina, nil];
     [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
     [[UMSocialControllerService defaultControllerService] setShareText:StageInfo.movieInfo.name shareImage:shareImage socialUIDelegate:self];
@@ -212,6 +287,24 @@
     
 }
 
+//跳转到电影页
+-(void)StageMovieButtonClick:(UIButton *) button
+{
+    
+    //电影按钮
+    MovieDetailViewController *vc =  [MovieDetailViewController new];
+    vc.movieId = self.stageInfo.movie_id;
+    NSMutableString  *backstr=[[NSMutableString alloc]initWithString:self.stageInfo.movieInfo.name];
+    NSString *str;
+    if(backstr.length>5)
+    {
+        str=[backstr substringToIndex:5];
+        str =[NSString stringWithFormat:@"%@...",str];
+    }
+    UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:str style:UIBarButtonItemStylePlain target:nil action:nil];
+    self.navigationItem.backBarButtonItem=item;
+    [self.navigationController pushViewController:vc animated:YES];
+}
 // 分享
 -(void)ScreenButtonClick:(UIButton  *) button
 {
@@ -279,10 +372,7 @@
 {
     //先对它赋值，然后让他弹出到界面
     if (isselect==YES) {
-        NSLog(@" new viewController SetToolBarValueWithDict  执行了出现工具栏的方法");
-        
-        //设置工具栏的值
-        //[_toolBar setToolBarValue:weiboDict :markView WithStageInfo:stageInfo];
+        _toolBar.alertView.frame=CGRectMake(15,0,kStageWidth-20, 100);
         _toolBar.weiboInfo=weiboDict;
         _toolBar.stageInfo=stageInfo;
         _toolBar.markView=markView;
@@ -388,6 +478,20 @@
         TagToStageViewController  *vc=[[TagToStageViewController alloc]init];
         vc.weiboInfo=weiboInfo;
         vc.tagInfo=tagInfo;
+//    
+//    NSMutableString  *backstr=[[NSMutableString alloc]initWithString:weiboInf];
+//    NSString *str;
+//    if(backstr.length>5)
+//    {
+//        str=[backstr substringToIndex:5];
+//        str =[NSString stringWithFormat:@"%@...",str];
+//    }
+//    
+//    UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:str style:UIBarButtonItemStylePlain target:nil action:nil];
+//    self.navigationItem.backBarButtonItem=item;
+//
+    
+    
         [self.navigationController pushViewController:vc animated:YES];
     
 }
@@ -546,7 +650,7 @@
     //宽度=字的宽度+左头像图片的宽度＋赞图片的宽度＋赞数量的宽度+中间两个空格2+2
     float markViewWidth = Msize.width+23+Uwidth+5+5+11+5;
     float markViewHeight = Msize.height+6;
-    if(IsIphone6)
+    if(IsIphone6plus)
     {
         markViewWidth=markViewWidth+10;
         markViewHeight=markViewHeight+4;
