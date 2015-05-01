@@ -24,6 +24,8 @@
 @property(nonatomic,strong) weiboInfoModel  *weiboInfo;
 @property(nonatomic,strong) TagModel   *tagInfo;
 
+//@property(nonatomic,assign) BOOL   isCanClick;
 
 @property(nonatomic,strong) id<TagViewDelegate> delegete;
+-(void)setTagViewIsClick:(BOOL) isCanClick;
 @end

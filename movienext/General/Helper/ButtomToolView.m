@@ -190,15 +190,14 @@
     
     TagView *tagview =[[TagView alloc]initWithFrame:CGRectZero];
     tagview.tag=1000+index;
-    tagview.clipsToBounds=YES;
     tagview.delegete=self;
+    //设置是否可以点击
+    [tagview setTagViewIsClick:YES];
     tagview.tagInfo=tagmodel;
     tagview.weiboInfo=self.weiboInfo;
-    NSLog(@"tag model ===%@ ----%ld",tagmodel.Id,index);
     NSString *titleStr = tagmodel.tagDetailInfo.title;
     tagview.titleLable.text=titleStr;
     CGSize  Tsize =[titleStr boundingRectWithSize:CGSizeMake(MAXFLOAT, TagHeight) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:[NSDictionary dictionaryWithObject:tagview.titleLable.font forKey:NSFontAttributeName] context:nil].size;
-    //纪录前面一个标签的宽度
      tagview.frame=CGRectMake(0,0, Tsize.width+10, TagHeight+10);
     return tagview;
 }
@@ -307,7 +306,7 @@
         tagHeight=tagHeight+30;
     }
     float  alertHeight = 10+headButton.frame.size.height+10+Wsize.height+tagHeight+buttomShareView.frame.size.height+15;
-    float  y=(kDeviceHeight-alertHeight)/2;
+    float  y=(self.frame.size.height-alertHeight)/2;
     float  x=15;
     if (IsIphone6) {
         x=25;
@@ -316,6 +315,10 @@
         x=35;
     }
     _alertView.frame=CGRectMake(x,y,kDeviceWidth-(2*x), alertHeight);
+    if (self.frame.size.height<kDeviceHeight) {
+        _alertView.frame=CGRectMake(x,y-32,kDeviceWidth-(2*x), alertHeight);
+
+    }
     //关闭按钮
     closealertView.frame=CGRectMake(_alertView.frame.size.width-36,0, 36, 36);
      //文字的高度

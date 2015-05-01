@@ -1010,13 +1010,14 @@
     if (isselect==YES) {
         //设置工具栏的值
         _toolBar.alertView.frame=CGRectMake(15,0,kStageWidth-20, 100);
-        
         _toolBar.weiboInfo=weiboDict;
         _toolBar.stageInfo=stageInfo;
         _toolBar.markView=markView;
         _toolBar.upweiboArray=_upWeiboArray;
         [_toolBar configToolBar];
         [AppView addSubview:_toolBar];
+      //  UIWindow  *window =[[[UIApplication sharedApplication] delegate] window];
+        //[window addSubview:_toolBar];
         //弹出工具栏
         [_toolBar ShowButtomView];
         
@@ -1050,7 +1051,6 @@
             [_toolBar removeFromSuperview];
             
         }
-        
         MyViewController   *myVc=[[MyViewController alloc]init];
         myVc.author_id=weiboDict.created_by;
         [self.navigationController pushViewController:myVc animated:YES];
@@ -1058,12 +1058,10 @@
 #pragma mark     -----------分享
     else if (button.tag==10001)
     {
-        
         [_mymarkView CancelMarksetSelect];
          if (_toolBar) {
             [_toolBar HidenButtomView];
             [_toolBar removeFromSuperview];
-            
         }
         UMShareViewController2  *shareVC=[[UMShareViewController2 alloc]init];
         shareVC.StageInfo=stageInfoDict;

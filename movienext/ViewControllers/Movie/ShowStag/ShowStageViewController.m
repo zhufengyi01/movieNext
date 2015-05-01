@@ -26,6 +26,7 @@
 #import "ScanMovieInfoViewController.h"
 #import "UMShareViewController2.h"
 #import "MovieDetailViewController.h"
+#import "AppDelegate.h"
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
 
@@ -190,7 +191,7 @@
 -(void)createToolBar
 
 {
-    _toolBar=[[ButtomToolView alloc]initWithFrame:CGRectMake(0,0,kDeviceWidth,kDeviceHeight)];
+    _toolBar=[[ButtomToolView alloc]initWithFrame:CGRectMake(0,0,kDeviceWidth,kDeviceHeight-kHeightNavigation)];
     _toolBar.delegete=self;
     
 }
@@ -350,14 +351,10 @@
 #pragma mark  ----
 -(void)StageViewHandClickMark:(weiboInfoModel *)weiboDict withmarkView:(id)markView StageInfoDict:(stageInfoModel *)stageInfoDict
 {
-    ///执行buttonview 弹出
     //获取markview的指针
     MarkView   *mv=(MarkView *)markView;
-    //把当前的markview 给存储在了controller 里面
     _mymarkView=mv;
     if (mv.isSelected==YES) {  //当前已经选中的状态
-        //设置工具栏的值，并且，弹出工具栏
-        // NSLog(@"出现工具栏,   ======stageinfo =====%@",stageInfoDict);
         [self SetToolBarValueWithDict:weiboDict markView:markView isSelect:YES StageInfo:stageInfoDict];
     }
     else if(mv.isSelected==NO)
@@ -377,10 +374,7 @@
         _toolBar.stageInfo=stageInfo;
         _toolBar.markView=markView;
         [_toolBar configToolBar];
-        
-        //把工具栏添加到当前视图
-        self.tabBarController.tabBar.hidden=YES;
-        [AppView addSubview:_toolBar];
+        [self.view addSubview:_toolBar];
          //弹出工具栏
         [_toolBar ShowButtomView];
         
@@ -388,11 +382,7 @@
     else if (isselect==NO)
     {
         //隐藏toolbar
-        NSLog(@" 执行了隐藏工具栏的方法");
-        self.tabBarController.tabBar.hidden=YES;
-        //隐藏工具栏
         if (_toolBar) {
-            
             [_toolBar HidenButtomView];
             //从父视图中除掉工具栏
             [_toolBar removeFromSuperview];
@@ -469,6 +459,7 @@
 }
 -(void)ToolViewTagHandClickTagView:(TagView *)tagView withweiboinfo:(weiboInfoModel *)weiboInfo WithTagInfo:(TagModel *)tagInfo
 {
+    
          [_mymarkView CancelMarksetSelect];
         if (_toolBar) {
             [_toolBar  HidenButtomView];
@@ -478,19 +469,6 @@
         TagToStageViewController  *vc=[[TagToStageViewController alloc]init];
         vc.weiboInfo=weiboInfo;
         vc.tagInfo=tagInfo;
-//    
-//    NSMutableString  *backstr=[[NSMutableString alloc]initWithString:weiboInf];
-//    NSString *str;
-//    if(backstr.length>5)
-//    {
-//        str=[backstr substringToIndex:5];
-//        str =[NSString stringWithFormat:@"%@...",str];
-//    }
-//    
-//    UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:str style:UIBarButtonItemStylePlain target:nil action:nil];
-//    self.navigationItem.backBarButtonItem=item;
-//
-    
     
         [self.navigationController pushViewController:vc animated:YES];
     
@@ -657,7 +635,6 @@
     }
 #pragma mark 设置气泡的大小和位置
     markView.frame=CGRectMake(markView.frame.origin.x, markView.frame.origin.y, markViewWidth, markViewHeight);
-    
     if (weibodict.tagArray.count>0) {
         markView.frame=CGRectMake(markView.frame.origin.x, markView.frame.origin.y, markViewWidth, markViewHeight+TagHeight+6);
     }

@@ -522,14 +522,12 @@
         vc.movieId = [dict objectForKey:@"movie_id"];
     //    vc.moviename=[dict objectForKey:@"title"];
         NSMutableString  *backstr=[[NSMutableString alloc]initWithString:[dict objectForKey:@"title"]];
-        NSString *str;
+        NSString *str=backstr;
         if(backstr.length>5)
         {
             str=[backstr substringToIndex:5];
             str =[NSString stringWithFormat:@"%@...",str];
         }
-
-        
         UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:str style:UIBarButtonItemStylePlain target:nil action:nil];
         self.navigationItem.backBarButtonItem=item;
     }

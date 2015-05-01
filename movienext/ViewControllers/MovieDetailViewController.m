@@ -105,7 +105,8 @@
     // Do any additional setup after loading the view.
     [self initData];
     [self initUI];
-    
+    [self createNavigation];
+
     if (self.pageSourceType==NSMovieSourcePageSearchListController) { //电影搜索页面进来的
         page=1;
         [self requestMovieIdWithdoubanId];
@@ -114,9 +115,9 @@
     {
         // 从电影列表页进来的
         page=1;
-        [self requestMovieInfoData];
+     //   [self requestMovieInfoData];
+        [self requestData];
      }
-    [self createNavigation];
     [self createToolBar];
     [self creatLoadView];
    
@@ -146,7 +147,7 @@
 //    self.navigationItem.titleView=titleLable;
     
     
-    upLoadimageBtn=[ZCControl createButtonWithFrame:CGRectMake(0,0,40,40) ImageName:nil Target:self Action:@selector(NavigationClick:) Title:nil];
+    upLoadimageBtn=[ZCControl createButtonWithFrame:CGRectMake(0,0,25,25) ImageName:nil Target:self Action:@selector(NavigationClick:) Title:nil];
     upLoadimageBtn.tag=201;
     [upLoadimageBtn setImage:[UIImage imageNamed:@"up_picture_blue.png"] forState:UIControlStateNormal];
     UIBarButtonItem  *rigthbar =[[UIBarButtonItem alloc]initWithCustomView:upLoadimageBtn];
@@ -168,11 +169,7 @@
     {
         //先把图片转成NSData
       UIImage* image = [info objectForKey:UIImagePickerControllerOriginalImage];
-    
-       // UIImage  *image=[UIImage imageNamed:@"choice_icon@2x.png"];
-         NSLog(@" image   =%@=== Imagesize  higth  =%f width ====%f   ",image,image.size.height,image.size.width);
         [self dismissViewControllerAnimated:NO completion:^{
-            
             UploadImageViewController  *upload=[[UploadImageViewController alloc]init];
             upload.upimage=image;
             upload.movie_Id=moviedetailmodel.douban_id;
@@ -340,7 +337,6 @@
 //举报某人
 -(void)requestReportweibo
 {
-    //NSString *type=@"1";
     UserDataCenter *userCenter =[UserDataCenter shareInstance];
     NSDictionary *parameters = @{@"reported_user_id":_TweiboInfo.uerInfo.Id,@"stage_id":_TStageInfo.Id,@"reason":@"",@"user_id":userCenter.user_id};
     
@@ -449,8 +445,9 @@
         if (movie_id && [movie_id intValue]>0) {
             self.movieId = movie_id;
         }
-        [self requestMovieInfoData];
-        }
+        //[self requestMovieInfoData];
+            [self requestMovieData];
+         }
 
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
@@ -462,7 +459,7 @@
 
 
 //根据电影id 请求电影的详细信息
--(void)requestMovieInfoData
+/*-(void)requestMovieInfoData
 {
     if (!_movieId || _movieId<=0) {
         return;
@@ -473,7 +470,7 @@
         NSLog(@"  电影详情页面的电影信息数据JSON: %@", responseObject);
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
             [moviedetailmodel setValuesForKeysWithDictionary:[responseObject objectForKey:@"model"]];
-        [self requestData];
+            [self requestData];
             [self.myConllectionView reloadData];
         }
         
@@ -481,7 +478,7 @@
         
         NSLog(@"Error: %@", error);
     }];
-}
+}*/
 
 -(void)requestData
 {

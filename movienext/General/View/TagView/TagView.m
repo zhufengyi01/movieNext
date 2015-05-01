@@ -23,7 +23,6 @@
     if ([super  initWithFrame:frame]) {
         self.layer.cornerRadius=TagViewConrnerRed;
         self.clipsToBounds=YES;
-        //self.backgroundColor =VBlue_color;
         [self createUI];
     }
     return self;
@@ -45,18 +44,20 @@
     self.titleLable.adjustsFontSizeToFitWidth=NO;
     [self.tagBgImageview addSubview:self.titleLable];
     
-    //添加点击手势
-    UITapGestureRecognizer  *tapself =[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(dealTapSelf:)];
-    [self addGestureRecognizer:tapself];
 }
+-(void)setTagViewIsClick:(BOOL) isCanClick;
+{
+ 
+    if (isCanClick==YES) {
+        UITapGestureRecognizer  *tapself =[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(dealTapSelf:)];
+        [self addGestureRecognizer:tapself];
+
+    }
+}
+
 //点击本身执行跳转到具有这个标签的剧情
 -(void)dealTapSelf:(UITapGestureRecognizer *) tap
 {
-    
-//    if(self.delegete &&[self.delegete respondsToSelector:@selector(handTapViewClick:withTagInfo:)])
-//    {
-//        [self.delegete handTapViewClick:self.weiboInfo withTagInfo:self.tagInfo];
-//    }
     if (self.delegete &&[self.delegete respondsToSelector:@selector(TapViewClick:Withweibo:withTagInfo:)]) {
         [self.delegete TapViewClick:self Withweibo:self.weiboInfo withTagInfo:self.tagInfo];
     }

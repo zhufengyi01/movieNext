@@ -117,8 +117,9 @@
 -(TagView *)createTagViewWithtagInfo:(TagModel *) tagmodel andIndex:(NSInteger ) index
 {
     TagView *tagview =[[TagView alloc]initWithFrame:CGRectZero];
-    tagview.clipsToBounds=YES;
     tagview.tag=1000+index;
+    //设置不可以点击
+    [tagview  setTagViewIsClick:NO];
     tagview.weiboInfo=self.weiboInfo;
     NSString *titleStr = tagmodel.tagDetailInfo.title;
     tagview.titleLable.text=titleStr;
