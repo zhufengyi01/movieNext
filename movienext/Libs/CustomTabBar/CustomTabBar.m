@@ -70,8 +70,6 @@
         
         UIImage * normalImage = [UIImage imageNamed:[self.m_arrNormal objectAtIndex:i]];
         UIImage * selectedImage = [UIImage imageNamed:[self.m_arrSelected objectAtIndex:i]];
-//        NSLog(@"selected image == %@", selectedImage);
-        
         if (i == 0) {
             [button setImage:selectedImage forState:UIControlStateNormal];
             lable.textColor=TabSelectColor;
@@ -121,9 +119,6 @@
     //[button setImageEdgeInsets:UIEdgeInsetsMake(8, 25, 15, 25)];
     UILabel  *label=(UILabel *)[self viewWithTag:button.tag+1000];
     label.textColor=TabSelectColor;
-    
-    
-    
 }
 
 /*

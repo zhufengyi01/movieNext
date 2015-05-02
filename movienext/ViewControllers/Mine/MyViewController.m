@@ -33,7 +33,7 @@
 #import "Function.h"
 #import "UIImage-Helpers.h"
 #import "ScanMovieInfoViewController.h"
-
+#import "TagToStageViewController.h"
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
 
@@ -1340,6 +1340,24 @@
         
     }
 }
+
+-(void)ToolViewTagHandClickTagView:(TagView *)tagView withweiboinfo:(weiboInfoModel *)weiboInfo WithTagInfo:(TagModel *)tagInfo
+{
+    
+    [_mymarkView CancelMarksetSelect];
+    if (_toolBar) {
+        [_toolBar  HidenButtomView];
+        [_toolBar removeFromSuperview];
+        
+    }
+    TagToStageViewController  *vc=[[TagToStageViewController alloc]init];
+    vc.weiboInfo=weiboInfo;
+    vc.tagInfo=tagInfo;
+    [self.navigationController pushViewController:vc animated:YES];
+    
+}
+
+
 //重新布局markview
 -(void)layoutMarkViewWithMarkView:(MarkView  *) markView WeiboInfo:(WeiboModel *) weibodict
 {

@@ -467,6 +467,16 @@
     animation.timingFunction=[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
      [view.layer addAnimation:animation forKey:@"scale-layer"];
 }
+
++(CAKeyframeAnimation *)getKeyframeAni{
+    CAKeyframeAnimation* popAni=[CAKeyframeAnimation animationWithKeyPath:@"transform"];
+    popAni.duration=0.3;
+    popAni.values=@[[NSValue valueWithCATransform3D:CATransform3DMakeScale(0.2, 0.2, 1.0)],[NSValue valueWithCATransform3D:CATransform3DMakeScale(1.02, 1.02, 1.0)],[NSValue valueWithCATransform3D:CATransform3DMakeScale(0.98, 0.98, 1.0)],[NSValue valueWithCATransform3D:CATransform3DIdentity]];
+    popAni.keyTimes=@[@0.0,@0.5,@0.75,@1.0];
+    popAni.timingFunctions=@[[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut],[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut],[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut],[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
+    
+    return popAni;
+}
 //邮箱验证
 +(BOOL) validateEmail: (NSString *) candidate {
     NSString *emailRegex = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";

@@ -43,7 +43,7 @@
     //弹出框
     _alertView =[[UIView alloc]initWithFrame:CGRectMake(15,0, kDeviceWidth-30, 50)];
     _alertView.backgroundColor=[UIColor whiteColor];
-    _alertView.alpha=0;
+    _alertView.alpha=1;
     _alertView.layer.cornerRadius=8;
     _alertView.clipsToBounds=YES;
     _alertView.userInteractionEnabled=YES;
@@ -241,25 +241,22 @@
 //显示底部试图
 -(void)ShowButtomView;
 {
-    [UIView animateWithDuration:0.1 animations:^{
-//        CGRect  Bframe=alertView.frame;
-//        Bframe.origin.y=m_frame.size.height-kHeightNavigation-50;
-//        alertView.frame=Bframe;
+   /* [UIView animateWithDuration:0.1 animations:^{
         _alertView.alpha=1;
         
     } completion:^(BOOL finished) {
         [Function BasicAnimationwithkey:@"transform.scale" Duration:0.20 repeatcont:1 autoresverses:YES fromValue:1.0 toValue:1.02 View:self.alertView];
-
-    }];
+    }];*/
+    //[self.alertView.layer addAnimation:[self getKeyframeAni] forKey:@"popView"];
+    [self.alertView.layer addAnimation:[Function getKeyframeAni] forKey:@"popAnimition"];
+    
 }
+
 //隐藏底部试图
 -(void)HidenButtomView;
 {
     [UIView animateWithDuration:0.2 animations:^{
-//        CGRect  Bframe=alertView.frame;
-//        Bframe.origin.y=m_frame.size.height-kHeightNavigation;
-//        alertView.frame=Bframe;
-        _alertView.alpha=0;
+        _alertView.alpha=1;
     } completion:^(BOOL finished) {
         
     }];
