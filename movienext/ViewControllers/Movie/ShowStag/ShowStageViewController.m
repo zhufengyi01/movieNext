@@ -191,7 +191,7 @@
 -(void)createToolBar
 
 {
-    _toolBar=[[ButtomToolView alloc]initWithFrame:CGRectMake(0,0,kDeviceWidth,kDeviceHeight-kHeightNavigation)];
+    _toolBar=[[ButtomToolView alloc]initWithFrame:CGRectMake(0,0,kDeviceWidth,kDeviceHeight)];
     _toolBar.delegete=self;
     
 }
@@ -225,6 +225,41 @@
     }
     
 }
+
+
+
+#pragma  mark  ----RequestData
+#pragma  mark  ---
+-(void)requestmoveReviewToNormal:(NSString *) stageId
+{
+    UserDataCenter *usercenter=[UserDataCenter shareInstance];
+    NSString  *review;
+    if ([Version  isEqualToString:@"1.0.1"]) {
+        //从审核版到正常
+        review=@"0";
+    }
+    else
+    {
+        review=@"1";
+        
+    }
+    NSDictionary *parameters = @{@"stage_id":stageId,@"user_id":usercenter.user_id,@"review":review};
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    NSString *urlString =[NSString stringWithFormat:@"%@/stage/move-to-review", kApiBaseUrl];
+    [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
+            NSLog(@"移除剧照成功=======%@",responseObject);
+            UIAlertView  *Al =[[UIAlertView alloc]initWithTitle:nil message:@"审核（正常）切换成功" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            [Al show];
+            
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+    
+}
+
  //微博点赞请求
 -(void)LikeRequstData:(weiboInfoModel  *) weiboInfo withOperation:(NSNumber *) operation
 {
@@ -334,10 +369,27 @@
 }
 -(void)cellButtonClick:(UIButton  *) button
 {
+//    //点击了更多
+//    UIActionSheet  *Act=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"内容投诉",@"版权投诉",@"查看图片信息", nil];
+//    Act.tag=507;
+//    [Act showInView:Act];
+    UserDataCenter  *userCenter =[UserDataCenter shareInstance];
     //点击了更多
-    UIActionSheet  *Act=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"内容投诉",@"版权投诉",@"查看图片信息", nil];
-    Act.tag=507;
-    [Act showInView:Act];
+    
+    if ([userCenter.is_admin intValue]>0) {
+        
+        UIActionSheet  *Act=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"内容投诉",@"版权投诉",@"图片信息",@"切换剧照到（审核/正式）", nil];
+        Act.tag=507;
+        [Act showInView:Act];
+    }
+    else
+    {
+        UIActionSheet  *Act=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"内容投诉",@"版权投诉",@"图片信息", nil];
+        Act.tag=507;
+        [Act showInView:Act];
+    }
+    
+
 
 }
 #pragma  mark -------AddMarkViewControllerReturn  --Delegete-------------
@@ -374,9 +426,10 @@
         _toolBar.stageInfo=stageInfo;
         _toolBar.markView=markView;
         [_toolBar configToolBar];
-        [self.view addSubview:_toolBar];
-         //弹出工具栏
+        
+        [[[[UIApplication sharedApplication] delegate] window] addSubview:_toolBar ];
         [_toolBar ShowButtomView];
+         //弹出工具栏
         
     }
     else if (isselect==NO)
@@ -495,7 +548,14 @@
             ScanMovieInfoViewController * scanvc =[ScanMovieInfoViewController new];
             scanvc.stageInfo=self.stageInfo;
             [self presentViewController:scanvc animated:YES completion:nil];
-            
+        }
+        else if (buttonIndex==3)
+        {
+            NSString  *stageId;
+           // stageInfoModel *model=[_dataArray objectAtIndex:Rowindex];
+            stageId=[NSString stringWithFormat:@"%@",self.stageInfo.Id];
+            //移动到审核版或者正常
+            [self requestmoveReviewToNormal:stageId];
 
         }
 

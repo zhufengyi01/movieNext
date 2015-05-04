@@ -27,6 +27,7 @@
 #import "MovieDetailViewController.h"
 #import "MJRefresh.h"
 #import "UIImage-Helpers.h"
+//#import "SearchMovieViewController.h"
 #define  BUTTON_COUNT  3
 @interface MovieViewController ()<UISearchBarDelegate,UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout,LoadingViewDelegate,MovieCollectionViewCellDelegate,UIActionSheetDelegate>
 {
@@ -185,7 +186,7 @@
 -(void)initData
 {
     page=0;
-    pageSize=12;
+     pageSize=12;
     _dataArray1=[[NSMutableArray alloc]init];
     _dataArray2=[[NSMutableArray alloc]init];
     _dataArray3=[[NSMutableArray alloc]init];
@@ -356,7 +357,7 @@
         
         if ([[responseObject objectForKey:@"return_code"] intValue]==0) {
 
-        NSLog(@"  电影首页数据JSON: %@", responseObject);
+        //NSLog(@"  电影首页数据JSON: %@", responseObject);
             [loadView stopAnimation];
             [loadView removeFromSuperview];
             

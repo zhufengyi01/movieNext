@@ -312,10 +312,6 @@
         x=35;
     }
     _alertView.frame=CGRectMake(x,y,kDeviceWidth-(2*x), alertHeight);
-    if (self.frame.size.height<kDeviceHeight) {
-        _alertView.frame=CGRectMake(x,y-32,kDeviceWidth-(2*x), alertHeight);
-
-    }
     //关闭按钮
     closealertView.frame=CGRectMake(_alertView.frame.size.width-36,0, 36, 36);
      //文字的高度

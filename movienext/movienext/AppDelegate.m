@@ -14,7 +14,7 @@
 //导入HUD框架
 //#import "SVProgressHUD.h"
 //导入友盟
-//#import  "User.h"
+#import "MobClick.h"
 #import "UserDataCenter.h"
 #import "UMSocial.h"
 //导入友盟微信
@@ -60,6 +60,25 @@
  *  初始化友盟组件, 配置SSO
  */
 - (void)initUmeng {
+#pragma mark 友盟统计
+    //友盟统计
+    //channekId 应用的推广渠道  nil或者@""默认为appstore
+    [MobClick setLogEnabled:YES];
+    [MobClick startWithAppkey:kUmengKey reportPolicy:BATCH channelId:@""];
+    //版本标识（version）
+    NSString  *version =[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    [MobClick setAppVersion:version];
+    //如果@param value为YES，SDK会对日志进行加密。加密模式可以有效防止网络攻击，提高数据安全性。
+   // 如果@param value为NO，SDK将按照非加密的方式来传输日志。
+    //如果您没有设置加密模式，SDK的加密模式为NO（不加密）。
+    [MobClick setEncryptEnabled:YES];
+    
+   // 您可以设置在应用切入后台时，是否进入background模式。
+    //对于支持backgound模式的APP，SDK可以确保在进入后台时，完成对日志的持久化工作，保证数据的完整性。您可以通过以下方法对后台模式进行设置：
+    [MobClick setBackgroundTaskEnabled:YES];
+    
+    
+    
     [UMSocialData setAppKey:kUmengKey];
     //    BOOL isOauth = [UMSocialAccountManager isOauthWithPlatform:UMShareToSina];
     //    LOG(@"isoauth = %d", isOauth);

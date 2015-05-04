@@ -39,6 +39,7 @@
 #import <MessageUI/MFMailComposeViewController.h>
 #import "ScanMovieInfoViewController.h"
 #import "netRequest.h"
+#import "MobClick.h"
 #import "TagModel.h"
 #import "TagToStageViewController.h"
 
@@ -74,6 +75,9 @@
 @implementation NewViewController
 -(void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
+    [MobClick beginLogPageView:@"最新热门"];
+    
     self.navigationController.navigationBar.hidden=NO;
   self.navigationController.navigationBar.alpha=1;
 //    self.navigationController.navigationBar.translucent=NO;
@@ -91,8 +95,11 @@
         }
     }
     
- 
-    
+}
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [MobClick endLogPageView:@"最新热门"];
 }
 
 //遇到上面的问题 最直接的解决方法就是在controller的viewDidAppear里面去调用present。这样可以确保view hierarchy的层次结构不乱。

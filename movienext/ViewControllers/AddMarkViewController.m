@@ -20,26 +20,24 @@
 #define  BOOKMARK_WORD_LIMIT 1000
 @interface AddMarkViewController ()<UITextFieldDelegate,UIAlertViewDelegate,UIScrollViewDelegate,UITextViewDelegate,TagViewDelegate,UIAlertViewDelegate>
 {
-    UIScrollView  *_myScorllerView;
-    UIToolbar  *_toolBar;
-
-    UIButton  *textLeftButton;
-    
+    UIScrollView *_myScorllerView;
+    UIToolbar    *_toolBar;
+    UIButton     *textLeftButton;
     UITextView   *_myTextView;
-    MarkView  *_myMarkView;
-    NSString    *X;
-    NSString    *Y;
-    CGSize   keyboardSize;
-    float   keybordHeight;
-    UIButton  *RighttBtn;
-    UIView   *tipView;
-    UIButton  *publishBtn;
-    NSString  *InputStr;
+    MarkView     *_myMarkView;
+    NSString     *X;
+    NSString     *Y;
+    CGSize       keyboardSize;
+    float        keybordHeight;
+    UIButton     *RighttBtn;
+    UIView       *tipView;
+    UIButton     *publishBtn;
+    NSString     *InputStr;
      //标签的lable
     M80AttributedLabel  *taglable;
-    UserDataCenter *userCenter;
-    weiboInfoModel  *weibomodel;
-    NSMutableArray  *TAGArray;        //把第一个标签和第二个标签存储在数组中
+    UserDataCenter      *userCenter;
+    weiboInfoModel      *weibomodel;
+    NSMutableArray      *TAGArray;        //把第一个标签和第二个标签存储在数组中
 }
 @end
 
@@ -64,16 +62,13 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-   // _myDict =[NSDictionary dictionaryWithDictionary:_stageDict];
-    
-    
     keybordHeight=0;
     [self createNavigation];
     [self initData];
     //键盘将要显示
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardDidShowNotification object:nil];
      //键盘将要隐藏
-    [[NSNotificationCenter defaultCenter ]addObserver:self selector:@selector(keyboardWillHiden:) name:UIKeyboardWillHideNotification object:nil];
+    //[[NSNotificationCenter defaultCenter ]addObserver:self selector:@selector(keyboardWillHiden:) name:UIKeyboardWillHideNotification object:nil];
     [self createMyScrollerView];
     [self createStageView];
     [self createButtomView];
@@ -118,16 +113,15 @@
     float  ImgeHight=[self.stageInfo.height floatValue];
     float hight=0;
     hight= kDeviceHeight;  // 计算的事bgview1的高度
-    
     if((ImgeHight/ImageWith) *kDeviceWidth>kDeviceHeight)
     {
         hight=  (ImgeHight/ImageWith) *kDeviceWidth;
         _myScorllerView.bounces=YES;
     }
-    _myScorllerView.contentSize=CGSizeMake(kDeviceWidth, hight);
     _myScorllerView =[[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth,hight)];
+    _myScorllerView.contentSize=CGSizeMake(kDeviceWidth,kDeviceHeight);
     _myScorllerView.delegate=self;
-    _myScorllerView.bounces=NO;
+    _myScorllerView.bounces=YES;
   
      [self.view addSubview:_myScorllerView];
     
@@ -250,13 +244,13 @@
     InputStr = [_myTextView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     //发布到屏幕之后需要把输入框退回去
     [_myTextView resignFirstResponder];
-   [UIView animateWithDuration:0.5 animations:^{
+   //[UIView animateWithDuration:0.5 animations:^{
        CGRect  iframe =_toolBar.frame;
        iframe.origin.y=kDeviceHeight;
        _toolBar.frame=iframe;
-   } completion:^(BOOL finished) {
+  // } completion:^(BOOL finished) {
        
-   }];
+   //}];
     [UIView animateWithDuration:0.3 animations:^{
         tipView.alpha=1;
     } completion:^(BOOL finished) {
@@ -364,9 +358,7 @@
     float markViewHeight = Msize.height+6;
     if (weibodict.tagArray.count>0) {
         markViewHeight=markViewHeight+25;
-        
     }
-    
     if(IsIphone6plus)
     {
         markViewWidth=markViewWidth+10;
@@ -374,7 +366,6 @@
     }
     float markViewX = (x*kStageWidth)/100-markViewWidth;
     markViewX = MIN(MAX(markViewX, 5.0f), kStageWidth-markViewWidth-5);
-    
     float markViewY = (y*hight)/100 - markViewHeight/2;
     markViewY = MIN(MAX(markViewY, 5.0f), hight-markViewHeight-5);
 #pragma mark 设置气泡的大小和位置
@@ -384,7 +375,7 @@
     NSString   *headurl =[NSString stringWithFormat:@"%@%@",kUrlAvatar,weibodict.uerInfo.logo];
     [markView.LeftImageView sd_setImageWithURL:[NSURL URLWithString:headurl] placeholderImage:[UIImage imageNamed:@"user_normal"]];
     markView.ZanNumLable.text=[NSString stringWithFormat:@"%@",weibodict.like_count];
-    
+
     //设置标签
     return markView;
 }
@@ -392,7 +383,7 @@
 -(void)handelPan:(UIPanGestureRecognizer*)gestureRecognizer{
     
     [UIView animateWithDuration:0.5 animations:^{
-        tipView.alpha=1;
+        tipView.alpha=0;
     } completion:^(BOOL finished) {
         
     }];
@@ -724,6 +715,7 @@
     TagView *tagview =[[TagView alloc]initWithFrame:CGRectZero];
     tagview.tag=1000+index;
     tagview.delegete=self;
+    [tagview setTagViewIsClick:YES];
     tagview.titleLable.text=tagText;
     CGSize  Tsize =[tagText boundingRectWithSize:CGSizeMake(MAXFLOAT, TagHeight) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:[NSDictionary dictionaryWithObject:tagview.titleLable.font forKey:NSFontAttributeName] context:nil].size;
     

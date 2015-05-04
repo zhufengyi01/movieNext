@@ -11,6 +11,7 @@
 #import "Constant.h"
 #import "Function.h"
 #import "UserDataCenter.h"
+#import <CoreText/CoreText.h>
 @implementation MarkView
 -(instancetype)initWithFrame:(CGRect)frame{
     if (self=[super initWithFrame:frame]) {
@@ -54,25 +55,26 @@
     
     
     
-    
-    //标题
-    self.contentLable =[[M80AttributedLabel alloc]initWithFrame:CGRectMake(0, 0, 0, 0)];
-    self.contentLable.font=[UIFont systemFontOfSize:MarkTextFont14];
-    if (IsIphone6plus) {
-        self.contentLable.font=[UIFont systemFontOfSize:MarkTextFont16];
-    }
-    self.contentLable.textColor=[UIColor whiteColor];
-    self.contentLable.lineSpacing=5.0;
-    //[_rightView addSubview:self.contentLable];
-    
-    
-    
     _ZanImageView=[ZCControl createImageViewWithFrame:CGRectMake(0, 0, 0,0) ImageName:@"tag_like_icon.png"];
     [_rightView addSubview:_ZanImageView];
     
     _ZanNumLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 0,0) Font:12 Text:@""];
     _ZanNumLable.textColor=[UIColor whiteColor];
     [_rightView addSubview:_ZanNumLable];
+
+    
+    
+//    //标题内容
+//    self.contentLable =[[M80AttributedLabel alloc]initWithFrame:CGRectMake(10, 0,100, 20)];
+//    self.contentLable.font=[UIFont systemFontOfSize:MarkTextFont14];
+//    self.contentLable.textColor=[UIColor whiteColor];
+//     if (IsIphone6plus) {
+//        self.contentLable.font=[UIFont systemFontOfSize:MarkTextFont16];
+//    }
+//    self.contentLable.backgroundColor =[UIColor clearColor];
+//     self.contentLable.lineSpacing=0.0;
+//    [_rightView addSubview:self.contentLable];
+//    
     
     UITapGestureRecognizer  *tap =[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(dealTapWeiboClick:)];
     [self addGestureRecognizer:tap];
@@ -101,6 +103,16 @@
             [_LeftImageView addSubview:isfakeView];
         }
     }
+//    //弹幕内容
+//    [self.contentLable appendText:self.weiboInfo.content];
+//    UIImage *likeImage =[UIImage imageNamed:@"tag_like_icon.png"];
+//    [self.contentLable appendImage:likeImage maxSize:CGSizeMake(11, 11) margin:UIEdgeInsetsMake(3,3, 0, 0)];
+//    if ([self.weiboInfo.like_count intValue]>0) {
+//    [self.contentLable appendText:[NSString stringWithFormat:@"%@",self.weiboInfo.like_count]];
+//    }
+//    
+
+
 //创建标签
     if (self.weiboInfo.tagArray&&self.weiboInfo.tagArray.count) {
         self.tagLable =[[M80AttributedLabel alloc]initWithFrame:CGRectMake(0, 0, 100, 30)];
@@ -185,15 +197,19 @@
         _ZanNumLable.hidden=YES;
     }
     
+//    //内容的大小
+//    self.contentLable.frame=CGRectMake(5, 3, Tsize.width+5+11, Tsize.height+10);
+//    if ([self.weiboInfo.like_count intValue]>0) {
+//        self.contentLable.frame=CGRectMake(5, 3, Tsize.width+5+11+Msize.width, Tsize.height+0);
+//    }
+//    
+    
     
     //标签
     if (self.weiboInfo.tagArray.count!=0) {
          self.tagLable.frame=CGRectMake(self.TitleLable.frame.origin.x, self.TitleLable.frame.origin.y+self.TitleLable.frame.size.height+5,self.rightView.frame.size.width-10, TagHeight);
     }
-//    if (self.tagLable.frame.size.width<self.rightView.frame.size.width) {
-//        
-//    }
-//    
+    
     //如果是静态的, 则将边框描一下
     if (!_isAnimation) {
         _LeftImageView.layer.borderColor = kAppTintColor.CGColor;

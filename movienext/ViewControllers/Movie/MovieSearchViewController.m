@@ -34,11 +34,15 @@
 @interface MovieSearchViewController ()<UISearchBarDelegate,UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate>
 {
     LoadingView   *loadView;
-    UITableView   *_myTableView;
-    NSMutableArray    *_dataArray;
+    //UITableView   *_myTableView;
+   // NSMutableArray    *_dataArray;
     UISearchBar  *search;
+    
+    
 
 }
+@property(nonatomic,strong) UITableView  *myTableView;
+@property(nonatomic,strong) NSMutableArray *dataArray;
 @end
 
 @implementation MovieSearchViewController
@@ -62,7 +66,7 @@
 }
 -(void)createNavigation
 {
-    [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color.png"] forBarMetrics:UIBarMetricsDefault];
+   // [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color.png"] forBarMetrics:UIBarMetricsDefault];
     search=[[UISearchBar alloc]initWithFrame:CGRectMake(30, 10, 0, 28)];
     search.placeholder=@"搜索电影";
     search.delegate=self;
@@ -78,7 +82,7 @@
 }
 -(void)initUI
 {
-    _myTableView =[[UITableView alloc]initWithFrame:CGRectMake(0, 0,kDeviceWidth, kDeviceHeight-kHeightNavigation)];
+    _myTableView =[[UITableView alloc]initWithFrame:CGRectMake(0, 0,kDeviceWidth, kDeviceHeight)];
     _myTableView.delegate=self;
     _myTableView.dataSource=self;
     _myTableView.separatorInset=UIEdgeInsetsMake(0, -110, 0, 0);
@@ -121,32 +125,24 @@
 #pragma  mark --
 //表格的区间数
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    if (tableView==_myTableView) {
       return 1;
-    }
-    return 0;
 }
 
 //表格的行高度
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-   if (tableView==_myTableView) {
     return 90;
-    }
-    return 0;
+
 }
 
 //表格的行数
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    if (tableView==_myTableView) {
         return _dataArray.count;
-    }
-    return 0;
-}
+ }
 
 //配置Cell
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     static NSString  *cellID=@"CELL";
-    SearchmovieTableViewCell  *cell=[tableView dequeueReusableCellWithIdentifier:cellID];
+    SearchmovieTableViewCell  *cell=(SearchmovieTableViewCell *)[tableView dequeueReusableCellWithIdentifier:cellID];
     if (!cell) {
         cell=[[SearchmovieTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
         cell.selectionStyle = UITableViewCellSelectionStyleGray;
@@ -155,20 +151,22 @@
     if (_dataArray.count > indexPath.row) {
      [cell setCellValue:[_dataArray  objectAtIndex:(long)indexPath.row]];
     }
+ 
      return cell;
 }
 
 //选择了cell之后
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    [search resignFirstResponder];
+     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (tableView==_myTableView) {
-        if (_dataArray.count > indexPath.row) {
+       if (_dataArray.count > indexPath.row) {
             MovieDetailViewController  *mvdetail =[[MovieDetailViewController alloc]init];
             mvdetail.douban_Id=[[_dataArray objectAtIndex:indexPath.row]  objectForKey:@"doubanId"];
             mvdetail.pageSourceType=NSMovieSourcePageSearchListController; //从电影列表页今日电影详细页面
             [self.navigationController pushViewController:mvdetail animated:YES];
-        
+           
         }
     }
  
@@ -180,10 +178,10 @@
 -(void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
 {
     [self requestData];
+    //[searchBar resignFirstResponder];
 }
 -(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
-   // [self requestData];
 }
 -(void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
 {

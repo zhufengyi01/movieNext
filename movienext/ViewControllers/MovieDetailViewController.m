@@ -115,7 +115,6 @@
     {
         // 从电影列表页进来的
         page=1;
-     //   [self requestMovieInfoData];
         [self requestData];
      }
     [self createToolBar];
@@ -126,26 +125,6 @@
 //创建可以显示隐藏的导航条
 -(void)createNavigation
 {
-    
-//    Navview=[[UIView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, 64)];
-//    Navview.userInteractionEnabled=YES;
-//    Navview.backgroundColor=[[UIColor whiteColor] colorWithAlphaComponent:1];
-//    [_myConllectionView bringSubviewToFront:Navview];
-//    [self.view addSubview:Navview];
-//    
-//    backBtn=[ZCControl createButtonWithFrame:CGRectMake(10,26,60,32) ImageName:nil Target:self Action:@selector(NavigationClick:) Title:nil];
-//    backBtn.tag=200;
-//    [backBtn setImageEdgeInsets:UIEdgeInsetsMake(0, -40, 0, 0)];
-//    [backBtn setImage:[UIImage imageNamed:@"back_icon_blue.png"] forState:UIControlStateNormal];
-//    [self.view addSubview:backBtn];
-    
-    //创建头部view
-//    UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:self.moviename];
-//    titleLable.textColor=VBlue_color;
-//    titleLable.font=[UIFont boldSystemFontOfSize:16];
-//    titleLable.textAlignment=NSTextAlignmentCenter;
-//    self.navigationItem.titleView=titleLable;
-    
     
     upLoadimageBtn=[ZCControl createButtonWithFrame:CGRectMake(0,0,25,25) ImageName:nil Target:self Action:@selector(NavigationClick:) Title:nil];
     upLoadimageBtn.tag=201;
@@ -159,11 +138,8 @@
 #pragma mark  ----
 //当选择一张图片后进入这里
 -(void)imagePickerController:(UIImagePickerController*)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
-
 {
-    
     NSString *type = [info objectForKey:UIImagePickerControllerMediaType];
-    
     //当选择的类型是图片
     if ([type isEqualToString:@"public.image"])
     {
@@ -273,6 +249,7 @@
 
 #pragma  mark  ----RequestData
 #pragma  mark  ---
+//审核版到正式版的切换
 -(void)requestmoveReviewToNormal:(NSString *) stageId
 {
     UserDataCenter *usercenter=[UserDataCenter shareInstance];
@@ -1211,7 +1188,7 @@
         {
             NSString  *stageId;
                 stageInfoModel *model=[_dataArray objectAtIndex:Rowindex];
-               stageId=model.Id;
+               stageId=[NSString stringWithFormat:@"%@",model.Id];
             //移动到审核版或者正常
             [self requestmoveReviewToNormal:stageId];
             

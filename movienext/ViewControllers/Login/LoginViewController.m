@@ -296,9 +296,8 @@
                         NSLog(@"登陆完成后的     JSON: %@", responseObject);
                         UserDataCenter  *userCenter=[UserDataCenter shareInstance];
                         userCenter.first_login=[responseObject objectForKey:@"first_login"];
-
                         NSDictionary *detail    = [responseObject objectForKey:@"model"];
-                        if (![detail isEqual:@""]) {
+                        if (detail) {
                     
                             userCenter.user_id=[detail objectForKey:@"id"];
                             userCenter.username=[detail objectForKey:@"username"];
@@ -328,6 +327,8 @@
                     
                 } else {
                     //                    [self dealErrorCase];
+                    //强行登陆
+                
                 }
             }];
         } else {
