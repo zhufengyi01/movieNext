@@ -30,6 +30,7 @@
 //导入电影页的视图
 #import "LoadingView.h"
 #import "SearchmovieTableViewCell.h"
+#import "UIImage+ImageWithColor.h"
 #import "MovieDetailViewController.h"
 @interface MovieSearchViewController ()<UISearchBarDelegate,UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate>
 {
@@ -50,6 +51,8 @@
  -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:YES];
+    [[UINavigationBar appearance] setShadowImage:[UIImage imageWithColor:tabBar_line size:CGSizeMake(kDeviceWidth, 1)]];
+    
     if (search) {
         [search becomeFirstResponder];
     }
@@ -61,12 +64,11 @@
     [self createNavigation];
     [self initData];
     [self initUI];
- 
 
 }
 -(void)createNavigation
 {
-   // [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color.png"] forBarMetrics:UIBarMetricsDefault];
+    [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color.png"] forBarMetrics:UIBarMetricsDefault];
     search=[[UISearchBar alloc]initWithFrame:CGRectMake(30, 10, 0, 28)];
     search.placeholder=@"搜索电影";
     search.delegate=self;
@@ -90,29 +92,28 @@
 }
 -(void)requestData
 {
+    if ([search.text isEqualToString:@"00"]) {
+        return;
+    }
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
     NSString *urlStr = [NSString stringWithFormat:@"http://movie.douban.com/subject_search?search_text=%@&cat=1002", [search.text URLEncodedString] ];
     [request setURL:[NSURL URLWithString:urlStr]];
     [request setHTTPMethod:@"GET"];
     NSOperationQueue * queue = [[NSOperationQueue alloc] init];
     [NSURLConnection sendAsynchronousRequest:request queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
-        NSLog(@"response start");
+        //NSLog(@"response start");
         if (connectionError) {
             NSLog(@"httpresponse code error %@", connectionError);
         } else {
             NSInteger responseCode = [(NSHTTPURLResponse *)response statusCode];
             NSString *responseString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-            
             if (responseCode == 200) {
                 responseString = [Function getNoNewLine:responseString];
                 
                 NSMutableArray *doubanInfos = [[DoubanService shareInstance] getDoubanInfosByResponse:responseString];
                 _dataArray = doubanInfos;
-                NSLog(@"------_dataArray -=====%@",_dataArray);
-                
-                
+               // NSLog(@"------_dataArray -=====%@",_dataArray);
                 [_myTableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
-                //[_myTableView reloadData];  //用这个方法加载不出来tableview
             } else {
                 NSLog(@"error");
             }
@@ -165,11 +166,15 @@
             MovieDetailViewController  *mvdetail =[[MovieDetailViewController alloc]init];
             mvdetail.douban_Id=[[_dataArray objectAtIndex:indexPath.row]  objectForKey:@"doubanId"];
             mvdetail.pageSourceType=NSMovieSourcePageSearchListController; //从电影列表页今日电影详细页面
+           
+           UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"搜索" style:UIBarButtonItemStylePlain target:nil action:nil];
+           self.navigationItem.backBarButtonItem=item;
+
             [self.navigationController pushViewController:mvdetail animated:YES];
            
         }
     }
- 
+
 }
 
 #pragma  mark ----

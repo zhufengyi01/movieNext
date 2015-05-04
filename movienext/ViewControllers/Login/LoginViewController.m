@@ -298,7 +298,6 @@
                         userCenter.first_login=[responseObject objectForKey:@"first_login"];
                         NSDictionary *detail    = [responseObject objectForKey:@"model"];
                         if (detail) {
-                    
                             userCenter.user_id=[detail objectForKey:@"id"];
                             userCenter.username=[detail objectForKey:@"username"];
                             userCenter.logo =[detail objectForKey:@"logo"];

@@ -8,19 +8,24 @@
 
 #import "DoubanService.h"
 #import "DoubanInfo.h"
-static DoubanService * doubanService = nil;
+static DoubanService * manager = nil;
 
 @implementation DoubanService
 
 +(DoubanService *)shareInstance{
-    if (!doubanService) {
-        doubanService = [[DoubanService alloc] init];
-    }
-    return doubanService;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken,^{
+        if (manager==nil) {
+            manager = [[DoubanService alloc]init];
+        }
+    });
+    return manager;
+    
 }
 
 - (NSMutableArray *)getDoubanInfosByResponse:(NSString *)responseString {
     NSString            * pattern = @"<a class=\"nbg\" href=\"http://movie\\.douban\\.com/subject/(\\d+)/\".*>\n.*<img src=\"(.*)\" alt=\"(.*?)\".*?/>";
+    
     NSMutableArray      * doubanInfos = [NSMutableArray array];
     NSRegularExpression * regular = [[NSRegularExpression alloc] initWithPattern:pattern
                                                                         options:NSRegularExpressionUseUnixLineSeparators

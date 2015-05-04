@@ -60,14 +60,11 @@
 -(void)initData
 {
     page=1;
-    pageSize=12;
+    pageSize=15;
     self.dataArray=[[NSMutableArray alloc]init];
-    
-    
 }
 -(void)initUI
 {
-    
     UICollectionViewFlowLayout    *layout=[[UICollectionViewFlowLayout alloc]init];
     layout.minimumInteritemSpacing=0; //cell之间左右的
     layout.minimumLineSpacing=0;      //cell上下间隔

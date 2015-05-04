@@ -363,10 +363,6 @@
     
 }
 
-
-
-
-
 //变身请求的随机数种子
 -(void)requestChangeUserRand4
 {
@@ -531,7 +527,6 @@
             if (_hotDataArray ==nil) {
                 _hotDataArray=[[NSMutableArray alloc]init];
             }
-            NSLog(@"热门数据 gaga JSON: %@", responseObject);
             for (NSDictionary  *hotDict in Detailarray) {
                 ModelsModel  *model =[[ModelsModel alloc]init];
                 if(model)
@@ -596,22 +591,18 @@
                     }
                     [_hotDataArray addObject:model];
                 }
-                NSNumber  *iD=model.stageInfo.Id;
-                NSLog(@"=====%@",iD);
-                
+           //     NSNumber  *iD=model.stageInfo.Id;
             }
             //点赞的数组
             for (NSDictionary  *updict in [responseObject objectForKey:@"upweibos"]) {
                 UpweiboModel *upmodel =[[UpweiboModel alloc]init];
                 if (upmodel) {
                     [upmodel setValuesForKeysWithDictionary:updict];
-                    
                     if (_upWeiboArray==nil) {
                         _upWeiboArray =[[NSMutableArray alloc]init];
                     }
                     [_upWeiboArray addObject:upmodel];
                 }
-                
             }
           [_HotMoVieTableView reloadData];
         }
@@ -631,8 +622,6 @@
                     [usermodel setValuesForKeysWithDictionary:[newDict objectForKey:@"user"]];
                     weibomodel.uerInfo=usermodel;
                 }
-                
-                
                 //2.stageInfo
                 stageInfoModel  *stageInfo =[[stageInfoModel alloc]init];
                 if(![[newDict  objectForKey:@"stage"]isKindOfClass:[NSNull class]])
@@ -649,8 +638,6 @@
                     weibomodel.stageInfo=stageInfo;
                   }
                 }
-                
-                
                 //3.tagsInfo
                 NSMutableArray  *tagArray =[[NSMutableArray alloc]init];
 

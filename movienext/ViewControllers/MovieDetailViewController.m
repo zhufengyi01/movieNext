@@ -48,9 +48,7 @@
 {
      UICollectionViewFlowLayout    *layout;
     LoadingView         *loadView;
-    NSMutableArray      *_dataArray;
-   // NSDictionary       *_MovieDict;
-    BOOL bigModel;
+     BOOL bigModel;
     ButtomToolView *_toolBar;
     MarkView       *_mymarkView;
      //UMShareView   *shareView;
@@ -71,7 +69,7 @@
     NSInteger  Rowindex;
     
 }
-
+@property(nonatomic,strong) NSMutableArray  *dataArray;
 @end
 
 @implementation MovieDetailViewController
@@ -125,7 +123,6 @@
 //创建可以显示隐藏的导航条
 -(void)createNavigation
 {
-    
     upLoadimageBtn=[ZCControl createButtonWithFrame:CGRectMake(0,0,25,25) ImageName:nil Target:self Action:@selector(NavigationClick:) Title:nil];
     upLoadimageBtn.tag=201;
     [upLoadimageBtn setImage:[UIImage imageNamed:@"up_picture_blue.png"] forState:UIControlStateNormal];
@@ -158,8 +155,7 @@
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
 {
-    NSLog(@"您取消了选择图片");
-   // [picker dismissModalViewControllerAnimated:YES];
+   
     [picker dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -167,7 +163,7 @@
 -(void)initData
 {
     page=1;
-    pageSize=12;
+    pageSize=15;
     pageCount=0;
     bigModel=NO;
     _dataArray =[[NSMutableArray alloc]init];
@@ -191,7 +187,7 @@
         layout.sectionInset=UIEdgeInsetsMake(0,0,64, 0); //整个偏移量 上左下右
     }
     
-    _myConllectionView =[[UICollectionView alloc]initWithFrame:CGRectMake(0,0,kDeviceWidth, kDeviceHeight+kHeightNavigation) collectionViewLayout:layout];
+    _myConllectionView =[[UICollectionView alloc]initWithFrame:CGRectMake(0,0,kDeviceWidth, kDeviceHeight) collectionViewLayout:layout];
     //[layout setHeaderReferenceSize:CGSizeMake(_myConllectionView.frame.size.width, kDeviceHeight/3+64+110)];
 
     _myConllectionView.backgroundColor=View_BackGround;
@@ -200,18 +196,41 @@
     
     //注册小图模式
     [_myConllectionView registerClass:[SmallImageCollectionViewCell class] forCellWithReuseIdentifier:@"smallcell"];
-    // 注册头部视图
+    // 注册头部视图sdsdsdsd
     //[_myConllectionView registerClass:[MovieHeadView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"headerView"];
     _myConllectionView.delegate=self;
     _myConllectionView.dataSource=self;
     
     [self.view addSubview:_myConllectionView];
     
-   // [self setupHeadView];
+   [self setupHeadView];
     [self setupFootView];
-    
-
 }
+
+- (void)setupHeadView
+{
+    
+    __unsafe_unretained typeof(self) vc = self;
+    // 添加下拉刷新头部控件
+    [_myConllectionView addHeaderWithCallback:^{
+        page=1;
+        if (self.dataArray.count>0) {
+            [vc.dataArray removeAllObjects];
+        }
+        // 进入刷新状态就会回调这个Block
+        [vc requestData];
+        
+        // 模拟延迟加载数据，因此2秒后才调用）
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            //[vc.myConllectionView reloadData];
+            // 结束刷新
+            [vc.myConllectionView headerEndRefreshing];
+        });
+    }];
+#warning 自动刷新(一进入程序就下拉刷新)
+    // [vc.myConllectionView headerBeginRefreshing];
+}
+
 
 - (void)setupFootView
 {
@@ -466,6 +485,7 @@
     NSString  *urlString =[NSString stringWithFormat:@"%@/stage/list?per-page=%d&page=%d",kApiBaseUrl,pageSize,page];
     NSDictionary *parameter;
      parameter = @{@"movie_id": _movieId, @"user_id": userCenter.user_id,@"Version":Version};
+    
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:urlString parameters:parameter success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"  电影详情页面数据JSON: %@", responseObject);
@@ -490,7 +510,6 @@
                            [usermodel setValuesForKeysWithDictionary:[weiboDict objectForKey:@"user"]];
                            weibomodel.uerInfo=usermodel;
                        }
-                       
                        //tag
                        NSMutableArray  *tagArray = [[NSMutableArray alloc]init];
                        for (NSDictionary  *tagDict  in [weiboDict objectForKey:@"tags"]) {
@@ -507,9 +526,6 @@
                            }
                        }
                        weibomodel.tagArray=tagArray;
-
-                       
-                       
                        [weibos addObject:weibomodel];
                     }
                 }

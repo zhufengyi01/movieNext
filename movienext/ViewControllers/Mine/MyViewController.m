@@ -34,6 +34,7 @@
 #import "UIImage-Helpers.h"
 #import "ScanMovieInfoViewController.h"
 #import "TagToStageViewController.h"
+#import "UpweiboModel.h"
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
 
@@ -587,11 +588,10 @@
              NSMutableArray  *Detailarray=[responseObject objectForKey:@"models"];
         for (int i=100; i<102;i++ ) {
             UIButton  *btn =(UIButton *)[self.view viewWithTag:i];
-        if (btn.tag==100&&btn.selected==YES) {
+            if (btn.tag==100&&btn.selected==YES) {
                 for (NSDictionary  *addDict  in Detailarray) {
                 userAddmodel  *model=[[userAddmodel alloc]init];
                 if (model) {
-                    
                     [model setValuesForKeysWithDictionary:addDict];
                     weiboInfoModel *weibomodel =[[weiboInfoModel alloc]init];
                     if (![[addDict objectForKey:@"weibo"] isKindOfClass:[NSNull class]]) {
@@ -649,6 +649,18 @@
                     }
                 }
             }
+                //点赞的数组
+//            for (NSDictionary  *updict in [responseObject objectForKey:@"upweibos"]) {
+//                UpweiboModel *upmodel =[[UpweiboModel alloc]init];
+//                if (upmodel) {
+//                    [upmodel setValuesForKeysWithDictionary:updict];
+//                    if (_upWeiboArray==nil) {
+//                        _upWeiboArray =[[NSMutableArray alloc]init];
+//                    }
+//                    [_upWeiboArray addObject:upmodel];
+//                    }
+//                }
+
             if (_addedDataArray.count==0) {
                 [IsNullStateDict setValue:@"YES" forKey:@"ONE"];
                 [_tableView addSubview:loadView];
