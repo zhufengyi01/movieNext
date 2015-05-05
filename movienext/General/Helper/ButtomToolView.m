@@ -89,7 +89,7 @@
     contentLable =[ZCControl createLabelWithFrame:CGRectMake(headButton.frame.origin.x,headButton.frame.origin.y+headButton.frame.size.height+0,_alertView.frame.size.width-20, 0) Font:16 Text:@"内容"];
     //contentLable.numberOfLines=0;
    contentLable.adjustsFontSizeToFitWidth=NO;
-    contentLable.lineBreakMode=NSLineBreakByTruncatingTail;
+   // contentLable.lineBreakMode=NSLineBreakByTruncatingTail;
     contentLable.textColor=VGray_color;
     [_alertView addSubview:contentLable];
     
@@ -151,11 +151,11 @@
     userNamelabel.text =self.weiboInfo.uerInfo.username;
     
     //时间
-    
     NSString *timeStr =[Function getTimeIntervalfromInerterval:self.weiboInfo.created_at];
     timelabel.text=timeStr;
     //内容
     contentLable.text =self.weiboInfo.content;
+    
    ////标签
     [self removeTagViewFromSuperView];
     leadWidth=0;
@@ -281,7 +281,6 @@
     if (self.delegete &&[self.delegete respondsToSelector:@selector(ToolViewTagHandClickTagView:withweiboinfo:WithTagInfo:)]) {
         [self.delegete ToolViewTagHandClickTagView:tagView withweiboinfo:weiboInfo WithTagInfo:tagInfo];
     }
-    
 }
 
 -(void)closeAlertViewClick
@@ -295,8 +294,15 @@
 {
     [super layoutSubviews];
     //文字的高度
+    CGFloat wheight=kDeviceWidth-30-headButton.frame.size.width-headButton.frame.origin.x-10-10;
+    if (IsIphone6) {
+        wheight=wheight-20;
+    }
+    if (IsIphone6plus) {
+        wheight=wheight-40;
+    }
     NSString *weiboString = self.weiboInfo.content;
-    CGSize  Wsize=[weiboString boundingRectWithSize:CGSizeMake(kStageWidth-40, MAXFLOAT) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:[NSDictionary dictionaryWithObject:contentLable.font forKey:NSFontAttributeName] context:nil].size;
+    CGSize  Wsize=[weiboString boundingRectWithSize:CGSizeMake(wheight, MAXFLOAT) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:[NSDictionary dictionaryWithObject:contentLable.font forKey:NSFontAttributeName] context:nil].size;
     //10+头像高度＋文字高度＋10+标签高度＋10+分享的高度
     float  tagHeight=0;
     if (self.weiboInfo.tagArray.count>0) {
@@ -326,5 +332,8 @@
     
 }
 
-
+-(void)dealloc
+{
+    
+}
 @end

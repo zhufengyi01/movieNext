@@ -124,15 +124,6 @@
             markView.tag=1000+index;
              float  x=[weibodict.x_percent floatValue];   //位置的百分比
              float  y=[weibodict.y_percent floatValue];
-//#pragma mark --------计算标签的长度---------------------------------------------------
-//             NSMutableString  *tagStr=[[NSMutableString alloc]init];
-//              for (int i=0;i<weibodict.tagArray.count;i++)
-//               {
-//                   TagModel  *tagmodel =[weibodict.tagArray objectAtIndex:i];
-//                  [ tagStr appendString:tagmodel.tagDetailInfo.title];
-//              }
-         //CGSize  Tagsize=[tagStr boundingRectWithSize:CGSizeMake(kDeviceWidth/2, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:[UIFont systemFontOfSize:14] forKey:NSFontAttributeName] context:nil].size;
-
              NSString  *weiboTitleString=weibodict.content;
              NSString  *UpString=[NSString stringWithFormat:@"%@",weibodict.like_count];//weibodict.ups;
             //计算标题的size
@@ -198,7 +189,7 @@
 //2.放大动画
 - (void)scaleAnimation {
     [UIView animateWithDuration:kalpaOneTime animations:^{
-        for (UIView *v in self.subviews) {
+        for (id v in self.subviews) {
             if ([v isKindOfClass:[MarkView class]]) {
                 MarkView *mv = (MarkView *)v;
                 self.userInteractionEnabled=YES;
@@ -212,7 +203,7 @@
         //动画延时小时5s,消失动画显示
         [UIView animateWithDuration:kalpaZeroTime delay:0.6 options:UIViewAnimationOptionCurveLinear animations:^{
             // 先把所有的气泡的透明度都设置成了 0
-            for (UIView *v in self.subviews) {
+            for (id v in self.subviews) {
                 if ([v isKindOfClass:[MarkView class]]) {
                     MarkView *mv = (MarkView *)v;
                     mv.alpha = 0;
@@ -226,12 +217,10 @@
             }
             //完成了全部显示后，立马显示第一个
             currentMarkIndex=0;
-
-           [self CircleshowAnimation];
+          // [self CircleshowAnimation];
             _timer = [NSTimer scheduledTimerWithTimeInterval:kTimeInterval target:self selector:@selector(CircleshowAnimation) userInfo:nil repeats:YES];
         }];
     }];
-    
     
 }
 
@@ -239,10 +228,8 @@
 //每次去控制一个动画的显示
 //在markview 中只做一件事,就是自身的现实和隐藏，不管外部对他怎么操作
 - (void)CircleshowAnimation {
-
-   // NSLog(@"currentMarkIndex   = %ld", currentMarkIndex);
      if (!_isAnimation) {
-        return;
+         return;
     }
     if (currentMarkIndex<self.weibosArray.count) {
         MarkView  *markView=(MarkView *)[self viewWithTag:1000+currentMarkIndex];

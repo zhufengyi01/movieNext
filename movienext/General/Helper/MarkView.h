@@ -26,14 +26,15 @@
 @property (nonatomic,strong) UIImageView    *LeftImageView;
 @property (nonatomic,strong) UIView         *rightView;  //又视图.包含titlelable 和赞的图片，赞的个数。
 @property (nonatomic,strong) UILabel        *TitleLable;
-@property(nonatomic,strong)  M80AttributedLabel  *contentLable;  //标题的lable包含文字 点赞图片  点赞的数量
 @property (nonatomic,strong) UILabel        *ZanNumLable;
 @property (nonatomic,strong) UIImageView    *ZanImageView;
 
 
+//内容文本器
+@property(nonatomic,strong)  M80AttributedLabel  *contentLable;  //标题的lable包含文字 点赞图片  点赞的数量
+
 //标签文本器
 @property(nonatomic,strong) M80AttributedLabel  *tagLable;
-
 
 //点击的状态
 @property (nonatomic,assign) BOOL  isSelected;   // 是否被选中
@@ -44,16 +45,12 @@
 @property (nonatomic,assign) BOOL isAnimation;   //是否是可以动的动画
 @property(nonatomic,assign) BOOL  isShowansHiden;  //是否可以闪现
 
-//@property (nonatomic,strong) M80AttributedLabel *contentLable;
-
-
 
 -(void)setValueWithWeiboInfo:(weiboInfoModel *) weiboInfo;
 //最新页面的markview 闪现
 -(void)StartShowAndhiden;
 //在controller 里面实现的方法，点击屏幕，让当前的的气泡取消选中
 #warning  唯一一个外部和内部都会调用的方法
-//外部和内部都会调用的方法
 -(void)CancelMarksetSelect;
 //markview 自身的动画
 -(void)startAnimation;

@@ -416,11 +416,11 @@
 
 
 //移除微博推荐接口
--(void)requestrecommendDeleteDataWith
+-(void)requestrecommendDeleteDataWithHotId:(NSString *) hot_id
 {
 
     UserDataCenter  *userCenter=[UserDataCenter shareInstance];
-    NSDictionary *parameters = @{@"hot_id":_hot_Id,@"user_id":userCenter.user_id};
+    NSDictionary *parameters = @{@"hot_id":hot_id,@"user_id":userCenter.user_id};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     //manager.requestSerializer=[AFHTTPRequestSerializer serializer];
    // manager.responseSerializer=[AFHTTPResponseSerializer serializer];
@@ -887,9 +887,18 @@
         //点击了更多
         if ([userCenter.is_admin intValue]>0) {
             
-            UIActionSheet  *Act=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"内容投诉",@"版权投诉",@"图片信息",@"切换剧照到（审核/正式）", nil];
-            Act.tag=507;
+            if (segment.selectedSegmentIndex==0) {
+                UIActionSheet  *Act=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"内容投诉",@"版权投诉",@"图片信息",@"切换剧照到(审核/正式)",@"移除推荐", nil];
+                Act.tag=507;
+                [Act showInView:Act];
+
+            }
+            else if(segment.selectedSegmentIndex==1)
+            {
+            UIActionSheet  *Act=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"内容投诉",@"版权投诉",@"图片信息",@"切换剧照到(审核/正式)", nil];
+              Act.tag=507;
             [Act showInView:Act];
+            }
         }
         else
         {
@@ -1110,6 +1119,8 @@
     {
        
         UserDataCenter  *userCenter =[UserDataCenter shareInstance];
+        
+        
         if ([userCenter.is_admin  intValue]>0) {
         UIActionSheet   *ash=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"删除",@"变身",@"推荐", nil];
          ash.tag=500;
@@ -1189,7 +1200,7 @@
     else if (actionSheet.tag==503)
     {
         if (buttonIndex==0) {
-            [self requestrecommendDeleteDataWith];
+            //[self requestrecommendDeleteDataWith];
         }
     }
 
@@ -1279,6 +1290,15 @@
             //移动到审核版或者正常
             [self requestmoveReviewToNormal:stageId];
         
+        }
+        else if (buttonIndex==4)
+        {
+            //移除推荐
+             ModelsModel    *moviemodel =[_hotDataArray objectAtIndex:Rowindex];
+             [self requestrecommendDeleteDataWithHotId:moviemodel.Id];
+            
+            
+            
         }
     }
 }

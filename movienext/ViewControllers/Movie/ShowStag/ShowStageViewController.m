@@ -109,7 +109,6 @@
     
 
     
-    
     stageView = [[StageView alloc] initWithFrame:CGRectMake(0,0,kDeviceWidth, kDeviceWidth)];
     stageView.isAnimation = YES;
     stageView.delegate=self;
@@ -119,7 +118,6 @@
      [BgView addSubview:stageView];
     [stageView startAnimation];
 
- 
 }
  -(void)createButtonView1
 {
@@ -128,7 +126,6 @@
     BgView2.backgroundColor=View_ToolBar;
     [self.view bringSubviewToFront:BgView2];
     [BgView addSubview:BgView2];
-
     
     MovieLogoImageView=[[UIImageView alloc]initWithFrame:CGRectMake(10,7.5,30, 30)];
     MovieLogoImageView.layer.cornerRadius=4;
@@ -230,6 +227,30 @@
 
 #pragma  mark  ----RequestData
 #pragma  mark  ---
+
+//屏幕剧照
+-(void)requestRemoveStage
+{
+    UserDataCenter *usercenter=[UserDataCenter shareInstance];
+    NSDictionary *parameters = @{@"stage_id":self.stageInfo.Id,@"user_id":usercenter.user_id};
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    NSString *urlString =[NSString stringWithFormat:@"%@/stage/block", kApiBaseUrl];
+    [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
+            NSLog(@"移除剧照成功=======%@",responseObject);
+            UIAlertView  *Al =[[UIAlertView alloc]initWithTitle:nil message:@"移除剧照成功" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            [Al show];
+            
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+    
+}
+
+
+
 -(void)requestmoveReviewToNormal:(NSString *) stageId
 {
     UserDataCenter *usercenter=[UserDataCenter shareInstance];
@@ -378,7 +399,7 @@
     
     if ([userCenter.is_admin intValue]>0) {
         
-        UIActionSheet  *Act=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"内容投诉",@"版权投诉",@"图片信息",@"切换剧照到（审核/正式）", nil];
+        UIActionSheet  *Act=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"内容投诉",@"版权投诉",@"图片信息",@"切换剧照到（审核/正式）",@"屏蔽剧照",nil];
         Act.tag=507;
         [Act showInView:Act];
     }
@@ -426,10 +447,8 @@
         _toolBar.stageInfo=stageInfo;
         _toolBar.markView=markView;
         [_toolBar configToolBar];
-        
         [[[[UIApplication sharedApplication] delegate] window] addSubview:_toolBar ];
         [_toolBar ShowButtomView];
-         //弹出工具栏
         
     }
     else if (isselect==NO)
@@ -557,6 +576,11 @@
             //移动到审核版或者正常
             [self requestmoveReviewToNormal:stageId];
 
+        }
+        else if (buttonIndex==4)
+        {
+            //屏蔽剧照
+            [self requestRemoveStage];
         }
 
     }

@@ -44,7 +44,7 @@
     
     
 
-//    //标题，点赞的view
+    //标题，点赞的view
     _TitleLable=[ZCControl createLabelWithFrame:CGRectMake(0,0, 0,0) Font:12 Text:@""];
     _TitleLable.font=[UIFont systemFontOfSize:MarkTextFont14];
     if (IsIphone6plus) {
@@ -63,7 +63,6 @@
     [_rightView addSubview:_ZanNumLable];
 
     
-    
 //    //标题内容
 //    self.contentLable =[[M80AttributedLabel alloc]initWithFrame:CGRectMake(10, 0,100, 20)];
 //    self.contentLable.font=[UIFont systemFontOfSize:MarkTextFont14];
@@ -71,10 +70,10 @@
 //     if (IsIphone6plus) {
 //        self.contentLable.font=[UIFont systemFontOfSize:MarkTextFont16];
 //    }
-//    self.contentLable.backgroundColor =[UIColor clearColor];
+//    self.contentLable.backgroundColor =[UIColor redColor];
 //     self.contentLable.lineSpacing=0.0;
 //    [_rightView addSubview:self.contentLable];
-//    
+    
     
     UITapGestureRecognizer  *tap =[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(dealTapWeiboClick:)];
     [self addGestureRecognizer:tap];
@@ -106,9 +105,13 @@
 //    //弹幕内容
 //    [self.contentLable appendText:self.weiboInfo.content];
 //    UIImage *likeImage =[UIImage imageNamed:@"tag_like_icon.png"];
-//    [self.contentLable appendImage:likeImage maxSize:CGSizeMake(11, 11) margin:UIEdgeInsetsMake(3,3, 0, 0)];
+//    [self.contentLable appendImage:likeImage maxSize:CGSizeMake(MarkViewLike_Image11, MarkViewLike_Image11) margin:UIEdgeInsetsMake(-3,5, 0,0)];
 //    if ([self.weiboInfo.like_count intValue]>0) {
-//    [self.contentLable appendText:[NSString stringWithFormat:@"%@",self.weiboInfo.like_count]];
+//        NSMutableAttributedString  *attributeStr =[[NSMutableAttributedString alloc]initWithString:[NSString stringWithFormat:@" %@",self.weiboInfo.like_count]];
+//        NSRange  range=NSMakeRange(0, attributeStr.length);
+//        attributeStr addAttribute:<#(NSString *)#> value:<#(id)#> range:<#(NSRange)#>
+//        
+//    [self.contentLable appendText:[NSString stringWithFormat:@" %@",self.weiboInfo.like_count]];
 //    }
 //    
 
@@ -129,7 +132,7 @@
 -(TagView *)createTagViewWithtagInfo:(TagModel *) tagmodel andIndex:(NSInteger ) index
 {
     TagView *tagview =[[TagView alloc]initWithFrame:CGRectZero];
-    tagview.tag=1000+index;
+    //tagview.tag=1000+index;
     //设置不可以点击
     [tagview  setTagViewIsClick:NO];
     tagview.weiboInfo=self.weiboInfo;
@@ -141,10 +144,8 @@
     return tagview;
 }
 
-
 - (void)layoutSubviews {
     [super layoutSubviews];
-    
     
     //布局之前先比较标签文字的长度跟标签弹幕文字的长度，这样去改变标签标签的长度
 //计算标签长度文字的长度
@@ -169,16 +170,16 @@
     
     
     //头像
-    _LeftImageView.frame=CGRectMake(0, 0, 23, 23);
+    _LeftImageView.frame=CGRectMake(0, 0, MarkViewHead23, MarkViewHead23);
     if (IsIphone6plus) {
-        _LeftImageView.frame=CGRectMake(0, 0, 28, 28);
+        _LeftImageView.frame=CGRectMake(0, 0,MarkViewHead28, MarkViewHead28);
     }
     isfakeView.frame= CGRectMake(_LeftImageView.frame.size.width-6,_LeftImageView.frame.size.height-6, 8, 8);
     
     //右视图
-    _rightView.frame=CGRectMake(21, 0,self.frame.size.width-23 , self.frame.size.height);
+    _rightView.frame=CGRectMake(21, 0,self.frame.size.width-MarkViewHead23 , self.frame.size.height);
     if (IsIphone6plus) {
-         _rightView.frame=CGRectMake(26, 0,self.frame.size.width-28 , self.frame.size.height);
+         _rightView.frame=CGRectMake(26, 0,self.frame.size.width-MarkViewHead28 , self.frame.size.height);
     }
    
    // 标题
@@ -186,7 +187,7 @@
     _TitleLable.frame=CGRectMake(5,3,Tsize.width, Tsize.height);
     
     //赞的图片
-    _ZanImageView.frame=CGRectMake(_TitleLable.frame.origin.x + _TitleLable.frame.size.width + 5,5,11,11 );
+    _ZanImageView.frame=CGRectMake(_TitleLable.frame.origin.x + _TitleLable.frame.size.width + 5,5,MarkViewLike_Image11,MarkViewLike_Image11 );
     
     //赞的数量
     CGSize  Msize=[_ZanNumLable.text boundingRectWithSize:CGSizeMake(kDeviceWidth/2,MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:_ZanNumLable.font forKey:NSFontAttributeName] context:nil].size;
@@ -197,14 +198,11 @@
         _ZanNumLable.hidden=YES;
     }
     
-//    //内容的大小
-//    self.contentLable.frame=CGRectMake(5, 3, Tsize.width+5+11, Tsize.height+10);
+    //内容的大小
+//    self.contentLable.frame=CGRectMake(5, 3, Tsize.width+5+MarkViewLike_Image11, Tsize.height+10);
 //    if ([self.weiboInfo.like_count intValue]>0) {
-//        self.contentLable.frame=CGRectMake(5, 3, Tsize.width+5+11+Msize.width, Tsize.height+0);
+//        self.contentLable.frame=CGRectMake(5, 3, Tsize.width+5+MarkViewLike_Image11+Msize.width+20, Tsize.height+0);
 //    }
-//    
-    
-    
     //标签
     if (self.weiboInfo.tagArray.count!=0) {
          self.tagLable.frame=CGRectMake(self.TitleLable.frame.origin.x, self.TitleLable.frame.origin.y+self.TitleLable.frame.size.height+5,self.rightView.frame.size.width-10, TagHeight);

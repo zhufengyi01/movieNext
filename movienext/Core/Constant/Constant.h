@@ -96,6 +96,10 @@
 #define MarkTextFont14  14
 #define MarkTextFont16  16
 #define MarkViewCornerRed 6
+#define MarkViewHead23     23
+#define MarkViewHead28     28
+#define MarkViewLike_Image11  11
+
 
 
 //标签相关定义

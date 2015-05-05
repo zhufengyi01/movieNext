@@ -62,7 +62,6 @@
         [self.delegete TapViewClick:self Withweibo:self.weiboInfo withTagInfo:self.tagInfo];
     }
     
-    
 }
 
 -(void)layoutSubviews

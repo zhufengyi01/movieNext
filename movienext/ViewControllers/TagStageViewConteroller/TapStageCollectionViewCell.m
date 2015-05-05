@@ -7,6 +7,7 @@
 //
 
 #import "TapStageCollectionViewCell.h"
+#import "Constant.h"
 
 @implementation TapStageCollectionViewCell
 
@@ -26,16 +27,23 @@
     _imageView.image=[UIImage imageNamed:@"loading_image_all"];
      [self.contentView addSubview:_imageView];
     
-    UIView  *titlebg =[[UIView alloc]initWithFrame:CGRectMake(0, m_frame.size.height-30,m_frame.size.width, 30)];
+    float  height=30;
+    if (IsIphone6plus) {
+        height=40;
+    }
+    UIView  *titlebg =[[UIView alloc]initWithFrame:CGRectMake(0, m_frame.size.height-height,m_frame.size.width,height)];
     titlebg.backgroundColor = [UIColor colorWithRed:0.0f/255.0f green:0.0f/255.0f blue:0.0f/255.0f alpha:0.5];
     [self.contentView addSubview:titlebg];
     
     
-    _titleLab = [[UILabel alloc]initWithFrame:CGRectMake(5,0,m_frame.size.width-10, 30)];
+    _titleLab = [[UILabel alloc]initWithFrame:CGRectMake(5,0,m_frame.size.width-10, height)];
     //_titleLab.backgroundColor = [UIColor colorWithRed:0.0f/255.0f green:0.0f/255.0f blue:0.0f/255.0f alpha:0.5];
-    _titleLab.textAlignment = NSTextAlignmentLeft;
+    _titleLab.textAlignment = NSTextAlignmentCenter;
     _titleLab.textColor = [UIColor whiteColor];
     _titleLab.font = [UIFont systemFontOfSize:14];
+    if (IsIphone6plus) {
+        _titleLab.font=[UIFont systemFontOfSize:17];
+    }
     [titlebg addSubview:_titleLab];
 }
 
