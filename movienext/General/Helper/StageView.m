@@ -36,43 +36,47 @@
     [self removeStageViewSubView];
     self.userInteractionEnabled=YES;
     self.backgroundColor =VStageView_color;
-    _MovieImageView =[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, 200)];
+    float height =kStageWidth;
+    _MovieImageView =[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kStageWidth, height*(9.0/16))];
+    _MovieImageView.contentMode=UIViewContentModeScaleAspectFit;
+    _MovieImageView.clipsToBounds=YES;
     [self addSubview:_MovieImageView];
 
 }
 #pragma mark    设置stageview的值  ，主要是给stagview 添加markview  和添加一张图片
 -(void)configStageViewforStageInfoDict{
     
-
     //先移除所有的Mark视图
     [self removeStageViewSubView];
-    float  ImageWith=[self.stageInfo.width intValue];
-    float  ImgeHight=[self.stageInfo.height intValue];
-    if (ImageWith==0) {
-        ImageWith=kDeviceWidth;
-    }
-    if (ImgeHight==0) {
-        ImgeHight=kDeviceWidth;
-    }
-    float x=0;
-    float y=0;
-    float width=0;
-    float hight=0;
-    if (ImageWith>ImgeHight) {
-          x=0;
-          width=kDeviceWidth;
-          hight=(ImgeHight/ImageWith)*kDeviceWidth;
-          y=(kDeviceWidth-hight)/2;
-    }
-    else
-    {
-        y=0;
-          hight=kDeviceWidth;
-        width=(ImageWith/ImgeHight)*kDeviceWidth;
-        x=(kDeviceWidth-width)/2;
-     }
-  
-        _MovieImageView.frame=CGRectMake(x, y,width,hight);
+//    float  ImageWith=[self.stageInfo.width intValue];
+//    float  ImgeHight=[self.stageInfo.height intValue];
+//    if (ImageWith==0) {
+//        ImageWith=kDeviceWidth;
+//    }
+//    if (ImgeHight==0) {
+//        ImgeHight=kDeviceWidth;
+//    }
+//    float x=0;
+//    float y=0;
+//    float width=0;
+//    float hight=0;
+//    if (ImageWith>ImgeHight) {
+//          x=0;
+//          width=kDeviceWidth;
+//          hight=(ImgeHight/ImageWith)*kDeviceWidth;
+//          y=(kDeviceWidth-hight)/2;
+//    }
+//    else
+//    {
+//        y=0;
+//          hight=kDeviceWidth;
+//        width=(ImageWith/ImgeHight)*kDeviceWidth;
+//        x=(kDeviceWidth-width)/2;
+//     }
+//  
+//        _MovieImageView.frame=CGRectMake(x, y,width,hight);
+    
+   // _MovieImageView.frame=CGRectMake(0, 0, kStageWidth, kStageWidth*9/16);
     
     _MovieImageView.backgroundColor =VStageView_color;
     NSString *photostring=[NSString stringWithFormat:@"%@%@!w640",kUrlStage,self.stageInfo.photo];
@@ -81,14 +85,14 @@
     [_MovieImageView sd_setImageWithURL:[NSURL URLWithString:photostring] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         
 #pragma  mark  是静态的, 气泡是不动的
-         if ( self.weiboinfo) {
+     /*    if ( self.weiboinfo) {
          MarkView *markView = [self createMarkViewWithDict:self.weiboinfo andIndex:2000];
          markView.alpha = 1.0;
          //设置是否markview 不可以动画
          markView.isAnimation =YES;
          //设置单条微博的参数信息
          markView.weiboInfo=self.weiboinfo;
-        [markView setValueWithWeiboInfo:self.weiboinfo];
+        //[markView setValueWithWeiboInfo:self.weiboinfo];
          //遵守markView 的协议
          markView.delegate=self;
         //单个气泡的时候，隐约显示的参数
@@ -112,7 +116,7 @@
          markView.delegate=self;
          [self addSubview:markView];
          }
-         }
+         }*/
     }];
 
 }

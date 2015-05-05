@@ -42,12 +42,18 @@ typedef NS_ENUM(NSInteger,NSUserPageType)
 //点击长按手势的事件
 -(void)commonStageCellLoogPressClickindex:(NSInteger )indexrow;
 
+
+-(void)cellTapViewClick:(TagView *) TagView withWeibo:(weiboInfoModel *) weiboInfo withTagInfo:(TagModel *) tagInfo;
+
 @end
-@interface CommonStageCell : UITableViewCell <StageViewDelegate>
+@interface CommonStageCell : UITableViewCell <StageViewDelegate,TagViewDelegate>
 {
     CGRect        m_frame;
     UIImageView       *BgView;
     UIView        *BgView0;   //最新顶上的view
+    UIView        *tagView;
+    UILabel  *marklable ;
+    M80AttributedLabel  *tagLable;
     //BgView0的子视图
     UIButton  *UserLogoButton;
     UILabel   *UserNameLable;

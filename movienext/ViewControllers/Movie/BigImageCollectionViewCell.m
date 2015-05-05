@@ -24,16 +24,18 @@
 -(void)CreateUI
 {
     self.backgroundColor=View_BackGround;
-    BgView =[[UIImageView alloc]initWithFrame:CGRectMake(5, 5, kDeviceWidth-10, kDeviceWidth+90)];
+    BgView =[[UIImageView alloc]initWithFrame:CGRectMake(5, 5, kDeviceWidth-10, kStageWidth+90)];
     
     BgView.clipsToBounds=YES;
     BgView.layer.cornerRadius=4;
     BgView.clipsToBounds=YES;
+    BgView.backgroundColor =[UIColor whiteColor];
     BgView.userInteractionEnabled=YES;
     [self.contentView addSubview:BgView];
 
     //[self CreateTopView];
     [self CreateSatageView];
+    [self createTagView];
     [self createButtonView];
 
 }
@@ -48,11 +50,25 @@
 
 -(void)CreateSatageView
 {
-    _StageView=[[StageView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth,kDeviceWidth)];
+    _StageView=[[StageView alloc]initWithFrame:CGRectMake(0, 0, kStageWidth,kStageWidth*(9.0/16))];
     _StageView.backgroundColor=VStageView_color;
     [BgView addSubview:_StageView];
     
 }
+-(void)createTagView
+{
+    
+    tagView =[[UIView alloc]initWithFrame:CGRectMake(0,310*(9.0/16), kStageWidth,45)];
+    tagView.backgroundColor=[UIColor whiteColor];
+    tagView.userInteractionEnabled=YES;
+    [BgView addSubview:tagView];
+    
+    
+    marklable =[ZCControl  createLabelWithFrame:CGRectMake(10, 10, 10, 10) Font:16 Text:@""];
+    marklable.textColor=VGray_color;
+    [tagView addSubview:marklable];
+}
+
 -(void)createButtonView
 {
     BgView2=[[UIView alloc]initWithFrame:CGRectMake(0, kDeviceWidth, kDeviceWidth, 45)];
@@ -60,11 +76,11 @@
     [BgView addSubview:BgView2];
     
     //更多
-    moreButton=[ZCControl createButtonWithFrame:CGRectMake(10, 9, 30, 25) ImageName:@"more_icon.png" Target:self Action:@selector(cellButtonClick:) Title:@""];
-    moreButton.layer.cornerRadius=2;
-    moreButton.hidden=NO;
-    moreButton.tag=4000;
-    [BgView2 addSubview:moreButton];
+//    moreButton=[ZCControl createButtonWithFrame:CGRectMake(10, 9, 30, 25) ImageName:@"more_icon.png" Target:self Action:@selector(cellButtonClick:) Title:@""];
+//    moreButton.layer.cornerRadius=2;
+//    moreButton.hidden=NO;
+//    moreButton.tag=4000;
+    //[BgView2 addSubview:moreButton];
     
 
     ScreenButton =[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-120,10,45,25) ImageName:@"btn_share_default.png" Target:self Action:@selector(cellButtonClick:) Title:@""];
@@ -91,14 +107,27 @@
         [_tanlogoButton removeFromSuperview];
         _tanlogoButton=nil;
     }
-    _tanlogoButton =[UIButton buttonWithType:UIButtonTypeCustom];
-    _tanlogoButton.frame=CGRectMake(moreButton.frame.origin.x+moreButton.frame.size.width+10, 5, 35, 35);
-    [_tanlogoButton setImage:[UIImage imageNamed:@"close_danmu.png"] forState:UIControlStateNormal];
-    [_tanlogoButton setImage:[UIImage imageNamed:@"open_danmu.png"] forState:UIControlStateSelected];
-    [_tanlogoButton addTarget:self action:@selector(hidenAndShowMarkView:) forControlEvents:UIControlEventTouchUpInside];
-    [BgView2 addSubview:_tanlogoButton];
-    
-    
+//    _tanlogoButton =[UIButton buttonWithType:UIButtonTypeCustom];
+//    _tanlogoButton.frame=CGRectMake(moreButton.frame.origin.x+moreButton.frame.size.width+10, 5, 35, 35);
+//    [_tanlogoButton setImage:[UIImage imageNamed:@"close_danmu.png"] forState:UIControlStateNormal];
+//    [_tanlogoButton setImage:[UIImage imageNamed:@"open_danmu.png"] forState:UIControlStateSelected];
+//    [_tanlogoButton addTarget:self action:@selector(hidenAndShowMarkView:) forControlEvents:UIControlEventTouchUpInside];
+//    [BgView2 addSubview:_tanlogoButton];
+//    
+    marklable.text=self.weiboInfo.content;
+    if (tagLable) {
+        [tagLable removeFromSuperview];
+        tagLable=nil;
+    }
+    if (self.weiboInfo.tagArray&&self.weiboInfo.tagArray.count) {
+        tagLable =[[M80AttributedLabel alloc]initWithFrame:CGRectMake(0,10,200,TagHeight)];
+        tagLable.backgroundColor =[UIColor clearColor];
+        for (int i=0; i<self.weiboInfo.tagArray.count; i++) {
+            TagView *tagview = [self createTagViewWithtagInfo:self.weiboInfo.tagArray[i] andIndex:i];
+            [tagLable appendView:tagview margin:UIEdgeInsetsMake(0, 0, 0, 10)];
+        }
+        [tagView addSubview:tagLable];
+    }
     
     if (self.weibosArray) {
         _StageView.weibosArray = self.weibosArray;
@@ -108,6 +137,27 @@
     _StageView.isAnimation = YES;
     
 }
+
+//创建标签的方法
+-(TagView *)createTagViewWithtagInfo:(TagModel *) tagmodel andIndex:(NSInteger ) index
+{
+    
+    TagView *tagview =[[TagView alloc]initWithFrame:CGRectZero];
+    tagview.tag=1000+index;
+    tagview.delegete=self;
+    //设置是否可以点击
+    [tagview setTagViewIsClick:YES];
+    tagview.tagInfo=tagmodel;
+    tagview.weiboInfo=self.weiboInfo;
+    NSString *titleStr = tagmodel.tagDetailInfo.title;
+    tagview.titleLable.text=titleStr;
+    CGSize  Tsize =[titleStr boundingRectWithSize:CGSizeMake(MAXFLOAT, TagHeight) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:[NSDictionary dictionaryWithObject:tagview.titleLable.font forKey:NSFontAttributeName] context:nil].size;
+    tagview.frame=CGRectMake(0,0, Tsize.width+10, TagHeight+10);
+    return tagview;
+}
+
+
+
 #pragma mark 点击屏幕显示和隐藏marview
 //显示隐藏markview
 -(void)hidenAndShowMarkView:(UIButton *) button
@@ -140,6 +190,17 @@
 - (void)layoutSubviews {
     [super layoutSubviews];
      // BgView2.frame=CGRectMake(0, kDeviceWidth, kDeviceWidth, 45);
+    
+    BgView.frame=CGRectMake(5,5, kStageWidth, self.frame.size.height-10);
+    tagView.frame=CGRectMake(0, 310*(9.0/16), kStageWidth, self.frame.size.height-(310*(9.0/16)-45));
+    
+    NSString  *contString =self.weiboInfo.content;
+    CGSize size =[contString boundingRectWithSize:CGSizeMake(kStageWidth-20, MAXFLOAT) options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes:[NSDictionary dictionaryWithObject:[UIFont systemFontOfSize:16] forKey:NSFontAttributeName] context:nil].size;
+    marklable.frame=CGRectMake(10, 10,kStageWidth-20, size.height);
+    tagLable.frame=CGRectMake(10,marklable.frame.origin.y+marklable.frame.size.height+10, kStageWidth-20, TagHeight+10);
+    BgView2.frame=CGRectMake(0,self.frame.size.height-45-10, kStageWidth, 45);
+    
+
     
 }
 

@@ -45,7 +45,7 @@
 
 //友盟分享
 //#import "UMSocial.h"
-@interface NewViewController ()<UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UIScrollViewDelegate,UMSocialDataDelegate,UMSocialUIDelegate,LoadingViewDelegate,UIActionSheetDelegate,CommonStageCellDelegate,AddMarkViewControllerDelegate,UMShareViewControllerDelegate,UMShareViewController2Delegate,MFMailComposeViewControllerDelegate>
+@interface NewViewController ()<UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UIScrollViewDelegate,UMSocialDataDelegate,UMSocialUIDelegate,LoadingViewDelegate,UIActionSheetDelegate,CommonStageCellDelegate,AddMarkViewControllerDelegate,UMShareViewControllerDelegate,UMShareViewController2Delegate,MFMailComposeViewControllerDelegate,TagViewDelegate>
 {
     AppDelegate  *appdelegate;
     UISegmentedControl *segment;
@@ -711,7 +711,17 @@
         
         float hight;
         if (_hotDataArray.count>indexPath.row) {
-            hight=kStageWidth+45;
+           // hight=kStageWidth+45;
+           // 获取当前weiboarray中点赞数最多的
+            hight=310*(9.0/16);
+            ModelsModel  *model =[_hotDataArray objectAtIndex:indexPath.row];
+            NSString  *contString =  [[self getLageLikeCount:model.stageInfo.weibosArray] objectAtIndex:0];
+            CGSize size =[contString boundingRectWithSize:CGSizeMake(kStageWidth-20, MAXFLOAT) options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes:[NSDictionary dictionaryWithObject:[UIFont systemFontOfSize:16] forKey:NSFontAttributeName] context:nil].size;
+            hight=hight+10+size.height;
+            if ([[[self getLageLikeCount:model.stageInfo.weibosArray] objectAtIndex:1] intValue]>0) {
+                hight=hight+TagHeight+10;
+            }
+            hight=hight+45+10;
         }
         return hight+10;
     }
@@ -719,12 +729,44 @@
     {
         float hight;
         if (_newDataArray.count>indexPath.row) {
-             hight= kStageWidth+45;
+            hight=310*(9.0/16);
+            weiboInfoModel  *model =[_newDataArray  objectAtIndex:indexPath.row];
+            
+            NSString *contString=model.content;
+            CGSize size =[contString boundingRectWithSize:CGSizeMake(kStageWidth-20, MAXFLOAT) options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes:[NSDictionary dictionaryWithObject:[UIFont systemFontOfSize:16] forKey:NSFontAttributeName] context:nil].size;
+            hight=hight+10+size.height;
+            if (model.tagArray.count>0) {
+                hight=hight+TagHeight+10;
+            }
+            hight=hight+45+10;
         }
         return hight+10;
     }
     return 200.0f;
 }
+//计算点赞最多的字符串
+-(NSMutableArray *)getLageLikeCount:(NSMutableArray  *) weiboarray
+{
+    int count=0;
+    NSInteger tagCount;
+ //   weiboInfoModel *weibomodel ;
+    NSMutableArray  *Array =[[NSMutableArray alloc]init];
+    NSString  *weiboString=@"";
+    for (weiboInfoModel   *model in  weiboarray) {
+        if (model.like_count.intValue >count) {
+            count=model.like_count.intValue;
+            weiboString=model.content;
+            tagCount=model.tagArray.count;
+            [Array addObject:weiboString];
+            [Array addObject:[NSString stringWithFormat:@"%ld",tagCount]];
+            [Array addObject:model];
+            
+        }
+    }
+    return Array;
+}
+
+
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
@@ -746,7 +788,8 @@
             cell.cellModel=model;
             cell.stageInfo=model.stageInfo;
             cell.weibosArray=model.stageInfo.weibosArray;
-            cell.weiboInfo=nil;
+            cell.weiboInfo=[[self getLageLikeCount:model.stageInfo.weibosArray] objectAtIndex:2];
+
             [cell ConfigsetCellindexPath:indexPath.row];
         }
         return cell;
@@ -909,31 +952,42 @@
         
     }
 }
-//长安剧情推荐和剧情移除
--(void)commonStageCellLoogPressClickindex:(NSInteger)indexrow
-{
-    //HotMovieModel  *hotmovie;
-    ModelsModel  *moviemodel;
-    if  (segment.selectedSegmentIndex==0) {
-        
-        moviemodel =[_hotDataArray objectAtIndex:indexrow];
-        _hot_Id=moviemodel.Id;
-        
-        UIActionSheet  *ash =[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"移除推荐" otherButtonTitles:nil, nil];
-        ash.tag=503;
-        [ash showInView:self.view];
-    }
-    else if(segment.selectedSegmentIndex==1)
-    {
-        moviemodel=[_newDataArray objectAtIndex:indexrow];
-        _stage_Id=moviemodel.stageInfo.Id;
-        UIActionSheet  *ash =[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"屏蔽剧照" otherButtonTitles:nil, nil];
-        ash.tag=505;
-        [ash showInView:self.view];
 
-    }
+-(void)cellTapViewClick:(TagView *)TagView withWeibo:(weiboInfoModel *)weiboInfo withTagInfo:(TagModel *)tagInfo
+{
+    TagToStageViewController  *vc=[[TagToStageViewController alloc]init];
+    vc.weiboInfo=weiboInfo;
+    vc.tagInfo=tagInfo;
+    [self.navigationController pushViewController:vc animated:YES];
     
+
 }
+////长安剧情推荐和剧情移除
+//-(void)commonStageCellLoogPressClickindex:(NSInteger)indexrow
+//{
+//    //HotMovieModel  *hotmovie;
+//    ModelsModel  *moviemodel;
+//    if  (segment.selectedSegmentIndex==0) {
+//        
+//        moviemodel =[_hotDataArray objectAtIndex:indexrow];
+//        _hot_Id=moviemodel.Id;
+//        
+//        UIActionSheet  *ash =[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"移除推荐" otherButtonTitles:nil, nil];
+//        ash.tag=503;
+//        [ash showInView:self.view];
+//    }
+//    else if(segment.selectedSegmentIndex==1)
+//    {
+//        moviemodel=[_newDataArray objectAtIndex:indexrow];
+//        _stage_Id=moviemodel.stageInfo.Id;
+//        UIActionSheet  *ash =[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"屏蔽剧照" otherButtonTitles:nil, nil];
+//        ash.tag=505;
+//        [ash showInView:self.view];
+//
+//    }
+//}
+
+
 #pragma mark  -----AddMarkViewControllerDelegate----
 -(void)AddMarkViewControllerReturn
 {

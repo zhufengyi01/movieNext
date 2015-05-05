@@ -16,8 +16,12 @@
 
 -(void)BigImageCollectionViewCellToolButtonClick:(UIButton *) button Rowindex:(NSInteger) index;
 
+
+-(void)BigcellTapViewClick:(TagView *) TagView withWeibo:(weiboInfoModel *) weiboInfo withTagInfo:(TagModel *) tagInfo;
+
+
 @end
-@interface BigImageCollectionViewCell : UICollectionViewCell
+@interface BigImageCollectionViewCell : UICollectionViewCell <TagViewDelegate>
 {
     CGRect        m_frame;
     UIButton   *moreButton;
@@ -26,6 +30,9 @@
     UIImageView        *BgView;
     UIView        *BgView2;        //放分享的白色背景
     UIView        *BgView0;
+    UIView        *tagView;
+    UILabel  *marklable ;
+    M80AttributedLabel  *tagLable;
     UIButton      *_tanlogoButton;
 
 }
@@ -35,6 +42,7 @@
 @property (nonatomic,strong) NSArray     *weibosArray;   //小标签的数组，在多个标签的时候使用这个
 //@property (nonatomic,strong) weiboInfoModel       *weiboinfo;     //只有一个标签的时候传递这个参数
 
+@property(nonatomic,strong) weiboInfoModel  *weiboInfo;
 @property(nonatomic,strong) stageInfoModel   *stageInfo;
 -(void)ConfigCellWithIndexPath:(NSInteger )row;
 

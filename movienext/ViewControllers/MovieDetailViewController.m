@@ -165,7 +165,7 @@
     page=1;
     pageSize=15;
     pageCount=0;
-    bigModel=NO;
+    bigModel=YES;
     _dataArray =[[NSMutableArray alloc]init];
     moviedetailmodel=[[movieInfoModel alloc]init];
     _upWeiboArray=[[NSMutableArray alloc]init];
@@ -711,7 +711,18 @@
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
    // HotMovieModel  *model =[_dataArray objectAtIndex:indexPath.row];
     if (bigModel==YES) {
-         return CGSizeMake(kDeviceWidth,kDeviceWidth+45+10);
+        float hight=hight=310*(9.0/16);
+        stageInfoModel *stagemodel=[_dataArray objectAtIndex:indexPath.row];
+        if ([[self getLageLikeCount:stagemodel.weibosArray] count]>0) {
+        NSString  *contString =  [[self getLageLikeCount:stagemodel.weibosArray] objectAtIndex:0];
+        CGSize size =[contString boundingRectWithSize:CGSizeMake(kStageWidth-20, MAXFLOAT) options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes:[NSDictionary dictionaryWithObject:[UIFont systemFontOfSize:16] forKey:NSFontAttributeName] context:nil].size;
+        hight=hight+10+size.height;
+        if ([[[self getLageLikeCount:stagemodel.weibosArray] objectAtIndex:1] intValue]>0) {
+            hight=hight+TagHeight+10;
+        }
+        }
+        hight=hight+45+10;
+        return CGSizeMake(kDeviceWidth,hight+45+10);
     }
     else
     {
@@ -720,6 +731,30 @@
     }
     return CGSizeMake(0, 0);
 }
+
+//计算点赞最多的字符串
+-(NSMutableArray *)getLageLikeCount:(NSMutableArray  *) weiboarray
+{
+    int count=0;
+    NSInteger tagCount;
+    //   weiboInfoModel *weibomodel ;
+    NSMutableArray  *Array =[[NSMutableArray alloc]init];
+    NSString  *weiboString=@"";
+    for (weiboInfoModel   *model in  weiboarray) {
+        if (model.like_count.intValue >count) {
+            count=model.like_count.intValue;
+            weiboString=model.content;
+            tagCount=model.tagArray.count;
+            [Array addObject:weiboString];
+            [Array addObject:[NSString stringWithFormat:@"%ld",tagCount]];
+            [Array addObject:model];
+            
+        }
+    }
+    return Array;
+}
+
+
 
 -(UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
 {

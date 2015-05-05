@@ -31,12 +31,14 @@
     BgView.layer.cornerRadius=4;
     BgView.clipsToBounds=YES;
     BgView.userInteractionEnabled=YES;
+    BgView.backgroundColor=[UIColor whiteColor];
     [self.contentView addSubview:BgView];
     
     //上部视图，包含头像，点赞
     //[self CreateTopView];
     //中间的stageview 视图
     [self CreateSatageView];
+    [self createTagView];
       //底部视图
     [self createButtomView];
   
@@ -71,7 +73,7 @@
 
 -(void)CreateSatageView
 {
-    _stageView=[[StageView alloc]initWithFrame:CGRectMake(0,0, kStageWidth, kStageWidth)];
+    _stageView=[[StageView alloc]initWithFrame:CGRectMake(0,0, kStageWidth, 310*(9.0/16))];
     _stageView.backgroundColor=VStageView_color;
    // _stageView.layer.cornerRadius=4;
     //_stageView.clipsToBounds=YES;
@@ -80,10 +82,23 @@
     [BgView addSubview:_stageView];
   
 }
+-(void)createTagView
+{
+ 
+    tagView =[[UIView alloc]initWithFrame:CGRectMake(0,310*(9.0/16), kStageWidth,45)];
+    tagView.backgroundColor=[UIColor whiteColor];
+    tagView.userInteractionEnabled=YES;
+    [BgView addSubview:tagView];
+    
+    
+     marklable =[ZCControl  createLabelWithFrame:CGRectMake(10, 10, 10, 10) Font:16 Text:@""];
+    marklable.textColor=VGray_color;
+    [tagView addSubview:marklable];
+}
 
 -(void)createButtomView
 {
-    BgView2=[[UIView alloc]initWithFrame:CGRectMake(0, kStageWidth, kStageWidth, 45)];
+    BgView2=[[UIView alloc]initWithFrame:CGRectMake(0, 310*(9.0/16), kStageWidth, 45)];
     //改变toolar 的颜色
     BgView2.backgroundColor=[UIColor whiteColor];
     [BgView addSubview:BgView2];
@@ -109,7 +124,7 @@
     
     
     //更多
-    moreButton=[ZCControl createButtonWithFrame:CGRectMake(kStageWidth-130, 9, 30, 25) ImageName:@"more_icon.png" Target:self Action:@selector(cellButtonClick:) Title:@""];
+    moreButton=[ZCControl createButtonWithFrame:CGRectMake(kStageWidth-95, 9, 30, 25) ImageName:@"more_icon.png" Target:self Action:@selector(cellButtonClick:) Title:@""];
     //moreButton.backgroundColor=VBlue_color;
     moreButton.layer.cornerRadius=2;
      moreButton.hidden=NO;
@@ -123,16 +138,16 @@
 //    [BgView2 addSubview:ScreenButton];
 
     
-    if (_tanlogoButton) {
-        [_tanlogoButton removeFromSuperview];
-        _tanlogoButton=nil;
-    }
-    _tanlogoButton =[UIButton buttonWithType:UIButtonTypeCustom];
-    _tanlogoButton.frame=CGRectMake(kStageWidth-100, 9, 45, 25);
-    [_tanlogoButton setImage:[UIImage imageNamed:@"close_danmu.png"] forState:UIControlStateNormal];
-    [_tanlogoButton setImage:[UIImage imageNamed:@"open_danmu.png.png"] forState:UIControlStateSelected];
-    [_tanlogoButton addTarget:self action:@selector(hidenAndShowMarkView:) forControlEvents:UIControlEventTouchUpInside];
-    [BgView2 addSubview:_tanlogoButton];
+//    if (_tanlogoButton) {
+//        [_tanlogoButton removeFromSuperview];
+//        _tanlogoButton=nil;
+//    }
+//    _tanlogoButton =[UIButton buttonWithType:UIButtonTypeCustom];
+//    _tanlogoButton.frame=CGRectMake(kStageWidth-100, 9, 45, 25);
+//    [_tanlogoButton setImage:[UIImage imageNamed:@"close_danmu.png"] forState:UIControlStateNormal];
+//    [_tanlogoButton setImage:[UIImage imageNamed:@"open_danmu.png.png"] forState:UIControlStateSelected];
+//    [_tanlogoButton addTarget:self action:@selector(hidenAndShowMarkView:) forControlEvents:UIControlEventTouchUpInside];
+//    [BgView2 addSubview:_tanlogoButton];
 
     //添加弹幕
     addMarkButton =[ZCControl createButtonWithFrame:CGRectMake(kStageWidth-55,9,45,25) ImageName:@"btn_add_default.png" Target:self Action:@selector(cellButtonClick:) Title:@""];
@@ -164,16 +179,6 @@
     UserLogoButton.tag=4000;
     deletButton.tag=5000;
     moreButton.tag=6000;
-//        if (_tanlogoButton) {
-//             [_tanlogoButton removeFromSuperview];
-//            _tanlogoButton=nil;
-//        }
-//        _tanlogoButton =[UIButton buttonWithType:UIButtonTypeCustom];
-//        _tanlogoButton.frame=CGRectMake(kDeviceWidth-120, 9, 45, 25);
-//        [_tanlogoButton setImage:[UIImage imageNamed:@"close_danmu.png"] forState:UIControlStateNormal];
-//        [_tanlogoButton setImage:[UIImage imageNamed:@"open_danmu.png"] forState:UIControlStateSelected];
-//        [_tanlogoButton addTarget:self action:@selector(hidenAndShowMarkView:) forControlEvents:UIControlEventTouchUpInside];
-//        [BgView2 addSubview:_tanlogoButton];
     
 #pragma mark  configDatawithSatgeView------------------------------
    //单个标签的时候用这个
@@ -199,6 +204,21 @@
         [MovieLogoImageView sd_setImageWithURL:[NSURL URLWithString:logoString] placeholderImage:[UIImage imageNamed:@"loading_image_all.png"]];
     }
     
+    marklable.text=self.weiboInfo.content;
+    if (tagLable) {
+        [tagLable removeFromSuperview];
+        tagLable=nil;
+    }
+    if (self.weiboInfo.tagArray&&self.weiboInfo.tagArray.count) {
+        tagLable =[[M80AttributedLabel alloc]initWithFrame:CGRectMake(0,10,200,TagHeight)];
+        tagLable.backgroundColor =[UIColor clearColor];
+        for (int i=0; i<self.weiboInfo.tagArray.count; i++) {
+            TagView *tagview = [self createTagViewWithtagInfo:self.weiboInfo.tagArray[i] andIndex:i];
+            [tagLable appendView:tagview margin:UIEdgeInsetsMake(0, 0, 0, 10)];
+        }
+        [tagView addSubview:tagLable];
+    }
+
     
 #pragma  mark  根据不同cell 配置cell 的样式------------------------------
 #pragma  mark  热门cell
@@ -219,6 +239,26 @@
         
     }
 }
+
+//创建标签的方法
+-(TagView *)createTagViewWithtagInfo:(TagModel *) tagmodel andIndex:(NSInteger ) index
+{
+    
+    TagView *tagview =[[TagView alloc]initWithFrame:CGRectZero];
+    tagview.tag=1000+index;
+    tagview.delegete=self;
+    //设置是否可以点击
+    [tagview setTagViewIsClick:YES];
+    tagview.tagInfo=tagmodel;
+    tagview.weiboInfo=self.weiboInfo;
+    NSString *titleStr = tagmodel.tagDetailInfo.title;
+    tagview.titleLable.text=titleStr;
+    CGSize  Tsize =[titleStr boundingRectWithSize:CGSizeMake(MAXFLOAT, TagHeight) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:[NSDictionary dictionaryWithObject:tagview.titleLable.font forKey:NSFontAttributeName] context:nil].size;
+    tagview.frame=CGRectMake(0,0, Tsize.width+10, TagHeight+10);
+    return tagview;
+}
+
+
 
 
 #pragma mark 点击屏幕显示和隐藏marview
@@ -253,6 +293,14 @@
 
 - (void)layoutSubviews {
     [super layoutSubviews];
+    BgView.frame=CGRectMake(5,5, kStageWidth, self.frame.size.height-10);
+    tagView.frame=CGRectMake(0, 310*(9.0/16), kStageWidth, self.frame.size.height-(310*(9.0/16)-45));
+    
+    NSString  *contString =self.weiboInfo.content;
+    CGSize size =[contString boundingRectWithSize:CGSizeMake(kStageWidth-20, MAXFLOAT) options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes:[NSDictionary dictionaryWithObject:[UIFont systemFontOfSize:16] forKey:NSFontAttributeName] context:nil].size;
+    marklable.frame=CGRectMake(10, 10,kStageWidth-20, size.height);
+    tagLable.frame=CGRectMake(10,marklable.frame.origin.y+marklable.frame.size.height+10, kStageWidth-20, TagHeight+10);
+    BgView2.frame=CGRectMake(0,self.frame.size.height-45-10, kStageWidth, 45);
     
     
 }
@@ -263,6 +311,14 @@
     
     if (self.delegate &&[self.delegate respondsToSelector:@selector(commonStageCellToolButtonClick:Rowindex:)]) {
         [self.delegate commonStageCellToolButtonClick:button Rowindex:self.Cellindex];
+    }
+    
+}
+//标签的点击事件
+-(void)TapViewClick:(TagView*)TagView Withweibo:(weiboInfoModel *)weiboInfo withTagInfo:(TagModel *)tagInfo
+{
+    if (self.delegate &&[self.delegate respondsToSelector:@selector(cellTapViewClick:withWeibo:withTagInfo:)]) {
+        [self.delegate cellTapViewClick:TagView withWeibo:weiboInfo withTagInfo:tagInfo];
     }
     
 }
