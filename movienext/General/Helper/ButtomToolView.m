@@ -155,11 +155,9 @@
     timelabel.text=timeStr;
     //内容
     contentLable.text =self.weiboInfo.content;
-    
    ////标签
     [self removeTagViewFromSuperView];
     leadWidth=0;
-    
     if (self.weiboInfo.tagArray&&self.weiboInfo.tagArray.count) {
           tagLable =[[M80AttributedLabel alloc]initWithFrame:CGRectMake(contentLable.frame.origin.x, contentLable.frame.origin.y+contentLable.frame.size.height, _alertView.frame.size.width-20, TagHeight+10)];
         tagLable.backgroundColor =[UIColor clearColor];
