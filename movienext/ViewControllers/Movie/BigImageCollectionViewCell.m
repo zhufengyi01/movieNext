@@ -107,17 +107,9 @@
     self.Cellindex=row;
     if (_tanlogoButton) {
         [_tanlogoButton removeFromSuperview];
-        _tanlogoButton=nil;
+       // _tanlogoButton=nil;
     }
-//    _tanlogoButton =[UIButton buttonWithType:UIButtonTypeCustom];
-//    _tanlogoButton.frame=CGRectMake(moreButton.frame.origin.x+moreButton.frame.size.width+10, 5, 35, 35);
-//    [_tanlogoButton setImage:[UIImage imageNamed:@"close_danmu.png"] forState:UIControlStateNormal];
-//    [_tanlogoButton setImage:[UIImage imageNamed:@"open_danmu.png"] forState:UIControlStateSelected];
-//    [_tanlogoButton addTarget:self action:@selector(hidenAndShowMarkView:) forControlEvents:UIControlEventTouchUpInside];
-//    [BgView2 addSubview:_tanlogoButton];
-//    
     marklable.text=self.weiboInfo.content;
-    
     if (tagLable) {
         [tagLable removeFromSuperview];
         tagLable=nil;
@@ -132,8 +124,6 @@
         }
         [tagView addSubview:tagLable];
     }
-    
-    
     
     if (self.weibosArray) {
         _StageView.weibosArray = self.weibosArray;

@@ -89,15 +89,15 @@
 
 
 }
--(void)requestMovieData
-{
-    page=1;
-    if (_dataArray.count >0) {
-        [_dataArray removeAllObjects];
-    }
-    [self requestData];
-    
-}
+//-(void)requestMovieData
+//{
+//    page=1;
+//    if (_dataArray.count >0) {
+//        [_dataArray removeAllObjects];
+//    }
+//    [self requestData];
+//    
+//}
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -203,7 +203,7 @@
     
     [self.view addSubview:_myConllectionView];
     
-   [self setupHeadView];
+    [self setupHeadView];
     [self setupFootView];
 }
 
@@ -218,17 +218,17 @@
             [vc.dataArray removeAllObjects];
         }
         // 进入刷新状态就会回调这个Block
-        [vc requestData];
+         [vc requestData];
         
         // 模拟延迟加载数据，因此2秒后才调用）
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            //[vc.myConllectionView reloadData];
+            [vc.myConllectionView reloadData];
             // 结束刷新
-            [vc.myConllectionView headerEndRefreshing];
+        [vc.myConllectionView headerEndRefreshing];
         });
     }];
 #warning 自动刷新(一进入程序就下拉刷新)
-    // [vc.myConllectionView headerBeginRefreshing];
+     //[vc.myConllectionView headerBeginRefreshing];
 }
 
 
@@ -441,8 +441,9 @@
         if (movie_id && [movie_id intValue]>0) {
             self.movieId = movie_id;
         }
-        //[self requestMovieInfoData];
-            [self requestMovieData];
+            //[self requestMovieData];
+            [self requestData];
+            
          }
 
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -487,6 +488,7 @@
      parameter = @{@"movie_id": _movieId, @"user_id": userCenter.user_id,@"Version":Version};
     
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    
     [manager POST:urlString parameters:parameter success:^(AFHTTPRequestOperation *operation, id responseObject) {
         //NSLog(@"  电影详情页面数据JSON: %@", responseObject);
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
@@ -624,11 +626,13 @@
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
+   
     //在这里先将内容给清除一下, 然后再加载新的, 添加完内容之后先动画, 在cell消失的时候做清理工作
+    BigImageCollectionViewCell *cell = (BigImageCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"bigcell" forIndexPath:indexPath];
+    
     if (_dataArray.count>indexPath.row) {
-    stageInfoModel  *model=[_dataArray objectAtIndex:indexPath.row];
+       stageInfoModel  *model=[_dataArray objectAtIndex:indexPath.row];
     if (bigModel ==YES) {
-        BigImageCollectionViewCell *cell = (BigImageCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"bigcell" forIndexPath:indexPath];
         if (_dataArray.count>indexPath.row) {
             cell.weibosArray=model.weibosArray;
             if ([[self getLageLikeCount:model.weibosArray] count]>2) {
@@ -642,21 +646,21 @@
         }
         [cell.StageView startAnimation];
         return cell;
-    } else {
-        SmallImageCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"smallcell" forIndexPath:indexPath];
-        cell.imageView.backgroundColor=VStageView_color;
-        [cell.imageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w340h340",kUrlStage,model.photo]] placeholderImage:[UIImage imageNamed:nil]];
-        if ( model.weibosArray.count>0) {
-            cell.titleLab.hidden = NO;
-            cell.titleLab.text=[NSString stringWithFormat:@"%ld", model.weibosArray.count];
-        } else {
-            cell.titleLab.hidden = YES;
-        }
-        
-        return cell;
+//    } else {
+//        SmallImageCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"smallcell" forIndexPath:indexPath];
+//        cell.imageView.backgroundColor=VStageView_color;
+//        [cell.imageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w340h340",kUrlStage,model.photo]] placeholderImage:[UIImage imageNamed:nil]];
+//        if ( model.weibosArray.count>0) {
+//            cell.titleLab.hidden = NO;
+//            cell.titleLab.text=[NSString stringWithFormat:@"%ld", model.weibosArray.count];
+//        } else {
+//            cell.titleLab.hidden = YES;
+//        }
+//        
+//        return cell;
     }
     }
-    return nil;
+    return cell;
 }
 //点击小图模式的时候，跳转到大图模式
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
