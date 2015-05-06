@@ -16,7 +16,6 @@
 
 -(void)BigImageCollectionViewCellToolButtonClick:(UIButton *) button Rowindex:(NSInteger) index;
 
-
 -(void)BigcellTapViewClick:(TagView *) TagView withWeibo:(weiboInfoModel *) weiboInfo withTagInfo:(TagModel *) tagInfo;
 
 

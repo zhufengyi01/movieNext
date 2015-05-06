@@ -38,7 +38,7 @@
     self.backgroundColor =VStageView_color;
     float height =kStageWidth;
     _MovieImageView =[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kStageWidth, height*(9.0/16))];
-    _MovieImageView.contentMode=UIViewContentModeScaleAspectFit;
+    _MovieImageView.contentMode=UIViewContentModeScaleAspectFill;
     _MovieImageView.clipsToBounds=YES;
     [self addSubview:_MovieImageView];
 

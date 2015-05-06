@@ -835,7 +835,38 @@
 }
 
 -(CGFloat )tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return kStageWidth+45+10;
+    
+    for (int i=100; i<102;i++ ) {
+        UIButton  *btn =(UIButton *)[self.view viewWithTag:i];
+        if  (btn.tag==100&&btn.selected==YES) {
+            float  hight=310*(9.0/16);
+            userAddmodel  *model =[_addedDataArray objectAtIndex:indexPath.row];
+            NSString *contString=model.weiboInfo.content;
+            CGSize size =[contString boundingRectWithSize:CGSizeMake(kStageWidth-20, MAXFLOAT) options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes:[NSDictionary dictionaryWithObject:[UIFont systemFontOfSize:16] forKey:NSFontAttributeName] context:nil].size;
+            hight=hight+10+size.height;
+            if (model.weiboInfo.tagArray.count>0) {
+                hight=hight+TagHeight+10;
+            }
+            hight=hight+45+10;
+            return hight+10;
+        }
+        else if (btn.tag==101&&btn.selected==YES)
+        {
+            float  hight=310*(9.0/16);
+
+            userAddmodel  *model =[_upedDataArray objectAtIndex:indexPath.row];
+            NSString *contString=model.weiboInfo.content;
+            CGSize size =[contString boundingRectWithSize:CGSizeMake(kStageWidth-20, MAXFLOAT) options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes:[NSDictionary dictionaryWithObject:[UIFont systemFontOfSize:16] forKey:NSFontAttributeName] context:nil].size;
+            hight=hight+10+size.height;
+            if (model.weiboInfo.tagArray.count>0) {
+                hight=hight+TagHeight+10;
+            }
+            hight=hight+45+10;
+            return hight+10;
+        }
+    }
+    return 0;
+    //return kStageWidth+45+10;
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -1038,6 +1069,14 @@
     }
     
 }
+-(void)cellTapViewClick:(TagView *)TagView withWeibo:(weiboInfoModel *)weiboInfo withTagInfo:(TagModel *)tagInfo
+{
+    TagToStageViewController  *vc=[[TagToStageViewController alloc]init];
+    vc.weiboInfo=weiboInfo;
+    vc.tagInfo=tagInfo;
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
 -(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     

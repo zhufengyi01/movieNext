@@ -52,6 +52,7 @@
 {
     _StageView=[[StageView alloc]initWithFrame:CGRectMake(0, 0, kStageWidth,kStageWidth*(9.0/16))];
     _StageView.backgroundColor=VStageView_color;
+    
     [BgView addSubview:_StageView];
     
 }
@@ -63,10 +64,11 @@
     tagView.userInteractionEnabled=YES;
     [BgView addSubview:tagView];
     
-    
-    marklable =[ZCControl  createLabelWithFrame:CGRectMake(10, 10, 10, 10) Font:16 Text:@""];
+    marklable =[ZCControl  createLabelWithFrame:CGRectMake(10, 10, 100, 10) Font:16 Text:@"wehlwehwehweh"];
     marklable.textColor=VGray_color;
     [tagView addSubview:marklable];
+    
+    
 }
 
 -(void)createButtonView
@@ -115,19 +117,23 @@
 //    [BgView2 addSubview:_tanlogoButton];
 //    
     marklable.text=self.weiboInfo.content;
+    
     if (tagLable) {
         [tagLable removeFromSuperview];
         tagLable=nil;
     }
     if (self.weiboInfo.tagArray&&self.weiboInfo.tagArray.count) {
-        tagLable =[[M80AttributedLabel alloc]initWithFrame:CGRectMake(0,10,200,TagHeight)];
-        tagLable.backgroundColor =[UIColor clearColor];
         for (int i=0; i<self.weiboInfo.tagArray.count; i++) {
+            tagLable =[[M80AttributedLabel alloc]initWithFrame:CGRectMake(0,10,200,TagHeight)];
+            tagLable.backgroundColor =[UIColor clearColor];
+
             TagView *tagview = [self createTagViewWithtagInfo:self.weiboInfo.tagArray[i] andIndex:i];
             [tagLable appendView:tagview margin:UIEdgeInsetsMake(0, 0, 0, 10)];
         }
         [tagView addSubview:tagLable];
     }
+    
+    
     
     if (self.weibosArray) {
         _StageView.weibosArray = self.weibosArray;
@@ -196,11 +202,10 @@
     
     NSString  *contString =self.weiboInfo.content;
     CGSize size =[contString boundingRectWithSize:CGSizeMake(kStageWidth-20, MAXFLOAT) options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes:[NSDictionary dictionaryWithObject:[UIFont systemFontOfSize:16] forKey:NSFontAttributeName] context:nil].size;
+    
     marklable.frame=CGRectMake(10, 10,kStageWidth-20, size.height);
     tagLable.frame=CGRectMake(10,marklable.frame.origin.y+marklable.frame.size.height+10, kStageWidth-20, TagHeight+10);
     BgView2.frame=CGRectMake(0,self.frame.size.height-45-10, kStageWidth, 45);
-    
-
     
 }
 
@@ -208,10 +213,18 @@
 #pragma mark ------下方按钮点击事件 ,在父视图中实现具体的方法
 -(void)cellButtonClick:(UIButton*)button
 {
+    
     if (self.delegate &&[self.delegate respondsToSelector:@selector(BigImageCollectionViewCellToolButtonClick:Rowindex:)]) {
         [self.delegate BigImageCollectionViewCellToolButtonClick:button Rowindex:self.Cellindex];
     }
     
+}
+-(void)TapViewClick:(TagView *)tagView Withweibo:(weiboInfoModel *)weiboInfo withTagInfo:(TagModel *)tagInfo
+{
+ 
+    if (self.delegate &&[self.delegate respondsToSelector:@selector(BigcellTapViewClick:withWeibo:withTagInfo:)]) {
+        [self.delegate BigcellTapViewClick:tagView withWeibo:weiboInfo withTagInfo:tagInfo];
+    }
 }
 
 -(void)ScreenButtonClick:(UIButton  *) button

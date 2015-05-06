@@ -788,6 +788,7 @@
             cell.cellModel=model;
             cell.stageInfo=model.stageInfo;
             cell.weibosArray=model.stageInfo.weibosArray;
+            
             cell.weiboInfo=[[self getLageLikeCount:model.stageInfo.weibosArray] objectAtIndex:2];
 
             [cell ConfigsetCellindexPath:indexPath.row];
@@ -1302,10 +1303,7 @@
             {
                 weiboInfoModel  *weibomodel =[_newDataArray objectAtIndex:Rowindex];
                 stageInfo=weibomodel.stageInfo;
-
-       
              }
-        
             //版权问题
             [self sendFeedBackWithStageInfo: stageInfo];
 
@@ -1356,6 +1354,7 @@
         }
     }
 }
+#pragma mark  sendEmail -----------------------------------------------------------------------------------------------
 
 - (void)sendFeedBackWithStageInfo:(stageInfoModel *)stageInfo
 {

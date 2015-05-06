@@ -631,13 +631,14 @@
         BigImageCollectionViewCell *cell = (BigImageCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"bigcell" forIndexPath:indexPath];
         if (_dataArray.count>indexPath.row) {
             cell.weibosArray=model.weibosArray;
+            if ([[self getLageLikeCount:model.weibosArray] count]>2) {
+            cell.weiboInfo=[[self getLageLikeCount:model.weibosArray] objectAtIndex:2];
+            }
             cell.backgroundColor=View_BackGround;
             cell.stageInfo=model;
             cell.delegate=self;
             [cell ConfigCellWithIndexPath:indexPath.row];
             cell.StageView.delegate=self;
-    
-          
         }
         [cell.StageView startAnimation];
         return cell;
@@ -711,17 +712,17 @@
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
    // HotMovieModel  *model =[_dataArray objectAtIndex:indexPath.row];
     if (bigModel==YES) {
-        float hight=hight=310*(9.0/16);
+        float hight=310*(9.0/16);
         stageInfoModel *stagemodel=[_dataArray objectAtIndex:indexPath.row];
         if ([[self getLageLikeCount:stagemodel.weibosArray] count]>0) {
         NSString  *contString =  [[self getLageLikeCount:stagemodel.weibosArray] objectAtIndex:0];
         CGSize size =[contString boundingRectWithSize:CGSizeMake(kStageWidth-20, MAXFLOAT) options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes:[NSDictionary dictionaryWithObject:[UIFont systemFontOfSize:16] forKey:NSFontAttributeName] context:nil].size;
-        hight=hight+10+size.height;
-        if ([[[self getLageLikeCount:stagemodel.weibosArray] objectAtIndex:1] intValue]>0) {
+            hight=hight+10+size.height;
+          if ([[[self getLageLikeCount:stagemodel.weibosArray] objectAtIndex:1] intValue]>0) {
             hight=hight+TagHeight+10;
+           }
         }
-        }
-        hight=hight+45+10;
+        hight=hight+10;
         return CGSizeMake(kDeviceWidth,hight+45+10);
     }
     else
@@ -931,11 +932,18 @@
             Act.tag=507;
             [Act showInView:Act];
         }
-
     }
     
 }
-#pragma  mark  -------- AddMarkViewControllerReturn  -----------------------------------------------
+-(void)BigcellTapViewClick:(TagView *)TagView withWeibo:(weiboInfoModel *)weiboInfo withTagInfo:(TagModel *)tagInfo
+{
+    TagToStageViewController  *vc=[[TagToStageViewController alloc]init];
+    vc.weiboInfo=weiboInfo;
+    vc.tagInfo=tagInfo;
+    [self.navigationController pushViewController:vc animated:YES];
+
+}
+#pragma  mark 添加弹幕返回通知刷新列表  -------- AddMarkViewControllerReturn  -----------------------------------------------
 -(void)AddMarkViewControllerReturn
 {
     [self.myConllectionView reloadData];

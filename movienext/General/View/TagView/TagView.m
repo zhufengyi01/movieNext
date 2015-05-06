@@ -58,6 +58,7 @@
 //点击本身执行跳转到具有这个标签的剧情
 -(void)dealTapSelf:(UITapGestureRecognizer *) tap
 {
+    
     if (self.delegete &&[self.delegete respondsToSelector:@selector(TapViewClick:Withweibo:withTagInfo:)]) {
         
         [self.delegete TapViewClick:self Withweibo:self.weiboInfo withTagInfo:self.tagInfo];
