@@ -41,6 +41,7 @@
 #import "movieInfoModel.h"
 #import "ScanMovieInfoViewController.h"
 #import "TagToStageViewController.h"
+#import "ShowSelectPhotoViewController.h"
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
 @interface MovieDetailViewController ()<UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UICollectionViewDelegate,MovieHeadViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UMSocialUIDelegate,UMSocialDataDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIScrollViewDelegate,BigImageCollectionViewCellDelegate,AddMarkViewControllerDelegate,UMShareViewControllerDelegate,UMShareViewController2Delegate,MFMailComposeViewControllerDelegate,LoadingViewDelegate>
@@ -123,6 +124,46 @@
 //创建可以显示隐藏的导航条
 -(void)createNavigation
 {
+    UIView *titleView=[[UIView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth-120, 40)];
+    UIImageView *    MovieLogoImageView=[[UIImageView alloc]initWithFrame:CGRectMake(0,0,30, 30)];
+    MovieLogoImageView.layer.cornerRadius=4;
+    MovieLogoImageView.contentMode=UIViewContentModeScaleAspectFill;
+    MovieLogoImageView.clipsToBounds=YES;
+    MovieLogoImageView.image =[UIImage imageNamed:@"Moments.png"];
+    MovieLogoImageView.layer.masksToBounds = YES;
+    [titleView addSubview:MovieLogoImageView];
+//
+    UILabel  *movieNameLable =[[UILabel alloc]initWithFrame:CGRectMake(35,0, 120, 30)];
+    movieNameLable.font=[UIFont systemFontOfSize:16];
+    movieNameLable.textColor=VGray_color;
+    // movieNameLable.numberOfLines=1;
+    movieNameLable.lineBreakMode=NSLineBreakByTruncatingTail;
+    [titleView addSubview:movieNameLable];
+    
+    NSString  *logoString;
+    if (self.pageSourceType==NSMovieSourcePageMovieListController) {
+        logoString =[NSString stringWithFormat:@"%@%@!poster",kUrlFeed,self.movielogo];
+    }
+    else if(self.pageSourceType==NSMovieSourcePageSearchListController)
+    {
+        logoString =self.movielogo;
+    }
+    else
+    {
+     logoString =[NSString stringWithFormat:@"%@%@!w100h100",kUrlMoviePoster,self.movielogo];
+    
+    }
+    
+    [MovieLogoImageView sd_setImageWithURL:[NSURL URLWithString:logoString] placeholderImage:[UIImage imageNamed:@"Moments.png"]];
+    NSString  *nameStr=self.moviename;
+    movieNameLable.text=[NSString stringWithFormat:@"%@",nameStr];
+    
+    self.navigationItem.titleView=titleView;
+    [self.navigationItem.titleView setContentMode:UIViewContentModeCenter];
+
+    
+    
+
     upLoadimageBtn=[ZCControl createButtonWithFrame:CGRectMake(0,0,25,25) ImageName:nil Target:self Action:@selector(NavigationClick:) Title:nil];
     upLoadimageBtn.tag=201;
     [upLoadimageBtn setImage:[UIImage imageNamed:@"up_picture_blue.png"] forState:UIControlStateNormal];
@@ -369,7 +410,6 @@
 //跟换用户的数据请求
 -(void)requestChangeUser:(NSDictionary  *) dict
 {
-    
     NSDictionary *parameters = @{@"weibo_id":_TweiboInfo.Id,@"user_id":[dict objectForKey:@"id"]};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:[NSString stringWithFormat:@"%@/weibo/switch", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -384,9 +424,7 @@
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
-    
 }
-
 //推荐微博的接口
 -(void)requestrecommendData
 {
@@ -442,7 +480,8 @@
             self.movieId = movie_id;
         }
         //[self requestMovieInfoData];
-            [self requestMovieData];
+          //  [self requestMovieData];
+            [self requestData];
          }
 
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -455,7 +494,7 @@
 
 
 //根据电影id 请求电影的详细信息
-/*-(void)requestMovieInfoData
+-(void)requestMovieInfoData
 {
     if (!_movieId || _movieId<=0) {
         return;
@@ -465,16 +504,23 @@
     [manager POST:[NSString stringWithFormat:@"%@/movie/info", kApiBaseUrl] parameters:parameter success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"  电影详情页面的电影信息数据JSON: %@", responseObject);
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
-            [moviedetailmodel setValuesForKeysWithDictionary:[responseObject objectForKey:@"model"]];
-            [self requestData];
-            [self.myConllectionView reloadData];
+            NSDictionary  *dict =[responseObject objectForKey:@"model"];
+            ShowSelectPhotoViewController  *vc =[[ShowSelectPhotoViewController alloc]init];
+            vc.douban_id=[dict objectForKey:@"douban_id"];
+            vc.movie_id=self.movieId;
+            
+            UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+            self.navigationItem.backBarButtonItem=item;
+
+            [self.navigationController pushViewController:vc animated:YES];
+            
         }
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         
         NSLog(@"Error: %@", error);
     }];
-}*/
+}
 
 -(void)requestData
 {
@@ -624,25 +670,26 @@
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
+      SmallImageCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"smallcell" forIndexPath:indexPath];
     //在这里先将内容给清除一下, 然后再加载新的, 添加完内容之后先动画, 在cell消失的时候做清理工作
     if (_dataArray.count>indexPath.row) {
     stageInfoModel  *model=[_dataArray objectAtIndex:indexPath.row];
-    if (bigModel ==YES) {
-        BigImageCollectionViewCell *cell = (BigImageCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"bigcell" forIndexPath:indexPath];
-        if (_dataArray.count>indexPath.row) {
-            cell.weibosArray=model.weibosArray;
-            cell.backgroundColor=View_BackGround;
-            cell.stageInfo=model;
-            cell.delegate=self;
-            [cell ConfigCellWithIndexPath:indexPath.row];
-            cell.StageView.delegate=self;
-    
-          
-        }
-        [cell.StageView startAnimation];
-        return cell;
-    } else {
-        SmallImageCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"smallcell" forIndexPath:indexPath];
+//    if (bigModel ==YES) {
+//        BigImageCollectionViewCell *cell = (BigImageCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"bigcell" forIndexPath:indexPath];
+//        if (_dataArray.count>indexPath.row) {
+//            cell.weibosArray=model.weibosArray;
+//            cell.backgroundColor=View_BackGround;
+//            cell.stageInfo=model;
+//            cell.delegate=self;
+//            [cell ConfigCellWithIndexPath:indexPath.row];
+//            cell.StageView.delegate=self;
+//    
+//          
+//        }
+//        [cell.StageView startAnimation];
+//        return cell;
+//    } else {
+      
         cell.imageView.backgroundColor=VStageView_color;
         [cell.imageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w340h340",kUrlStage,model.photo]] placeholderImage:[UIImage imageNamed:nil]];
         if ( model.weibosArray.count>0) {
@@ -651,11 +698,10 @@
         } else {
             cell.titleLab.hidden = YES;
         }
-        
         return cell;
+    //}
     }
-    }
-    return nil;
+    return cell;
 }
 //点击小图模式的时候，跳转到大图模式
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
@@ -833,13 +879,10 @@
     }
     else if (button.tag==201)
     {
-        UIImagePickerController *picker = [[UIImagePickerController alloc] init];
         
-        picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-        picker.delegate = self;
-        //设置选择后的图片可被编辑
-        picker.allowsEditing = YES;
-        [self presentViewController:picker animated:YES completion:nil];
+        UIActionSheet  *ac =[[UIActionSheet alloc]initWithTitle:@"选择照片" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"本地上传",@"网上图片", nil];
+        ac.tag=499;
+        [ac showInView:self.view];
     }
 }
 #pragma  mark  -------BigImageCollectionViewCellToolButtonClick  ---- -- ---------------------
@@ -1127,8 +1170,25 @@
 #pragma mark  ----actionSheetDelegate--
 -(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
+    if (actionSheet.tag==499) {
+        
+        if (buttonIndex==0) {
+                    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+                    picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+                    picker.delegate = self;
+                    //设置选择后的图片可被编辑
+                    picker.allowsEditing = YES;
+                    [self presentViewController:picker animated:YES completion:nil];
+            
+        }
+        else if (buttonIndex==1)
+        {
+            
+            [self requestMovieInfoData];
+        }
+    }
     
-    if (actionSheet.tag==500) {
+    else  if (actionSheet.tag==500) {
         if (buttonIndex==0) {
             //删除
             UIActionSheet   *ash=[[UIActionSheet alloc]initWithTitle:@"确定删除" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"删除" otherButtonTitles:nil,nil];

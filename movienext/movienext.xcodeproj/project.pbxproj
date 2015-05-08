@@ -108,6 +108,8 @@
 		00218C8B1AE0E5EE006B79B4 /* netRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 00218C8A1AE0E5EE006B79B4 /* netRequest.m */; };
 		002E39171AC9439C00666AD0 /* liked_icon_light@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 002E39151AC9439C00666AD0 /* liked_icon_light@2x.png */; };
 		002E39181AC9439C00666AD0 /* liked_icon_light@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 002E39161AC9439C00666AD0 /* liked_icon_light@3x.png */; };
+		0031D48B1AFB443600827023 /* ShowSelectPhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0031D48A1AFB443600827023 /* ShowSelectPhotoViewController.m */; };
+		0031D48E1AFB622C00827023 /* DoubanUpImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0031D48D1AFB622C00827023 /* DoubanUpImageViewController.m */; };
 		0032657B1ABFB8A800641EE0 /* UploadProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0032657A1ABFB8A800641EE0 /* UploadProgressView.m */; };
 		00354B331ABEC8EC00F650AA /* UploadImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00354B321ABEC8EC00F650AA /* UploadImageViewController.m */; };
 		00354C2C1ABF004100F650AA /* UpYun.m in Sources */ = {isa = PBXBuildFile; fileRef = 00354C201ABF004100F650AA /* UpYun.m */; };
@@ -522,6 +524,10 @@
 		00218C8A1AE0E5EE006B79B4 /* netRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = netRequest.m; sourceTree = "<group>"; };
 		002E39151AC9439C00666AD0 /* liked_icon_light@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "liked_icon_light@2x.png"; sourceTree = "<group>"; };
 		002E39161AC9439C00666AD0 /* liked_icon_light@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "liked_icon_light@3x.png"; sourceTree = "<group>"; };
+		0031D4891AFB443600827023 /* ShowSelectPhotoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShowSelectPhotoViewController.h; sourceTree = "<group>"; };
+		0031D48A1AFB443600827023 /* ShowSelectPhotoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShowSelectPhotoViewController.m; sourceTree = "<group>"; };
+		0031D48C1AFB622C00827023 /* DoubanUpImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DoubanUpImageViewController.h; sourceTree = "<group>"; };
+		0031D48D1AFB622C00827023 /* DoubanUpImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DoubanUpImageViewController.m; sourceTree = "<group>"; };
 		003265791ABFB8A800641EE0 /* UploadProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UploadProgressView.h; path = ../UploadProgressView.h; sourceTree = "<group>"; };
 		0032657A1ABFB8A800641EE0 /* UploadProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UploadProgressView.m; path = ../UploadProgressView.m; sourceTree = "<group>"; };
 		00354B311ABEC8EC00F650AA /* UploadImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UploadImageViewController.h; sourceTree = "<group>"; };
@@ -1014,6 +1020,8 @@
 			children = (
 				00354B311ABEC8EC00F650AA /* UploadImageViewController.h */,
 				00354B321ABEC8EC00F650AA /* UploadImageViewController.m */,
+				0031D48C1AFB622C00827023 /* DoubanUpImageViewController.h */,
+				0031D48D1AFB622C00827023 /* DoubanUpImageViewController.m */,
 			);
 			path = UploadImage;
 			sourceTree = "<group>";
@@ -1021,6 +1029,7 @@
 		000B08F71AA2EA1800B8D13A /* Movie */ = {
 			isa = PBXGroup;
 			children = (
+				0031D4881AFB440800827023 /* ShowSelectPhoto */,
 				000613AA1ABE67E200E8C719 /* UploadImage */,
 				00562B4E1ABBD8E0001D4FE0 /* Showstage */,
 				00ABFC6E1AAAA78100980824 /* MovieDetail */,
@@ -1301,6 +1310,15 @@
 			);
 			name = LoadView;
 			path = ../Helper/LoadView;
+			sourceTree = "<group>";
+		};
+		0031D4881AFB440800827023 /* ShowSelectPhoto */ = {
+			isa = PBXGroup;
+			children = (
+				0031D4891AFB443600827023 /* ShowSelectPhotoViewController.h */,
+				0031D48A1AFB443600827023 /* ShowSelectPhotoViewController.m */,
+			);
+			path = ShowSelectPhoto;
 			sourceTree = "<group>";
 		};
 		00354C1E1ABF004100F650AA /* UPYun */ = {
@@ -2488,6 +2506,7 @@
 				0067CFEF1AD4186200148561 /* UMShareViewController.m in Sources */,
 				00AA545D1AA2C526004096F8 /* LoginViewController.m in Sources */,
 				00AA542C1AA2C525004096F8 /* SDWebImageDecoder.m in Sources */,
+				0031D48B1AFB443600827023 /* ShowSelectPhotoViewController.m in Sources */,
 				00AA542F1AA2C525004096F8 /* SDWebImageManager.m in Sources */,
 				00DF5EFA1AE64FDF0063CCBC /* M80AttributedLabel.m in Sources */,
 				00354C601ABF030C00F650AA /* AFNetworkActivityIndicatorManager.m in Sources */,
@@ -2525,6 +2544,7 @@
 				00AA54571AA2C526004096F8 /* MovieList.m in Sources */,
 				00AA54351AA2C525004096F8 /* UIImageView+HighlightedWebCache.m in Sources */,
 				00B168B11AD77E88002265CD /* weiboInfoModel.m in Sources */,
+				0031D48E1AFB622C00827023 /* DoubanUpImageViewController.m in Sources */,
 				00AA54211AA2C525004096F8 /* MASConstraintMaker.m in Sources */,
 				00354C651ABF030C00F650AA /* UIProgressView+AFNetworking.m in Sources */,
 				00AA54251AA2C525004096F8 /* NSArray+MASAdditions.m in Sources */,

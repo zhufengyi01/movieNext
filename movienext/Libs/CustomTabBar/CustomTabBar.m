@@ -14,7 +14,6 @@
 //以后在这里调整正常字体的颜色
 #define  TabNorColor      [UIColor colorWithRed:175.0/255 green:180.0/255 blue:201.0/255 alpha:1]
 
-
 @interface CustomTabBar ()
 {
     CGRect m_frame;
@@ -86,39 +85,42 @@
 
 - (void)buttonPressed:(UIButton *)button
 {
+    if (button.selected==NO) {
     [self resetButtonImagesWithButton:button];
     
-    // 必选的代理方法，如下调用，作用可以帮助排查必选的代理方法是否实现
-    [self.m_delegate buttonPresedInCustomTabBar:button.tag - BUTTON_START_TAG];
-    
-    // 针对代理协议里面有可选的代理时使用的方法可，respondsToSelector 就是判断self.m_delegate指向的对象有没有，这个方法--> buttonPresedInCustomTabBar:
+     // 针对代理协议里面有可选的代理时使用的方法可，respondsToSelector 就是判断self.m_delegate指向的对象有没有，这个方法--> buttonPresedInCustomTabBar:
     if (self.m_delegate && [self.m_delegate respondsToSelector:@selector(buttonPresedInCustomTabBar:)]) {
-        
+          [self.m_delegate buttonPresedInCustomTabBar:button.tag - BUTTON_START_TAG];
+    }
     }
 }
 
+//重置图片
 - (void)resetButtonImagesWithButton:(UIButton *)button
 {
-    
+    if (button.selected==NO) {
     for (NSUInteger i = 0; i < BUTTON_COUNT; i++) {
         UIButton * btn = (UIButton *)[self viewWithTag:i + BUTTON_START_TAG];
         NSString * normal = [self.m_arrNormal objectAtIndex:i];
         UIImage * normalImage = [UIImage imageNamed:normal];
       
         [btn setImage:normalImage forState:UIControlStateNormal];
-
         UILabel  *lable=(UILabel *)[self viewWithTag:2000+i] ;
         lable.textColor=TabNorColor;
-        
     }
-    
-    NSLog(@"button pressed");
-    NSString * selected = [self.m_arrSelected objectAtIndex:button.tag - BUTTON_START_TAG];
+     NSString * selected = [self.m_arrSelected objectAtIndex:button.tag - BUTTON_START_TAG];
     UIImage * selectedImage = [UIImage imageNamed:selected];
     [button setImage:selectedImage forState:UIControlStateNormal];
-    //[button setImageEdgeInsets:UIEdgeInsetsMake(8, 25, 15, 25)];
+ 
     UILabel  *label=(UILabel *)[self viewWithTag:button.tag+1000];
     label.textColor=TabSelectColor;
+    }
+    else if (button.selected==YES)
+    {
+        //如果已经选中了,那么就刷新啊
+        
+        
+    }
 }
 
 /*

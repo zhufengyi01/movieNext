@@ -122,6 +122,7 @@
     [self creatLoadView];
     //  [self requestData];
     [self createToolBar];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshTableView) name:@"RefeshTableview" object:nil];
     
     
 }
@@ -154,9 +155,28 @@
     
     [segment addTarget:self action:@selector(segmentClick:) forControlEvents:UIControlEventValueChanged];
     [self.navigationItem setTitleView:segment];
+    
+//    
+//    UIButton  *button=[UIButton buttonWithType:UIButtonTypeCustom];
+//    //[button setTitle:@"设置" forState:UIControlStateNormal];
+//    [button setBackgroundImage:[UIImage imageNamed:@"setting.png"] forState:UIControlStateNormal];
+//    button.frame=CGRectMake(kDeviceWidth-30, 10, 18, 18);
+//    [button addTarget:self action:@selector(refreshTableView) forControlEvents:UIControlEventTouchUpInside];
+//    UIBarButtonItem  *barButton=[[UIBarButtonItem alloc]initWithCustomView:button];
+//    self.navigationItem.rightBarButtonItem=barButton;
+
+    
 }
+//点击可刷新
+-(void)refreshTableView
+{
+    [_HotMoVieTableView  headerBeginRefreshing];
+}
+
 -(void)segmentClick:(UISegmentedControl *)seg
 {
+    
+    
       if(seg.selectedSegmentIndex==0)
       {
           if (_hotDataArray.count==0) {
@@ -177,7 +197,7 @@
 }
 -(void)createHotView
 {
-    _HotMoVieTableView=[[UITableView alloc]initWithFrame:CGRectMake(0,0, kDeviceWidth, kDeviceHeight-kHeightNavigation)];
+    _HotMoVieTableView=[[UITableView alloc]initWithFrame:CGRectMake(0,0,kDeviceWidth, kDeviceHeight-kHeightNavigation)];
     _HotMoVieTableView.delegate=self;
     _HotMoVieTableView.backgroundColor = View_BackGround;
     _HotMoVieTableView.dataSource=self;
@@ -191,8 +211,10 @@
 {
     // 1.下拉刷新(进入刷新状态就会调用self的headerRereshing)
     [_HotMoVieTableView addHeaderWithTarget:self action:@selector(headerRereshing)];
+    
     //  #warning 自动刷新(一进入程序就下拉刷新)
     [_HotMoVieTableView headerBeginRefreshing];
+    
     // 2.上拉加载更多(进入刷新状态就会调用self的footerRereshing)
     [_HotMoVieTableView addFooterWithTarget:self action:@selector(footerRereshing)];
 }
@@ -561,8 +583,10 @@
                                       [tagmodel setValuesForKeysWithDictionary:tagDict];
                                       TagDetailModel *tagedetail = [[TagDetailModel alloc]init];
                                       if (tagedetail) {
+                                          if (![[tagDict objectForKey:@"tag"] isKindOfClass:[NSNull class]]) {
                                           [tagedetail setValuesForKeysWithDictionary:[tagDict  objectForKey:@"tag"]];
                                           tagmodel.tagDetailInfo=tagedetail;
+                                          }
                                       }
                                       
                                       [tagArray addObject:tagmodel];
@@ -768,7 +792,6 @@
             cell.stageInfo=model.stageInfo;
             cell.delegate=self;
             [cell ConfigsetCellindexPath:indexPath.row];
-            
         }
         return  cell;
     }
@@ -783,6 +806,8 @@
 }
 -(void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    CommonStageCell  *Cell =(CommonStageCell *)[tableView cellForRowAtIndexPath:indexPath];
+    ///[Cell.stageView ];
     
 }
 //开始现实cell 的时候执行这个方法，执行动画
@@ -835,15 +860,17 @@
         //电影按钮
         MovieDetailViewController *vc =  [MovieDetailViewController new];
         vc.movieId =  model.stageInfo.movie_id;
-        NSMutableString  *backstr=[[NSMutableString alloc]initWithString:model.stageInfo.movieInfo.name];
-        NSString *str;
-        if(backstr.length>5)
-        {
-            str=[backstr substringToIndex:5];
-            str =[NSString stringWithFormat:@"%@...",str];
-        }
-        UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:str style:UIBarButtonItemStylePlain target:nil action:nil];
-        self.navigationItem.backBarButtonItem=item;
+        vc.moviename=model.stageInfo.movieInfo.name;
+        vc.movielogo=model.stageInfo.movieInfo.logo;
+//        NSMutableString  *backstr=[[NSMutableString alloc]initWithString:model.stageInfo.movieInfo.name];
+//        NSString *str;
+//        if(backstr.length>5)
+//        {
+//            str=[backstr substringToIndex:5];
+//            str =[NSString stringWithFormat:@"%@...",str];
+//        }
+//        UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:str style:UIBarButtonItemStylePlain target:nil action:nil];
+//        self.navigationItem.backBarButtonItem=item;
         [self.navigationController pushViewController:vc animated:YES];
 
     }
@@ -909,31 +936,31 @@
         
     }
 }
-//长安剧情推荐和剧情移除
--(void)commonStageCellLoogPressClickindex:(NSInteger)indexrow
-{
-    //HotMovieModel  *hotmovie;
-    ModelsModel  *moviemodel;
-    if  (segment.selectedSegmentIndex==0) {
-        
-        moviemodel =[_hotDataArray objectAtIndex:indexrow];
-        _hot_Id=moviemodel.Id;
-        
-        UIActionSheet  *ash =[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"移除推荐" otherButtonTitles:nil, nil];
-        ash.tag=503;
-        [ash showInView:self.view];
-    }
-    else if(segment.selectedSegmentIndex==1)
-    {
-        moviemodel=[_newDataArray objectAtIndex:indexrow];
-        _stage_Id=moviemodel.stageInfo.Id;
-        UIActionSheet  *ash =[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"屏蔽剧照" otherButtonTitles:nil, nil];
-        ash.tag=505;
-        [ash showInView:self.view];
-
-    }
-    
-}
+////长安剧情推荐和剧情移除
+//-(void)commonStageCellLoogPressClickindex:(NSInteger)indexrow
+//{
+//    //HotMovieModel  *hotmovie;
+//    ModelsModel  *moviemodel;
+//    if  (segment.selectedSegmentIndex==0) {
+//        
+//        moviemodel =[_hotDataArray objectAtIndex:indexrow];
+//        _hot_Id=moviemodel.Id;
+//        
+//        UIActionSheet  *ash =[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"移除推荐" otherButtonTitles:nil, nil];
+//        ash.tag=503;
+//        [ash showInView:self.view];
+//    }
+//    else if(segment.selectedSegmentIndex==1)
+//    {
+//        moviemodel=[_newDataArray objectAtIndex:indexrow];
+//        _stage_Id=moviemodel.stageInfo.Id;
+//        UIActionSheet  *ash =[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"屏蔽剧照" otherButtonTitles:nil, nil];
+//        ash.tag=505;
+//        [ash showInView:self.view];
+//
+//    }
+//    
+//}
 #pragma mark  -----AddMarkViewControllerDelegate----
 -(void)AddMarkViewControllerReturn
 {
@@ -1293,11 +1320,11 @@
         }
         else if (buttonIndex==4)
         {
+            if (segment.selectedSegmentIndex==0) {
             //移除推荐
              ModelsModel    *moviemodel =[_hotDataArray objectAtIndex:Rowindex];
              [self requestrecommendDeleteDataWithHotId:moviemodel.Id];
-            
-            
+            }
             
         }
     }

@@ -352,14 +352,16 @@
     MovieDetailViewController *vc =  [MovieDetailViewController new];
     vc.movieId = self.stageInfo.movie_id;
     NSMutableString  *backstr=[[NSMutableString alloc]initWithString:self.stageInfo.movieInfo.name];
-    NSString *str;
-    if(backstr.length>5)
-    {
-        str=[backstr substringToIndex:5];
-        str =[NSString stringWithFormat:@"%@...",str];
-    }
-    UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:str style:UIBarButtonItemStylePlain target:nil action:nil];
-    self.navigationItem.backBarButtonItem=item;
+    vc.moviename=self.stageInfo.movieInfo.name;
+    vc.movielogo=self.stageInfo.movieInfo.logo;
+//    NSString *str;
+//    if(backstr.length>5)
+//    {
+//        str=[backstr substringToIndex:5];
+//        str =[NSString stringWithFormat:@"%@...",str];
+//    }
+//    UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:str style:UIBarButtonItemStylePlain target:nil action:nil];
+//    self.navigationItem.backBarButtonItem=item;
     [self.navigationController pushViewController:vc animated:YES];
 }
 // 分享
@@ -481,6 +483,11 @@
         //点击了分享
         //分享文字
       //   UIImage  *image=[Function getImage:stageView WithSize:CGSizeMake(kDeviceWidth, kDeviceWidth)];
+        [_mymarkView CancelMarksetSelect];
+        if (_toolBar) {
+            [_toolBar HidenButtomView];
+            [_toolBar removeFromSuperview];
+        }
         UMShareViewController2  *shareVC=[[UMShareViewController2 alloc]init];
         shareVC.StageInfo=stageInfoDict;
         shareVC.weiboInfo=weiboDict;

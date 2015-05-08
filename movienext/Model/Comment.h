@@ -43,7 +43,7 @@
  */
 @property (nonatomic, strong) NSString * create_time;
 /**
- *  评论的作者
+ *  评论
  */
 //@property (nonatomic, strong) User * user;
 

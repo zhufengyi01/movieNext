@@ -8,10 +8,17 @@
 
 #import <UIKit/UIKit.h>
 
+//typedef NS_ENUM(NSInteger,NSSmallCellPage)
+//{
+//    NSSmallCellPageMovieDetail =100,
+//    NSSmallCellPageSelectPhoto  =101,
+//};
+
 @interface SmallImageCollectionViewCell : UICollectionViewCell
 {
     CGRect   m_frame;
 }
+
 @property(strong,nonatomic)UIImageView *imageView;
 @property(strong,nonatomic)UILabel *titleLab;
 @end

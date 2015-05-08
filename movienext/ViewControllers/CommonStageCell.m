@@ -106,16 +106,12 @@
     [leftButtomButton addTarget:self action:@selector(cellButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     [BgView2 addSubview:leftButtomButton];
     
-    
-    
     //更多
     moreButton=[ZCControl createButtonWithFrame:CGRectMake(kStageWidth-130, 9, 30, 25) ImageName:@"more_icon.png" Target:self Action:@selector(cellButtonClick:) Title:@""];
     //moreButton.backgroundColor=VBlue_color;
     moreButton.layer.cornerRadius=2;
      moreButton.hidden=NO;
     [BgView2 addSubview:moreButton];
-
-    
     
 //    //分享
 //    ScreenButton =[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-120,9,45,25) ImageName:@"btn_share_default.png" Target:self Action:@selector(cellButtonClick:) Title:@""];
@@ -228,11 +224,10 @@
     if (button.selected==NO) {
         NSLog(@"执行了隐藏 view ");
         button.selected=YES;
-        for (UIView  *view  in self.stageView.subviews) {
+        for (id view  in self.stageView.subviews) {
             if  ([view isKindOfClass:[MarkView class]]) {
                 MarkView  *mv =(MarkView *)view;
                 mv.hidden=YES;
-                
             }
         }
     }
@@ -240,7 +235,7 @@
     {
         NSLog(@"执行了显示view ");
         button.selected=NO;
-        for (UIView  *view  in self.stageView.subviews) {
+        for (id   view  in self.stageView.subviews) {
             if  ([view isKindOfClass:[MarkView class]]) {
                 MarkView  *mv =(MarkView *)view;
                 mv.hidden=NO;

@@ -153,7 +153,9 @@
     for (int i=0;i<self.weiboInfo.tagArray.count;i++)
     {
         TagModel  *tagmodel =[self.weiboInfo.tagArray objectAtIndex:i];
+        if (tagmodel.tagDetailInfo.title) {
         [ tagStr appendString:tagmodel.tagDetailInfo.title];
+        }
     }
     
     CGSize  Tagsize=[tagStr boundingRectWithSize:CGSizeMake(kDeviceWidth/2, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:[UIFont systemFontOfSize:14] forKey:NSFontAttributeName] context:nil].size;

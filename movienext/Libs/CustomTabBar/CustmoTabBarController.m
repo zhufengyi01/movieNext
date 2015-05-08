@@ -44,7 +44,6 @@
     NewViewController * newVC = [[NewViewController alloc] init];
     UINavigationController * fristNav = [[UINavigationController alloc] initWithRootViewController:newVC];
     
-    
     MovieViewController * movieVC = [[MovieViewController alloc] init];
     UINavigationController * secondNav = [[UINavigationController alloc] initWithRootViewController:movieVC];
     
@@ -82,6 +81,7 @@
 - (void)buttonPresedInCustomTabBar:(NSUInteger)index
 {
     self.selectedIndex = index;
+    
 }
 
 - (void)didReceiveMemoryWarning

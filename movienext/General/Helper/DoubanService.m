@@ -22,12 +22,9 @@ static DoubanService * manager = nil;
     return manager;
     
 }
-
-- (NSMutableArray *)getDoubanInfosByResponse:(NSString *)responseString {
-    NSString            * pattern = @"<a class=\"nbg\" href=\"http://movie\\.douban\\.com/subject/(\\d+)/\".*>\n.*<img src=\"(.*)\" alt=\"(.*?)\".*?/>";
-    
-    NSMutableArray      * doubanInfos = [NSMutableArray array];
-    NSRegularExpression * regular = [[NSRegularExpression alloc] initWithPattern:pattern
+-(NSMutableArray *)getDoubanInfosByResponse:(NSString *)responseString withpattern:(NSString *)patternSting type:(NServiceType)type{
+     NSMutableArray      * doubanInfos = [NSMutableArray array];
+    NSRegularExpression * regular = [[NSRegularExpression alloc] initWithPattern:patternSting
                                                                         options:NSRegularExpressionUseUnixLineSeparators
                                                                           error:nil];
     NSArray *array = [regular matchesInString:responseString options:0 range:NSMakeRange(0, [responseString length])];
@@ -35,8 +32,11 @@ static DoubanService * manager = nil;
         return doubanInfos;
     }
     
+    if (type==NServiceTypeSearch) {
     for (NSTextCheckingResult* b in array)
     {
+        NSLog(@"array = %@", array);
+
         NSString *doubanId = [responseString substringWithRange:[b rangeAtIndex:1]];
         NSString *movieName = [responseString substringWithRange:[b rangeAtIndex:3]];
         NSString *smallImage = [responseString substringWithRange:[b rangeAtIndex:2]];
@@ -47,6 +47,17 @@ static DoubanService * manager = nil;
         [di setValue:smallImage forKey:@"smallimage"];
       
         [doubanInfos addObject:di];
+    }
+    }
+    else if (type==NServiceTypePhoto)
+    {
+        for (NSTextCheckingResult* b in array)
+        {
+           NSString  *str1 = [responseString substringWithRange:b.range];
+            str1 = [str1 stringByReplacingOccurrencesOfString:@"thumb" withString:@"photo"];//将获取的内容图片地址换成相册图标
+            [doubanInfos addObject:str1];
+        }
+        
     }
     return doubanInfos;
 }

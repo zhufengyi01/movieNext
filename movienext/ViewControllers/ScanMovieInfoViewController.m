@@ -39,7 +39,7 @@
     NSString *createBy;
     //if ([self.stageInfo.created_by intValue] ==0) {
         createBy = [array objectAtIndex:([self.stageInfo.Id integerValue]%50)];
-        createBy =[NSString stringWithFormat:@"作者 : %@",createBy];
+        createBy =[NSString stringWithFormat:@"图片上传者 : %@",createBy];
         create_namelabel.text=createBy;
     //}
     

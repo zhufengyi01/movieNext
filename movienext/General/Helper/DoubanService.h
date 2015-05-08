@@ -8,10 +8,17 @@
 
 #import <Foundation/Foundation.h>
 
+typedef NS_ENUM(NSInteger,NServiceType)
+{
+    NServiceTypeSearch,
+    NServiceTypePhoto
+};
+
+
 @interface DoubanService : NSObject
 +(DoubanService *)shareInstance;
 
-//正则匹配豆瓣电影信息
-- (NSMutableArray *)getDoubanInfosByResponse:(NSString *)responseString;
-
+////正则匹配豆瓣电影信息
+//- (NSMutableArray *)getDoubanInfosByResponse:(NSString *)responseString;
+- (NSMutableArray *)getDoubanInfosByResponse:(NSString *)responseString  withpattern:(NSString *) patternSting type:(NServiceType)type;
 @end

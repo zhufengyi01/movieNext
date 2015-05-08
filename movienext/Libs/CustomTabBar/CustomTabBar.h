@@ -12,6 +12,7 @@
 //代理方法
 - (void)buttonPresedInCustomTabBar:(NSUInteger)index;
 
+-(void)refreshCustomTableView;
 @end
 
 @interface CustomTabBar : UIView

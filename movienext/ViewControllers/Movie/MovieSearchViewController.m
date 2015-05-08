@@ -110,7 +110,8 @@
             if (responseCode == 200) {
                 responseString = [Function getNoNewLine:responseString];
                 
-                NSMutableArray *doubanInfos = [[DoubanService shareInstance] getDoubanInfosByResponse:responseString];
+                NSString     * pattern = @"<a class=\"nbg\" href=\"http://movie\\.douban\\.com/subject/(\\d+)/\".*>\n.*<img src=\"(.*)\" alt=\"(.*?)\".*?/>";
+                NSMutableArray *doubanInfos = [[DoubanService shareInstance] getDoubanInfosByResponse:responseString withpattern:pattern type:NServiceTypeSearch];
                 _dataArray = doubanInfos;
                // NSLog(@"------_dataArray -=====%@",_dataArray);
                 [_myTableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
@@ -166,7 +167,10 @@
             MovieDetailViewController  *mvdetail =[[MovieDetailViewController alloc]init];
             mvdetail.douban_Id=[[_dataArray objectAtIndex:indexPath.row]  objectForKey:@"doubanId"];
             mvdetail.pageSourceType=NSMovieSourcePageSearchListController; //从电影列表页今日电影详细页面
+           mvdetail.pageSourceType=NSMovieSourcePageSearchListController;
+           mvdetail.movielogo=[[_dataArray objectAtIndex:indexPath.row] objectForKey:@"smallimage"];
            
+           mvdetail.moviename=[[_dataArray objectAtIndex:indexPath.row] objectForKey:@"title"];
            UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"搜索" style:UIBarButtonItemStylePlain target:nil action:nil];
            self.navigationItem.backBarButtonItem=item;
 

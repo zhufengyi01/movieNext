@@ -521,16 +521,18 @@
     if (array.count > indexPath.row) {
          NSDictionary *dict = [array  objectAtIndex:(long)indexPath.row];
         vc.movieId = [dict objectForKey:@"movie_id"];
-    //    vc.moviename=[dict objectForKey:@"title"];
-        NSMutableString  *backstr=[[NSMutableString alloc]initWithString:[dict objectForKey:@"title"]];
-        NSString *str=backstr;
-        if(backstr.length>5)
-        {
-            str=[backstr substringToIndex:5];
-            str =[NSString stringWithFormat:@"%@...",str];
-        }
-        UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:str style:UIBarButtonItemStylePlain target:nil action:nil];
-        self.navigationItem.backBarButtonItem=item;
+        vc.moviename=[dict objectForKey:@"title"];
+        vc.pageSourceType=NSMovieSourcePageMovieListController;
+        vc.movielogo =[dict objectForKey:@"photo"];
+//        NSMutableString  *backstr=[[NSMutableString alloc]initWithString:[dict objectForKey:@"title"]];
+//        NSString *str=backstr;
+//        if(backstr.length>5)
+//        {
+//            str=[backstr substringToIndex:5];
+//            str =[NSString stringWithFormat:@"%@...",str];
+//        }
+//        UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:str style:UIBarButtonItemStylePlain target:nil action:nil];
+//        self.navigationItem.backBarButtonItem=item;
     }
    [self.navigationController pushViewController:vc animated:YES];
 }
