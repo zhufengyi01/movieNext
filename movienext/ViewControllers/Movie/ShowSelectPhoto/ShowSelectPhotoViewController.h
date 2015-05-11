@@ -12,6 +12,9 @@
 
 @property (nonatomic,strong) NSString  *douban_id;
 
+
 @property(nonatomic,strong) NSString  *movie_id;
+
+@property(nonatomic,strong)NSString   *movie_name;
 
 @end

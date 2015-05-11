@@ -59,6 +59,7 @@
     int pagesize;
     int pageCount1;
     int pageCount2;
+    BOOL  isShowMark;
     
     ButtomToolView *_toolBar;
     MarkView       *_mymarkView;
@@ -138,6 +139,7 @@
     pagesize=10;
     pageCount1=1;
     pageCount2=1;
+    isShowMark=YES;
  }
 #pragma  mark   ------
 #pragma  mark  -------CreatUI;
@@ -905,12 +907,23 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
         //点击cell 隐藏弹幕，再点击隐藏
-        NSLog(@"didDeselectRowAtIndexPath  =====%ld",indexPath.row);
-     //   CommonStageCell   *cell=(CommonStageCell *)[tableView cellForRowAtIndexPath:indexPath];
+        //NSLog(@"didDeselectRowAtIndexPath  =====%ld",indexPath.row);
+       CommonStageCell   *cell=(CommonStageCell *)[tableView cellForRowAtIndexPath:indexPath];
+    if (isShowMark==YES) {
+        [cell showAndHidenMarkViews:YES];
+        isShowMark=NO;
+    }
+    else if (isShowMark==NO)
+    {
+        isShowMark=YES;
+        [cell showAndHidenMarkViews:NO];
+        
+    }
+    
 }
 -(void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    CommonStageCell  *Cell =(CommonStageCell *)[tableView cellForRowAtIndexPath:indexPath];
+   // CommonStageCell  *Cell =(CommonStageCell *)[tableView cellForRowAtIndexPath:indexPath];
     ///[Cell.stageView ];
     
 }

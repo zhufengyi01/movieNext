@@ -152,7 +152,7 @@
     UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:@"我的"];
     titleLable.textColor=VBlue_color;
     
-    titleLable.font=[UIFont boldSystemFontOfSize:16];
+    titleLable.font=[UIFont boldSystemFontOfSize:18];
     titleLable.textAlignment=NSTextAlignmentCenter;
     self.navigationItem.titleView=titleLable;
     
@@ -793,7 +793,7 @@
 -(void)requestDelectDatawithRowindex:(NSInteger) index
 {
     userAddmodel  *model =[_addedDataArray objectAtIndex:index];
-    NSDictionary *parameters = @{@"weibo_id":model.weiboInfo.Id,@"user_id":userCenter.user_id};
+    NSDictionary *parameters = @{@"weibo_id":model.weiboInfo.Id,@"remove_type":@"0",@"user_id":userCenter.user_id};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:[NSString stringWithFormat:@"%@/weibo/remove", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {

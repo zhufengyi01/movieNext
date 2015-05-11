@@ -125,6 +125,7 @@
 -(void)createNavigation
 {
     UIView *titleView=[[UIView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth-120, 40)];
+    //电影图片
     UIImageView *    MovieLogoImageView=[[UIImageView alloc]initWithFrame:CGRectMake(0,0,30, 30)];
     MovieLogoImageView.layer.cornerRadius=4;
     MovieLogoImageView.contentMode=UIViewContentModeScaleAspectFill;
@@ -132,13 +133,15 @@
     MovieLogoImageView.image =[UIImage imageNamed:@"Moments.png"];
     MovieLogoImageView.layer.masksToBounds = YES;
     [titleView addSubview:MovieLogoImageView];
-//
+//电影名
     UILabel  *movieNameLable =[[UILabel alloc]initWithFrame:CGRectMake(35,0, 120, 30)];
     movieNameLable.font=[UIFont systemFontOfSize:16];
     movieNameLable.textColor=VGray_color;
     // movieNameLable.numberOfLines=1;
     movieNameLable.lineBreakMode=NSLineBreakByTruncatingTail;
     [titleView addSubview:movieNameLable];
+    
+    
     
     NSString  *logoString;
     if (self.pageSourceType==NSMovieSourcePageMovieListController) {
@@ -156,8 +159,10 @@
     
     [MovieLogoImageView sd_setImageWithURL:[NSURL URLWithString:logoString] placeholderImage:[UIImage imageNamed:@"Moments.png"]];
     NSString  *nameStr=self.moviename;
+    CGSize   Nsize =[nameStr boundingRectWithSize:CGSizeMake(120, 25) options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes:[NSDictionary dictionaryWithObject:[UIFont systemFontOfSize:16] forKey:NSFontAttributeName] context:nil].size;
     movieNameLable.text=[NSString stringWithFormat:@"%@",nameStr];
-    
+    movieNameLable.frame=CGRectMake(35,8,Nsize.width+5, 25);
+    titleView.frame=CGRectMake(0, 0, 30+5+movieNameLable.frame.size.width, 40);
     self.navigationItem.titleView=titleView;
     [self.navigationItem.titleView setContentMode:UIViewContentModeCenter];
 
@@ -508,6 +513,7 @@
             ShowSelectPhotoViewController  *vc =[[ShowSelectPhotoViewController alloc]init];
             vc.douban_id=[dict objectForKey:@"douban_id"];
             vc.movie_id=self.movieId;
+            vc.movie_name=self.moviename;
             
             UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
             self.navigationItem.backBarButtonItem=item;

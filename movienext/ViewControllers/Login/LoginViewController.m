@@ -28,7 +28,7 @@
 #import "Login2_1ViewController.h"
 #import "Register_1ViewController.h"
 
-#define  IsInstallWechat   1
+#define  IsInstallWechat   0    //1表示已经安装   0是未安装
 
 @interface LoginViewController ()<UMSocialUIDelegate>
 {
@@ -171,7 +171,7 @@
 //      emaillogin.hidden=NO;
 //      emailregister.hidden=NO;
 //    }
-    //判断是否安装了微信
+//    //判断是否安装了微信
     if ([WXApi  isWXAppInstalled]==NO) {
         weiboButton.hidden=YES;
         weiChateButton.hidden=YES;
@@ -294,10 +294,12 @@
                     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
                     [manager POST:[NSString stringWithFormat:@"%@/user/login", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
                         NSLog(@"登陆完成后的     JSON: %@", responseObject);
+                        
                         UserDataCenter  *userCenter=[UserDataCenter shareInstance];
                         userCenter.first_login=[responseObject objectForKey:@"first_login"];
                         NSDictionary *detail    = [responseObject objectForKey:@"model"];
                         if (detail) {
+                            
                             userCenter.user_id=[detail objectForKey:@"id"];
                             userCenter.username=[detail objectForKey:@"username"];
                             userCenter.logo =[detail objectForKey:@"logo"];
@@ -305,9 +307,10 @@
                             userCenter.verified=[detail objectForKey:@"verified"];
                             userCenter.sex=[detail objectForKey:@"sex"];
                             userCenter.signature=[detail objectForKey:@"brief"];
-                           
-                            userCenter.fake=[detail objectForKey:@"fake"];
-                            
+                            userCenter.fake=@"1";
+                            if ([detail objectForKey:@"fake"]) {
+                                userCenter.fake=[detail objectForKey:@"fake"];
+                            }
                             [Function saveUser:userCenter];
                             //登陆成功后把根
                              if ([[responseObject objectForKey:@"first_login"] intValue]==0) {

@@ -312,6 +312,7 @@
         }
     }
     vc.upimage=cell.imageView.image;
+    vc.movie_name=self.movie_name;
     vc.movie_id=self.movie_id;
     if (urlString) {
     vc.photourl=urlString;

@@ -79,6 +79,9 @@ typedef NS_ENUM(NSInteger,NSUserPageType)
 @property(nonatomic,strong) weiboInfoModel       *weiboInfo;
 @property(nonatomic,strong)NSMutableArray        *upweibosArray;   //微博点赞
 @property(nonatomic,strong)UIButton              *tanlogoButton;
+//现实和隐藏弹幕
+-(void)showAndHidenMarkViews:(BOOL) isShow;
+
 //设置stageview的背景图片
 -(void)ConfigsetCellindexPath:(NSInteger) row;
 

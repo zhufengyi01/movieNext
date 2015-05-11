@@ -73,7 +73,7 @@
 
 #define GetAppDelegate()   ((AppDelegate*)[[UIApplication sharedApplication] delegate])
 
-#define AppView  [UIApplication sharedApplication].delegate.window.rootViewController.view
+#define AppView  [UIApplication sharedApplication].delegate.window
 
 //动画定义
 #define  kTimeInterval  1.1   //  气泡和气泡之间动画出现的时间间隔

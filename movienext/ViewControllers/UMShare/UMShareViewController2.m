@@ -56,7 +56,7 @@
     
     UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:@"分享"];
     titleLable.textColor=VBlue_color;
-    titleLable.font=[UIFont boldSystemFontOfSize:16];
+    titleLable.font=[UIFont boldSystemFontOfSize:18];
     titleLable.textAlignment=NSTextAlignmentCenter;
     self.navigationItem.titleView=titleLable;
     
@@ -229,9 +229,9 @@
 {
   
     logoView.hidden=NO;
-                                                               
     [self dismissViewControllerAnimated:YES completion:^{
         shareImage=[Function getImage:shareView WithSize:CGSizeMake(kDeviceWidth,shareView.frame.size.height)];
+        
         if (self.delegate &&[self.delegate respondsToSelector:@selector(UMShareViewController2HandClick:ShareImage:StageInfoModel:)]) {
             [self.delegate UMShareViewController2HandClick:button ShareImage:shareImage StageInfoModel:self.StageInfo];
         }

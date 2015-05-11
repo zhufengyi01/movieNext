@@ -25,7 +25,7 @@
 -(void)CreateUI
 {
     self.backgroundColor=View_BackGround;
-     BgView =[[UIImageView alloc]initWithFrame:CGRectMake(5, 5, kDeviceWidth-10, kStageWidth+90)];
+     BgView =[[UIImageView alloc]initWithFrame:CGRectMake(5, 5, kDeviceWidth-10, kStageWidth+45)];
     
      BgView.clipsToBounds=YES;
     BgView.layer.cornerRadius=4;
@@ -88,23 +88,28 @@
     BgView2.backgroundColor=[UIColor whiteColor];
     [BgView addSubview:BgView2];
  
-    MovieLogoImageView=[[UIImageView alloc]initWithFrame:CGRectMake(10,7.5,30, 30)];
-    MovieLogoImageView.layer.cornerRadius=4;
-    MovieLogoImageView.layer.masksToBounds = YES;
-    [BgView2 addSubview:MovieLogoImageView];
+    leftButtomButton=[UIButton buttonWithType:UIButtonTypeCustom];
+    leftButtomButton.frame=CGRectMake(10, 9, 140, 27);
+    [leftButtomButton addTarget:self action:@selector(cellButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    [leftButtomButton setBackgroundImage:[[UIImage imageNamed:@"movie_button_bg"] stretchableImageWithLeftCapWidth:15 topCapHeight:15] forState:UIControlStateNormal];
+    [BgView2 addSubview:leftButtomButton];
     
-    movieNameLable =[[UILabel alloc]initWithFrame:CGRectMake(45, 7.5, 120, 30)];
+    MovieLogoImageView=[[UIImageView alloc]initWithFrame:CGRectMake(0,0,30, 27)];
+    MovieLogoImageView.layer.cornerRadius=4;
+    MovieLogoImageView.contentMode=UIViewContentModeScaleAspectFill;
+    MovieLogoImageView.layer.masksToBounds = YES;
+    [leftButtomButton addSubview:MovieLogoImageView];
+    
+    movieNameLable =[[UILabel alloc]initWithFrame:CGRectMake(35, 0, 120, 27)];
     movieNameLable.font=[UIFont systemFontOfSize:16];
     movieNameLable.textColor=VGray_color;
     // movieNameLable.numberOfLines=1;
     movieNameLable.lineBreakMode=NSLineBreakByTruncatingTail;
-    [BgView2 addSubview:movieNameLable];
+    [leftButtomButton addSubview:movieNameLable];
     
-    leftButtomButton=[UIButton buttonWithType:UIButtonTypeCustom];
-    leftButtomButton.frame=CGRectMake(10, 5, 140, 35);
-    //leftButtomButton.backgroundColor=[[UIColor redColor]colorWithAlphaComponent:0.2];
-    [leftButtomButton addTarget:self action:@selector(cellButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-    [BgView2 addSubview:leftButtomButton];
+   
+    
+    
     
     //更多
     moreButton=[ZCControl createButtonWithFrame:CGRectMake(kStageWidth-130, 9, 30, 25) ImageName:@"more_icon.png" Target:self Action:@selector(cellButtonClick:) Title:@""];
@@ -135,15 +140,7 @@
     [addMarkButton setBackgroundImage:[UIImage imageNamed:@"btn_add_select.png"] forState:UIControlStateHighlighted];
     [BgView2 addSubview:addMarkButton];
     
-   // UserDataCenter  *userCenter=[UserDataCenter shareInstance];
-//    if ([userCenter.is_admin intValue]>0) {
-//        //创建长按手势
-//        pressview=[[UIView alloc]initWithFrame:CGRectMake(ScreenButton.frame.origin.x-50, ScreenButton.frame.origin.y, 50,30)];
-//        [BgView2 addSubview:pressview];
-//        UILongPressGestureRecognizer   *longPress=[[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(logPress:)];
-//        [pressview addGestureRecognizer:longPress];
-//
-//    }
+
     //底部2像素的投影
     UIImageView *lineImage =[[UIImageView alloc]initWithFrame:CGRectMake(0,44, kDeviceWidth, 2)];
     lineImage.image=[UIImage imageNamed:@"cell_buttom_line.png"];
@@ -177,6 +174,9 @@
     //设置底部
     if (self.stageInfo.movieInfo.name) {  //电影名字，s这里设置title 偏移
         NSString  *nameStr=self.stageInfo.movieInfo.name;
+        CGSize  Nsize =[nameStr boundingRectWithSize:CGSizeMake(100, 27) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:[NSDictionary dictionaryWithObject:movieNameLable.font forKey:NSFontAttributeName] context:nil].size;
+        movieNameLable.frame=CGRectMake(35, 0, Nsize.width+4, 27);
+        leftButtomButton.frame=CGRectMake(10, 9, 30+5+movieNameLable.frame.size.width, 27);
          movieNameLable.text=[NSString stringWithFormat:@"%@",nameStr];
     }
     
@@ -184,6 +184,8 @@
         NSString  *logoString =[NSString stringWithFormat:@"%@%@!w100h100",kUrlMoviePoster,self.stageInfo.movieInfo.logo];
         [MovieLogoImageView sd_setImageWithURL:[NSURL URLWithString:logoString] placeholderImage:[UIImage imageNamed:@"loading_image_all.png"]];
     }
+    
+   // leftButtomButton.frame=
     
     
 #pragma  mark  根据不同cell 配置cell 的样式------------------------------
@@ -232,6 +234,29 @@
     
 }
 
+-(void)showAndHidenMarkViews:(BOOL) isShow
+{
+    if (isShow==NO) {
+        NSLog(@"执行了隐藏 view ");
+         for (id view  in self.stageView.subviews) {
+            if  ([view isKindOfClass:[MarkView class]]) {
+                MarkView  *mv =(MarkView *)view;
+                mv.hidden=YES;
+            }
+        }
+    }
+    else if (isShow==YES)
+    {
+        NSLog(@"执行了显示view ");
+         for (id   view  in self.stageView.subviews) {
+            if  ([view isKindOfClass:[MarkView class]]) {
+                MarkView  *mv =(MarkView *)view;
+                mv.hidden=NO;
+            }
+        }
+    }
+}
+
 
 - (void)layoutSubviews {
     [super layoutSubviews];
@@ -242,7 +267,6 @@
 #pragma mark ------下方按钮点击事件 ,在父视图中实现具法代理方法
 -(void)cellButtonClick:(UIButton*)button
 {
-    
     if (self.delegate &&[self.delegate respondsToSelector:@selector(commonStageCellToolButtonClick:Rowindex:)]) {
         [self.delegate commonStageCellToolButtonClick:button Rowindex:self.Cellindex];
     }

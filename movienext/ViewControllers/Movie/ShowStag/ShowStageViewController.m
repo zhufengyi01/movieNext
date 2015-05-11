@@ -34,16 +34,12 @@
 {
     ButtomToolView *_toolBar;
     UIButton  *moreButton;
-}
-@end
-
-@implementation ShowStageViewController
-{
+    BOOL    isShowMark;
     UIScrollView *scrollView;
     UIView *BgView2;
     UIButton  *ScreenButton;
     UIButton  *addMarkButton;
- //   UMShareView  *shareView;
+    //   UMShareView  *shareView;
     StageView *stageView;
     MarkView       *_mymarkView;
     UIImageView *BgView;
@@ -52,9 +48,13 @@
     UIButton      *leftButtomButton;   //左下边按钮
     UILabel       *movieNameLable;
     UIImageView   *MovieLogoImageView;  // 电影的小图片
-
+    
 
 }
+@end
+
+@implementation ShowStageViewController
+
 -(void)viewWillAppear:(BOOL)animated
 {
     self.navigationController.navigationBar.alpha=1;
@@ -63,6 +63,7 @@
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
+    isShowMark=YES;
     [self createNav];
      [self createScrollView];
     //[self createTopView];
@@ -77,7 +78,7 @@
     UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:self.stageInfo.movieInfo.name];
     titleLable.textColor=VBlue_color;
     
-    titleLable.font=[UIFont boldSystemFontOfSize:16];
+    titleLable.font=[UIFont boldSystemFontOfSize:18];
     titleLable.textAlignment=NSTextAlignmentCenter;
     //self.navigationItem.titleView=titleLable;
     
@@ -117,6 +118,9 @@
     [stageView configStageViewforStageInfoDict];
      [BgView addSubview:stageView];
     [stageView startAnimation];
+    
+    UITapGestureRecognizer  *tap =[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showAndHidenMarkViews)];
+    [stageView addGestureRecognizer:tap];
 
 }
  -(void)createButtonView1
@@ -127,7 +131,15 @@
     [self.view bringSubviewToFront:BgView2];
     [BgView addSubview:BgView2];
     
-    MovieLogoImageView=[[UIImageView alloc]initWithFrame:CGRectMake(10,7.5,30, 30)];
+    leftButtomButton=[UIButton buttonWithType:UIButtonTypeCustom];
+    leftButtomButton.frame=CGRectMake(10, 5, 140, 35);
+    //leftButtomButton.backgroundColor=[[UIColor redColor]colorWithAlphaComponent:0.2];
+    [leftButtomButton setBackgroundImage:[[UIImage imageNamed:@"movie_button_bg"] stretchableImageWithLeftCapWidth:15 topCapHeight:15] forState:UIControlStateNormal];
+    
+    [leftButtomButton addTarget:self action:@selector(StageMovieButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    [BgView2 addSubview:leftButtomButton];
+
+    MovieLogoImageView=[[UIImageView alloc]initWithFrame:CGRectMake(0,0,30, 27)];
     MovieLogoImageView.layer.cornerRadius=4;
     if (self.stageInfo.movieInfo.logo) {
         NSString  *logoString =[NSString stringWithFormat:@"%@%@!w100h100",kUrlMoviePoster,self.stageInfo.movieInfo.logo];
@@ -135,22 +147,24 @@
     }
     
     MovieLogoImageView.layer.masksToBounds = YES;
-    [BgView2 addSubview:MovieLogoImageView];
+    [leftButtomButton addSubview:MovieLogoImageView];
     
-    movieNameLable =[[UILabel alloc]initWithFrame:CGRectMake(45, 7.5, 120, 30)];
+    movieNameLable =[[UILabel alloc]initWithFrame:CGRectMake(35, 9, 120, 30)];
     movieNameLable.font=[UIFont systemFontOfSize:16];
     movieNameLable.textColor=VGray_color;
-    movieNameLable.text=self.stageInfo.movieInfo.name;
+    //movieNameLable.text=self.stageInfo.movieInfo.name;
     // movieNameLable.numberOfLines=1;
     movieNameLable.lineBreakMode=NSLineBreakByTruncatingTail;
-    [BgView2 addSubview:movieNameLable];
+    [leftButtomButton addSubview:movieNameLable];
+    NSString  *nameStr=self.stageInfo.movieInfo.name;
+
     
-    leftButtomButton=[UIButton buttonWithType:UIButtonTypeCustom];
-    leftButtomButton.frame=CGRectMake(10, 5, 140, 35);
-    //leftButtomButton.backgroundColor=[[UIColor redColor]colorWithAlphaComponent:0.2];
-    [leftButtomButton addTarget:self action:@selector(StageMovieButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-    [BgView2 addSubview:leftButtomButton];
     
+    CGSize  Nsize =[nameStr boundingRectWithSize:CGSizeMake(100, 27) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:[NSDictionary dictionaryWithObject:movieNameLable.font forKey:NSFontAttributeName] context:nil].size;
+    movieNameLable.frame=CGRectMake(35, 0, Nsize.width+4, 27);
+    leftButtomButton.frame=CGRectMake(10, 9, 30+5+movieNameLable.frame.size.width, 27);
+    movieNameLable.text=[NSString stringWithFormat:@"%@",nameStr];
+
 
     
     
@@ -220,8 +234,33 @@
             }
         }
     }
-    
 }
+
+-(void)showAndHidenMarkViews
+{
+    if (isShowMark==NO) {
+        isShowMark=YES;
+        NSLog(@"执行了隐藏 view ");
+        for (id view  in stageView.subviews) {
+            if  ([view isKindOfClass:[MarkView class]]) {
+                MarkView  *mv =(MarkView *)view;
+                mv.hidden=YES;
+            }
+        }
+    }
+    else if (isShowMark==YES)
+    {
+        NSLog(@"执行了显示view ");
+        isShowMark=NO;
+        for (id   view  in stageView.subviews) {
+            if  ([view isKindOfClass:[MarkView class]]) {
+                MarkView  *mv =(MarkView *)view;
+                mv.hidden=NO;
+            }
+        }
+    }
+}
+
 
 
 
@@ -354,14 +393,7 @@
     NSMutableString  *backstr=[[NSMutableString alloc]initWithString:self.stageInfo.movieInfo.name];
     vc.moviename=self.stageInfo.movieInfo.name;
     vc.movielogo=self.stageInfo.movieInfo.logo;
-//    NSString *str;
-//    if(backstr.length>5)
-//    {
-//        str=[backstr substringToIndex:5];
-//        str =[NSString stringWithFormat:@"%@...",str];
-//    }
-//    UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:str style:UIBarButtonItemStylePlain target:nil action:nil];
-//    self.navigationItem.backBarButtonItem=item;
+ 
     [self.navigationController pushViewController:vc animated:YES];
 }
 // 分享
@@ -392,13 +424,8 @@
 }
 -(void)cellButtonClick:(UIButton  *) button
 {
-//    //点击了更多
-//    UIActionSheet  *Act=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"内容投诉",@"版权投诉",@"查看图片信息", nil];
-//    Act.tag=507;
-//    [Act showInView:Act];
-    UserDataCenter  *userCenter =[UserDataCenter shareInstance];
+     UserDataCenter  *userCenter =[UserDataCenter shareInstance];
     //点击了更多
-    
     if ([userCenter.is_admin intValue]>0) {
         
         UIActionSheet  *Act=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"内容投诉",@"版权投诉",@"图片信息",@"切换剧照到（审核/正式）",@"屏蔽剧照",nil];
@@ -473,6 +500,12 @@
     
     if (button.tag==10000) {
         ///点击了头像//进入个人页面
+        [_mymarkView CancelMarksetSelect];
+        if (_toolBar) {
+            [_toolBar HidenButtomView];
+            [_toolBar removeFromSuperview];
+        }
+
         MyViewController   *myVc=[[MyViewController alloc]init];
         myVc.author_id=weiboDict.created_by;
         [self.navigationController pushViewController:myVc animated:YES];
@@ -543,7 +576,6 @@
         if (_toolBar) {
             [_toolBar  HidenButtomView];
             [_toolBar removeFromSuperview];
-            
         }
         TagToStageViewController  *vc=[[TagToStageViewController alloc]init];
         vc.weiboInfo=weiboInfo;
@@ -702,19 +734,13 @@
 {
 #pragma mark   缩放整体的弹幕大小
     [Function BasicAnimationwithkey:@"transform.scale" Duration:0.25 repeatcont:1 autoresverses:YES fromValue:1.0 toValue:1.05 View:markView];
-    
-    
-    //NSLog(@" 点赞 后 微博dict  ＝====uped====%@    ups===%@",weibodict.uped,weibodict.ups);
-    
-    NSString  *weiboTitleString=weibodict.content;
+     NSString  *weiboTitleString=weibodict.content;
     NSString  *UpString=[NSString stringWithFormat:@"%@",weibodict.like_count];//weibodict.ups;
     //计算标题的size
     CGSize  Msize=[weiboTitleString boundingRectWithSize:CGSizeMake(kDeviceWidth/2,MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:markView.TitleLable.font forKey:NSFontAttributeName] context:nil].size;
     // 计算赞数量的size
     CGSize Usize=[UpString boundingRectWithSize:CGSizeMake(40,MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:markView.ZanNumLable.font forKey:NSFontAttributeName] context:nil].size;
-    
-    // NSLog(@"size= %f %f", Msize.width, Msize.height);
-    //计算赞数量的长度
+     //计算赞数量的长度
     float  Uwidth=[UpString floatValue]==0?0:Usize.width;
     //宽度=字的宽度+左头像图片的宽度＋赞图片的宽度＋赞数量的宽度+中间两个空格2+2
     float markViewWidth = Msize.width+23+Uwidth+5+5+11+5;

@@ -43,7 +43,7 @@
     
     UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 120, 20) Font:16 Text:@"上传图片"];
     titleLable.textColor=VBlue_color;
-    titleLable.font=[UIFont boldSystemFontOfSize:16];
+    titleLable.font=[UIFont boldSystemFontOfSize:18];
     titleLable.textAlignment=NSTextAlignmentCenter;
     self.navigationItem.titleView=titleLable;
  

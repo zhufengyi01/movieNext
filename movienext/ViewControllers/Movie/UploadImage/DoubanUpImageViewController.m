@@ -33,7 +33,7 @@
     
     UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 120, 20) Font:16 Text:@"上传图片"];
     titleLable.textColor=VBlue_color;
-    titleLable.font=[UIFont boldSystemFontOfSize:16];
+    titleLable.font=[UIFont boldSystemFontOfSize:18];
     titleLable.textAlignment=NSTextAlignmentCenter;
     self.navigationItem.titleView=titleLable;
     
@@ -102,13 +102,17 @@
     [manager POST:[NSString stringWithFormat:@"%@/stage/create-from-douban",kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
-            NSLog(@"删除成功=======%@",responseObject);
+            NSLog(@"创建成功=======%@",responseObject);
             
 //            UIAlertView *al =[[UIAlertView alloc]initWithTitle:@"删除成功" message:nil delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
 //            [al show];
             
             AddMarkViewController  *vc =[[AddMarkViewController alloc]init];
             stageInfoModel  *model =[[stageInfoModel alloc]init];
+            movieInfoModel  *movieInfo =[[movieInfoModel alloc]init];
+            movieInfo.name =self.movie_name;
+            movieInfo.Id=self.movie_id;
+            model.movieInfo=movieInfo;
              [model setValuesForKeysWithDictionary:[responseObject objectForKey:@"model"]];
             vc.stageInfo=model;
             [self.navigationController pushViewController:vc animated:YES];
