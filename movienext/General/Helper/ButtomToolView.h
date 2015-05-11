@@ -23,7 +23,7 @@
 -(void)ToolViewHandClick:(UIButton  *) button :(MarkView *) markView weiboDict:(weiboInfoModel*) weiboDict StageInfo:(stageInfoModel *)stageInfoDict;
 
 ///点击屏幕的透明颜色时候，弹回上面
--(void)topViewTouchBengan;
+//-(void)topViewTouchBengan;
 
 //点击标签，跳转到含有标签的剧情列表
 -(void)ToolViewTagHandClickTagView:(TagView*)tagView  withweiboinfo:(weiboInfoModel *) weiboInfo WithTagInfo:(TagModel *) tagInfo;
@@ -71,6 +71,8 @@
 -(void)ShowButtomView;
 //隐藏底部试图
 -(void)HidenButtomView;
+
+
 
 #pragma  mark 点赞的方法
 //设置赞的状态为选中

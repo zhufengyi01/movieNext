@@ -32,32 +32,31 @@ static DoubanService * manager = nil;
         return doubanInfos;
     }
     
+    if (array.count>0) {
     if (type==NServiceTypeSearch) {
-    for (NSTextCheckingResult* b in array)
-    {
-        NSLog(@"array = %@", array);
-
-        NSString *doubanId = [responseString substringWithRange:[b rangeAtIndex:1]];
-        NSString *movieName = [responseString substringWithRange:[b rangeAtIndex:3]];
-        NSString *smallImage = [responseString substringWithRange:[b rangeAtIndex:2]];
-        
-        NSMutableDictionary *di = [NSMutableDictionary dictionary];
+         for (NSTextCheckingResult* b in array)
+        {
+         NSLog(@"array = %@", array);
+         NSString *doubanId = [responseString substringWithRange:[b rangeAtIndex:1]];
+         NSString *movieName = [responseString substringWithRange:[b rangeAtIndex:3]];
+         NSString *smallImage = [responseString substringWithRange:[b rangeAtIndex:2]];
+         NSMutableDictionary *di = [NSMutableDictionary dictionary];
         [di setValue:doubanId forKey:@"doubanId"];
         [di setValue:movieName forKey:@"title"];
         [di setValue:smallImage forKey:@"smallimage"];
-      
         [doubanInfos addObject:di];
-    }
+       }
     }
     else if (type==NServiceTypePhoto)
     {
+        //NSLog(@"array  ======%@",array);
         for (NSTextCheckingResult* b in array)
         {
            NSString  *str1 = [responseString substringWithRange:b.range];
-            str1 = [str1 stringByReplacingOccurrencesOfString:@"thumb" withString:@"photo"];//将获取的内容图片地址换成相册图标
+            str1 = [str1 stringByReplacingOccurrencesOfString:@"thumb" withString:@"albumicon"];//将获取的内容图片地址换成相册图标
             [doubanInfos addObject:str1];
         }
-        
+    }
     }
     return doubanInfos;
 }

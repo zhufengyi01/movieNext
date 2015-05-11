@@ -46,9 +46,11 @@
     NSMutableArray    *_upedDataArray;
    // NSMutableDictionary  *_userInfoDict;
     LoadingView   *loadView;
-    int page;
+    int page1;
+    int page2;
     int pageSize;
-    int pageCount;
+    int pageCount1;
+    int pageCount2;
     UIImageView *ivAvatar;//头像
     UILabel *lblUsername;//用户名
     UILabel *lblCount;//统计信息
@@ -121,9 +123,11 @@
 }
 
 -(void)initData {
-    page=1;
+    page1=1;
+    page2=1;
     pageSize=10;
-    pageCount=1;
+    pageCount1=1;
+    pageCount2=1;
     _addedDataArray = [[NSMutableArray alloc] init];
     _upedDataArray = [[NSMutableArray alloc] init];
     buttonStateDict=[[NSMutableDictionary alloc]init];
@@ -333,23 +337,26 @@
 #pragma mark 开始进入刷新状态
 - (void)headerRereshing
 {
-    page=1;
+    
     for (int i=100; i<102;i++ ) {
         UIButton  *btn =(UIButton *)[self.view viewWithTag:i];
         if (btn.tag==100&&btn.selected==YES) {
             if (_addedDataArray.count>0) {
                 [_addedDataArray removeAllObjects];
             }
-            
+            page1=1;
+            [self requestData];
+
         }
         else if (btn.tag==101&&btn.selected==YES)
         {
             if (_upedDataArray.count>0) {
                 [_upedDataArray removeAllObjects];
             }
+            page2=1;
+            [self requestData];
         }
     }
-    [self requestData];
     // 2.2秒后刷新表格UI
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         // 刷新表格
@@ -362,10 +369,28 @@
 - (void)footerRereshing
 {
 
-    if (page<pageCount) {
-        page++;
-     [self  requestData];
+//    if (page<pageCount) {
+//        page++;
+//     [self  requestData];
+//    }
+    
+    for (int i=100; i<102;i++ ) {
+        UIButton  *btn =(UIButton *)[self.view viewWithTag:i];
+        if (btn.tag==100&&btn.selected==YES) {
+            if (pageCount1>page1) {
+              page1=page1+1;
+            [self requestData];
+            }
+        }
+        else if (btn.tag==101&&btn.selected==YES)
+        {
+            if (pageCount2>page2) {
+            page2=page2+1;
+            [self requestData];
+        }
     }
+    }
+
     
     // 2.2秒后刷新表格UI
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -567,14 +592,17 @@
     //user_id是当前用户的ID
     NSDictionary *parameters = @{@"user_id":userCenter.user_id,@"author_id":autorid};
     NSString * section;
+    int  page;
     for (int i=100; i<102;i++ ) {
         UIButton  *btn =(UIButton *)[self.view viewWithTag:i];
         if (btn.tag==101&&btn.selected==YES) {
             section=@"user-up-weibo/list";
+            page=page1;
         }
         else if (btn.tag==100&&btn.selected==YES)
         {
             section= @"user-create-weibo/list";
+            page=page2;
         }
     }
     NSLog(@" parameters  ====%@",parameters);
@@ -584,11 +612,12 @@
     [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject objectForKey:@"code"] intValue]==0) {
             NSLog(@"个人页面返回的数据====%@",responseObject);
-            pageCount=[[responseObject objectForKey:@"pageCount"] intValue];
              NSMutableArray  *Detailarray=[responseObject objectForKey:@"models"];
         for (int i=100; i<102;i++ ) {
             UIButton  *btn =(UIButton *)[self.view viewWithTag:i];
             if (btn.tag==100&&btn.selected==YES) {
+                pageCount1=[[responseObject objectForKey:@"pageCount"] intValue];
+
                 for (NSDictionary  *addDict  in Detailarray) {
                 userAddmodel  *model=[[userAddmodel alloc]init];
                 if (model) {
@@ -676,10 +705,13 @@
         }
         else if(btn.tag==101&&btn.selected==YES)
         {
+            pageCount2=[[responseObject objectForKey:@"pageCount"] intValue];
+
             if (_upedDataArray ==nil) {
                 _upedDataArray=[[NSMutableArray alloc]init];
             }
             for (NSDictionary  *addDict  in Detailarray) {
+                
                 userAddmodel  *model=[[userAddmodel alloc]init];
                 if (model) {
                     [model setValuesForKeysWithDictionary:addDict];
@@ -986,6 +1018,9 @@
         // 电影
         MovieDetailViewController *vc =  [MovieDetailViewController new];
         vc.movieId = addmodel.weiboInfo.stageInfo.movieInfo.Id;
+        vc.moviename=addmodel.weiboInfo.stageInfo.movieInfo.name;
+        vc.movielogo=addmodel.weiboInfo.stageInfo.movieInfo.logo;
+
         [self.navigationController pushViewController:vc animated:YES];
 
     }

@@ -13,6 +13,7 @@
 #import "UserDataCenter.h"
 #import "AddMarkViewController.h"
 #import "stageInfoModel.h"
+#import  "UIImageView+WebCache.h"
 
 @interface DoubanUpImageViewController ()
 
@@ -56,29 +57,33 @@
     [self.view addSubview:bgView];
     
     UIImageView  *imageView=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, 200)];
-    imageView.image=self.upimage;
-    
+    //imageView.image=self.upimage;
+  
+  //  [imageView  sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",self.photourl]] placeholderImage:nil];
+    [imageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",self.photourl]] placeholderImage:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+        CGSize  Isize=imageView.image.size;
+        float x=0;
+        float y=0;
+        float width=0;
+        float hight=0;
+        if (Isize.width>Isize.height) {
+            x=0;
+            width=kDeviceWidth;
+            hight=(Isize.height/Isize.width)*kDeviceWidth;
+            y=(kDeviceWidth-hight)/2;
+        }
+        else
+        {
+            y=0;
+            hight=kDeviceWidth;
+            width=(Isize.width/Isize.height)*kDeviceWidth;
+            x=(kDeviceWidth-width)/2;
+        }
+        imageView.frame=CGRectMake(x,y,width,hight);
+ 
+    }];
     [bgView addSubview:imageView];
     
-    CGSize  Isize=self.upimage.size;
-    float x=0;
-    float y=0;
-    float width=0;
-    float hight=0;
-    if (Isize.width>Isize.height) {
-        x=0;
-        width=kDeviceWidth;
-        hight=(Isize.height/Isize.width)*kDeviceWidth;
-        y=(kDeviceWidth-hight)/2;
-    }
-    else
-    {
-        y=0;
-        hight=kDeviceWidth;
-        width=(Isize.width/Isize.height)*kDeviceWidth;
-        x=(kDeviceWidth-width)/2;
-    }
-    imageView.frame=CGRectMake(x,y,width,hight);
     
 }
 
@@ -101,6 +106,7 @@
             
 //            UIAlertView *al =[[UIAlertView alloc]initWithTitle:@"删除成功" message:nil delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
 //            [al show];
+            
             AddMarkViewController  *vc =[[AddMarkViewController alloc]init];
             stageInfoModel  *model =[[stageInfoModel alloc]init];
              [model setValuesForKeysWithDictionary:[responseObject objectForKey:@"model"]];

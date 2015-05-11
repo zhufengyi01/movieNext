@@ -16,9 +16,12 @@
 #import "weiboInfoModel.h"
 #import "MovieDetailViewController.h"
 #import "TagView.h"
+#import "UMSocialData.h"
+#import "UMShareViewController2.h"
+#import "UMSocial.h"
 //#import "AddTagViewController.h"
 #define  BOOKMARK_WORD_LIMIT 1000
-@interface AddMarkViewController ()<UITextFieldDelegate,UIAlertViewDelegate,UIScrollViewDelegate,UITextViewDelegate,TagViewDelegate,UIAlertViewDelegate>
+@interface AddMarkViewController ()<UITextFieldDelegate,UIAlertViewDelegate,UIScrollViewDelegate,UITextViewDelegate,TagViewDelegate,UIAlertViewDelegate,UMShareViewController2Delegate>
 {
     UIScrollView *_myScorllerView;
     UIToolbar    *_toolBar;
@@ -40,7 +43,6 @@
     NSMutableArray      *TAGArray;        //把第一个标签和第二个标签存储在数组中
 }
 @end
-
 @implementation AddMarkViewController
 
 -(void)viewWillAppear:(BOOL)animated
@@ -144,6 +146,7 @@
 {
      stageView = [[StageView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceWidth)];
      stageView.stageInfo=self.stageInfo;
+    
     [stageView configStageViewforStageInfoDict];
        NSLog(@" 在 添加弹幕页面的   stagedict = %@",self.stageInfo);
      [_myScorllerView addSubview:stageView];
@@ -445,10 +448,10 @@
     [manager POST:urlString parameters:parameter success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"  添加弹幕发布请求    JSON: %@", responseObject);
         if ([[responseObject  objectForKey:@"code"] intValue]==0) {
-            UIAlertView  *Al=[[UIAlertView alloc]initWithTitle:nil message:@"发布成功" delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
-            Al.tag=1000;
-            [Al show];
-           // UserDataCenter  *useCenter=[UserDataCenter shareInstance];
+//            UIAlertView  *Al=[[UIAlertView alloc]initWithTitle:nil message:@"发布成功" delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
+//            Al.tag=1000;
+//            [Al show];
+            
             weiboInfoModel *weibo =[[weiboInfoModel alloc]init];
             if (weibo) {
                 [weibo setValuesForKeysWithDictionary:[responseObject objectForKey:@"model"]];
@@ -458,10 +461,8 @@
                   weibouser.username=userCenter.username;
                   weibo.uerInfo=weibouser;
                 }
-                
                 NSMutableArray  *tagarray =[[NSMutableArray alloc]init];
                 for (NSDictionary  *tagDict in [[responseObject objectForKey:@"model"] objectForKey:@"tags"]) {
-                    
                     TagModel  *tagmodel =[[TagModel alloc]init];
                     if (tagmodel) {
                         [tagmodel  setValuesForKeysWithDictionary:tagDict];
@@ -476,9 +477,17 @@
                 }
                 weibo.tagArray=tagarray;
             }
-         //   weibomodel.uerInfo.fake=[NSNumber numberWithInt:1];
             [self.stageInfo.weibosArray addObject:weibo];
-        
+            
+            UMShareViewController2  *shareVC=[[UMShareViewController2 alloc]init];
+            shareVC.StageInfo=self.stageInfo;
+            shareVC.weiboInfo=weibo;
+            shareVC.delegate=self;
+            UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:shareVC];
+            [self presentViewController:na animated:YES completion:nil];
+            
+
+            
         }
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -486,6 +495,35 @@
     }];
     
 }
+
+
+-(void)UMShareViewController2HandClick:(UIButton *)button ShareImage:(UIImage *)shareImage StageInfoModel:(stageInfoModel *)StageInfo
+{
+    
+    NSArray  *sharearray =[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQzone, UMShareToSina, nil];
+    [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
+    [[UMSocialControllerService defaultControllerService] setShareText:StageInfo.movieInfo.name shareImage:shareImage socialUIDelegate:self];
+    //设置分享内容和回调对象
+    
+    [UMSocialSnsPlatformManager getSocialPlatformWithName:[sharearray  objectAtIndex:button.tag-10000]].snsClickHandler(self,[UMSocialControllerService defaultControllerService],YES);
+    
+}
+-(void)didCloseUIViewController:(UMSViewControllerType)fromViewControllerType
+{
+    [self.navigationController popViewControllerAnimated:NO];
+}
+//根据有的view 上次一张图片
+-(void)didFinishGetUMSocialDataInViewController:(UMSocialResponseEntity *)response
+{
+    
+     [self.navigationController popViewControllerAnimated:NO];
+}
+-(void)didFinishGetUMSocialDataResponse:(UMSocialResponseEntity *)response;
+{
+    NSLog(@"didFinishGetUMSocialDataResponse第二部执行这个");
+     [self.navigationController popViewControllerAnimated:NO];
+}
+
 //发布弹幕请求
 #pragma mark 键盘的通知事件
 -(void)keyboardWillShow:(NSNotification * )  notification

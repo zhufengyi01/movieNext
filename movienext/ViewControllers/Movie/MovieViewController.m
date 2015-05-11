@@ -32,10 +32,16 @@
 @interface MovieViewController ()<UISearchBarDelegate,UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout,LoadingViewDelegate,MovieCollectionViewCellDelegate,UIActionSheetDelegate>
 {
     LoadingView         *loadView;
-    int page;
     int pageSize;
     NSString  *startId;
-    int pageCount;
+    int page1;
+    int page2;
+    int page3;
+    int pageCount1;
+    int pageCount2;
+    int pageCount3;
+
+    
     NSInteger Rowindex;
 }
 
@@ -185,7 +191,12 @@
 }
 -(void)initData
 {
-    page=0;
+    page1=1;
+    page2=1;
+    page3=1;
+    pageCount1=1;
+    pageCount2=1;
+    pageCount3=1;
      pageSize=12;
     _dataArray1=[[NSMutableArray alloc]init];
     _dataArray2=[[NSMutableArray alloc]init];
@@ -220,14 +231,15 @@
     __unsafe_unretained typeof(self) vc = self;
     // 添加下拉刷新头部控件
     [_myConllectionView addHeaderWithCallback:^{
-        page=1;
         for (int i=0;i<3;i++) {
             UIButton  *btn=(UIButton *) [vc.view viewWithTag:100+i];
             if (i==0&&btn.selected==YES) {
                 if (_dataArray1.count>0) {
                     [vc.dataArray1 removeAllObjects];
                 }
-                break;
+                page1=1;
+                [vc requestData];
+
 
             }
             else if(i==1&&btn.selected==YES)
@@ -235,7 +247,9 @@
                 if (_dataArray2.count>0) {
                     [vc.dataArray2 removeAllObjects];
                 }
-                break;
+                page2=1;
+                [vc requestData];
+
 
                 
             }
@@ -245,13 +259,12 @@
                 if (_dataArray3.count>0) {
                     [vc.dataArray3 removeAllObjects];
                 }
-                break;
-
+                page3=1;
+                [vc requestData];
             }
             
         }
         // 进入刷新状态就会回调这个Block
-        [vc requestData];
 
         // 模拟延迟加载数据，因此2秒后才调用）
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -267,20 +280,37 @@
 
 - (void)setupFootView
 {
-    
-   
-    __unsafe_unretained typeof(self) vc = self;
+   __unsafe_unretained typeof(self) vc = self;
     // 添加上拉刷新尾部控件
     [vc.myConllectionView addFooterWithCallback:^{
-        if (pageCount>page) {
-            page ++;
-            [vc requestData];
-
+        for (int i=0;i<3;i++) {
+            UIButton  *btn=(UIButton *) [vc.view viewWithTag:100+i];
+            if (i==0&&btn.selected==YES) {
+                if (pageCount1>page1) {
+                page1=page1+1;
+                [vc requestData];
+                }
+            }
+            else if(i==1&&btn.selected==YES)
+            {
+                if (pageCount2>page2) {
+                page2=page2+1;
+                [vc requestData];
+                }
+            }
+            else if (i==2&&btn.selected==YES)
+            {
+                if (pageCount3>page3) {
+                 page3=page3+1;
+                [vc requestData];
+                }
+            }
         }
-        
-        // 进入刷新状态就会回调这个Block
-        //page++;
 
+        
+//        
+        // 进入刷新状态就会回调这个Block
+ 
         // 增加5条假数据
       ///  for (int i = 0; i<5; i++) {
          //   [vc.fakeColors addObject:MJRandomColor];
@@ -331,27 +361,28 @@
 {
     
     NSString  *type;
+    int PAGE;
     for (int i=0;i<3;i++) {
         UIButton  *btn=(UIButton *) [self.view viewWithTag:100+i];
         if (i==0&&btn.selected==YES) {
             type=@"1";
-            break;
+            PAGE=page1;
         }
         else if(i==1&&btn.selected==YES)
         {
             type=@"2";
-            break;
-        }
+            PAGE=page2;
+         }
         else if (i==2&&btn.selected==YES)
         {
             type=@"3";
-            break;
+            PAGE=page3;
             
         }
         
     }
     NSDictionary  *parameters =@{@"type":type};
-    NSString  *urlString=[NSString stringWithFormat:@"%@/feed/list?per-page=%d&page=%d",kApiBaseUrl,pageSize,page];
+    NSString  *urlString=[NSString stringWithFormat:@"%@/feed/list?per-page=%d&page=%d",kApiBaseUrl,pageSize,PAGE];
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
@@ -369,7 +400,7 @@
                         _dataArray1=[[NSMutableArray alloc]init];
                     }
                     NSArray  *detailarray=[responseObject objectForKey:@"models"];
-                    pageCount =[[responseObject objectForKey:@"pageCount"] intValue];
+                    pageCount1 =[[responseObject objectForKey:@"pageCount"] intValue];
                     if (detailarray.count>0) {
                         [_dataArray1 addObjectsFromArray:detailarray];
                     }
@@ -381,7 +412,7 @@
                         _dataArray2=[[NSMutableArray alloc]init];
                     }
                     NSArray  *detailarray=[responseObject objectForKey:@"models"];
-                    pageCount =[[responseObject objectForKey:@"pageCount"] intValue];
+                    pageCount2 =[[responseObject objectForKey:@"pageCount"] intValue];
                     if (detailarray.count>0) {
                         [_dataArray2 addObjectsFromArray:detailarray];
                     }
@@ -393,7 +424,7 @@
                         _dataArray3=[[NSMutableArray alloc]init];
                     }
                     NSArray  *detailarray=[responseObject objectForKey:@"models"];
-                    pageCount =[[responseObject objectForKey:@"pageCount"] intValue];
+                    pageCount3 =[[responseObject objectForKey:@"pageCount"] intValue];
                     if (detailarray.count>0) {
                         [_dataArray3 addObjectsFromArray:detailarray];
                     }

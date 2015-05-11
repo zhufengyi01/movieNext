@@ -215,6 +215,8 @@
 //底部视图的点击事件
 -(void)dealButtomClick:(UIButton  *) button
 {
+    
+    
     if (button.tag==10002) {
       if (zanbutton.selected==YES) {
         zanbutton.selected=NO;
@@ -235,12 +237,15 @@
     if (self.delegete &&[self.delegete respondsToSelector:@selector(ToolViewHandClick::weiboDict:StageInfo:)]) {
         [self.delegete ToolViewHandClick:button :_markView weiboDict:self.weiboInfo StageInfo:self.stageInfo];
     }
+   // [self removeFromSuperview];
 }
 
 
 //显示底部试图
 -(void)ShowButtomView;
 {
+    
+     [AppView addSubview:self];
    /* [UIView animateWithDuration:0.1 animations:^{
         _alertView.alpha=1;
         

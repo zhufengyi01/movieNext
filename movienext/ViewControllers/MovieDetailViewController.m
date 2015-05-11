@@ -502,7 +502,7 @@
     NSDictionary *parameter = @{@"movie_id": self.movieId};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:[NSString stringWithFormat:@"%@/movie/info", kApiBaseUrl] parameters:parameter success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"  电影详情页面的电影信息数据JSON: %@", responseObject);
+      //  NSLog(@"  电影详情页面的电影信息数据JSON: %@", responseObject);
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
             NSDictionary  *dict =[responseObject objectForKey:@"model"];
             ShowSelectPhotoViewController  *vc =[[ShowSelectPhotoViewController alloc]init];

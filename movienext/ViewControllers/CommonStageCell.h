@@ -40,7 +40,7 @@ typedef NS_ENUM(NSInteger,NSUserPageType)
 //工具条的点击事件
 -(void)commonStageCellToolButtonClick:(UIButton *) button Rowindex:(NSInteger) index;
 //点击长按手势的事件
--(void)commonStageCellLoogPressClickindex:(NSInteger )indexrow;
+//-(void)commonStageCellLoogPressClickindex:(NSInteger )indexrow;
 
 @end
 @interface CommonStageCell : UITableViewCell <StageViewDelegate>
@@ -64,7 +64,7 @@ typedef NS_ENUM(NSInteger,NSUserPageType)
     UIImageView   *MovieLogoImageView;  // 电影的小图片
     UIButton      *ScreenButton;
     UIButton      *addMarkButton;
-    UIView  *pressview;
+//    UIView  *pressview;
 
  }
 @property (assign,nonatomic)id <CommonStageCellDelegate>  delegate;

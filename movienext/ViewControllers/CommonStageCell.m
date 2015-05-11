@@ -135,15 +135,15 @@
     [addMarkButton setBackgroundImage:[UIImage imageNamed:@"btn_add_select.png"] forState:UIControlStateHighlighted];
     [BgView2 addSubview:addMarkButton];
     
-    UserDataCenter  *userCenter=[UserDataCenter shareInstance];
-    if ([userCenter.is_admin intValue]>0) {
-        //创建长按手势
-        pressview=[[UIView alloc]initWithFrame:CGRectMake(ScreenButton.frame.origin.x-50, ScreenButton.frame.origin.y, 50,30)];
-        [BgView2 addSubview:pressview];
-        UILongPressGestureRecognizer   *longPress=[[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(logPress:)];
-        [pressview addGestureRecognizer:longPress];
-
-    }
+   // UserDataCenter  *userCenter=[UserDataCenter shareInstance];
+//    if ([userCenter.is_admin intValue]>0) {
+//        //创建长按手势
+//        pressview=[[UIView alloc]initWithFrame:CGRectMake(ScreenButton.frame.origin.x-50, ScreenButton.frame.origin.y, 50,30)];
+//        [BgView2 addSubview:pressview];
+//        UILongPressGestureRecognizer   *longPress=[[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(logPress:)];
+//        [pressview addGestureRecognizer:longPress];
+//
+//    }
     //底部2像素的投影
     UIImageView *lineImage =[[UIImageView alloc]initWithFrame:CGRectMake(0,44, kDeviceWidth, 2)];
     lineImage.image=[UIImage imageNamed:@"cell_buttom_line.png"];
@@ -160,16 +160,6 @@
     UserLogoButton.tag=4000;
     deletButton.tag=5000;
     moreButton.tag=6000;
-//        if (_tanlogoButton) {
-//             [_tanlogoButton removeFromSuperview];
-//            _tanlogoButton=nil;
-//        }
-//        _tanlogoButton =[UIButton buttonWithType:UIButtonTypeCustom];
-//        _tanlogoButton.frame=CGRectMake(kDeviceWidth-120, 9, 45, 25);
-//        [_tanlogoButton setImage:[UIImage imageNamed:@"close_danmu.png"] forState:UIControlStateNormal];
-//        [_tanlogoButton setImage:[UIImage imageNamed:@"open_danmu.png"] forState:UIControlStateSelected];
-//        [_tanlogoButton addTarget:self action:@selector(hidenAndShowMarkView:) forControlEvents:UIControlEventTouchUpInside];
-//        [BgView2 addSubview:_tanlogoButton];
     
 #pragma mark  configDatawithSatgeView------------------------------
    //单个标签的时候用这个
@@ -198,22 +188,19 @@
     
 #pragma  mark  根据不同cell 配置cell 的样式------------------------------
 #pragma  mark  热门cell
-    if (_pageType==NSPageSourceTypeMainHotController) {  //热门
+    if (_pageType==NSPageSourceTypeMainHotController||_pageType==NSPageSourceTypeMainNewController) {  //热门
          _stageView.isAnimation = YES;
+        
     }
 #pragma mark 首页最新,我的添加，赞 cell
-    else if(_pageType==NSPageSourceTypeMainNewController || _pageType==NSPageSourceTypeMyAddedViewController || _pageType==NSPageSourceTypeMyupedViewController)  //最新
+    else if( _pageType==NSPageSourceTypeMyAddedViewController || _pageType==NSPageSourceTypeMyupedViewController)  //最新
     {
-         pressview.hidden=YES;
         if (_pageType==NSPageSourceTypeMainNewController) {
-            pressview.hidden=NO;
+            
         }
          _stageView.isAnimation=NO;
     }
-    else
-    {
-        
-    }
+    
 }
 
 
@@ -261,19 +248,19 @@
     }
     
 }
-//长安显示了
--(void)logPress:(UILongPressGestureRecognizer *) logPress
-{
-    //开始
-    if(logPress.state==UIGestureRecognizerStateBegan)
-    {
-        if (self.delegate&&[self.delegate respondsToSelector:@selector(commonStageCellLoogPressClickindex:)]) {
-            [self.delegate commonStageCellLoogPressClickindex:pressview.tag];
-        }
-        
-    }
-    
-}
+////长安显示了
+//-(void)logPress:(UILongPressGestureRecognizer *) logPress
+//{
+//    //开始
+//    if(logPress.state==UIGestureRecognizerStateBegan)
+//    {
+//        if (self.delegate&&[self.delegate respondsToSelector:@selector(commonStageCellLoogPressClickindex:)]) {
+//            [self.delegate commonStageCellLoogPressClickindex:pressview.tag];
+//        }
+//        
+//    }
+//    
+//}
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];

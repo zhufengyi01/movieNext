@@ -53,9 +53,12 @@
     LoadingView   *loadView;
     NSMutableArray    *_hotDataArray;
     NSMutableArray    *_newDataArray;
-    int page;
+    int page1;
+    int page2;
+    
     int pagesize;
-    int pageCount;
+    int pageCount1;
+    int pageCount2;
     
     ButtomToolView *_toolBar;
     MarkView       *_mymarkView;
@@ -130,9 +133,11 @@
     _hotDataArray = [[NSMutableArray alloc]init];
     _newDataArray=[[NSMutableArray alloc]init];
     _upWeiboArray=[[NSMutableArray alloc]init];
-    page=1;
+    page1=1;
+    page2=1;
     pagesize=10;
-    pageCount=1;
+    pageCount1=1;
+    pageCount2=1;
  }
 #pragma  mark   ------
 #pragma  mark  -------CreatUI;
@@ -221,16 +226,18 @@
 #pragma mark 开始进入刷新状态
 - (void)headerRereshing
 {
-    page=1;
+ 
 
     if (segment.selectedSegmentIndex==0) {
         if (_hotDataArray.count>0) {
+            page1=1;
             [_hotDataArray removeAllObjects];
         }
     }
     else if (segment.selectedSegmentIndex==1)
     {
         if (_newDataArray.count>0) {
+            page2=1;
             [_newDataArray removeAllObjects];
         }
     }
@@ -247,11 +254,23 @@
 - (void)footerRereshing
 {
     
-    if (pageCount>page) {
-     page++;
-    [self  requestData];
+    if (segment.selectedSegmentIndex==0) {
+        if (pageCount1>page1) {
+            page1=page1+1;
+            [self requestData];
+         }
     }
+    else if (segment.selectedSegmentIndex==1)
+    {
+        if (pageCount2>page2) {
+            page2=page2+1;
+            [self requestData];
+         }
+    }
+
+    
     // 2.2秒后刷新表格UI
+    
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         // 刷新表格
       //  [_HotMoVieTableView reloadData];
@@ -526,12 +545,17 @@
     NSDictionary *parameters;
     parameters = @{@"user_id":userId,@"Version":Version};
     NSString * section;
-    if (segment.selectedSegmentIndex==1) {  // 最新
-        section=@"weibo/listrecently";
-    }
-    else if(segment.selectedSegmentIndex==0) //热门
-    {
+    int page;
+    if (segment.selectedSegmentIndex==0) {  // 热门
+        page=page1;
         section= @"hot/list";
+
+    }
+    else if(segment.selectedSegmentIndex==1)//最新
+    {
+        page=page2;
+        section=@"new-stage/list";
+
     }
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     NSString *urlString=[NSString stringWithFormat:@"%@/%@?per-page=%d&page=%d", kApiBaseUrl, section,pagesize,page];
@@ -543,7 +567,13 @@
             [loadView stopAnimation];
             loadView.hidden=YES;
         NSMutableArray  *Detailarray=[responseObject objectForKey:@"models"];
-        pageCount=[[responseObject objectForKey:@"pageCount"] intValue];
+            if (segment.selectedSegmentIndex==0) {
+                pageCount1=[[responseObject objectForKey:@"pageCount"] intValue];
+            }
+            else if (segment.selectedSegmentIndex==1)
+            {
+                pageCount2=[[responseObject objectForKey:@"pageCount"] intValue];
+            }
             
         if (segment.selectedSegmentIndex==0) {
             if (_hotDataArray ==nil) {
@@ -567,14 +597,12 @@
                              weiboInfoModel *weibomodel=[[weiboInfoModel alloc]init];
                             if (weibomodel) {
                                 [weibomodel setValuesForKeysWithDictionary:weibodict];
-                                
                                 //weibouserInfo
                                 weiboUserInfoModel  *usermodel =[[weiboUserInfoModel alloc]init];
                                     if (usermodel) {
                                          [usermodel setValuesForKeysWithDictionary:[weibodict objectForKey:@"user"]];
                                         weibomodel.uerInfo=usermodel;
                                    }
-                                
                                 //tag
                                 NSMutableArray  *tagArray = [[NSMutableArray alloc]init];
                                 for (NSDictionary  *tagDict  in [weibodict objectForKey:@"tags"]) {
@@ -585,15 +613,10 @@
                                       if (tagedetail) {
                                           if (![[tagDict objectForKey:@"tag"] isKindOfClass:[NSNull class]]) {
                                           [tagedetail setValuesForKeysWithDictionary:[tagDict  objectForKey:@"tag"]];
-                                          tagmodel.tagDetailInfo=tagedetail;
-                                          }
+                                          tagmodel.tagDetailInfo=tagedetail;}
                                       }
-                                      
-                                      [tagArray addObject:tagmodel];
-                                  }
-                                }
+                                      [tagArray addObject:tagmodel];}}
                                 weibomodel.tagArray=tagArray;
-                                
                                 [weibosarray addObject:weibomodel];
                             }
                         }
@@ -615,8 +638,7 @@
                     }
                     [_hotDataArray addObject:model];
                 }
-           //     NSNumber  *iD=model.stageInfo.Id;
-            }
+             }
             //点赞的数组
             for (NSDictionary  *updict in [responseObject objectForKey:@"upweibos"]) {
                 UpweiboModel *upmodel =[[UpweiboModel alloc]init];
@@ -633,61 +655,132 @@
         else if(segment.selectedSegmentIndex==1)
         {
             NSLog(@"最新数据 JSON: %@", responseObject);
-            
             for (NSDictionary  *newDict in Detailarray) {
-            weiboInfoModel  *weibomodel =[[weiboInfoModel alloc]init];
-            if(weibomodel)
-            {
-                [weibomodel setValuesForKeysWithDictionary:newDict];
-                
-                //1.userInfo
-                weiboUserInfoModel *usermodel =[[weiboUserInfoModel alloc]init];
-                if (usermodel) {
-                    [usermodel setValuesForKeysWithDictionary:[newDict objectForKey:@"user"]];
-                    weibomodel.uerInfo=usermodel;
-                }
-                //2.stageInfo
-                stageInfoModel  *stageInfo =[[stageInfoModel alloc]init];
-                if(![[newDict  objectForKey:@"stage"]isKindOfClass:[NSNull class]])
+                ModelsModel  *model =[[ModelsModel alloc]init];
+                if(model)
                 {
-                if (stageInfo) {
-                    [stageInfo setValuesForKeysWithDictionary:[newDict objectForKey:@"stage"]];
-                    movieInfoModel  *moviemodel =[[movieInfoModel alloc]init];
-                    if (moviemodel) {
-                        if (![[[newDict objectForKey:@"stage"] objectForKey:@"movie"] isKindOfClass:[NSNull class]]) {
-                        [moviemodel setValuesForKeysWithDictionary:[[newDict objectForKey:@"stage"] objectForKey:@"movie"]];
-                        stageInfo.movieInfo=moviemodel;
+                    [model setValuesForKeysWithDictionary:newDict];
+                    //stageinfo
+                    stageInfoModel  *stagemodel =[[stageInfoModel alloc]init];
+                    if (stagemodel) {
+                        if(![[newDict objectForKey:@"stage"] isKindOfClass:[NSNull class]])
+                        {
+                            [stagemodel setValuesForKeysWithDictionary:[newDict objectForKey:@"stage"]];
+                            //weiboinfo
+                            NSMutableArray  *weibosarray=[[NSMutableArray alloc]init];
+                            for (NSDictionary  *weibodict  in [[newDict objectForKey:@"stage"] objectForKey:@"weibos"]) {
+                                weiboInfoModel *weibomodel=[[weiboInfoModel alloc]init];
+                                if (weibomodel) {
+                                    [weibomodel setValuesForKeysWithDictionary:weibodict];
+                                    //weibouserInfo
+                                    weiboUserInfoModel  *usermodel =[[weiboUserInfoModel alloc]init];
+                                    if (usermodel) {
+                                        [usermodel setValuesForKeysWithDictionary:[weibodict objectForKey:@"user"]];
+                                        weibomodel.uerInfo=usermodel;
+                                    }
+                                    //tag
+                                    NSMutableArray  *tagArray = [[NSMutableArray alloc]init];
+                                    for (NSDictionary  *tagDict  in [weibodict objectForKey:@"tags"]) {
+                                        TagModel *tagmodel =[[TagModel alloc]init];
+                                        if (tagmodel) {
+                                            [tagmodel setValuesForKeysWithDictionary:tagDict];
+                                            TagDetailModel *tagedetail = [[TagDetailModel alloc]init];
+                                            if (tagedetail) {
+                                                if (![[tagDict objectForKey:@"tag"] isKindOfClass:[NSNull class]]) {
+                                                    [tagedetail setValuesForKeysWithDictionary:[tagDict  objectForKey:@"tag"]];
+                                                    tagmodel.tagDetailInfo=tagedetail;}
+                                            }
+                                            [tagArray addObject:tagmodel];}}
+                                    weibomodel.tagArray=tagArray;
+                                    [weibosarray addObject:weibomodel];
+                                }
+                            }
+                            stagemodel.weibosArray=weibosarray;
+                            //moviemodel
+                            movieInfoModel *moviemodel =[[movieInfoModel alloc]init];
+                            if (moviemodel) {
+                                [moviemodel setValuesForKeysWithDictionary:[[newDict objectForKey:@"stage"] objectForKey:@"movie"]];
+                                stagemodel.movieInfo=moviemodel;
+                            }
                         }
+                        model.stageInfo=stagemodel;
                     }
-                    weibomodel.stageInfo=stageInfo;
-                  }
+                    if(_newDataArray==nil)
+                    {
+                        _newDataArray =[[NSMutableArray alloc]init];
+                        
+                    }
+                    [_newDataArray addObject:model];
                 }
-                //3.tagsInfo
-                NSMutableArray  *tagArray =[[NSMutableArray alloc]init];
+            }
+//            //点赞的数组
+//            for (NSDictionary  *updict in [responseObject objectForKey:@"upweibos"]) {
+//                UpweiboModel *upmodel =[[UpweiboModel alloc]init];
+//                if (upmodel) {
+//                    [upmodel setValuesForKeysWithDictionary:updict];
+//                    if (_upWeiboArray==nil) {
+//                        _upWeiboArray =[[NSMutableArray alloc]init];
+//                    }
+//                    [_upWeiboArray addObject:upmodel];
+//                }
+//            }
 
-                if (![[newDict objectForKey:@"tags"] isKindOfClass:[NSNull class]]) {
-                    for (NSDictionary  *tagDict  in [newDict objectForKey:@"tags"]) {
-                        TagModel  *tagmodel =[[TagModel alloc]init];
-                        [tagmodel setValuesForKeysWithDictionary:tagDict];
-                        
-                        TagDetailModel  *tagDetailmodel =[[TagDetailModel alloc]init];
-                        if (tagDetailmodel) {
-                            [tagDetailmodel setValuesForKeysWithDictionary:[tagDict objectForKey:@"tag"]];
-                            tagmodel.tagDetailInfo=tagDetailmodel;
-                        }
-                        [tagArray addObject:tagmodel];
-                        
-                    }
-                    
-                }
-                weibomodel.tagArray=tagArray;
-                
-                if (_newDataArray==nil) {
-                    _newDataArray =[[NSMutableArray alloc]init];
-                }
-                 [_newDataArray addObject:weibomodel];
-            }
-            }
+            
+            
+//            for (NSDictionary  *newDict in Detailarray) {
+//            weiboInfoModel  *weibomodel =[[weiboInfoModel alloc]init];
+//            if(weibomodel)
+//            {
+//                [weibomodel setValuesForKeysWithDictionary:newDict];
+//                
+//                //1.userInfo
+//                weiboUserInfoModel *usermodel =[[weiboUserInfoModel alloc]init];
+//                if (usermodel) {
+//                    [usermodel setValuesForKeysWithDictionary:[newDict objectForKey:@"user"]];
+//                    weibomodel.uerInfo=usermodel;
+//                }
+//                //2.stageInfo
+//                stageInfoModel  *stageInfo =[[stageInfoModel alloc]init];
+//                if(![[newDict  objectForKey:@"stage"]isKindOfClass:[NSNull class]])
+//                {
+//                if (stageInfo) {
+//                    [stageInfo setValuesForKeysWithDictionary:[newDict objectForKey:@"stage"]];
+//                    movieInfoModel  *moviemodel =[[movieInfoModel alloc]init];
+//                    if (moviemodel) {
+//                        if (![[[newDict objectForKey:@"stage"] objectForKey:@"movie"] isKindOfClass:[NSNull class]]) {
+//                        [moviemodel setValuesForKeysWithDictionary:[[newDict objectForKey:@"stage"] objectForKey:@"movie"]];
+//                        stageInfo.movieInfo=moviemodel;
+//                        }
+//                    }
+//                    weibomodel.stageInfo=stageInfo;
+//                  }
+//                }
+//                //3.tagsInfo
+//                NSMutableArray  *tagArray =[[NSMutableArray alloc]init];
+//
+//                if (![[newDict objectForKey:@"tags"] isKindOfClass:[NSNull class]]) {
+//                    for (NSDictionary  *tagDict  in [newDict objectForKey:@"tags"]) {
+//                        TagModel  *tagmodel =[[TagModel alloc]init];
+//                        [tagmodel setValuesForKeysWithDictionary:tagDict];
+//                        
+//                        TagDetailModel  *tagDetailmodel =[[TagDetailModel alloc]init];
+//                        if (tagDetailmodel) {
+//                            [tagDetailmodel setValuesForKeysWithDictionary:[tagDict objectForKey:@"tag"]];
+//                            tagmodel.tagDetailInfo=tagDetailmodel;
+//                        }
+//                        [tagArray addObject:tagmodel];
+//                        
+//                    }
+//                    
+//                }
+//                weibomodel.tagArray=tagArray;
+//                
+//                if (_newDataArray==nil) {
+//                    _newDataArray =[[NSMutableArray alloc]init];
+//                }
+//                 [_newDataArray addObject:weibomodel];
+//            }
+//            }
           
            [_HotMoVieTableView reloadData];
         }
@@ -785,13 +878,24 @@
             cell.backgroundColor=View_BackGround;
         }
         if (_newDataArray.count>indexPath.row) {
-            weiboInfoModel  *model =[_newDataArray  objectAtIndex:indexPath.row];
+//            weiboInfoModel  *model =[_newDataArray  objectAtIndex:indexPath.row];
+//            cell.pageType=NSPageSourceTypeMainNewController;
+//            cell.weiboInfo=model;
+//            cell.stageView.delegate=self;
+//            cell.stageInfo=model.stageInfo;
+//            cell.delegate=self;
+//            [cell ConfigsetCellindexPath:indexPath.row];
+            
+            ModelsModel  *model =[_newDataArray objectAtIndex:indexPath.row];
             cell.pageType=NSPageSourceTypeMainNewController;
-            cell.weiboInfo=model;
-            cell.stageView.delegate=self;
-            cell.stageInfo=model.stageInfo;
             cell.delegate=self;
+            cell.stageView.delegate=self;
+            cell.cellModel=model;
+            cell.stageInfo=model.stageInfo;
+            cell.weibosArray=model.stageInfo.weibosArray;
+            //cell.weiboInfo=nil;
             [cell ConfigsetCellindexPath:indexPath.row];
+            
         }
         return  cell;
     }
@@ -816,12 +920,14 @@
     NSLog(@"willDisplayCell ==== 当前显示的cell %ld",(long)indexPath.row);
     if (segment.selectedSegmentIndex==0) {
         CommonStageCell *commonStageCell = (CommonStageCell *)cell;
-      // [commonStageCell.stageView startAnimation];
-        [commonStageCell.stageView performSelector:@selector(startAnimation) withObject:nil afterDelay:0.1];
+         [commonStageCell.stageView performSelector:@selector(startAnimation) withObject:nil afterDelay:0.1];
     }
     else if (segment.selectedSegmentIndex==1)
     {
         //开始了闪现
+        CommonStageCell *commonStageCell = (CommonStageCell *)cell;
+        [commonStageCell.stageView performSelector:@selector(startAnimation) withObject:nil afterDelay:0.1];
+
         
     }
 }
@@ -839,7 +945,9 @@
     else if (segment.selectedSegmentIndex==1)
     {
         //结束闪现
-        
+        CommonStageCell *commonStageCell = (CommonStageCell *)cell;
+        [commonStageCell.stageView stopAnimation];
+
     }
 }
 
