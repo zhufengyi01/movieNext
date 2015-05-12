@@ -35,9 +35,9 @@
 -(void)createNavigation
 {
     //[self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color.png"] forBarMetrics:UIBarMetricsDefault];
-    UIView  *navView=[[UIView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, 64)];
-    navView.userInteractionEnabled=YES;
-    [self.view addSubview:navView];
+//    UIView  *navView=[[UIView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, 64)];
+//    navView.userInteractionEnabled=YES;
+//    [self.view addSubview:navView];
     
     search=[[UISearchBar alloc]initWithFrame:CGRectMake(10, 30, kDeviceWidth-20, 28)];
     search.placeholder=@"请输入标签";
@@ -46,8 +46,8 @@
     search.searchBarStyle = UISearchBarStyleMinimal;
     [search becomeFirstResponder];
     search.backgroundColor=[UIColor clearColor];
-    [navView addSubview:search];
-    //self.navigationItem.titleView=search;
+    //[navView addSubview:search];
+    self.navigationItem.titleView=search;
 }
 -(void)initData
 {
@@ -55,7 +55,7 @@
 }
 -(void) createUI
 {
-    self.myTableView =[[UITableView alloc]initWithFrame:CGRectMake(0, 64, kDeviceWidth, kDeviceHeight-kHeightNavigation)];
+    self.myTableView =[[UITableView alloc]initWithFrame:CGRectMake(0,0, kDeviceWidth, kDeviceHeight-kHeightNavigation)];
     self.myTableView.delegate=self;
     self.myTableView.dataSource=self;
     [self.view addSubview:self.myTableView];

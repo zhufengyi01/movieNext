@@ -18,6 +18,8 @@
 {
     CGRect m_frame;
     NSArray  *titleArray;
+    NSMutableDictionary  *indexSelectDict;  // 纪录当前那一个tabbar是处于选中
+    
 }
 
 @property (nonatomic, strong) NSArray * m_arrNormal;
@@ -35,6 +37,7 @@
         NSLog(@"custom tabBar initWithFrame");
         m_frame = frame;
         NSLog(@"m_frame == %@", NSStringFromCGRect(m_frame));
+        indexSelectDict =[[NSMutableDictionary alloc]initWithObjectsAndKeys:@"1000",@"isSelect", nil];
         [self setMemory];
         [self createButtons];
     }
@@ -69,12 +72,13 @@
         
         UIImage * normalImage = [UIImage imageNamed:[self.m_arrNormal objectAtIndex:i]];
         UIImage * selectedImage = [UIImage imageNamed:[self.m_arrSelected objectAtIndex:i]];
+        [button setImage:normalImage forState:UIControlStateNormal];
+        [button setImage:selectedImage forState:UIControlStateSelected];
         if (i == 0) {
-            [button setImage:selectedImage forState:UIControlStateNormal];
+             button.selected=YES;
             lable.textColor=TabSelectColor;
         } else {
-             [button setImage:normalImage forState:UIControlStateNormal];
-
+             button.selected=NO;
         }
         //要想调整图片的大小和位置都可以这么调
         [button setImageEdgeInsets:UIEdgeInsetsMake(4, 25, 15, 25)];
@@ -85,42 +89,42 @@
 
 - (void)buttonPressed:(UIButton *)button
 {
-    if (button.selected==NO) {
-    [self resetButtonImagesWithButton:button];
     
+    
+    NSString  *select  =[indexSelectDict objectForKey:@"isSelect"];
+    NSLog(@"select1 ======%@",select);
+    if (button.selected==NO) {
+       [indexSelectDict setValue:[NSString stringWithFormat:@"%ld",button.tag] forKey:@"isSelect"];
+            NSLog(@"select2======%@",select);
+       [self resetButtonImagesWithButton:button];
      // 针对代理协议里面有可选的代理时使用的方法可，respondsToSelector 就是判断self.m_delegate指向的对象有没有，这个方法--> buttonPresedInCustomTabBar:
-    if (self.m_delegate && [self.m_delegate respondsToSelector:@selector(buttonPresedInCustomTabBar:)]) {
+      if(self.m_delegate && [self.m_delegate respondsToSelector:@selector(buttonPresedInCustomTabBar:)]) {
           [self.m_delegate buttonPresedInCustomTabBar:button.tag - BUTTON_START_TAG];
+       }
     }
+    else if(button.selected==YES&&[select intValue]==button.tag)  //如果选中并且
+    {
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"RefeshTableview" object:nil];
     }
 }
 
 //重置图片
 - (void)resetButtonImagesWithButton:(UIButton *)button
 {
-    if (button.selected==NO) {
-    for (NSUInteger i = 0; i < BUTTON_COUNT; i++) {
+     for (NSUInteger i = 0; i < BUTTON_COUNT; i++) {
         UIButton * btn = (UIButton *)[self viewWithTag:i + BUTTON_START_TAG];
-        NSString * normal = [self.m_arrNormal objectAtIndex:i];
-        UIImage * normalImage = [UIImage imageNamed:normal];
-      
-        [btn setImage:normalImage forState:UIControlStateNormal];
+          btn.selected=NO;
         UILabel  *lable=(UILabel *)[self viewWithTag:2000+i] ;
         lable.textColor=TabNorColor;
     }
-     NSString * selected = [self.m_arrSelected objectAtIndex:button.tag - BUTTON_START_TAG];
-    UIImage * selectedImage = [UIImage imageNamed:selected];
-    [button setImage:selectedImage forState:UIControlStateNormal];
+    
+     button.selected=YES;
  
     UILabel  *label=(UILabel *)[self viewWithTag:button.tag+1000];
     label.textColor=TabSelectColor;
-    }
-    else if (button.selected==YES)
-    {
-        //如果已经选中了,那么就刷新啊
-        
-        
-    }
+    
+
 }
 
 /*

@@ -144,7 +144,9 @@
     _moviewName.textColor=VLight_GrayColor;
     _moviewName.numberOfLines=0;
     _moviewName.adjustsFontSizeToFitWidth=NO;
-    _moviewName.text=[NSString stringWithFormat:@"《%@》", self.StageInfo.movieInfo.name];
+    
+    NSString  *nameString =[Function htmlString: self.StageInfo.movieInfo.name];
+    _moviewName.text=[NSString stringWithFormat:@"《%@》",nameString];
     _moviewName.lineBreakMode=NSLineBreakByTruncatingTail;
     [shareView addSubview:_moviewName];
     
