@@ -230,7 +230,7 @@
                     }
                     if (doubanInfos) {
                         [self.dataArray1 addObjectsFromArray:doubanInfos];
-                        NSLog(@"====doubanInfo ===%@",doubanInfos);
+                     //   NSLog(@"====doubanInfo ===%@",doubanInfos);
                     }
 
                 }

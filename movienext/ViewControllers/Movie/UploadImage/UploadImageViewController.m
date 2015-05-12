@@ -55,7 +55,7 @@
     RighttBtn.titleLabel.font=[UIFont systemFontOfSize:16];
     [RighttBtn setTitleColor:VBlue_color forState:UIControlStateNormal];
     [RighttBtn setTitle:@"确定" forState:UIControlStateNormal];
-    RighttBtn.titleLabel.font=[UIFont boldSystemFontOfSize:16];
+    RighttBtn.titleLabel.font=[UIFont boldSystemFontOfSize:18];
     self.navigationItem.rightBarButtonItem=[[UIBarButtonItem alloc]initWithCustomView:RighttBtn];
     
     
@@ -175,6 +175,7 @@
    // NSString  *h=[NSString stringWithFormat:@"%f",self.upimage.size.height];
     int width=self.upimage.size.width;
     int heigth=self.upimage.size.height;
+    
     NSDictionary *parameter = @{@"photo":[upyunDict objectForKey:@"url"],@"movie_id":self.movie_Id,@"user_id":usreCenter.user_id,@"width":[NSString stringWithFormat:@"%d",width],@"height":[NSString stringWithFormat:@"%d",heigth]};
     
     NSLog(@"==parameter====%@",parameter);
@@ -199,7 +200,7 @@
         AddMarkViewController  *Addmark =[[AddMarkViewController alloc]init];
         Addmark.stageInfo=stageInfo;
         Addmark.pageSoureType=NSAddMarkPageSourceUploadImage;
-        [self.navigationController pushViewController:Addmark animated:YES];
+        [self.navigationController presentViewController:Addmark animated:NO completion:nil];
         }
         else
         {
@@ -207,6 +208,7 @@
             [_myprogress setProgressTitle:@"上传成功"];
             [_myprogress removeFromSuperview];
             _myprogress=nil;
+            
             UIAlertView  *al =[[UIAlertView alloc]initWithTitle:@"发布失败，请重新发布" message:nil delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
             [al show];
 

@@ -398,7 +398,7 @@
 }
 
 
-//举报剧情
+//微博
 -(void)requestReportweibo
 {
     // NSString *type=@"1";
@@ -1271,8 +1271,6 @@
     {
        
         UserDataCenter  *userCenter =[UserDataCenter shareInstance];
-        
-        
         if ([userCenter.is_admin  intValue]>0) {
         UIActionSheet   *ash=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"删除",@"变身",@"推荐", nil];
          ash.tag=500;

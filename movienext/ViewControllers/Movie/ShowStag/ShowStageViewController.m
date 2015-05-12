@@ -48,6 +48,8 @@
     UIButton      *leftButtomButton;   //左下边按钮
     UILabel       *movieNameLable;
     UIImageView   *MovieLogoImageView;  // 电影的小图片
+    weiboInfoModel  *_TweiboInfo;
+    stageInfoModel  *_TstageInfo;
     
 
 }
@@ -366,6 +368,94 @@
     
 }
 
+//推荐微博的接口
+-(void)requestrecommendDataWithStageId:(NSString *) stageId weiboId:(NSString *) weiboId
+{
+    UserDataCenter  *userCenter =[UserDataCenter shareInstance];
+    NSDictionary *parameters = @{@"weibo_id":weiboId,@"stage_id":stageId,@"user_id":userCenter.user_id};
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    [manager POST:[NSString stringWithFormat:@"%@/hot/create", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
+            NSLog(@"推荐成功=======%@",responseObject);
+            UIAlertView  *Al=[[UIAlertView alloc]initWithTitle:nil message:@"推荐成功" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            [Al show];
+            
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+    
+}
+//删除微博的接口
+-(void)requestDelectDataWithweiboId:(NSString  *) weiboId
+{
+    UserDataCenter *userCenter=[UserDataCenter shareInstance];
+    NSDictionary *parameters = @{@"weibo_id":weiboId,@"user_id":userCenter.user_id};
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    [manager POST:[NSString stringWithFormat:@"%@/weibo/remove", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
+            NSLog(@"删除数据成功=======%@",responseObject);
+            UIAlertView  *Al=[[UIAlertView alloc]initWithTitle:nil message:@"删除成功" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            [Al show];
+            
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+    
+}
+
+//变身请求的随机数种子
+-(void)requestChangeUserRand4
+{
+    
+    UserDataCenter  *userCenter=[UserDataCenter shareInstance];
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    NSDictionary *parameters=@{@"user_id":userCenter.user_id};
+    [manager POST:[NSString stringWithFormat:@"%@/user/fakeuserid", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
+            NSLog(@"随机数种子请求成功=======%@",responseObject);
+            [self  requestChangeUser:[responseObject objectForKey:@"user_id"]];
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+    
+}
+//跟换用户的数据请求
+-(void)requestChangeUser:( NSString *) author_id
+{
+    UserDataCenter  *userCenter =[UserDataCenter shareInstance];
+    NSDictionary *parameters = @{@"weibo_id":_TweiboInfo.Id,@"user_id":userCenter.user_id,@"author_id":author_id};
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    NSString  *urlString =[NSString stringWithFormat:@"%@/weibo/switch", kApiBaseUrl];
+    [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
+            weiboUserInfoModel  *usermodel=[[weiboUserInfoModel alloc]init];
+            if (usermodel) {
+                [usermodel setValuesForKeysWithDictionary:[responseObject objectForKey:@"model"]];
+            }
+            NSLog(@"变身成功=======%@",responseObject);
+            UIAlertView  *Al=[[UIAlertView alloc]initWithTitle:nil message:@"变身成功" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            [Al show];
+            
+            int Id=[author_id intValue];
+            _TweiboInfo.uerInfo.Id=[NSNumber numberWithInt:Id];
+            _TweiboInfo.uerInfo.logo=usermodel.logo;
+            NSString  *urlString =[NSString stringWithFormat:@"%@%@",kUrlAvatar,usermodel.logo];
+            [_mymarkView.LeftImageView sd_setImageWithURL:[NSURL URLWithString:urlString]];
+            
+        }
+        else
+        {
+            NSLog(@"error ===%@",[responseObject objectForKey:@"message"]);
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+    
+}
+
 
 -(void)UMShareViewControllerHandClick:(UIButton *)button ShareImage:(UIImage *)shareImage StageInfoModel:(stageInfoModel *)StageInfo
 {
@@ -505,6 +595,10 @@
 -(void)ToolViewHandClick:(UIButton *)button :(MarkView *)markView weiboDict:(weiboInfoModel *)weiboDict StageInfo:(stageInfoModel *)stageInfoDict
 {
     
+    _TweiboInfo =weiboDict;
+    _TstageInfo=stageInfoDict;
+    
+    
     if (button.tag==10000) {
         ///点击了头像//进入个人页面
         [_mymarkView CancelMarksetSelect];
@@ -512,7 +606,6 @@
             [_toolBar HidenButtomView];
             [_toolBar removeFromSuperview];
         }
-
         MyViewController   *myVc=[[MyViewController alloc]init];
         myVc.author_id=weiboDict.created_by;
         [self.navigationController pushViewController:myVc animated:YES];
@@ -574,6 +667,15 @@
         ////发送到服务器
         [self LikeRequstData:weiboDict withOperation:operation];
         
+    }else if (button.tag==10003)
+    {
+        UserDataCenter  *userCenter =[UserDataCenter shareInstance];
+        if ([userCenter.is_admin  intValue]>0) {
+            UIActionSheet   *ash=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"删除",@"变身",@"推荐", nil];
+            ash.tag=500;
+            [ash showInView:self.view];
+        }
+ 
     }
 }
 -(void)ToolViewTagHandClickTagView:(TagView *)tagView withweiboinfo:(weiboInfoModel *)weiboInfo WithTagInfo:(TagModel *)tagInfo
@@ -587,13 +689,32 @@
         TagToStageViewController  *vc=[[TagToStageViewController alloc]init];
         vc.weiboInfo=weiboInfo;
         vc.tagInfo=tagInfo;
-    
         [self.navigationController pushViewController:vc animated:YES];
     
 }
 -(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    if (actionSheet.tag==507) {
+    if (actionSheet.tag==500) {
+        if (buttonIndex==0) {
+            //删除
+            [self requestDelectDataWithweiboId:[NSString stringWithFormat:@"%@",_TweiboInfo.Id]];
+            
+        }
+        else if(buttonIndex==1)
+        {
+            ///变身
+            // [self.navigationController pushViewController:[ChangeSelfViewController new] animated:YES];
+            //请求随机数种子
+            [self requestChangeUserRand4];
+        }
+        else if(buttonIndex==2)
+        {
+            //推荐
+            [self requestrecommendDataWithStageId:[NSString stringWithFormat:@"%@",_TstageInfo.Id] weiboId:[NSString stringWithFormat:@"%@",_TweiboInfo.Id]];
+        }
+    }
+  
+   else if (actionSheet.tag==507) {
         if (buttonIndex==0) {
             //举报剧情
             [self requestReportSatge];

@@ -243,7 +243,10 @@
         }
         AddTagViewController  *addtag =[[AddTagViewController alloc]init];
         addtag.delegate=self;
-        [self presentViewController:addtag animated:NO completion:nil];
+        addtag.modalTransitionStyle=UIModalTransitionStyleCrossDissolve;
+        UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:addtag];
+        //[self presentViewController:addtag animated:NO completion:nil];
+        [self presentViewController:na animated:YES completion:nil];
     }
 }
 //把markview 添加到屏幕

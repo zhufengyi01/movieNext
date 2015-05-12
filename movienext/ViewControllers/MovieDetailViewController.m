@@ -190,10 +190,11 @@
         [self dismissViewControllerAnimated:NO completion:^{
             UploadImageViewController  *upload=[[UploadImageViewController alloc]init];
             upload.upimage=image;
-            upload.movie_Id=moviedetailmodel.douban_id;
+
+            upload.movie_Id=self.movieId;
+            //upload.movie_Id=moviedetailmodel.douban_id;
             [self.navigationController pushViewController:upload animated:YES];
         }];
-    
     }
     
 }
@@ -517,8 +518,7 @@
             UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
             self.navigationItem.backBarButtonItem=item;
             UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:vc];
-            //[self.navigationController pushViewController:na animated:YES];
-            [self.navigationController presentViewController:na animated:YES completion:nil];
+             [self presentViewController:na animated:YES completion:nil];
             
         }
         
@@ -1184,8 +1184,8 @@
                     picker.delegate = self;
                     //设置选择后的图片可被编辑
                     picker.allowsEditing = YES;
-                    [self presentViewController:picker animated:YES completion:nil];
-            
+                   // UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:picker];
+                    [self.navigationController presentViewController:picker animated:YES completion:nil];
         }
         else if (buttonIndex==1)
         {

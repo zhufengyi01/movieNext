@@ -582,7 +582,6 @@
     [ash showInView:self.view];
     
 }
-
 -(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (actionSheet.tag==1000) {
