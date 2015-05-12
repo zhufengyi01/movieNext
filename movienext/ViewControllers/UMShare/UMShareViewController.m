@@ -9,6 +9,7 @@
 #import "UMShareViewController.h"
 #import "ZCControl.h"
 #import "Constant.h"
+#import "NewViewController.h"
 #import "Function.h"
 @interface UMShareViewController ()
 {
@@ -54,6 +55,7 @@
 -(void)CancleShareClick:(UIButton *) button
 {
     [self dismissViewControllerAnimated:YES completion:nil];
+    //[self.navigationController  pushViewController:[NewViewController new] animated:NO];
 }
 
 -(void)createButtomView

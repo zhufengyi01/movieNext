@@ -126,14 +126,14 @@
 {
     UIView *titleView=[[UIView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth-120, 40)];
     //电影图片
-    UIImageView *    MovieLogoImageView=[[UIImageView alloc]initWithFrame:CGRectMake(0,0,30, 30)];
+    UIImageView *    MovieLogoImageView=[[UIImageView alloc]initWithFrame:CGRectMake(0,5,30, 30)];
     MovieLogoImageView.layer.cornerRadius=4;
     MovieLogoImageView.contentMode=UIViewContentModeScaleAspectFill;
     MovieLogoImageView.clipsToBounds=YES;
     MovieLogoImageView.image =[UIImage imageNamed:@"Moments.png"];
     MovieLogoImageView.layer.masksToBounds = YES;
     [titleView addSubview:MovieLogoImageView];
-//电影名
+    //电影名
     UILabel  *movieNameLable =[[UILabel alloc]initWithFrame:CGRectMake(35,0, 120, 30)];
     movieNameLable.font=[UIFont systemFontOfSize:16];
     movieNameLable.textColor=VGray_color;
@@ -167,11 +167,10 @@
     [self.navigationItem.titleView setContentMode:UIViewContentModeCenter];
 
     
-    
-
     upLoadimageBtn=[ZCControl createButtonWithFrame:CGRectMake(0,0,25,25) ImageName:nil Target:self Action:@selector(NavigationClick:) Title:nil];
     upLoadimageBtn.tag=201;
     [upLoadimageBtn setImage:[UIImage imageNamed:@"up_picture_blue.png"] forState:UIControlStateNormal];
+    // [upLoadimageBtn setBackgroundImage:[UIImage imageNamed:@"up_picture_blue"] forState:UIControlStateNormal];
     UIBarButtonItem  *rigthbar =[[UIBarButtonItem alloc]initWithCustomView:upLoadimageBtn];
     self.navigationItem.rightBarButtonItem=rigthbar;
 }
@@ -517,8 +516,9 @@
             
             UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
             self.navigationItem.backBarButtonItem=item;
-
-            [self.navigationController pushViewController:vc animated:YES];
+            UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:vc];
+            //[self.navigationController pushViewController:na animated:YES];
+            [self.navigationController presentViewController:na animated:YES completion:nil];
             
         }
         
@@ -1098,8 +1098,8 @@
         shareVC.StageInfo=stageInfoDict;
         shareVC.weiboInfo=weiboDict;
         shareVC.delegate=self;
-        UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:shareVC];
-        [self presentViewController:na animated:YES completion:nil];
+      //  UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:shareVC];
+        [self.navigationController presentViewController:shareVC animated:YES completion:nil];
         
         
 

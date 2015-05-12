@@ -47,6 +47,15 @@
 #pragma  mark  -------CreatUI;
 -(void)creatNavigation
 {
+    
+    UIButton  *button=[UIButton buttonWithType:UIButtonTypeCustom];
+    [button setTitle:@"取消" forState:UIControlStateNormal];
+    [button setTitleColor:VBlue_color forState:UIControlStateNormal];
+    button.frame=CGRectMake(10, 10, 40, 30);
+    [button addTarget:self action:@selector(cancle) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem  *barButton=[[UIBarButtonItem alloc]initWithCustomView:button];
+    self.navigationItem.leftBarButtonItem=barButton;
+
     [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color.png"] forBarMetrics:UIBarMetricsDefault];
     NSArray *segmentedArray = [[NSArray alloc] initWithObjects:@"剧照",@"截图", nil];
     segment = [[UISegmentedControl alloc] initWithItems:segmentedArray];
@@ -66,6 +75,11 @@
     [self.navigationItem setTitleView:segment];
     
  }
+-(void)cancle
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+    
+}
 -(void)segmentClick:(UISegmentedControl *)seg
 {
     if(seg.selectedSegmentIndex==0)
@@ -108,7 +122,7 @@
     layout.minimumLineSpacing=0;      //cell上下间隔
     
       //   layout.sectionInset=UIEdgeInsetsMake(0,0,64, 0); //整个偏移量 上左下右
-    _myConllectionView =[[UICollectionView alloc]initWithFrame:CGRectMake(0,0,kDeviceWidth+0, kDeviceHeight-20) collectionViewLayout:layout];
+    _myConllectionView =[[UICollectionView alloc]initWithFrame:CGRectMake(0,0,kDeviceWidth+0, kDeviceHeight-kHeightNavigation) collectionViewLayout:layout];
     _myConllectionView.backgroundColor=View_BackGround;
          //注册小图模式
     [_myConllectionView registerClass:[SmallImageCollectionViewCell class] forCellWithReuseIdentifier:@"smallcell"];

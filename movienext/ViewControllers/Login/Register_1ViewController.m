@@ -16,6 +16,7 @@
 {
     UITextField  *emailTextfield;
     UITextField  *PassworfTextfield;
+    UIImageView  *bgView;
 
 }
 @end
@@ -33,8 +34,33 @@
     self.view.backgroundColor =[UIColor whiteColor];
     [self createNavigition];
     [self createUI];
+    //键盘将要显示
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    //键盘将要隐藏
+    [[NSNotificationCenter defaultCenter ]addObserver:self selector:@selector(keyboardWillHiden:) name:UIKeyboardWillHideNotification object:nil];
+    
+
     
 }
+
+#pragma mark 键盘的通知事件
+-(void)keyboardWillShow:(NSNotification * )  notification
+{
+    
+    
+    [UIView animateWithDuration:0.2 animations:^{
+        bgView.frame =CGRectMake(0, -40,kDeviceWidth, kDeviceHeight);
+     }];
+    
+}
+-(void)keyboardWillHiden:(NSNotification *) notification
+{
+    [UIView animateWithDuration:0.2 animations:^{
+        bgView.frame =CGRectMake(0, 0,kDeviceWidth,kDeviceHeight);
+     }];
+    
+}
+
 -(void)createNavigition
 {
     UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:@"注册"];
@@ -58,7 +84,7 @@
 }
 -(void)createUI
 {
-    UIImageView  *bgView=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight)];
+    bgView=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight)];
     bgView.image =[ UIImage imageNamed:@"login_background.png"];
     bgView.userInteractionEnabled=YES;
     [self.view addSubview:bgView];
@@ -74,7 +100,7 @@
    // emailTextfield.text=@"673229963@qq.com";
     emailTextfield.delegate=self;
     emailTextfield.leftView=left1;
-    [self.view addSubview:emailTextfield];
+    [bgView addSubview:emailTextfield];
     
     
     
@@ -95,11 +121,11 @@
     PassworfTextfield.backgroundColor=[UIColor whiteColor];
     PassworfTextfield.rightViewMode=UITextFieldViewModeAlways;
     PassworfTextfield.leftView=left2;
-    [self.view addSubview:PassworfTextfield];
+    [bgView addSubview:PassworfTextfield];
     
     UIButton  *loginButton =[ZCControl createButtonWithFrame:CGRectMake((kDeviceWidth-200)/2,PassworfTextfield.frame.origin.y+PassworfTextfield.frame.size.height+20, 200, 40) ImageName:@"signup_sure_press.png" Target:self Action:@selector(dealregiterClick:) Title:nil];
     loginButton.tag=101;
-    [self.view addSubview:loginButton];
+    [bgView addSubview:loginButton];
 
     
 }
@@ -190,10 +216,10 @@
 }
 -(BOOL)textFieldShouldReturn:(UITextField *)textField
 {
-    if (textField==emailTextfield) {
+    //if (textField==emailTextfield) {
         [emailTextfield resignFirstResponder];
-        [PassworfTextfield becomeFirstResponder];
-    }
+       [PassworfTextfield resignFirstResponder];
+    //}
     return YES;
 }
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event

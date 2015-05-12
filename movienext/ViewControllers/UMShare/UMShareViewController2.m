@@ -39,52 +39,61 @@
     // Do any additional setup after loading the view.
     self.view.backgroundColor=[UIColor whiteColor];
     [self createNavigation];
-    
-
     [self creatScrollerView];
     
     [self createStageView];
-
     [self createButtomView];
-
 
 }
 
 -(void)createNavigation
 {
-    [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color.png"] forBarMetrics:UIBarMetricsDefault];
+    //[self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color.png"] forBarMetrics:UIBarMetricsDefault];
     
-    UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:@"分享"];
+    UIView  *view =[[UIView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, kHeightNavigation)];
+    view.userInteractionEnabled=YES;
+    view.layer.shadowColor=[UIColor blackColor].CGColor;
+    view.layer.shadowRadius=8;
+    //view.backgroundColor =[UIColor redColor];
+    view.layer.shadowOpacity=1;
+    view.layer.shadowOffset=CGSizeMake(20, 100);
+    
+    [self.view addSubview:view];
+    
+    UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake((kDeviceWidth-100)/2, 30, 100, 20) Font:16 Text:@"分享"];
     titleLable.textColor=VBlue_color;
     titleLable.font=[UIFont boldSystemFontOfSize:18];
     titleLable.textAlignment=NSTextAlignmentCenter;
-    self.navigationItem.titleView=titleLable;
+//    self.navigationItem.titleView=titleLable;
+    [view addSubview:titleLable];
     
     UIButton  *button=[UIButton buttonWithType:UIButtonTypeCustom];
     [button setTitle:@"取消" forState:UIControlStateNormal];
     [button setTitleColor:VBlue_color forState:UIControlStateNormal];
-    button.frame=CGRectMake(10, 10, 40, 30);
+    button.frame=CGRectMake(10, 30, 40, 30);
     [button addTarget:self action:@selector(CancleShareClick:) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem  *barButton=[[UIBarButtonItem alloc]initWithCustomView:button];
-    self.navigationItem.leftBarButtonItem=barButton;
+    [view addSubview:button];
+//    UIBarButtonItem  *barButton=[[UIBarButtonItem alloc]initWithCustomView:button];
+//    self.navigationItem.leftBarButtonItem=barButton;
     
 }
 -(void)CancleShareClick:(UIButton *) button
 {
-    [self dismissViewControllerAnimated:YES completion:nil];
+ 
+//    //[self dismissViewControllerAnimated:YES completion:nil];
+    [self dismissViewControllerAnimated:YES completion:^{
+        
+     }];
 }
 
 -(void)createButtomView
 {
-    
-    buttomView=[[UIView alloc]initWithFrame:CGRectMake(0, kDeviceHeight-kDeviceWidth/4-kHeightNavigation, kDeviceWidth, kDeviceWidth/4)];
+    buttomView=[[UIView alloc]initWithFrame:CGRectMake(0, kDeviceHeight-kDeviceWidth/4-kHeightNavigation+64, kDeviceWidth, kDeviceWidth/4+64)];
     buttomView.backgroundColor=[UIColor whiteColor];
     buttomView.userInteractionEnabled=YES;
     [self.view addSubview:buttomView];
 #pragma create four button
-    
     NSArray  *imageArray=[NSArray arrayWithObjects:@"wechat_share_icon.png",@"moments_share_icon.png",@"qzone_share_icon.png",@"weibo_share_icon.png", nil];
-    
     for (int i=0; i<4; i++) {
         double   x=(kDeviceWidth/4)*i;
         double   y=0;
@@ -92,15 +101,12 @@
         btn.tag=10000+i;
         btn.backgroundColor=[UIColor whiteColor];
         [buttomView addSubview:btn];
-        
     }
-    
-    
 }
 
 -(void)creatScrollerView
 {
-    myScrollerView =[[UIScrollView alloc]initWithFrame:CGRectMake(0,0, kDeviceWidth,kDeviceHeight-kDeviceWidth/4-kHeightNavigation)];
+    myScrollerView =[[UIScrollView alloc]initWithFrame:CGRectMake(0,64, kDeviceWidth,kDeviceHeight-kDeviceWidth/4-kHeightNavigation)];
     myScrollerView.contentSize=CGSizeMake(kDeviceWidth, kDeviceHeight);
     //myScrollerView.backgroundColor =[UIColor  yellowColor];
     [self.view addSubview:myScrollerView];
@@ -155,7 +161,6 @@
     }
     
     //内容
-    
     self.contentLable=[ZCControl createLabelWithFrame:CGRectMake(_moviewName.frame.origin.x,_moviewName.frame.origin.y+_moviewName.frame.size.height+10, kDeviceWidth-30, 40) Font:MarkTextFont14 Text:self.weiboInfo.content];
     self.contentLable.adjustsFontSizeToFitWidth=NO;
     if (IsIphone6plus) {

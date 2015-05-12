@@ -22,19 +22,27 @@
     NSInteger currentMarkIndex;
     NSTimer *_timer;
    // UIImageView  *tanimageView;
-    UIButton      *tanlogoButton;
 }
 @property (nonatomic,strong ) NSArray    *weibosArray;   //小标签的数组，在多个标签的时候使用这个
-//@property (nonatomic,strong ) WeiboModel      *weiboDict;     //只有一个标签的时候传递这个参数
+
 @property (nonatomic,strong ) weiboInfoModel      *weiboinfo;     //只有一个标签的时候传递这个参数
 
 //设置气泡是否可以移动，这个在cell 里面进行了设置
 @property (nonatomic,assign) BOOL isAnimation;   //子视图是否是可以动的动画
-//@property(nonatomic,strong) StageInfoModel   *StageInfoDict;
+
 @property(nonatomic,strong) stageInfoModel   *stageInfo;
 
- -(void)configStageViewforStageInfoDict;
 @property (nonatomic,assign )id <StageViewDelegate> delegate;
+
+
+@property(nonatomic,strong)     UIButton      *tanlogoButton;
+
+
+ -(void)configStageViewforStageInfoDict;
+
+
+
+
 /**
  *  开始动画
  */

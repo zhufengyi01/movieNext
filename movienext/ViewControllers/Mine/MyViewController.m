@@ -507,28 +507,27 @@
 //举报剧情
 -(void)requestReportSatge
 {
-    
-    
     // NSString *type=@"1";
-    NSNumber  *stageId;
-    NSString  *author_id;
+    NSString  *stageId=@"";
+    NSString  *author_id=@"";
     for (int i=100; i<102;i++ ) {
         UIButton  *btn =(UIButton *)[self.view viewWithTag:i];
-        if (btn.tag==101&&btn.selected==YES) {
+        if (btn.tag==100&&btn.selected==YES) {
             userAddmodel *model =[_addedDataArray objectAtIndex:Rowindex];
-            stageId=model.weiboInfo.stageInfo.Id;
+            stageId=[NSString stringWithFormat:@"%@",model.weiboInfo.stageInfo.Id];
             author_id=model.weiboInfo.stageInfo.created_by;
 
         }
-        else if (btn.tag==100&&btn.selected==YES)
+        else if (btn.tag==101&&btn.selected==YES)
         {
          
             userAddmodel *model =[_upedDataArray objectAtIndex:Rowindex];
-            stageId=model.weiboInfo.stageInfo.Id;
+            stageId=[NSString stringWithFormat:@"%@",model.weiboInfo.stageInfo.Id];
             author_id=model.weiboInfo.stageInfo.created_by;
 
         }
     }
+    
     NSDictionary *parameters = @{@"reported_user_id":author_id,@"stage_id":stageId,@"reason":@"",@"user_id":userCenter.user_id};
     
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
@@ -611,7 +610,7 @@
     
     [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject objectForKey:@"code"] intValue]==0) {
-            NSLog(@"个人页面返回的数据====%@",responseObject);
+            //NSLog(@"个人页面返回的数据====%@",responseObject);
              NSMutableArray  *Detailarray=[responseObject objectForKey:@"models"];
         for (int i=100; i<102;i++ ) {
             UIButton  *btn =(UIButton *)[self.view viewWithTag:i];
@@ -917,7 +916,7 @@
             cell.backgroundColor=View_BackGround;
         }
         
-            cell.pageType=NSPageSourceTypeMainNewController;
+            cell.pageType=NSPageSourceTypeMyupedViewController;
             cell.weiboInfo =model.weiboInfo;
             cell.stageInfo=model.weiboInfo.stageInfo;
             [cell ConfigsetCellindexPath:indexPath.row];
@@ -1046,8 +1045,11 @@
         AddMarkVC.stageInfo=addmodel.weiboInfo.stageInfo;
         //AddMarkVC.pageSoureType=NSAddMarkPageSourceDefault;
         NSLog(@"dict.stageinfo = %@", AddMarkVC.stageInfo);
-        [self.navigationController pushViewController:AddMarkVC animated:NO];
-        
+//        UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:AddMarkVC];
+//        [self.navigationController pushViewController:na animated:NO];
+        UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:AddMarkVC];
+        [self.navigationController presentViewController:na animated:NO completion:nil];
+
     }
     else if(button.tag==4000)
     {
@@ -1064,7 +1066,7 @@
         else
         {
             //点击了更多
-            UIActionSheet  *Act=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"举报",@"版权问题",@"查看图片信息", nil];
+            UIActionSheet  *Act=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"内容投诉",@"版权投诉",@"查看图片信息", nil];
             Act.tag=507;
             [Act showInView:Act];
         }
@@ -1089,6 +1091,7 @@
         if (buttonIndex==0) {
             //举报剧情
             [self requestReportSatge];
+            
             
         }
         else if(buttonIndex==1)
@@ -1348,8 +1351,8 @@
         shareVC.StageInfo=stageInfoDict;
         shareVC.weiboInfo=weiboDict;
         shareVC.delegate=self;
-        UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:shareVC];
-        [self presentViewController:na animated:YES completion:nil];
+        //UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:shareVC];
+        [self.navigationController presentViewController:shareVC animated:YES completion:nil];
         
 
         

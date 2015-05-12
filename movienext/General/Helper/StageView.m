@@ -8,6 +8,7 @@
 
 #import "StageView.h"
 #import "Constant.h"
+#import "ZCControl.h"
 #import "Function.h"
 #import "UIImageView+WebCache.h"
 
@@ -38,14 +39,21 @@
     self.backgroundColor =VStageView_color;
     _MovieImageView =[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, 200)];
     [self addSubview:_MovieImageView];
+    
+    self.tanlogoButton =[UIButton buttonWithType:UIButtonTypeCustom];
+    self.tanlogoButton.frame=CGRectMake(kStageWidth-35, 10, 25, 25);
+    [self.tanlogoButton setBackgroundImage:[UIImage imageNamed:@"dan_close"] forState:UIControlStateNormal];
+    [self.tanlogoButton setBackgroundImage:[UIImage imageNamed:@"dan_closed"] forState:UIControlStateSelected];
+    [self addSubview:self.tanlogoButton];
+    
+    
 
 }
 #pragma mark    设置stageview的值  ，主要是给stagview 添加markview  和添加一张图片
 -(void)configStageViewforStageInfoDict{
-    
-
     //先移除所有的Mark视图
     [self removeStageViewSubView];
+    
     float  ImageWith=[self.stageInfo.width intValue];
     float  ImgeHight=[self.stageInfo.height intValue];
     if (ImageWith==0) {
@@ -71,13 +79,10 @@
         width=(ImageWith/ImgeHight)*kDeviceWidth;
         x=(kDeviceWidth-width)/2;
      }
-  
         _MovieImageView.frame=CGRectMake(x, y,width,hight);
-    
     _MovieImageView.backgroundColor =VStageView_color;
     NSString *photostring=[NSString stringWithFormat:@"%@%@!w640",kUrlStage,self.stageInfo.photo];
     //可监视下载进入的方法
-
     [_MovieImageView sd_setImageWithURL:[NSURL URLWithString:photostring] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         
 #pragma  mark  是静态的, 气泡是不动的
@@ -151,13 +156,7 @@
             markViewY = MIN(MAX(markViewY, 5.0f), hight-markViewHeight-5);
 #pragma mark 设置气泡的大小和位置
             markView.frame=CGRectMake(markViewX, markViewY, markViewWidth, markViewHeight);
-    
-          //[markView.contentLable appendText:weiboTitleString];
-         // [markView.contentLable appendImage:[UIImage imageNamed:@"tag_like_icon.png"] maxSize:CGSizeMake(11, 11) margin:UIEdgeInsetsMake(0, 0, 0, 0) alignment:M80ImageAlignmentBottom];
-        // [markView.contentLable appendText:[NSString stringWithFormat:@"%@",weibodict.like_count]];
-    
             markView.TitleLable.text=weiboTitleString;
-        
           NSString   *headurl =[NSString stringWithFormat:@"%@%@",kUrlAvatar,weibodict.uerInfo.logo];
             [markView.LeftImageView sd_setImageWithURL:[NSURL URLWithString:headurl] placeholderImage:[UIImage imageNamed:@"user_normal"]];
            markView.ZanNumLable.text=[NSString stringWithFormat:@"%@",weibodict.like_count];
@@ -168,12 +167,11 @@
 //防止cell服用导致的原来的内容存在,移除原来的markview
 -(void)removeStageViewSubView
 {
-    for (UIView  *Mview in  self.subviews) {
+    for (id  Mview in  self.subviews) {
         if ([Mview isKindOfClass:[MarkView class]]) {
             MarkView  *mv =(MarkView  *) Mview;
             [mv  removeFromSuperview];
             mv=nil;
-            
         }
     }
 }

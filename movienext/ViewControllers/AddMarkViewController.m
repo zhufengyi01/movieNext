@@ -41,6 +41,7 @@
     UserDataCenter      *userCenter;
     weiboInfoModel      *weibomodel;
     NSMutableArray      *TAGArray;        //把第一个标签和第二个标签存储在数组中
+    weiboInfoModel *weibo;
 }
 @end
 @implementation AddMarkViewController
@@ -48,7 +49,7 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     self.navigationController.navigationBar.alpha=1;
-    self.navigationController.navigationBar.hidden=NO;
+    self.navigationController.navigationBar.hidden=YES;
     self.tabBarController.tabBar.hidden=YES;
     if (_myTextView) {
         [_myTextView becomeFirstResponder];
@@ -77,28 +78,37 @@
 }
 -(void)createNavigation
 {
+    
+    UIView  *naview= [[UIView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, 64)];
+    naview.userInteractionEnabled=YES;
+    [self.view addSubview:naview];
+    
     UIButton  *leftBtn= [UIButton buttonWithType:UIButtonTypeSystem];
-    leftBtn.frame=CGRectMake(0, 0, 40, 30);
+    leftBtn.frame=CGRectMake(20, 30, 40, 30);
     [leftBtn setTitleColor:VGray_color forState:UIControlStateNormal];
     [leftBtn setTitle:@"取消" forState:UIControlStateNormal];
-    leftBtn.titleLabel.font=[UIFont boldSystemFontOfSize:16];
+    leftBtn.titleLabel.font=[UIFont boldSystemFontOfSize:18];
     [leftBtn setTitleEdgeInsets:UIEdgeInsetsMake(0, -15, 0, 0)];
     [leftBtn addTarget:self action:@selector(dealNavClick:) forControlEvents:UIControlEventTouchUpInside];
     leftBtn.tag=100;
-    UIBarButtonItem  *leftBarButton=[[UIBarButtonItem alloc]initWithCustomView:leftBtn];
-    self.navigationItem.leftBarButtonItem=leftBarButton;
+    [naview addSubview:leftBtn];
+   // UIBarButtonItem  *leftBarButton=[[UIBarButtonItem alloc]initWithCustomView:leftBtn];
+   // self.navigationItem.leftBarButtonItem=leftBarButton;
+    
+    
     
     RighttBtn= [UIButton buttonWithType:UIButtonTypeSystem];
-    RighttBtn.frame=CGRectMake(0, 0, 40, 30);
+    RighttBtn.frame=CGRectMake(kDeviceWidth-60, 30, 40, 30);
     [RighttBtn addTarget:self action:@selector(dealNavClick:) forControlEvents:UIControlEventTouchUpInside];
     RighttBtn.tag=101;
    // [RighttBtn setTitleColor:VGray_color forState:UIControlStateNormal];
     [RighttBtn setTitle:@"发布" forState:UIControlStateNormal];
     [RighttBtn setTitleEdgeInsets:UIEdgeInsetsMake(0, 0, 0, -10)];
-
-    RighttBtn.titleLabel.font=[UIFont boldSystemFontOfSize:16];
+    
+    RighttBtn.titleLabel.font=[UIFont boldSystemFontOfSize:18];
     RighttBtn.hidden=YES;
-    self.navigationItem.rightBarButtonItem=[[UIBarButtonItem alloc]initWithCustomView:RighttBtn];
+    [naview addSubview:RighttBtn];
+    //self.navigationItem.rightBarButtonItem=[[UIBarButtonItem alloc]initWithCustomView:RighttBtn];
     
 
 }
@@ -120,7 +130,7 @@
         hight=  (ImgeHight/ImageWith) *kDeviceWidth;
         _myScorllerView.bounces=YES;
     }
-    _myScorllerView =[[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth,hight)];
+    _myScorllerView =[[UIScrollView alloc]initWithFrame:CGRectMake(0, 64, kDeviceWidth,hight)];
     _myScorllerView.contentSize=CGSizeMake(kDeviceWidth,kDeviceHeight);
     _myScorllerView.delegate=self;
     _myScorllerView.bounces=YES;
@@ -128,7 +138,7 @@
      [self.view addSubview:_myScorllerView];
     
     
-    tipView =[[UIView alloc]initWithFrame:CGRectMake(0, kDeviceWidth, kDeviceWidth, 30)];
+    tipView =[[UIView alloc]initWithFrame:CGRectMake(0, kDeviceWidth+64, kDeviceWidth, 30)];
     tipView.backgroundColor=[[UIColor blackColor]colorWithAlphaComponent:0.7];
     UILabel  *tiplable =[[UILabel alloc]initWithFrame:CGRectMake(0,0,kDeviceWidth,30)];
     tiplable.textColor=[UIColor whiteColor];
@@ -205,7 +215,7 @@
     
     if (button.tag==100) {
          //取消发布
-        [self.navigationController popViewControllerAnimated:NO];
+        [self dismissViewControllerAnimated:YES completion:nil];
     
     }
     else if (button.tag==101)
@@ -226,8 +236,8 @@
 //        addtag.modalTransitionStyle=UIModalTransitionStyleCrossDissolve;
 //        [self presentViewController:addtag animated:YES completion:nil];
 //
-        if (TAGArray.count==2) {
-            UIAlertView  *al =[[UIAlertView alloc]initWithTitle:nil message:@"最多可以添加两个标签" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:nil, nil];
+        if (TAGArray.count==5) {
+            UIAlertView  *al =[[UIAlertView alloc]initWithTitle:nil message:@"最多可以添加五个标签" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:nil, nil];
             al.tag=1001;
             [al show];
             return;
@@ -410,7 +420,7 @@
 //确定发布
 -(void)PublicRuqest
 {
-    RighttBtn.enabled=NO;
+ //   RighttBtn.enabled=NO;
     if ([X intValue]==0||[Y intValue]==0) {
         X =[NSString stringWithFormat:@"%d",100];
         Y=[NSString stringWithFormat:@"%d",100];
@@ -452,7 +462,7 @@
             Al.tag=1000;
             [Al show];
             
-            weiboInfoModel *weibo =[[weiboInfoModel alloc]init];
+            weibo =[[weiboInfoModel alloc]init];
             if (weibo) {
                 [weibo setValuesForKeysWithDictionary:[responseObject objectForKey:@"model"]];
                 weiboUserInfoModel  *weibouser=[[weiboUserInfoModel alloc]init];
@@ -478,16 +488,8 @@
                 weibo.tagArray=tagarray;
             }
             [self.stageInfo.weibosArray addObject:weibo];
-            
             //发布成功后，进入分享
-            UMShareViewController2  *shareVC=[[UMShareViewController2 alloc]init];
-            shareVC.StageInfo=self.stageInfo;
-            shareVC.weiboInfo=weibo;
-            shareVC.delegate=self;
-            UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:shareVC];
-            [self presentViewController:na animated:YES completion:nil];
-
-        
+ 
         }
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -541,9 +543,9 @@
     
     [UIView  animateWithDuration:timeInterval animations:^{
         CGRect  tframe=_toolBar.frame;
-        tframe.origin.y=kDeviceHeight -keyboardSize.height-kHeightNavigation-50;
+        tframe.origin.y=kDeviceHeight -keyboardSize.height-kHeightNavigation-50+64;
         if (TAGArray.count>0) {
-            tframe.origin.y=kDeviceHeight-keyboardSize.height-kHeightNavigation-80;
+            tframe.origin.y=kDeviceHeight-keyboardSize.height-kHeightNavigation-80+64;
         }
         _toolBar.frame=tframe;
         
@@ -670,29 +672,45 @@
     if (alertView.tag==1000) {
         //发布弹幕成功的返回
     if (buttonIndex==0) {
-        if (self.pageSoureType==NSAddMarkPageSourceUploadImage) {
+       // if (self.pageSoureType==NSAddMarkPageSourceUploadImage||self.pageSoureType==NSAddMarkPageSourceDoubanUploadImage) {  // 发布图片的时候执行这个
             //返回电影详细页面的时候需要去刷新一下
-            [[NSNotificationCenter  defaultCenter] postNotificationName:@"RefreshMovieDeatail" object:nil userInfo:nil];
-            [self.navigationController popViewControllerAnimated:YES];
-            [self.navigationController popViewControllerAnimated:YES];
-            
-        
-        }else
-        {
+            ///[[NSNotificationCenter  defaultCenter] postNotificationName:@"RefreshMovieDeatail" object:nil userInfo:nil];
+            //[self.navigationController popToViewController:[MovieDetailViewController new] animated:YES];
+            //[self.navigationController popViewControllerAnimated:YES];
+            //[self.navigationController popViewControllerAnimated:YES];
+//            UMShareViewController2  *shareVC=[[UMShareViewController2 alloc]init];
+//            shareVC.StageInfo=self.stageInfo;
+//            shareVC.weiboInfo=weibo;
+//            shareVC.delegate=self;
+//           //    UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:shareVC];
+//          [self.navigationController presentViewController:shareVC animated:YES completion:nil];
+//            
+//        }
+//         else
+//        {
+            //[self.navigationController popViewControllerAnimated:YES];
             //返回之前需要调用
-            if (self.delegate&&[self.delegate respondsToSelector:@selector(AddMarkViewControllerReturn)]) {
-                //返回的时候需要去刷新tableview
-                [self.delegate AddMarkViewControllerReturn];
-            }
-            [self.navigationController popViewControllerAnimated:YES];
-        }
+//            
+//            if (self.delegate&&[self.delegate respondsToSelector:@selector(AddMarkViewControllerReturn)]) {
+//                //返回的时候需要去刷新tableview
+//                [self.delegate AddMarkViewControllerReturn];
+//            }
+        [self dismissViewControllerAnimated:YES completion:^{
+//            UMShareViewController2  *shareVC=[[UMShareViewController2 alloc]init];
+//            shareVC.StageInfo=self.stageInfo;
+//            shareVC.weiboInfo=weibo;
+//            shareVC.delegate=self;
+//            [self presentViewController:shareVC animated:YES completion:nil];
+            
+            
+             NSDictionary  *dict = [[NSDictionary alloc]initWithObjectsAndKeys:self.stageInfo,@"stageInfo",weibo,@"weiboInfo",self.delegate,@"delegate", nil];
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"ShareViewAlert" object:nil userInfo:dict];
         
-    }
-    }
-    else if (alertView.tag==1001)
-    {
-        //标签个数大于2的时候返回
+            
+        }];
         
+      }
     }
 }
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView
@@ -702,7 +720,6 @@
 
 -(void)AddTagViewHandClickWithTag:(NSString *)tag
 {
-    
     //改变_toolBar的高度;
     _myTextView.frame=CGRectMake(_myTextView.frame.origin.x, _myTextView.frame.origin.y, _myTextView.frame.size.width, 30);
     _toolBar.frame=CGRectMake(_toolBar.frame.origin.x, _toolBar.frame.origin.y-30,_toolBar.frame.size.width, 80);

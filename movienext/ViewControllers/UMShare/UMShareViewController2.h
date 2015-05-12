@@ -11,6 +11,16 @@
 #import "weiboInfoModel.h"
 #import "M80AttributedLabel.h"
 
+typedef NS_ENUM(NSInteger,NSSharePageType)
+{
+    NSSharePageTypeDefault,  //默认返回到根视图控制器
+    NSSharePageTypeDoubanUploadImage,  //从豆瓣的网上图片过来
+    NSSharePageTypeLoadUploadImage      //从本地分享过来
+    
+};
+
+
+
 @protocol UMShareViewController2Delegate <NSObject>
 
 -(void)UMShareViewController2HandClick:(UIButton *) button ShareImage:(UIImage *)shareImage StageInfoModel :(stageInfoModel *) StageInfo;
@@ -37,5 +47,6 @@
 @property(nonatomic,assign)id<UMShareViewController2Delegate> delegate;
 @property(nonatomic,strong) stageInfoModel  *StageInfo;
 @property(nonatomic,strong) weiboInfoModel  *weiboInfo;
+@property(nonatomic,assign) NSSharePageType   pageType;
 
 @end

@@ -21,6 +21,7 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     self.navigationController.navigationItem.leftBarButtonItem=nil;
+    self.navigationController.navigationBar.hidden=NO;
     
 }
 - (void)viewDidLoad {

@@ -419,7 +419,10 @@
    // AddMarkVC.model=self.stageInfo;
     AddMarkVC.stageInfo=self.stageInfo;
   //  AddMarkVC.pageSoureType=NSAddMarkPageSourceDefault;
-    [self.navigationController pushViewController:AddMarkVC animated:NO];
+ //   [self.navigationController pushViewController:AddMarkVC animated:NO];
+    UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:AddMarkVC];
+    [self.navigationController presentViewController:na animated:YES completion:nil];
+
 
 }
 -(void)cellButtonClick:(UIButton  *) button
@@ -525,8 +528,8 @@
         shareVC.StageInfo=stageInfoDict;
         shareVC.weiboInfo=weiboDict;
         shareVC.delegate=self;
-        UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:shareVC];
-        [self presentViewController:na animated:YES completion:nil];
+        //UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:shareVC];
+        [self.navigationController presentViewController:shareVC animated:YES completion:nil];
         
      }
 #pragma mark  ----------点赞--------------

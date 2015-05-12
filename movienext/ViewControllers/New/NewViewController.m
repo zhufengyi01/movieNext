@@ -127,7 +127,23 @@
     //  [self requestData];
     [self createToolBar];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshTableView) name:@"RefeshTableview" object:nil];
+    //添加弹幕完成后执行弹出分享通知
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(shareViewAlert:) name:@"ShareViewAlert" object:nil];
     
+    
+}
+//点击添加弹幕完成后分享
+-(void)shareViewAlert:(NSNotification *) notifi
+{
+                stageInfoModel  *stageInfo =[notifi.userInfo objectForKey:@"stageInfo"];
+                 weiboInfoModel  *weiboInfo =[notifi.userInfo objectForKey:@"weiboInfo"];
+   
+    
+                UMShareViewController2  *shareVC=[[UMShareViewController2 alloc]init];
+                shareVC.StageInfo=stageInfo;
+                shareVC.weiboInfo=weiboInfo;
+                shareVC.delegate=self;
+             [self presentViewController:shareVC animated:YES completion:nil];
     
 }
 -(void)initData{
@@ -1006,7 +1022,7 @@
         shareVC.screenImage=image;
         shareVC.delegate=self;
          UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:shareVC];
-        [self presentViewController:na animated:YES completion:nil];
+        [self presentViewController:na animated:NO completion:nil];
         
      }
     else if(button.tag==3000)
@@ -1017,7 +1033,9 @@
         AddMarkVC.model=model;
         AddMarkVC.delegate=self;
         //AddMarkVC.pageSoureType=NSAddMarkPageSourceDefault;
-        [self.navigationController pushViewController:AddMarkVC animated:NO];
+        //UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:AddMarkVC];
+        //[self.navigationController presentViewController:na animated:NO completion:nil];
+        [self presentViewController:AddMarkVC animated:NO completion:nil];
 
     }
     else if (button.tag==4000)
@@ -1218,8 +1236,9 @@
         shareVC.StageInfo=stageInfoDict;
         shareVC.weiboInfo=weiboDict;
         shareVC.delegate=self;
-        UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:shareVC];
-        [self presentViewController:na animated:YES completion:nil];
+        shareVC.pageType=NSSharePageTypeDefault;
+        //UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:shareVC];
+        [self.navigationController presentViewController:shareVC animated:YES completion:nil];
 
     }
 #pragma mark  ----------点赞--------------

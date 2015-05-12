@@ -14,10 +14,12 @@
 #import "AppDelegate.h"
 #import "CustmoTabBarController.h"
 
-@interface Login2_1ViewController ()
+@interface Login2_1ViewController ()<UITextFieldDelegate>
 {
     AppDelegate  *appdelegate;
     UIWindow     *window;
+    UIImageView  *inputView;
+    UIButton    *loginButton;
     UITextField  *emailTextfield;
     UITextField  *PassworfTextfield;
 
@@ -32,7 +34,7 @@
     self.navigationController.navigationBar.hidden=YES;
 }
 
-- (void)viewDidLoad {
+-(void)viewDidLoad {
     [super viewDidLoad];
     appdelegate = [[UIApplication sharedApplication]delegate];
     window=appdelegate.window;
@@ -40,7 +42,31 @@
     self.view.backgroundColor=[UIColor whiteColor];
     [self createNavgaition];
     [self createUI];
+    
+    //键盘将要显示
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    //键盘将要隐藏
+    [[NSNotificationCenter defaultCenter ]addObserver:self selector:@selector(keyboardWillHiden:) name:UIKeyboardWillHideNotification object:nil];
+
+ }
+#pragma mark 键盘的通知事件
+-(void)keyboardWillShow:(NSNotification * )  notification
+{
+    [UIView animateWithDuration:0.2 animations:^{
+        inputView.frame =CGRectMake(inputView.frame.origin.x, 120, inputView.frame.size.width, inputView.frame.size.height);
+        loginButton.frame=CGRectMake(loginButton.frame.origin.x,120+79+20, loginButton.frame.size.width, loginButton.frame.size.height);
+    }];
+   
 }
+-(void)keyboardWillHiden:(NSNotification *) notification
+{
+    [UIView animateWithDuration:0.2 animations:^{
+        inputView.frame =CGRectMake(inputView.frame.origin.x, 200, inputView.frame.size.width, inputView.frame.size.height);
+        loginButton.frame=CGRectMake(loginButton.frame.origin.x,200+79+20, loginButton.frame.size.width, loginButton.frame.size.height);
+    }];
+    
+}
+
 -(void)createNavgaition
 {
     
@@ -53,12 +79,15 @@
 }
 -(void)createUI
 {
-    UIImageView  *inputView=[[UIImageView alloc]initWithFrame:CGRectMake((kDeviceWidth-250)/2, 200, 250, 79)];
+    
+    
+    inputView=[[UIImageView alloc]initWithFrame:CGRectMake((kDeviceWidth-250)/2, 200, 250, 79)];
     inputView.userInteractionEnabled=YES;
     inputView.image =[UIImage imageNamed:@"login_email_password.png"];
     [self.view addSubview:inputView];
     
     emailTextfield=[ZCControl createTextFieldWithFrame:CGRectMake(10, 2, 230,37) placeholder:@"请输入邮箱" passWord:NO leftImageView:nil rightImageView:nil Font:15];
+    emailTextfield.delegate=self;
     //emailTextfield.text=@"673229963@qq.com";
     [inputView addSubview:emailTextfield];
     
@@ -74,11 +103,12 @@
     
     PassworfTextfield=[ZCControl createTextFieldWithFrame:CGRectMake(10, 39, 230,39) placeholder:@"请输入密码" passWord:YES leftImageView:nil rightImageView:nil Font:15];
     PassworfTextfield.rightView=rightButton;
+    PassworfTextfield.delegate=self;
     //PassworfTextfield.text=@"123";
     PassworfTextfield.rightViewMode=UITextFieldViewModeAlways;
     [inputView addSubview:PassworfTextfield];
     
-    UIButton  *loginButton =[ZCControl createButtonWithFrame:CGRectMake((kDeviceWidth-230)/2, inputView.frame.origin.y+inputView.frame.size.height+20, 230, 40) ImageName:@"login_normal.png" Target:self Action:@selector(loginClick:) Title:nil];
+    loginButton =[ZCControl createButtonWithFrame:CGRectMake((kDeviceWidth-230)/2, inputView.frame.origin.y+inputView.frame.size.height+20, 230, 40) ImageName:@"login_normal.png" Target:self Action:@selector(loginClick:) Title:nil];
     loginButton.tag=100;
     [self.view addSubview:loginButton];
     
@@ -179,7 +209,21 @@
     }
     
 }
-
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [emailTextfield resignFirstResponder];
+    [PassworfTextfield resignFirstResponder];
+}
+-(void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    
+}
+-(BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [emailTextfield resignFirstResponder];
+    [PassworfTextfield resignFirstResponder];
+    return YES;
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

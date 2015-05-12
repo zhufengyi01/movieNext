@@ -100,7 +100,6 @@
     NSDictionary *parameters=@{@"movie_id":self.movie_id,@"photo":self.photourl,@"user_id":userCenter.user_id};
     
     [manager POST:[NSString stringWithFormat:@"%@/stage/create-from-douban",kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
             NSLog(@"创建成功=======%@",responseObject);
             
@@ -111,11 +110,15 @@
             stageInfoModel  *model =[[stageInfoModel alloc]init];
             movieInfoModel  *movieInfo =[[movieInfoModel alloc]init];
             movieInfo.name =self.movie_name;
+            vc.pageSoureType=NSAddMarkPageSourceDoubanUploadImage;
             movieInfo.Id=self.movie_id;
             model.movieInfo=movieInfo;
              [model setValuesForKeysWithDictionary:[responseObject objectForKey:@"model"]];
             vc.stageInfo=model;
-            [self.navigationController pushViewController:vc animated:YES];
+          //  UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:vc];
+            //[self.navigationController presentViewController:vc animated:YES completion:nil];
+            [self.navigationController pushViewController:vc animated:NO];
+            
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);

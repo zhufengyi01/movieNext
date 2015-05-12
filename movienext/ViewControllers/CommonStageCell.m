@@ -49,24 +49,6 @@
     [BgView addSubview:BgView0];
     
     
-//    MovieLogoImageView=[[UIImageView alloc]initWithFrame:CGRectMake(10,7.5,30, 30)];
-//    MovieLogoImageView.layer.cornerRadius=4;
-//    MovieLogoImageView.layer.masksToBounds = YES;
-//    [BgView0 addSubview:MovieLogoImageView];
-//    
-//    movieNameLable =[[UILabel alloc]initWithFrame:CGRectMake(45, 7.5, 120, 30)];
-//    movieNameLable.font=[UIFont systemFontOfSize:16];
-//    movieNameLable.textColor=VGray_color;
-//   // movieNameLable.numberOfLines=1;
-//    movieNameLable.lineBreakMode=NSLineBreakByTruncatingTail;
-//    [BgView0 addSubview:movieNameLable];
-//    
-//    leftButtomButton=[UIButton buttonWithType:UIButtonTypeCustom];
-//    leftButtomButton.frame=CGRectMake(10, 5, 200, 35);
-//    //leftButtomButton.backgroundColor=[[UIColor redColor]colorWithAlphaComponent:0.2];
-//     [leftButtomButton addTarget:self action:@selector(cellButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-//     [BgView0 addSubview:leftButtomButton];
-    
 }
 
 -(void)CreateSatageView
@@ -201,6 +183,9 @@
             
         }
          _stageView.isAnimation=NO;
+        if (_pageType==NSPageSourceTypeMyupedViewController) {
+            moreButton.hidden=YES;
+        }
     }
     
 }
