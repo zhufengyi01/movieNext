@@ -484,6 +484,12 @@
     return [emailTest evaluateWithObject:candidate];
 }
 
+
++(NSString *)htmlString:(NSString *) htmlstring
+{
+    htmlstring =[htmlstring stringByReplacingOccurrencesOfString:@"amp;" withString:@""];
+    return htmlstring;
+}
 +(NSString *)dateToString:(NSDate *)date {
     NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
     //[dateFormatter setDateStyle:kCFDateFormatterFullStyle];

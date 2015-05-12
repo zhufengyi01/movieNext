@@ -78,7 +78,9 @@
     [self initUI];
     [self creatLoadView];
     //[self requestData];
-       
+    //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshTableView) name:@"RefeshTableview" object:nil];
+
+    
 }
 -(void)createNavigation
 {
@@ -91,6 +93,13 @@
      search.backgroundColor=[UIColor clearColor];
      self.navigationItem.titleView=search;
 }
+//点击可刷新
+-(void)refreshTableView
+{
+    [self.myConllectionView  headerBeginRefreshing];
+}
+
+
 -(void)createSegmentView
 {
     UIImageView   *TopImageView=[[UIImageView alloc]initWithFrame:CGRectMake(0,0, kDeviceWidth, 30)];
@@ -265,7 +274,6 @@
             
         }
         // 进入刷新状态就会回调这个Block
-
         // 模拟延迟加载数据，因此2秒后才调用）
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [vc.myConllectionView reloadData];
@@ -273,7 +281,6 @@
             [vc.myConllectionView headerEndRefreshing];
         });
     }];
-    
 #warning 自动刷新(一进入程序就下拉刷新)
     [vc.myConllectionView headerBeginRefreshing];
 }

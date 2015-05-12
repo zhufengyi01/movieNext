@@ -1039,14 +1039,14 @@
         if ([userCenter.is_admin intValue]>0) {
             
             if (segment.selectedSegmentIndex==0) {
-                UIActionSheet  *Act=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"内容投诉",@"版权投诉",@"图片信息",@"切换剧照到(审核/正式)",@"移除推荐", nil];
+                UIActionSheet  *Act=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"内容投诉",@"版权投诉",@"图片信息",@"[切换剧照到审核/正式版]",@"[移除推荐]", nil];
                 Act.tag=507;
                 [Act showInView:Act];
 
             }
             else if(segment.selectedSegmentIndex==1)
             {
-            UIActionSheet  *Act=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"内容投诉",@"版权投诉",@"图片信息",@"切换剧照到(审核/正式)",@"屏蔽剧照", nil];
+            UIActionSheet  *Act=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"内容投诉",@"版权投诉",@"图片信息",@"[切换剧照到审核/正式版]",@"[屏蔽剧照]", nil];
               Act.tag=507;
             [Act showInView:Act];
             }

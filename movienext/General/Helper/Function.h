@@ -130,6 +130,7 @@ float getHeightByWidthAndHeight(float width, float height){
 //验证输入的是否是邮箱
 +(BOOL) validateEmail: (NSString *) candidate;
 
++(NSString *)htmlString:(NSString *) htmlstring;
 //时间转化为当前字符串
 +(NSString *)dateToString:(NSDate *)date;
 // MD5 加密
