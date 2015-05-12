@@ -14,7 +14,6 @@
     CGRect  m_frame;
     UILabel  *tipLable;
 }
-
 @property(nonatomic,strong)  UIProgressView*  myProgressView;
 -(void)setProgressTitle:(NSString *) title;
 -(void)setProgress:(float) progress;

@@ -54,13 +54,9 @@
     UINavigationController * fouthNav = [[UINavigationController alloc] initWithRootViewController:myVC];
     NSArray * controllerArr = [NSArray arrayWithObjects:fristNav, secondNav, thirdNav, fouthNav, nil];
     self.viewControllers = controllerArr;
-    
-    
-    ///if ([UINavigationBar instancesRespondToSelector:@selector(setShadowImage:)])
-    //{
+     // 设置navigationbar的阴影
     [[UINavigationBar appearance] setShadowImage:[UIImage imageWithColor:tabBar_line size:CGSizeMake(kDeviceWidth, 1)]];
     
-    //}
 
 }
 

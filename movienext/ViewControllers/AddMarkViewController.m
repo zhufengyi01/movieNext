@@ -52,7 +52,7 @@
     self.navigationController.navigationBar.hidden=YES;
     self.tabBarController.tabBar.hidden=YES;
     if (_myTextView) {
-        [_myTextView becomeFirstResponder];
+     //   [_myTextView becomeFirstResponder];
     }
     
 }
@@ -82,7 +82,6 @@
     UIView  *naview= [[UIView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, 64)];
     naview.userInteractionEnabled=YES;
     [self.view addSubview:naview];
-    
     UIButton  *leftBtn= [UIButton buttonWithType:UIButtonTypeSystem];
     leftBtn.frame=CGRectMake(20, 30, 40, 30);
     [leftBtn setTitleColor:VGray_color forState:UIControlStateNormal];
@@ -241,13 +240,10 @@
             al.tag=1001;
             [al show];
             return;
-
         }
         AddTagViewController  *addtag =[[AddTagViewController alloc]init];
         addtag.delegate=self;
-        [self.navigationController pushViewController:addtag animated:NO];
-        
-        
+        [self presentViewController:addtag animated:NO completion:nil];
     }
 }
 //把markview 添加到屏幕
@@ -537,9 +533,9 @@
         float  timeInterval=0.1;
         NSLog(@"keyBoard   height  :%f", keyboardSize.height);
     //第一次需要计算键盘的高度
-    if (keybordHeight==0) {
+    //if (keybordHeight==0) {
        keybordHeight=keyboardSize.height;
-    }
+    //}
     
     [UIView  animateWithDuration:timeInterval animations:^{
         CGRect  tframe=_toolBar.frame;
@@ -717,13 +713,12 @@
 {
    // [_myTextView resignFirstResponder];
 }
-
 -(void)AddTagViewHandClickWithTag:(NSString *)tag
 {
     //改变_toolBar的高度;
     _myTextView.frame=CGRectMake(_myTextView.frame.origin.x, _myTextView.frame.origin.y, _myTextView.frame.size.width, 30);
     _toolBar.frame=CGRectMake(_toolBar.frame.origin.x, _toolBar.frame.origin.y-30,_toolBar.frame.size.width, 80);
-
+    
     //如果第一个标签为空
     if (TAGArray.count==0) {
         NSMutableDictionary  *tag1Dict =[NSMutableDictionary dictionaryWithObject:tag forKey:@"TAG"];
@@ -740,9 +735,7 @@
         }
         [TAGArray insertObject:tag2Dict atIndex:1];
     }
-    
-    NSLog(@"======%@",TAGArray);
-    
+ 
 //创建标签文本
     taglable =[[M80AttributedLabel alloc]initWithFrame:CGRectZero];
     taglable.backgroundColor =[UIColor clearColor];
@@ -758,7 +751,6 @@
          TagView   *tagview =[self createTagViewWithtagText:[dict objectForKey:@"TAG"] withIndex:i withBgImage:[UIImage imageNamed:@"tag_backgroud_color.png"]];
         [taglable appendView:tagview margin:UIEdgeInsetsMake(0, 10, 0, 0)];
     }
-    
     [_toolBar addSubview:taglable];
     
 }

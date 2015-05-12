@@ -34,19 +34,16 @@
 
 @property (nonatomic,assign )id <StageViewDelegate> delegate;
 
-
 @property(nonatomic,strong)     UIButton      *tanlogoButton;
 
+-(void)showAndHidenMarkView:(BOOL) isShow;
 
- -(void)configStageViewforStageInfoDict;
-
-
-
+-(void)configStageViewforStageInfoDict;
 
 /**
  *  开始动画
  */
-- (void)startAnimation; //在celldisplay执行的方法
+-(void)startAnimation; //在celldisplay执行的方法
 
 /**
  *  结束动画

@@ -195,9 +195,11 @@
 //显示隐藏markview
 -(void)hidenAndShowMarkView:(UIButton *) button
 {
+    [self.stageView showAndHidenMarkView:button.selected];
     if (button.selected==NO) {
         NSLog(@"执行了隐藏 view ");
         button.selected=YES;
+        //[self.stageView showAndHidenMarkView:NO];
         for (id view  in self.stageView.subviews) {
             if  ([view isKindOfClass:[MarkView class]]) {
                 MarkView  *mv =(MarkView *)view;
@@ -209,6 +211,7 @@
     {
         NSLog(@"执行了显示view ");
         button.selected=NO;
+        //[self.stageView showAndHidenMarkView:NO];
         for (id   view  in self.stageView.subviews) {
             if  ([view isKindOfClass:[MarkView class]]) {
                 MarkView  *mv =(MarkView *)view;
@@ -221,9 +224,11 @@
 
 -(void)showAndHidenMarkViews:(BOOL) isShow
 {
+    [self.stageView showAndHidenMarkView:isShow];
+    
     if (isShow==NO) {
         NSLog(@"执行了隐藏 view ");
-         for (id view  in self.stageView.subviews) {
+          for (id view  in self.stageView.subviews) {
             if  ([view isKindOfClass:[MarkView class]]) {
                 MarkView  *mv =(MarkView *)view;
                 mv.hidden=YES;

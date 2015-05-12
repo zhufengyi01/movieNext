@@ -106,7 +106,7 @@
     shareButton.titleLabel.font=[UIFont systemFontOfSize:14];
     [shareButton setTitleEdgeInsets:UIEdgeInsetsMake(10, 25, 10, 10)];
 
-    [shareButton setImage:[UIImage imageNamed:@"opened_share_icon.png"] forState:UIControlStateNormal];
+    [shareButton setImage:[UIImage imageNamed:@"btn_share_default.png"] forState:UIControlStateNormal];
     shareButton.backgroundColor=View_ToolBar;
     //[shareButton setBackgroundImage:[UIImage imageNamed:@"login_alpa_backgroundcolor.png"] forState:UIControlStateNormal];
     shareButton.tag=10001;

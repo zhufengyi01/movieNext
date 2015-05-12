@@ -144,7 +144,6 @@
                 shareVC.weiboInfo=weiboInfo;
                 shareVC.delegate=self;
              [self presentViewController:shareVC animated:YES completion:nil];
-    
 }
 -(void)initData{
     _hotDataArray = [[NSMutableArray alloc]init];
@@ -339,26 +338,24 @@
             NSLog(@"移除剧照成功=======%@",responseObject);
             UIAlertView  *Al =[[UIAlertView alloc]initWithTitle:nil message:@"审核（正常）切换成功" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
             [Al show];
-            
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
-    
 }
 
 
 //屏幕剧照
--(void)requestRemoveStage
+-(void)requestRemoveStageWithStageId:(NSString *)stageId
 {
     UserDataCenter *usercenter=[UserDataCenter shareInstance];
-    NSDictionary *parameters = @{@"stage_id":_stage_Id,@"user_id":usercenter.user_id};
+    NSDictionary *parameters = @{@"stage_id":stageId,@"user_id":usercenter.user_id};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     NSString *urlString =[NSString stringWithFormat:@"%@/stage/block", kApiBaseUrl];
     [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
             NSLog(@"移除剧照成功=======%@",responseObject);
-            UIAlertView  *Al =[[UIAlertView alloc]initWithTitle:nil message:@"移除剧照成功" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            UIAlertView  *Al =[[UIAlertView alloc]initWithTitle:nil message:@"剧照屏蔽成功" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
             [Al show];
             
         }
@@ -918,7 +915,6 @@
         return  cell;
     }
     return nil;
-    
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -927,15 +923,13 @@
        CommonStageCell   *cell=(CommonStageCell *)[tableView cellForRowAtIndexPath:indexPath];
     if (isShowMark==YES) {
         [cell showAndHidenMarkViews:YES];
-        isShowMark=NO;
+         isShowMark=NO;
     }
     else if (isShowMark==NO)
     {
         isShowMark=YES;
         [cell showAndHidenMarkViews:NO];
-        
-    }
-    
+     }
 }
 -(void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -999,15 +993,6 @@
         vc.movieId =  model.stageInfo.movie_id;
         vc.moviename=model.stageInfo.movieInfo.name;
         vc.movielogo=model.stageInfo.movieInfo.logo;
-//        NSMutableString  *backstr=[[NSMutableString alloc]initWithString:model.stageInfo.movieInfo.name];
-//        NSString *str;
-//        if(backstr.length>5)
-//        {
-//            str=[backstr substringToIndex:5];
-//            str =[NSString stringWithFormat:@"%@...",str];
-//        }
-//        UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:str style:UIBarButtonItemStylePlain target:nil action:nil];
-//        self.navigationItem.backBarButtonItem=item;
         [self.navigationController pushViewController:vc animated:YES];
 
     }
@@ -1061,7 +1046,7 @@
             }
             else if(segment.selectedSegmentIndex==1)
             {
-            UIActionSheet  *Act=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"内容投诉",@"版权投诉",@"图片信息",@"切换剧照到(审核/正式)", nil];
+            UIActionSheet  *Act=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"内容投诉",@"版权投诉",@"图片信息",@"切换剧照到(审核/正式)",@"屏蔽剧照", nil];
               Act.tag=507;
             [Act showInView:Act];
             }
@@ -1390,9 +1375,9 @@
     }
     else if (actionSheet.tag==506)
     {
-        if (buttonIndex==0) {
-        [self requestRemoveStage];
-        }
+        //if (buttonIndex==0) {
+        ///[self requestRemoveStage];
+        //}
         
     }
     else if (actionSheet.tag==507)
@@ -1464,6 +1449,11 @@
             //移除推荐
              ModelsModel    *moviemodel =[_hotDataArray objectAtIndex:Rowindex];
              [self requestrecommendDeleteDataWithHotId:moviemodel.Id];
+            }
+            if (segment.selectedSegmentIndex==1) {
+                ModelsModel  *model =[_newDataArray objectAtIndex:Rowindex];
+                //屏蔽剧照
+                [self requestRemoveStageWithStageId:model.stage_id];
             }
             
         }

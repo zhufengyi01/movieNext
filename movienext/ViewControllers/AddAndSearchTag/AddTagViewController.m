@@ -35,14 +35,19 @@
 -(void)createNavigation
 {
     //[self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color.png"] forBarMetrics:UIBarMetricsDefault];
-    search=[[UISearchBar alloc]initWithFrame:CGRectMake(10, 10, kDeviceWidth-40, 28)];
+    UIView  *navView=[[UIView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, 64)];
+    navView.userInteractionEnabled=YES;
+    [self.view addSubview:navView];
+    
+    search=[[UISearchBar alloc]initWithFrame:CGRectMake(10, 30, kDeviceWidth-20, 28)];
     search.placeholder=@"请输入标签";
     search.delegate=self;
-   // search.showsCancelButton=YES;
+    search.showsCancelButton=YES;
     search.searchBarStyle = UISearchBarStyleMinimal;
     [search becomeFirstResponder];
     search.backgroundColor=[UIColor clearColor];
-    self.navigationItem.titleView=search;
+    [navView addSubview:search];
+    //self.navigationItem.titleView=search;
 }
 -(void)initData
 {
@@ -50,13 +55,12 @@
 }
 -(void) createUI
 {
-    self.myTableView =[[UITableView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight-kHeightNavigation)];
+    self.myTableView =[[UITableView alloc]initWithFrame:CGRectMake(0, 64, kDeviceWidth, kDeviceHeight-kHeightNavigation)];
     self.myTableView.delegate=self;
     self.myTableView.dataSource=self;
     [self.view addSubview:self.myTableView];
 
 }
-
 #pragma  mark -----
 #pragma  mark ------  DataRequest －－－－－－－－－－－－－－－－－－－－－－－－－－
 #pragma  mark ----
@@ -95,11 +99,11 @@
 
 -(void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
 {
-   // [self dismissViewControllerAnimated:NO completion:nil];
+    [self dismissViewControllerAnimated:NO completion:nil];
 }
 -(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
-    
+    //[self dismissViewControllerAnimated:YES completion:nil];
     
 }
 
@@ -159,9 +163,8 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (self.delegate&&[self.delegate respondsToSelector:@selector(AddTagViewHandClickWithTag:)]) {
         [self.delegate AddTagViewHandClickWithTag:[dict objectForKey:@"title"]];
-        
     }
-    [self.navigationController popViewControllerAnimated:NO];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)didReceiveMemoryWarning {

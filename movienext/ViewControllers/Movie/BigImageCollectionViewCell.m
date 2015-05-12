@@ -115,11 +115,11 @@
     if (button.selected==NO) {
         NSLog(@"执行了隐藏 view ");
         button.selected=YES;
+        [self.StageView  showAndHidenMarkView:YES];
         for (UIView  *view  in self.StageView.subviews) {
             if  ([view isKindOfClass:[MarkView class]]) {
                 MarkView  *mv =(MarkView *)view;
                 mv.hidden=YES;
-                
             }
         }
     }
@@ -127,6 +127,7 @@
     {
         NSLog(@"执行了显示view ");
         button.selected=NO;
+        [self.StageView showAndHidenMarkView:NO];
         for (UIView  *view  in self.StageView.subviews) {
             if  ([view isKindOfClass:[MarkView class]]) {
                 MarkView  *mv =(MarkView *)view;

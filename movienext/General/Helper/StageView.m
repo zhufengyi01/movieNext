@@ -42,7 +42,7 @@
     
     self.tanlogoButton =[UIButton buttonWithType:UIButtonTypeCustom];
     self.tanlogoButton.frame=CGRectMake(kStageWidth-35, 10, 25, 25);
-    [self.tanlogoButton setBackgroundImage:[UIImage imageNamed:@"dan_close"] forState:UIControlStateNormal];
+    //[self.tanlogoButton setBackgroundImage:[UIImage imageNamed:@"dan_close"] forState:UIControlStateNormal];
     [self.tanlogoButton setBackgroundImage:[UIImage imageNamed:@"dan_closed"] forState:UIControlStateSelected];
     [self addSubview:self.tanlogoButton];
     
@@ -74,10 +74,10 @@
     }
     else
     {
-        y=0;
+          y=0;
           hight=kDeviceWidth;
-        width=(ImageWith/ImgeHight)*kDeviceWidth;
-        x=(kDeviceWidth-width)/2;
+          width=(ImageWith/ImgeHight)*kDeviceWidth;
+          x=(kDeviceWidth-width)/2;
      }
         _MovieImageView.frame=CGRectMake(x, y,width,hight);
     _MovieImageView.backgroundColor =VStageView_color;
@@ -251,7 +251,11 @@
 }
 
 
-
+-(void)showAndHidenMarkView:(BOOL) isShow;
+{
+    self.tanlogoButton.selected=!isShow;
+    
+}
 
 
 #pragma mark  ----

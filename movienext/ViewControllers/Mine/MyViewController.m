@@ -69,6 +69,7 @@
     weiboUserInfoModel  *userInfomodel;
     stageInfoModel  *_TStageInfo;
     weiboInfoModel      *_TweiboInfo;
+    BOOL  isShowMark;
 
 }
 @end
@@ -128,6 +129,7 @@
     pageSize=10;
     pageCount1=1;
     pageCount2=1;
+    isShowMark=YES;
     _addedDataArray = [[NSMutableArray alloc] init];
     _upedDataArray = [[NSMutableArray alloc] init];
     buttonStateDict=[[NSMutableDictionary alloc]init];
@@ -934,8 +936,19 @@
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"didDeselectRowAtIndexPath  =====%ld",indexPath.row);
+    
+    
     CommonStageCell   *cell=(CommonStageCell *)[tableView cellForRowAtIndexPath:indexPath];
+    if (isShowMark==YES) {
+        [cell showAndHidenMarkViews:YES];
+        isShowMark=NO;
+    }
+    else if (isShowMark==NO)
+    {
+        isShowMark=YES;
+        [cell showAndHidenMarkViews:NO];
+    }
+
  
 }
 //设置页面
