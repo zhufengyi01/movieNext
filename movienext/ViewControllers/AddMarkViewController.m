@@ -452,6 +452,7 @@
 
     }
     
+    
     NSString *urlString =[NSString stringWithFormat:@"%@/weibo/create", kApiBaseUrl];
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:urlString parameters:parameter success:^(AFHTTPRequestOperation *operation, id responseObject) {

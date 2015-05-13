@@ -83,22 +83,17 @@
  
     }];
     [bgView addSubview:imageView];
-    
-    
 }
 
 -(void)dealRightNavClick:(UIButton *) button
 {
     [self requestupphoto];
-    
 }
 -(void)requestupphoto
 {
-    
     UserDataCenter  *userCenter=[UserDataCenter shareInstance];
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     NSDictionary *parameters=@{@"movie_id":self.movie_id,@"photo":self.photourl,@"user_id":userCenter.user_id};
-    
     [manager POST:[NSString stringWithFormat:@"%@/stage/create-from-douban",kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
             NSLog(@"创建成功=======%@",responseObject);
