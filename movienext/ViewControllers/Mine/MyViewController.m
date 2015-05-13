@@ -91,6 +91,8 @@
     [[NSNotificationCenter defaultCenter]  addObserver:self selector:@selector(changeUser) name:@"initUser" object:nil];
     //NSNotificationCenter  *c= [NSNotificationCenter defaultCenter];
     [[UINavigationBar appearance] setShadowImage:[UIImage imageWithColor:tabBar_line size:CGSizeMake(kDeviceWidth, 1)]];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshTableView) name:@"RefeshTableview" object:nil];
+
     
 
     
@@ -168,6 +170,12 @@
     
     
 }
+//点击可刷新
+-(void)refreshTableView
+{
+    [_tableView  headerBeginRefreshing];
+}
+
 
 -(void)createTableView
 {

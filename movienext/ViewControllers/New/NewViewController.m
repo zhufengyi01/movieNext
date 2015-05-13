@@ -500,6 +500,7 @@
 {
     UserDataCenter  *userCenter =[UserDataCenter shareInstance];
     NSDictionary *parameters = @{@"weibo_id":_TweiboInfo.Id,@"stage_id":_TStageInfo.Id,@"user_id":userCenter.user_id};
+    
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:[NSString stringWithFormat:@"%@/hot/create", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
@@ -511,7 +512,6 @@
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
-    
 }
 
 //删除微博的接口
@@ -530,7 +530,6 @@
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
-    
 }
 //微博点赞请求
 -(void)LikeRequstData:(weiboInfoModel  *) weiboInfo withOperation:(NSNumber *) operation

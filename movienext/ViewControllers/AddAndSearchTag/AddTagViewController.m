@@ -55,7 +55,7 @@
 }
 -(void) createUI
 {
-    self.myTableView =[[UITableView alloc]initWithFrame:CGRectMake(0,0, kDeviceWidth, kDeviceHeight-kHeightNavigation)];
+    self.myTableView =[[UITableView alloc]initWithFrame:CGRectMake(0,0, kDeviceWidth, kDeviceHeight)];
     self.myTableView.delegate=self;
     self.myTableView.dataSource=self;
     [self.view addSubview:self.myTableView];

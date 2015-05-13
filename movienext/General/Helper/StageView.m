@@ -46,8 +46,6 @@
     [self.tanlogoButton setBackgroundImage:[UIImage imageNamed:@"dan_closed"] forState:UIControlStateSelected];
     [self addSubview:self.tanlogoButton];
     
-    
-
 }
 #pragma mark    设置stageview的值  ，主要是给stagview 添加markview  和添加一张图片
 -(void)configStageViewforStageInfoDict{

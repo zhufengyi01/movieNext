@@ -230,7 +230,7 @@
 + (NSString *)addOneByIntegerString:(NSString *)integerString
 {
     NSInteger integer = [integerString integerValue];
-    return [NSString stringWithFormat:@"%d",integer+1];
+    return [NSString stringWithFormat:@"%ld",integer+1];
 }
 
 

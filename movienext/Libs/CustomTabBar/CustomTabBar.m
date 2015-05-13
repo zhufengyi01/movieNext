@@ -94,7 +94,7 @@
     NSString  *select  =[indexSelectDict objectForKey:@"isSelect"];
     NSLog(@"select1 ======%@",select);
     if (button.selected==NO) {
-       [indexSelectDict setValue:[NSString stringWithFormat:@"%ld",button.tag] forKey:@"isSelect"];
+        button.selected=YES;
             NSLog(@"select2======%@",select);
        [self resetButtonImagesWithButton:button];
      // 针对代理协议里面有可选的代理时使用的方法可，respondsToSelector 就是判断self.m_delegate指向的对象有没有，这个方法--> buttonPresedInCustomTabBar:
@@ -102,9 +102,12 @@
           [self.m_delegate buttonPresedInCustomTabBar:button.tag - BUTTON_START_TAG];
        }
     }
+    
     else if(button.selected==YES&&[select intValue]==button.tag)  //如果选中并且
     {
         
+        [indexSelectDict setValue:[NSString stringWithFormat:@"%ld",button.tag] forKey:@"isSelect"];
+   
         [[NSNotificationCenter defaultCenter] postNotificationName:@"RefeshTableview" object:nil];
     }
 }
@@ -118,9 +121,7 @@
         UILabel  *lable=(UILabel *)[self viewWithTag:2000+i] ;
         lable.textColor=TabNorColor;
     }
-    
      button.selected=YES;
- 
     UILabel  *label=(UILabel *)[self viewWithTag:button.tag+1000];
     label.textColor=TabSelectColor;
     
