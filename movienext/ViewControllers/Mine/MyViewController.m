@@ -105,6 +105,12 @@
 
     }
 }
+-(void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:YES];
+ 
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"RefeshTableview" object:nil];
+ }
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -805,20 +811,19 @@
     [manager POST:[NSString stringWithFormat:@"%@/weibo/remove", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
             NSLog(@"删除数据成功=======%@",responseObject);
+            if (_addedDataArray.count>0) {
             [_addedDataArray removeObjectAtIndex:index];
+            }
             [_tableView reloadData];
             
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
-    
 }
 //微博点赞请求
 -(void)LikeRequstData:(WeiboModel  *) weiboDict StageInfo :(stageInfoModel *) stageInfoDict
 {
-    
-    //UserDataCenter  *userCenter=[UserDataCenter shareInstance];
     NSNumber  *weiboId=weiboDict.Id;
     NSNumber  *stageId=stageInfoDict.Id;
     NSString  *movieId=stageInfoDict.movie_id;
@@ -834,7 +839,6 @@
     {
         uped=[NSNumber numberWithInt:1];
     }
-    
     NSDictionary *parameters = @{@"weibo_id":weiboId, @"stage_id":stageId,@"movie_id":movieId,@"movie_name":movieName,@"user_id":userId,@"author_id":autorId,@"operation":uped};
     
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
@@ -878,66 +882,63 @@
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    CommonStageCell  *cell;
     for (int i=100; i<102;i++ ) {
         UIButton  *btn =(UIButton *)[self.view viewWithTag:i];
-
     if  (btn.tag==100&&btn.selected==YES) {
-
-        
-        if (_addedDataArray.count>indexPath.row) {
-            
-        userAddmodel  *model =[_addedDataArray objectAtIndex:indexPath.row];
+       
         static NSString *cellID=@"CELL1";
-        CommonStageCell  *cell= (CommonStageCell *)[tableView dequeueReusableCellWithIdentifier:cellID];
+        cell= (CommonStageCell *)[tableView dequeueReusableCellWithIdentifier:cellID];
         if (!cell) {
             cell=[[CommonStageCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
             cell.selectionStyle=UITableViewCellSelectionStyleNone;
             cell.backgroundColor=View_BackGround;
         }
-                 cell.pageType=NSPageSourceTypeMyAddedViewController;
+            cell.pageType=NSPageSourceTypeMyAddedViewController;
              if (self.author_id.length==0||[self.author_id isEqualToString:@"0"]) {  //表示直接进入这个页面的话，这个为空
                 cell.userPage=NSUserPageTypeMySelfController;
             }
             else {
                 cell.userPage=NSUserPageTypeOthersController;
             }
-       
+        if (_addedDataArray.count>indexPath.row) {
+            userAddmodel  *model =[_addedDataArray objectAtIndex:indexPath.row];
+
             cell.weiboInfo=model.weiboInfo;
             //小闪动标签的数组
             cell.delegate=self;
             cell.stageInfo=model.weiboInfo.stageInfo;
             [cell ConfigsetCellindexPath:indexPath.row];
             cell.stageView.delegate=self;
-            return cell;
+            
         }
-        return nil;
+        return cell;
     }
     else if (btn.tag==101&&btn.selected==YES)
     {
-        if (_upedDataArray.count>indexPath.row) {
-        userAddmodel  *model  =[_upedDataArray objectAtIndex:indexPath.row];
         static NSString *cellID=@"CELL2";
-        CommonStageCell  *cell= (CommonStageCell *)[tableView dequeueReusableCellWithIdentifier:cellID];
+        cell= (CommonStageCell *)[tableView dequeueReusableCellWithIdentifier:cellID];
         if (!cell) {
             cell=[[CommonStageCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
             cell.selectionStyle=UITableViewCellSelectionStyleNone;
             cell.backgroundColor=View_BackGround;
         }
-        
             cell.pageType=NSPageSourceTypeMyupedViewController;
+            if (_upedDataArray.count>indexPath.row) {
+                userAddmodel  *model  =[_upedDataArray objectAtIndex:indexPath.row];
+
             cell.weiboInfo =model.weiboInfo;
             cell.stageInfo=model.weiboInfo.stageInfo;
             [cell ConfigsetCellindexPath:indexPath.row];
             cell.stageView.delegate=self;
             cell.delegate=self;
-            return  cell;
-        }
-     
-        
-        
+            
+          }
+        return cell;
+     }
     }
-    }
-    return nil;
+    
+    return cell;
     
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -1467,9 +1468,9 @@
 }
 -(void)dealloc
 {
-    [[NSNotificationCenter defaultCenter]removeObserver:self name:@"initUser" object:nil];
+      [[NSNotificationCenter defaultCenter]removeObserver:self name:@"initUser" object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"refreshTableView" object:nil];
-    
+ 
 
 }
 

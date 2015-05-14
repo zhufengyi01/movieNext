@@ -90,25 +90,20 @@
 - (void)buttonPressed:(UIButton *)button
 {
     
-  
-
     NSString  *select  =[indexSelectDict objectForKey:@"isSelect"];
- 
-    NSLog(@"select1 ======%@",select);
+    [indexSelectDict setValue:[NSString stringWithFormat:@"%ld",button.tag] forKey:@"isSelect"];
+    //NSLog(@"select1 ======%@",select);
     if (button.selected==NO) {
         button.selected=YES;
-        [indexSelectDict setValue:[NSString stringWithFormat:@"%ld",button.tag] forKey:@"isSelect"];
-            NSLog(@"select2======%@",select);
+      //NSLog(@"select2======%@",select);
        [self resetButtonImagesWithButton:button];
      // 针对代理协议里面有可选的代理时使用的方法可，respondsToSelector 就是判断self.m_delegate指向的对象有没有，这个方法--> buttonPresedInCustomTabBar:
       if(self.m_delegate && [self.m_delegate respondsToSelector:@selector(buttonPresedInCustomTabBar:)]) {
           [self.m_delegate buttonPresedInCustomTabBar:button.tag - BUTTON_START_TAG];
        }
     }
-    
     else if(button.selected==YES&&[select intValue]==button.tag)  //如果选中并且
     {
-   
         [[NSNotificationCenter defaultCenter] postNotificationName:@"RefeshTableview" object:nil];
     }
 }

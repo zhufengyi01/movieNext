@@ -55,13 +55,18 @@
     if (_myTextView) {
      //   [_myTextView becomeFirstResponder];
     }
-    
+    _myTextView.frame= CGRectMake(40, 10, kDeviceWidth-110, 30);
 }
 
+//页面已经出现的时候执行这个   所以在执行代理完成后再执行通知的方法
 -(void)viewDidAppear:(BOOL)animated
 {
+    
     if(_myTextView)
+    {
         [_myTextView becomeFirstResponder];
+    }
+    
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -208,7 +213,7 @@
     _myTextView.maximumZoomScale=3;
     _myTextView.returnKeyType=UIReturnKeyDone;
     _myTextView.scrollEnabled=YES;
-    _myTextView.autoresizingMask=UIViewAutoresizingFlexibleHeight;
+    //_myTextView.autoresizingMask=UIViewAutoresizingFlexibleHeight;
     _myTextView.selectedRange = NSMakeRange(0,0);  //默认光标从第一个开始
     [_myTextView becomeFirstResponder];
     [_toolBar addSubview:_myTextView];
@@ -565,34 +570,35 @@
         NSDictionary *info = [notification userInfo];
         NSValue *value = [info objectForKey:UIKeyboardFrameEndUserInfoKey];
          keyboardSize = [value CGRectValue].size;
-        float  timeInterval=0.1;
-        NSLog(@"keyBoard   height  :%f", keyboardSize.height);
+        NSLog(@"will show     keyBoard   height  :%f", keyboardSize.height);
         keybordHeight=keyboardSize.height;
-       CGRect  frame =_myTextView.frame;
-       frame.size.height=30;
+        CGRect  frame =_myTextView.frame;
+        frame.size.height=30;
        _myTextView.frame=frame;
+        CGSize Tsize =[taglable sizeThatFits:CGSizeMake(kDeviceWidth-20, CGFLOAT_MAX)];
+    //位置和大小
+       taglable.frame=CGRectMake(10,50,kDeviceWidth-20, Tsize.height);
+
+   
+    [UIView  animateWithDuration:0.1 animations:^{
+     } completion:^(BOOL finished) {
+         _toolBar.frame=CGRectMake(_toolBar.frame.origin.x,kDeviceHeight-keybordHeight-50-Tsize.height,_toolBar.frame.size.width, 50+Tsize.height);
+         
+    }];
     
-//    [UIView  animateWithDuration:timeInterval animations:^{
-//        CGRect  tframe=_toolBar.frame;
-//        tframe.origin.y=kDeviceHeight -keyboardSize.height-kHeightNavigation-50+64;
-//        if (TAGArray.count>0) {
-//            tframe.origin.y=kDeviceHeight-keyboardSize.height-kHeightNavigation-80+64;
-//        }
-//        _toolBar.frame=tframe;
-//        
-//    } completion:^(BOOL finished) {
-//    }];
+    NSLog(@"====will show keyboard  tag====%f",_myTextView.frame.size.height);
+
 }
 -(void)keyboardWillHiden:(NSNotification *) notification
 {
  
-    [UIView  animateWithDuration:0.1 animations:^{
-        CGRect  tframe=_toolBar.frame;
-        tframe.origin.y=kDeviceHeight-50-kHeightNavigation;
-        _toolBar.frame=tframe;
-    } completion:^(BOOL finished) {
-        
-    }];
+//    [UIView  animateWithDuration:0.1 animations:^{
+//        CGRect  tframe=_toolBar.frame;
+//        tframe.origin.y=kDeviceHeight-50-kHeightNavigation;
+//        _toolBar.frame=tframe;
+//    } completion:^(BOOL finished) {
+//        
+//    }];
 
 }
 #pragma  mark  ---UItextViewDelegate-------------
@@ -702,15 +708,8 @@
     if (alertView.tag==1000) {
         //发布弹幕成功的返回
     if (buttonIndex==0) {
-//         else
-//        {
-            //[self.navigationController popViewControllerAnimated:YES];
-            //返回之前需要调用
-//            
-//            if (self.delegate&&[self.delegate respondsToSelector:@selector(AddMarkViewControllerReturn)]) {
-//                //返回的时候需要去刷新tableview
-//                [self.delegate AddMarkViewControllerReturn];
-//            }
+ 
+        [self.delegate AddMarkViewControllerReturn];
         [self dismissViewControllerAnimated:YES completion:^{
 //            UMShareViewController2  *shareVC=[[UMShareViewController2 alloc]init];
 //            shareVC.StageInfo=self.stageInfo;
@@ -720,7 +719,6 @@
             
             
              NSDictionary  *dict = [[NSDictionary alloc]initWithObjectsAndKeys:self.stageInfo,@"stageInfo",weibo,@"weiboInfo",self.delegate,@"delegate", nil];
-            
             [[NSNotificationCenter defaultCenter] postNotificationName:@"ShareViewAlert" object:nil userInfo:dict];
         
             
@@ -731,7 +729,13 @@
 }
 -(void)AddTagViewHandClickWithTag:(NSString *)tag
 {
-         if (TAGArray==nil) {
+    CGRect  frame =_myTextView.frame;
+    frame.size.height=30;
+    _myTextView.frame=frame;
+    
+    
+    
+    if (TAGArray==nil) {
         TAGArray =[[NSMutableArray alloc]init];
     }
     //如果第一个标签为空
@@ -781,20 +785,9 @@
     //位置和大小
     taglable.frame=CGRectMake(10,50,kDeviceWidth-20, Tsize.height);
     
-    if(keybordHeight==0)
-    {
-        keybordHeight=252.0;
-        if (IsIphone6) {
-            keybordHeight=258.0;
-        }
-        if (IsIphone6plus) {
-            keybordHeight=271.0;
-        }
-      
-    }
- 
-    _toolBar.frame=CGRectMake(_toolBar.frame.origin.x,kDeviceHeight-keybordHeight-50-Tsize.height,_toolBar.frame.size.width, 50+Tsize.height);
-    [_toolBar addSubview:taglable];
+      [_toolBar addSubview:taglable];
+    
+    NSLog(@"==== add  tag====%f",_myTextView.frame.size.height);
     
 }
 
@@ -815,14 +808,14 @@
 //点击标签，删除操作
 -(void)TapViewClick:(TagView *)tagView Withweibo:(weiboInfoModel *)weiboInfo withTagInfo:(TagModel *)tagInfo
 {
+    
+    NSLog(@"=========tagView %ld",tagView.tag);
     if(TAGArray.count>0)
     {
-    [TAGArray  removeObjectAtIndex:tagView.tag-1000];
+       [TAGArray  removeObjectAtIndex:tagView.tag-1000];
     }
     //删除完成后，清除所有的布局
-    //[taglable removeFromSuperview];
-    //taglable=nil;
-    //移除所有tagview的子视图
+     //移除所有tagview的子视图
     for (id view in taglable.subviews) {
         if ([view isKindOfClass:[TagView class]]) {
             TagView  *tag=(TagView *)view;
@@ -830,13 +823,17 @@
             tag=nil;
         }
     }
-    [taglable removeFromSuperview];
+    if (taglable) {
+        [taglable removeFromSuperview];
+        taglable=nil;
+    }
+    
     taglable =[[M80AttributedLabel alloc]initWithFrame:CGRectZero];
     taglable.backgroundColor =[UIColor clearColor];
     taglable.font=[UIFont systemFontOfSize:MarkTextFont14];
-    if (IsIphone6plus) {
+    if(IsIphone6plus) {
         taglable.font =[UIFont systemFontOfSize:MarkTextFont16];
-    }
+     }
      if(keybordHeight==0)
     {
         keybordHeight=252.0;
@@ -847,8 +844,12 @@
             keybordHeight=271.0;
         }
     }
+    NSLog(@"删除之后的数组====%@",TAGArray);
+
+
     //然后从新开始渲染布局
     for (int i=0; i<TAGArray.count; i++) {
+        
         NSDictionary  *dict =[TAGArray objectAtIndex:i];
         TagView   *tagview =[self createTagViewWithtagText:[dict objectForKey:@"TAG"] withIndex:i withBgImage:[UIImage imageNamed:@"tag_backgroud_color.png"]];
         [taglable appendView:tagview margin:UIEdgeInsetsMake(0, 10, 0, 0)];
@@ -857,11 +858,11 @@
     CGSize Tsize =[taglable sizeThatFits:CGSizeMake(kDeviceWidth-20, CGFLOAT_MAX)];
     //位置和大小
     taglable.frame=CGRectMake(10,50,kDeviceWidth-20, Tsize.height);
-
     _toolBar.frame=CGRectMake(_toolBar.frame.origin.x,kDeviceHeight-keybordHeight-50-Tsize.height,_toolBar.frame.size.width, 50+Tsize.height);
     [_toolBar addSubview:taglable];
     
     _myTextView.frame=CGRectMake(_myTextView.frame.origin.x, 10,_myTextView.frame.size.width, 30);
+    
     if (TAGArray.count==0) {
         if(keybordHeight==0)
         {
@@ -872,12 +873,10 @@
             if (IsIphone6plus) {
                 keybordHeight=271.0;
             }
-            
         }
         _toolBar.frame=CGRectMake(_toolBar.frame.origin.x,kDeviceHeight-keybordHeight-50,_toolBar.frame.size.width, 50);
+        [taglable removeFromSuperview];
       }
-    NSLog(@"删除之后的数组====%@",TAGArray);
-
 }
 /*
 #pragma mark - Navigation

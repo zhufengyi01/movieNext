@@ -42,6 +42,7 @@
     self.tabBarController.tabBar.hidden=NO;
     
     [[NSNotificationCenter defaultCenter]  addObserver:self selector:@selector(changeUser) name:@"initUser" object:nil];
+ 
 
 }
 -(void)changeUser

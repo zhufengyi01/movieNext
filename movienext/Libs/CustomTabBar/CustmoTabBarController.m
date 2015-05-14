@@ -38,7 +38,6 @@
     [self createControllers];
     [self createCustomTabBar];
 }
-
 - (void)createControllers
 {
     NewViewController * newVC = [[NewViewController alloc] init];
@@ -57,9 +56,7 @@
      // 设置navigationbar的阴影
     [[UINavigationBar appearance] setShadowImage:[UIImage imageWithColor:tabBar_line size:CGSizeMake(kDeviceWidth, 1)]];
     
-
 }
-
 -(void)createCustomTabBar
 {
     

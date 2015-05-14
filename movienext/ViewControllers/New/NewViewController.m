@@ -83,9 +83,8 @@
     [MobClick beginLogPageView:@"最新热门"];
     
     self.navigationController.navigationBar.hidden=NO;
-  self.navigationController.navigationBar.alpha=1;
+    self.navigationController.navigationBar.alpha=1;
 //    self.navigationController.navigationBar.translucent=NO;
-//
     self.tabBarController.tabBar.hidden=NO;
     //if (_HotMoVieTableView) {
       //  [self setupRefresh];
@@ -98,12 +97,16 @@
             imageView.backgroundColor=tabBar_line;
         }
     }
+   // [[NSNotificationCenter defaultCenter] removeObserver:self name:@"RefeshTableview" object:nil];
     
 }
 -(void)viewWillDisappear:(BOOL)animated
 {
+    //开始切换标签栏执行
     [super viewWillDisappear:animated];
     [MobClick endLogPageView:@"最新热门"];
+
+
 }
 
 //遇到上面的问题 最直接的解决方法就是在controller的viewDidAppear里面去调用present。这样可以确保view hierarchy的层次结构不乱。
@@ -112,7 +115,14 @@
 {
     [super viewDidAppear:YES];
 }
+-(void)viewDidDisappear:(BOOL)animated
+{
+    //标签栏已经切换成功执行这个
+    [super viewDidDisappear:YES];
+ 
+    //[[NSNotificationCenter defaultCenter] removeObserver:self name:@"RefeshTableview" object:nil];
 
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -137,8 +147,6 @@
 {
                 stageInfoModel  *stageInfo =[notifi.userInfo objectForKey:@"stageInfo"];
                  weiboInfoModel  *weiboInfo =[notifi.userInfo objectForKey:@"weiboInfo"];
-   
-    
                 UMShareViewController2  *shareVC=[[UMShareViewController2 alloc]init];
                 shareVC.StageInfo=stageInfo;
                 shareVC.weiboInfo=weiboInfo;
@@ -196,8 +204,10 @@
 }
 -(void)dealloc
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"refreshTableView" object:nil];
-}
+     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"RefeshTableview" object:nil];
+    
+    //切换标签栏的时候  并没有去delloc
+ }
 -(void)segmentClick:(UISegmentedControl *)seg
 {
     
@@ -1019,9 +1029,6 @@
         AddMarkVC.stageInfo=model.stageInfo;
         AddMarkVC.model=model;
         AddMarkVC.delegate=self;
-        //AddMarkVC.pageSoureType=NSAddMarkPageSourceDefault;
-        //UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:AddMarkVC];
-        //[self.navigationController presentViewController:na animated:NO completion:nil];
         [self presentViewController:AddMarkVC animated:NO completion:nil];
 
     }
@@ -1062,31 +1069,6 @@
         
     }
 }
-////长安剧情推荐和剧情移除
-//-(void)commonStageCellLoogPressClickindex:(NSInteger)indexrow
-//{
-//    //HotMovieModel  *hotmovie;
-//    ModelsModel  *moviemodel;
-//    if  (segment.selectedSegmentIndex==0) {
-//        
-//        moviemodel =[_hotDataArray objectAtIndex:indexrow];
-//        _hot_Id=moviemodel.Id;
-//        
-//        UIActionSheet  *ash =[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"移除推荐" otherButtonTitles:nil, nil];
-//        ash.tag=503;
-//        [ash showInView:self.view];
-//    }
-//    else if(segment.selectedSegmentIndex==1)
-//    {
-//        moviemodel=[_newDataArray objectAtIndex:indexrow];
-//        _stage_Id=moviemodel.stageInfo.Id;
-//        UIActionSheet  *ash =[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"屏蔽剧照" otherButtonTitles:nil, nil];
-//        ash.tag=505;
-//        [ash showInView:self.view];
-//
-//    }
-//    
-//}
 #pragma mark  -----AddMarkViewControllerDelegate----
 -(void)AddMarkViewControllerReturn
 {
