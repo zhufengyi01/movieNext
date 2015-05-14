@@ -765,7 +765,7 @@
 
 //创建标签文本
     taglable =[[M80AttributedLabel alloc]initWithFrame:CGRectZero];
-    taglable.backgroundColor =[UIColor whiteColor];
+    taglable.backgroundColor =[UIColor clearColor];
     taglable.lineSpacing=5.0;
     taglable.font=[UIFont systemFontOfSize:MarkTextFont14];
     if (IsIphone6plus) {

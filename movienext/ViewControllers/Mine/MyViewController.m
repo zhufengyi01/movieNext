@@ -57,7 +57,6 @@
     UILabel *lblZanCout;
     UILabel *lblBrief;//简介
     UserDataCenter  *userCenter;
-    
     ButtomToolView *_toolBar;
     MarkView       *_mymarkView;
      int  productCount;
@@ -128,7 +127,7 @@
 -(void)initData {
     page1=1;
     page2=1;
-    pageSize=10;
+    pageSize=20;
     pageCount1=1;
     pageCount2=1;
     isShowMark=YES;
@@ -175,6 +174,7 @@
 {
     [_tableView  headerBeginRefreshing];
 }
+
 
 
 -(void)createTableView
@@ -379,11 +379,7 @@
 - (void)footerRereshing
 {
 
-//    if (page<pageCount) {
-//        page++;
-//     [self  requestData];
-//    }
-    
+ 
     for (int i=100; i<102;i++ ) {
         UIButton  *btn =(UIButton *)[self.view viewWithTag:i];
         if (btn.tag==100&&btn.selected==YES) {
@@ -604,20 +600,20 @@
     int  page;
     for (int i=100; i<102;i++ ) {
         UIButton  *btn =(UIButton *)[self.view viewWithTag:i];
-        if (btn.tag==101&&btn.selected==YES) {
-            section=@"user-up-weibo/list";
+        if (btn.tag==100&&btn.selected==YES) {
+            section= @"user-create-weibo/list";
+
             page=page1;
         }
-        else if (btn.tag==100&&btn.selected==YES)
+        else if (btn.tag==101&&btn.selected==YES)
         {
-            section= @"user-create-weibo/list";
+            section=@"user-up-weibo/list";
             page=page2;
         }
     }
     NSLog(@" parameters  ====%@",parameters);
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
      NSString *urlString =[NSString stringWithFormat:@"%@/%@?per-page=%d&page=%d", kApiBaseUrl, section,pageSize,page];
-    
     [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject objectForKey:@"code"] intValue]==0) {
             //NSLog(@"个人页面返回的数据====%@",responseObject);
@@ -757,8 +753,10 @@
                                 [tagmodel setValuesForKeysWithDictionary:tagDict];
                                 TagDetailModel *tagedetail = [[TagDetailModel alloc]init];
                                 if (tagedetail) {
+                                    if (![[tagDict objectForKey:@"tag"] isKindOfClass:[NSNull class]]) {
                                     [tagedetail setValuesForKeysWithDictionary:[tagDict  objectForKey:@"tag"]];
                                     tagmodel.tagDetailInfo=tagedetail;
+                                    }
                                 }
                                 
                                 [tagArray addObject:tagmodel];
@@ -1469,7 +1467,10 @@
 }
 -(void)dealloc
 {
-    [[NSNotificationCenter defaultCenter]removeObserver:nil name:@"initUser" object:nil];
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:@"initUser" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"refreshTableView" object:nil];
+    
+
 }
 
 

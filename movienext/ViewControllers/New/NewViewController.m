@@ -151,7 +151,7 @@
     _upWeiboArray=[[NSMutableArray alloc]init];
     page1=1;
     page2=1;
-    pagesize=10;
+    pagesize=20;
     pageCount1=1;
     pageCount2=1;
     isShowMark=YES;
@@ -194,7 +194,10 @@
 {
     [_HotMoVieTableView  headerBeginRefreshing];
 }
-
+-(void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"refreshTableView" object:nil];
+}
 -(void)segmentClick:(UISegmentedControl *)seg
 {
     
