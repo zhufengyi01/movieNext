@@ -7,17 +7,24 @@
 //
 
 #import "weiboInfoModel.h"
-
+#import "MJExtension.h"
 @implementation weiboInfoModel
 
-+ (NSDictionary *)replacedKeyFromPropertyName
-{
-    return @{@"Id" : @"id",
-             @"movieInfo" : @"movie",
-             @"tagArray":@"tags",
-             @"uerInfo":@"user",
-             };
-}
+//+ (NSDictionary *)replacedKeyFromPropertyName
+//{
+//    return @{@"Id" : @"id",
+//              @"uerInfo":@"user",
+//              };
+//}
+//+ (NSDictionary *)objectClassInArray
+//{
+//    return @{
+//             @"tagArray" : @"tags",
+//             
+//             };
+//}
+
+
 
 -(void)setValue:(id)value forUndefinedKey:(NSString *)key
 {

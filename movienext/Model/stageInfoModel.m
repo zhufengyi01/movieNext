@@ -8,15 +8,23 @@
 
 #import "stageInfoModel.h"
 
+#import "MJExtension.h"
 @implementation stageInfoModel
 //字典中的id 对应模型中的Id
-+ (NSDictionary *)replacedKeyFromPropertyName
+//+ (NSDictionary *)replacedKeyFromPropertyName
+//{
+//    return @{@"Id" : @"id",
+//             @"movieInfo" : @"movie",
+//              };
+//}
+
+/*+ (NSDictionary *)objectClassInArray
 {
-    return @{@"Id" : @"id",
-             @"movieInfo" : @"movie",
-             @"weibosArray":@"weibos"
+    return @{
+             @"weibosArray" : @"weibos",
              };
-}
+}*/
+
 
 -(void)setValue:(id)value forUndefinedKey:(NSString *)key
 {

@@ -9,13 +9,12 @@
 #import "UpweiboModel.h"
 
 @implementation UpweiboModel
-+ (NSDictionary *)replacedKeyFromPropertyName
-{
-    return @{@"Id" : @"id",
-             @"stageInfo" : @"stage",
-             };
-}
-
+//+ (NSDictionary *)replacedKeyFromPropertyName
+//{
+//    return @{@"Id" : @"id",
+//            };
+//}
+//
 -(void)setValue:(id)value forUndefinedKey:(NSString *)key
 {
     

@@ -596,6 +596,9 @@
             if (_hotDataArray ==nil) {
                 _hotDataArray=[[NSMutableArray alloc]init];
             }
+//            NSArray   *hotarray =[ModelsModel objectArrayWithKeyValuesArray:Detailarray];
+//            [_hotDataArray addObjectsFromArray:hotarray];
+          
             for (NSDictionary  *hotDict in Detailarray) {
                 ModelsModel  *model =[[ModelsModel alloc]init];
                 if(model)
@@ -671,6 +674,9 @@
         }
         else if(segment.selectedSegmentIndex==1)
         {
+//            NSArray   *hotarray =[ModelsModel objectArrayWithKeyValuesArray:Detailarray];
+//            [_newDataArray addObjectsFromArray:hotarray];
+
             NSLog(@"最新数据 JSON: %@", responseObject);
             for (NSDictionary  *newDict in Detailarray) {
                 ModelsModel  *model =[[ModelsModel alloc]init];
@@ -730,74 +736,6 @@
                     [_newDataArray addObject:model];
                 }
             }
-//            //点赞的数组
-//            for (NSDictionary  *updict in [responseObject objectForKey:@"upweibos"]) {
-//                UpweiboModel *upmodel =[[UpweiboModel alloc]init];
-//                if (upmodel) {
-//                    [upmodel setValuesForKeysWithDictionary:updict];
-//                    if (_upWeiboArray==nil) {
-//                        _upWeiboArray =[[NSMutableArray alloc]init];
-//                    }
-//                    [_upWeiboArray addObject:upmodel];
-//                }
-//            }
-
-            
-            
-//            for (NSDictionary  *newDict in Detailarray) {
-//            weiboInfoModel  *weibomodel =[[weiboInfoModel alloc]init];
-//            if(weibomodel)
-//            {
-//                [weibomodel setValuesForKeysWithDictionary:newDict];
-//                
-//                //1.userInfo
-//                weiboUserInfoModel *usermodel =[[weiboUserInfoModel alloc]init];
-//                if (usermodel) {
-//                    [usermodel setValuesForKeysWithDictionary:[newDict objectForKey:@"user"]];
-//                    weibomodel.uerInfo=usermodel;
-//                }
-//                //2.stageInfo
-//                stageInfoModel  *stageInfo =[[stageInfoModel alloc]init];
-//                if(![[newDict  objectForKey:@"stage"]isKindOfClass:[NSNull class]])
-//                {
-//                if (stageInfo) {
-//                    [stageInfo setValuesForKeysWithDictionary:[newDict objectForKey:@"stage"]];
-//                    movieInfoModel  *moviemodel =[[movieInfoModel alloc]init];
-//                    if (moviemodel) {
-//                        if (![[[newDict objectForKey:@"stage"] objectForKey:@"movie"] isKindOfClass:[NSNull class]]) {
-//                        [moviemodel setValuesForKeysWithDictionary:[[newDict objectForKey:@"stage"] objectForKey:@"movie"]];
-//                        stageInfo.movieInfo=moviemodel;
-//                        }
-//                    }
-//                    weibomodel.stageInfo=stageInfo;
-//                  }
-//                }
-//                //3.tagsInfo
-//                NSMutableArray  *tagArray =[[NSMutableArray alloc]init];
-//
-//                if (![[newDict objectForKey:@"tags"] isKindOfClass:[NSNull class]]) {
-//                    for (NSDictionary  *tagDict  in [newDict objectForKey:@"tags"]) {
-//                        TagModel  *tagmodel =[[TagModel alloc]init];
-//                        [tagmodel setValuesForKeysWithDictionary:tagDict];
-//                        
-//                        TagDetailModel  *tagDetailmodel =[[TagDetailModel alloc]init];
-//                        if (tagDetailmodel) {
-//                            [tagDetailmodel setValuesForKeysWithDictionary:[tagDict objectForKey:@"tag"]];
-//                            tagmodel.tagDetailInfo=tagDetailmodel;
-//                        }
-//                        [tagArray addObject:tagmodel];
-//                        
-//                    }
-//                    
-//                }
-//                weibomodel.tagArray=tagArray;
-//                
-//                if (_newDataArray==nil) {
-//                    _newDataArray =[[NSMutableArray alloc]init];
-//                }
-//                 [_newDataArray addObject:weibomodel];
-//            }
-//            }
           
            [_HotMoVieTableView reloadData];
         }

@@ -7,14 +7,14 @@
 //
 
 #import "TagDetailModel.h"
-
+#import "MJExtension.h"
 @implementation TagDetailModel
 //字典中的id 对应模型中的Id
-+ (NSDictionary *)replacedKeyFromPropertyName
-{
-    return @{@"Id" : @"id",
-              };
-}
+//+ (NSDictionary *)replacedKeyFromPropertyName
+//{
+//    return @{@"Id" : @"id",
+//              };
+//}
 -(void)setValue:(id)value forUndefinedKey:(NSString *)key
 {
     

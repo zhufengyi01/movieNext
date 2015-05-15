@@ -8,13 +8,14 @@
 
 #import "weiboUserInfoModel.h"
 
+#import "MJExtension.h"
 @implementation weiboUserInfoModel
-+ (NSDictionary *)replacedKeyFromPropertyName
-{
-    return @{@"Id" : @"id",
-             };
-              
-}
+//+ (NSDictionary *)replacedKeyFromPropertyName
+//{
+//    return @{@"Id" : @"id",
+//             };
+//              
+//}
 
 
 -(void)setValue:(id)value forUndefinedKey:(NSString *)key

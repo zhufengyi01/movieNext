@@ -8,15 +8,16 @@
 
 #import "userAddmodel.h"
 
+#import "MJExtension.h"
 @implementation userAddmodel
 
-+ (NSDictionary *)replacedKeyFromPropertyName
-{
-    return @{@"Id" : @"id",
-             @"weiboInfo" : @"weibo",
-             };
-}
-
+//+ (NSDictionary *)replacedKeyFromPropertyName
+//{
+//    return @{@"Id" : @"id",
+//             @"weiboInfo" : @"weibo",
+//             };
+//}
+//
 
 -(void)setValue:(id)value forUndefinedKey:(NSString *)key
 {

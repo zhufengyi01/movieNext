@@ -8,13 +8,14 @@
 
 #import "TagModel.h"
 
+#import "MJExtension.h"
 @implementation TagModel
-+ (NSDictionary *)replacedKeyFromPropertyName
-{
-    return @{@"Id" : @"id",
-             @"tagDetailInfo" : @"tag",
-             };
-}
+//+ (NSDictionary *)replacedKeyFromPropertyName
+//{
+//    return @{@"Id" : @"id",
+//             @"tagDetailInfo" : @"tag",
+//             };
+//}
 
 -(void)setValue:(id)value forUndefinedKey:(NSString *)key
 {

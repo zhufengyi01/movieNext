@@ -21,8 +21,6 @@
 @property(nonatomic,strong) NSString  *weibo_id;
 
 
-//@property(nonatomic,strong)NSNumber  *stage_id;
-
 @property(nonatomic,strong) NSString  *status;
 
 
