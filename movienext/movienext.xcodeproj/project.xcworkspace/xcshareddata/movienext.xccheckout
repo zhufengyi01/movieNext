@@ -7,14 +7,14 @@
 	<key>IDESourceControlProjectIdentifier</key>
 	<string>026D3898-120C-4979-A6A4-8E7184101681</string>
 	<key>IDESourceControlProjectName</key>
-	<string>movienext</string>
+	<string>project</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>A1CBA25037A14C126BE5118055CA5A8F47B05B8F</key>
 		<string>https://github.com/FocusGroup/yingdan_ios.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>movienext/movienext.xcodeproj</string>
+	<string>movienext/movienext.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>A1CBA25037A14C126BE5118055CA5A8F47B05B8F</key>
