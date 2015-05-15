@@ -9,7 +9,7 @@
 #import "ShowStageViewController.h"
 #import "StageView.h"
 #import "StageInfoModel.h"
-#import "WeiboModel.h"
+
 #import "ZCControl.h"
 #import "Constant.h"
 #import "AddMarkViewController.h"
@@ -675,7 +675,6 @@
             ash.tag=500;
             [ash showInView:self.view];
         }
- 
     }
 }
 -(void)ToolViewTagHandClickTagView:(TagView *)tagView withweiboinfo:(weiboInfoModel *)weiboInfo WithTagInfo:(TagModel *)tagInfo

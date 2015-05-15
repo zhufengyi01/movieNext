@@ -11,9 +11,7 @@
 ///#import "User.h"
 #import "UserDataCenter.h"
 //导入微博模型
-#import "Weibo.h"
 //导入标签模型
-#import "Mark.h"
 //导入图片加载框架
 #import "UIImageView+WebCache.h"
 //导入常量头文件
@@ -212,7 +210,7 @@
  *  @return 带有背影图片的标签内容
  */
 + (UIImageView *)getBgvMarkInfo:(Weibo *)weibo x:(CGFloat)x y:(CGFloat)y{
-    int wordLimit   = 10;
+   /* int wordLimit   = 10;
     int widthLimit  = wordLimit*19;
     int margin      = 8;
     int marginHead  = 12;
@@ -278,12 +276,12 @@
         int ivVerifiedHeight = 8;
         UIImageView *ivVerified = [[UIImageView alloc] initWithFrame:CGRectMake(logoWidth-ivVerifiedHeight, logoWidth-ivVerifiedHeight, ivVerifiedHeight, ivVerifiedHeight)];
         ivVerified.image = [UIImage imageNamed:@"verified"];
-        ivVerified.hidden = [weibo.verified intValue]==0;
+        //ivVerified.hidden = [weibo.verified intValue]==0;
         ivVerified.alpha = 0.8;
         [bgv addSubview:ivVerified];
         
         return bgv;
-    }
+    }*/
     return nil;
 }
 

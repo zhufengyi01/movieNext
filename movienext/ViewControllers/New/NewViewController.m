@@ -29,7 +29,6 @@
 #import "Function.h"
 #import "UMSocial.h"
 #import "NSDate+Additions.h"
-//#import "UMShareView.h"
 #import "UMSocialControllerService.h"
 #import "UIImageView+WebCache.h"
 #import "UMShareViewController.h"
@@ -38,11 +37,10 @@
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
 #import "ScanMovieInfoViewController.h"
-#import "netRequest.h"
 #import "MobClick.h"
 #import "TagModel.h"
 #import "TagToStageViewController.h"
-
+#import "MJExtension.h"
 //友盟分享
 //#import "UMSocial.h"
 @interface NewViewController ()<UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UIScrollViewDelegate,UMSocialDataDelegate,UMSocialUIDelegate,LoadingViewDelegate,UIActionSheetDelegate,CommonStageCellDelegate,AddMarkViewControllerDelegate,UMShareViewControllerDelegate,UMShareViewController2Delegate,MFMailComposeViewControllerDelegate>
@@ -186,15 +184,7 @@
     [segment addTarget:self action:@selector(segmentClick:) forControlEvents:UIControlEventValueChanged];
     [self.navigationItem setTitleView:segment];
     
-//    
-//    UIButton  *button=[UIButton buttonWithType:UIButtonTypeCustom];
-//    //[button setTitle:@"设置" forState:UIControlStateNormal];
-//    [button setBackgroundImage:[UIImage imageNamed:@"setting.png"] forState:UIControlStateNormal];
-//    button.frame=CGRectMake(kDeviceWidth-30, 10, 18, 18);
-//    [button addTarget:self action:@selector(refreshTableView) forControlEvents:UIControlEventTouchUpInside];
-//    UIBarButtonItem  *barButton=[[UIBarButtonItem alloc]initWithCustomView:button];
-//    self.navigationItem.rightBarButtonItem=barButton;
-
+ 
     
 }
 //点击可刷新

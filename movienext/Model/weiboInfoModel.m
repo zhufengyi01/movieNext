@@ -9,6 +9,16 @@
 #import "weiboInfoModel.h"
 
 @implementation weiboInfoModel
+
++ (NSDictionary *)replacedKeyFromPropertyName
+{
+    return @{@"Id" : @"id",
+             @"movieInfo" : @"movie",
+             @"tagArray":@"tags",
+             @"uerInfo":@"user",
+             };
+}
+
 -(void)setValue:(id)value forUndefinedKey:(NSString *)key
 {
     

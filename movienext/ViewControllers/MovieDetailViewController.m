@@ -27,7 +27,6 @@
 #import "CommonStageCell.h"
 #import "UMSocial.h"
 #import "AddMarkViewController.h"
-#import "HotMovieModel.h"
 #import "MyViewController.h"
 //#import "ButtomToolView.h"
 #import "MJRefresh.h"

@@ -13,7 +13,6 @@
 //#import "WeiboModel.h"
 #import "stageInfoModel.h"
 #import "weiboInfoModel.h"
-#import "HotMovieModel.h"
 #import "ModelsModel.h"
 #import "AddTagViewController.h"
 typedef NS_ENUM(NSInteger,NSAddMarkPageSource)

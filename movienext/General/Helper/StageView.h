@@ -8,8 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import "MarkView.h"
-//#import "WeiboModel.h"
-//#import "StageInfoModel.h"
 #import "weiboInfoModel.h"
 #import "stageInfoModel.h"
 @protocol StageViewDelegate <NSObject>

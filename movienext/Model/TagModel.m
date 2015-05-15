@@ -9,6 +9,13 @@
 #import "TagModel.h"
 
 @implementation TagModel
++ (NSDictionary *)replacedKeyFromPropertyName
+{
+    return @{@"Id" : @"id",
+             @"tagDetailInfo" : @"tag",
+             };
+}
+
 -(void)setValue:(id)value forUndefinedKey:(NSString *)key
 {
     

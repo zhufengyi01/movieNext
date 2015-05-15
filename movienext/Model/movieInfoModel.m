@@ -9,6 +9,13 @@
 #import "movieInfoModel.h"
 
 @implementation movieInfoModel
++ (NSDictionary *)replacedKeyFromPropertyName
+{
+    return @{@"Id" : @"id",
+            };
+}
+
+
 -(void)setValue:(id)value forUndefinedKey:(NSString *)key
 {
     

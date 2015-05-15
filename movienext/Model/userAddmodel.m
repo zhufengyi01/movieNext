@@ -10,6 +10,14 @@
 
 @implementation userAddmodel
 
++ (NSDictionary *)replacedKeyFromPropertyName
+{
+    return @{@"Id" : @"id",
+             @"weiboInfo" : @"weibo",
+             };
+}
+
+
 -(void)setValue:(id)value forUndefinedKey:(NSString *)key
 {
     
