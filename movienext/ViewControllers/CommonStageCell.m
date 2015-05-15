@@ -67,7 +67,7 @@
 {
     BgView2=[[UIView alloc]initWithFrame:CGRectMake(0, kStageWidth, kStageWidth, 45)];
     //改变toolar 的颜色
-    BgView2.backgroundColor=[UIColor whiteColor];
+    BgView2.backgroundColor=View_ToolBar;
     [BgView addSubview:BgView2];
  
     leftButtomButton=[UIButton buttonWithType:UIButtonTypeCustom];
@@ -94,7 +94,7 @@
     
     
     //更多
-    moreButton=[ZCControl createButtonWithFrame:CGRectMake(kStageWidth-130, 9, 30, 25) ImageName:@"more_icon.png" Target:self Action:@selector(cellButtonClick:) Title:@""];
+    moreButton=[ZCControl createButtonWithFrame:CGRectMake(kStageWidth-130, 9, 30, 25) ImageName:@"more_icon_default.png" Target:self Action:@selector(cellButtonClick:) Title:@""];
     //moreButton.backgroundColor=VBlue_color;
     moreButton.layer.cornerRadius=2;
      moreButton.hidden=NO;
@@ -112,7 +112,7 @@
     }
     _tanlogoButton =[UIButton buttonWithType:UIButtonTypeCustom];
     _tanlogoButton.frame=CGRectMake(kStageWidth-100, 9, 45, 25);
-    [_tanlogoButton setImage:[UIImage imageNamed:@"close_danmu.png"] forState:UIControlStateNormal];
+    [_tanlogoButton setImage:[UIImage imageNamed:@"closed_icon_default.png"] forState:UIControlStateNormal];
     [_tanlogoButton setImage:[UIImage imageNamed:@"open_danmu.png.png"] forState:UIControlStateSelected];
     [_tanlogoButton addTarget:self action:@selector(hidenAndShowMarkView:) forControlEvents:UIControlEventTouchUpInside];
     [BgView2 addSubview:_tanlogoButton];

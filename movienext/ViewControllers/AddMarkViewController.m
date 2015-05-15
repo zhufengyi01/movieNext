@@ -22,7 +22,7 @@
 #import "Masonry.h"
 //#import "AddTagViewController.h"
 #define  BOOKMARK_WORD_LIMIT 1000
-@interface AddMarkViewController ()<UITextFieldDelegate,UIAlertViewDelegate,UIScrollViewDelegate,UITextViewDelegate,TagViewDelegate,UIAlertViewDelegate,UMShareViewController2Delegate,UMSocialUIDelegate,UMSocialDataDelegate>
+@interface AddMarkViewController ()<UIAlertViewDelegate,UIScrollViewDelegate,UITextViewDelegate,TagViewDelegate,UIAlertViewDelegate,UMShareViewController2Delegate,UMSocialUIDelegate,UMSocialDataDelegate>
 {
     UIScrollView *_myScorllerView;
     UIToolbar    *_toolBar;
@@ -55,7 +55,7 @@
     if (_myTextView) {
      //   [_myTextView becomeFirstResponder];
     }
-    _myTextView.frame= CGRectMake(40, 10, kDeviceWidth-110, 30);
+    _myTextView.frame= CGRectMake(50, 10, kDeviceWidth-120, 30);
 }
 
 //页面已经出现的时候执行这个   所以在执行代理完成后再执行通知的方法
@@ -140,8 +140,7 @@
     _myScorllerView.contentSize=CGSizeMake(kDeviceWidth,kDeviceHeight);
     _myScorllerView.delegate=self;
     _myScorllerView.bounces=YES;
-  
-     [self.view addSubview:_myScorllerView];
+    [self.view addSubview:_myScorllerView];
     
     tipView =[[UIView alloc]initWithFrame:CGRectMake(0, kDeviceWidth+64, kDeviceWidth, 30)];
     tipView.backgroundColor=[[UIColor blackColor]colorWithAlphaComponent:0.7];
@@ -154,14 +153,11 @@
     tipView.alpha=1;
     [self.view addSubview:tipView];
     
-    
-    
 }
 -(void)createStageView
 {
      stageView = [[StageView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceWidth)];
      stageView.stageInfo=self.stageInfo;
-    
     [stageView configStageViewforStageInfoDict];
        NSLog(@" 在 添加弹幕页面的   stagedict = %@",self.stageInfo);
      [_myScorllerView addSubview:stageView];
@@ -193,20 +189,20 @@
         } completion:^(BOOL finished) {
         }];
     
-    
     //添加一个按钮到标签搜索页
-    textLeftButton =[ZCControl createButtonWithFrame:CGRectMake(8, 13, 25, 25) ImageName:@"add_tag_icon@2x.png" Target:self Action:@selector(dealNavClick:) Title:nil];
+    textLeftButton =[ZCControl createButtonWithFrame:CGRectMake(5,5, 40, 40) ImageName:nil Target:self Action:@selector(dealNavClick:) Title:nil];
+    
+    [textLeftButton setImage:[UIImage imageNamed:@"add_tag_icon"] forState:UIControlStateNormal];
     textLeftButton.tag=102;
     [_toolBar addSubview:textLeftButton];
     
     
-     _myTextView=[[UITextView alloc]initWithFrame:CGRectMake(40, 10, kDeviceWidth-110, 30)];
+     _myTextView=[[UITextView alloc]initWithFrame:CGRectMake(50, 10, kDeviceWidth-120, 30)];
     _myTextView.delegate=self;
     _myTextView.textColor=VGray_color;
     _myTextView.font= [UIFont systemFontOfSize:16];
     _myTextView.backgroundColor=[UIColor clearColor];
     _myTextView.layer.cornerRadius=4;
-    
     
     _myTextView.layer.borderWidth=0.5;
     _myTextView.layer.borderColor=VLight_GrayColor.CGColor;
@@ -225,7 +221,6 @@
      publishBtn.layer.cornerRadius=4;
      publishBtn.tag=99;
      publishBtn.clipsToBounds=YES;
-
      [_toolBar addSubview:publishBtn];
      [self.view addSubview:_toolBar];
 }
@@ -294,7 +289,6 @@
     
     //创建微博对象
     [self createWeibomodel];
-    
    _myMarkView = [self createMarkViewWithDict:weibomodel andIndex:1000];
     _myMarkView.weiboInfo=weibomodel;
     _myMarkView.isAnimation=YES;
@@ -313,9 +307,22 @@
 
     //计算弹幕的长度
     CGSize  Msize= [InputStr  boundingRectWithSize:CGSizeMake(kDeviceWidth/2, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:[UIFont systemFontOfSize:14] forKey:NSFontAttributeName] context:nil].size;
+    //标签的宽度
+    
+    NSMutableString  *tagString =[[NSMutableString alloc]init];
+    for (int i=0; i<TAGArray.count; i++) {
+        if (i<2) {
+            [tagString appendString:[[TAGArray objectAtIndex:i] objectForKey:@"TAG"]];
+        }
+    }
+    CGSize  Tsize =[tagString  boundingRectWithSize:CGSizeMake(kDeviceWidth/2, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:[UIFont systemFontOfSize:14] forKey:NSFontAttributeName] context:nil].size;
+    if (Tsize.width>Msize.width) {
+        Msize=Tsize;
+    }
+
     
     int  markViewWidth = (int)Msize.width+23+5+5+11+5;
-    int markViewHeight =(int) Msize.height+6;
+    int   markViewHeight =(int) Msize.height+6;
     int  kw=kDeviceWidth;
     int  x=arc4random()%(kw-markViewWidth);//要求x在0~~~（宽度-markViewWidth）
     int  y=arc4random()%((kw-markViewHeight/2)+markViewHeight/2-markViewHeight);  //要求y在markviewheight.y/2 ~~~~~~~(高度--markViewheigth/2)
@@ -604,16 +611,30 @@
 #pragma  mark  ---UItextViewDelegate-------------
 -(void)textViewDidBeginEditing:(UITextView *)textView
 {
+    
  
 }
 -(void)textViewDidEndEditing:(UITextView *)textView
 {
-    [_myTextView resignFirstResponder];
+   // [_myTextView resignFirstResponder];
+    ///[self PushlicInScreen];
 }
  -(void)textViewDidChangeSelection:(UITextView *)textView
 {
     
 }
+//点击键盘上的return键执行这个方法
+-(BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+{
+    //if ([text isEqualToString:@"\n"]) {
+     //   [self PushlicInScreen];
+       // return NO;
+    //}
+    //return YES;
+    return YES;
+}
+
+
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
     //[_myTextView resignFirstResponder];
@@ -624,45 +645,7 @@
 
 -(void)textViewDidChange:(UITextView *)textView{
     //防止光标抖动
-    /*CGRect line = [textView caretRectForPosition:
-                   textView.selectedTextRange.start];
-    CGFloat overflow = line.origin.y + line.size.height
-    - ( textView.contentOffset.y + textView.bounds.size.height
-       - textView.contentInset.bottom - textView.contentInset.top );
-    if ( overflow > 0 ) {
-        // We are at the bottom of the visible text and introduced a line feed, scroll down (iOS 7 does not do it)
-        // Scroll caret to visible area
-        CGPoint offset = textView.contentOffset;
-        offset.y += overflow + 7; // leave 7 pixels margin
-        // Cannot animate with setContentOffset:animated: or caret will not appear
-        [UIView animateWithDuration:.2 animations:^{
-            [textView setContentOffset:offset];
-        }];
-    }
- 
-//    CGSize  tSize=textView.contentSize;
-//    CGPoint  tPoint =textView.contentOffset;
-//    tPoint.y=tSize.height;
-//    textView.contentOffset=tPoint;
-    
-    //计算文本的高度
-    CGSize   sizeFrame=[textView.text boundingRectWithSize:CGSizeMake(textView.frame.size.width, MAXFLOAT) options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes:[NSDictionary dictionaryWithObject:_myTextView.font forKey:NSFontAttributeName] context:nil].size;
    
-    if ((sizeFrame.height)/19>4) {
-        textView.scrollEnabled=YES;
-    }
-    else
-    {
-        textView.scrollEnabled=NO;
-    }
-    //重新调整textView的高度
-    CGRect  Tframe =textView.frame;
-    Tframe.size.height=MAX(MIN(sizeFrame.height+((sizeFrame.height)/19)*5, 70),30);
-    textView.frame=Tframe;
-   // NSLog(@" textView = heigt =====%f ",textView.frame.size.height);
-    
-    _toolBar.frame=CGRectMake(0,kDeviceHeight-keybordHeight-textView.frame.size.height -kHeightNavigation-20, kDeviceWidth, textView.frame.size.height+20);
-*/
     if (textView==_myTextView) {
         if ([Function isBlankString:_myTextView.text]==NO) {
             publishBtn.enabled=YES;
@@ -676,7 +659,7 @@
 
 
 //控制输入文字的长度和内容，可通调用以下代理方法实现
--(BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+/*-(BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
     //这个方法比textdidchange先执行
     if (range.location>=60)
@@ -694,7 +677,7 @@
     }
     return YES;
 
-}
+}*/
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -729,16 +712,16 @@
 }
 -(void)AddTagViewHandClickWithTag:(NSString *)tag
 {
-    CGRect  frame =_myTextView.frame;
-    frame.size.height=30;
-    _myTextView.frame=frame;
+//    CGRect  frame =_myTextView.frame;
+//    frame.size.height=30;
+//    _myTextView.frame=frame;
+//    
     
     
-    
-    if (TAGArray==nil) {
-        TAGArray =[[NSMutableArray alloc]init];
-    }
-    //如果第一个标签为空
+//    if (TAGArray==nil) {
+//        TAGArray =[[NSMutableArray alloc]init];
+//    }
+//    //如果第一个标签为空
     if (TAGArray.count==0) {
         NSMutableDictionary  *tag1Dict =[NSMutableDictionary dictionaryWithObject:tag forKey:@"TAG"];
         [TAGArray insertObject:tag1Dict atIndex:0];
@@ -766,7 +749,6 @@
         [TAGArray insertObject:tag5Dict atIndex:4];
     }
 
-
 //创建标签文本
     taglable =[[M80AttributedLabel alloc]initWithFrame:CGRectZero];
     taglable.backgroundColor =[UIColor clearColor];
@@ -784,9 +766,7 @@
     CGSize Tsize =[taglable sizeThatFits:CGSizeMake(kDeviceWidth-20, CGFLOAT_MAX)];
     //位置和大小
     taglable.frame=CGRectMake(10,50,kDeviceWidth-20, Tsize.height);
-    
       [_toolBar addSubview:taglable];
-    
     NSLog(@"==== add  tag====%f",_myTextView.frame.size.height);
     
 }

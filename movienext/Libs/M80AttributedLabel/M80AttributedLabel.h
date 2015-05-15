@@ -66,7 +66,6 @@
              forRange: (NSRange)range
             linkColor: (UIColor *)color;
 
-
 //大小
 - (CGSize)sizeThatFits:(CGSize)size;
 

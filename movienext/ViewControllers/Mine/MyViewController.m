@@ -182,11 +182,10 @@
 }
 
 
-
 -(void)createTableView
 {
     _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight-kHeightNavigation-kHeigthTabBar+10)];
-    _tableView.backgroundColor=[UIColor whiteColor];
+    _tableView.backgroundColor=View_BackGround;
     _tableView.separatorStyle=UITableViewCellSeparatorStyleNone;
     _tableView.delegate = self;
     _tableView.dataSource = self;
