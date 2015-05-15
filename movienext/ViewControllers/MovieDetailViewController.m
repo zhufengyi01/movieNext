@@ -620,11 +620,11 @@
         else if(detailArray.count==0)
         {
             
-            [loadView  showNullView:@"没有数据..."];
+            //[loadView  showNullView:@"没有数据..."];
            //没有数据 时候添加图片，添加图片,
-            //loadView.failTitle.hidden=YES;
-            //[loadView.failBtn setTitle:@"添加剧照" forState:UIControlStateNormal];
-            //[loadView showFailLoadData];
+            loadView.failTitle.text =@"还没有内容，快来添加一条吧";
+            [loadView.failBtn setTitle:@"添加" forState:UIControlStateNormal];
+            [loadView showFailLoadData];
 
         }
     }
@@ -640,9 +640,9 @@
 //数据加载失败
 -(void)reloadDataClick
 {
-    [self requestData];
-    [loadView hidenFailLoadAndShowAnimation];
-    //[self uploadImageFromAbumdAndDouban];
+    //[self requestData];
+    //[loadView hidenFailLoadAndShowAnimation];
+    [self uploadImageFromAbumdAndDouban];
     
 }
 #pragma  mark -----

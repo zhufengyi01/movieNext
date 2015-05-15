@@ -592,6 +592,13 @@
          _toolBar.frame=CGRectMake(_toolBar.frame.origin.x,kDeviceHeight-keybordHeight-50-Tsize.height,_toolBar.frame.size.width, 50+Tsize.height);
          
     }];
+    if ([TAGArray count]>0) {
+        publishBtn.enabled=YES;
+    }
+    else
+    {
+        publishBtn.enabled=NO;
+    }
     
     NSLog(@"====will show keyboard  tag====%f",_myTextView.frame.size.height);
 
@@ -857,6 +864,14 @@
         _toolBar.frame=CGRectMake(_toolBar.frame.origin.x,kDeviceHeight-keybordHeight-50,_toolBar.frame.size.width, 50);
         [taglable removeFromSuperview];
       }
+    if ([TAGArray count]>0) {
+        publishBtn.enabled=YES;
+    }
+    else
+    {
+        publishBtn.enabled=NO;
+    }
+
 }
 /*
 #pragma mark - Navigation
