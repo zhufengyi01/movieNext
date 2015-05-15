@@ -121,8 +121,25 @@
         self.tagLable =[[M80AttributedLabel alloc]initWithFrame:CGRectMake(0, 0, 100, 30)];
         self.tagLable.backgroundColor=[[UIColor blackColor] colorWithAlphaComponent:0];
          for (int i=0; i<self.weiboInfo.tagArray.count; i++) {
+             
             TagView *tagview = [self createTagViewWithtagInfo:self.weiboInfo.tagArray[i] andIndex:i];
             [self.tagLable appendView:tagview margin:UIEdgeInsetsMake(0, 0, 0, 5)];
+             //最多放置两个标签
+             if (i==1&&self.weiboInfo.tagArray.count>2) {
+                 //放置一个...的
+                 TagView *tagview =[[TagView alloc]initWithFrame:CGRectZero];
+                 //tagview.tag=1000+index;
+                 //设置不可以点击
+                 [tagview  setTagViewIsClick:NO];
+                 tagview.weiboInfo=self.weiboInfo;
+                 NSString *titleStr = @"...";
+                 tagview.titleLable.text=titleStr;
+                 CGSize  Tsize =[titleStr boundingRectWithSize:CGSizeMake(MAXFLOAT, TagHeight) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:[NSDictionary dictionaryWithObject:tagview.titleLable.font forKey:NSFontAttributeName] context:nil].size;
+                 //纪录前面一个标签的宽度
+                 tagview.frame=CGRectMake(0,0, Tsize.width+10, TagHeight);
+                 [self.tagLable appendView:tagview margin:UIEdgeInsetsMake(0, 0, 0, 5)];
+                 break;
+             }
         }
          [self.rightView addSubview:self.tagLable];
     }
@@ -153,9 +170,12 @@
     for (int i=0;i<self.weiboInfo.tagArray.count;i++)
     {
         TagModel  *tagmodel =[self.weiboInfo.tagArray objectAtIndex:i];
-        if (tagmodel.tagDetailInfo.title) {
-        [ tagStr appendString:tagmodel.tagDetailInfo.title];
+        if (i<2) {
+          if (tagmodel.tagDetailInfo.title) {
+          [ tagStr appendString:tagmodel.tagDetailInfo.title];
+          }
         }
+        
     }
     
     CGSize  Tagsize=[tagStr boundingRectWithSize:CGSizeMake(kDeviceWidth/2, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:[UIFont systemFontOfSize:14] forKey:NSFontAttributeName] context:nil].size;
@@ -165,6 +185,7 @@
    // NSString  *UpString=[NSString stringWithFormat:@"%@",self.weiboInfo.like_count];
     //计算标题的size
     CGSize  Zsize=[weiboTitleString boundingRectWithSize:CGSizeMake(kDeviceWidth/2,MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:self.TitleLable.font forKey:NSFontAttributeName] context:nil].size;
+    
     if (Tagsize.width+5>Zsize.width) {
         self.frame=CGRectMake(self.frame.origin.x, self.frame.origin.y, Tagsize.width+23+5+5+11+5+10+5, self.frame.size.height);
     }

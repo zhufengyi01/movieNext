@@ -161,12 +161,16 @@
     leadWidth=0;
     
     if (self.weiboInfo.tagArray&&self.weiboInfo.tagArray.count) {
-          tagLable =[[M80AttributedLabel alloc]initWithFrame:CGRectMake(contentLable.frame.origin.x, contentLable.frame.origin.y+contentLable.frame.size.height, _alertView.frame.size.width-20, TagHeight+10)];
+        tagLable=[[M80AttributedLabel alloc]initWithFrame:CGRectZero];
         tagLable.backgroundColor =[UIColor clearColor];
         for (int i=0; i<self.weiboInfo.tagArray.count; i++) {
             TagView *tagview = [self createTagViewWithtagInfo:self.weiboInfo.tagArray[i] andIndex:i];
             [tagLable appendView:tagview margin:UIEdgeInsetsMake(0, 0, 0, 10)];
-        }
+            tagLable.lineSpacing=5;
+            tagLable.numberOfLines=0;
+            ///tagLable.backgroundColor =[UIColor redColor];
+         }
+      
         [_alertView addSubview:tagLable];
      }
     
@@ -306,15 +310,9 @@
     if (IsIphone6plus) {
         wheight=wheight-40;
     }
+    //计算文字的高度
     NSString *weiboString = self.weiboInfo.content;
     CGSize  Wsize=[weiboString boundingRectWithSize:CGSizeMake(wheight, MAXFLOAT) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:[NSDictionary dictionaryWithObject:contentLable.font forKey:NSFontAttributeName] context:nil].size;
-    //10+头像高度＋文字高度＋10+标签高度＋10+分享的高度
-    float  tagHeight=0;
-    if (self.weiboInfo.tagArray.count>0) {
-        tagHeight=tagHeight+30;
-    }
-    float  alertHeight = 10+headButton.frame.size.height+10+Wsize.height+tagHeight+buttomShareView.frame.size.height+15;
-    float  y=(self.frame.size.height-alertHeight)/2;
     float  x=15;
     if (IsIphone6) {
         x=25;
@@ -322,18 +320,34 @@
     if (IsIphone6plus) {
         x=35;
     }
-    _alertView.frame=CGRectMake(x,y,kDeviceWidth-(2*x), alertHeight);
+    //ji 算标签的高度
+    CGSize  Tsize=CGSizeMake(0.1, 0.1);
+    //10+头像高度＋文字高度＋10+标签高度＋10+分享的高度
+    float  tagHeight=0;
+    if (self.weiboInfo.tagArray.count>0) {
+        //计算tag的高度
+         Tsize =[tagLable sizeThatFits:CGSizeMake(kDeviceWidth-(2*x)-35-20, CGFLOAT_MAX)];
+         tagHeight=Tsize.height+0;
+    }
+
+
+    float  alertHeight = 10+headButton.frame.size.height+10+Wsize.height+tagHeight+buttomShareView.frame.size.height+15;
+    float  y=(self.frame.size.height-alertHeight)/2;
+    _alertView.frame=CGRectMake(x,y,kDeviceWidth-(2*x), alertHeight+0);
+    
+
+    
+    
     //关闭按钮
     closealertView.frame=CGRectMake(_alertView.frame.size.width-36,0, 36, 36);
      //文字的高度
     contentLable.frame=CGRectMake(userNamelabel.frame.origin.x, headButton.frame.origin.y+headButton.frame.size.height+10, _alertView.frame.size.width-userNamelabel.frame.origin.x-10, Wsize.height);
     
-
-    tagLable.frame=CGRectMake(userNamelabel.frame.origin.x, contentLable.frame.origin.y+contentLable.frame.size.height+5, tagLable.frame.size.width, tagLable.frame.size.height);
+    tagLable.frame=CGRectMake(userNamelabel.frame.origin.x, contentLable.frame.origin.y+contentLable.frame.size.height+5,contentLable.frame.size.width, Tsize.height+0);
+    
     buttomShareView.frame=CGRectMake(buttomShareView.frame.origin.x, _alertView.frame.size.height-45,_alertView.frame.size.width, 45);
     shareButton.frame=CGRectMake(0,0,buttomShareView.frame.size.width/2, 45);
     zanbutton.frame=CGRectMake(buttomShareView.frame.size.width/2, 0, buttomShareView.frame.size.width/2, 45);
- //  likeimageview.frame=CGRectMake(<#CGFloat x#>, <#CGFloat y#>, <#CGFloat width#>, <#CGFloat height#>)
     
 }
 

@@ -52,6 +52,7 @@
     [button setTitle:@"取消" forState:UIControlStateNormal];
     [button setTitleColor:VBlue_color forState:UIControlStateNormal];
     button.frame=CGRectMake(10, 10, 40, 30);
+    button.titleLabel.font =[UIFont boldSystemFontOfSize:18];
     [button addTarget:self action:@selector(cancle) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem  *barButton=[[UIBarButtonItem alloc]initWithCustomView:button];
     self.navigationItem.leftBarButtonItem=barButton;
@@ -110,8 +111,8 @@
 {
     self.dataArray1 =[[NSMutableArray alloc]init];
     self.dataArray2 =[[NSMutableArray alloc]init];
-    page1=1;
-    page2=1;
+    page1=0;
+    page2=0;
     
 }
 -(void)initUI
@@ -200,11 +201,11 @@
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
     NSString *urlstr;
     if (segment.selectedSegmentIndex==0) {
-        urlstr = [NSString stringWithFormat:@"http://movie.douban.com/subject/%@/photos?type=S&start=%d&sortby=vote&size=a&subtype=o", self.douban_id,page1];
+        urlstr = [NSString stringWithFormat:@"http://movie.douban.com/subject/%@/photos?type=S&start=%ld&sortby=vote&size=a&subtype=o", self.douban_id,self.dataArray1.count];
     }
     else if (segment.selectedSegmentIndex==1)
     {
-      urlstr = [NSString stringWithFormat:@"http://movie.douban.com/subject/%@/photos?type=S&start=%d&sortby=vote&size=a&subtype=c", self.douban_id,page2];
+      urlstr = [NSString stringWithFormat:@"http://movie.douban.com/subject/%@/photos?type=S&start=%ld&sortby=vote&size=a&subtype=c", self.douban_id,self.dataArray2.count];
     }
     
     [request setURL:[NSURL URLWithString:urlstr]];

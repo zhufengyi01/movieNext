@@ -58,7 +58,7 @@
      //[  self.myConllectionView headerBeginRefreshing];
     //}
    // [[UINavigationBar appearance] setShadowImage:[UIImage imageWithColor:[UIColor clearColor] size:CGSizeMake(kDeviceWidth, 1)]];
-
+ 
 }
 -(void)viewDidAppear:(BOOL)animated
 {
@@ -78,8 +78,7 @@
     [self initUI];
     [self creatLoadView];
     //[self requestData];
-    //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshTableView) name:@"RefeshTableview" object:nil];
-
+ 
     
 }
 -(void)createNavigation

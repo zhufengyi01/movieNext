@@ -24,7 +24,7 @@
     double angle;
     CGRect  m_frame;
     UIView  *failLoadView;
-    //没有数据的view
+     //没有数据的view
     UIView   *NullDataView;
     UILabel * failTitle2;
 }
@@ -38,6 +38,11 @@
 
 //显示加载失败
 -(void)showFailLoadData;
+
+
+@property (nonatomic,strong) UILabel    *failTitle;
+@property (nonatomic,strong) UIButton   *failBtn;
+
 //重复加载数据,隐藏加载失败，同时显示加载等待
 -(void)hidenFailLoadAndShowAnimation;
 //现实没有数据

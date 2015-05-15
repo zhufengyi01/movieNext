@@ -167,12 +167,21 @@
     [self.navigationItem.titleView setContentMode:UIViewContentModeCenter];
 
     
-    upLoadimageBtn=[ZCControl createButtonWithFrame:CGRectMake(0,0,25,25) ImageName:nil Target:self Action:@selector(NavigationClick:) Title:nil];
+    upLoadimageBtn=[ZCControl createButtonWithFrame:CGRectMake(0,0,25,25) ImageName:nil Target:self Action:@selector(uploadImageFromAbumdAndDouban) Title:nil];
     upLoadimageBtn.tag=201;
     [upLoadimageBtn setImage:[UIImage imageNamed:@"up_picture_blue.png"] forState:UIControlStateNormal];
-    // [upLoadimageBtn setBackgroundImage:[UIImage imageNamed:@"up_picture_blue"] forState:UIControlStateNormal];
     UIBarButtonItem  *rigthbar =[[UIBarButtonItem alloc]initWithCustomView:upLoadimageBtn];
     self.navigationItem.rightBarButtonItem=rigthbar;
+}
+
+-(void)uploadImageFromAbumdAndDouban
+{
+    
+    UIActionSheet  *ac =[[UIActionSheet alloc]initWithTitle:@"选择照片" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"网上图片",@"本地上传", nil];
+    ac.tag=499;
+    [ac showInView:self.view];
+
+    
 }
 
 #pragma mark  ---
@@ -611,12 +620,19 @@
         }
         else if(detailArray.count==0)
         {
-            [loadView showNullView:@"没有数据..."];
+            
+            [loadView  showNullView:@"没有数据..."];
+           //没有数据 时候添加图片，添加图片,
+            //loadView.failTitle.hidden=YES;
+            //[loadView.failBtn setTitle:@"添加剧照" forState:UIControlStateNormal];
+            //[loadView showFailLoadData];
+
         }
     }
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error     地方: %@", error);
+        //重新加载
         [loadView showFailLoadData];
         
     }];
@@ -627,6 +643,8 @@
 {
     [self requestData];
     [loadView hidenFailLoadAndShowAnimation];
+    //[self uploadImageFromAbumdAndDouban];
+    
 }
 #pragma  mark -----
 #pragma  mark ------  DataRequest
@@ -882,13 +900,6 @@
    // [self.navigationController popViewControllerAnimated:YES];
     if (button.tag==200) {
         [self.navigationController popViewControllerAnimated:YES];
-    }
-    else if (button.tag==201)
-    {
-        
-        UIActionSheet  *ac =[[UIActionSheet alloc]initWithTitle:@"选择照片" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"本地上传",@"网上图片", nil];
-        ac.tag=499;
-        [ac showInView:self.view];
     }
 }
 #pragma  mark  -------BigImageCollectionViewCellToolButtonClick  ---- -- ---------------------
@@ -1179,18 +1190,19 @@
     if (actionSheet.tag==499) {
         
         if (buttonIndex==0) {
-                    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-                    picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-                    picker.delegate = self;
-                    //设置选择后的图片可被编辑
-                    picker.allowsEditing = YES;
-                   // UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:picker];
-                    [self.navigationController presentViewController:picker animated:YES completion:nil];
+            [self requestMovieInfoData];
         }
         else if (buttonIndex==1)
         {
             
-            [self requestMovieInfoData];
+            UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+            picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+            picker.delegate = self;
+            //设置选择后的图片可被编辑
+            picker.allowsEditing = YES;
+            // UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:picker];
+            [self.navigationController presentViewController:picker animated:YES completion:nil];
+
         }
     }
     

@@ -48,15 +48,15 @@
     failLoadView.userInteractionEnabled=YES;
     [self addSubview:failLoadView];
     
-    UILabel * failTitle=[ZCControl createLabelWithFrame:CGRectMake(0, 10, kDeviceWidth, 20) Font:16 Text:@"加载失败，请重新加载!"];
-    failTitle.textAlignment=NSTextAlignmentCenter;
-    failTitle.textColor=VGray_color;
-    [failLoadView addSubview:failTitle];
+     self.failTitle=[ZCControl createLabelWithFrame:CGRectMake(0, 10, kDeviceWidth, 20) Font:16 Text:@"加载失败，请重新加载!"];
+    self.failTitle.textAlignment=NSTextAlignmentCenter;
+    self.failTitle.textColor=VGray_color;
+    [failLoadView addSubview:self.failTitle];
     
-    UIButton  *failBtn=[ZCControl createButtonWithFrame:CGRectMake((kDeviceWidth-80)/2, 40, 80, 40) ImageName:@"loginoutbackgroundcolor.png" Target:self Action:@selector(reloadDataClick:) Title:@"重试"];
-    failBtn.layer.cornerRadius=4;
-    failBtn.clipsToBounds=YES;
-    [failLoadView addSubview:failBtn];
+    self.failBtn=[ZCControl createButtonWithFrame:CGRectMake((kDeviceWidth-80)/2, 40, 80, 40) ImageName:@"loginoutbackgroundcolor.png" Target:self Action:@selector(reloadDataClick:) Title:@"重试"];
+    self.failBtn.layer.cornerRadius=4;
+    self.failBtn.clipsToBounds=YES;
+    [failLoadView addSubview:self.failBtn];
     
     
     

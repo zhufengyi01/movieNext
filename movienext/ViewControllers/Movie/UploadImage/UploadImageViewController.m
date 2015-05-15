@@ -57,8 +57,6 @@
     [RighttBtn setTitle:@"确定" forState:UIControlStateNormal];
     RighttBtn.titleLabel.font=[UIFont boldSystemFontOfSize:18];
     self.navigationItem.rightBarButtonItem=[[UIBarButtonItem alloc]initWithCustomView:RighttBtn];
-    
-    
 }
 -(void)initData
 {

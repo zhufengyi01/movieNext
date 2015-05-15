@@ -19,9 +19,10 @@
 #import "UMSocialData.h"
 #import "UMShareViewController2.h"
 #import "UMSocial.h"
+#import "Masonry.h"
 //#import "AddTagViewController.h"
 #define  BOOKMARK_WORD_LIMIT 1000
-@interface AddMarkViewController ()<UITextFieldDelegate,UIAlertViewDelegate,UIScrollViewDelegate,UITextViewDelegate,TagViewDelegate,UIAlertViewDelegate,UMShareViewController2Delegate,UMSocialUIDelegate,UMSocialDataDelegate>
+@interface AddMarkViewController ()<UIAlertViewDelegate,UIScrollViewDelegate,UITextViewDelegate,TagViewDelegate,UIAlertViewDelegate,UMShareViewController2Delegate,UMSocialUIDelegate,UMSocialDataDelegate>
 {
     UIScrollView *_myScorllerView;
     UIToolbar    *_toolBar;
@@ -40,7 +41,7 @@
     M80AttributedLabel  *taglable;
     UserDataCenter      *userCenter;
     weiboInfoModel      *weibomodel;
-    NSMutableArray      *TAGArray;        //把第一个标签和第二个标签存储在数组中
+    NSMutableArray      *TAGArray;        //把第一个标签到第二个标签存储在数组中
     weiboInfoModel *weibo;
 }
 @end
@@ -54,13 +55,18 @@
     if (_myTextView) {
      //   [_myTextView becomeFirstResponder];
     }
-    
+    _myTextView.frame= CGRectMake(50, 10, kDeviceWidth-120, 30);
 }
 
+//页面已经出现的时候执行这个   所以在执行代理完成后再执行通知的方法
 -(void)viewDidAppear:(BOOL)animated
 {
+    
     if(_myTextView)
+    {
         [_myTextView becomeFirstResponder];
+    }
+    
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -69,6 +75,7 @@
     [self createNavigation];
     [self initData];
     //键盘将要显示
+    //一旦开启通知后，那么整个过程中都在监视键盘的事件
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardDidShowNotification object:nil];
      //键盘将要隐藏
     //[[NSNotificationCenter defaultCenter ]addObserver:self selector:@selector(keyboardWillHiden:) name:UIKeyboardWillHideNotification object:nil];
@@ -78,12 +85,12 @@
 }
 -(void)createNavigation
 {
-    
     UIView  *naview= [[UIView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, 64)];
     naview.userInteractionEnabled=YES;
+    naview.backgroundColor =[UIColor whiteColor];
     [self.view addSubview:naview];
     UIButton  *leftBtn= [UIButton buttonWithType:UIButtonTypeSystem];
-    leftBtn.frame=CGRectMake(20, 30, 40, 30);
+    leftBtn.frame=CGRectMake(10, 20, 60, 40);
     [leftBtn setTitleColor:VGray_color forState:UIControlStateNormal];
     [leftBtn setTitle:@"取消" forState:UIControlStateNormal];
     leftBtn.titleLabel.font=[UIFont boldSystemFontOfSize:18];
@@ -97,7 +104,7 @@
     
     
     RighttBtn= [UIButton buttonWithType:UIButtonTypeSystem];
-    RighttBtn.frame=CGRectMake(kDeviceWidth-60, 30, 40, 30);
+    RighttBtn.frame=CGRectMake(kDeviceWidth-70, 20, 60, 40);
     [RighttBtn addTarget:self action:@selector(dealNavClick:) forControlEvents:UIControlEventTouchUpInside];
     RighttBtn.tag=101;
    // [RighttBtn setTitleColor:VGray_color forState:UIControlStateNormal];
@@ -133,9 +140,7 @@
     _myScorllerView.contentSize=CGSizeMake(kDeviceWidth,kDeviceHeight);
     _myScorllerView.delegate=self;
     _myScorllerView.bounces=YES;
-  
-     [self.view addSubview:_myScorllerView];
-    
+    [self.view addSubview:_myScorllerView];
     
     tipView =[[UIView alloc]initWithFrame:CGRectMake(0, kDeviceWidth+64, kDeviceWidth, 30)];
     tipView.backgroundColor=[[UIColor blackColor]colorWithAlphaComponent:0.7];
@@ -148,14 +153,11 @@
     tipView.alpha=1;
     [self.view addSubview:tipView];
     
-    
-    
 }
 -(void)createStageView
 {
      stageView = [[StageView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceWidth)];
      stageView.stageInfo=self.stageInfo;
-    
     [stageView configStageViewforStageInfoDict];
        NSLog(@" 在 添加弹幕页面的   stagedict = %@",self.stageInfo);
      [_myScorllerView addSubview:stageView];
@@ -163,35 +165,51 @@
 
 -(void)createButtomView
 {
-     _toolBar=[[UIToolbar alloc]initWithFrame:CGRectMake(0,kDeviceHeight-50-kHeightNavigation, kDeviceHeight, 50)];
+     _toolBar=[[UIToolbar alloc]initWithFrame:CGRectMake(0,kDeviceHeight-50-kHeightNavigation, kDeviceWidth, 50)];
      //_toolBar.barTintColor=[UIColor redColor];   //背景颜色
      // [self.navigat setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color.png"] forBarMetrics:UIBarMetricsDefault];
      [_toolBar setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color.png"] forToolbarPosition:UIBarPositionAny barMetrics:UIBarMetricsDefault];
-     _toolBar.tintColor=VGray_color;  //内容颜色
+         _toolBar.tintColor=VGray_color;  //内容颜色
+
+        [UIView  animateWithDuration:0.1 animations:^{
+            CGRect  tframe=_toolBar.frame;
+            
+            if (keybordHeight==0) {
+                keybordHeight=252.0;
+                if (IsIphone6) {
+                    keybordHeight=258.0;
+                }
+                if (IsIphone6plus) {
+                    keybordHeight=271;
+                }
+            }
+            tframe.origin.y=kDeviceHeight-keybordHeight-50;
+             _toolBar.frame=tframe;
     
-    
+        } completion:^(BOOL finished) {
+        }];
     
     //添加一个按钮到标签搜索页
-    textLeftButton =[ZCControl createButtonWithFrame:CGRectMake(8, 13, 25, 25) ImageName:@"add_tag_icon@2x.png" Target:self Action:@selector(dealNavClick:) Title:nil];
+    textLeftButton =[ZCControl createButtonWithFrame:CGRectMake(5,5, 40, 40) ImageName:nil Target:self Action:@selector(dealNavClick:) Title:nil];
+    
+    [textLeftButton setImage:[UIImage imageNamed:@"add_tag_icon"] forState:UIControlStateNormal];
     textLeftButton.tag=102;
     [_toolBar addSubview:textLeftButton];
     
     
-     _myTextView=[[UITextView alloc]initWithFrame:CGRectMake(40, 10, kDeviceWidth-110, 30)];
+     _myTextView=[[UITextView alloc]initWithFrame:CGRectMake(50, 10, kDeviceWidth-120, 30)];
     _myTextView.delegate=self;
     _myTextView.textColor=VGray_color;
     _myTextView.font= [UIFont systemFontOfSize:16];
     _myTextView.backgroundColor=[UIColor clearColor];
     _myTextView.layer.cornerRadius=4;
     
-    
     _myTextView.layer.borderWidth=0.5;
     _myTextView.layer.borderColor=VLight_GrayColor.CGColor;
     _myTextView.maximumZoomScale=3;
     _myTextView.returnKeyType=UIReturnKeyDone;
     _myTextView.scrollEnabled=YES;
-    _myTextView.autoresizingMask=UIViewAutoresizingFlexibleHeight;
-  //  _myTextView.textContainerInset=[UIEdgeInsetsMake(<#CGFloat top#>, <#CGFloat left#>, //,) ];
+    //_myTextView.autoresizingMask=UIViewAutoresizingFlexibleHeight;
     _myTextView.selectedRange = NSMakeRange(0,0);  //默认光标从第一个开始
     [_myTextView becomeFirstResponder];
     [_toolBar addSubview:_myTextView];
@@ -203,7 +221,6 @@
      publishBtn.layer.cornerRadius=4;
      publishBtn.tag=99;
      publishBtn.clipsToBounds=YES;
-
      [_toolBar addSubview:publishBtn];
      [self.view addSubview:_toolBar];
 }
@@ -230,11 +247,6 @@
     else if (button.tag==102)
     {
         //点击进入搜索添加标签页面
-//        
-//        UINavigationController  *addtag=[[UINavigationController alloc]initWithRootViewController:[AddTagViewController new]];
-//        addtag.modalTransitionStyle=UIModalTransitionStyleCrossDissolve;
-//        [self presentViewController:addtag animated:YES completion:nil];
-//
         if (TAGArray.count==5) {
             UIAlertView  *al =[[UIAlertView alloc]initWithTitle:nil message:@"最多可以添加五个标签" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:nil, nil];
             al.tag=1001;
@@ -256,13 +268,10 @@
     InputStr = [_myTextView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     //发布到屏幕之后需要把输入框退回去
     [_myTextView resignFirstResponder];
-   //[UIView animateWithDuration:0.5 animations:^{
+  
        CGRect  iframe =_toolBar.frame;
        iframe.origin.y=kDeviceHeight;
        _toolBar.frame=iframe;
-  // } completion:^(BOOL finished) {
-       
-   //}];
     [UIView animateWithDuration:0.3 animations:^{
         tipView.alpha=1;
     } completion:^(BOOL finished) {
@@ -280,7 +289,6 @@
     
     //创建微博对象
     [self createWeibomodel];
-    
    _myMarkView = [self createMarkViewWithDict:weibomodel andIndex:1000];
     _myMarkView.weiboInfo=weibomodel;
     _myMarkView.isAnimation=YES;
@@ -299,9 +307,22 @@
 
     //计算弹幕的长度
     CGSize  Msize= [InputStr  boundingRectWithSize:CGSizeMake(kDeviceWidth/2, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:[UIFont systemFontOfSize:14] forKey:NSFontAttributeName] context:nil].size;
+    //标签的宽度
+    
+    NSMutableString  *tagString =[[NSMutableString alloc]init];
+    for (int i=0; i<TAGArray.count; i++) {
+        if (i<2) {
+            [tagString appendString:[[TAGArray objectAtIndex:i] objectForKey:@"TAG"]];
+        }
+    }
+    CGSize  Tsize =[tagString  boundingRectWithSize:CGSizeMake(kDeviceWidth/2, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:[UIFont systemFontOfSize:14] forKey:NSFontAttributeName] context:nil].size;
+    if (Tsize.width>Msize.width) {
+        Msize=Tsize;
+    }
+
     
     int  markViewWidth = (int)Msize.width+23+5+5+11+5;
-    int markViewHeight =(int) Msize.height+6;
+    int   markViewHeight =(int) Msize.height+6;
     int  kw=kDeviceWidth;
     int  x=arc4random()%(kw-markViewWidth);//要求x在0~~~（宽度-markViewWidth）
     int  y=arc4random()%((kw-markViewHeight/2)+markViewHeight/2-markViewHeight);  //要求y在markviewheight.y/2 ~~~~~~~(高度--markViewheigth/2)
@@ -424,7 +445,6 @@
         X =[NSString stringWithFormat:@"%d",100];
         Y=[NSString stringWithFormat:@"%d",100];
     }
-    
     int x_percent=[X intValue];
     X=[NSString stringWithFormat:@"%d",x_percent];
     int y_percent=[Y intValue];
@@ -451,7 +471,31 @@
         parameter = @{@"user_id": userid,@"content":InputStr,@"stage_id":stageId,@"x_percent":X,@"y_percent":Y,@"tags[0]":tag1,@"tags[1]":tag2};
 
     }
-    
+    else if (TAGArray.count==3)
+    {
+        NSString  *tag1 =[[TAGArray objectAtIndex:0] objectForKey:@"TAG"];
+        NSString  *tag2 =[[TAGArray objectAtIndex:1] objectForKey:@"TAG"];
+        NSString  *tag3 =[[TAGArray objectAtIndex:2] objectForKey:@"TAG"];
+        parameter = @{@"user_id": userid,@"content":InputStr,@"stage_id":stageId,@"x_percent":X,@"y_percent":Y,@"tags[0]":tag1,@"tags[1]":tag2,@"tags[2]":tag3};
+    }
+    else if (TAGArray.count==4)
+    {
+        NSString  *tag1 =[[TAGArray objectAtIndex:0] objectForKey:@"TAG"];
+        NSString  *tag2 =[[TAGArray objectAtIndex:1] objectForKey:@"TAG"];
+        NSString  *tag3 =[[TAGArray objectAtIndex:2] objectForKey:@"TAG"];
+        NSString  *tag4 =[[TAGArray objectAtIndex:3] objectForKey:@"TAG"];
+        parameter = @{@"user_id": userid,@"content":InputStr,@"stage_id":stageId,@"x_percent":X,@"y_percent":Y,@"tags[0]":tag1,@"tags[1]":tag2,@"tags[2]":tag3,@"tags[3]":tag4};
+    }
+    else if (TAGArray.count==5)
+    {
+        NSString  *tag1 =[[TAGArray objectAtIndex:0] objectForKey:@"TAG"];
+        NSString  *tag2 =[[TAGArray objectAtIndex:1] objectForKey:@"TAG"];
+        NSString  *tag3 =[[TAGArray objectAtIndex:2] objectForKey:@"TAG"];
+        NSString  *tag4 =[[TAGArray objectAtIndex:3] objectForKey:@"TAG"];
+        NSString  *tag5 =[[TAGArray objectAtIndex:3] objectForKey:@"TAG"];
+        parameter = @{@"user_id": userid,@"content":InputStr,@"stage_id":stageId,@"x_percent":X,@"y_percent":Y,@"tags[0]":tag1,@"tags[1]":tag2,@"tags[2]":tag3,@"tags[3]":tag4,@"tags[4]":tag5};
+    }
+
     NSString *urlString =[NSString stringWithFormat:@"%@/weibo/create", kApiBaseUrl];
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:urlString parameters:parameter success:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -529,54 +573,68 @@
 #pragma mark 键盘的通知事件
 -(void)keyboardWillShow:(NSNotification * )  notification
 {
-        _myTextView.frame=CGRectMake(_myTextView.frame.origin.x, _myTextView.frame.origin.y, _myTextView.frame.size.width, 30);
+
         NSDictionary *info = [notification userInfo];
         NSValue *value = [info objectForKey:UIKeyboardFrameEndUserInfoKey];
          keyboardSize = [value CGRectValue].size;
-        float  timeInterval=0.1;
-        NSLog(@"keyBoard   height  :%f", keyboardSize.height);
-    //第一次需要计算键盘的高度
-    //if (keybordHeight==0) {
-       keybordHeight=keyboardSize.height;
-    //}
-    
-    [UIView  animateWithDuration:timeInterval animations:^{
-        CGRect  tframe=_toolBar.frame;
-        tframe.origin.y=kDeviceHeight -keyboardSize.height-kHeightNavigation-50+64;
-        if (TAGArray.count>0) {
-            tframe.origin.y=kDeviceHeight-keyboardSize.height-kHeightNavigation-80+64;
-        }
-        _toolBar.frame=tframe;
-        
-    } completion:^(BOOL finished) {
-        
+        NSLog(@"will show     keyBoard   height  :%f", keyboardSize.height);
+        keybordHeight=keyboardSize.height;
+        CGRect  frame =_myTextView.frame;
+        frame.size.height=30;
+       _myTextView.frame=frame;
+        CGSize Tsize =[taglable sizeThatFits:CGSizeMake(kDeviceWidth-20, CGFLOAT_MAX)];
+    //位置和大小
+       taglable.frame=CGRectMake(10,50,kDeviceWidth-20, Tsize.height);
+
+   
+    [UIView  animateWithDuration:0.1 animations:^{
+     } completion:^(BOOL finished) {
+         _toolBar.frame=CGRectMake(_toolBar.frame.origin.x,kDeviceHeight-keybordHeight-50-Tsize.height,_toolBar.frame.size.width, 50+Tsize.height);
+         
     }];
+    
+    NSLog(@"====will show keyboard  tag====%f",_myTextView.frame.size.height);
+
 }
 -(void)keyboardWillHiden:(NSNotification *) notification
 {
-        _myTextView.frame=CGRectMake(_myTextView.frame.origin.x, _myTextView.frame.origin.y, _myTextView.frame.size.width, 30);
-    [UIView  animateWithDuration:0.1 animations:^{
-        CGRect  tframe=_toolBar.frame;
-        tframe.origin.y=kDeviceHeight-50-kHeightNavigation;
-        _toolBar.frame=tframe;
-    } completion:^(BOOL finished) {
-        
-    }];
+ 
+//    [UIView  animateWithDuration:0.1 animations:^{
+//        CGRect  tframe=_toolBar.frame;
+//        tframe.origin.y=kDeviceHeight-50-kHeightNavigation;
+//        _toolBar.frame=tframe;
+//    } completion:^(BOOL finished) {
+//        
+//    }];
 
 }
 #pragma  mark  ---UItextViewDelegate-------------
 -(void)textViewDidBeginEditing:(UITextView *)textView
 {
+    
  
 }
 -(void)textViewDidEndEditing:(UITextView *)textView
 {
-    [_myTextView resignFirstResponder];
+   // [_myTextView resignFirstResponder];
+    ///[self PushlicInScreen];
 }
  -(void)textViewDidChangeSelection:(UITextView *)textView
 {
     
 }
+//点击键盘上的return键执行这个方法
+-(BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+{
+    //if ([text isEqualToString:@"\n"]) {
+     //   [self PushlicInScreen];
+       // return NO;
+    //}
+    //return YES;
+    return YES;
+}
+
+
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
     //[_myTextView resignFirstResponder];
@@ -587,45 +645,7 @@
 
 -(void)textViewDidChange:(UITextView *)textView{
     //防止光标抖动
-    /*CGRect line = [textView caretRectForPosition:
-                   textView.selectedTextRange.start];
-    CGFloat overflow = line.origin.y + line.size.height
-    - ( textView.contentOffset.y + textView.bounds.size.height
-       - textView.contentInset.bottom - textView.contentInset.top );
-    if ( overflow > 0 ) {
-        // We are at the bottom of the visible text and introduced a line feed, scroll down (iOS 7 does not do it)
-        // Scroll caret to visible area
-        CGPoint offset = textView.contentOffset;
-        offset.y += overflow + 7; // leave 7 pixels margin
-        // Cannot animate with setContentOffset:animated: or caret will not appear
-        [UIView animateWithDuration:.2 animations:^{
-            [textView setContentOffset:offset];
-        }];
-    }
- 
-//    CGSize  tSize=textView.contentSize;
-//    CGPoint  tPoint =textView.contentOffset;
-//    tPoint.y=tSize.height;
-//    textView.contentOffset=tPoint;
-    
-    //计算文本的高度
-    CGSize   sizeFrame=[textView.text boundingRectWithSize:CGSizeMake(textView.frame.size.width, MAXFLOAT) options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes:[NSDictionary dictionaryWithObject:_myTextView.font forKey:NSFontAttributeName] context:nil].size;
    
-    if ((sizeFrame.height)/19>4) {
-        textView.scrollEnabled=YES;
-    }
-    else
-    {
-        textView.scrollEnabled=NO;
-    }
-    //重新调整textView的高度
-    CGRect  Tframe =textView.frame;
-    Tframe.size.height=MAX(MIN(sizeFrame.height+((sizeFrame.height)/19)*5, 70),30);
-    textView.frame=Tframe;
-   // NSLog(@" textView = heigt =====%f ",textView.frame.size.height);
-    
-    _toolBar.frame=CGRectMake(0,kDeviceHeight-keybordHeight-textView.frame.size.height -kHeightNavigation-20, kDeviceWidth, textView.frame.size.height+20);
-*/
     if (textView==_myTextView) {
         if ([Function isBlankString:_myTextView.text]==NO) {
             publishBtn.enabled=YES;
@@ -639,7 +659,7 @@
 
 
 //控制输入文字的长度和内容，可通调用以下代理方法实现
--(BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+/*-(BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
     //这个方法比textdidchange先执行
     if (range.location>=60)
@@ -657,7 +677,7 @@
     }
     return YES;
 
-}
+}*/
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -671,29 +691,8 @@
     if (alertView.tag==1000) {
         //发布弹幕成功的返回
     if (buttonIndex==0) {
-       // if (self.pageSoureType==NSAddMarkPageSourceUploadImage||self.pageSoureType==NSAddMarkPageSourceDoubanUploadImage) {  // 发布图片的时候执行这个
-            //返回电影详细页面的时候需要去刷新一下
-            ///[[NSNotificationCenter  defaultCenter] postNotificationName:@"RefreshMovieDeatail" object:nil userInfo:nil];
-            //[self.navigationController popToViewController:[MovieDetailViewController new] animated:YES];
-            //[self.navigationController popViewControllerAnimated:YES];
-            //[self.navigationController popViewControllerAnimated:YES];
-//            UMShareViewController2  *shareVC=[[UMShareViewController2 alloc]init];
-//            shareVC.StageInfo=self.stageInfo;
-//            shareVC.weiboInfo=weibo;
-//            shareVC.delegate=self;
-//           //    UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:shareVC];
-//          [self.navigationController presentViewController:shareVC animated:YES completion:nil];
-//            
-//        }
-//         else
-//        {
-            //[self.navigationController popViewControllerAnimated:YES];
-            //返回之前需要调用
-//            
-//            if (self.delegate&&[self.delegate respondsToSelector:@selector(AddMarkViewControllerReturn)]) {
-//                //返回的时候需要去刷新tableview
-//                [self.delegate AddMarkViewControllerReturn];
-//            }
+ 
+        [self.delegate AddMarkViewControllerReturn];
         [self dismissViewControllerAnimated:YES completion:^{
 //            UMShareViewController2  *shareVC=[[UMShareViewController2 alloc]init];
 //            shareVC.StageInfo=self.stageInfo;
@@ -703,7 +702,6 @@
             
             
              NSDictionary  *dict = [[NSDictionary alloc]initWithObjectsAndKeys:self.stageInfo,@"stageInfo",weibo,@"weiboInfo",self.delegate,@"delegate", nil];
-            
             [[NSNotificationCenter defaultCenter] postNotificationName:@"ShareViewAlert" object:nil userInfo:dict];
         
             
@@ -712,49 +710,64 @@
       }
     }
 }
--(void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
-   // [_myTextView resignFirstResponder];
-}
 -(void)AddTagViewHandClickWithTag:(NSString *)tag
 {
-    //改变_toolBar的高度;
-    _myTextView.frame=CGRectMake(_myTextView.frame.origin.x, _myTextView.frame.origin.y, _myTextView.frame.size.width, 30);
-    _toolBar.frame=CGRectMake(_toolBar.frame.origin.x, _toolBar.frame.origin.y-30,_toolBar.frame.size.width, 80);
+//    CGRect  frame =_myTextView.frame;
+//    frame.size.height=30;
+//    _myTextView.frame=frame;
+//    
     
-    //如果第一个标签为空
+    
+//    if (TAGArray==nil) {
+//        TAGArray =[[NSMutableArray alloc]init];
+//    }
+//    //如果第一个标签为空
     if (TAGArray.count==0) {
         NSMutableDictionary  *tag1Dict =[NSMutableDictionary dictionaryWithObject:tag forKey:@"TAG"];
-        if (TAGArray==nil) {
-            TAGArray =[[NSMutableArray alloc]init];
-        }
         [TAGArray insertObject:tag1Dict atIndex:0];
     }
-    else
+    else  if(TAGArray.count==1)
     {
         NSMutableDictionary  *tag2Dict =[NSMutableDictionary dictionaryWithObject:tag forKey:@"TAG"];
-        if (TAGArray==nil) {
-            TAGArray =[[NSMutableArray alloc]init];
-        }
-        [TAGArray insertObject:tag2Dict atIndex:1];
+         [TAGArray insertObject:tag2Dict atIndex:1];
     }
+    else if (TAGArray.count==2)
+    {
+        NSMutableDictionary  *tag3Dict =[NSMutableDictionary dictionaryWithObject:tag forKey:@"TAG"];
+        [TAGArray insertObject:tag3Dict atIndex:2];
  
+    }
+    else if (TAGArray.count==3)
+    {
+        NSMutableDictionary  *tag4Dict =[NSMutableDictionary dictionaryWithObject:tag forKey:@"TAG"];
+        [TAGArray insertObject:tag4Dict atIndex:3];
+        
+    }
+    else if (TAGArray.count==4)
+    {
+        NSMutableDictionary  *tag5Dict =[NSMutableDictionary dictionaryWithObject:tag forKey:@"TAG"];
+        [TAGArray insertObject:tag5Dict atIndex:4];
+    }
+
 //创建标签文本
     taglable =[[M80AttributedLabel alloc]initWithFrame:CGRectZero];
     taglable.backgroundColor =[UIColor clearColor];
+    taglable.lineSpacing=5.0;
     taglable.font=[UIFont systemFontOfSize:MarkTextFont14];
     if (IsIphone6plus) {
         taglable.font =[UIFont systemFontOfSize:MarkTextFont16];
     }
-    //位置和大小
-    taglable.frame=CGRectMake(10,50,kDeviceWidth-20, TagHeight+10);
     
     for (int i=0; i<TAGArray.count; i++) {
         NSDictionary  *dict =[TAGArray objectAtIndex:i];
          TagView   *tagview =[self createTagViewWithtagText:[dict objectForKey:@"TAG"] withIndex:i withBgImage:[UIImage imageNamed:@"tag_backgroud_color.png"]];
         [taglable appendView:tagview margin:UIEdgeInsetsMake(0, 10, 0, 0)];
     }
-    [_toolBar addSubview:taglable];
+    CGSize Tsize =[taglable sizeThatFits:CGSizeMake(kDeviceWidth-20, CGFLOAT_MAX)];
+    //位置和大小
+    taglable.frame=CGRectMake(10,50,kDeviceWidth-20, Tsize.height);
+      [_toolBar addSubview:taglable];
+    NSLog(@"==== add  tag====%f",_myTextView.frame.size.height);
     
 }
 
@@ -776,40 +789,74 @@
 -(void)TapViewClick:(TagView *)tagView Withweibo:(weiboInfoModel *)weiboInfo withTagInfo:(TagModel *)tagInfo
 {
     
+    NSLog(@"=========tagView %ld",tagView.tag);
     if(TAGArray.count>0)
     {
-    [TAGArray  removeObjectAtIndex:tagView.tag-1000];
+       [TAGArray  removeObjectAtIndex:tagView.tag-1000];
     }
     //删除完成后，清除所有的布局
-    [taglable removeFromSuperview];
-    taglable=nil;
+     //移除所有tagview的子视图
+    for (id view in taglable.subviews) {
+        if ([view isKindOfClass:[TagView class]]) {
+            TagView  *tag=(TagView *)view;
+            [tag removeFromSuperview];
+            tag=nil;
+        }
+    }
+    if (taglable) {
+        [taglable removeFromSuperview];
+        taglable=nil;
+    }
     
     taglable =[[M80AttributedLabel alloc]initWithFrame:CGRectZero];
     taglable.backgroundColor =[UIColor clearColor];
     taglable.font=[UIFont systemFontOfSize:MarkTextFont14];
-    if (IsIphone6plus) {
+    if(IsIphone6plus) {
         taglable.font =[UIFont systemFontOfSize:MarkTextFont16];
+     }
+     if(keybordHeight==0)
+    {
+        keybordHeight=252.0;
+        if (IsIphone6) {
+            keybordHeight=258.0;
+        }
+        if (IsIphone6plus) {
+            keybordHeight=271.0;
+        }
     }
-    //位置和大小
-    taglable.frame=CGRectMake(10,50,kDeviceWidth-20, TagHeight+10);
-    [_toolBar addSubview:taglable];
-    
-    
+    NSLog(@"删除之后的数组====%@",TAGArray);
+
+
     //然后从新开始渲染布局
     for (int i=0; i<TAGArray.count; i++) {
+        
         NSDictionary  *dict =[TAGArray objectAtIndex:i];
         TagView   *tagview =[self createTagViewWithtagText:[dict objectForKey:@"TAG"] withIndex:i withBgImage:[UIImage imageNamed:@"tag_backgroud_color.png"]];
         [taglable appendView:tagview margin:UIEdgeInsetsMake(0, 10, 0, 0)];
     }
     
+    CGSize Tsize =[taglable sizeThatFits:CGSizeMake(kDeviceWidth-20, CGFLOAT_MAX)];
+    //位置和大小
+    taglable.frame=CGRectMake(10,50,kDeviceWidth-20, Tsize.height);
+    _toolBar.frame=CGRectMake(_toolBar.frame.origin.x,kDeviceHeight-keybordHeight-50-Tsize.height,_toolBar.frame.size.width, 50+Tsize.height);
+    [_toolBar addSubview:taglable];
+    
+    _myTextView.frame=CGRectMake(_myTextView.frame.origin.x, 10,_myTextView.frame.size.width, 30);
     
     if (TAGArray.count==0) {
-        _toolBar.frame=CGRectMake(_toolBar.frame.origin.x, _toolBar.frame.origin.y+30,_toolBar.frame.size.width, 50);
-        _myTextView.frame=CGRectMake(_myTextView.frame.origin.x,10, _myTextView.frame.size.width, 30);
-
-    }
-    NSLog(@"删除之后的数组====%@",TAGArray);
-
+        if(keybordHeight==0)
+        {
+            keybordHeight=252.0;
+            if (IsIphone6) {
+                keybordHeight=258.0;
+            }
+            if (IsIphone6plus) {
+                keybordHeight=271.0;
+            }
+        }
+        _toolBar.frame=CGRectMake(_toolBar.frame.origin.x,kDeviceHeight-keybordHeight-50,_toolBar.frame.size.width, 50);
+        [taglable removeFromSuperview];
+      }
 }
 /*
 #pragma mark - Navigation

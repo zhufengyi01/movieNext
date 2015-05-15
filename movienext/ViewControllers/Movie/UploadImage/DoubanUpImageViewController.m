@@ -31,7 +31,7 @@
 -(void)createNavigation
 {
     
-    UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 120, 20) Font:16 Text:@"上传图片"];
+    UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 120, 20) Font:16 Text:@"预览"];
     titleLable.textColor=VBlue_color;
     titleLable.font=[UIFont boldSystemFontOfSize:18];
     titleLable.textAlignment=NSTextAlignmentCenter;
@@ -83,22 +83,17 @@
  
     }];
     [bgView addSubview:imageView];
-    
-    
 }
 
 -(void)dealRightNavClick:(UIButton *) button
 {
     [self requestupphoto];
-    
 }
 -(void)requestupphoto
 {
-    
     UserDataCenter  *userCenter=[UserDataCenter shareInstance];
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     NSDictionary *parameters=@{@"movie_id":self.movie_id,@"photo":self.photourl,@"user_id":userCenter.user_id};
-    
     [manager POST:[NSString stringWithFormat:@"%@/stage/create-from-douban",kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
             NSLog(@"创建成功=======%@",responseObject);
