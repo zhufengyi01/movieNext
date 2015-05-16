@@ -17,7 +17,6 @@
 #import "UserDataCenter.h"
 #import "SettingViewController.h"
 #import "UIImageView+WebCache.h"
-#import "WeiboModel.h"
 #import "StageView.h"
 #import "stageInfoModel.h"
 #import "ButtomToolView.h"
