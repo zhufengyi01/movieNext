@@ -380,9 +380,13 @@
     }
     else if (segment.selectedSegmentIndex==1)
     {
-        weiboInfoModel  *weibomodel =[_newDataArray objectAtIndex:Rowindex];
-        stageId=weibomodel.stage_id;
-        author_id=[NSString stringWithFormat:@"%@",weibomodel.uerInfo.Id];
+//        weiboInfoModel  *weibomodel =[_newDataArray objectAtIndex:Rowindex];
+//        stageId=weibomodel.stage_id;
+//        author_id=[NSString stringWithFormat:@"%@",weibomodel.uerInfo.Id];
+        ModelsModel  *model =[_newDataArray objectAtIndex:Rowindex];
+        stageId=model.stage_id;
+        author_id=model.stageInfo.created_by;
+
     }
     UserDataCenter *userCenter =[UserDataCenter shareInstance];
     NSDictionary *parameters = @{@"reported_user_id":author_id,@"stage_id":stageId,@"reason":@"",@"user_id":userCenter.user_id};
@@ -1230,8 +1234,7 @@
         else if(buttonIndex==1)
         {
             ///变身
-           // [self.navigationController pushViewController:[ChangeSelfViewController new] animated:YES];
-            //请求随机数种子
+         
             [self requestChangeUserRand4];
         }
         else if(buttonIndex==2)
@@ -1299,7 +1302,6 @@
         }
         else if(buttonIndex==1)
         {
-            
             stageInfoModel  *stageInfo;
             if (segment.selectedSegmentIndex==0) {
                 ModelsModel   *model =[_hotDataArray objectAtIndex:Rowindex];

@@ -279,8 +279,7 @@
     }];
     RighttBtn.hidden=NO;
     RighttBtn.titleLabel.textColor=VBlue_color;
-    //[_myTextView resignFirstResponder];
-    //清楚原来添加的弹幕
+     //清楚原来添加的弹幕
     for (UIView *view in stageView.subviews) {
         if ([view isKindOfClass:[MarkView class]]) {
             [view removeFromSuperview];
@@ -320,14 +319,14 @@
         Msize=Tsize;
     }
 
-    
     int  markViewWidth = (int)Msize.width+23+5+5+11+5;
-    int   markViewHeight =(int) Msize.height+6;
-    int  kw=kDeviceWidth;
+     int   markViewHeight =(int) Msize.height+6;
+    int  kw=kStageWidth;
+    
     int  x=arc4random()%(kw-markViewWidth);//要求x在0~~~（宽度-markViewWidth）
     int  y=arc4random()%((kw-markViewHeight/2)+markViewHeight/2-markViewHeight);  //要求y在markviewheight.y/2 ~~~~~~~(高度--markViewheigth/2)
-    X =[NSString stringWithFormat:@"%f",((x+markViewWidth)/kDeviceWidth)*100];
-    Y=[NSString stringWithFormat:@"%f",((y+markViewHeight/2)/kDeviceWidth)*100];
+    X =[NSString stringWithFormat:@"%f",((x+markViewWidth)/kStageWidth)*100];
+    Y=[NSString stringWithFormat:@"%f",((y+markViewHeight/2)/kStageWidth)*100];
     
     
     //开始创建weibo对象

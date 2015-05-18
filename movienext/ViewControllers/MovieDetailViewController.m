@@ -622,7 +622,7 @@
             
             //[loadView  showNullView:@"没有数据..."];
            //没有数据 时候添加图片，添加图片,
-            loadView.failTitle.text =@"还没有内容，快来添加一条吧";
+            loadView.failTitle.text =@"还没有内容，快来添加一条吧！";
             [loadView.failBtn setTitle:@"添加" forState:UIControlStateNormal];
             [loadView showFailLoadData];
 

@@ -14,6 +14,7 @@
 #import "UserDataCenter.h"
 #import "UpweiboModel.h"
 #import "Function.h"
+#import "NSDate+Extension.h"
 #import "UIButton+WebCache.h"
 
 @implementation ButtomToolView 
@@ -151,9 +152,18 @@
     userNamelabel.text =self.weiboInfo.uerInfo.username;
     
     //时间
-    NSString *timeStr =[Function getTimeIntervalfromInerterval:self.weiboInfo.created_at];
-    timelabel.text=timeStr;
-    //内容
+    //NSString *timeStr =[Function getTimeIntervalfromInerterval:self.weiboInfo.created_at];
+    
+   //根据时间戳转化成时间
+    NSDate  *comfromTimesp =[NSDate dateWithTimeIntervalSince1970:[self.weiboInfo.created_at intValue]];
+    NSString  *da = [NSDate timeInfoWithDate:comfromTimesp];
+    timelabel.text=da;
+    
+    
+   // timelabel.text=timeStr;
+    
+    
+   // //内容
     contentLable.text =self.weiboInfo.content;
     
    ////标签

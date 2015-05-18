@@ -820,7 +820,7 @@
     }];
 }
 //微博点赞请求
--(void)LikeRequstData:(WeiboModel  *) weiboDict StageInfo :(stageInfoModel *) stageInfoDict
+/*-(void)LikeRequstData:(WeiboModel  *) weiboDict StageInfo :(stageInfoModel *) stageInfoDict
 {
     NSNumber  *weiboId=weiboDict.Id;
     NSNumber  *stageId=stageInfoDict.Id;
@@ -850,7 +850,7 @@
         NSLog(@"Error: %@", error);
     }];
     
-}
+}*/
 
 
 #pragma mark  -----
@@ -1427,7 +1427,7 @@
 
 
 //重新布局markview
--(void)layoutMarkViewWithMarkView:(MarkView  *) markView WeiboInfo:(WeiboModel *) weibodict
+/*-(void)layoutMarkViewWithMarkView:(MarkView  *) markView WeiboInfo:(WeiboModel *) weibodict
 {
     
     
@@ -1463,7 +1463,7 @@
         markView.ZanNumLable.hidden=NO;
     }
     
-}
+}*/
 -(void)dealloc
 {
       [[NSNotificationCenter defaultCenter]removeObserver:self name:@"initUser" object:nil];

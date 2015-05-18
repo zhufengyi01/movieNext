@@ -136,13 +136,12 @@
     
     //把当前时间变成时间戳
     NSDate *datenow = [NSDate date];//现在时间,你可以输出来看下是什么格式
-    NSTimeZone *zone = [NSTimeZone defaultTimeZone];
+    NSTimeZone *zone = [NSTimeZone systemTimeZone];
     NSInteger interval = [zone secondsFromGMTForDate:datenow];
     NSDate *localeDate = [datenow  dateByAddingTimeInterval: interval];
     NSLog(@"%@当前时间", localeDate);
     NSString *timeSp = [NSString stringWithFormat:@"%ld", (long)[localeDate timeIntervalSince1970]];
     NSLog(@"当前时间戳timeSp:%@",timeSp); //时间戳的值
-    
     
     long  int inter =[timeSp intValue] -[timeInerval intValue];
     if (inter<=10) {
