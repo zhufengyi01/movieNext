@@ -8,6 +8,7 @@
 
 #import "AddMarkViewController.h"
 #import "ZCControl.h"
+#import "UITextView+PlaceHolder.h"
 #import "Constant.h"
 #import "Function.h"
 #import "UserDataCenter.h"
@@ -76,12 +77,14 @@
     [self initData];
     //键盘将要显示
     //一旦开启通知后，那么整个过程中都在监视键盘的事件
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardDidShowNotification object:nil];
      //键盘将要隐藏
     //[[NSNotificationCenter defaultCenter ]addObserver:self selector:@selector(keyboardWillHiden:) name:UIKeyboardWillHideNotification object:nil];
     [self createMyScrollerView];
     [self createStageView];
     [self createButtomView];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardDidShowNotification object:nil];
+    
+
 }
 -(void)createNavigation
 {
@@ -100,9 +103,13 @@
     [naview addSubview:leftBtn];
    // UIBarButtonItem  *leftBarButton=[[UIBarButtonItem alloc]initWithCustomView:leftBtn];
    // self.navigationItem.leftBarButtonItem=leftBarButton;
-    
-    
-    
+    if (self.weiboInfo) {
+    UILabel  *lable =[ZCControl createLabelWithFrame:CGRectMake((kDeviceWidth-100)/2, 20, 100, 30) Font:15 Text:@"编辑"];
+        lable.font=[UIFont boldSystemFontOfSize:18];
+        lable.textAlignment=NSTextAlignmentCenter;
+        lable.textColor=VBlue_color;
+        [naview addSubview:lable];
+    }
     RighttBtn= [UIButton buttonWithType:UIButtonTypeSystem];
     RighttBtn.frame=CGRectMake(kDeviceWidth-70, 20, 60, 40);
     [RighttBtn addTarget:self action:@selector(dealNavClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -115,14 +122,22 @@
     RighttBtn.hidden=YES;
     [naview addSubview:RighttBtn];
     //self.navigationItem.rightBarButtonItem=[[UIBarButtonItem alloc]initWithCustomView:RighttBtn];
-    
 
 }
 -(void)initData
 {
     userCenter=[UserDataCenter shareInstance];
     TAGArray =[[NSMutableArray alloc]init];
-    
+    if (self.weiboInfo) {
+        NSArray  *array =self.weiboInfo.tagArray;
+        for (int i=0;i<array.count; i++) {
+//            NSString *tag =[[[array objectAtIndex:i] objectForKey:@"tag"] objectForKey:@""];
+            TagModel *tagmodel =[array objectAtIndex:i];
+            NSString  *tagString =tagmodel.tagDetailInfo.title;
+            NSMutableDictionary  *dict =[NSMutableDictionary  dictionaryWithObject:tagString forKey:@"TAG"];
+            [TAGArray   addObject:dict];
+        }
+    }
 }
 -(void)createMyScrollerView
 {
@@ -173,7 +188,6 @@
 
         [UIView  animateWithDuration:0.1 animations:^{
             CGRect  tframe=_toolBar.frame;
-            
             if (keybordHeight==0) {
                 keybordHeight=252.0;
                 if (IsIphone6) {
@@ -188,17 +202,15 @@
     
         } completion:^(BOOL finished) {
         }];
-    
     //添加一个按钮到标签搜索页
     textLeftButton =[ZCControl createButtonWithFrame:CGRectMake(5,5, 40, 40) ImageName:nil Target:self Action:@selector(dealNavClick:) Title:nil];
-    
     [textLeftButton setImage:[UIImage imageNamed:@"add_tag_icon"] forState:UIControlStateNormal];
     textLeftButton.tag=102;
     [_toolBar addSubview:textLeftButton];
     
-    
      _myTextView=[[UITextView alloc]initWithFrame:CGRectMake(50, 10, kDeviceWidth-120, 30)];
     _myTextView.delegate=self;
+   // [_myTextView addPlaceHolder:@"输入弹幕"];
     _myTextView.textColor=VGray_color;
     _myTextView.font= [UIFont systemFontOfSize:16];
     _myTextView.backgroundColor=[UIColor clearColor];
@@ -214,12 +226,20 @@
     [_myTextView becomeFirstResponder];
     [_toolBar addSubview:_myTextView];
     
-    
+    //编辑
+    if (self.weiboInfo) {
+        //
+        _myTextView.text=self.weiboInfo.content;
+        
+    }
      publishBtn=[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-60, 10, 50, 28) ImageName:@"loginoutbackgroundcolor.png" Target:self Action:@selector(dealNavClick:) Title:@"确定"];
      publishBtn.enabled=NO;
      publishBtn.titleLabel.font=[UIFont systemFontOfSize:14];
      publishBtn.layer.cornerRadius=4;
      publishBtn.tag=99;
+     if (self.weiboInfo) {
+         publishBtn.enabled=YES;
+    }
      publishBtn.clipsToBounds=YES;
      [_toolBar addSubview:publishBtn];
      [self.view addSubview:_toolBar];
@@ -232,7 +252,6 @@
     if (button.tag==100) {
          //取消发布
         [self dismissViewControllerAnimated:YES completion:nil];
-    
     }
     else if (button.tag==101)
     {        [self  PublicRuqest];
@@ -325,9 +344,9 @@
     
     int  x=arc4random()%(kw-markViewWidth);//要求x在0~~~（宽度-markViewWidth）
     int  y=arc4random()%((kw-markViewHeight/2)+markViewHeight/2-markViewHeight);  //要求y在markviewheight.y/2 ~~~~~~~(高度--markViewheigth/2)
-    X =[NSString stringWithFormat:@"%f",((x+markViewWidth)/kStageWidth)*100];
-    Y=[NSString stringWithFormat:@"%f",((y+markViewHeight/2)/kStageWidth)*100];
     
+    X =[NSString stringWithFormat:@"%f",((x+markViewWidth)/310.0)*100];
+    Y=[NSString stringWithFormat:@"%f",((y+markViewHeight/2)/310.0)*100];
     
     //开始创建weibo对象
       weibomodel =[[weiboInfoModel alloc]init];
@@ -451,16 +470,22 @@
    // UserDataCenter  *userCenter=[UserDataCenter shareInstance];
     NSString  *userid=userCenter.user_id;
     NSNumber  *stageId=self.stageInfo.Id;
-    
-    
+
     NSDictionary *parameter;
     if (TAGArray.count==0) {
      parameter = @{@"user_id": userid,@"content":InputStr,@"stage_id":stageId,@"x_percent":X,@"y_percent":Y};
+        if (self.weiboInfo) {
+            parameter = @{@"user_id":userid,@"content":InputStr,@"stage_id":stageId,@"x_percent":X,@"y_percent":Y,@"weibo_id":self.weiboInfo.Id};
+        }
     }
     else if (TAGArray.count==1)
     {
         NSString  *tag1 =[[TAGArray objectAtIndex:0] objectForKey:@"TAG"];
         parameter = @{@"user_id": userid,@"content":InputStr,@"stage_id":stageId,@"x_percent":X,@"y_percent":Y,@"tags[0]":tag1};
+        if (self.weiboInfo) {
+            parameter = @{@"user_id": userid,@"content":InputStr,@"stage_id":stageId,@"weibo_id":self.weiboInfo.Id,@"x_percent":X,@"y_percent":Y,@"tags[0]":tag1};
+
+        }
 
     }
     else if(TAGArray.count==2)
@@ -468,6 +493,10 @@
         NSString  *tag1 =[[TAGArray objectAtIndex:0] objectForKey:@"TAG"];
         NSString  *tag2 =[[TAGArray objectAtIndex:1] objectForKey:@"TAG"];
         parameter = @{@"user_id": userid,@"content":InputStr,@"stage_id":stageId,@"x_percent":X,@"y_percent":Y,@"tags[0]":tag1,@"tags[1]":tag2};
+        if (self.weiboInfo) {
+            parameter = @{@"user_id": userid,@"content":InputStr,@"stage_id":stageId,@"weibo_id":self.weiboInfo.Id,@"x_percent":X,@"y_percent":Y,@"tags[0]":tag1,@"tags[1]":tag2};
+
+        }
 
     }
     else if (TAGArray.count==3)
@@ -476,6 +505,9 @@
         NSString  *tag2 =[[TAGArray objectAtIndex:1] objectForKey:@"TAG"];
         NSString  *tag3 =[[TAGArray objectAtIndex:2] objectForKey:@"TAG"];
         parameter = @{@"user_id": userid,@"content":InputStr,@"stage_id":stageId,@"x_percent":X,@"y_percent":Y,@"tags[0]":tag1,@"tags[1]":tag2,@"tags[2]":tag3};
+        if (self.weiboInfo) {
+                    parameter = @{@"user_id": userid,@"content":InputStr,@"stage_id":stageId,@"weibo_id":self.weiboInfo.Id,@"x_percent":X,@"y_percent":Y,@"tags[0]":tag1,@"tags[1]":tag2,@"tags[2]":tag3};
+        }
     }
     else if (TAGArray.count==4)
     {
@@ -484,6 +516,10 @@
         NSString  *tag3 =[[TAGArray objectAtIndex:2] objectForKey:@"TAG"];
         NSString  *tag4 =[[TAGArray objectAtIndex:3] objectForKey:@"TAG"];
         parameter = @{@"user_id": userid,@"content":InputStr,@"stage_id":stageId,@"x_percent":X,@"y_percent":Y,@"tags[0]":tag1,@"tags[1]":tag2,@"tags[2]":tag3,@"tags[3]":tag4};
+        if (self.weiboInfo) {
+            parameter = @{@"user_id": userid,@"content":InputStr,@"stage_id":stageId,@"weibo_id":self.weiboInfo.Id,@"x_percent":X,@"y_percent":Y,@"tags[0]":tag1,@"tags[1]":tag2,@"tags[2]":tag3,@"tags[3]":tag4};
+        }
+        
     }
     else if (TAGArray.count==5)
     {
@@ -493,14 +529,25 @@
         NSString  *tag4 =[[TAGArray objectAtIndex:3] objectForKey:@"TAG"];
         NSString  *tag5 =[[TAGArray objectAtIndex:3] objectForKey:@"TAG"];
         parameter = @{@"user_id": userid,@"content":InputStr,@"stage_id":stageId,@"x_percent":X,@"y_percent":Y,@"tags[0]":tag1,@"tags[1]":tag2,@"tags[2]":tag3,@"tags[3]":tag4,@"tags[4]":tag5};
+        if (self.weiboInfo) {
+            parameter = @{@"user_id": userid,@"content":InputStr,@"stage_id":stageId,@"weibo_id":self.weiboInfo.Id,@"x_percent":X,@"y_percent":Y,@"tags[0]":tag1,@"tags[1]":tag2,@"tags[2]":tag3,@"tags[3]":tag4,@"tags[4]":tag5};
+        }
     }
 
     NSString *urlString =[NSString stringWithFormat:@"%@/weibo/create", kApiBaseUrl];
+    if (self.weiboInfo) {
+        //更新
+        urlString =[NSString stringWithFormat:@"%@/weibo/update",kApiBaseUrl];
+    }
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:urlString parameters:parameter success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"  添加弹幕发布请求    JSON: %@", responseObject);
         if ([[responseObject  objectForKey:@"code"] intValue]==0) {
-            UIAlertView  *Al=[[UIAlertView alloc]initWithTitle:nil message:@"发布成功" delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
+            NSString *message =@"发布成功";
+            if (self.weiboInfo) {
+                message=@"编辑成功";
+            }
+            UIAlertView  *Al=[[UIAlertView alloc]initWithTitle:nil message:message delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
             Al.tag=1000;
             [Al show];
             
@@ -596,9 +643,36 @@
     }
     else
     {
-        publishBtn.enabled=NO;
+        publishBtn.enabled=YES;
     }
-    
+    if (self.weiboInfo) {
+        publishBtn.enabled=YES;
+        //把tag放到_toolBar上
+        //创建标签文本
+        taglable =[[M80AttributedLabel alloc]initWithFrame:CGRectZero];
+        taglable.backgroundColor =[UIColor clearColor];
+        taglable.lineSpacing=5.0;
+        taglable.font=[UIFont systemFontOfSize:MarkTextFont14];
+        if (IsIphone6plus) {
+            taglable.font =[UIFont systemFontOfSize:MarkTextFont16];
+        }
+        
+        for (int i=0; i<TAGArray.count; i++) {
+            NSDictionary  *dict =[TAGArray objectAtIndex:i];
+            TagView   *tagview =[self createTagViewWithtagText:[dict objectForKey:@"TAG"] withIndex:i withBgImage:[UIImage imageNamed:@"tag_backgroud_color.png"]];
+            [taglable appendView:tagview margin:UIEdgeInsetsMake(0, 10, 0, 0)];
+        }
+        CGSize Tsize =[taglable sizeThatFits:CGSizeMake(kDeviceWidth-20, CGFLOAT_MAX)];
+        //位置和大小
+        taglable.frame=CGRectMake(10,50,kDeviceWidth-20, Tsize.height);
+        [_toolBar addSubview:taglable];
+        [UIView  animateWithDuration:0.1 animations:^{
+        } completion:^(BOOL finished) {
+            _toolBar.frame=CGRectMake(_toolBar.frame.origin.x,kDeviceHeight-keybordHeight-50-Tsize.height,_toolBar.frame.size.width, 50+Tsize.height);
+            
+        }];
+
+    }
     NSLog(@"====will show keyboard  tag====%f",_myTextView.frame.size.height);
 
 }
@@ -658,7 +732,7 @@
         }
         else
         {
-            publishBtn.enabled=NO;
+            publishBtn.enabled=YES;
         }
     }
  }
@@ -700,34 +774,32 @@
  
         [self.delegate AddMarkViewControllerReturn];
         [self dismissViewControllerAnimated:YES completion:^{
-//            UMShareViewController2  *shareVC=[[UMShareViewController2 alloc]init];
-//            shareVC.StageInfo=self.stageInfo;
-//            shareVC.weiboInfo=weibo;
-//            shareVC.delegate=self;
-//            [self presentViewController:shareVC animated:YES completion:nil];
-            
-            
+            if (self.weiboInfo) {
+                //编辑状态，不分享,刷新tabview
+                if (self.delegate&&[self.delegate respondsToSelector:@selector(AddMarkViewControllerReturn)]) {
+                    [self.delegate AddMarkViewControllerReturn];
+                }
+            }
+            else {
+                //编辑状态，不分享,刷新tabview
+               if (self.delegate&&[self.delegate respondsToSelector:@selector(AddMarkViewControllerReturn)]) {
+                [self.delegate AddMarkViewControllerReturn];
+                }
              NSDictionary  *dict = [[NSDictionary alloc]initWithObjectsAndKeys:self.stageInfo,@"stageInfo",weibo,@"weiboInfo",self.delegate,@"delegate", nil];
             [[NSNotificationCenter defaultCenter] postNotificationName:@"ShareViewAlert" object:nil userInfo:dict];
+            }
         
-            
         }];
         
       }
     }
 }
 -(void)AddTagViewHandClickWithTag:(NSString *)tag
-{
-//    CGRect  frame =_myTextView.frame;
-//    frame.size.height=30;
-//    _myTextView.frame=frame;
-//    
-    
-    
+{    
 //    if (TAGArray==nil) {
 //        TAGArray =[[NSMutableArray alloc]init];
 //    }
-//    //如果第一个标签为空
+
     if (TAGArray.count==0) {
         NSMutableDictionary  *tag1Dict =[NSMutableDictionary dictionaryWithObject:tag forKey:@"TAG"];
         [TAGArray insertObject:tag1Dict atIndex:0];
@@ -868,7 +940,7 @@
     }
     else
     {
-        publishBtn.enabled=NO;
+        publishBtn.enabled=YES;
     }
 
 }

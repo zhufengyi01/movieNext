@@ -346,6 +346,28 @@
     }];
     
 }
+
+//微博举报
+-(void)requestReportweibo
+{
+    // NSString *type=@"1";
+    UserDataCenter *userCenter =[UserDataCenter shareInstance];
+    NSDictionary *parameters = @{@"reported_user_id":_TweiboInfo.uerInfo.Id,@"weibo_id":_TweiboInfo.Id,@"reason":@"",@"user_id":userCenter.user_id};
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    [manager POST:[NSString stringWithFormat:@"%@/report-weibo/create", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
+            NSLog(@"随机数种子请求成功=======%@",responseObject);
+            UIAlertView  *Al =[[UIAlertView alloc]initWithTitle:nil message:@"你的举报已成功,我们会在24小时内处理" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            [Al show];
+            
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+    
+}
+
 -(void)requestReportSatge
 {
     // NSString *type=@"1";
@@ -484,7 +506,7 @@
     //电影按钮
     MovieDetailViewController *vc =  [MovieDetailViewController new];
     vc.movieId = self.stageInfo.movie_id;
-    NSMutableString  *backstr=[[NSMutableString alloc]initWithString:self.stageInfo.movieInfo.name];
+   // NSMutableString  *backstr=[[NSMutableString alloc]initWithString:self.stageInfo.movieInfo.name];
     vc.moviename=self.stageInfo.movieInfo.name;
     vc.movielogo=self.stageInfo.movieInfo.logo;
  
@@ -515,7 +537,7 @@
   //  AddMarkVC.pageSoureType=NSAddMarkPageSourceDefault;
  //   [self.navigationController pushViewController:AddMarkVC animated:NO];
     UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:AddMarkVC];
-    [self.navigationController presentViewController:na animated:YES completion:nil];
+    [self.navigationController presentViewController:na animated:NO completion:nil];
 
 
 }
@@ -671,9 +693,16 @@
     {
         UserDataCenter  *userCenter =[UserDataCenter shareInstance];
         if ([userCenter.is_admin  intValue]>0) {
-            UIActionSheet   *ash=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"删除",@"变身",@"推荐", nil];
+            UIActionSheet   *ash=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"删除",@"变身",@"推荐",@"编辑", nil];
             ash.tag=500;
             [ash showInView:self.view];
+        }
+        else
+        {
+            UIActionSheet   *ash=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"举报" otherButtonTitles:nil, nil];
+            ash.tag=504;
+            [ash showInView:self.view];
+
         }
     }
 }
@@ -711,6 +740,29 @@
             //推荐
             [self requestrecommendDataWithStageId:[NSString stringWithFormat:@"%@",_TstageInfo.Id] weiboId:[NSString stringWithFormat:@"%@",_TweiboInfo.Id]];
         }
+        else if (buttonIndex==3)
+        {
+            [_mymarkView CancelMarksetSelect];
+            if (_toolBar) {
+                [_toolBar HidenButtomView];
+                [_toolBar removeFromSuperview];
+                
+            }
+
+            //弹幕编辑
+            AddMarkViewController  *AddMarkVC=[[AddMarkViewController alloc]init];
+            AddMarkVC.stageInfo=self.stageInfo;
+            AddMarkVC.weiboInfo=_TweiboInfo;
+            AddMarkVC.delegate=self;
+            [self presentViewController:AddMarkVC animated:NO completion:nil];
+
+        }
+    }
+    else if (actionSheet.tag==504)
+    {
+        //确认举报
+        [self requestReportweibo];
+
     }
   
    else if (actionSheet.tag==507) {

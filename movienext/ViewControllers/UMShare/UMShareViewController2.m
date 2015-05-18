@@ -64,13 +64,14 @@
     titleLable.textColor=VBlue_color;
     titleLable.font=[UIFont boldSystemFontOfSize:18];
     titleLable.textAlignment=NSTextAlignmentCenter;
-//    self.navigationItem.titleView=titleLable;
+//self.navigationItem.titleView=titleLable;
     [view addSubview:titleLable];
     
     UIButton  *button=[UIButton buttonWithType:UIButtonTypeCustom];
     [button setTitle:@"取消" forState:UIControlStateNormal];
     [button setTitleColor:VBlue_color forState:UIControlStateNormal];
-    button.frame=CGRectMake(10, 30, 40, 30);
+    button.frame=CGRectMake(0, 20, 60, 40);
+    button.titleLabel.font=[UIFont boldSystemFontOfSize:18];
     [button addTarget:self action:@selector(CancleShareClick:) forControlEvents:UIControlEventTouchUpInside];
     [view addSubview:button];
 //    UIBarButtonItem  *barButton=[[UIBarButtonItem alloc]initWithCustomView:button];
@@ -79,9 +80,7 @@
 }
 -(void)CancleShareClick:(UIButton *) button
 {
- 
-//    //[self dismissViewControllerAnimated:YES completion:nil];
-    [self dismissViewControllerAnimated:YES completion:^{
+     [self dismissViewControllerAnimated:YES completion:^{
         
      }];
 }

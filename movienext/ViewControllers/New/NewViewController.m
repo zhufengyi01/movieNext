@@ -184,7 +184,6 @@
     [segment addTarget:self action:@selector(segmentClick:) forControlEvents:UIControlEventValueChanged];
     [self.navigationItem setTitleView:segment];
     
- 
     
 }
 //点击可刷新
@@ -1119,7 +1118,6 @@
         if (_toolBar) {
             [_toolBar HidenButtomView];
             [_toolBar removeFromSuperview];
-            
         }
         MyViewController   *myVc=[[MyViewController alloc]init];
         myVc.author_id=weiboDict.created_by;
@@ -1188,7 +1186,7 @@
        
         UserDataCenter  *userCenter =[UserDataCenter shareInstance];
         if ([userCenter.is_admin  intValue]>0) {
-        UIActionSheet   *ash=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"删除",@"变身",@"推荐", nil];
+        UIActionSheet   *ash=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"删除",@"变身",@"推荐",@"编辑", nil];
          ash.tag=500;
         [ash showInView:self.view];
         }
@@ -1229,7 +1227,6 @@
             UIActionSheet   *ash=[[UIActionSheet alloc]initWithTitle:@"确定删除" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"删除" otherButtonTitles:nil,nil];
             ash.tag=501;
             [ash showInView:self.view];
-            
         }
         else if(buttonIndex==1)
         {
@@ -1243,6 +1240,31 @@
             UIActionSheet   *ash=[[UIActionSheet alloc]initWithTitle:@"确定推荐" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"确定" otherButtonTitles:nil,nil];
             ash.tag=502;
             [ash showInView:self.view];
+        }
+        else if (buttonIndex==3)
+        {
+            [_mymarkView CancelMarksetSelect];
+            if (_toolBar) {
+                [_toolBar HidenButtomView];
+                [_toolBar removeFromSuperview];
+            }
+            ModelsModel    *model;
+            if (!segment) {
+                segment.selectedSegmentIndex=0;
+            }
+            if (segment.selectedSegmentIndex==0) {
+                model =[_hotDataArray objectAtIndex:Rowindex];
+            }
+            if (segment.selectedSegmentIndex==1) {
+                model=[_newDataArray objectAtIndex:Rowindex];
+             }
+            //弹幕编辑
+            AddMarkViewController  *AddMarkVC=[[AddMarkViewController alloc]init];
+            AddMarkVC.stageInfo=model.stageInfo;
+            AddMarkVC.model=model;
+            AddMarkVC.weiboInfo=_TweiboInfo;
+            AddMarkVC.delegate=self;
+            [self presentViewController:AddMarkVC animated:NO completion:nil];
         }
     }
     // 确定删除
