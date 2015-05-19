@@ -135,5 +135,8 @@ float getHeightByWidthAndHeight(float width, float height){
 +(NSString *)dateToString:(NSDate *)date;
 // MD5 加密
 +(NSString *)md5:(NSString *)str;
+//得到中英文字符混合长度
++(int)getToInt:(NSString*)strtemp;
+
 
 @end

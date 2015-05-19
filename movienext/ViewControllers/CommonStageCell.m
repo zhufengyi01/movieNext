@@ -91,31 +91,26 @@
     
    
     
-    
-    
     //更多
-    moreButton=[ZCControl createButtonWithFrame:CGRectMake(kStageWidth-130, 9, 30, 25) ImageName:@"more_icon_default.png" Target:self Action:@selector(cellButtonClick:) Title:@""];
+    moreButton=[ZCControl createButtonWithFrame:CGRectMake(kStageWidth-150, 9, 30, 25) ImageName:@"more_icon_default.png" Target:self Action:@selector(cellButtonClick:) Title:@""];
     //moreButton.backgroundColor=VBlue_color;
     moreButton.layer.cornerRadius=2;
      moreButton.hidden=NO;
     [BgView2 addSubview:moreButton];
     
-//    //分享
-//    ScreenButton =[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-120,9,45,25) ImageName:@"btn_share_default.png" Target:self Action:@selector(cellButtonClick:) Title:@""];
-//    [ScreenButton setBackgroundImage:[UIImage imageNamed:@"btn_share_select.png"] forState:UIControlStateHighlighted];
-//    [BgView2 addSubview:ScreenButton];
-
     
-    if (_tanlogoButton) {
-        [_tanlogoButton removeFromSuperview];
-        _tanlogoButton=nil;
-    }
-    _tanlogoButton =[UIButton buttonWithType:UIButtonTypeCustom];
+    //分享
+    ScreenButton =[ZCControl createButtonWithFrame:CGRectMake(kStageWidth-110,9,45,25) ImageName:@"btn_share_default.png" Target:self Action:@selector(cellButtonClick:) Title:@""];
+    [ScreenButton setBackgroundImage:[UIImage imageNamed:@"btn_share_select.png"] forState:UIControlStateHighlighted];
+    [ScreenButton setBackgroundImage:[UIImage imageNamed:@"btn_share_select.png"] forState:UIControlStateNormal];
+    [BgView2 addSubview:ScreenButton];
+
+     _tanlogoButton =[UIButton buttonWithType:UIButtonTypeCustom];
     _tanlogoButton.frame=CGRectMake(kStageWidth-100, 9, 45, 25);
     [_tanlogoButton setImage:[UIImage imageNamed:@"closed_icon_default.png"] forState:UIControlStateNormal];
     [_tanlogoButton setImage:[UIImage imageNamed:@"open_danmu.png.png"] forState:UIControlStateSelected];
     [_tanlogoButton addTarget:self action:@selector(hidenAndShowMarkView:) forControlEvents:UIControlEventTouchUpInside];
-    [BgView2 addSubview:_tanlogoButton];
+   // [BgView2 addSubview:_tanlogoButton];
 
     //添加弹幕
     addMarkButton =[ZCControl createButtonWithFrame:CGRectMake(kStageWidth-55,9,45,25) ImageName:@"btn_add_default.png" Target:self Action:@selector(cellButtonClick:) Title:@""];

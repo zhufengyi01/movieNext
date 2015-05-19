@@ -508,5 +508,13 @@
             result[12], result[13], result[14], result[15]
             ]; 
 }
+//得到中英文混合字符串长度 方法2
++(int)getToInt:(NSString*)strtemp
+
+{
+    NSStringEncoding enc = CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000);
+    NSData* da = [strtemp dataUsingEncoding:enc];
+    return [da length];
+}
 
 @end

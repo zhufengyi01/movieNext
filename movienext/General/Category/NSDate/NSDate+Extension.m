@@ -428,6 +428,9 @@
     int day = (int)([curDate day] - [date day]);
     
     NSTimeInterval retTime = 1.0;
+    if (time<60) {
+        return [NSString stringWithFormat:@"刚刚"];
+    }
     if (time < 3600) { // 小于一小时
         retTime = time / 60;
         retTime = retTime <= 0.0 ? 1.0 : retTime;

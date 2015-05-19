@@ -250,7 +250,7 @@
     
     //注册小图模式
     [_myConllectionView registerClass:[SmallImageCollectionViewCell class] forCellWithReuseIdentifier:@"smallcell"];
-    // 注册头部视图sdsdsdsd
+    // 注册头部视图
     //[_myConllectionView registerClass:[MovieHeadView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"headerView"];
     _myConllectionView.delegate=self;
     _myConllectionView.dataSource=self;

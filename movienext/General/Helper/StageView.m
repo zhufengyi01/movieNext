@@ -77,7 +77,7 @@
           width=(ImageWith/ImgeHight)*kDeviceWidth;
           x=(kDeviceWidth-width)/2;
      }
-        _MovieImageView.frame=CGRectMake(x, y,width,hight);
+    _MovieImageView.frame=CGRectMake(x, y,width,hight);
     _MovieImageView.backgroundColor =VStageView_color;
     NSString *photostring=[NSString stringWithFormat:@"%@%@!w640",kUrlStage,self.stageInfo.photo];
     //可监视下载进入的方法
@@ -98,9 +98,8 @@
          markView.isShowansHiden=YES;
          [markView StartShowAndhiden];
          [self addSubview:markView];
-         
          }
-#pragma  mark  有很多气泡，气泡循环播放
+#pragma  mark  有很多弹幕，气泡循环播放
          if (self.weibosArray&&self.weibosArray.count>0) {
          for ( int i=0;i<self.weibosArray.count ; i++) {
          MarkView *markView = [self createMarkViewWithDict:self.weibosArray[i] andIndex:i];
@@ -109,7 +108,7 @@
          markView.alpha=0;
          //设置单条微博的参数信息
          markView.weiboInfo=self.weibosArray[i];
-             [markView setValueWithWeiboInfo:self.weibosArray[i]];
+         [markView setValueWithWeiboInfo:self.weibosArray[i]];
          //遵守markView 的协议
          markView.isShowansHiden=NO;
          markView.delegate=self;
@@ -140,7 +139,8 @@
             float markViewWidth = Msize.width+23+Uwidth+5+5+11+5;
             float markViewHeight = Msize.height+6;
             if (weibodict.tagArray.count>0) {
-                markViewHeight=markViewHeight+25;}
+                markViewHeight=markViewHeight+25;
+            }
            if(IsIphone6plus)
            {
                markViewWidth=markViewWidth+10;

@@ -21,7 +21,7 @@
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:YES];
-    
+    [[UIApplication sharedApplication] setStatusBarHidden:YES];
 }
 
 - (void)viewDidLoad {
@@ -47,6 +47,7 @@
     [button setTitle:@"取消" forState:UIControlStateNormal];
     [button setTitleColor:VBlue_color forState:UIControlStateNormal];
     button.frame=CGRectMake(10, 10, 40, 30);
+    button.titleLabel.font =[UIFont boldSystemFontOfSize:18];
     [button addTarget:self action:@selector(CancleShareClick:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem  *barButton=[[UIBarButtonItem alloc]initWithCustomView:button];
     self.navigationItem.leftBarButtonItem=barButton;
@@ -55,7 +56,6 @@
 -(void)CancleShareClick:(UIButton *) button
 {
     [self dismissViewControllerAnimated:YES completion:nil];
-    //[self.navigationController  pushViewController:[NewViewController new] animated:NO];
 }
 
 -(void)createButtomView
@@ -66,7 +66,6 @@
     buttomView.userInteractionEnabled=YES;
     [self.view addSubview:buttomView];
 #pragma create four button
-    
     NSArray  *imageArray=[NSArray arrayWithObjects:@"wechat_share_icon.png",@"moments_share_icon.png",@"qzone_share_icon.png",@"weibo_share_icon.png", nil];
     
     for (int i=0; i<4; i++) {
@@ -83,10 +82,10 @@
 }
 -(void)createStageView
 {
- //   self.view.backgroundColor=VStageView_color;
+    //self.view.backgroundColor=VStageView_color;
     shareView =[[UIView alloc]initWithFrame:CGRectMake(0,(kDeviceHeight-(kDeviceWidth/4)-kDeviceWidth-20-kHeightNavigation)/2, kDeviceWidth, kDeviceWidth+20)];
     shareView.userInteractionEnabled=YES;
-    shareView.backgroundColor=[UIColor redColor];
+    shareView.backgroundColor=VStageView_color;
     [self.view addSubview:shareView];
     
     _ShareimageView=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth,kDeviceWidth)];
@@ -97,13 +96,15 @@
     //放置电影名和标签的view
     logosupView=[[UIView alloc]initWithFrame:CGRectMake(0,kDeviceWidth, kDeviceWidth, 20)];
     logosupView.backgroundColor=VStageView_color;
+    logosupView.hidden=YES;
     [shareView addSubview:logosupView];
     
-    _moviewName= [ZCControl createLabelWithFrame:CGRectMake(10,0, kDeviceWidth-70, 20) Font:12 Text:@""];
+    _moviewName= [ZCControl createLabelWithFrame:CGRectMake(10,0,180, 20) Font:12 Text:@""];
     _moviewName.textColor=VLight_GrayColor;
     _moviewName.numberOfLines=0;
     _moviewName.text=self.StageInfo.movieInfo.name;
-    //_moviewName.lineBreakMode=NSLineBreakByTruncatingTail
+    _moviewName.adjustsFontSizeToFitWidth=NO;
+    _moviewName.lineBreakMode=NSLineBreakByTruncatingTail;
     [logosupView addSubview:_moviewName];
     
     logoLable=[ZCControl createLabelWithFrame:CGRectMake(kDeviceWidth-60,0, 50, 20) Font:12 Text:@"影弹App"];
@@ -115,8 +116,7 @@
 //点击分享
 -(void)handShareButtonClick:(UIButton *) button
 {
-    
-    
+    logosupView.hidden=NO;
     [self dismissViewControllerAnimated:YES completion:^{
         shareImage=[Function getImage:shareView WithSize:CGSizeMake(kDeviceWidth, kDeviceWidth+20)];
         if (self.delegate &&[self.delegate respondsToSelector:@selector(UMShareViewControllerHandClick:ShareImage:StageInfoModel:)]) {

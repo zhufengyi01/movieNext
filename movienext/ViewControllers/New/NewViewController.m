@@ -943,14 +943,16 @@
     {
         //分享
         CommonStageCell *cell = (CommonStageCell *)(button.superview.superview.superview.superview);
-       // CommonStageCell  *cell=(CommonStageCell *)[_HotMoVieTableView cellForRowAtIndexPath:index];
-        UIImage  *image=[Function getImage:cell.stageView WithSize:CGSizeMake(kDeviceWidth, kDeviceWidth)];
+        NSIndexPath  *indexpath;
+        //CommonStageCell  *cell=(CommonStageCell *)[_HotMoVieTableView indexPath];
+        
+        UIImage  *image=[Function getImage:cell.stageView WithSize:CGSizeMake(kStageWidth, kStageWidth)];
         UMShareViewController  *shareVC=[[UMShareViewController alloc]init];
         shareVC.StageInfo=model.stageInfo;
         shareVC.screenImage=image;
         shareVC.delegate=self;
          UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:shareVC];
-        [self presentViewController:na animated:NO completion:nil];
+        [self presentViewController:na animated:YES completion:nil];
         
      }
     else if(button.tag==3000)

@@ -41,6 +41,7 @@
     if (IsIphone6plus) {
         self.titleLable.font=[UIFont systemFontOfSize:TagTextFont16];
     }
+    self.titleLable.lineBreakMode=NSLineBreakByTruncatingTail;
     self.titleLable.adjustsFontSizeToFitWidth=NO;
     [self.tagBgImageview addSubview:self.titleLable];
     
@@ -68,7 +69,7 @@
 {
     [super layoutSubviews];
     self.tagBgImageview.frame=CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
-    self.titleLable.frame=CGRectMake(5,0, self.frame.size.width-10,self.frame.size.height);
+    self.titleLable.frame=CGRectMake(5,0, self.frame.size.width-6,self.frame.size.height);
     
 }
 

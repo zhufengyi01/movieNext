@@ -285,9 +285,14 @@
 {
     //方法只是去掉左右两边的空格；
     InputStr = [_myTextView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    if (TAGArray.count==0&&InputStr.length==0) {
+        UIAlertView  *al  =[[UIAlertView alloc]initWithTitle:nil message:@"请输入标签或弹幕" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+        [al show];
+        return;
+    }
+
     //发布到屏幕之后需要把输入框退回去
     [_myTextView resignFirstResponder];
-  
        CGRect  iframe =_toolBar.frame;
        iframe.origin.y=kDeviceHeight;
        _toolBar.frame=iframe;
@@ -326,7 +331,6 @@
     //计算弹幕的长度
     CGSize  Msize= [InputStr  boundingRectWithSize:CGSizeMake(kDeviceWidth/2, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:[UIFont systemFontOfSize:14] forKey:NSFontAttributeName] context:nil].size;
     //标签的宽度
-    
     NSMutableString  *tagString =[[NSMutableString alloc]init];
     for (int i=0; i<TAGArray.count; i++) {
         if (i<2) {
@@ -334,19 +338,25 @@
         }
     }
     CGSize  Tsize =[tagString  boundingRectWithSize:CGSizeMake(kDeviceWidth/2, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:[UIFont systemFontOfSize:14] forKey:NSFontAttributeName] context:nil].size;
+    //如果标签的宽度大于字的宽度
     if (Tsize.width>Msize.width) {
         Msize=Tsize;
+        if (Msize.width>kDeviceWidth/2) {
+            Msize.width=kDeviceWidth/2;
+        }
     }
-
     int  markViewWidth = (int)Msize.width+23+5+5+11+5;
      int   markViewHeight =(int) Msize.height+6;
-    int  kw=kStageWidth;
+    if (TAGArray.count>0) {
+        markViewHeight=markViewHeight+TagHeight+5;
+    }
+    int  width=kStageWidth;
+    float  x=arc4random()%(width-markViewWidth);//要求x在0~~~（宽度-markViewWidth）
+    float  y=arc4random()%((width-markViewHeight/2)+markViewHeight/2-markViewHeight);  //要求y在markviewheight.y/2 ~~~~~~~(高度--markViewheigth/2)
+    X =[NSString stringWithFormat:@"%f",((x+markViewWidth)/width)*100];
+    Y=[NSString stringWithFormat:@"%f",((y+markViewHeight/2)/width)*100];
     
-    int  x=arc4random()%(kw-markViewWidth);//要求x在0~~~（宽度-markViewWidth）
-    int  y=arc4random()%((kw-markViewHeight/2)+markViewHeight/2-markViewHeight);  //要求y在markviewheight.y/2 ~~~~~~~(高度--markViewheigth/2)
     
-    X =[NSString stringWithFormat:@"%f",((x+markViewWidth)/310.0)*100];
-    Y=[NSString stringWithFormat:@"%f",((y+markViewHeight/2)/310.0)*100];
     
     //开始创建weibo对象
       weibomodel =[[weiboInfoModel alloc]init];
@@ -378,7 +388,6 @@
                 }
                 [tagArray addObject:tagmodel];
             }
-            
         }
         //标签数组
         weibomodel.tagArray=tagArray;
@@ -443,14 +452,16 @@
     CGPoint curPoint = [gestureRecognizer locationInView:stageView];
     CGFloat xoffset = _myMarkView.frame.size.width/2.0;
     CGFloat yoffset = _myMarkView.frame.size.height/2.0;
-    CGFloat x = MIN(kDeviceWidth-xoffset,  MAX(xoffset, curPoint.x) );
-    CGFloat y = MIN(kDeviceWidth-yoffset,  MAX(yoffset, curPoint.y) );
+    float width=kDeviceWidth;
+    CGFloat x = MIN(width-xoffset,  MAX(xoffset, curPoint.x) );
+    CGFloat y = MIN(width-yoffset,  MAX(yoffset, curPoint.y) );
     _myMarkView.center = CGPointMake(x, y);
+    NSLog(@"mark ----x ==%f   y===%f",_myMarkView.frame.origin.x,_myMarkView.frame.origin.y);
     float  markViewY=_myMarkView.frame.origin.y;
     float  markviewHight2 =_myMarkView.frame.size.height/2;
     //发布的右下中部的位置
-    X =[NSString stringWithFormat:@"%f",((_myMarkView.frame.origin.x+_myMarkView.frame.size.width)/kDeviceWidth)*100];
-    Y=[NSString stringWithFormat:@"%f",((markViewY+markviewHight2)/kDeviceWidth)*100];
+    X =[NSString stringWithFormat:@"%f",((_myMarkView.frame.origin.x+_myMarkView.frame.size.width)/width)*100];
+    Y=[NSString stringWithFormat:@"%f",((markViewY+markviewHight2)/width)*100];
     
  
 }
