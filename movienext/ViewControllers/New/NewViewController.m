@@ -41,9 +41,10 @@
 #import "TagModel.h"
 #import "TagToStageViewController.h"
 #import "MJExtension.h"
+#import "UMShareView.h"
 //友盟分享
 //#import "UMSocial.h"
-@interface NewViewController ()<UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UIScrollViewDelegate,UMSocialDataDelegate,UMSocialUIDelegate,LoadingViewDelegate,UIActionSheetDelegate,CommonStageCellDelegate,AddMarkViewControllerDelegate,UMShareViewControllerDelegate,UMShareViewController2Delegate,MFMailComposeViewControllerDelegate>
+@interface NewViewController ()<UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UIScrollViewDelegate,UMSocialDataDelegate,UMSocialUIDelegate,LoadingViewDelegate,UIActionSheetDelegate,CommonStageCellDelegate,AddMarkViewControllerDelegate,UMShareViewControllerDelegate,UMShareViewController2Delegate,MFMailComposeViewControllerDelegate,UMShareViewDelegate>
 {
     AppDelegate  *appdelegate;
     UISegmentedControl *segment;
@@ -836,14 +837,6 @@
             cell.backgroundColor=View_BackGround;
         }
         if (_newDataArray.count>indexPath.row) {
-//            weiboInfoModel  *model =[_newDataArray  objectAtIndex:indexPath.row];
-//            cell.pageType=NSPageSourceTypeMainNewController;
-//            cell.weiboInfo=model;
-//            cell.stageView.delegate=self;
-//            cell.stageInfo=model.stageInfo;
-//            cell.delegate=self;
-//            [cell ConfigsetCellindexPath:indexPath.row];
-            
             ModelsModel  *model =[_newDataArray objectAtIndex:indexPath.row];
             cell.pageType=NSPageSourceTypeMainNewController;
             cell.delegate=self;
@@ -862,7 +855,6 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
         //点击cell 隐藏弹幕，再点击隐藏
-        //NSLog(@"didDeselectRowAtIndexPath  =====%ld",indexPath.row);
        CommonStageCell   *cell=(CommonStageCell *)[tableView cellForRowAtIndexPath:indexPath];
     if (isShowMark==YES) {
         [cell showAndHidenMarkViews:YES];
@@ -937,22 +929,29 @@
         vc.moviename=model.stageInfo.movieInfo.name;
         vc.movielogo=model.stageInfo.movieInfo.logo;
         [self.navigationController pushViewController:vc animated:YES];
-
     }
     else if (button.tag==2000)
     {
         //分享
         CommonStageCell *cell = (CommonStageCell *)(button.superview.superview.superview.superview);
-        NSIndexPath  *indexpath;
-        //CommonStageCell  *cell=(CommonStageCell *)[_HotMoVieTableView indexPath];
-        
+        //NSIndexPath  *indexpath = [NSIndexPath indexPathForRow:Rowindex inSection:1];
+        //CommonStageCell  *cell=(CommonStageCell *)[_HotMoVieTableView cellForRowAtIndexPath:indexpath];
         UIImage  *image=[Function getImage:cell.stageView WithSize:CGSizeMake(kStageWidth, kStageWidth)];
-        UMShareViewController  *shareVC=[[UMShareViewController alloc]init];
-        shareVC.StageInfo=model.stageInfo;
-        shareVC.screenImage=image;
-        shareVC.delegate=self;
-         UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:shareVC];
-        [self presentViewController:na animated:YES completion:nil];
+        
+        if (UMShareStyle==1) {//使用controller方式分享
+                    UMShareViewController  *shareVC=[[UMShareViewController alloc]init];
+                    shareVC.StageInfo=model.stageInfo;
+                    shareVC.screenImage=image;
+                    shareVC.delegate=self;
+                     UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:shareVC];
+                    [self presentViewController:na animated:YES completion:nil];
+            
+        }
+        else if (UMShareStyle==0)//使用view方式分享
+        {
+        UMShareView *ShareView =[[UMShareView alloc] initwithStageInfo:model.stageInfo ScreenImage:image delgate:self];
+        [ShareView show];
+        }
         
      }
     else if(button.tag==3000)
@@ -1014,7 +1013,6 @@
 -(void)UMShareViewControllerHandClick:(UIButton *)button ShareImage:(UIImage *)shareImage StageInfoModel:(stageInfoModel *)StageInfo
 {
     
-    
     NSArray  *sharearray =[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQzone, UMShareToSina, nil];
     
     [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
@@ -1037,6 +1035,15 @@
     
 }
 
+-(void)UMShareViewHandClick:(UIButton *)button ShareImage:(UIImage *)shareImage StageInfoModel:(stageInfoModel *)StageInfo
+{
+    NSArray  *sharearray =[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQzone, UMShareToSina, nil];
+    [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
+    [[UMSocialControllerService defaultControllerService] setShareText:StageInfo.movieInfo.name shareImage:shareImage socialUIDelegate:self];
+    //设置分享内容和回调对象
+    [UMSocialSnsPlatformManager getSocialPlatformWithName:[sharearray  objectAtIndex:button.tag-10000]].snsClickHandler(self,[UMSocialControllerService defaultControllerService],YES);
+    
+}
 //#pragma mark  --UMShareDelegate 友盟分享实现的功能
 
 -(void)didCloseUIViewController:(UMSViewControllerType)fromViewControllerType

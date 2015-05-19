@@ -141,6 +141,7 @@
 		001F0D521AF223BF004BE754 /* close_danmu@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 001F0D501AF223BF004BE754 /* close_danmu@3x.png */; };
 		001F0D531AF223BF004BE754 /* close_danmu@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 001F0D511AF223BF004BE754 /* close_danmu@2x.png */; };
 		00218C701AE0A230006B79B4 /* ScanMovieInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00218C6F1AE0A230006B79B4 /* ScanMovieInfoViewController.m */; };
+		0029A9491B0B388B004256B9 /* UMShareView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0029A9481B0B388B004256B9 /* UMShareView.m */; };
 		002A12EA1B01A999003A001F /* dan_close@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 002A12E61B01A999003A001F /* dan_close@2x.png */; };
 		002A12EB1B01A999003A001F /* dan_close@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 002A12E71B01A999003A001F /* dan_close@3x.png */; };
 		002A12EC1B01A999003A001F /* dan_closed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 002A12E81B01A999003A001F /* dan_closed@2x.png */; };
@@ -643,6 +644,8 @@
 		001F0D511AF223BF004BE754 /* close_danmu@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "close_danmu@2x.png"; sourceTree = "<group>"; };
 		00218C6E1AE0A230006B79B4 /* ScanMovieInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScanMovieInfoViewController.h; sourceTree = "<group>"; };
 		00218C6F1AE0A230006B79B4 /* ScanMovieInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScanMovieInfoViewController.m; sourceTree = "<group>"; };
+		0029A9471B0B388B004256B9 /* UMShareView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UMShareView.h; sourceTree = "<group>"; };
+		0029A9481B0B388B004256B9 /* UMShareView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UMShareView.m; sourceTree = "<group>"; };
 		002A12E61B01A999003A001F /* dan_close@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dan_close@2x.png"; sourceTree = "<group>"; };
 		002A12E71B01A999003A001F /* dan_close@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dan_close@3x.png"; sourceTree = "<group>"; };
 		002A12E81B01A999003A001F /* dan_closed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dan_closed@2x.png"; sourceTree = "<group>"; };
@@ -1921,6 +1924,8 @@
 				0067CFEE1AD4186200148561 /* UMShareViewController.m */,
 				001F0D491AF1D652004BE754 /* UMShareViewController2.h */,
 				001F0D4A1AF1D652004BE754 /* UMShareViewController2.m */,
+				0029A9471B0B388B004256B9 /* UMShareView.h */,
+				0029A9481B0B388B004256B9 /* UMShareView.m */,
 			);
 			name = UMShareView;
 			path = ../../ViewControllers/UMShare;
@@ -2989,6 +2994,7 @@
 				0067395E1AA49F560087C240 /* SearchmovieTableViewCell.m in Sources */,
 				000B09201AA3007600B8D13A /* SettingViewController.m in Sources */,
 				000850B41B09C87900E6009C /* UIButton+CountDown.m in Sources */,
+				0029A9491B0B388B004256B9 /* UMShareView.m in Sources */,
 				00665A121ACEA65300010BED /* UserHeadChangeViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

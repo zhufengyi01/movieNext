@@ -23,7 +23,6 @@
     [super viewDidAppear:YES];
     [[UIApplication sharedApplication] setStatusBarHidden:YES];
 }
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.

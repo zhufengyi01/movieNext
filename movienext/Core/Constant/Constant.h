@@ -50,6 +50,8 @@
 
 //#define   Review   1          ///上传appstore版本  1 为审核
 #define   Version  @"1.0"       //版本信息  1.0.1 审核版         1.0 正常版
+#define   UMShareStyle  0      //分享1使用controller方式分享    0 使用view 方式分享
+
 
 #pragma  mark 颜色设置
 #define kAppTintColor [UIColor colorWithRed:0.0/255.0 green:146.0/255.0 blue:255.0/255.0 alpha:1]

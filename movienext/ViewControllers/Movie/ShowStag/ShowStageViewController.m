@@ -27,10 +27,11 @@
 #import "UMShareViewController2.h"
 #import "MovieDetailViewController.h"
 #import "AppDelegate.h"
+#import "UMShareView.h"
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
 
-@interface ShowStageViewController() <ButtomToolViewDelegate,StageViewDelegate,AddMarkViewControllerDelegate,UMShareViewControllerDelegate,UMSocialDataDelegate,UMSocialUIDelegate,UIActionSheetDelegate,UMShareViewController2Delegate>
+@interface ShowStageViewController() <ButtomToolViewDelegate,StageViewDelegate,AddMarkViewControllerDelegate,UMShareViewControllerDelegate,UMSocialDataDelegate,UMSocialUIDelegate,UIActionSheetDelegate,UMShareViewController2Delegate,UMShareViewDelegate>
 {
     ButtomToolView *_toolBar;
     UIButton  *moreButton;
@@ -171,7 +172,7 @@
     
     
     //更多
-    moreButton=[ZCControl createButtonWithFrame:CGRectMake(kStageWidth-150, 9, 30, 25) ImageName:@"more_icon_default.png" Target:self Action:@selector(cellButtonClick:) Title:@""];
+    moreButton=[ZCControl createButtonWithFrame:CGRectMake(kStageWidth-135, 9, 30, 25) ImageName:@"more_icon_default.png" Target:self Action:@selector(cellButtonClick:) Title:@""];
     moreButton.layer.cornerRadius=2;
     moreButton.hidden=NO;
     [BgView2 addSubview:moreButton];
@@ -179,8 +180,8 @@
 
     
     
-    ScreenButton =[ZCControl createButtonWithFrame:CGRectMake(kStageWidth-110,9,45,25) ImageName:@"btn_share_default.png" Target:self Action:@selector(ScreenButtonClick:) Title:@""];
-    [ScreenButton setBackgroundImage:[UIImage imageNamed:@"btn_share_select.png"] forState:UIControlStateHighlighted];
+    ScreenButton =[ZCControl createButtonWithFrame:CGRectMake(kStageWidth-95,9,30,25) ImageName:@"btn_share_default.png" Target:self Action:@selector(ScreenButtonClick:) Title:@""];
+    //[ScreenButton setBackgroundImage:[UIImage imageNamed:@"btn_share_select.png"] forState:UIControlStateHighlighted];
     [ScreenButton setBackgroundImage:[UIImage imageNamed:@"btn_share_select.png"] forState:UIControlStateNormal];
     [BgView2 addSubview:ScreenButton];
     
@@ -499,7 +500,17 @@
     [UMSocialSnsPlatformManager getSocialPlatformWithName:[sharearray  objectAtIndex:button.tag-10000]].snsClickHandler(self,[UMSocialControllerService defaultControllerService],YES);
     
 }
+-(void)UMShareViewHandClick:(UIButton *)button ShareImage:(UIImage *)shareImage StageInfoModel:(stageInfoModel *)StageInfo
+{
+    NSArray  *sharearray =[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQzone, UMShareToSina, nil];
+    [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
+    [[UMSocialControllerService defaultControllerService] setShareText:StageInfo.movieInfo.name shareImage:shareImage socialUIDelegate:self];
+    //设置分享内容和回调对象
+    
+    [UMSocialSnsPlatformManager getSocialPlatformWithName:[sharearray  objectAtIndex:button.tag-10000]].snsClickHandler(self,[UMSocialControllerService defaultControllerService],YES);
+    
 
+}
 //跳转到电影页
 -(void)StageMovieButtonClick:(UIButton *) button
 {
@@ -516,14 +527,24 @@
 // 分享
 -(void)ScreenButtonClick:(UIButton  *) button
 {
-    UIImage  *image=[Function getImage:stageView WithSize:CGSizeMake(kDeviceWidth, kDeviceWidth)];
-    UMShareViewController  *shareVC=[[UMShareViewController alloc]init];
-    shareVC.StageInfo=self.stageInfo;
-    shareVC.screenImage=image;
-    shareVC.delegate=self;
-    UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:shareVC];
-    [self presentViewController:na animated:YES completion:nil];
+    UIImage  *image=[Function getImage:stageView WithSize:CGSizeMake(kStageWidth, kStageWidth)];
+    
 
+    if (UMShareStyle==1) {
+        UMShareViewController  *shareVC=[[UMShareViewController alloc]init];
+        shareVC.StageInfo=self.stageInfo;
+        shareVC.screenImage=image;
+        shareVC.delegate=self;
+        UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:shareVC];
+        [self presentViewController:na animated:YES completion:nil];
+   
+    }
+    else if (UMShareStyle==0)
+    {
+        UMShareView *ShareView =[[UMShareView alloc] initwithStageInfo:self.stageInfo ScreenImage:image delgate:self];
+        [ShareView show];
+
+    }
 }
 //添加弹幕
 -(void)addMarkButtonClick:(UIButton  *) button

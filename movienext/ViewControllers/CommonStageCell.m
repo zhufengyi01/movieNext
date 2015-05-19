@@ -92,7 +92,7 @@
    
     
     //更多
-    moreButton=[ZCControl createButtonWithFrame:CGRectMake(kStageWidth-150, 9, 30, 25) ImageName:@"more_icon_default.png" Target:self Action:@selector(cellButtonClick:) Title:@""];
+    moreButton=[ZCControl createButtonWithFrame:CGRectMake(kStageWidth-135, 9, 30, 25) ImageName:@"more_icon_default.png" Target:self Action:@selector(cellButtonClick:) Title:@""];
     //moreButton.backgroundColor=VBlue_color;
     moreButton.layer.cornerRadius=2;
      moreButton.hidden=NO;
@@ -100,8 +100,8 @@
     
     
     //分享
-    ScreenButton =[ZCControl createButtonWithFrame:CGRectMake(kStageWidth-110,9,45,25) ImageName:@"btn_share_default.png" Target:self Action:@selector(cellButtonClick:) Title:@""];
-    [ScreenButton setBackgroundImage:[UIImage imageNamed:@"btn_share_select.png"] forState:UIControlStateHighlighted];
+    ScreenButton =[ZCControl createButtonWithFrame:CGRectMake(kStageWidth-95,9,30,25) ImageName:@"btn_share_default.png" Target:self Action:@selector(cellButtonClick:) Title:@""];
+   // [ScreenButton setBackgroundImage:[UIImage imageNamed:@"btn_share_select.png"] forState:UIControlStateHighlighted];
     [ScreenButton setBackgroundImage:[UIImage imageNamed:@"btn_share_select.png"] forState:UIControlStateNormal];
     [BgView2 addSubview:ScreenButton];
 
