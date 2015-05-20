@@ -69,7 +69,7 @@
     NSString  *version =[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
     [MobClick setAppVersion:version];
     //如果@param value为YES，SDK会对日志进行加密。加密模式可以有效防止网络攻击，提高数据安全性。
-   // 如果@param value为NO，SDK将按照非加密的方式来传输日志。
+    // 如果@param value为NO，SDK将按照非加密的方式来传输日志。
     //如果您没有设置加密模式，SDK的加密模式为NO（不加密）。
     [MobClick setEncryptEnabled:YES];
     

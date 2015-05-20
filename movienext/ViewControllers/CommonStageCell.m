@@ -151,7 +151,9 @@
     //设置底部
     if (self.stageInfo.movieInfo.name) {  //电影名字，s这里设置title 偏移
         NSString  *nameStr=self.stageInfo.movieInfo.name;
-        CGSize  Nsize =[nameStr boundingRectWithSize:CGSizeMake(100, 27) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:[NSDictionary dictionaryWithObject:movieNameLable.font forKey:NSFontAttributeName] context:nil].size;
+        float  nameW =kDeviceWidth*0.36;
+        
+        CGSize  Nsize =[nameStr boundingRectWithSize:CGSizeMake(nameW, 27) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:[NSDictionary dictionaryWithObject:movieNameLable.font forKey:NSFontAttributeName] context:nil].size;
         movieNameLable.frame=CGRectMake(35, 0, Nsize.width+4, 27);
         leftButtomButton.frame=CGRectMake(10, 9, 30+5+movieNameLable.frame.size.width, 27);
          movieNameLable.text=[NSString stringWithFormat:@"%@",nameStr];

@@ -127,15 +127,17 @@
              //最多放置两个标签
              if (i==1&&self.weiboInfo.tagArray.count>2) {
                  //放置一个...的
-                 TagView *tagview =[[TagView alloc]initWithFrame:CGRectZero];
+                 TagModel  *tagmodel =[self.weiboInfo.tagArray objectAtIndex:i];
+                 tagmodel.tagDetailInfo.title=@"...";
+                 TagView *tagview =[[TagView alloc]initWithWeiboInfo:self.weiboInfo AndTagInfo:tagmodel delegate:nil isCanClick:NO backgoundImage:nil isLongTag:NO];
                  //tagview.tag=1000+index;
                  //设置不可以点击
-                 [tagview  setTagViewIsClick:NO];
-                 tagview.weiboInfo=self.weiboInfo;
-                 NSString *titleStr = @"...";
-                 tagview.titleLable.text=titleStr;
-                 CGSize  Tsize =[titleStr boundingRectWithSize:CGSizeMake(MAXFLOAT, TagHeight) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:[NSDictionary dictionaryWithObject:tagview.titleLable.font forKey:NSFontAttributeName] context:nil].size;
-                 tagview.frame=CGRectMake(0,0, Tsize.width+10, TagHeight);
+                // [tagview  setTagViewIsClick:NO];
+//                 tagview.weiboInfo=self.weiboInfo;
+//                 NSString *titleStr = @"...";
+//                 tagview.titleLable.text=titleStr;
+//                 CGSize  Tsize =[titleStr boundingRectWithSize:CGSizeMake(MAXFLOAT, TagHeight) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:[NSDictionary dictionaryWithObject:tagview.titleLable.font forKey:NSFontAttributeName] context:nil].size;
+//                 tagview.frame=CGRectMake(0,0, Tsize.width+10, TagHeight);
                  [self.tagLable appendView:tagview margin:UIEdgeInsetsMake(0, 0, 0, 5)];
                  break;
              }
@@ -147,18 +149,18 @@
 //创建标签的方法
 -(TagView *)createTagViewWithtagInfo:(TagModel *) tagmodel andIndex:(NSInteger ) index
 {
-    TagView *tagview =[[TagView alloc]initWithFrame:CGRectZero];
-    //tagview.tag=1000+index;
-    //设置不可以点击
-    [tagview  setTagViewIsClick:NO];
-    tagview.weiboInfo=self.weiboInfo;
-    NSString *titleStr = tagmodel.tagDetailInfo.title;
-     tagview.titleLable.text=titleStr;
-     CGSize  Tsize =[titleStr boundingRectWithSize:CGSizeMake(MAXFLOAT, TagHeight) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:[NSDictionary dictionaryWithObject:tagview.titleLable.font forKey:NSFontAttributeName] context:nil].size;
-    if (Tsize.width>60) {
-        Tsize.width=60;
-    }
-     tagview.frame=CGRectMake(0,0, Tsize.width+10, TagHeight);
+    TagView *tagview =[[TagView alloc]initWithWeiboInfo:self.weiboInfo AndTagInfo:tagmodel delegate:nil isCanClick:NO backgoundImage:nil isLongTag:NO];
+//    //tagview.tag=1000+index;
+//    //设置不可以点击
+//    [tagview  setTagViewIsClick:NO];
+//    tagview.weiboInfo=self.weiboInfo;
+//    NSString *titleStr = tagmodel.tagDetailInfo.title;
+//     tagview.titleLable.text=titleStr;
+//     CGSize  Tsize =[titleStr boundingRectWithSize:CGSizeMake(MAXFLOAT, TagHeight) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:[NSDictionary dictionaryWithObject:tagview.titleLable.font forKey:NSFontAttributeName] context:nil].size;
+//    if (Tsize.width>60) {
+//        Tsize.width=60;
+//    }
+//     tagview.frame=CGRectMake(0,0, Tsize.width+10, TagHeight);
     return tagview;
 }
 

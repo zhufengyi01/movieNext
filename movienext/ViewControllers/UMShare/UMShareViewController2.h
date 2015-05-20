@@ -10,7 +10,7 @@
 #import "stageInfoModel.h"
 #import "weiboInfoModel.h"
 #import "M80AttributedLabel.h"
-
+#define  Tag_View_Color [UIColor colorWithRed:155.0/255 green:155.0/255 blue:155.0/255 alpha:1]
 typedef NS_ENUM(NSInteger,NSSharePageType)
 {
     NSSharePageTypeDefault,  //默认返回到根视图控制器

@@ -1048,7 +1048,8 @@
         vc.movieId = addmodel.weiboInfo.stageInfo.movieInfo.Id;
         vc.moviename=addmodel.weiboInfo.stageInfo.movieInfo.name;
         vc.movielogo=addmodel.weiboInfo.stageInfo.movieInfo.logo;
-
+        UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+        self.navigationItem.backBarButtonItem=item;
         [self.navigationController pushViewController:vc animated:YES];
 
     }

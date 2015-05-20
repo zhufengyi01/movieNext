@@ -177,7 +177,6 @@
        NSLog(@" 在 添加弹幕页面的   stagedict = %@",self.stageInfo);
      [_myScorllerView addSubview:stageView];
 }
-
 -(void)createButtomView
 {
      _toolBar=[[UIToolbar alloc]initWithFrame:CGRectMake(0,kDeviceHeight-50-kHeightNavigation, kDeviceWidth, 50)];
@@ -215,7 +214,6 @@
     _myTextView.font= [UIFont systemFontOfSize:16];
     _myTextView.backgroundColor=[UIColor clearColor];
     _myTextView.layer.cornerRadius=4;
-    
     _myTextView.layer.borderWidth=0.5;
     _myTextView.layer.borderColor=VLight_GrayColor.CGColor;
     _myTextView.maximumZoomScale=3;
@@ -863,22 +861,29 @@
 //创建标签的方法
 -(TagView *)createTagViewWithtagText:(NSString *) tagText withIndex:(NSInteger) index withBgImage:(UIImage *) imagename
 {
-    TagView *tagview =[[TagView alloc]initWithFrame:CGRectZero];
+    TagModel  *tagmodel =[[TagModel alloc]init];
+    TagDetailModel  *tagdetail =[[TagDetailModel alloc]init];
+    tagdetail.title=tagText;
+    tagmodel.tagDetailInfo=tagdetail;
+    TagView *tagview =[[TagView alloc]initWithWeiboInfo:self.weiboInfo AndTagInfo:tagmodel  delegate:self isCanClick:YES backgoundImage:imagename isLongTag:YES];
+    [tagview setbigTag:YES];
     tagview.tag=1000+index;
-    tagview.delegete=self;
-    [tagview setTagViewIsClick:YES];
-    tagview.titleLable.text=tagText;
-    CGSize  Tsize =[tagText boundingRectWithSize:CGSizeMake(MAXFLOAT, TagHeight) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:[NSDictionary dictionaryWithObject:tagview.titleLable.font forKey:NSFontAttributeName] context:nil].size;
-    
-    tagview.tagBgImageview.image =[imagename stretchableImageWithLeftCapWidth:15 topCapHeight:15];
-    tagview.frame=CGRectMake(0,0, Tsize.width+10, TagHeight+6);
+    //tagview.titleLable.text=tagText;
+//    tagview.tag=1000+index;
+//    tagview.delegete=self;
+//    [tagview setTagViewIsClick:YES];
+//    tagview.titleLable.text=tagText;
+//    CGSize  Tsize =[tagText boundingRectWithSize:CGSizeMake(MAXFLOAT, TagHeight) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:[NSDictionary dictionaryWithObject:tagview.titleLable.font forKey:NSFontAttributeName] context:nil].size;
+//    
+//    tagview.tagBgImageview.image =[imagename stretchableImageWithLeftCapWidth:15 topCapHeight:15];
+//    tagview.frame=CGRectMake(0,0, Tsize.width+10, TagHeight+6);
     return tagview;
 }
 //点击标签，删除操作
 -(void)TapViewClick:(TagView *)tagView Withweibo:(weiboInfoModel *)weiboInfo withTagInfo:(TagModel *)tagInfo
 {
     
-    NSLog(@"=========tagView %ld",tagView.tag);
+    //NSLog(@"=========tagView %d",tagView.tag);
     if(TAGArray.count>0)
     {
        [TAGArray  removeObjectAtIndex:tagView.tag-1000];

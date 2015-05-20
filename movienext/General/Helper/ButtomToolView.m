@@ -159,10 +159,6 @@
     NSString  *da = [NSDate timeInfoWithDate:comfromTimesp];
     timelabel.text=da;
     
-    
-   // timelabel.text=timeStr;
-    
-    
    // //内容
     contentLable.text =self.weiboInfo.content;
     
@@ -202,17 +198,19 @@
 -(TagView *)createTagViewWithtagInfo:(TagModel *) tagmodel andIndex:(NSInteger ) index
 {
     
-    TagView *tagview =[[TagView alloc]initWithFrame:CGRectZero];
-    tagview.tag=1000+index;
-    tagview.delegete=self;
-    //设置是否可以点击
-    [tagview setTagViewIsClick:YES];
-    tagview.tagInfo=tagmodel;
-    tagview.weiboInfo=self.weiboInfo;
-    NSString *titleStr = tagmodel.tagDetailInfo.title;
-    tagview.titleLable.text=titleStr;
-    CGSize  Tsize =[titleStr boundingRectWithSize:CGSizeMake(MAXFLOAT, TagHeight) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:[NSDictionary dictionaryWithObject:tagview.titleLable.font forKey:NSFontAttributeName] context:nil].size;
-     tagview.frame=CGRectMake(0,0, Tsize.width+10, TagHeight+10);
+    TagView *tagview =[[TagView alloc]initWithWeiboInfo:self.weiboInfo AndTagInfo:tagmodel delegate:self isCanClick:YES backgoundImage:nil isLongTag:YES];
+    [tagview setbigTag:YES];
+    //tagview.frame=CGRectMake(0, 0, 0, 0);
+//    tagview.tag=1000+index;
+//    tagview.delegete=self;
+//    //设置是否可以点击
+//    [tagview setTagViewIsClick:YES];
+//    tagview.tagInfo=tagmodel;
+//    tagview.weiboInfo=self.weiboInfo;
+//    NSString *titleStr = tagmodel.tagDetailInfo.title;
+//    tagview.titleLable.text=titleStr;
+//    CGSize  Tsize =[titleStr boundingRectWithSize:CGSizeMake(MAXFLOAT, TagHeight) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:[NSDictionary dictionaryWithObject:tagview.titleLable.font forKey:NSFontAttributeName] context:nil].size;
+//     tagview.frame=CGRectMake(0,0, Tsize.width+10, TagHeight+10);
     return tagview;
 }
 

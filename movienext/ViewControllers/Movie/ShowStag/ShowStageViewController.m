@@ -521,15 +521,15 @@
    // NSMutableString  *backstr=[[NSMutableString alloc]initWithString:self.stageInfo.movieInfo.name];
     vc.moviename=self.stageInfo.movieInfo.name;
     vc.movielogo=self.stageInfo.movieInfo.logo;
- 
+    UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+    self.navigationItem.backBarButtonItem=item;
+
     [self.navigationController pushViewController:vc animated:YES];
 }
 // 分享
 -(void)ScreenButtonClick:(UIButton  *) button
 {
     UIImage  *image=[Function getImage:stageView WithSize:CGSizeMake(kStageWidth, kStageWidth)];
-    
-
     if (UMShareStyle==1) {
         UMShareViewController  *shareVC=[[UMShareViewController alloc]init];
         shareVC.StageInfo=self.stageInfo;

@@ -928,7 +928,12 @@
         vc.movieId =  model.stageInfo.movie_id;
         vc.moviename=model.stageInfo.movieInfo.name;
         vc.movielogo=model.stageInfo.movieInfo.logo;
+        UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+        self.navigationItem.backBarButtonItem=item;
+
         [self.navigationController pushViewController:vc animated:YES];
+        
+        
     }
     else if (button.tag==2000)
     {
@@ -937,7 +942,6 @@
         //NSIndexPath  *indexpath = [NSIndexPath indexPathForRow:Rowindex inSection:1];
         //CommonStageCell  *cell=(CommonStageCell *)[_HotMoVieTableView cellForRowAtIndexPath:indexpath];
         UIImage  *image=[Function getImage:cell.stageView WithSize:CGSizeMake(kStageWidth, kStageWidth)];
-        
         if (UMShareStyle==1) {//使用controller方式分享
                     UMShareViewController  *shareVC=[[UMShareViewController alloc]init];
                     shareVC.StageInfo=model.stageInfo;

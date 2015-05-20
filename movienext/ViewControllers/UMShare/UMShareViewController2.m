@@ -217,17 +217,19 @@
 //创建标签的方法
 -(TagView *)createTagViewWithtagInfo:(TagModel *) tagmodel andIndex:(NSInteger ) index
 {
-    TagView *tagview =[[TagView alloc]initWithFrame:CGRectZero];
-    tagview.clipsToBounds=YES;
-    tagview.tag=1000+index;
-    tagview.tagBgImageview.backgroundColor =[UIColor colorWithRed:155.0/255 green:155.0/255 blue:155.0/255 alpha:1];
-    tagview.weiboInfo=self.weiboInfo;
-    NSString *titleStr = tagmodel.tagDetailInfo.title;
-    tagview.titleLable.text=titleStr;
-    CGSize  Tsize =[titleStr boundingRectWithSize:CGSizeMake(MAXFLOAT, TagHeight) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:[NSDictionary dictionaryWithObject:tagview.titleLable.font forKey:NSFontAttributeName] context:nil].size;
-    //纪录前面一个标签的宽度
-    tagview.frame=CGRectMake(0,0, Tsize.width+10, TagHeight);
-    return tagview;
+//    TagView *tagview =[[TagView alloc]initWithFrame:CGRectZero];
+//    tagview.clipsToBounds=YES;
+//    tagview.tag=1000+index;
+//    tagview.tagBgImageview.backgroundColor =[UIColor colorWithRed:155.0/255 green:155.0/255 blue:155.0/255 alpha:1];
+//    tagview.weiboInfo=self.weiboInfo;
+//    NSString *titleStr = tagmodel.tagDetailInfo.title;
+//    tagview.titleLable.text=titleStr;
+//    CGSize  Tsize =[titleStr boundingRectWithSize:CGSizeMake(MAXFLOAT, TagHeight) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:[NSDictionary dictionaryWithObject:tagview.titleLable.font forKey:NSFontAttributeName] context:nil].size;
+//    //纪录前面一个标签的宽度
+//    tagview.frame=CGRectMake(0,0, Tsize.width+10, TagHeight);
+    TagView  *tagView =[[TagView alloc]initWithWeiboInfo:self.weiboInfo AndTagInfo:tagmodel delegate:nil isCanClick:NO backgoundImage:nil isLongTag:YES];
+    tagView.backgroundColor =Tag_View_Color;
+    return tagView;
 }
 
 //点击分享

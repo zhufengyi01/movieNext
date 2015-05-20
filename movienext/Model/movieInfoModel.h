@@ -21,7 +21,6 @@
 
 @property(nonatomic,strong) NSString  *logo;
 
-
 @property(nonatomic,strong) NSString  *brief;
 
 @property(nonatomic,strong) NSString  *director;
