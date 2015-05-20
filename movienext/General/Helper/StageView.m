@@ -40,17 +40,22 @@
     _MovieImageView =[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, 200)];
     [self addSubview:_MovieImageView];
     
-    self.tanlogoButton =[UIButton buttonWithType:UIButtonTypeCustom];
-    self.tanlogoButton.frame=CGRectMake(kStageWidth-35, 10, 25, 25);
-    //[self.tanlogoButton setBackgroundImage:[UIImage imageNamed:@"dan_close"] forState:UIControlStateNormal];
-    [self.tanlogoButton setBackgroundImage:[UIImage imageNamed:@"dan_closed"] forState:UIControlStateSelected];
-    [self addSubview:self.tanlogoButton];
+   
     
 }
 #pragma mark    设置stageview的值  ，主要是给stagview 添加markview  和添加一张图片
 -(void)configStageViewforStageInfoDict{
     //先移除所有的Mark视图
     [self removeStageViewSubView];
+    if (self.tanlogoButton) {
+        [self.tanlogoButton removeFromSuperview];
+        self.tanlogoButton=nil;
+    }
+    self.tanlogoButton =[UIButton buttonWithType:UIButtonTypeCustom];
+    self.tanlogoButton.frame=CGRectMake(kStageWidth-35, 10, 25, 25);
+    //[self.tanlogoButton setBackgroundImage:[UIImage imageNamed:@"dan_close"] forState:UIControlStateNormal];
+    [self.tanlogoButton setBackgroundImage:[UIImage imageNamed:@"dan_closed"] forState:UIControlStateSelected];
+    [self addSubview:self.tanlogoButton];
     
     float  ImageWith=[self.stageInfo.width intValue];
     float  ImgeHight=[self.stageInfo.height intValue];

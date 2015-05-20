@@ -37,7 +37,6 @@
 -(void)showAndHidenMarkView:(BOOL) isShow;
 
 -(void)configStageViewforStageInfoDict;
-
 /**
  *  开始动画
  */

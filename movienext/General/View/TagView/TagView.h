@@ -23,9 +23,11 @@
 
 @property(nonatomic,strong) weiboInfoModel  *weiboInfo;
 @property(nonatomic,strong) TagModel   *tagInfo;
-
-//@property(nonatomic,assign) BOOL   isCanClick;
-
 @property(nonatomic,strong) id<TagViewDelegate> delegete;
+
+//custom init
+-(instancetype)initWithWeiboInfo:(weiboInfoModel *) weiboInfo AndTagInfo :(TagModel *) tagInfo delegate:(id<TagViewDelegate>) delegate isCanClick:(BOOL) click  backgoundImage:(UIImage *) image;
+
+///设置tag是否可以被点击
 -(void)setTagViewIsClick:(BOOL) isCanClick;
 @end

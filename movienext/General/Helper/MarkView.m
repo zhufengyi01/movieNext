@@ -93,7 +93,7 @@
     if ([userCenter.is_admin intValue]>0) {
         if ( [weiboInfo.uerInfo.fake intValue]==0) {
             //虚拟用户
-            isfakeView=[[UIImageView alloc]initWithFrame:CGRectMake(_LeftImageView.frame.size.width-6,_LeftImageView.frame.size.height-6, 8, 8)];
+            isfakeView=[[UIImageView alloc]initWithFrame:CGRectMake(_LeftImageView.frame.size.width-8,_LeftImageView.frame.size.height-8, 8, 8)];
             isfakeView.layer.cornerRadius=4;
             isfakeView.clipsToBounds=YES;
             isfakeView.layer.borderColor=[UIColor whiteColor].CGColor;
@@ -183,7 +183,7 @@
     if (IsIphone6plus) {
         _LeftImageView.frame=CGRectMake(0, 0,MarkViewHead28, MarkViewHead28);
     }
-    isfakeView.frame= CGRectMake(_LeftImageView.frame.size.width-6,_LeftImageView.frame.size.height-6, 8, 8);
+    isfakeView.frame= CGRectMake(_LeftImageView.frame.size.width-9,_LeftImageView.frame.size.height-9, 8, 8);
     
     //右视图
     _rightView.frame=CGRectMake(21, 0,self.frame.size.width-MarkViewHead23 , self.frame.size.height);

@@ -34,10 +34,11 @@
 #import "ScanMovieInfoViewController.h"
 #import "TagToStageViewController.h"
 #import "UpweiboModel.h"
+#import "UMShareView.h"
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
 
-@interface MyViewController ()<UITableViewDataSource, UITableViewDelegate,StageViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UIActionSheetDelegate,UMSocialDataDelegate,UMSocialUIDelegate,CommonStageCellDelegate,UMShareViewControllerDelegate,UMShareViewController2Delegate>
+@interface MyViewController ()<UITableViewDataSource, UITableViewDelegate,StageViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UIActionSheetDelegate,UMSocialDataDelegate,UMSocialUIDelegate,CommonStageCellDelegate,UMShareViewControllerDelegate,UMShareViewController2Delegate,UMShareViewDelegate>
 {
     //UISegmentedControl *segment;
     UITableView   *_tableView;
@@ -985,6 +986,16 @@
     [UMSocialSnsPlatformManager getSocialPlatformWithName:[sharearray  objectAtIndex:button.tag-10000]].snsClickHandler(self,[UMSocialControllerService defaultControllerService],YES);
     
 }
+-(void)UMShareViewHandClick:(UIButton *)button ShareImage:(UIImage *)shareImage StageInfoModel:(stageInfoModel *)StageInfo
+{
+    NSArray  *sharearray =[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQzone, UMShareToSina, nil];
+    [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
+    [[UMSocialControllerService defaultControllerService] setShareText:StageInfo.movieInfo.name shareImage:shareImage socialUIDelegate:self];
+    //设置分享内容和回调对象
+    [UMSocialSnsPlatformManager getSocialPlatformWithName:[sharearray  objectAtIndex:button.tag-10000]].snsClickHandler(self,[UMSocialControllerService defaultControllerService],YES);
+    
+}
+
 
 
 ///点击分享的屏幕，收回分享的背景
@@ -1045,7 +1056,8 @@
     {
         //分享
         CommonStageCell *cell = (CommonStageCell *)(button.superview.superview.superview.superview);
-        UIImage  *image=[Function getImage:cell.stageView WithSize:CGSizeMake(kDeviceWidth, kDeviceWidth)];
+        UIImage  *image=[Function getImage:cell.stageView WithSize:CGSizeMake(kStageWidth, kStageWidth)];
+        if (UMShareStyle==1) {
         //创建UMshareView 后必须配备这三个方法
        UMShareViewController  *shareVC=[[UMShareViewController alloc]init];
        shareVC.StageInfo=addmodel.weiboInfo.stageInfo;
@@ -1053,6 +1065,13 @@
         shareVC.delegate=self;
         UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:shareVC];
         [self presentViewController:na animated:YES completion:nil];
+        }
+        else if (UMShareStyle==0)//使用view方式分享
+        {
+            UMShareView *ShareView =[[UMShareView alloc] initwithStageInfo:addmodel.weiboInfo.stageInfo ScreenImage:image delgate:self];
+            [ShareView show];
+        }
+        
         
 
     }

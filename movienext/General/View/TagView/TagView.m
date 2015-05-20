@@ -18,6 +18,15 @@
     // Drawing code
 }
 */
+//重写tagview的方法
+-(instancetype)initWithWeiboInfo:(weiboInfoModel *) weiboInfo AndTagInfo :(TagModel *) tagInfo delegate:(id<TagViewDelegate>) delegate isCanClick:(BOOL) click  backgoundImage:(UIImage *) image
+{
+    if (self =[super init]) {
+        
+    }
+    return self;
+}
+
 -(instancetype)initWithFrame:(CGRect)frame
 {
     if ([super  initWithFrame:frame]) {
