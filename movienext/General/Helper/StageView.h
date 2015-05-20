@@ -8,8 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import "MarkView.h"
-//#import "WeiboModel.h"
-//#import "StageInfoModel.h"
 #import "weiboInfoModel.h"
 #import "stageInfoModel.h"
 @protocol StageViewDelegate <NSObject>
@@ -39,7 +37,6 @@
 -(void)showAndHidenMarkView:(BOOL) isShow;
 
 -(void)configStageViewforStageInfoDict;
-
 /**
  *  开始动画
  */

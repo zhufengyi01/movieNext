@@ -27,7 +27,6 @@
 #import "CommonStageCell.h"
 #import "UMSocial.h"
 #import "AddMarkViewController.h"
-#import "HotMovieModel.h"
 #import "MyViewController.h"
 //#import "ButtomToolView.h"
 #import "MJRefresh.h"
@@ -142,7 +141,6 @@
     [titleView addSubview:movieNameLable];
     
     
-    
     NSString  *logoString;
     if (self.pageSourceType==NSMovieSourcePageMovieListController) {
         logoString =[NSString stringWithFormat:@"%@%@!poster",kUrlFeed,self.movielogo];
@@ -159,7 +157,9 @@
     
     [MovieLogoImageView sd_setImageWithURL:[NSURL URLWithString:logoString] placeholderImage:[UIImage imageNamed:@"Moments.png"]];
     NSString  *nameStr=self.moviename;
-    CGSize   Nsize =[nameStr boundingRectWithSize:CGSizeMake(120, 25) options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes:[NSDictionary dictionaryWithObject:[UIFont systemFontOfSize:16] forKey:NSFontAttributeName] context:nil].size;
+    nameStr =[Function htmlString:nameStr];
+    float nameW=kDeviceWidth*0.6;
+    CGSize   Nsize =[nameStr boundingRectWithSize:CGSizeMake(nameW, 25) options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes:[NSDictionary dictionaryWithObject:[UIFont systemFontOfSize:16] forKey:NSFontAttributeName] context:nil].size;
     movieNameLable.text=[NSString stringWithFormat:@"%@",nameStr];
     movieNameLable.frame=CGRectMake(35,8,Nsize.width+5, 25);
     titleView.frame=CGRectMake(0, 0, 30+5+movieNameLable.frame.size.width, 40);
@@ -251,7 +251,7 @@
     
     //注册小图模式
     [_myConllectionView registerClass:[SmallImageCollectionViewCell class] forCellWithReuseIdentifier:@"smallcell"];
-    // 注册头部视图sdsdsdsd
+    // 注册头部视图
     //[_myConllectionView registerClass:[MovieHeadView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"headerView"];
     _myConllectionView.delegate=self;
     _myConllectionView.dataSource=self;
@@ -621,11 +621,11 @@
         else if(detailArray.count==0)
         {
             
-            [loadView  showNullView:@"没有数据..."];
+            //[loadView  showNullView:@"没有数据..."];
            //没有数据 时候添加图片，添加图片,
-            //loadView.failTitle.hidden=YES;
-            //[loadView.failBtn setTitle:@"添加剧照" forState:UIControlStateNormal];
-            //[loadView showFailLoadData];
+            loadView.failTitle.text =@"还没有内容，快来添加一条吧！";
+            [loadView.failBtn setTitle:@"添加" forState:UIControlStateNormal];
+            [loadView showFailLoadData];
 
         }
     }
@@ -641,9 +641,9 @@
 //数据加载失败
 -(void)reloadDataClick
 {
-    [self requestData];
-    [loadView hidenFailLoadAndShowAnimation];
-    //[self uploadImageFromAbumdAndDouban];
+    //[self requestData];
+    //[loadView hidenFailLoadAndShowAnimation];
+    [self uploadImageFromAbumdAndDouban];
     
 }
 #pragma  mark -----

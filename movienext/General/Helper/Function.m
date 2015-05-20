@@ -11,9 +11,7 @@
 ///#import "User.h"
 #import "UserDataCenter.h"
 //导入微博模型
-#import "Weibo.h"
 //导入标签模型
-#import "Mark.h"
 //导入图片加载框架
 #import "UIImageView+WebCache.h"
 //导入常量头文件
@@ -138,13 +136,12 @@
     
     //把当前时间变成时间戳
     NSDate *datenow = [NSDate date];//现在时间,你可以输出来看下是什么格式
-    NSTimeZone *zone = [NSTimeZone defaultTimeZone];
+    NSTimeZone *zone = [NSTimeZone systemTimeZone];
     NSInteger interval = [zone secondsFromGMTForDate:datenow];
     NSDate *localeDate = [datenow  dateByAddingTimeInterval: interval];
     NSLog(@"%@当前时间", localeDate);
     NSString *timeSp = [NSString stringWithFormat:@"%ld", (long)[localeDate timeIntervalSince1970]];
     NSLog(@"当前时间戳timeSp:%@",timeSp); //时间戳的值
-    
     
     long  int inter =[timeSp intValue] -[timeInerval intValue];
     if (inter<=10) {
@@ -212,7 +209,7 @@
  *  @return 带有背影图片的标签内容
  */
 + (UIImageView *)getBgvMarkInfo:(Weibo *)weibo x:(CGFloat)x y:(CGFloat)y{
-    int wordLimit   = 10;
+   /* int wordLimit   = 10;
     int widthLimit  = wordLimit*19;
     int margin      = 8;
     int marginHead  = 12;
@@ -278,12 +275,12 @@
         int ivVerifiedHeight = 8;
         UIImageView *ivVerified = [[UIImageView alloc] initWithFrame:CGRectMake(logoWidth-ivVerifiedHeight, logoWidth-ivVerifiedHeight, ivVerifiedHeight, ivVerifiedHeight)];
         ivVerified.image = [UIImage imageNamed:@"verified"];
-        ivVerified.hidden = [weibo.verified intValue]==0;
+        //ivVerified.hidden = [weibo.verified intValue]==0;
         ivVerified.alpha = 0.8;
         [bgv addSubview:ivVerified];
         
         return bgv;
-    }
+    }*/
     return nil;
 }
 
@@ -510,6 +507,14 @@
             result[8], result[9], result[10], result[11],
             result[12], result[13], result[14], result[15]
             ]; 
+}
+//得到中英文混合字符串长度 方法2
++(int)getToInt:(NSString*)strtemp
+
+{
+    NSStringEncoding enc = CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000);
+    NSData* da = [strtemp dataUsingEncoding:enc];
+    return [da length];
 }
 
 @end

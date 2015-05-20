@@ -13,7 +13,6 @@
 //#import "WeiboModel.h"
 #import "stageInfoModel.h"
 #import "weiboInfoModel.h"
-#import "HotMovieModel.h"
 #import "ModelsModel.h"
 #import "AddTagViewController.h"
 typedef NS_ENUM(NSInteger,NSAddMarkPageSource)
@@ -34,9 +33,15 @@ typedef NS_ENUM(NSInteger,NSAddMarkPageSource)
 @property(assign,nonatomic)id<AddMarkViewControllerDelegate> delegate;
 
 @property(assign,nonatomic) NSAddMarkPageSource  pageSoureType;
+
+//剧情信息
 @property (nonatomic, strong) stageInfoModel  *stageInfo;
 
-//@property (nonatomic,strong) HotMovieModel    *model;
+
+//所有信息
 @property(nonatomic,strong) ModelsModel     *model;
+
+//管理员编辑标签的时候必须传递weibo_id
+@property(nonatomic,strong)weiboInfoModel *weiboInfo;
 
 @end

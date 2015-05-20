@@ -568,8 +568,8 @@
 //            str=[backstr substringToIndex:5];
 //            str =[NSString stringWithFormat:@"%@...",str];
 //        }
-//        UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:str style:UIBarButtonItemStylePlain target:nil action:nil];
-//        self.navigationItem.backBarButtonItem=item;
+        UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+       self.navigationItem.backBarButtonItem=item;
     }
    [self.navigationController pushViewController:vc animated:YES];
 }

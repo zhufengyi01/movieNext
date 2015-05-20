@@ -9,7 +9,7 @@
 #import "ShowStageViewController.h"
 #import "StageView.h"
 #import "StageInfoModel.h"
-#import "WeiboModel.h"
+
 #import "ZCControl.h"
 #import "Constant.h"
 #import "AddMarkViewController.h"
@@ -27,10 +27,11 @@
 #import "UMShareViewController2.h"
 #import "MovieDetailViewController.h"
 #import "AppDelegate.h"
+#import "UMShareView.h"
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
 
-@interface ShowStageViewController() <ButtomToolViewDelegate,StageViewDelegate,AddMarkViewControllerDelegate,UMShareViewControllerDelegate,UMSocialDataDelegate,UMSocialUIDelegate,UIActionSheetDelegate,UMShareViewController2Delegate>
+@interface ShowStageViewController() <ButtomToolViewDelegate,StageViewDelegate,AddMarkViewControllerDelegate,UMShareViewControllerDelegate,UMSocialDataDelegate,UMSocialUIDelegate,UIActionSheetDelegate,UMShareViewController2Delegate,UMShareViewDelegate>
 {
     ButtomToolView *_toolBar;
     UIButton  *moreButton;
@@ -171,7 +172,7 @@
     
     
     //更多
-    moreButton=[ZCControl createButtonWithFrame:CGRectMake(kStageWidth-130, 9, 30, 25) ImageName:@"more_icon_default.png" Target:self Action:@selector(cellButtonClick:) Title:@""];
+    moreButton=[ZCControl createButtonWithFrame:CGRectMake(kStageWidth-135, 9, 30, 25) ImageName:@"more_icon_default.png" Target:self Action:@selector(cellButtonClick:) Title:@""];
     moreButton.layer.cornerRadius=2;
     moreButton.hidden=NO;
     [BgView2 addSubview:moreButton];
@@ -179,9 +180,10 @@
 
     
     
-//    ScreenButton =[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-110,10,45,25) ImageName:@"btn_share_default.png" Target:self Action:@selector(ScreenButtonClick:) Title:@""];
-//    [ScreenButton setBackgroundImage:[UIImage imageNamed:@"btn_share_select.png"] forState:UIControlStateHighlighted];
-//    [BgView2 addSubview:ScreenButton];
+    ScreenButton =[ZCControl createButtonWithFrame:CGRectMake(kStageWidth-95,9,30,25) ImageName:@"btn_share_default.png" Target:self Action:@selector(ScreenButtonClick:) Title:@""];
+    //[ScreenButton setBackgroundImage:[UIImage imageNamed:@"btn_share_select.png"] forState:UIControlStateHighlighted];
+    [ScreenButton setBackgroundImage:[UIImage imageNamed:@"btn_share_select.png"] forState:UIControlStateNormal];
+    [BgView2 addSubview:ScreenButton];
     
     if (_tanlogoButton) {
         [_tanlogoButton removeFromSuperview];
@@ -192,7 +194,7 @@
     [_tanlogoButton setImage:[UIImage imageNamed:@"closed_icon_default.png"] forState:UIControlStateNormal];
     [_tanlogoButton setImage:[UIImage imageNamed:@"open_danmu.png.png"] forState:UIControlStateSelected];
     [_tanlogoButton addTarget:self action:@selector(hidenAndShowMarkView:) forControlEvents:UIControlEventTouchUpInside];
-    [BgView2 addSubview:_tanlogoButton];
+  //  [BgView2 addSubview:_tanlogoButton];
 
     
     addMarkButton =[ZCControl createButtonWithFrame:CGRectMake(kStageWidth-55,10,45,25) ImageName:@"btn_add_default.png" Target:self Action:@selector(addMarkButtonClick:) Title:@""];
@@ -346,6 +348,28 @@
     }];
     
 }
+
+//微博举报
+-(void)requestReportweibo
+{
+    // NSString *type=@"1";
+    UserDataCenter *userCenter =[UserDataCenter shareInstance];
+    NSDictionary *parameters = @{@"reported_user_id":_TweiboInfo.uerInfo.Id,@"weibo_id":_TweiboInfo.Id,@"reason":@"",@"user_id":userCenter.user_id};
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    [manager POST:[NSString stringWithFormat:@"%@/report-weibo/create", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
+            NSLog(@"随机数种子请求成功=======%@",responseObject);
+            UIAlertView  *Al =[[UIAlertView alloc]initWithTitle:nil message:@"你的举报已成功,我们会在24小时内处理" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            [Al show];
+            
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+    
+}
+
 -(void)requestReportSatge
 {
     // NSString *type=@"1";
@@ -476,7 +500,17 @@
     [UMSocialSnsPlatformManager getSocialPlatformWithName:[sharearray  objectAtIndex:button.tag-10000]].snsClickHandler(self,[UMSocialControllerService defaultControllerService],YES);
     
 }
+-(void)UMShareViewHandClick:(UIButton *)button ShareImage:(UIImage *)shareImage StageInfoModel:(stageInfoModel *)StageInfo
+{
+    NSArray  *sharearray =[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQzone, UMShareToSina, nil];
+    [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
+    [[UMSocialControllerService defaultControllerService] setShareText:StageInfo.movieInfo.name shareImage:shareImage socialUIDelegate:self];
+    //设置分享内容和回调对象
+    
+    [UMSocialSnsPlatformManager getSocialPlatformWithName:[sharearray  objectAtIndex:button.tag-10000]].snsClickHandler(self,[UMSocialControllerService defaultControllerService],YES);
+    
 
+}
 //跳转到电影页
 -(void)StageMovieButtonClick:(UIButton *) button
 {
@@ -484,23 +518,33 @@
     //电影按钮
     MovieDetailViewController *vc =  [MovieDetailViewController new];
     vc.movieId = self.stageInfo.movie_id;
-    NSMutableString  *backstr=[[NSMutableString alloc]initWithString:self.stageInfo.movieInfo.name];
+   // NSMutableString  *backstr=[[NSMutableString alloc]initWithString:self.stageInfo.movieInfo.name];
     vc.moviename=self.stageInfo.movieInfo.name;
     vc.movielogo=self.stageInfo.movieInfo.logo;
- 
+    UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+    self.navigationItem.backBarButtonItem=item;
+
     [self.navigationController pushViewController:vc animated:YES];
 }
 // 分享
 -(void)ScreenButtonClick:(UIButton  *) button
 {
-    UIImage  *image=[Function getImage:stageView WithSize:CGSizeMake(kDeviceWidth, kDeviceWidth)];
-    UMShareViewController  *shareVC=[[UMShareViewController alloc]init];
-    shareVC.StageInfo=self.stageInfo;
-    shareVC.screenImage=image;
-    shareVC.delegate=self;
-    UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:shareVC];
-    [self presentViewController:na animated:YES completion:nil];
+    UIImage  *image=[Function getImage:stageView WithSize:CGSizeMake(kStageWidth, kStageWidth)];
+    if (UMShareStyle==1) {
+        UMShareViewController  *shareVC=[[UMShareViewController alloc]init];
+        shareVC.StageInfo=self.stageInfo;
+        shareVC.screenImage=image;
+        shareVC.delegate=self;
+        UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:shareVC];
+        [self presentViewController:na animated:YES completion:nil];
+   
+    }
+    else if (UMShareStyle==0)
+    {
+        UMShareView *ShareView =[[UMShareView alloc] initwithStageInfo:self.stageInfo ScreenImage:image delgate:self];
+        [ShareView show];
 
+    }
 }
 //添加弹幕
 -(void)addMarkButtonClick:(UIButton  *) button
@@ -515,7 +559,7 @@
   //  AddMarkVC.pageSoureType=NSAddMarkPageSourceDefault;
  //   [self.navigationController pushViewController:AddMarkVC animated:NO];
     UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:AddMarkVC];
-    [self.navigationController presentViewController:na animated:YES completion:nil];
+    [self.navigationController presentViewController:na animated:NO completion:nil];
 
 
 }
@@ -671,11 +715,17 @@
     {
         UserDataCenter  *userCenter =[UserDataCenter shareInstance];
         if ([userCenter.is_admin  intValue]>0) {
-            UIActionSheet   *ash=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"删除",@"变身",@"推荐", nil];
+            UIActionSheet   *ash=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"删除",@"变身",@"推荐",@"编辑", nil];
             ash.tag=500;
             [ash showInView:self.view];
         }
- 
+        else
+        {
+            UIActionSheet   *ash=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"举报" otherButtonTitles:nil, nil];
+            ash.tag=504;
+            [ash showInView:self.view];
+
+        }
     }
 }
 -(void)ToolViewTagHandClickTagView:(TagView *)tagView withweiboinfo:(weiboInfoModel *)weiboInfo WithTagInfo:(TagModel *)tagInfo
@@ -712,6 +762,29 @@
             //推荐
             [self requestrecommendDataWithStageId:[NSString stringWithFormat:@"%@",_TstageInfo.Id] weiboId:[NSString stringWithFormat:@"%@",_TweiboInfo.Id]];
         }
+        else if (buttonIndex==3)
+        {
+            [_mymarkView CancelMarksetSelect];
+            if (_toolBar) {
+                [_toolBar HidenButtomView];
+                [_toolBar removeFromSuperview];
+                
+            }
+
+            //弹幕编辑
+            AddMarkViewController  *AddMarkVC=[[AddMarkViewController alloc]init];
+            AddMarkVC.stageInfo=self.stageInfo;
+            AddMarkVC.weiboInfo=_TweiboInfo;
+            AddMarkVC.delegate=self;
+            [self presentViewController:AddMarkVC animated:NO completion:nil];
+
+        }
+    }
+    else if (actionSheet.tag==504)
+    {
+        //确认举报
+        [self requestReportweibo];
+
     }
   
    else if (actionSheet.tag==507) {

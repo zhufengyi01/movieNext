@@ -93,7 +93,7 @@
     if ([userCenter.is_admin intValue]>0) {
         if ( [weiboInfo.uerInfo.fake intValue]==0) {
             //虚拟用户
-            isfakeView=[[UIImageView alloc]initWithFrame:CGRectMake(_LeftImageView.frame.size.width-6,_LeftImageView.frame.size.height-6, 8, 8)];
+            isfakeView=[[UIImageView alloc]initWithFrame:CGRectMake(_LeftImageView.frame.size.width-8,_LeftImageView.frame.size.height-8, 8, 8)];
             isfakeView.layer.cornerRadius=4;
             isfakeView.clipsToBounds=YES;
             isfakeView.layer.borderColor=[UIColor whiteColor].CGColor;
@@ -127,16 +127,17 @@
              //最多放置两个标签
              if (i==1&&self.weiboInfo.tagArray.count>2) {
                  //放置一个...的
-                 TagView *tagview =[[TagView alloc]initWithFrame:CGRectZero];
+                 TagModel  *tagmodel =[self.weiboInfo.tagArray objectAtIndex:i];
+                 tagmodel.tagDetailInfo.title=@"...";
+                 TagView *tagview =[[TagView alloc]initWithWeiboInfo:self.weiboInfo AndTagInfo:tagmodel delegate:nil isCanClick:NO backgoundImage:nil isLongTag:NO];
                  //tagview.tag=1000+index;
                  //设置不可以点击
-                 [tagview  setTagViewIsClick:NO];
-                 tagview.weiboInfo=self.weiboInfo;
-                 NSString *titleStr = @"...";
-                 tagview.titleLable.text=titleStr;
-                 CGSize  Tsize =[titleStr boundingRectWithSize:CGSizeMake(MAXFLOAT, TagHeight) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:[NSDictionary dictionaryWithObject:tagview.titleLable.font forKey:NSFontAttributeName] context:nil].size;
-                 //纪录前面一个标签的宽度
-                 tagview.frame=CGRectMake(0,0, Tsize.width+10, TagHeight);
+                // [tagview  setTagViewIsClick:NO];
+//                 tagview.weiboInfo=self.weiboInfo;
+//                 NSString *titleStr = @"...";
+//                 tagview.titleLable.text=titleStr;
+//                 CGSize  Tsize =[titleStr boundingRectWithSize:CGSizeMake(MAXFLOAT, TagHeight) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:[NSDictionary dictionaryWithObject:tagview.titleLable.font forKey:NSFontAttributeName] context:nil].size;
+//                 tagview.frame=CGRectMake(0,0, Tsize.width+10, TagHeight);
                  [self.tagLable appendView:tagview margin:UIEdgeInsetsMake(0, 0, 0, 5)];
                  break;
              }
@@ -148,56 +149,43 @@
 //创建标签的方法
 -(TagView *)createTagViewWithtagInfo:(TagModel *) tagmodel andIndex:(NSInteger ) index
 {
-    TagView *tagview =[[TagView alloc]initWithFrame:CGRectZero];
-    //tagview.tag=1000+index;
-    //设置不可以点击
-    [tagview  setTagViewIsClick:NO];
-    tagview.weiboInfo=self.weiboInfo;
-    NSString *titleStr = tagmodel.tagDetailInfo.title;
-    tagview.titleLable.text=titleStr;
-     CGSize  Tsize =[titleStr boundingRectWithSize:CGSizeMake(MAXFLOAT, TagHeight) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:[NSDictionary dictionaryWithObject:tagview.titleLable.font forKey:NSFontAttributeName] context:nil].size;
-    //纪录前面一个标签的宽度
-    tagview.frame=CGRectMake(0,0, Tsize.width+10, TagHeight);
+    TagView *tagview =[[TagView alloc]initWithWeiboInfo:self.weiboInfo AndTagInfo:tagmodel delegate:nil isCanClick:NO backgoundImage:nil isLongTag:NO];
+//    //tagview.tag=1000+index;
+//    //设置不可以点击
+//    [tagview  setTagViewIsClick:NO];
+//    tagview.weiboInfo=self.weiboInfo;
+//    NSString *titleStr = tagmodel.tagDetailInfo.title;
+//     tagview.titleLable.text=titleStr;
+//     CGSize  Tsize =[titleStr boundingRectWithSize:CGSizeMake(MAXFLOAT, TagHeight) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:[NSDictionary dictionaryWithObject:tagview.titleLable.font forKey:NSFontAttributeName] context:nil].size;
+//    if (Tsize.width>60) {
+//        Tsize.width=60;
+//    }
+//     tagview.frame=CGRectMake(0,0, Tsize.width+10, TagHeight);
     return tagview;
 }
 
-- (void)layoutSubviews {
+-(void)layoutSubviews {
     [super layoutSubviews];
-    
     //布局之前先比较标签文字的长度跟标签弹幕文字的长度，这样去改变标签标签的长度
-//计算标签长度文字的长度
-    NSMutableString  *tagStr=[[NSMutableString alloc]init];
-    for (int i=0;i<self.weiboInfo.tagArray.count;i++)
-    {
-        TagModel  *tagmodel =[self.weiboInfo.tagArray objectAtIndex:i];
-        if (i<2) {
-          if (tagmodel.tagDetailInfo.title) {
-          [ tagStr appendString:tagmodel.tagDetailInfo.title];
-          }
-        }
-        
-    }
+    //计算标签长度文字的长度
     
-    CGSize  Tagsize=[tagStr boundingRectWithSize:CGSizeMake(kDeviceWidth/2, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:[UIFont systemFontOfSize:14] forKey:NSFontAttributeName] context:nil].size;
-    
-//计算文字的长度
+//计算内容文字的长度
     NSString  *weiboTitleString=self.weiboInfo.content;
-   // NSString  *UpString=[NSString stringWithFormat:@"%@",self.weiboInfo.like_count];
-    //计算标题的size
     CGSize  Zsize=[weiboTitleString boundingRectWithSize:CGSizeMake(kDeviceWidth/2,MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:self.TitleLable.font forKey:NSFontAttributeName] context:nil].size;
-    
-    if (Tagsize.width+5>Zsize.width) {
-        self.frame=CGRectMake(self.frame.origin.x, self.frame.origin.y, Tagsize.width+23+5+5+11+5+10+5, self.frame.size.height);
+    //用标签的宽度根微博内容的宽度比较,计算出整个弹幕的daxiao
+    int  width=kDeviceWidth/2;
+    CGSize Tagsize =[self.tagLable sizeThatFits:CGSizeMake(width, CGFLOAT_MAX)];
+    //在stagview里面已经对markview的大小计算了，这里重写
+    if (Tagsize.width>Zsize.width) {
+        self.frame=CGRectMake(self.frame.origin.x, self.frame.origin.y,Tagsize.width+23+11+5, self.frame.size.height);
     }
-    
-    
-    
+
     //头像
     _LeftImageView.frame=CGRectMake(0, 0, MarkViewHead23, MarkViewHead23);
     if (IsIphone6plus) {
         _LeftImageView.frame=CGRectMake(0, 0,MarkViewHead28, MarkViewHead28);
     }
-    isfakeView.frame= CGRectMake(_LeftImageView.frame.size.width-6,_LeftImageView.frame.size.height-6, 8, 8);
+    isfakeView.frame= CGRectMake(_LeftImageView.frame.size.width-9,_LeftImageView.frame.size.height-9, 8, 8);
     
     //右视图
     _rightView.frame=CGRectMake(21, 0,self.frame.size.width-MarkViewHead23 , self.frame.size.height);
@@ -221,15 +209,10 @@
         _ZanNumLable.hidden=YES;
     }
     
-    //内容的大小
-//    self.contentLable.frame=CGRectMake(5, 3, Tsize.width+5+MarkViewLike_Image11, Tsize.height+10);
-//    if ([self.weiboInfo.like_count intValue]>0) {
-//        self.contentLable.frame=CGRectMake(5, 3, Tsize.width+5+MarkViewLike_Image11+Msize.width+20, Tsize.height+0);
-//    }
-    //标签
+     //标签
     if (self.weiboInfo.tagArray.count!=0) {
          self.tagLable.frame=CGRectMake(self.TitleLable.frame.origin.x, self.TitleLable.frame.origin.y+self.TitleLable.frame.size.height+5,self.rightView.frame.size.width-10, TagHeight);
-    }
+      }
     
     //如果是静态的, 则将边框描一下
     if (!_isAnimation) {

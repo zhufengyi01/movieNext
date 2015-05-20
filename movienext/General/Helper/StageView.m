@@ -40,17 +40,22 @@
     _MovieImageView =[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, 200)];
     [self addSubview:_MovieImageView];
     
-    self.tanlogoButton =[UIButton buttonWithType:UIButtonTypeCustom];
-    self.tanlogoButton.frame=CGRectMake(kStageWidth-35, 10, 25, 25);
-    //[self.tanlogoButton setBackgroundImage:[UIImage imageNamed:@"dan_close"] forState:UIControlStateNormal];
-    [self.tanlogoButton setBackgroundImage:[UIImage imageNamed:@"dan_closed"] forState:UIControlStateSelected];
-    [self addSubview:self.tanlogoButton];
+   
     
 }
 #pragma mark    设置stageview的值  ，主要是给stagview 添加markview  和添加一张图片
 -(void)configStageViewforStageInfoDict{
     //先移除所有的Mark视图
     [self removeStageViewSubView];
+    if (self.tanlogoButton) {
+        [self.tanlogoButton removeFromSuperview];
+        self.tanlogoButton=nil;
+    }
+    self.tanlogoButton =[UIButton buttonWithType:UIButtonTypeCustom];
+    self.tanlogoButton.frame=CGRectMake(kStageWidth-35, 10, 25, 25);
+    //[self.tanlogoButton setBackgroundImage:[UIImage imageNamed:@"dan_close"] forState:UIControlStateNormal];
+    [self.tanlogoButton setBackgroundImage:[UIImage imageNamed:@"dan_closed"] forState:UIControlStateSelected];
+    [self addSubview:self.tanlogoButton];
     
     float  ImageWith=[self.stageInfo.width intValue];
     float  ImgeHight=[self.stageInfo.height intValue];
@@ -77,7 +82,7 @@
           width=(ImageWith/ImgeHight)*kDeviceWidth;
           x=(kDeviceWidth-width)/2;
      }
-        _MovieImageView.frame=CGRectMake(x, y,width,hight);
+    _MovieImageView.frame=CGRectMake(x, y,width,hight);
     _MovieImageView.backgroundColor =VStageView_color;
     NSString *photostring=[NSString stringWithFormat:@"%@%@!w640",kUrlStage,self.stageInfo.photo];
     //可监视下载进入的方法
@@ -98,9 +103,8 @@
          markView.isShowansHiden=YES;
          [markView StartShowAndhiden];
          [self addSubview:markView];
-         
          }
-#pragma  mark  有很多气泡，气泡循环播放
+#pragma  mark  有很多弹幕，气泡循环播放
          if (self.weibosArray&&self.weibosArray.count>0) {
          for ( int i=0;i<self.weibosArray.count ; i++) {
          MarkView *markView = [self createMarkViewWithDict:self.weibosArray[i] andIndex:i];
@@ -109,7 +113,7 @@
          markView.alpha=0;
          //设置单条微博的参数信息
          markView.weiboInfo=self.weibosArray[i];
-             [markView setValueWithWeiboInfo:self.weibosArray[i]];
+         [markView setValueWithWeiboInfo:self.weibosArray[i]];
          //遵守markView 的协议
          markView.isShowansHiden=NO;
          markView.delegate=self;
@@ -131,7 +135,6 @@
              NSString  *UpString=[NSString stringWithFormat:@"%@",weibodict.like_count];//weibodict.ups;
             //计算标题的size
             CGSize  Msize=[weiboTitleString boundingRectWithSize:CGSizeMake(kDeviceWidth/2,MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:markView.TitleLable.font forKey:NSFontAttributeName] context:nil].size;
-    
             // 计算赞数量的size
             CGSize Usize=[UpString boundingRectWithSize:CGSizeMake(40,MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:markView.ZanNumLable.font forKey:NSFontAttributeName] context:nil].size;
             float hight=kStageWidth;
@@ -141,7 +144,8 @@
             float markViewWidth = Msize.width+23+Uwidth+5+5+11+5;
             float markViewHeight = Msize.height+6;
             if (weibodict.tagArray.count>0) {
-                markViewHeight=markViewHeight+25;}
+                markViewHeight=markViewHeight+25;
+            }
            if(IsIphone6plus)
            {
                markViewWidth=markViewWidth+10;

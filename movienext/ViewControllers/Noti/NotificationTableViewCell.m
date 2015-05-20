@@ -12,6 +12,7 @@
 #import "ZCControl.h"
 #import "Constant.h"
 #import "Function.h"
+#import "NSDate+Extension.h"
 @implementation NotificationTableViewCell
 
 -(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
@@ -86,9 +87,12 @@
     Zanlable.frame=CGRectMake(titleLable.frame.origin.x+Namesize.width+0, titleLable.frame.origin.y, 60,titleLable.frame.size.height);
     
     if ([dict objectForKey:@"updated_at"]) {
-       // NSString  *dateStr=[Function friendlyTime:[dict objectForKey:@"create_time"]];
-        NSString *dateStr=[Function getTimeIntervalfromInerterval:[dict objectForKey:@"updated_at"]];
-        dateLable.text=dateStr;
+         //NSString *dateStr=[Function getTimeIntervalfromInerterval:[dict objectForKey:@"updated_at"]];
+        //dateLable.text=dateStr;
+        NSDate  *comfromTimesp =[NSDate dateWithTimeIntervalSince1970:[[dict objectForKey:@"updated_at"] intValue]];
+        NSString  *da = [NSDate timeInfoWithDate:comfromTimesp];
+        dateLable.text=da;
+
     }
     
 }

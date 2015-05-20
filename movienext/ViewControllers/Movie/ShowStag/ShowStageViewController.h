@@ -12,7 +12,8 @@
 #import "stageInfoModel.h"
 #import "TagView.h"
 #import "TagToStageViewController.h"
-@interface ShowStageViewController : RootViewController <TagViewDelegate>
+#import "AddMarkViewController.h"
+@interface ShowStageViewController : RootViewController <TagViewDelegate,AddMarkViewControllerDelegate>
 
 @property (nonatomic, strong) stageInfoModel *stageInfo;
 @property(nonatomic,strong) NSMutableArray   *upweiboArray;

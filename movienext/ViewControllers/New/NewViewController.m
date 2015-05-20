@@ -29,7 +29,6 @@
 #import "Function.h"
 #import "UMSocial.h"
 #import "NSDate+Additions.h"
-//#import "UMShareView.h"
 #import "UMSocialControllerService.h"
 #import "UIImageView+WebCache.h"
 #import "UMShareViewController.h"
@@ -38,14 +37,14 @@
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
 #import "ScanMovieInfoViewController.h"
-#import "netRequest.h"
 #import "MobClick.h"
 #import "TagModel.h"
 #import "TagToStageViewController.h"
-
+#import "MJExtension.h"
+#import "UMShareView.h"
 //友盟分享
 //#import "UMSocial.h"
-@interface NewViewController ()<UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UIScrollViewDelegate,UMSocialDataDelegate,UMSocialUIDelegate,LoadingViewDelegate,UIActionSheetDelegate,CommonStageCellDelegate,AddMarkViewControllerDelegate,UMShareViewControllerDelegate,UMShareViewController2Delegate,MFMailComposeViewControllerDelegate>
+@interface NewViewController ()<UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UIScrollViewDelegate,UMSocialDataDelegate,UMSocialUIDelegate,LoadingViewDelegate,UIActionSheetDelegate,CommonStageCellDelegate,AddMarkViewControllerDelegate,UMShareViewControllerDelegate,UMShareViewController2Delegate,MFMailComposeViewControllerDelegate,UMShareViewDelegate>
 {
     AppDelegate  *appdelegate;
     UISegmentedControl *segment;
@@ -186,15 +185,6 @@
     [segment addTarget:self action:@selector(segmentClick:) forControlEvents:UIControlEventValueChanged];
     [self.navigationItem setTitleView:segment];
     
-//    
-//    UIButton  *button=[UIButton buttonWithType:UIButtonTypeCustom];
-//    //[button setTitle:@"设置" forState:UIControlStateNormal];
-//    [button setBackgroundImage:[UIImage imageNamed:@"setting.png"] forState:UIControlStateNormal];
-//    button.frame=CGRectMake(kDeviceWidth-30, 10, 18, 18);
-//    [button addTarget:self action:@selector(refreshTableView) forControlEvents:UIControlEventTouchUpInside];
-//    UIBarButtonItem  *barButton=[[UIBarButtonItem alloc]initWithCustomView:button];
-//    self.navigationItem.rightBarButtonItem=barButton;
-
     
 }
 //点击可刷新
@@ -390,9 +380,13 @@
     }
     else if (segment.selectedSegmentIndex==1)
     {
-        weiboInfoModel  *weibomodel =[_newDataArray objectAtIndex:Rowindex];
-        stageId=weibomodel.stage_id;
-        author_id=[NSString stringWithFormat:@"%@",weibomodel.uerInfo.Id];
+//        weiboInfoModel  *weibomodel =[_newDataArray objectAtIndex:Rowindex];
+//        stageId=weibomodel.stage_id;
+//        author_id=[NSString stringWithFormat:@"%@",weibomodel.uerInfo.Id];
+        ModelsModel  *model =[_newDataArray objectAtIndex:Rowindex];
+        stageId=model.stage_id;
+        author_id=model.stageInfo.created_by;
+
     }
     UserDataCenter *userCenter =[UserDataCenter shareInstance];
     NSDictionary *parameters = @{@"reported_user_id":author_id,@"stage_id":stageId,@"reason":@"",@"user_id":userCenter.user_id};
@@ -606,6 +600,9 @@
             if (_hotDataArray ==nil) {
                 _hotDataArray=[[NSMutableArray alloc]init];
             }
+//            NSArray   *hotarray =[ModelsModel objectArrayWithKeyValuesArray:Detailarray];
+//            [_hotDataArray addObjectsFromArray:hotarray];
+          
             for (NSDictionary  *hotDict in Detailarray) {
                 ModelsModel  *model =[[ModelsModel alloc]init];
                 if(model)
@@ -681,6 +678,9 @@
         }
         else if(segment.selectedSegmentIndex==1)
         {
+//            NSArray   *hotarray =[ModelsModel objectArrayWithKeyValuesArray:Detailarray];
+//            [_newDataArray addObjectsFromArray:hotarray];
+
             NSLog(@"最新数据 JSON: %@", responseObject);
             for (NSDictionary  *newDict in Detailarray) {
                 ModelsModel  *model =[[ModelsModel alloc]init];
@@ -740,74 +740,6 @@
                     [_newDataArray addObject:model];
                 }
             }
-//            //点赞的数组
-//            for (NSDictionary  *updict in [responseObject objectForKey:@"upweibos"]) {
-//                UpweiboModel *upmodel =[[UpweiboModel alloc]init];
-//                if (upmodel) {
-//                    [upmodel setValuesForKeysWithDictionary:updict];
-//                    if (_upWeiboArray==nil) {
-//                        _upWeiboArray =[[NSMutableArray alloc]init];
-//                    }
-//                    [_upWeiboArray addObject:upmodel];
-//                }
-//            }
-
-            
-            
-//            for (NSDictionary  *newDict in Detailarray) {
-//            weiboInfoModel  *weibomodel =[[weiboInfoModel alloc]init];
-//            if(weibomodel)
-//            {
-//                [weibomodel setValuesForKeysWithDictionary:newDict];
-//                
-//                //1.userInfo
-//                weiboUserInfoModel *usermodel =[[weiboUserInfoModel alloc]init];
-//                if (usermodel) {
-//                    [usermodel setValuesForKeysWithDictionary:[newDict objectForKey:@"user"]];
-//                    weibomodel.uerInfo=usermodel;
-//                }
-//                //2.stageInfo
-//                stageInfoModel  *stageInfo =[[stageInfoModel alloc]init];
-//                if(![[newDict  objectForKey:@"stage"]isKindOfClass:[NSNull class]])
-//                {
-//                if (stageInfo) {
-//                    [stageInfo setValuesForKeysWithDictionary:[newDict objectForKey:@"stage"]];
-//                    movieInfoModel  *moviemodel =[[movieInfoModel alloc]init];
-//                    if (moviemodel) {
-//                        if (![[[newDict objectForKey:@"stage"] objectForKey:@"movie"] isKindOfClass:[NSNull class]]) {
-//                        [moviemodel setValuesForKeysWithDictionary:[[newDict objectForKey:@"stage"] objectForKey:@"movie"]];
-//                        stageInfo.movieInfo=moviemodel;
-//                        }
-//                    }
-//                    weibomodel.stageInfo=stageInfo;
-//                  }
-//                }
-//                //3.tagsInfo
-//                NSMutableArray  *tagArray =[[NSMutableArray alloc]init];
-//
-//                if (![[newDict objectForKey:@"tags"] isKindOfClass:[NSNull class]]) {
-//                    for (NSDictionary  *tagDict  in [newDict objectForKey:@"tags"]) {
-//                        TagModel  *tagmodel =[[TagModel alloc]init];
-//                        [tagmodel setValuesForKeysWithDictionary:tagDict];
-//                        
-//                        TagDetailModel  *tagDetailmodel =[[TagDetailModel alloc]init];
-//                        if (tagDetailmodel) {
-//                            [tagDetailmodel setValuesForKeysWithDictionary:[tagDict objectForKey:@"tag"]];
-//                            tagmodel.tagDetailInfo=tagDetailmodel;
-//                        }
-//                        [tagArray addObject:tagmodel];
-//                        
-//                    }
-//                    
-//                }
-//                weibomodel.tagArray=tagArray;
-//                
-//                if (_newDataArray==nil) {
-//                    _newDataArray =[[NSMutableArray alloc]init];
-//                }
-//                 [_newDataArray addObject:weibomodel];
-//            }
-//            }
           
            [_HotMoVieTableView reloadData];
         }
@@ -905,14 +837,6 @@
             cell.backgroundColor=View_BackGround;
         }
         if (_newDataArray.count>indexPath.row) {
-//            weiboInfoModel  *model =[_newDataArray  objectAtIndex:indexPath.row];
-//            cell.pageType=NSPageSourceTypeMainNewController;
-//            cell.weiboInfo=model;
-//            cell.stageView.delegate=self;
-//            cell.stageInfo=model.stageInfo;
-//            cell.delegate=self;
-//            [cell ConfigsetCellindexPath:indexPath.row];
-            
             ModelsModel  *model =[_newDataArray objectAtIndex:indexPath.row];
             cell.pageType=NSPageSourceTypeMainNewController;
             cell.delegate=self;
@@ -931,7 +855,6 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
         //点击cell 隐藏弹幕，再点击隐藏
-        //NSLog(@"didDeselectRowAtIndexPath  =====%ld",indexPath.row);
        CommonStageCell   *cell=(CommonStageCell *)[tableView cellForRowAtIndexPath:indexPath];
     if (isShowMark==YES) {
         [cell showAndHidenMarkViews:YES];
@@ -1005,21 +928,34 @@
         vc.movieId =  model.stageInfo.movie_id;
         vc.moviename=model.stageInfo.movieInfo.name;
         vc.movielogo=model.stageInfo.movieInfo.logo;
-        [self.navigationController pushViewController:vc animated:YES];
+        UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+        self.navigationItem.backBarButtonItem=item;
 
+        [self.navigationController pushViewController:vc animated:YES];
+        
+        
     }
     else if (button.tag==2000)
     {
         //分享
         CommonStageCell *cell = (CommonStageCell *)(button.superview.superview.superview.superview);
-       // CommonStageCell  *cell=(CommonStageCell *)[_HotMoVieTableView cellForRowAtIndexPath:index];
-        UIImage  *image=[Function getImage:cell.stageView WithSize:CGSizeMake(kDeviceWidth, kDeviceWidth)];
-        UMShareViewController  *shareVC=[[UMShareViewController alloc]init];
-        shareVC.StageInfo=model.stageInfo;
-        shareVC.screenImage=image;
-        shareVC.delegate=self;
-         UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:shareVC];
-        [self presentViewController:na animated:NO completion:nil];
+        //NSIndexPath  *indexpath = [NSIndexPath indexPathForRow:Rowindex inSection:1];
+        //CommonStageCell  *cell=(CommonStageCell *)[_HotMoVieTableView cellForRowAtIndexPath:indexpath];
+        UIImage  *image=[Function getImage:cell.stageView WithSize:CGSizeMake(kStageWidth, kStageWidth)];
+        if (UMShareStyle==1) {//使用controller方式分享
+                    UMShareViewController  *shareVC=[[UMShareViewController alloc]init];
+                    shareVC.StageInfo=model.stageInfo;
+                    shareVC.screenImage=image;
+                    shareVC.delegate=self;
+                     UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:shareVC];
+                    [self presentViewController:na animated:YES completion:nil];
+            
+        }
+        else if (UMShareStyle==0)//使用view方式分享
+        {
+        UMShareView *ShareView =[[UMShareView alloc] initwithStageInfo:model.stageInfo ScreenImage:image delgate:self];
+        [ShareView show];
+        }
         
      }
     else if(button.tag==3000)
@@ -1081,7 +1017,6 @@
 -(void)UMShareViewControllerHandClick:(UIButton *)button ShareImage:(UIImage *)shareImage StageInfoModel:(stageInfoModel *)StageInfo
 {
     
-    
     NSArray  *sharearray =[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQzone, UMShareToSina, nil];
     
     [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
@@ -1104,6 +1039,15 @@
     
 }
 
+-(void)UMShareViewHandClick:(UIButton *)button ShareImage:(UIImage *)shareImage StageInfoModel:(stageInfoModel *)StageInfo
+{
+    NSArray  *sharearray =[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQzone, UMShareToSina, nil];
+    [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
+    [[UMSocialControllerService defaultControllerService] setShareText:StageInfo.movieInfo.name shareImage:shareImage socialUIDelegate:self];
+    //设置分享内容和回调对象
+    [UMSocialSnsPlatformManager getSocialPlatformWithName:[sharearray  objectAtIndex:button.tag-10000]].snsClickHandler(self,[UMSocialControllerService defaultControllerService],YES);
+    
+}
 //#pragma mark  --UMShareDelegate 友盟分享实现的功能
 
 -(void)didCloseUIViewController:(UMSViewControllerType)fromViewControllerType
@@ -1187,7 +1131,6 @@
         if (_toolBar) {
             [_toolBar HidenButtomView];
             [_toolBar removeFromSuperview];
-            
         }
         MyViewController   *myVc=[[MyViewController alloc]init];
         myVc.author_id=weiboDict.created_by;
@@ -1256,7 +1199,7 @@
        
         UserDataCenter  *userCenter =[UserDataCenter shareInstance];
         if ([userCenter.is_admin  intValue]>0) {
-        UIActionSheet   *ash=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"删除",@"变身",@"推荐", nil];
+        UIActionSheet   *ash=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"删除",@"变身",@"推荐",@"编辑", nil];
          ash.tag=500;
         [ash showInView:self.view];
         }
@@ -1297,13 +1240,11 @@
             UIActionSheet   *ash=[[UIActionSheet alloc]initWithTitle:@"确定删除" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"删除" otherButtonTitles:nil,nil];
             ash.tag=501;
             [ash showInView:self.view];
-            
         }
         else if(buttonIndex==1)
         {
             ///变身
-           // [self.navigationController pushViewController:[ChangeSelfViewController new] animated:YES];
-            //请求随机数种子
+         
             [self requestChangeUserRand4];
         }
         else if(buttonIndex==2)
@@ -1312,6 +1253,31 @@
             UIActionSheet   *ash=[[UIActionSheet alloc]initWithTitle:@"确定推荐" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"确定" otherButtonTitles:nil,nil];
             ash.tag=502;
             [ash showInView:self.view];
+        }
+        else if (buttonIndex==3)
+        {
+            [_mymarkView CancelMarksetSelect];
+            if (_toolBar) {
+                [_toolBar HidenButtomView];
+                [_toolBar removeFromSuperview];
+            }
+            ModelsModel    *model;
+            if (!segment) {
+                segment.selectedSegmentIndex=0;
+            }
+            if (segment.selectedSegmentIndex==0) {
+                model =[_hotDataArray objectAtIndex:Rowindex];
+            }
+            if (segment.selectedSegmentIndex==1) {
+                model=[_newDataArray objectAtIndex:Rowindex];
+             }
+            //弹幕编辑
+            AddMarkViewController  *AddMarkVC=[[AddMarkViewController alloc]init];
+            AddMarkVC.stageInfo=model.stageInfo;
+            AddMarkVC.model=model;
+            AddMarkVC.weiboInfo=_TweiboInfo;
+            AddMarkVC.delegate=self;
+            [self presentViewController:AddMarkVC animated:NO completion:nil];
         }
     }
     // 确定删除
@@ -1371,7 +1337,6 @@
         }
         else if(buttonIndex==1)
         {
-            
             stageInfoModel  *stageInfo;
             if (segment.selectedSegmentIndex==0) {
                 ModelsModel   *model =[_hotDataArray objectAtIndex:Rowindex];

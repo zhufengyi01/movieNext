@@ -64,13 +64,14 @@
     titleLable.textColor=VBlue_color;
     titleLable.font=[UIFont boldSystemFontOfSize:18];
     titleLable.textAlignment=NSTextAlignmentCenter;
-//    self.navigationItem.titleView=titleLable;
+//self.navigationItem.titleView=titleLable;
     [view addSubview:titleLable];
     
     UIButton  *button=[UIButton buttonWithType:UIButtonTypeCustom];
     [button setTitle:@"取消" forState:UIControlStateNormal];
     [button setTitleColor:VBlue_color forState:UIControlStateNormal];
-    button.frame=CGRectMake(10, 30, 40, 30);
+    button.frame=CGRectMake(0, 20, 60, 40);
+    button.titleLabel.font=[UIFont boldSystemFontOfSize:18];
     [button addTarget:self action:@selector(CancleShareClick:) forControlEvents:UIControlEventTouchUpInside];
     [view addSubview:button];
 //    UIBarButtonItem  *barButton=[[UIBarButtonItem alloc]initWithCustomView:button];
@@ -79,9 +80,7 @@
 }
 -(void)CancleShareClick:(UIButton *) button
 {
- 
-//    //[self dismissViewControllerAnimated:YES completion:nil];
-    [self dismissViewControllerAnimated:YES completion:^{
+     [self dismissViewControllerAnimated:YES completion:^{
         
      }];
 }
@@ -218,17 +217,19 @@
 //创建标签的方法
 -(TagView *)createTagViewWithtagInfo:(TagModel *) tagmodel andIndex:(NSInteger ) index
 {
-    TagView *tagview =[[TagView alloc]initWithFrame:CGRectZero];
-    tagview.clipsToBounds=YES;
-    tagview.tag=1000+index;
-    tagview.tagBgImageview.backgroundColor =[UIColor colorWithRed:155.0/255 green:155.0/255 blue:155.0/255 alpha:1];
-    tagview.weiboInfo=self.weiboInfo;
-    NSString *titleStr = tagmodel.tagDetailInfo.title;
-    tagview.titleLable.text=titleStr;
-    CGSize  Tsize =[titleStr boundingRectWithSize:CGSizeMake(MAXFLOAT, TagHeight) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:[NSDictionary dictionaryWithObject:tagview.titleLable.font forKey:NSFontAttributeName] context:nil].size;
-    //纪录前面一个标签的宽度
-    tagview.frame=CGRectMake(0,0, Tsize.width+10, TagHeight);
-    return tagview;
+//    TagView *tagview =[[TagView alloc]initWithFrame:CGRectZero];
+//    tagview.clipsToBounds=YES;
+//    tagview.tag=1000+index;
+//    tagview.tagBgImageview.backgroundColor =[UIColor colorWithRed:155.0/255 green:155.0/255 blue:155.0/255 alpha:1];
+//    tagview.weiboInfo=self.weiboInfo;
+//    NSString *titleStr = tagmodel.tagDetailInfo.title;
+//    tagview.titleLable.text=titleStr;
+//    CGSize  Tsize =[titleStr boundingRectWithSize:CGSizeMake(MAXFLOAT, TagHeight) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:[NSDictionary dictionaryWithObject:tagview.titleLable.font forKey:NSFontAttributeName] context:nil].size;
+//    //纪录前面一个标签的宽度
+//    tagview.frame=CGRectMake(0,0, Tsize.width+10, TagHeight);
+    TagView  *tagView =[[TagView alloc]initWithWeiboInfo:self.weiboInfo AndTagInfo:tagmodel delegate:nil isCanClick:NO backgoundImage:nil isLongTag:YES];
+    tagView.backgroundColor =Tag_View_Color;
+    return tagView;
 }
 
 //点击分享

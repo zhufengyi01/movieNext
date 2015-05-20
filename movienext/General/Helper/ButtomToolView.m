@@ -14,6 +14,7 @@
 #import "UserDataCenter.h"
 #import "UpweiboModel.h"
 #import "Function.h"
+#import "NSDate+Extension.h"
 #import "UIButton+WebCache.h"
 
 @implementation ButtomToolView 
@@ -151,9 +152,14 @@
     userNamelabel.text =self.weiboInfo.uerInfo.username;
     
     //时间
-    NSString *timeStr =[Function getTimeIntervalfromInerterval:self.weiboInfo.created_at];
-    timelabel.text=timeStr;
-    //内容
+    //NSString *timeStr =[Function getTimeIntervalfromInerterval:self.weiboInfo.created_at];
+    
+   //根据时间戳转化成时间
+    NSDate  *comfromTimesp =[NSDate dateWithTimeIntervalSince1970:[self.weiboInfo.created_at intValue]];
+    NSString  *da = [NSDate timeInfoWithDate:comfromTimesp];
+    timelabel.text=da;
+    
+   // //内容
     contentLable.text =self.weiboInfo.content;
     
    ////标签
@@ -192,17 +198,19 @@
 -(TagView *)createTagViewWithtagInfo:(TagModel *) tagmodel andIndex:(NSInteger ) index
 {
     
-    TagView *tagview =[[TagView alloc]initWithFrame:CGRectZero];
-    tagview.tag=1000+index;
-    tagview.delegete=self;
-    //设置是否可以点击
-    [tagview setTagViewIsClick:YES];
-    tagview.tagInfo=tagmodel;
-    tagview.weiboInfo=self.weiboInfo;
-    NSString *titleStr = tagmodel.tagDetailInfo.title;
-    tagview.titleLable.text=titleStr;
-    CGSize  Tsize =[titleStr boundingRectWithSize:CGSizeMake(MAXFLOAT, TagHeight) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:[NSDictionary dictionaryWithObject:tagview.titleLable.font forKey:NSFontAttributeName] context:nil].size;
-     tagview.frame=CGRectMake(0,0, Tsize.width+10, TagHeight+10);
+    TagView *tagview =[[TagView alloc]initWithWeiboInfo:self.weiboInfo AndTagInfo:tagmodel delegate:self isCanClick:YES backgoundImage:nil isLongTag:YES];
+    [tagview setbigTag:YES];
+    //tagview.frame=CGRectMake(0, 0, 0, 0);
+//    tagview.tag=1000+index;
+//    tagview.delegete=self;
+//    //设置是否可以点击
+//    [tagview setTagViewIsClick:YES];
+//    tagview.tagInfo=tagmodel;
+//    tagview.weiboInfo=self.weiboInfo;
+//    NSString *titleStr = tagmodel.tagDetailInfo.title;
+//    tagview.titleLable.text=titleStr;
+//    CGSize  Tsize =[titleStr boundingRectWithSize:CGSizeMake(MAXFLOAT, TagHeight) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:[NSDictionary dictionaryWithObject:tagview.titleLable.font forKey:NSFontAttributeName] context:nil].size;
+//     tagview.frame=CGRectMake(0,0, Tsize.width+10, TagHeight+10);
     return tagview;
 }
 

@@ -7,7 +7,7 @@
 //
 
 #import "DoubanService.h"
-#import "DoubanInfo.h"
+//#import "DoubanInfo.h"
 static DoubanService * manager = nil;
 
 @implementation DoubanService

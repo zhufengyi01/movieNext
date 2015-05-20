@@ -72,7 +72,7 @@
     NSString *urlString =[NSString stringWithFormat:@"%@/tag/search", kApiBaseUrl];
     [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
-            NSLog(@"sdsd=======%@",responseObject);
+           // NSLog(@"sdsd=======%@",responseObject);
             if (_dataArray==nil) {
                 _dataArray= [[NSMutableArray alloc]init];
             }
