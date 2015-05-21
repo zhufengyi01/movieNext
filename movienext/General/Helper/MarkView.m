@@ -121,23 +121,18 @@
         self.tagLable =[[M80AttributedLabel alloc]initWithFrame:CGRectMake(0, 0, 100, 30)];
         self.tagLable.backgroundColor=[[UIColor blackColor] colorWithAlphaComponent:0];
          for (int i=0; i<self.weiboInfo.tagArray.count; i++) {
-             
             TagView *tagview = [self createTagViewWithtagInfo:self.weiboInfo.tagArray[i] andIndex:i];
             [self.tagLable appendView:tagview margin:UIEdgeInsetsMake(0, 0, 0, 5)];
              //最多放置两个标签
              if (i==1&&self.weiboInfo.tagArray.count>2) {
                  //放置一个...的
-                 TagModel  *tagmodel =[self.weiboInfo.tagArray objectAtIndex:i];
-                 tagmodel.tagDetailInfo.title=@"...";
+                 //TagModel  *tagmodel =[self.weiboInfo.tagArray objectAtIndex:i];
+                 TagDetailModel  *tagdetail =[[TagDetailModel alloc]init];
+                 tagdetail.title=@"...";
+                 TagModel  *tagmodel=[[TagModel alloc]init];
+                 tagmodel.tagDetailInfo=tagdetail;
+                  //tagmodel.tagDetailInfo.title=@"...";
                  TagView *tagview =[[TagView alloc]initWithWeiboInfo:self.weiboInfo AndTagInfo:tagmodel delegate:nil isCanClick:NO backgoundImage:nil isLongTag:NO];
-                 //tagview.tag=1000+index;
-                 //设置不可以点击
-                // [tagview  setTagViewIsClick:NO];
-//                 tagview.weiboInfo=self.weiboInfo;
-//                 NSString *titleStr = @"...";
-//                 tagview.titleLable.text=titleStr;
-//                 CGSize  Tsize =[titleStr boundingRectWithSize:CGSizeMake(MAXFLOAT, TagHeight) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:[NSDictionary dictionaryWithObject:tagview.titleLable.font forKey:NSFontAttributeName] context:nil].size;
-//                 tagview.frame=CGRectMake(0,0, Tsize.width+10, TagHeight);
                  [self.tagLable appendView:tagview margin:UIEdgeInsetsMake(0, 0, 0, 5)];
                  break;
              }
@@ -150,17 +145,6 @@
 -(TagView *)createTagViewWithtagInfo:(TagModel *) tagmodel andIndex:(NSInteger ) index
 {
     TagView *tagview =[[TagView alloc]initWithWeiboInfo:self.weiboInfo AndTagInfo:tagmodel delegate:nil isCanClick:NO backgoundImage:nil isLongTag:NO];
-//    //tagview.tag=1000+index;
-//    //设置不可以点击
-//    [tagview  setTagViewIsClick:NO];
-//    tagview.weiboInfo=self.weiboInfo;
-//    NSString *titleStr = tagmodel.tagDetailInfo.title;
-//     tagview.titleLable.text=titleStr;
-//     CGSize  Tsize =[titleStr boundingRectWithSize:CGSizeMake(MAXFLOAT, TagHeight) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:[NSDictionary dictionaryWithObject:tagview.titleLable.font forKey:NSFontAttributeName] context:nil].size;
-//    if (Tsize.width>60) {
-//        Tsize.width=60;
-//    }
-//     tagview.frame=CGRectMake(0,0, Tsize.width+10, TagHeight);
     return tagview;
 }
 
@@ -177,7 +161,16 @@
     CGSize Tagsize =[self.tagLable sizeThatFits:CGSizeMake(width, CGFLOAT_MAX)];
     //在stagview里面已经对markview的大小计算了，这里重写
     if (Tagsize.width>Zsize.width) {
-        self.frame=CGRectMake(self.frame.origin.x, self.frame.origin.y,Tagsize.width+23+11+5, self.frame.size.height);
+        // 此时需要重新布局xy
+        float  x=[self.weiboInfo.x_percent floatValue];   //位置的百分比
+        float  y=[self.weiboInfo.y_percent floatValue];
+        float width=Tagsize.width+23+11;
+        float height=self.frame.size.height;
+         float markViewX = (x*(kDeviceWidth-10))/100-width;
+        float markViewY = (y*(kDeviceWidth-10))/100 - height/2;
+        markViewX = MIN(MAX(markViewX, 5.0f), kDeviceWidth-10-width-5);
+        markViewY = (y*(kDeviceWidth-10))/100 - height/2;
+        self.frame=CGRectMake(markViewX,markViewY,width,height);
     }
 
     //头像

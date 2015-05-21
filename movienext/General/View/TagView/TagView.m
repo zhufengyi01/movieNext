@@ -65,8 +65,8 @@
     CGSize  Tsize =[self.titleLable.text boundingRectWithSize:CGSizeMake(MAXFLOAT, TagHeight) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:[NSDictionary dictionaryWithObject:self.titleLable.font forKey:NSFontAttributeName] context:nil].size;
     //不是长微博
     if (_isLongtag==NO) {
-        if (Tsize.width>60) {
-            Tsize.width=60+10;
+        if (Tsize.width>60){
+            Tsize.width=60;
         }
     }
     self.frame=CGRectMake(0, 0, Tsize.width+10, TagHeight);
@@ -74,7 +74,6 @@
 }
 -(void)setbigTag:(BOOL) isbig;
 {
-    
     self.frame=CGRectMake(0, 0,self.frame.size.width+8, self.frame.size.height+6);
     self.titleLable.frame=CGRectMake(0,0,self.frame.size.width, self.frame.size.height);
 }

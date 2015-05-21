@@ -174,7 +174,6 @@
             [tagLable appendView:tagview margin:UIEdgeInsetsMake(0, 0, 0, 10)];
             tagLable.lineSpacing=5;
             tagLable.numberOfLines=0;
-            ///tagLable.backgroundColor =[UIColor redColor];
          }
       
         [_alertView addSubview:tagLable];
