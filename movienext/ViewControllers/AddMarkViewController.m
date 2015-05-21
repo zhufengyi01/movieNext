@@ -354,8 +354,6 @@
     X =[NSString stringWithFormat:@"%f",((x+markViewWidth)/width)*100];
     Y=[NSString stringWithFormat:@"%f",((y+markViewHeight/2)/width)*100];
     
-    
-    
     //开始创建weibo对象
       weibomodel =[[weiboInfoModel alloc]init];
     if (weibomodel) {

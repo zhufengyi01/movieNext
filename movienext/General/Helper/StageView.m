@@ -158,6 +158,7 @@
             markViewY = MIN(MAX(markViewY, 5.0f), hight-markViewHeight-5);
 #pragma mark 设置气泡的大小和位置
             markView.frame=CGRectMake(markViewX, markViewY, markViewWidth, markViewHeight);
+    
             markView.TitleLable.text=weiboTitleString;
           NSString   *headurl =[NSString stringWithFormat:@"%@%@",kUrlAvatar,weibodict.uerInfo.logo];
             [markView.LeftImageView sd_setImageWithURL:[NSURL URLWithString:headurl] placeholderImage:[UIImage imageNamed:@"user_normal"]];

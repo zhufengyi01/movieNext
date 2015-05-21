@@ -1253,6 +1253,7 @@
 		000850EE1B09CD4800E6009C /* UIImage */ = {
 			isa = PBXGroup;
 			children = (
+				007427331AADAB9B0034047D /* UIImage-Helpers */,
 				000850EF1B09CD4800E6009C /* UIImage+Alpha.h */,
 				000850F01B09CD4800E6009C /* UIImage+Alpha.m */,
 				000850F11B09CD4800E6009C /* UIImage+animatedGIF.h */,
@@ -1942,7 +1943,8 @@
 				007427391AADAB9B0034047D /* UIImage+Screenshot.m */,
 				0074273A1AADAB9B0034047D /* UIImage-Helpers.h */,
 			);
-			path = "UIImage-Helpers";
+			name = "UIImage-Helpers";
+			path = "../../../../Libs/UIImage-Helpers";
 			sourceTree = "<group>";
 		};
 		00963B9E1B0323E10069CBD9 /* Masonry */ = {
@@ -2138,7 +2140,6 @@
 				00AA53491AA2C525004096F8 /* CustomUI */,
 				00354C301ABF030C00F650AA /* AFNetworking */,
 				00354C1E1ABF004100F650AA /* UPYun */,
-				007427331AADAB9B0034047D /* UIImage-Helpers */,
 				006739421AA491250087C240 /* MJRefresh */,
 				00AA53671AA2C525004096F8 /* CustomTabBar */,
 				00AA53841AA2C525004096F8 /* SDWebImage */,

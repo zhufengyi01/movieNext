@@ -40,7 +40,6 @@
     int pageCount1;
     int pageCount2;
     int pageCount3;
-
     
     NSInteger Rowindex;
 }
@@ -344,6 +343,8 @@
 #pragma  mark  ---
 #pragma  mark  ----RequestData
 #pragma  mark  ---
+
+
 //删除电影
 -(void)requestDeletMovieWithMovieId:(NSString *) movie_id
 {

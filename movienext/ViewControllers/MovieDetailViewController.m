@@ -12,11 +12,13 @@
 //导入图片处理引擎框架
 #import "UIImageView+WebCache.h"
 //导入常量
+#import "M80AttributedLabel.h"
 #import "Constant.h"
 //导入App delegate
 #import "AppDelegate.h"
 //导入功能类
 #import "Function.h"
+#import "MJExtension.h"
 #import "LoadingView.h"
 #import "UserDataCenter.h"
 #import "ZCControl.h"
@@ -36,6 +38,7 @@
 #import "UMShareViewController.h"
 #import "UMShareViewController2.h"
 #import "UpYun.h"
+#import "TagModel.h"
 #import "stageInfoModel.h"
 #import "movieInfoModel.h"
 #import "ScanMovieInfoViewController.h"
@@ -43,7 +46,7 @@
 #import "ShowSelectPhotoViewController.h"
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
-@interface MovieDetailViewController ()<UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UICollectionViewDelegate,MovieHeadViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UMSocialUIDelegate,UMSocialDataDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIScrollViewDelegate,BigImageCollectionViewCellDelegate,AddMarkViewControllerDelegate,UMShareViewControllerDelegate,UMShareViewController2Delegate,MFMailComposeViewControllerDelegate,LoadingViewDelegate>
+@interface MovieDetailViewController ()<UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UICollectionViewDelegate,MovieHeadViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UMSocialUIDelegate,UMSocialDataDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIScrollViewDelegate,BigImageCollectionViewCellDelegate,AddMarkViewControllerDelegate,UMShareViewControllerDelegate,UMShareViewController2Delegate,MFMailComposeViewControllerDelegate,LoadingViewDelegate,TagViewDelegate>
 
 {
      UICollectionViewFlowLayout    *layout;
@@ -66,10 +69,16 @@
     movieInfoModel   * moviedetailmodel;
     int pageCount;
     NSMutableArray  *_upWeiboArray;
-    NSInteger  Rowindex;
+    NSInteger      Rowindex;
+    //头部放置标签列表的视图
+   //  UIView  *headView;
+    
     
 }
+@property(nonatomic,strong) M80AttributedLabel  *tagLable;//头部标签
+@property(nonatomic,strong) UIScrollView      *HeadScrollerView;
 @property(nonatomic,strong) NSMutableArray  *dataArray;
+
 @end
 
 @implementation MovieDetailViewController
@@ -79,7 +88,6 @@
   ///  self.navigationController.navigationBar.alpha=0.4;
     self.navigationController.navigationBar.hidden=NO;
     self.tabBarController.tabBar.hidden=YES;
-
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(requestMovieData) name:@"RefreshMovieDeatail" object:nil];
 
 }
@@ -113,6 +121,7 @@
     {
         // 从电影列表页进来的
         page=1;
+        //[self requestTagList];
         [self requestData];
      }
     [self createToolBar];
@@ -139,7 +148,6 @@
     // movieNameLable.numberOfLines=1;
     movieNameLable.lineBreakMode=NSLineBreakByTruncatingTail;
     [titleView addSubview:movieNameLable];
-    
     
     NSString  *logoString;
     if (self.pageSourceType==NSMovieSourcePageMovieListController) {
@@ -226,9 +234,51 @@
     _upWeiboArray=[[NSMutableArray alloc]init];
     
 }
+#pragma mark 创建头部的标签列表
+-(void)createHeadViewWithArray:(NSArray *) array
+{
+//    headView=[[UIView alloc]initWithFrame:CGRectMake(0,0, kDeviceWidth, 200)];
+//    headView.backgroundColor =[UIColor whiteColor];
+//    [self.view addSubview:headView];
+    
+    self.HeadScrollerView =[[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, 120)];
+    self.HeadScrollerView.contentSize=CGSizeMake(kDeviceWidth*3, 120);
+    [self.view addSubview:self.HeadScrollerView];
+    
+    
+    self.tagLable =[[M80AttributedLabel alloc]initWithFrame:CGRectMake(10,10,kDeviceWidth-20, 100)];
+    self.tagLable.backgroundColor=[[UIColor blackColor] colorWithAlphaComponent:0];
+    self.tagLable.lineSpacing=10;
+    for (int i=0; i<array.count; i++) {
+        TagView *tagview = [self createTagViewWithtagInfo:array[i] andIndex:i];
+        [self.tagLable appendView:tagview margin:UIEdgeInsetsMake(0, 0, 0, 10)];
+     }
+    [self.HeadScrollerView addSubview:self.tagLable];
+    //计算tagview的高度
+    CGSize Tagsize =[self.tagLable sizeThatFits:CGSizeMake(kDeviceWidth*3, 100)];
+    self.tagLable.frame=CGRectMake(10,10,Tagsize.width, Tagsize.height+0);
+    //headView.frame=CGRectMake(0, 0, kDeviceWidth,20+Tagsize.height+40);
+
+}
+//创建标签的方法
+-(TagView *)createTagViewWithtagInfo:(TagModel *) tagmodel andIndex:(NSInteger ) index
+{
+    TagView *tagview =[[TagView alloc]initWithWeiboInfo:nil AndTagInfo:tagmodel delegate:self isCanClick:YES backgoundImage:nil isLongTag:YES];
+    tagview.tagBgImageview.backgroundColor=VLight_GrayColor;
+    [tagview setbigTag:YES];
+    tagview.tag=2000+index;
+    tagview.titleLable.textColor=VGray_color;
+    if (index==0) {
+        tagview.tagBgImageview.backgroundColor =VBlue_color;
+        tagview.titleLable.textColor=[UIColor whiteColor];
+    }
+    return tagview;
+}
+
+
+
 -(void)initUI
 {
- 
     layout=[[UICollectionViewFlowLayout alloc]init];
     //layout.minimumInteritemSpacing=10; //cell之间左右的
     //layout.minimumLineSpacing=10;      //cell上下间隔
@@ -241,8 +291,7 @@
 
         layout.sectionInset=UIEdgeInsetsMake(0,0,64, 0); //整个偏移量 上左下右
     }
-    
-    _myConllectionView =[[UICollectionView alloc]initWithFrame:CGRectMake(0,0,kDeviceWidth, kDeviceHeight-20) collectionViewLayout:layout];
+    _myConllectionView =[[UICollectionView alloc]initWithFrame:CGRectMake(0,0,kDeviceWidth, kDeviceHeight-20-0) collectionViewLayout:layout];
     //[layout setHeaderReferenceSize:CGSizeMake(_myConllectionView.frame.size.width, kDeviceHeight/3+64+110)];
 
     _myConllectionView.backgroundColor=View_BackGround;
@@ -323,6 +372,35 @@
 
 #pragma  mark  ----RequestData
 #pragma  mark  ---
+
+//举报某人
+-(void)requestTagList
+{
+    //UserDataCenter *userCenter =[UserDataCenter shareInstance];
+    NSDictionary *parameters = @{@"movie_id":self.movieId};
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    [manager POST:[NSString stringWithFormat:@"%@/tag-stage/tag-list", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
+            NSLog(@"标签列表=======%@",responseObject);
+            NSMutableArray  *array =[[NSMutableArray alloc]initWithArray:[TagModel objectArrayWithKeyValuesArray:[responseObject objectForKey:@"models"]]];
+            //自己创建一个文字问全部的标签
+            TagDetailModel  *detailmodel =[[TagDetailModel alloc]init];
+            detailmodel.title=@"全部";
+            TagModel *tagmodel =[[TagModel alloc]init];
+            tagmodel.tagDetailInfo=detailmodel;
+            [array insertObject:tagmodel atIndex:0];
+            [self createHeadViewWithArray:array];
+            
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+    
+}
+
+
+
+
 //审核版到正式版的切换
 -(void)requestmoveReviewToNormal:(NSString *) stageId
 {
@@ -493,8 +571,7 @@
         if (movie_id && [movie_id intValue]>0) {
             self.movieId = movie_id;
         }
-        //[self requestMovieInfoData];
-          //  [self requestMovieData];
+             //[self requestTagList];
             [self requestData];
          }
 
