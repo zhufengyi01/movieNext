@@ -173,7 +173,6 @@
            mvdetail.moviename=[[_dataArray objectAtIndex:indexPath.row] objectForKey:@"title"];
            UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"搜索" style:UIBarButtonItemStylePlain target:nil action:nil];
            self.navigationItem.backBarButtonItem=item;
-
             [self.navigationController pushViewController:mvdetail animated:YES];
            
         }
@@ -200,7 +199,10 @@
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    [search resignFirstResponder];
+    if (search.text.length>0) {
+        [search resignFirstResponder];
+
+    }
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
