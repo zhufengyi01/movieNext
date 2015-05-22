@@ -123,7 +123,7 @@
     {
         // 从电影列表页进来的
         page=1;
-       [self requestTagList];
+       //[self requestTagList];
         [self requestData];
      }
     [self createToolBar];
@@ -181,7 +181,7 @@
     upLoadimageBtn.tag=201;
     [upLoadimageBtn setImage:[UIImage imageNamed:@"up_picture_blue.png"] forState:UIControlStateNormal];
     UIBarButtonItem  *rigthbar =[[UIBarButtonItem alloc]initWithCustomView:upLoadimageBtn];
-    self.navigationItem.rightBarButtonItem=rigthbar;
+    //self.navigationItem.rightBarButtonItem=rigthbar;
 }
 
 -(void)uploadImageFromAbumdAndDouban
@@ -294,7 +294,7 @@
 
         layout.sectionInset=UIEdgeInsetsMake(0,0,64, 0); //整个偏移量 上左下右
     }
-    _myConllectionView =[[UICollectionView alloc]initWithFrame:CGRectMake(0,120,kDeviceWidth, kDeviceHeight-20-120) collectionViewLayout:layout];
+    _myConllectionView =[[UICollectionView alloc]initWithFrame:CGRectMake(0,0,kDeviceWidth, kDeviceHeight-20-0) collectionViewLayout:layout];
     //[layout setHeaderReferenceSize:CGSizeMake(_myConllectionView.frame.size.width, kDeviceHeight/3+64+110)];
 
     _myConllectionView.backgroundColor=View_BackGround;
@@ -597,7 +597,7 @@
         if (movie_id && [movie_id intValue]>0) {
             self.movieId = movie_id;
         }
-              [self requestTagList];
+         //[self requestTagList];
             [self requestData];
          }
 
@@ -827,8 +827,10 @@
         cell.imageView.backgroundColor=VStageView_color;
         [cell.imageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w340h340",kUrlStage,model.photo]] placeholderImage:[UIImage imageNamed:nil]];
         if ( model.weibosArray.count>0) {
-            cell.titleLab.hidden = NO;
-            cell.titleLab.text=[NSString stringWithFormat:@"%ld", model.weibosArray.count];
+            //cell.titleLab.hidden = NO;
+            // 显示第一条微博
+            weiboInfoModel *weibo = [model.weibosArray objectAtIndex:0];
+            cell.titleLab.text=[NSString stringWithFormat:@"%@",weibo.content];
         } else {
             cell.titleLab.hidden = YES;
         }
@@ -842,7 +844,7 @@
 {
     if (bigModel==YES&&collectionView==_myConllectionView) {
         //点击cell 隐藏弹幕，再点击隐藏
-        NSLog(@"didDeselectRowAtIndexPath  =====%ld",indexPath.row);
+        //NSLog(@"didDeselectRowAtIndexPath  =====%ld",indexPath.row);
       //  BigImageCollectionViewCell   *cell=(BigImageCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
      } else {
          
@@ -852,15 +854,15 @@
          vc.upweiboArray=_upWeiboArray;
          vc.stageInfo = stagemodel;
          
-         NSMutableString  *backstr=[[NSMutableString alloc]initWithString:stagemodel.movieInfo.name];
-         NSString *str;
-         if(backstr.length>5)
-         {
-             str=[backstr substringToIndex:5];
-             str =[NSString stringWithFormat:@"%@...",str];
-         }
+//         NSMutableString  *backstr=[[NSMutableString alloc]initWithString:stagemodel.movieInfo.name];
+//         NSString *str;
+//         if(backstr.length>5)
+//         {
+//             str=[backstr substringToIndex:5];
+//             str =[NSString stringWithFormat:@"%@...",str];
+//         }
 
-         UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:str style:UIBarButtonItemStylePlain target:nil action:nil];
+         UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:nil action:nil];
          self.navigationItem.backBarButtonItem=item;
 
         [self.navigationController pushViewController:vc animated:YES];
@@ -895,7 +897,7 @@
     }
     else
     {
-        return CGSizeMake((kDeviceWidth-10)/3,(kDeviceWidth-10)/3);
+        return CGSizeMake((kDeviceWidth-5)/2,(kDeviceWidth-10)/3);
 
     }
     return CGSizeMake(0, 0);

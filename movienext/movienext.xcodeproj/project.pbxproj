@@ -417,6 +417,8 @@
 		00ABFC711AAAAB2200980824 /* BigImageCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00ABFC701AAAAB2200980824 /* BigImageCollectionViewCell.m */; };
 		00ABFC741AAAAB3F00980824 /* SmallImageCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00ABFC731AAAAB3F00980824 /* SmallImageCollectionViewCell.m */; };
 		00ABFC7A1AAACDF800980824 /* MovieHeadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 00ABFC791AAACDF800980824 /* MovieHeadView.m */; };
+		00B93F591B0ED0BE00AF6BDE /* FinderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00B93F581B0ED0BE00AF6BDE /* FinderViewController.m */; };
+		00B93F5D1B0ED20700AF6BDE /* AddViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00B93F5C1B0ED20700AF6BDE /* AddViewController.m */; };
 		00BA5F6D1AC13C1800BC3039 /* login_button_sina_press@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 00BA5F6B1AC13C1800BC3039 /* login_button_sina_press@2x.png */; };
 		00BA5F6E1AC13C1800BC3039 /* login_button_sina_press@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 00BA5F6C1AC13C1800BC3039 /* login_button_sina_press@3x.png */; };
 		00BA5F741AC13D3600BC3039 /* back_Icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 00BA5F701AC13D3600BC3039 /* back_Icon@3x.png */; };
@@ -1075,6 +1077,10 @@
 		00ABFC731AAAAB3F00980824 /* SmallImageCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SmallImageCollectionViewCell.m; sourceTree = "<group>"; };
 		00ABFC781AAACDF800980824 /* MovieHeadView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MovieHeadView.h; sourceTree = "<group>"; };
 		00ABFC791AAACDF800980824 /* MovieHeadView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MovieHeadView.m; sourceTree = "<group>"; };
+		00B93F571B0ED0BE00AF6BDE /* FinderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FinderViewController.h; sourceTree = "<group>"; };
+		00B93F581B0ED0BE00AF6BDE /* FinderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FinderViewController.m; sourceTree = "<group>"; };
+		00B93F5B1B0ED20700AF6BDE /* AddViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddViewController.h; sourceTree = "<group>"; };
+		00B93F5C1B0ED20700AF6BDE /* AddViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddViewController.m; sourceTree = "<group>"; };
 		00BA5F6B1AC13C1800BC3039 /* login_button_sina_press@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_button_sina_press@2x.png"; sourceTree = "<group>"; };
 		00BA5F6C1AC13C1800BC3039 /* login_button_sina_press@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_button_sina_press@3x.png"; sourceTree = "<group>"; };
 		00BA5F701AC13D3600BC3039 /* back_Icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "back_Icon@3x.png"; sourceTree = "<group>"; };
@@ -2346,6 +2352,8 @@
 				00AA53FB1AA2C525004096F8 /* Login */,
 				00AA53FE1AA2C525004096F8 /* Mine */,
 				00AA54011AA2C525004096F8 /* New */,
+				00B93F561B0ED09800AF6BDE /* Finder */,
+				00B93F5A1B0ED1C300AF6BDE /* Add */,
 				00AA54041AA2C525004096F8 /* Noti */,
 				005AFB581AA5F41900D80CFB /* CommonStageCell.h */,
 				005AFB591AA5F41900D80CFB /* CommonStageCell.m */,
@@ -2431,6 +2439,24 @@
 				00ABFC791AAACDF800980824 /* MovieHeadView.m */,
 			);
 			name = MovieDetail;
+			sourceTree = "<group>";
+		};
+		00B93F561B0ED09800AF6BDE /* Finder */ = {
+			isa = PBXGroup;
+			children = (
+				00B93F571B0ED0BE00AF6BDE /* FinderViewController.h */,
+				00B93F581B0ED0BE00AF6BDE /* FinderViewController.m */,
+			);
+			path = Finder;
+			sourceTree = "<group>";
+		};
+		00B93F5A1B0ED1C300AF6BDE /* Add */ = {
+			isa = PBXGroup;
+			children = (
+				00B93F5B1B0ED20700AF6BDE /* AddViewController.h */,
+				00B93F5C1B0ED20700AF6BDE /* AddViewController.m */,
+			);
+			path = Add;
 			sourceTree = "<group>";
 		};
 		00C604001AED1773008493D0 /* TagView */ = {
@@ -2965,6 +2991,7 @@
 				0053E9251ACBDD8300C11CB4 /* ChangeSelfViewController.m in Sources */,
 				006739591AA491250087C240 /* UIScrollView+MJRefresh.m in Sources */,
 				00354C641ABF030C00F650AA /* UIImageView+AFNetworking.m in Sources */,
+				00B93F591B0ED0BE00AF6BDE /* FinderViewController.m in Sources */,
 				000850ED1B09CCF700E6009C /* NSString+UUID.m in Sources */,
 				00AA545E1AA2C526004096F8 /* MyViewController.m in Sources */,
 				00354B331ABEC8EC00F650AA /* UploadImageViewController.m in Sources */,
@@ -2990,6 +3017,7 @@
 				006739541AA491250087C240 /* MJRefreshBaseView.m in Sources */,
 				00ABFC7A1AAACDF800980824 /* MovieHeadView.m in Sources */,
 				00354C2D1ABF004100F650AA /* MF_Base64Additions.m in Sources */,
+				00B93F5D1B0ED20700AF6BDE /* AddViewController.m in Sources */,
 				0059EDAA1B05D2A800C2ACA1 /* NSObject+MJProperty.m in Sources */,
 				0059EDA81B05D2A800C2ACA1 /* NSObject+MJCoding.m in Sources */,
 				00963BBB1B0323E10069CBD9 /* MASViewConstraint.m in Sources */,
@@ -3151,8 +3179,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-2";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Beijing Zuijiao Technology Company";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Beijing Zuijiao Technology Company";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_STRICT_OBJC_MSGSEND = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3170,7 +3198,7 @@
 					"$(PROJECT_DIR)/Libs/UMAnalytics_Sdk_3.4.8",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "ca993ee7-8f71-4e27-bc13-4e2338226631";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -3183,8 +3211,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-2";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Beijing Zuijiao Technology Company";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Beijing Zuijiao Technology Company";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_STRICT_OBJC_MSGSEND = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3202,7 +3230,7 @@
 					"$(PROJECT_DIR)/Libs/UMAnalytics_Sdk_3.4.8",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "ca993ee7-8f71-4e27-bc13-4e2338226631";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
 			};

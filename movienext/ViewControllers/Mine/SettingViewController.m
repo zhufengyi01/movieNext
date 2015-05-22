@@ -59,8 +59,6 @@
     self.navigationItem.rightBarButtonItem=barButton;
     }
    
-    
-    
     self.view.backgroundColor=View_BackGround;
     appdelegate = [[UIApplication sharedApplication]delegate ];
     window=appdelegate.window;

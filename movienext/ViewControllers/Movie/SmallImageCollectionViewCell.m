@@ -30,12 +30,12 @@
     _imageView.clipsToBounds=YES;
     [self.contentView addSubview:_imageView];
     
-    _titleLab = [[UILabel alloc]initWithFrame:CGRectMake(m_frame.size.width-20, m_frame.size.height-20, 20, 20)];
-    _titleLab.backgroundColor = [UIColor colorWithRed:0.0f/255.0f green:0.0f/255.0f blue:0.0f/255.0f alpha:0.5];
+    _titleLab = [[UILabel alloc]initWithFrame:CGRectMake(10, m_frame.size.height-30, m_frame.size.width-20, 30)];
+    //_titleLab.backgroundColor = [UIColor colorWithRed:0.0f/255.0f green:0.0f/255.0f blue:0.0f/255.0f alpha:0.5];
     _titleLab.text=@"";
     _titleLab.textAlignment = NSTextAlignmentCenter;
     _titleLab.textColor = [UIColor whiteColor];
-    _titleLab.font = [UIFont systemFontOfSize:12];
+    _titleLab.font = [UIFont systemFontOfSize:16];
     [self.contentView addSubview:_titleLab];
 }
 

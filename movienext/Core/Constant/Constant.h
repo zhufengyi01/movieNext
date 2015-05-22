@@ -53,6 +53,8 @@
 #define   UMShareStyle  0      //分享1使用controller方式分享    0 使用view 方式分享
 
 
+
+
 #pragma  mark 颜色设置
 #define kAppTintColor [UIColor colorWithRed:0.0/255.0 green:146.0/255.0 blue:255.0/255.0 alpha:1]
 //项目背景颜色
@@ -63,11 +65,15 @@
 #define tabBar_line   [UIColor colorWithRed:220.0/255 green:220.0/255 blue:220.0/255 alpha:1]
 //字体浅灰色
 #define VLight_GrayColor [UIColor colorWithRed:188.0/255 green:188.0/255 blue:188.0/255 alpha:1]
+//背景的浅灰色
+#define VLight_GrayColor_apla [UIColor colorWithRed:240.0/255 green:240.0/255 blue:240.0/255 alpha:1]
+
 //字体深灰色
 #define VGray_color      [UIColor colorWithRed:127.0/255 green:127.0/255 blue:139.0/255 alpha:1]
 //字体蓝色
 #define VBlue_color [UIColor colorWithRed:0/255 green:146.0/255 blue:255.0/255 alpha:1]
 #define VStageView_color [UIColor colorWithRed:23.0/255 green:23.0/255 blue:23.0/255 alpha:1]
+
 #define ShareLogo_color  [UIColor colorWithRed:210.0/255 green:202.0/255 blue:187.0/255 alpha:1]
 
 

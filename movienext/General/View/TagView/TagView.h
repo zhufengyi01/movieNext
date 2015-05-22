@@ -33,8 +33,11 @@
 //@property(nonatomic,strong) TagModel   *tagInfo;
 //@property(nonatomic,strong) id<TagViewDelegate> delegete;
 
-//custom init
+//custom init by tagInfo
 -(instancetype)initWithWeiboInfo:(weiboInfoModel *) weiboInfo AndTagInfo :(TagModel *) tagInfo delegate:(id<TagViewDelegate>) delegate isCanClick:(BOOL) click  backgoundImage:(UIImage *) image isLongTag:(BOOL) longtag;
+
+
+
 
 //是否是大标签
 -(void)setbigTag:(BOOL) isbig;

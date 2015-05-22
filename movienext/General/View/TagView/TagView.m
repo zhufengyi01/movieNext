@@ -29,7 +29,7 @@
         _isCanclick=click;
         _backgroundImage = image;
         _isLongtag =longtag;
-        self.layer.cornerRadius=TagViewConrnerRed;
+        self.layer.cornerRadius=0;
         self.backgroundColor =VBlue_color;
         self.clipsToBounds=YES;
         [self createUI];
@@ -58,15 +58,21 @@
     self.titleLable.lineBreakMode=NSLineBreakByTruncatingTail;
     self.titleLable.adjustsFontSizeToFitWidth=NO;
     self.titleLable.textAlignment=NSTextAlignmentCenter;
-    self.titleLable.text=_tagInfo.tagDetailInfo.title;
+    if (_tagInfo) {
+        self.titleLable.text=_tagInfo.tagDetailInfo.title;
+    }
+    else
+    {
+        self.titleLable.text=_weiboInfo.content;
+    }
     [self.tagBgImageview addSubview:self.titleLable];
     //计算自身的大小
     //NSString  *titleString =_tagInfo.tagDetailInfo.title;
     CGSize  Tsize =[self.titleLable.text boundingRectWithSize:CGSizeMake(MAXFLOAT, TagHeight) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:[NSDictionary dictionaryWithObject:self.titleLable.font forKey:NSFontAttributeName] context:nil].size;
     //不是长微博
     if (_isLongtag==NO) {
-        if (Tsize.width>60){
-            Tsize.width=60;
+        if (Tsize.width>120){
+            Tsize.width=120;
         }
     }
     self.frame=CGRectMake(0, 0, Tsize.width+10, TagHeight);

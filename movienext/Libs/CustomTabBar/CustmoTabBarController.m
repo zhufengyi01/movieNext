@@ -13,6 +13,8 @@
 #import "MyViewController.h"
 #import "CustomTabBar.h"
 #import "ZCControl.h"
+#import "FinderViewController.h"
+#import "AddViewController.h"
 #import "UIImage+ImageWithColor.h"
 #import "Constant.h"
 
@@ -40,18 +42,33 @@
 }
 - (void)createControllers
 {
-    NewViewController * newVC = [[NewViewController alloc] init];
-    UINavigationController * fristNav = [[UINavigationController alloc] initWithRootViewController:newVC];
+   // NewViewController * newVC = [[NewViewController alloc] init];
+    //UINavigationController * fristNav = [[UINavigationController alloc] initWithRootViewController:newVC];
     
-    MovieViewController * movieVC = [[MovieViewController alloc] init];
-    UINavigationController * secondNav = [[UINavigationController alloc] initWithRootViewController:movieVC];
+    MovieViewController * mvc = [[MovieViewController alloc] init];
+    UINavigationController * mvcNav = [[UINavigationController alloc] initWithRootViewController:mvc];
+    
+    //添加一个发现页
+    FinderViewController  *fvc =[[FinderViewController alloc]init];
+    UINavigationController *fvcNav =[[UINavigationController alloc]initWithRootViewController:fvc];
+    
+    
+    //添加页
+    AddViewController *add =[[AddViewController alloc]init];
+    UINavigationController *addNav =[[UINavigationController alloc]initWithRootViewController:add];
+    
     
     NotificationViewController * notVC = [[NotificationViewController alloc] init];
-    UINavigationController * thirdNav = [[UINavigationController alloc] initWithRootViewController:notVC];
+    UINavigationController *notNav = [[UINavigationController alloc] initWithRootViewController:notVC];
     
     MyViewController * myVC = [[MyViewController alloc] init];
-    UINavigationController * fouthNav = [[UINavigationController alloc] initWithRootViewController:myVC];
-    NSArray * controllerArr = [NSArray arrayWithObjects:fristNav, secondNav, thirdNav, fouthNav, nil];
+    UINavigationController *myNav = [[UINavigationController alloc] initWithRootViewController:myVC];
+    
+   
+    
+    
+
+    NSArray * controllerArr = [NSArray arrayWithObjects:mvcNav, fvcNav,addNav, notNav, myNav, nil];
     self.viewControllers = controllerArr;
      // 设置navigationbar的阴影
     [[UINavigationBar appearance] setShadowImage:[UIImage imageWithColor:tabBar_line size:CGSizeMake(kDeviceWidth, 1)]];

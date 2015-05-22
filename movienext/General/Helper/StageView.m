@@ -65,25 +65,28 @@
     if (ImgeHight==0) {
         ImgeHight=kDeviceWidth;
     }
-    float x=0;
-    float y=0;
-    float width=0;
-    float hight=0;
-    if (ImageWith>ImgeHight) {
-          x=0;
-          width=kDeviceWidth;
-          hight=(ImgeHight/ImageWith)*kDeviceWidth;
-          y=(kDeviceWidth-hight)/2;
-    }
-    else
-    {
-          y=0;
-          hight=kDeviceWidth;
-          width=(ImageWith/ImgeHight)*kDeviceWidth;
-          x=(kDeviceWidth-width)/2;
-     }
-    _MovieImageView.frame=CGRectMake(x, y,width,hight);
+  //  float x=0;
+   // float y=0;
+    float width=kDeviceWidth-10;
+    float hight=width*(9/16.0);
+//    if (ImageWith>ImgeHight) {
+//          x=0;
+//          width=kDeviceWidth;
+//          hight=(ImgeHight/ImageWith)*kDeviceWidth;
+//          y=(kDeviceWidth-hight)/2;
+//    }
+//    else
+//    {
+//          y=0;
+//          hight=kDeviceWidth;
+//          width=(ImageWith/ImgeHight)*kDeviceWidth;
+//          x=(kDeviceWidth-width)/2;
+//     }
+    
+    _MovieImageView.frame=CGRectMake(0, 0,width,hight);
     _MovieImageView.backgroundColor =VStageView_color;
+    _MovieImageView.contentMode=UIViewContentModeScaleAspectFill;
+    _MovieImageView.clipsToBounds=YES;
     NSString *photostring=[NSString stringWithFormat:@"%@%@!w640",kUrlStage,self.stageInfo.photo];
     //可监视下载进入的方法
     [_MovieImageView sd_setImageWithURL:[NSURL URLWithString:photostring] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {

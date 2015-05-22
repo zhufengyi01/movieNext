@@ -153,7 +153,6 @@
     }
     
 }
-
 -(void)ScreenButtonClick:(UIButton  *) button
 {
    //分享

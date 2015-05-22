@@ -28,7 +28,8 @@
         _stageInfo=stageInfo;
         self.frame=CGRectMake(0, 0,kDeviceWidth,kDeviceHeight);
         self.backgroundColor =[[UIColor blackColor] colorWithAlphaComponent:0];
-        float height=(kDeviceWidth/4)+(kDeviceWidth-20)+40+30;
+        
+        float height=(kDeviceWidth/4)+(kDeviceWidth-20)*(9.0/16)+40+30;
         backView =[[UIView alloc]initWithFrame:CGRectMake(0,kDeviceHeight, kDeviceWidth, height)];
         backView.userInteractionEnabled=YES;
         backView.backgroundColor =[UIColor whiteColor];
@@ -71,7 +72,7 @@
 -(void)CancleShareClick
 {
     [UIView animateWithDuration:KShow_ShareView_Time animations:^{
-        float height=kDeviceWidth/4+(kDeviceWidth-20)+40+30;
+        float height=(kDeviceWidth/4)+(kDeviceWidth-20)*(9.0/16)+40+30;
         backView.frame=CGRectMake(0, kDeviceHeight, kDeviceWidth,height);
     } completion:^(BOOL finished) {
         [self removeFromSuperview];
@@ -80,18 +81,18 @@
 
 -(void)createShareView
 {
-    shareView =[[UIView alloc]initWithFrame:CGRectMake(10,40, kDeviceWidth-20, kDeviceWidth-20+20)];
+    shareView =[[UIView alloc]initWithFrame:CGRectMake(10,40, kDeviceWidth-20, (kDeviceWidth-20)*(9.0/16)+20)];
     shareView.userInteractionEnabled=YES;
-    shareView.backgroundColor=VStageView_color;
+    shareView.backgroundColor=View_BackGround;
     [backView addSubview:shareView];
     
-    _ShareimageView=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0,kDeviceWidth-20,kDeviceWidth-20)];
-    _ShareimageView.backgroundColor=[UIColor whiteColor];
+    _ShareimageView=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0,kDeviceWidth-20,(kDeviceWidth-20)*(9.0/16))];
+    _ShareimageView.backgroundColor=[UIColor redColor];
     _ShareimageView.image=_screenImage;
     [shareView addSubview:_ShareimageView];
     
     //放置电影名和标签的view
-    logosupView=[[UIView alloc]initWithFrame:CGRectMake(0,40+kDeviceWidth-60, kDeviceWidth-20, 20)];
+    logosupView=[[UIView alloc]initWithFrame:CGRectMake(0,_ShareimageView.frame.origin.y+_ShareimageView.frame.size.height,kDeviceWidth-20, 20)];
     logosupView.backgroundColor=VStageView_color;
    // logosupView.hidden=YES;
     [shareView addSubview:logosupView];
@@ -110,10 +111,8 @@
     [logosupView addSubview:logoLable];
     
 }
-
 -(void)createButtomView
 {
-    
     buttomView=[[UIView alloc]initWithFrame:CGRectMake(0,backView.frame.size.height-(kDeviceWidth/4), kDeviceWidth, kDeviceWidth/4)];
     buttomView.backgroundColor=[UIColor whiteColor];
     buttomView.userInteractionEnabled=YES;
@@ -130,13 +129,12 @@
         [buttomView addSubview:btn];
         
     }
-    
 }
 //点击分享
 -(void)handShareButtonClick:(UIButton *) button
 {
-    logosupView.hidden=NO;
-    shareImage=[Function getImage:shareView WithSize:CGSizeMake(kDeviceWidth-20, kDeviceWidth-20+20)];
+     logosupView.hidden=NO;
+    shareImage=[Function getImage:shareView WithSize:CGSizeMake(kDeviceWidth-20, (kDeviceWidth-20)*(9.0/16)+20)];
     if (_delegate &&[_delegate respondsToSelector:@selector(UMShareViewHandClick:ShareImage:StageInfoModel:)]) {
         [_delegate UMShareViewHandClick:button ShareImage:shareImage StageInfoModel:_stageInfo];
         }
@@ -152,8 +150,10 @@
     
     [AppView addSubview:self];
     [UIView animateWithDuration:KShow_ShareView_Time animations:^{
-        float height=kDeviceWidth/4+(kDeviceWidth-20)+40+30;
+        float height=(kDeviceWidth/4)+(kDeviceWidth-20)*(9.0/16)+40+30;
         backView.frame=CGRectMake(0, kDeviceHeight-height, kDeviceWidth, height);
+        self.backgroundColor =[[UIColor blackColor] colorWithAlphaComponent:0.5];
+
     } completion:^(BOOL finished) {
         self.backgroundColor =[[UIColor blackColor] colorWithAlphaComponent:0.5];
     }];

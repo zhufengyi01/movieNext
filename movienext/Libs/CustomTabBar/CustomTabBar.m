@@ -7,7 +7,7 @@
 //
 
 #import "CustomTabBar.h"
-#define BUTTON_COUNT 4
+#define BUTTON_COUNT 5
 #define BUTTON_START_TAG 1000
 //在这里调选中的状态的字体颜色
 #define  TabSelectColor   [UIColor colorWithRed:0.0/255 green:146.0/255 blue:255.0/255 alpha:1]
@@ -46,9 +46,9 @@
 
 - (void)setMemory
 {
-    self.m_arrNormal = [NSArray arrayWithObjects:@"feed_tab_butten_normal.png", @"movie_tab_butten_normal.png", @"notice_tab_butten_normal.png", @"me_tab_butten_normal.png", nil];
-    self.m_arrSelected = [NSArray arrayWithObjects:@"feed_tab_butten_press.png", @"movie_tab_butten_press.png", @"notice_tab_butten_press.png", @"me_tab_butten_press.png", nil];
-    titleArray=@[@"最新",@"电影",@"消息",@"我的"];
+    self.m_arrNormal = [NSArray arrayWithObjects:@"feed_tab_butten_normal.png", @"movie_tab_butten_normal.png",@"movie_tab_butten_normal.png", @"notice_tab_butten_normal.png", @"me_tab_butten_normal.png", nil];
+    self.m_arrSelected = [NSArray arrayWithObjects:@"feed_tab_butten_press.png", @"movie_tab_butten_press.png",@"movie_tab_butten_press.png", @"notice_tab_butten_press.png", @"me_tab_butten_press.png", nil];
+    titleArray=@[@"电影",@"发现",@"添加",@"消息",@"我的"];
     
 }
 
