@@ -12,9 +12,12 @@
 #import "AppDelegate.h"
 #import "LoginViewController.h"
 #import "UMSocial.h"
+#import "ZCControl.h"
 #import <MessageUI/MessageUI.h>
 #import "UserHeadChangeViewController.h"
 #import "ThanksViewController.h"
+#import "UserDataCenter.h"
+#import "AdmListViewController.h"
 #import <MessageUI/MFMailComposeViewController.h>
 @interface SettingViewController ()<UITableViewDataSource,UITableViewDelegate,UMSocialUIDelegate>
 {
@@ -35,12 +38,40 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationController.navigationItem.title=@"设置";
+    
+    UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:@"设置"];
+    titleLable.textColor=VBlue_color;
+    
+    titleLable.font=[UIFont boldSystemFontOfSize:18];
+    titleLable.textAlignment=NSTextAlignmentCenter;
+    self.navigationItem.titleView=titleLable;
 
+    
+    UserDataCenter  *userCenter =[UserDataCenter shareInstance];
+    if ([userCenter.is_admin intValue ]>0) {
+    UIButton  *button=[UIButton buttonWithType:UIButtonTypeCustom];
+    [button setTitle:@"管理员" forState:UIControlStateNormal];
+   // [button setBackgroundImage:[UIImage imageNamed:@"setting.png"] forState:UIControlStateNormal];
+    [button setTitleColor:VBlue_color forState:UIControlStateNormal];
+    button.frame=CGRectMake(0, 0, 60, 40);
+    [button addTarget:self action:@selector(adminClick:) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem  *barButton=[[UIBarButtonItem alloc]initWithCustomView:button];
+    self.navigationItem.rightBarButtonItem=barButton;
+    }
+   
+    
+    
     self.view.backgroundColor=View_BackGround;
     appdelegate = [[UIApplication sharedApplication]delegate ];
     window=appdelegate.window;
     [self createUI];
     [self createOutLogin];
+}
+-(void)adminClick:(UIButton *) btn
+{
+    
+    [self.navigationController pushViewController:[AdmListViewController new] animated:YES];
+    
 }
 -(void)createUI
 {
@@ -84,6 +115,7 @@
     UITableViewCell   *cell=(UITableViewCell *)[tableView dequeueReusableCellWithIdentifier:cellID];
     if (!cell) {
         cell=[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+        cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
     }
     cell.textLabel.font =[UIFont systemFontOfSize:14];
   //  cell.textColor =VGray_color;

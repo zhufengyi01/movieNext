@@ -72,11 +72,13 @@
     NSInteger      Rowindex;
     //头部放置标签列表的视图
    //  UIView  *headView;
+    NSString *tagId;
     
     
 }
 @property(nonatomic,strong) M80AttributedLabel  *tagLable;//头部标签
 @property(nonatomic,strong) UIScrollView      *HeadScrollerView;
+@property(nonatomic,strong) NSMutableArray    *tagListArray;
 @property(nonatomic,strong) NSMutableArray  *dataArray;
 
 @end
@@ -121,7 +123,7 @@
     {
         // 从电影列表页进来的
         page=1;
-        //[self requestTagList];
+       [self requestTagList];
         [self requestData];
      }
     [self createToolBar];
@@ -229,7 +231,9 @@
     pageSize=15;
     pageCount=0;
     bigModel=NO;
+    tagId=@"0";
     _dataArray =[[NSMutableArray alloc]init];
+    self.tagListArray=[[NSMutableArray alloc]init];
     moviedetailmodel=[[movieInfoModel alloc]init];
     _upWeiboArray=[[NSMutableArray alloc]init];
     
@@ -242,9 +246,8 @@
 //    [self.view addSubview:headView];
     
     self.HeadScrollerView =[[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, 120)];
-    self.HeadScrollerView.contentSize=CGSizeMake(kDeviceWidth*3, 120);
+    self.HeadScrollerView.contentSize=CGSizeMake(kDeviceWidth+100, 120);
     [self.view addSubview:self.HeadScrollerView];
-    
     
     self.tagLable =[[M80AttributedLabel alloc]initWithFrame:CGRectMake(10,10,kDeviceWidth-20, 100)];
     self.tagLable.backgroundColor=[[UIColor blackColor] colorWithAlphaComponent:0];
@@ -255,7 +258,7 @@
      }
     [self.HeadScrollerView addSubview:self.tagLable];
     //计算tagview的高度
-    CGSize Tagsize =[self.tagLable sizeThatFits:CGSizeMake(kDeviceWidth*3, 100)];
+    CGSize Tagsize =[self.tagLable sizeThatFits:CGSizeMake(kDeviceWidth+100, 100)];
     self.tagLable.frame=CGRectMake(10,10,Tagsize.width, Tagsize.height+0);
     //headView.frame=CGRectMake(0, 0, kDeviceWidth,20+Tagsize.height+40);
 
@@ -291,7 +294,7 @@
 
         layout.sectionInset=UIEdgeInsetsMake(0,0,64, 0); //整个偏移量 上左下右
     }
-    _myConllectionView =[[UICollectionView alloc]initWithFrame:CGRectMake(0,0,kDeviceWidth, kDeviceHeight-20-0) collectionViewLayout:layout];
+    _myConllectionView =[[UICollectionView alloc]initWithFrame:CGRectMake(0,120,kDeviceWidth, kDeviceHeight-20-120) collectionViewLayout:layout];
     //[layout setHeaderReferenceSize:CGSizeMake(_myConllectionView.frame.size.width, kDeviceHeight/3+64+110)];
 
     _myConllectionView.backgroundColor=View_BackGround;
@@ -389,6 +392,7 @@
             TagModel *tagmodel =[[TagModel alloc]init];
             tagmodel.tagDetailInfo=detailmodel;
             [array insertObject:tagmodel atIndex:0];
+            self.tagListArray=array;
             [self createHeadViewWithArray:array];
             
         }
@@ -398,7 +402,31 @@
     
 }
 
+#pragma mark
+-(void)TapViewClick:(TagView *)tagView Withweibo:(weiboInfoModel *)weiboInfo withTagInfo:(TagModel *)tagInfo
+{
 
+    page=1;
+    if (self.dataArray.count>0) {
+    [self.dataArray removeAllObjects];
+ 
+    }
+    
+    for (int i=0; i<self.tagListArray.count; i++) {
+    //直接
+        TagView  *tagView=(TagView *)[self.tagLable viewWithTag:2000+i];
+        tagView.tagBgImageview.backgroundColor =VLight_GrayColor;
+        tagView.titleLable.textColor=VGray_color;
+    }
+    
+    tagView.tagBgImageview.backgroundColor =VBlue_color;
+    tagView.titleLable.textColor=[UIColor whiteColor];
+    tagId =tagInfo.tagDetailInfo.Id;
+    [self requestData];
+    
+    
+    
+}
 
 
 //审核版到正式版的切换
@@ -459,8 +487,6 @@
     }];
     
 }
-
-
 
 
 //举报某人
@@ -571,7 +597,7 @@
         if (movie_id && [movie_id intValue]>0) {
             self.movieId = movie_id;
         }
-             //[self requestTagList];
+              [self requestTagList];
             [self requestData];
          }
 
@@ -620,13 +646,20 @@
         return;
     }
     UserDataCenter  *userCenter =[UserDataCenter shareInstance];
-    NSString  *urlString =[NSString stringWithFormat:@"%@/stage/list?per-page=%d&page=%d",kApiBaseUrl,pageSize,page];
     NSDictionary *parameter;
-     parameter = @{@"movie_id": _movieId, @"user_id": userCenter.user_id,@"Version":Version};
+    NSString  *urlString;
+    if ([tagId intValue]==0) { //是全部的标签
+        urlString =[NSString stringWithFormat:@"%@/stage/list?per-page=%d&page=%d",kApiBaseUrl,pageSize,page];
+        parameter = @{@"movie_id": _movieId, @"user_id": userCenter.user_id,@"Version":Version};
+    }
+    else{
+        urlString =[NSString stringWithFormat:@"%@/tag-stage/stage-list-by-tag-id",kApiBaseUrl];
+        parameter = @{@"movie_id": _movieId, @"user_id": userCenter.user_id,@"Version":Version,@"tag_id":tagId};
+    }
     
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:urlString parameters:parameter success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        //NSLog(@"  电影详情页面数据JSON: %@", responseObject);
+        NSLog(@"  电影详情页面数据JSON: %@", responseObject);
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
         pageCount=[[responseObject objectForKey:@"pageCount"] intValue];
         NSMutableArray  *detailArray=[responseObject objectForKey:@"models"];
