@@ -419,6 +419,7 @@
 		00ABFC7A1AAACDF800980824 /* MovieHeadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 00ABFC791AAACDF800980824 /* MovieHeadView.m */; };
 		00B93F591B0ED0BE00AF6BDE /* FinderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00B93F581B0ED0BE00AF6BDE /* FinderViewController.m */; };
 		00B93F5D1B0ED20700AF6BDE /* AddViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00B93F5C1B0ED20700AF6BDE /* AddViewController.m */; };
+		00B93F951B0F465300AF6BDE /* FindDatailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00B93F941B0F465300AF6BDE /* FindDatailViewController.m */; };
 		00BA5F6D1AC13C1800BC3039 /* login_button_sina_press@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 00BA5F6B1AC13C1800BC3039 /* login_button_sina_press@2x.png */; };
 		00BA5F6E1AC13C1800BC3039 /* login_button_sina_press@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 00BA5F6C1AC13C1800BC3039 /* login_button_sina_press@3x.png */; };
 		00BA5F741AC13D3600BC3039 /* back_Icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 00BA5F701AC13D3600BC3039 /* back_Icon@3x.png */; };
@@ -1081,6 +1082,8 @@
 		00B93F581B0ED0BE00AF6BDE /* FinderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FinderViewController.m; sourceTree = "<group>"; };
 		00B93F5B1B0ED20700AF6BDE /* AddViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddViewController.h; sourceTree = "<group>"; };
 		00B93F5C1B0ED20700AF6BDE /* AddViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddViewController.m; sourceTree = "<group>"; };
+		00B93F931B0F465300AF6BDE /* FindDatailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FindDatailViewController.h; sourceTree = "<group>"; };
+		00B93F941B0F465300AF6BDE /* FindDatailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FindDatailViewController.m; sourceTree = "<group>"; };
 		00BA5F6B1AC13C1800BC3039 /* login_button_sina_press@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_button_sina_press@2x.png"; sourceTree = "<group>"; };
 		00BA5F6C1AC13C1800BC3039 /* login_button_sina_press@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_button_sina_press@3x.png"; sourceTree = "<group>"; };
 		00BA5F701AC13D3600BC3039 /* back_Icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "back_Icon@3x.png"; sourceTree = "<group>"; };
@@ -2446,6 +2449,8 @@
 			children = (
 				00B93F571B0ED0BE00AF6BDE /* FinderViewController.h */,
 				00B93F581B0ED0BE00AF6BDE /* FinderViewController.m */,
+				00B93F931B0F465300AF6BDE /* FindDatailViewController.h */,
+				00B93F941B0F465300AF6BDE /* FindDatailViewController.m */,
 			);
 			path = Finder;
 			sourceTree = "<group>";
@@ -2974,6 +2979,7 @@
 				001244141ABAE4B5005B0AB5 /* SerViceViewController.m in Sources */,
 				0053E9291ACBE8C000C11CB4 /* AddUserViewController.m in Sources */,
 				00354C571ABF030C00F650AA /* AFHTTPRequestOperation.m in Sources */,
+				00B93F951B0F465300AF6BDE /* FindDatailViewController.m in Sources */,
 				00963BBA1B0323E10069CBD9 /* MASViewAttribute.m in Sources */,
 				00354C5F1ABF030C00F650AA /* AFURLSessionManager.m in Sources */,
 				0074273C1AADAB9B0034047D /* UIImage+ImageWithColor.m in Sources */,
