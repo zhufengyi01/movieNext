@@ -34,21 +34,27 @@
     [self addSubview:view];
     isanimal=YES;
     angle=10;
-    imageView=[[UIImageView alloc]initWithFrame:CGRectMake((m_frame.size.width-30)/2, (m_frame.size.height-30)/2, 30, 30)];
-    imageView.image=[UIImage imageNamed:@"loading_roll_image.png"];
-    imageView.center=CGPointMake((kDeviceWidth)/2, (kDeviceHeight-kHeightNavigation)/2);
-    [self addSubview:imageView];
+#pragma mark --------等待中
+    // 等待的.......
+    CircleImageView=[[UIImageView alloc]initWithFrame:CGRectMake((m_frame.size.width-30)/2, (m_frame.size.height-30)/2, 30, 30)];
+    CircleImageView.image=[UIImage imageNamed:@"loading_roll_image.png"];
+    CircleImageView.center=CGPointMake((kDeviceWidth)/2, (kDeviceHeight-kHeightNavigation)/2);
+    [self addSubview:CircleImageView];
     [self startAnimation];
     
     
     
+    
+    
+#pragma mark ------数据加载失败的view
+    //数据加载失败
     failLoadView =[[UIView alloc]initWithFrame:CGRectMake(0, (kDeviceWidth-100)/2, kDeviceWidth, 100)];
     failLoadView.hidden=YES;
     failLoadView.backgroundColor=View_BackGround;
     failLoadView.userInteractionEnabled=YES;
     [self addSubview:failLoadView];
     
-     self.failTitle=[ZCControl createLabelWithFrame:CGRectMake(0, 10, kDeviceWidth, 20) Font:16 Text:@"加载失败，请重新加载!"];
+    self.failTitle=[ZCControl createLabelWithFrame:CGRectMake(0, 10, kDeviceWidth, 20) Font:16 Text:@"加载失败，请重新加载!"];
     self.failTitle.textAlignment=NSTextAlignmentCenter;
     self.failTitle.textColor=VGray_color;
     [failLoadView addSubview:self.failTitle];
@@ -58,8 +64,8 @@
     self.failBtn.clipsToBounds=YES;
     [failLoadView addSubview:self.failBtn];
     
-    
-    
+
+#pragma mark 数据为空的view
     //没有数据的时候显示这个笑脸的
     NullDataView =[[UIView alloc]initWithFrame:CGRectMake(0, (kDeviceWidth-100)/2, kDeviceWidth, 100)];
     NullDataView.hidden=YES;
@@ -67,14 +73,14 @@
     NullDataView.userInteractionEnabled=YES;
     [self addSubview:NullDataView];
     
-    UIImageView *smailview=[[UIImageView alloc]initWithFrame:CGRectMake((kDeviceWidth-25)/2, 20, 25, 25)];
-    smailview.image=[UIImage imageNamed:@"notice_icon.png"];
-    [NullDataView addSubview:smailview];
+     self.nullImageView=[[UIImageView alloc]initWithFrame:CGRectMake((kDeviceWidth-25)/2, 20, 25, 25)];
+    self.nullImageView.image=[UIImage imageNamed:@"notice_icon.png"];
+    [NullDataView addSubview:self.nullImageView];
     
-    failTitle2=[ZCControl createLabelWithFrame:CGRectMake(0, 60, kDeviceWidth, 20) Font:16 Text:@"亲，没有数据"];
-    failTitle2.textAlignment=NSTextAlignmentCenter;
-    failTitle2.textColor=VGray_color;
-    [NullDataView addSubview:failTitle2];
+    self.nullTitle=[ZCControl createLabelWithFrame:CGRectMake(0, 60, kDeviceWidth, 20) Font:16 Text:@"亲，没有数据"];
+    self.nullTitle.textAlignment=NSTextAlignmentCenter;
+    self.nullTitle.textColor=VGray_color;
+    [NullDataView addSubview:self.nullTitle];
     
     
     
@@ -87,7 +93,7 @@
     [UIView setAnimationDuration:0.01];
     [UIView setAnimationDelegate:self];
     [UIView setAnimationDidStopSelector:@selector(endAnimation)];
-    imageView.transform = CGAffineTransformMakeRotation(angle * (M_PI / 180.0f));
+    CircleImageView.transform = CGAffineTransformMakeRotation(angle * (M_PI / 180.0f));
     [UIView commitAnimations];
     
 }
@@ -104,6 +110,8 @@
     isanimal=NO;
 }
 #pragma mark  加载失败的时候执行
+
+
 //重新加载数据
 -(void)reloadDataClick:(UIButton *)button
 {
@@ -118,23 +126,25 @@
 {
     failLoadView.hidden=NO;
     [self stopAnimation];
-    imageView.hidden=YES;
+    CircleImageView.hidden=YES;
     
 }
+-(void)showNullView:(NSString *) failString;
+{
+     NullDataView.hidden=NO;
+    [self stopAnimation];
+    CircleImageView.hidden=YES;
+    self.nullTitle.text=failString;
+}
+
+
 //隐藏加载失败
 -(void)hidenFailLoadAndShowAnimation;
 {
     failLoadView.hidden=YES;
     [self startAnimation];
-    imageView.hidden=NO;
+    CircleImageView.hidden=NO;
     
-}
--(void)showNullView:(NSString *) failString;
-{
-    NullDataView.hidden=NO;
-    [self stopAnimation];
-    imageView.hidden=YES;
-    failTitle2.text=failString;
 }
 
 

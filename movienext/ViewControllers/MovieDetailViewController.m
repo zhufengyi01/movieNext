@@ -123,7 +123,7 @@
     {
         // 从电影列表页进来的
         page=1;
-       [self requestTagList];
+       //[self requestTagList];
         [self requestData];
      }
     [self createToolBar];
@@ -294,7 +294,7 @@
 
         layout.sectionInset=UIEdgeInsetsMake(0,0,64, 0); //整个偏移量 上左下右
     }
-    _myConllectionView =[[UICollectionView alloc]initWithFrame:CGRectMake(0,120,kDeviceWidth, kDeviceHeight-20-120) collectionViewLayout:layout];
+    _myConllectionView =[[UICollectionView alloc]initWithFrame:CGRectMake(0,0,kDeviceWidth, kDeviceHeight-20-0) collectionViewLayout:layout];
     //[layout setHeaderReferenceSize:CGSizeMake(_myConllectionView.frame.size.width, kDeviceHeight/3+64+110)];
 
     _myConllectionView.backgroundColor=View_BackGround;
@@ -597,7 +597,7 @@
         if (movie_id && [movie_id intValue]>0) {
             self.movieId = movie_id;
         }
-              [self requestTagList];
+            //[self requestTagList];
             [self requestData];
          }
 

@@ -26,19 +26,18 @@
 //导入功能类
 #import "Function.h"
 //导入常量类
+#import "LoadingView.h"
+
 #import "Constant.h"
 //导入电影页的视图
 #import "LoadingView.h"
 #import "SearchmovieTableViewCell.h"
 #import "UIImage+ImageWithColor.h"
 #import "MovieDetailViewController.h"
-@interface MovieSearchViewController ()<UISearchBarDelegate,UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate>
+@interface MovieSearchViewController ()<UISearchBarDelegate,UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate,LoadingViewDelegate>
 {
     LoadingView   *loadView;
-    //UITableView   *_myTableView;
-   // NSMutableArray    *_dataArray;
     UISearchBar  *search;
-    
     
 
 }
@@ -52,7 +51,6 @@
 {
     [super viewWillAppear:YES];
     [[UINavigationBar appearance] setShadowImage:[UIImage imageWithColor:tabBar_line size:CGSizeMake(kDeviceWidth, 1)]];
-    
     if (search) {
         [search becomeFirstResponder];
     }
@@ -64,6 +62,7 @@
     [self createNavigation];
     [self initData];
     [self initUI];
+    //[self creatLoadView];
 
 }
 -(void)createNavigation
@@ -90,11 +89,20 @@
     _myTableView.separatorInset=UIEdgeInsetsMake(0, -110, 0, 0);
     [self.view addSubview:_myTableView];
 }
+-(void)creatLoadView
+{
+    loadView =[[LoadingView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight-kHeightNavigation)];
+    loadView.delegate=self;
+    [self.view addSubview:loadView];
+}
+
 -(void)requestData
 {
     if ([search.text isEqualToString:@"00"]) {
         return;
     }
+     //[self.view addSubview:loadView];
+    
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
     NSString *urlStr = [NSString stringWithFormat:@"http://movie.douban.com/subject_search?search_text=%@&cat=1002", [search.text URLEncodedString] ];
     [request setURL:[NSURL URLWithString:urlStr]];
@@ -103,24 +111,44 @@
     [NSURLConnection sendAsynchronousRequest:request queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
         //NSLog(@"response start");
         if (connectionError) {
+            
             NSLog(@"httpresponse code error %@", connectionError);
+           // [loadView showFailLoadData];
+            
+            
         } else {
-            NSInteger responseCode = [(NSHTTPURLResponse *)response statusCode];
+             NSInteger responseCode = [(NSHTTPURLResponse *)response statusCode];
             NSString *responseString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
             if (responseCode == 200) {
                 responseString = [Function getNoNewLine:responseString];
-                
                 NSString     * pattern = @"<a class=\"nbg\" href=\"http://movie\\.douban\\.com/subject/(\\d+)/\".*>\n.*<img src=\"(.*)\" alt=\"(.*?)\".*?/>";
                 NSMutableArray *doubanInfos = [[DoubanService shareInstance] getDoubanInfosByResponse:responseString withpattern:pattern type:NServiceTypeSearch];
                 _dataArray = doubanInfos;
-               // NSLog(@"------_dataArray -=====%@",_dataArray);
+                //if (_dataArray.count>0) {
+                  //   [loadView stopAnimation];
+                   // [loadView removeFromSuperview];
+                    //loadView=nil;
+                //}
+                //else if(_dataArray.count==0)
+                //{
+                    //需要显示笑脸
+                  //  [loadView showNullView:@"没搜索到电影"];
+                    //return;
+                //}
                 [_myTableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
             } else {
                 NSLog(@"error");
+              //  [loadView showFailLoadData];
+                
             }
         }
     }];
 
+}
+-(void)reloadDataClick
+{
+    [self requestData];
+    [loadView hidenFailLoadAndShowAnimation];
 }
 #pragma mark --
 #pragma mark  -UITableViewDelegate
@@ -185,15 +213,28 @@
 #pragma  mark  ----
 -(void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
 {
+    if (self.dataArray.count>0) {
+        [self.dataArray removeAllObjects];
+        [self.myTableView reloadData];
+    }
+    if (searchBar.text.length==0) {
+        [loadView removeFromSuperview];
+    }
     [self requestData];
-    //[searchBar resignFirstResponder];
-}
+ }
 -(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
+    [searchBar resignFirstResponder];
+}
+-(void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar
+{
+}
+-(void)searchBarTextDidEndEditing:(UISearchBar *)searchBar
+{
+    //[self creatLoadView];
 }
 -(void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
 {
-    
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -201,9 +242,9 @@
 {
     if (search.text.length>0) {
         [search resignFirstResponder];
-
     }
 }
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

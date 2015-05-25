@@ -169,7 +169,6 @@
             {
               [loadView stopAnimation];
               [loadView removeFromSuperview];
-            
               [_myTableView reloadData];
           }
         }
