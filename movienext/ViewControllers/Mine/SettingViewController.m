@@ -48,7 +48,7 @@
 
     
     UserDataCenter  *userCenter =[UserDataCenter shareInstance];
-    if ([userCenter.is_admin intValue ]>0) {
+   // if ([userCenter.is_admin intValue ]>0) {
     UIButton  *button=[UIButton buttonWithType:UIButtonTypeCustom];
     [button setTitle:@"管理员" forState:UIControlStateNormal];
    // [button setBackgroundImage:[UIImage imageNamed:@"setting.png"] forState:UIControlStateNormal];
@@ -57,7 +57,7 @@
     [button addTarget:self action:@selector(adminClick:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem  *barButton=[[UIBarButtonItem alloc]initWithCustomView:button];
     self.navigationItem.rightBarButtonItem=barButton;
-    }
+    //}
    
     self.view.backgroundColor=View_BackGround;
     appdelegate = [[UIApplication sharedApplication]delegate ];
@@ -250,7 +250,6 @@
 }
 
 #pragma mark - 协议的委托方法
-
 - (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error
 {
     NSString *msg;

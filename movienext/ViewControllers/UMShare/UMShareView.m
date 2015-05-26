@@ -97,18 +97,35 @@
    // logosupView.hidden=YES;
     [shareView addSubview:logosupView];
     
-    _moviewName= [ZCControl createLabelWithFrame:CGRectMake(10,0,180, 20) Font:12 Text:@""];
+    _moviewName= [ZCControl createLabelWithFrame:CGRectMake(0,0,kDeviceWidth-20, 20) Font:12 Text:@""];
     _moviewName.textColor=VLight_GrayColor;
     _moviewName.numberOfLines=0;
-    _moviewName.text=_stageInfo.movieInfo.name;
+  
+    _moviewName.text=[NSString stringWithFormat:@"%@",_stageInfo.movieInfo.name];
     _moviewName.adjustsFontSizeToFitWidth=NO;
     _moviewName.lineBreakMode=NSLineBreakByTruncatingTail;
     [logosupView addSubview:_moviewName];
     
-    logoLable=[ZCControl createLabelWithFrame:CGRectMake(kDeviceWidth-20-60,0,50, 20) Font:12 Text:@"影弹App"];
+    NSMutableString  *namstr =[[NSMutableString alloc]initWithString:_stageInfo.movieInfo.name];
+    NSString  *str=namstr;
+    if (namstr.length>8) {
+       str= [namstr substringToIndex:8];
+       str =[str stringByAppendingString:@"..."];
+    }
+    _moviewName.text=[NSString stringWithFormat:@"《%@》 电影卡片",str];
+    _moviewName.textAlignment=NSTextAlignmentCenter;
+    
+    
+    
+//    CGSize Msize =[_stageInfo.movieInfo.name boundingRectWithSize:CGSizeMake(100, 20) options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes:[NSDictionary dictionaryWithObject:_moviewName.font forKey:NSFontAttributeName] context:nil].size;
+//    _moviewName.frame=CGRectMake(0, 0, Msize.width, 20);
+//    
+    
+    logoLable=[ZCControl createLabelWithFrame:CGRectMake(_moviewName.frame.origin.x+_moviewName.frame.size.width,0,50, 20) Font:12 Text:@"电影卡片"];
     logoLable.textAlignment=NSTextAlignmentRight;
     logoLable.textColor=VLight_GrayColor;
-    [logosupView addSubview:logoLable];
+    //logoLable.backgroundColor =[UIColor whiteColor];
+   // [logosupView addSubview:logoLable];
     
 }
 -(void)createButtomView

@@ -258,11 +258,12 @@
           NSURL  *photourl=[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w340h340",kUrlStage,model.stageInfo.photo]];
          [cell.imageView sd_setImageWithURL:photourl placeholderImage:nil];
           
-          if(model.stageInfo.movieInfo.name.length==0)
-          {
-              cell.titleLab.hidden=YES;
-          }
-          cell.titleLab.text=[NSString stringWithFormat:@"%@",model.stageInfo.movieInfo.name];
+//          if(model.stageInfo.movieInfo.name.length==0)
+//          {
+//              cell.titleLab.hidden=YES;
+//          }
+          weiboInfoModel  *weiboinfo =[model.stageInfo.weibosArray objectAtIndex:0];
+          cell.titleLab.text=[NSString stringWithFormat:@"%@",weiboinfo.content];
           
     }
     return cell;
@@ -270,8 +271,9 @@
 }
 
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
-         return CGSizeMake((kDeviceWidth-10)/3,(kDeviceWidth-10)/3);
-    
+     //    return CGSizeMake((kDeviceWidth-10)/3,(kDeviceWidth-10)/3);
+    return CGSizeMake((kDeviceWidth-5)/2,(kDeviceWidth-10)/3);
+
 }
 -(UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
 {

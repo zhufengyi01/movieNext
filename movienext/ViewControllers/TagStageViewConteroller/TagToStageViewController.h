@@ -22,6 +22,7 @@
 //
 //公开的
 @property (nonatomic,strong) weiboInfoModel  *weiboInfo;
+
 @property(nonatomic,strong) TagModel   *tagInfo;
 
 @end

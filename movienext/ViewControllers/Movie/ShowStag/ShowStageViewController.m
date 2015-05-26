@@ -52,10 +52,13 @@
     UIImageView   *MovieLogoImageView;  // 电影的小图片
     weiboInfoModel  *_TweiboInfo;
     stageInfoModel  *_TstageInfo;
-    UILabel  *markLable;
     UIScrollView  *tagScrollView;
-    
-
+ 
+    UIImageView  *starImageView;
+    UILabel  *markLable;
+    ///当前微博的内容   初始化的时候，取了点赞数组的第一个元素
+    weiboInfoModel  *_WeiboInfo;
+    UIButton  *like_btn;
 }
 @property(nonatomic,strong) M80AttributedLabel  *tagLable;
 @end
@@ -80,11 +83,11 @@
     [self createShareToolBar];
     [self createToolBar];
     
- }
-
+}
 -(void)createNav
 {
-    UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:self.stageInfo.movieInfo.name];
+    NSString  *titleString =[Function htmlString: self.stageInfo.movieInfo.name ];
+    UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:30 Text:titleString];
     titleLable.textColor=VBlue_color;
 
     titleLable.font=[UIFont systemFontOfSize:14];
@@ -95,6 +98,15 @@
    // UIBarButtonItem  *barbutton =[[UIBarButtonItem alloc]initWithCustomView:titleLable];
     //self.navigationItem.backBarButtonItem = barbutton;
    
+    //更多
+    moreButton=[ZCControl createButtonWithFrame:CGRectMake(kStageWidth-135, 9, 30, 25) ImageName:nil Target:self Action:@selector(cellButtonClick:) Title:@""];
+    [moreButton setImage:[UIImage imageNamed:@"three_points"] forState:UIControlStateNormal];
+    //moreButton.backgroundColor=VBlue_color;
+    moreButton.layer.cornerRadius=2;
+    moreButton.hidden=NO;
+    [moreButton setTitleColor:VGray_color forState:UIControlStateNormal];
+    UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithCustomView:moreButton];
+    self.navigationItem.rightBarButtonItem=item;
 
 }
 -(void)createScrollView
@@ -150,8 +162,12 @@
     [_layerView.layer insertSublayer:_gradientLayer atIndex:0];
     
     
-    markLable=[ZCControl createLabelWithFrame:CGRectMake(10,0,_layerView.frame.size.width-20, 60) Font:18 Text:@"弹幕文字"];
+    markLable=[ZCControl createLabelWithFrame:CGRectMake(10,0,_layerView.frame.size.width-20, 60) Font:20 Text:@"弹幕文字"];
+    markLable.font =[UIFont boldSystemFontOfSize:20];
     //markLable.backgroundColor=[[UIColor blackColor] colorWithAlphaComponent:0.4];
+    if (IsIphone6plus) {
+        markLable.font=[UIFont boldSystemFontOfSize:22];
+    }
     markLable.textColor=[UIColor whiteColor];
     weiboInfoModel *weibomodel =[self.stageInfo.weibosArray objectAtIndex:0];
     markLable.text=weibomodel.content;
@@ -186,8 +202,8 @@
 //    }
     
     //显示微博的头像
-    weiboInfoModel  *weiboInfo =[self.stageInfo.weibosArray objectAtIndex:0];
-    NSString  *uselogoString =[NSString stringWithFormat:@"%@%@!thumb",kUrlAvatar,weiboInfo.uerInfo.logo];
+    _WeiboInfo =[self.stageInfo.weibosArray objectAtIndex:0];
+    NSString  *uselogoString =[NSString stringWithFormat:@"%@%@!thumb",kUrlAvatar,_WeiboInfo.uerInfo.logo];
     [MovieLogoImageView sd_setImageWithURL:[NSURL URLWithString:uselogoString] placeholderImage:[UIImage imageNamed:@"user_normal.png"]];
 
     MovieLogoImageView.layer.masksToBounds = YES;
@@ -203,7 +219,7 @@
 //   
 //    NSString  *nameStr=self.stageInfo.movieInfo.name;
     
-    NSString  *nameStr=weiboInfo.uerInfo.username;
+    NSString  *nameStr=_WeiboInfo.uerInfo.username;
     CGSize  Nsize =[nameStr boundingRectWithSize:CGSizeMake(100, 27) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:[NSDictionary dictionaryWithObject:movieNameLable.font forKey:NSFontAttributeName] context:nil].size;
     movieNameLable.frame=CGRectMake(35,0, Nsize.width+4, 30);
     leftButtomButton.frame=CGRectMake(10, 9, 30+5+movieNameLable.frame.size.width, 27);
@@ -213,9 +229,9 @@
     
     
     //更多
-    moreButton=[ZCControl createButtonWithFrame:CGRectMake(kStageWidth-135, 9, 30, 25) ImageName:@"more_icon_default.png" Target:self Action:@selector(cellButtonClick:) Title:@""];
-    moreButton.layer.cornerRadius=2;
-    moreButton.hidden=NO;
+    //moreButton=[ZCControl createButtonWithFrame:CGRectMake(kStageWidth-135, 9, 30, 25) ImageName:@"more_icon_default.png" Target:self Action:@selector(cellButtonClick:) Title:@""];
+    //moreButton.layer.cornerRadius=2;
+    //moreButton.hidden=NO;
     //[BgView2 addSubview:moreButton];
     
 
@@ -239,16 +255,111 @@
     [addMarkButton setBackgroundImage:[UIImage imageNamed:@"btn_add_select.png"] forState:UIControlStateHighlighted];
     //[BgView2 addSubview:addMarkButton];
     
-    Like_lable =[ZCControl createLabelWithFrame:CGRectMake(kDeviceWidth-80,10,70, 25) Font:16 Text:@"喜欢"];
-    Like_lable.textColor=[UIColor whiteColor];
-    Like_lable.backgroundColor =VLight_GrayColor;
+    
+    
+    //点赞的按钮 上面放一张图片 右边放文字
+     like_btn =[ZCControl createButtonWithFrame:CGRectMake(kStageWidth-65,10,70,25) ImageName:nil Target:self Action:@selector(clickLike:) Title:@""];
+    like_btn.backgroundColor=View_BackGround;
+    [BgView2 addSubview:like_btn];
+    
+    //赞的星星
+    starImageView=[[UIImageView alloc]initWithFrame:CGRectMake(10, 8, 14,12)];
+    starImageView.image =[UIImage imageNamed:@"like_nomoal.png"];
+    [like_btn addSubview:starImageView];
+    
+    
+    //赞的文字
+    Like_lable =[ZCControl createLabelWithFrame:CGRectMake(20,0,40, 25) Font:14 Text:@""];
+    Like_lable.textColor=VGray_color;
     Like_lable.textAlignment=NSTextAlignmentCenter;
-    Like_lable.text=[NSString stringWithFormat:@"喜欢 %@",weiboInfo.like_count];
-    [BgView2 addSubview:Like_lable];
+    if ([_WeiboInfo.like_count intValue]==0) {
+        Like_lable.text=[NSString stringWithFormat:@"喜欢"];
+    }
+    else
+    {
+        Like_lable.text=[NSString stringWithFormat:@"%@",_WeiboInfo.like_count];
+    }
+    
+
+    [like_btn addSubview:Like_lable];
+    
+    
+    for (int i=0; i<self.upweiboArray.count; i++) {
+        UpweiboModel *upmodel=self.upweiboArray[i];
+        //weiboInfoModel  *weiboInfo =[self.stageInfo.weibosArray objectAtIndex:0];
+        if ([upmodel.weibo_id intValue]==[_WeiboInfo.Id intValue]) {
+            like_btn.selected=YES;
+            starImageView.image=[UIImage imageNamed:@"like_slected.png"];
+            break;
+        }
+        else{
+            like_btn.selected=NO;
+             starImageView.image=[UIImage imageNamed:@"like_nomoal.png"];
+        }
+    }
+
     
 }
+//点赞实现的方法
+-(void)clickLike:(UIButton *) btn
+{
+    
+    NSNumber  *operation;
 
+    if (btn.selected==YES) {
+        btn.selected=NO;
+        //已赞的,再点击就要移除数组
+        operation =[NSNumber numberWithInt:0];
+        for (int i=0; i<self.upweiboArray.count; i++) {
+            //已赞的
+            UpweiboModel *upmodel =self.upweiboArray[i];
+            if ([upmodel.weibo_id intValue]==[_WeiboInfo.Id intValue]) {
+                 [self.upweiboArray removeObjectAtIndex:i];
+                break;
+            }
+        }
+        
 
+        starImageView.image=[UIImage imageNamed:@"like_nomoal.png"];
+        //把赞的数量-1
+        int  like =   [Like_lable.text intValue];
+        like=like-1;
+        _WeiboInfo.like_count=[NSNumber numberWithInt:like];
+
+        if ([_WeiboInfo.like_count intValue]==0) {
+            Like_lable.text=[NSString stringWithFormat:@"喜欢"];
+        }
+        else
+        {
+            Like_lable.text=[NSString stringWithFormat:@"%@",_WeiboInfo.like_count];
+        }
+        
+    }
+    else if (btn.selected==NO)
+    {
+        btn.selected=YES;
+        //未赞
+        operation =[NSNumber numberWithInt:1];
+        UpweiboModel  *upmodel =[[UpweiboModel alloc]init];
+        upmodel.weibo_id=_WeiboInfo.Id;
+        upmodel.created_at=_WeiboInfo.created_at;
+        upmodel.created_by=_WeiboInfo.created_by;
+        upmodel.updated_at=_WeiboInfo.updated_at;
+        [self.upweiboArray addObject:upmodel];
+        
+         starImageView.image=[UIImage imageNamed:@"like_slected.png"];
+        [Function BasicAnimationwithkey:@"transform.scale" Duration:0.25 repeatcont:1 autoresverses:YES fromValue:1.0 toValue:1.5 View:starImageView];
+        // 把赞的数量+1
+        int like=[_WeiboInfo.like_count intValue];
+        like=like+1;
+        _WeiboInfo.like_count=[NSNumber numberWithInt:like];
+        Like_lable.text=[NSString stringWithFormat:@"%@",_WeiboInfo.like_count];
+    }
+    [self LikeRequstData:_WeiboInfo withOperation:operation];
+//   请求点赞接口
+    
+    
+}
 //创建固定于地步的分享按钮
 -(void)createShareToolBar
 {
@@ -301,19 +412,54 @@
     [tagview setbigTag:YES];
     return tagview;
 }
+
+
+
 -(void)TapViewClick:(TagView *)tagView Withweibo:(weiboInfoModel *)weiboInfo withTagInfo:(TagModel *)tagInfo
 {
     
+    _WeiboInfo=weiboInfo;
     for (int i=0; i<self.stageInfo.weibosArray.count; i++) {
         TagView  *tagView=(TagView *)[self.tagLable viewWithTag:2000+i];
         tagView.tagBgImageview.backgroundColor =VLight_GrayColor_apla;
         tagView.titleLable.textColor=VGray_color;
     }
+    
     tagView.tagBgImageview.backgroundColor =VLight_GrayColor;
     tagView.titleLable.textColor=[UIColor whiteColor];
     markLable.text=weiboInfo.content;
-    Like_lable.text=[NSString stringWithFormat:@"喜欢 %@",weiboInfo.like_count];
+    Like_lable.text=[NSString stringWithFormat:@"%@",_WeiboInfo.like_count];
     
+    
+    // 看是否已赞的
+    for (int i=0; i<self.upweiboArray.count; i++) {
+        UpweiboModel *upmodel=self.upweiboArray[i];
+        //weiboInfoModel  *weiboInfo =[self.stageInfo.weibosArray objectAtIndex:0];
+        if ([upmodel.weibo_id intValue]==[_WeiboInfo.Id intValue]) {
+            like_btn.selected=YES;
+            starImageView.image=[UIImage imageNamed:@"like_slected.png"];
+            break;
+        }
+        else{
+            like_btn.selected=NO;
+            starImageView.image=[UIImage imageNamed:@"like_nomoal.png"];
+        }
+    }
+    
+    if ([_WeiboInfo.like_count intValue]==0) {
+        Like_lable.text=[NSString stringWithFormat:@"喜欢"];
+    }
+    NSString  *uselogoString =[NSString stringWithFormat:@"%@%@!thumb",kUrlAvatar,_WeiboInfo.uerInfo.logo];
+    [MovieLogoImageView sd_setImageWithURL:[NSURL URLWithString:uselogoString] placeholderImage:[UIImage imageNamed:@"user_normal.png"]];
+    
+    NSString  *nameStr=weiboInfo.uerInfo.username;
+    CGSize  Nsize =[nameStr boundingRectWithSize:CGSizeMake(100, 27) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:[NSDictionary dictionaryWithObject:movieNameLable.font forKey:NSFontAttributeName] context:nil].size;
+    movieNameLable.frame=CGRectMake(35,0, Nsize.width+4, 30);
+    leftButtomButton.frame=CGRectMake(10, 9, 30+5+movieNameLable.frame.size.width, 27);
+    movieNameLable.text=[NSString stringWithFormat:@"%@",nameStr];
+
+    
+
 }
 
 ////创建标签的方法
@@ -807,10 +953,11 @@
     {
 
         NSNumber  *operation;
-        int tag=0;// 标志是否含有weiboid
+        int tag=0;// 标志是否 已赞  如果tag＝1  已赞  否则tag＝0 是未赞的
         for (int i=0; i<self.upweiboArray.count; i++) {
             //已赞的
             UpweiboModel *upmodel =self.upweiboArray[i];
+            
             if ([upmodel.weibo_id intValue]==[weiboDict.Id intValue]) {
                 tag=1;
                 operation =[NSNumber numberWithInt:0];

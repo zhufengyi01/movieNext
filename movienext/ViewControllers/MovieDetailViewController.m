@@ -181,7 +181,7 @@
     upLoadimageBtn.tag=201;
     [upLoadimageBtn setImage:[UIImage imageNamed:@"up_picture_blue.png"] forState:UIControlStateNormal];
     UIBarButtonItem  *rigthbar =[[UIBarButtonItem alloc]initWithCustomView:upLoadimageBtn];
-    //self.navigationItem.rightBarButtonItem=rigthbar;
+    self.navigationItem.rightBarButtonItem=rigthbar;
 }
 
 -(void)uploadImageFromAbumdAndDouban

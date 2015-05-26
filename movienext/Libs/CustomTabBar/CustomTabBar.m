@@ -44,10 +44,10 @@
     return self;
 }
 
-- (void)setMemory
+-(void)setMemory
 {
-    self.m_arrNormal = [NSArray arrayWithObjects:@"feed_tab_butten_normal.png", @"movie_tab_butten_normal.png",@"movie_tab_butten_normal.png", @"notice_tab_butten_normal.png", @"me_tab_butten_normal.png", nil];
-    self.m_arrSelected = [NSArray arrayWithObjects:@"feed_tab_butten_press.png", @"movie_tab_butten_press.png",@"movie_tab_butten_press.png", @"notice_tab_butten_press.png", @"me_tab_butten_press.png", nil];
+    self.m_arrNormal = [NSArray arrayWithObjects:@"feed_tab_butten_normal.png", @"me_tab_butten_normal copy 4.png",@"add_tab_butten.png", @"notice_tab_butten_normal.png", @"me_tab_butten_normal.png", nil];
+    self.m_arrSelected = [NSArray arrayWithObjects:@"feed_tab_butten_press.png", @"me_tab_butten_normal copy 5.png",@"add_tab_butten.png", @"notice_tab_butten_press.png", @"me_tab_butten_press.png", nil];
     titleArray=@[@"电影",@"发现",@"添加",@"消息",@"我的"];
     
 }
@@ -57,7 +57,7 @@
     for (NSUInteger i = 0; i < BUTTON_COUNT; i++) {
         UIButton * button = [UIButton buttonWithType:UIButtonTypeCustom];
         
-        button.frame = CGRectMake(0 + (m_frame.size.width / BUTTON_COUNT) * i, 0,m_frame.size.width/4, m_frame.size.height);
+        button.frame = CGRectMake(0 + (m_frame.size.width / BUTTON_COUNT) * i, 0,m_frame.size.width/BUTTON_COUNT, m_frame.size.height);
         button.tag = BUTTON_START_TAG + i;
         
         UILabel  *lable=[[UILabel alloc]initWithFrame:CGRectMake(button.frame.origin.x, m_frame.size.height-15, button.frame.size.width, 15)];
@@ -81,7 +81,7 @@
              button.selected=NO;
         }
         //要想调整图片的大小和位置都可以这么调
-        [button setImageEdgeInsets:UIEdgeInsetsMake(4, 25, 15, 25)];
+        [button setImageEdgeInsets:UIEdgeInsetsMake(4, 20, 15, 20)];
         [button addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:button];
     }
@@ -91,7 +91,7 @@
 {
     
     NSString  *select  =[indexSelectDict objectForKey:@"isSelect"];
-    [indexSelectDict setValue:[NSString stringWithFormat:@"%ld",button.tag] forKey:@"isSelect"];
+    [indexSelectDict setValue:[NSString stringWithFormat:@"%d",button.tag] forKey:@"isSelect"];
     //NSLog(@"select1 ======%@",select);
     if (button.selected==NO) {
         button.selected=YES;
