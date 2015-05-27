@@ -17,6 +17,10 @@
 #import "AddViewController.h"
 #import "UIImage+ImageWithColor.h"
 #import "Constant.h"
+#import "FindBeforeViewController.h"
+#import "FinderViewController.h"
+
+#import "AppDelegate.h"
 
 @interface CustmoTabBarController ()<CustomTabBarDelegate>
 @property (nonatomic, strong) CustomTabBar * m_tabBar;
@@ -49,14 +53,14 @@
     UINavigationController * mvcNav = [[UINavigationController alloc] initWithRootViewController:mvc];
     
     //添加一个发现页
-    FinderViewController  *fvc =[[FinderViewController alloc]init];
+    /*FindBeforeViewController  *fvc =[[FindBeforeViewController alloc]init];
     UINavigationController *fvcNav =[[UINavigationController alloc]initWithRootViewController:fvc];
     
     
     //添加页
     AddViewController *add =[[AddViewController alloc]init];
     UINavigationController *addNav =[[UINavigationController alloc]initWithRootViewController:add];
-    
+    */
     
     NotificationViewController * notVC = [[NotificationViewController alloc] init];
     UINavigationController *notNav = [[UINavigationController alloc] initWithRootViewController:notVC];
@@ -68,7 +72,7 @@
     
     
 
-    NSArray * controllerArr = [NSArray arrayWithObjects:mvcNav, fvcNav,addNav, notNav, myNav, nil];
+    NSArray * controllerArr = [NSArray arrayWithObjects:mvcNav, notNav, myNav, nil];
     self.viewControllers = controllerArr;
      // 设置navigationbar的阴影
     [[UINavigationBar appearance] setShadowImage:[UIImage imageWithColor:tabBar_line size:CGSizeMake(kDeviceWidth, 1)]];
@@ -90,8 +94,35 @@
 #pragma  mark ---
 - (void)buttonPresedInCustomTabBar:(NSUInteger)index
 {
-    self.selectedIndex = index;
     
+     if (index==0) {
+        
+         self.selectedIndex=0;
+      
+     }
+    else if(index==1)
+    {
+        //发现
+//        FinderViewController  *finder =[FinderViewController new];
+//        UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:finder];
+//        AppDelegate  *delegate =(AppDelegate *)[[UIApplication sharedApplication] delegate];
+//        UIWindow  *window=[delegate window];
+//        [window.rootViewController presentViewController:na animated:YES completion:nil];
+    }
+    else if (index==2)
+    {
+        //添加
+    }
+    else if(index==3)
+    {
+        self.selectedIndex=1;
+        
+    }
+    else if (index==4)
+    {
+        self.selectedIndex=2;
+        
+    }
 }
 
 - (void)didReceiveMemoryWarning

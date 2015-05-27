@@ -10,19 +10,19 @@
 #import "MJExtension.h"
 @implementation weiboInfoModel
 
-//+ (NSDictionary *)replacedKeyFromPropertyName
-//{
-//    return @{@"Id" : @"id",
-//              @"uerInfo":@"user",
-//              };
-//}
-//+ (NSDictionary *)objectClassInArray
-//{
-//    return @{
-//             @"tagArray" : @"tags",
-//             
-//             };
-//}
++ (NSDictionary *)replacedKeyFromPropertyName
+{
+    return @{@"Id" : @"id",
+              @"uerInfo":@"user",
+              @"stageInfo":@"stage"
+              };
+}
++ (NSDictionary *)objectClassInArray
+{
+    return @{
+             @"tagArray" : @"tags",
+             };
+}
 
 
 

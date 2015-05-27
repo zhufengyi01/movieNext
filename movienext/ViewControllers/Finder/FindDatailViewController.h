@@ -8,11 +8,14 @@
 
 #import "RootViewController.h"
 
-#import "stageInfoModel.h"
+#import "weiboInfoModel.h"
 
 
 @interface FindDatailViewController : RootViewController
 
-@property(nonatomic,strong) stageInfoModel  *stageInfo;
+@property(nonatomic,strong) weiboInfoModel  *weiboInfo;
 
+@property(nonatomic,strong) NSString *index;
+
+-(void)shareButtonClick;
 @end

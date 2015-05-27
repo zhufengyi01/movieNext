@@ -13,7 +13,7 @@
 #import "Constant.h"
 #import "TagToStageViewController.h"
 #import "TagDetailModel.h"
-
+#import "MovieDetailViewController.h"
 @interface AdmListViewController ()<UITableViewDataSource,UITableViewDelegate>
 
 @property(nonatomic,strong) UITableView  *myTableView;
@@ -41,8 +41,8 @@
 }
 -(void)createUI
 {
-    _dataArray =[[NSMutableArray alloc]initWithObjects:@"用户列表",@"标签，表情包",nil];
-    _myTableView =[[UITableView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth,110) style:UITableViewStylePlain];
+    _dataArray =[[NSMutableArray alloc]initWithObjects:@"用户列表",@"标签，表情包",@"已屏蔽剧照列表",@"已屏蔽弹幕列表",nil];
+    _myTableView =[[UITableView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth,55*4) style:UITableViewStylePlain];
     _myTableView.delegate=self;
     _myTableView.dataSource=self;
     _myTableView.bounces=NO;
@@ -79,7 +79,6 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.row==0) {
         [self.navigationController pushViewController:[AdmCustomListViewController new] animated:YES];
-        
     }
     else if (indexPath.row==1) {
         
@@ -89,11 +88,15 @@
         tagdetail.title=@"表情包";
         tagdetail.created_by=@"56";
         tagmodel.tagDetailInfo=tagdetail;
-        TagToStageViewController  *tostage =[TagToStageViewController new];
         
+        TagToStageViewController  *tostage =[TagToStageViewController new];
         tostage.tagInfo=tagmodel;
         [self.navigationController pushViewController:tostage animated:YES];
      } else if (indexPath.row==2) {
+         MovieDetailViewController *movied =[[MovieDetailViewController alloc]init];
+         movied.pageSourceType=NSMovieSourcePageAdminCloseStageViewController;
+         [self.navigationController pushViewController:movied animated:YES];
+         
      } else if (indexPath.row==3) {
      }
     else if (indexPath.row==4)

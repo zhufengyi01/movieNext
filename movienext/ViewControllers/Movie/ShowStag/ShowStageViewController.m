@@ -59,6 +59,8 @@
     ///当前微博的内容   初始化的时候，取了点赞数组的第一个元素
     weiboInfoModel  *_WeiboInfo;
     UIButton  *like_btn;
+    
+    UIView  *ShareView;
 }
 @property(nonatomic,strong) M80AttributedLabel  *tagLable;
 @end
@@ -120,6 +122,8 @@
 
 -(void)createStageView
 {
+    
+    //分享出来的不是这个view
     BgView =[[UIImageView alloc]initWithFrame:CGRectMake(0,0,kDeviceWidth-0, (kDeviceWidth-0)*(9.0/16))];
     BgView.clipsToBounds=YES;
     [BgView.layer setShadowOffset:CGSizeMake(kDeviceWidth, 20)];
@@ -131,7 +135,13 @@
     BgView.userInteractionEnabled=YES;
     [scrollView addSubview:BgView];
     
-
+    
+    ShareView =[[UIView alloc]initWithFrame:CGRectMake(5, 5, kDeviceWidth-10, (kDeviceWidth-10)*(9.0/16))];
+    ShareView.userInteractionEnabled=YES;
+    ShareView.backgroundColor=[UIColor redColor];
+    [BgView addSubview:ShareView];
+  
+    
     stageView = [[StageView alloc] initWithFrame:CGRectMake(5,5,kDeviceWidth-10, (kDeviceWidth-10)*(9.0/16))];
     stageView.isAnimation = YES;
     stageView.delegate=self;
@@ -146,7 +156,7 @@
     
     //创建剧照上的渐变背景文字
     
-    UIView  *_layerView =[[UIView alloc]initWithFrame:CGRectMake(0, stageView.frame.size.height-60, kDeviceWidth-10, 60)];
+    UIView  *_layerView =[[UIView alloc]initWithFrame:CGRectMake(0, stageView.frame.size.height-100, kDeviceWidth-10, 100)];
     [stageView addSubview:_layerView];
     
     CAGradientLayer * _gradientLayer = [CAGradientLayer layer];  // 设置渐变效果
@@ -162,13 +172,16 @@
     [_layerView.layer insertSublayer:_gradientLayer atIndex:0];
     
     
-    markLable=[ZCControl createLabelWithFrame:CGRectMake(10,0,_layerView.frame.size.width-20, 60) Font:20 Text:@"弹幕文字"];
+    markLable=[ZCControl createLabelWithFrame:CGRectMake(20,40,_layerView.frame.size.width-40, 60) Font:20 Text:@"弹幕文字"];
     markLable.font =[UIFont boldSystemFontOfSize:20];
     //markLable.backgroundColor=[[UIColor blackColor] colorWithAlphaComponent:0.4];
     if (IsIphone6plus) {
-        markLable.font=[UIFont boldSystemFontOfSize:22];
+        markLable.font=[UIFont boldSystemFontOfSize:24];
     }
     markLable.textColor=[UIColor whiteColor];
+    if (self.stageInfo.weibosArray.count==0) {
+        return;
+    }
     weiboInfoModel *weibomodel =[self.stageInfo.weibosArray objectAtIndex:0];
     markLable.text=weibomodel.content;
     markLable.lineBreakMode=NSLineBreakByCharWrapping;
@@ -202,6 +215,9 @@
 //    }
     
     //显示微博的头像
+    if ([self.stageInfo.weibosArray count] ==0) {
+        return;
+    }
     _WeiboInfo =[self.stageInfo.weibosArray objectAtIndex:0];
     NSString  *uselogoString =[NSString stringWithFormat:@"%@%@!thumb",kUrlAvatar,_WeiboInfo.uerInfo.logo];
     [MovieLogoImageView sd_setImageWithURL:[NSURL URLWithString:uselogoString] placeholderImage:[UIImage imageNamed:@"user_normal.png"]];
@@ -281,9 +297,9 @@
     }
     
 
+    
+    
     [like_btn addSubview:Like_lable];
-    
-    
     for (int i=0; i<self.upweiboArray.count; i++) {
         UpweiboModel *upmodel=self.upweiboArray[i];
         //weiboInfoModel  *weiboInfo =[self.stageInfo.weibosArray objectAtIndex:0];
@@ -298,8 +314,8 @@
         }
     }
 
-    
 }
+#pragma mark 星星点赞方法
 //点赞实现的方法
 -(void)clickLike:(UIButton *) btn
 {
@@ -545,17 +561,25 @@
 #pragma  mark  ---
 
 //屏幕剧照
--(void)requestRemoveStage
+-(void)requestRemoveStage:(NSString *) type
 {
     UserDataCenter *usercenter=[UserDataCenter shareInstance];
-    NSDictionary *parameters = @{@"stage_id":self.stageInfo.Id,@"user_id":usercenter.user_id};
-    
+    NSDictionary *parameters;
+    parameters = @{@"stage_id":self.stageInfo.Id,@"user_id":usercenter.user_id};
+    if ([type intValue]==1) {
+        //恢复剧照
+          parameters = @{@"stage_id":self.stageInfo.Id,@"user_id":usercenter.user_id,@"block":type};
+    }
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     NSString *urlString =[NSString stringWithFormat:@"%@/stage/block", kApiBaseUrl];
     [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
             NSLog(@"移除剧照成功=======%@",responseObject);
-            UIAlertView  *Al =[[UIAlertView alloc]initWithTitle:nil message:@"移除剧照成功" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            NSString *message =@"屏蔽剧照成功";
+            if ([type intValue]==1) {
+                message=@"恢复剧照成功";
+            }
+            UIAlertView  *Al =[[UIAlertView alloc]initWithTitle:nil message:message delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
             [Al show];
             
         }
@@ -821,6 +845,7 @@
 
     }
 }
+
 //添加弹幕
 -(void)addMarkButtonClick:(UIButton  *) button
 {
@@ -835,16 +860,13 @@
  //   [self.navigationController pushViewController:AddMarkVC animated:NO];
     UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:AddMarkVC];
     [self.navigationController presentViewController:na animated:NO completion:nil];
-
-
 }
 -(void)cellButtonClick:(UIButton  *) button
 {
      UserDataCenter  *userCenter =[UserDataCenter shareInstance];
     //点击了更多
     if ([userCenter.is_admin intValue]>0) {
-        
-        UIActionSheet  *Act=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"内容投诉",@"版权投诉",@"图片信息",@"[切换剧照到审核/正式版]",@"[屏蔽剧照]",nil];
+        UIActionSheet  *Act=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"内容投诉",@"版权投诉",@"图片信息",@"[切换剧照到审核/正式版]",@"[屏蔽剧照]",@"[编辑弹幕]",@"[屏蔽弹幕]",@"[恢复剧照]",nil];
         Act.tag=507;
         [Act showInView:Act];
     }
@@ -916,8 +938,6 @@
     
     _TweiboInfo =weiboDict;
     _TstageInfo=stageInfoDict;
-    
-    
     if (button.tag==10000) {
         ///点击了头像//进入个人页面
         [_mymarkView CancelMarksetSelect];
@@ -1096,10 +1116,31 @@
         else if (buttonIndex==4)
         {
             //屏蔽剧照
-            [self requestRemoveStage];
+            [self requestRemoveStage:@"0"];
         }
+       else if (buttonIndex==5)
+       {
+           //编辑弹幕功能
+           //弹幕编辑
+           AddMarkViewController  *AddMarkVC=[[AddMarkViewController alloc]init];
+           AddMarkVC.stageInfo=self.stageInfo;
+           //AddMarkVC.model=model;
+           AddMarkVC.weiboInfo=_WeiboInfo;
+           AddMarkVC.delegate=self;
+           [self presentViewController:AddMarkVC animated:NO completion:nil];
 
-    }
+       }
+       else if (buttonIndex==6)
+       {
+           NSString *weibo_id =[NSString stringWithFormat:@"%@",_WeiboInfo.Id];
+           [self requestDelectDataWithweiboId:weibo_id];
+       }
+       else if (buttonIndex==7)
+       {
+           //恢复剧照
+           [self requestRemoveStage:@"1"];
+       }
+     }
 }
 
 

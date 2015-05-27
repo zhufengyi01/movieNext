@@ -1,60 +1,60 @@
 //
-//  AddViewController.m
+//  FindBeforeViewController.m
 //  movienext
 //
-//  Created by 风之翼 on 15/5/22.
+//  Created by 风之翼 on 15/5/26.
 //  Copyright (c) 2015年 redianying. All rights reserved.
 //
 
-#import "AddViewController.h"
-#import "ZCControl.h"
-#import "AFNetworking.h"
-#import "Constant.h"
+#import "FindBeforeViewController.h"
 
-@interface AddViewController ()
+#import "ZCControl.h"
+
+#import "Constant.h"
+#import "FinderViewController.h"
+
+@interface FindBeforeViewController ()
 
 @end
 
-@implementation AddViewController
-
+@implementation FindBeforeViewController
+-(void)viewWillAppear:(BOOL)animated
+{
+    }
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.view.backgroundColor=View_BackGround;
     [self createNavigation];
+    
+  
+    
 }
-
 -(void)createNavigation
 {
     [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color.png"] forBarMetrics:UIBarMetricsDefault];
     
-    UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:@"添加"];
+    UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:@"发现之旅"];
     titleLable.textColor=VBlue_color;
     
     titleLable.font=[UIFont boldSystemFontOfSize:18];
     titleLable.textAlignment=NSTextAlignmentCenter;
     self.navigationItem.titleView=titleLable;
     
-    UIButton  *button=[UIButton buttonWithType:UIButtonTypeCustom];
-    [button setTitle:@"返回" forState:UIControlStateNormal];
-    //[button setBackgroundImage:[UIImage imageNamed:@"setting.png"] forState:UIControlStateNormal];
-    button.frame=CGRectMake(0, 0, 40, 40);
-    [button setTitleColor:VBlue_color forState:UIControlStateNormal];
-    [button addTarget:self action:@selector(GotoSettingClick) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem  *barButton=[[UIBarButtonItem alloc]initWithCustomView:button];
-    self.navigationItem.leftBarButtonItem=barButton;
+    UILabel  *lable =[ZCControl createLabelWithFrame:CGRectMake(0,(kDeviceHeight-kHeightNavigation-100)/2, kDeviceWidth, 100) Font:20 Text:@"点击屏幕开启发现之旅"];
+    lable.textAlignment=NSTextAlignmentCenter;
+    [self.view addSubview:lable];
 }
--(void)GotoSettingClick
+
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    [self dismissViewControllerAnimated:YES completion:^{
-
-    }];
+    FinderViewController *find =[FinderViewController new];
+    find.CustomtabbarController=(CustmoTabBarController *)self.tabBarController;
+    UINavigationController *na =[[UINavigationController alloc]initWithRootViewController:find];
     
+    [self.navigationController presentViewController:na animated:YES completion:nil];
+    
+
 }
-
-
-
-
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

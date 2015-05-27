@@ -93,7 +93,7 @@
     
     //放置电影名和标签的view
     logosupView=[[UIView alloc]initWithFrame:CGRectMake(0,_ShareimageView.frame.origin.y+_ShareimageView.frame.size.height,kDeviceWidth-20, 20)];
-    logosupView.backgroundColor=VStageView_color;
+    logosupView.backgroundColor=[UIColor blackColor];
    // logosupView.hidden=YES;
     [shareView addSubview:logosupView];
     
@@ -123,7 +123,7 @@
     
     logoLable=[ZCControl createLabelWithFrame:CGRectMake(_moviewName.frame.origin.x+_moviewName.frame.size.width,0,50, 20) Font:12 Text:@"电影卡片"];
     logoLable.textAlignment=NSTextAlignmentRight;
-    logoLable.textColor=VLight_GrayColor;
+    logoLable.textColor=VGray_color;
     //logoLable.backgroundColor =[UIColor whiteColor];
    // [logosupView addSubview:logoLable];
     

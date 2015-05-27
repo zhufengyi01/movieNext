@@ -119,13 +119,19 @@
         page=1;
         [self requestMovieIdWithdoubanId];
     }
-    else
+    else if(self.pageSourceType==NSMovieSourcePageMovieListController)
     {
         // 从电影列表页进来的
         page=1;
-       //[self requestTagList];
         [self requestData];
-     }
+    }
+    else if (self.pageSourceType ==NSMovieSourcePageAdminCloseStageViewController)
+    {
+        //管理员页面进来
+        page=1;
+        [self requestData];
+        
+    }
     [self createToolBar];
     [self creatLoadView];
    
@@ -175,13 +181,16 @@
     titleView.frame=CGRectMake(0, 0, 30+5+movieNameLable.frame.size.width, 40);
     self.navigationItem.titleView=titleView;
     [self.navigationItem.titleView setContentMode:UIViewContentModeCenter];
-
     
     upLoadimageBtn=[ZCControl createButtonWithFrame:CGRectMake(0,0,25,25) ImageName:nil Target:self Action:@selector(uploadImageFromAbumdAndDouban) Title:nil];
     upLoadimageBtn.tag=201;
     [upLoadimageBtn setImage:[UIImage imageNamed:@"up_picture_blue.png"] forState:UIControlStateNormal];
     UIBarButtonItem  *rigthbar =[[UIBarButtonItem alloc]initWithCustomView:upLoadimageBtn];
     self.navigationItem.rightBarButtonItem=rigthbar;
+    if (self.pageSourceType==NSMovieSourcePageAdminCloseStageViewController) {
+        self.navigationItem.titleView=nil;
+        self.navigationItem.rightBarButtonItem=nil;
+    }
 }
 
 -(void)uploadImageFromAbumdAndDouban
@@ -642,24 +651,33 @@
 
 -(void)requestData
 {
-    if (!_movieId || _movieId<=0) {
+    /*if (!_movieId || _movieId<=0) {
         return;
-    }
+    }*/
+    
     UserDataCenter  *userCenter =[UserDataCenter shareInstance];
     NSDictionary *parameter;
     NSString  *urlString;
-    if ([tagId intValue]==0) { //是全部的标签
+//    if ([tagId intValue]==0) { //是全部的标签
+//        urlString =[NSString stringWithFormat:@"%@/stage/list?per-page=%d&page=%d",kApiBaseUrl,pageSize,page];
+//        parameter = @{@"movie_id": _movieId, @"user_id": userCenter.user_id,@"Version":Version};
+//    }
+//    else{
+    //在电影列表或者是搜索页进来的
+    if (self.pageSourceType==NSMovieSourcePageMovieListController|self.pageSourceType==  NSMovieSourcePageSearchListController)
+    {
         urlString =[NSString stringWithFormat:@"%@/stage/list?per-page=%d&page=%d",kApiBaseUrl,pageSize,page];
         parameter = @{@"movie_id": _movieId, @"user_id": userCenter.user_id,@"Version":Version};
     }
-    else{
-        urlString =[NSString stringWithFormat:@"%@/tag-stage/stage-list-by-tag-id",kApiBaseUrl];
-        parameter = @{@"movie_id": _movieId, @"user_id": userCenter.user_id,@"Version":Version,@"tag_id":tagId};
+     //}
+    else   if (self.pageSourceType==NSMovieSourcePageAdminCloseStageViewController) {
+        urlString =[NSString stringWithFormat:@"%@/stage/block-list?per-page=%d&page=%d",kApiBaseUrl,pageSize,page];
+        parameter = @{ @"user_id": userCenter.user_id,@"Version":Version};
     }
     
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:urlString parameters:parameter success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"  电影详情页面数据JSON: %@", responseObject);
+        //NSLog(@"  电影详情页面数据JSON: %@", responseObject);
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
         pageCount=[[responseObject objectForKey:@"pageCount"] intValue];
         NSMutableArray  *detailArray=[responseObject objectForKey:@"models"];

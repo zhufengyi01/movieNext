@@ -13,6 +13,7 @@ typedef NS_ENUM(NSInteger,NSMovieSourcePage)
 {
     NSMovieSourcePageMovieListController =100,
     NSMovieSourcePageSearchListController  =101,
+    NSMovieSourcePageAdminCloseStageViewController
     
 };
 @interface MovieDetailViewController : RootViewController <ButtomToolViewDelegate>

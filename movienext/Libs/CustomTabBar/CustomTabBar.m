@@ -8,8 +8,11 @@
 
 #import "CustomTabBar.h"
 #define BUTTON_COUNT 5
+#import "AddViewController.h"
 #define BUTTON_START_TAG 1000
+#import "FinderViewController.h"
 //在这里调选中的状态的字体颜色
+#import "AppDelegate.h"
 #define  TabSelectColor   [UIColor colorWithRed:0.0/255 green:146.0/255 blue:255.0/255 alpha:1]
 //以后在这里调整正常字体的颜色
 #define  TabNorColor      [UIColor colorWithRed:175.0/255 green:180.0/255 blue:201.0/255 alpha:1]
@@ -46,8 +49,8 @@
 
 -(void)setMemory
 {
-    self.m_arrNormal = [NSArray arrayWithObjects:@"feed_tab_butten_normal.png", @"me_tab_butten_normal copy 4.png",@"add_tab_butten.png", @"notice_tab_butten_normal.png", @"me_tab_butten_normal.png", nil];
-    self.m_arrSelected = [NSArray arrayWithObjects:@"feed_tab_butten_press.png", @"me_tab_butten_normal copy 5.png",@"add_tab_butten.png", @"notice_tab_butten_press.png", @"me_tab_butten_press.png", nil];
+    self.m_arrNormal = [NSArray arrayWithObjects:@"feed_tab_butten_normal.png", @"find_tab_butten_normalcopy4@2x.png",@"add_tab_butten.png", @"notice_tab_butten_normal.png", @"me_tab_butten_normal.png", nil];
+    self.m_arrSelected = [NSArray arrayWithObjects:@"feed_tab_butten_press.png", @"find_tab_butten_normalcopy4@2x.png",@"add_tab_butten.png", @"notice_tab_butten_press.png", @"me_tab_butten_press.png", nil];
     titleArray=@[@"电影",@"发现",@"添加",@"消息",@"我的"];
     
 }
@@ -90,22 +93,50 @@
 - (void)buttonPressed:(UIButton *)button
 {
     
-    NSString  *select  =[indexSelectDict objectForKey:@"isSelect"];
-    [indexSelectDict setValue:[NSString stringWithFormat:@"%d",button.tag] forKey:@"isSelect"];
-    //NSLog(@"select1 ======%@",select);
-    if (button.selected==NO) {
-        button.selected=YES;
-      //NSLog(@"select2======%@",select);
-       [self resetButtonImagesWithButton:button];
-     // 针对代理协议里面有可选的代理时使用的方法可，respondsToSelector 就是判断self.m_delegate指向的对象有没有，这个方法--> buttonPresedInCustomTabBar:
-      if(self.m_delegate && [self.m_delegate respondsToSelector:@selector(buttonPresedInCustomTabBar:)]) {
-          [self.m_delegate buttonPresedInCustomTabBar:button.tag - BUTTON_START_TAG];
-       }
+    if (button.tag==BUTTON_START_TAG+1) {
+     
+    //发现
+                FinderViewController  *finder =[FinderViewController new];
+                UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:finder];
+                AppDelegate  *delegate =(AppDelegate *)[[UIApplication sharedApplication] delegate];
+                UIWindow  *window=[delegate window];
+                [window.rootViewController presentViewController:na animated:YES completion:nil];
+
     }
-    else if(button.selected==YES&&[select intValue]==button.tag)  //如果选中并且
+    else if (button.tag==BUTTON_START_TAG+2)
     {
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"RefeshTableview" object:nil];
+        AddViewController  *add =[AddViewController new];
+        UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:add];
+        AppDelegate  *delegate =(AppDelegate *)[[UIApplication sharedApplication] delegate];
+        UIWindow  *window=[delegate window];
+        [window.rootViewController presentViewController:na animated:YES completion:nil];
+
+     
+        
     }
+    
+    else{
+
+        NSString  *select  =[indexSelectDict objectForKey:@"isSelect"];
+
+        [indexSelectDict setValue:[NSString stringWithFormat:@"%d",button.tag] forKey:@"isSelect"];
+       if (button.selected==NO) {
+        button.selected=YES;
+           
+
+         [self resetButtonImagesWithButton:button];
+           }
+       // 针对代理协议里面有可选的代理时使用的方法可，respondsToSelector 就是判断self.m_delegate指向的对象有没有，这个方法--> buttonPresedInCustomTabBar:
+         if(self.m_delegate && [self.m_delegate respondsToSelector:@selector(buttonPresedInCustomTabBar:)]) {
+          [self.m_delegate buttonPresedInCustomTabBar:button.tag - BUTTON_START_TAG];
+          }
+       else if(button.selected==YES&&[select intValue]==button.tag)  //如果选中并且
+       {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"RefeshTableview" object:nil];
+      }
+    }
+    
+   
 }
 
 //重置图片

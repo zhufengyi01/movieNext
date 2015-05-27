@@ -10,20 +10,26 @@
 #import "ZCControl.h"
 #import "Constant.h"
 #import "AFNetworking.h"
-
 #import "FindDatailViewController.h"
 #import "ModelsModel.h"
+#import "MovieViewController.h"
 #import "UserDataCenter.h"
 #import "weiboInfoModel.h"
-@interface FinderViewController ()<UIPageViewControllerDataSource,UIPageViewControllerDelegate>
-
+#import "MJExtension.h"
+#import "LoadingView.h"
+#import "UIButton+Block.h"
+@interface FinderViewController ()<UIPageViewControllerDataSource,UIPageViewControllerDelegate,LoadingViewDelegate>
 {
-    int pagesize;
-    int page;
+    LoadingView         *loadView;
+    //当前的detailcontroller
+    FindDatailViewController *CenterViewController;
+    
 }
 @property (strong, nonatomic) UIPageViewController *pageController;
 
 @property (strong, nonatomic) NSMutableArray *pageContent;
+
+@property(strong,nonatomic) NSMutableArray   *indexArray; //存储每个页面的索引
 
 @end
 
@@ -34,17 +40,26 @@
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.view.backgroundColor =View_BackGround;
     // Do any additional setup after loading the view.
     [self createNavigation];
-    self.view.backgroundColor =View_BackGround;
     [self initData];
-    [self createContentPages];// 初始化所有数据
-    
-   // [self createUI];
+    [self requestData];// 初始化所有数据
+    [self creatLoadView];
     
 }
+-(void)creatLoadView
+{
+    loadView =[[LoadingView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight)];
+    loadView.delegate=self;
+    [self.view addSubview:loadView];
+    
+}
+
 -(void)createNavigation
 {
+    
+    
     [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color.png"] forBarMetrics:UIBarMetricsDefault];
     
     UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:@"发现详细"];
@@ -56,125 +71,98 @@
     
     UIButton  *button=[UIButton buttonWithType:UIButtonTypeCustom];
     [button setTitle:@"返回" forState:UIControlStateNormal];
-    //[button setBackgroundImage:[UIImage imageNamed:@"setting.png"] forState:UIControlStateNormal];
+   // [button setBackgroundImage:[UIImage imageNamed:@"setting.png"] forState:UIControlStateNormal];
     button.frame=CGRectMake(0, 0, 40, 40);
+    button.tag=1000;
     [button setTitleColor:VBlue_color forState:UIControlStateNormal];
-    [button addTarget:self action:@selector(GotoSettingClick) forControlEvents:UIControlEventTouchUpInside];
+    [button addTarget:self action:@selector(naviagetionItemClick:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem  *barButton=[[UIBarButtonItem alloc]initWithCustomView:button];
     self.navigationItem.leftBarButtonItem=barButton;
     
     
-}
--(void)GotoSettingClick
-{
-    self.tabBarController.tabBar.hidden=NO;
+//    
+    UIButton  *sharebtn=[UIButton buttonWithType:UIButtonTypeCustom];
+     [sharebtn setBackgroundImage:[UIImage imageNamed:@"find_share.png"] forState:UIControlStateNormal];
+    sharebtn.frame=CGRectMake(0, 0, 25, 25);
+    sharebtn.tag=1001;
+    //[sharebtn setTitleColor:VBlue_color forState:UIControlStateNormal];
+    [sharebtn addTarget:self action:@selector(naviagetionItemClick:) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem  *rigthbarButton=[[UIBarButtonItem alloc]initWithCustomView:sharebtn];
+    self.navigationItem.rightBarButtonItem=rigthbarButton;
+
     
+    
+    
+    
+}
+//返回 取消
+-(void)naviagetionItemClick:(UIButton *) btn
+{
+    if (btn.tag==1000) {
+        [self dismissViewControllerAnimated:YES completion:^{
+        }];
+    }
+    else if(btn.tag==1001)
+    {
+        //分享
+        [CenterViewController shareButtonClick];
+        
+    }
 }
 
 -(void)initData
 {
     self.pageContent =[[NSMutableArray alloc]init];
-    page=1;
-    pagesize=20;
-}
+    self.indexArray =[[NSMutableArray alloc]init];
+ }
 // 初始化所有数据
-- (void) createContentPages {
+- (void)requestData {
     UserDataCenter  *userCenter=[UserDataCenter shareInstance];
     NSString *userId=userCenter.user_id;
+    NSDictionary *parameters= @{@"user_id":userId};
     
-    NSDictionary *parameters;
-    parameters = @{@"user_id":userId,@"Version":Version};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    NSString *urlString=[NSString stringWithFormat:@"%@/hot/list?per-page=%d&page=%d", kApiBaseUrl,pagesize,page];
-    [manager  POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    NSString *urlString=[NSString stringWithFormat:@"%@/weibo/discover", kApiBaseUrl];
+    
+    [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
         if ([[responseObject objectForKey:@"code"] intValue]==0) {
+        
+           // NSMutableArray  *Array =[[NSMutableArray alloc]initWithArray:[responseObject objectForKey:@"models"]];
+            self.pageContent= [[NSMutableArray alloc] initWithArray:[weiboInfoModel objectArrayWithKeyValuesArray:[responseObject objectForKey:@"models"]]];
             
-            
-            NSMutableArray  *Detailarray=[responseObject objectForKey:@"models"];
-            for (NSDictionary  *hotDict in Detailarray) {
-                ModelsModel  *model =[[ModelsModel alloc]init];
-                if(model)
-                {
-                    [model setValuesForKeysWithDictionary:hotDict];
-                    //stageinfo
-                    stageInfoModel  *stagemodel =[[stageInfoModel alloc]init];
-                    if (stagemodel) {
-                        if(![[hotDict objectForKey:@"stage"] isKindOfClass:[NSNull class]])
-                        {
-                            [stagemodel setValuesForKeysWithDictionary:[hotDict objectForKey:@"stage"]];
-                            //weiboinfo
-                            NSMutableArray  *weibosarray=[[NSMutableArray alloc]init];
-                            for (NSDictionary  *weibodict  in [[hotDict objectForKey:@"stage"] objectForKey:@"weibos"]) {
-                                weiboInfoModel *weibomodel=[[weiboInfoModel alloc]init];
-                                if (weibomodel) {
-                                    [weibomodel setValuesForKeysWithDictionary:weibodict];
-                                    //weibouserInfo
-                                    weiboUserInfoModel  *usermodel =[[weiboUserInfoModel alloc]init];
-                                    if (usermodel) {
-                                        [usermodel setValuesForKeysWithDictionary:[weibodict objectForKey:@"user"]];
-                                        weibomodel.uerInfo=usermodel;
-                                    }
-                                    //tag
-                                    NSMutableArray  *tagArray = [[NSMutableArray alloc]init];
-                                    for (NSDictionary  *tagDict  in [weibodict objectForKey:@"tags"]) {
-                                        TagModel *tagmodel =[[TagModel alloc]init];
-                                        if (tagmodel) {
-                                            [tagmodel setValuesForKeysWithDictionary:tagDict];
-                                            TagDetailModel *tagedetail = [[TagDetailModel alloc]init];
-                                            if (tagedetail) {
-                                                if (![[tagDict objectForKey:@"tag"] isKindOfClass:[NSNull class]]) {
-                                                    [tagedetail setValuesForKeysWithDictionary:[tagDict  objectForKey:@"tag"]];
-                                                    tagmodel.tagDetailInfo=tagedetail;}
-                                            }
-                                            [tagArray addObject:tagmodel];}}
-                                    weibomodel.tagArray=tagArray;
-                                    [weibosarray addObject:weibomodel];
-                                }
-                            }
-                            stagemodel.weibosArray=weibosarray;
-                            //moviemodel
-                            movieInfoModel *moviemodel =[[movieInfoModel alloc]init];
-                            if (moviemodel) {
-                                [moviemodel setValuesForKeysWithDictionary:[[hotDict objectForKey:@"stage"] objectForKey:@"movie"]];
-                                stagemodel.movieInfo=moviemodel;
-                            }
-                        }
-                        model.stageInfo=stagemodel;
-                        
-                    }
-                    if(self.pageContent==nil)
-                    {
-                        self.pageContent =[[NSMutableArray alloc]init];
-                        
-                    }
-                    [self.pageContent addObject:model];
-                }
+            if (self.pageContent.count==0) {
+                [loadView showNullView:@"没有发现了..."];
             }
-            
+            else
+            {
+                [loadView stopAnimation];
+                [loadView removeFromSuperview];
+            }
+            //存储页面的索引
+            for (int i=0; i<self.pageContent.count;i++) {
+                NSString  *index =[NSString stringWithFormat:@"%d",i];
+                [self.indexArray  addObject:index];
+            }
             [self createUI];
         }
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+         [loadView showFailLoadData];
+         
+        NSLog(@"Error: %@", error);
     }];
-}
-// 得到相应的VC对象
-- (FindDatailViewController *)viewControllerAtIndex:(NSUInteger)index {
-    if (([self.pageContent count] == 0) || (index >= [self.pageContent count])) {
-        return nil;
-    }
-    // 创建一个新的控制器类，并且分配给相应的数据
-    FindDatailViewController *dataViewController =[[FindDatailViewController alloc] init];
-    ModelsModel *model =[self.pageContent objectAtIndex:index];
-    
-    dataViewController.stageInfo =model.stageInfo;
-    
-    return dataViewController;
-}
+ }
 
+-(void)reloadDataClick
+{
+    [self requestData];
+    [loadView hidenFailLoadAndShowAnimation];
+}
 -(void)createUI
 {
     // 设置UIPageViewController的配置项
-    NSDictionary *options =[NSDictionary dictionaryWithObject:[NSNumber numberWithInteger:UIPageViewControllerSpineLocationMin]
+    NSDictionary *options =[NSDictionary dictionaryWithObject:[NSNumber numberWithInteger:UIPageViewControllerSpineLocationMax]
                                                        forKey: UIPageViewControllerOptionSpineLocationKey];
     
     // 实例化UIPageViewController对象，根据给定的属性
@@ -192,6 +180,10 @@
     // 因为我们定义UIPageViewController对象显示样式为显示一页（options参数指定）。
     // 如果要显示2页，NSArray中，应该有2个相应页数据。
     FindDatailViewController *initialViewController =[self viewControllerAtIndex:0];// 得到第一页
+    
+    //初始化的时候记录了当前的第一个viewcontroller  以后每次都在代理里面获取当前的viewcontroller
+    CenterViewController=initialViewController;
+    
     NSArray *viewControllers =[NSArray arrayWithObject:initialViewController];
     [_pageController setViewControllers:viewControllers
                               direction:UIPageViewControllerNavigationDirectionForward
@@ -202,16 +194,33 @@
     [[self view] addSubview:[_pageController view]];
 
 }
-// 根据数组元素值，得到下标值
+
+
+//根据下标值获取上一个控制器或者下一个控制器  得到相应的VC对象
+- (FindDatailViewController *)viewControllerAtIndex:(NSUInteger)index {
+    if (([self.pageContent count] == 0) || (index >= [self.pageContent count])) {
+        return nil;
+    }
+    // 创建一个新的控制器类，并且分配给相应的数据
+   FindDatailViewController * dataViewController =[[FindDatailViewController alloc] init];
+    dataViewController.weiboInfo=[self.pageContent objectAtIndex:index];
+    dataViewController.index=[self.indexArray objectAtIndex:index];
+      return dataViewController;
+}
+ // 根据数组元素值，得到下标值
 - (NSUInteger)indexOfViewController:(FindDatailViewController *)viewController {
     FindDatailViewController *dataViewController=(FindDatailViewController *)viewController;
     
-    return [self.pageContent indexOfObject:dataViewController.stageInfo];
-}
+    
+    return [self.indexArray indexOfObject:dataViewController.index];
+ }
 
 
 // 返回上一个ViewController对象
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(UIViewController *)viewController{
+    //获取当前控制器
+    
+    CenterViewController =(FindDatailViewController *)viewController;
     
     NSUInteger index = [self indexOfViewController:(FindDatailViewController *)viewController];
     if ((index == 0) || (index == NSNotFound)) {
@@ -221,14 +230,21 @@
     // 返回的ViewController，将被添加到相应的UIPageViewController对象上。
     // UIPageViewController对象会根据UIPageViewControllerDataSource协议方法，自动来维护次序。
     // 不用我们去操心每个ViewController的顺序问题。
+    
     return [self viewControllerAtIndex:index];
     
 }
 
+
+
 // 返回下一个ViewController对象
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController{
     
+    
+    CenterViewController =(FindDatailViewController *)viewController;
+
     NSUInteger index = [self indexOfViewController:(FindDatailViewController *)viewController];
+    
     if (index == NSNotFound) {
         return nil;
     }

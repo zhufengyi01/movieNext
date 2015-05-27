@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CustmoTabBarController.h"
 
 @interface FinderViewController : UIViewController
 
+
+@property (nonatomic,strong) CustmoTabBarController  *CustomtabbarController;
 @end
