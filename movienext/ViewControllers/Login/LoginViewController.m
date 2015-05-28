@@ -60,7 +60,7 @@
 }
 -(void)creatUI
 {
-    UIImageView   *logoImageView=[[UIImageView alloc]initWithFrame:CGRectMake((kDeviceWidth-180)/2, 125, 180, 125)];
+    UIImageView   *logoImageView=[[UIImageView alloc]initWithFrame:CGRectMake((kDeviceWidth-230)/2, 125, 230, 120)];
     logoImageView.image=[UIImage imageNamed:@"first_screen_slogan.png"];
     [self.view addSubview:logoImageView];
     

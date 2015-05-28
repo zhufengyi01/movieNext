@@ -196,9 +196,11 @@
 -(void)uploadImageFromAbumdAndDouban
 {
     
-    UIActionSheet  *ac =[[UIActionSheet alloc]initWithTitle:@"选择照片" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"网上图片",@"本地上传", nil];
-    ac.tag=499;
-    [ac showInView:self.view];
+//    UIActionSheet  *ac =[[UIActionSheet alloc]initWithTitle:@"选择照片" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"网上图片",@"本地上传", nil];
+//    ac.tag=499;
+//    [ac showInView:self.view];
+    //选取网络图片
+    [self requestMovieInfoData];
 
     
 }

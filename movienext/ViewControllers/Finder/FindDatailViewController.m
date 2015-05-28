@@ -86,7 +86,6 @@
     
     [UMSocialSnsPlatformManager getSocialPlatformWithName:[sharearray  objectAtIndex:button.tag-10000]].snsClickHandler(self,[UMSocialControllerService defaultControllerService],YES);
     
-    
 }
 
 
@@ -186,7 +185,7 @@
     
     
     
-    [self createLikeBar];
+   [self createLikeBar];
     
     
     

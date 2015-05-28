@@ -7,7 +7,14 @@
 //
 
 #import "RootViewController.h"
+typedef NS_ENUM(NSInteger,NSSearchSourceType)
+{
+    NSSearchSourceTypeMovieList,
+    NSSearchSourceTypeAddCard
+};
 
 @interface MovieSearchViewController : RootViewController
+
+@property(nonatomic,assign) NSSearchSourceType  pageType;
 
 @end

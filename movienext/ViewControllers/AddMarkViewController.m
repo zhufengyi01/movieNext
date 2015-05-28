@@ -44,7 +44,11 @@
     weiboInfoModel      *weibomodel;
     NSMutableArray      *TAGArray;        //把第一个标签到第二个标签存储在数组中
     weiboInfoModel *weibo;
+    
+  //  UILabel  *markLable;
 }
+@property(nonatomic,strong) UIImageView  *stageImageView;  //剧照的图片
+
 @end
 @implementation AddMarkViewController
 
@@ -81,8 +85,8 @@
     //[[NSNotificationCenter defaultCenter ]addObserver:self selector:@selector(keyboardWillHiden:) name:UIKeyboardWillHideNotification object:nil];
     [self createMyScrollerView];
     [self createStageView];
-    [self createButtomView];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardDidShowNotification object:nil];
+    //[self createButtomView];
+   // [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardDidShowNotification object:nil];
     
 
 }
@@ -96,7 +100,7 @@
     leftBtn.frame=CGRectMake(10, 20, 60, 40);
     [leftBtn setTitleColor:VGray_color forState:UIControlStateNormal];
     [leftBtn setTitle:@"取消" forState:UIControlStateNormal];
-    leftBtn.titleLabel.font=[UIFont boldSystemFontOfSize:18];
+    //leftBtn.titleLabel.font=[UIFont boldSystemFontOfSize:18];
     [leftBtn setTitleEdgeInsets:UIEdgeInsetsMake(0, -15, 0, 0)];
     [leftBtn addTarget:self action:@selector(dealNavClick:) forControlEvents:UIControlEventTouchUpInside];
     leftBtn.tag=100;
@@ -157,26 +161,88 @@
     _myScorllerView.bounces=YES;
     [self.view addSubview:_myScorllerView];
     
-    tipView =[[UIView alloc]initWithFrame:CGRectMake(0, kDeviceWidth+64, kDeviceWidth, 30)];
-    tipView.backgroundColor=[[UIColor blackColor]colorWithAlphaComponent:0.7];
-    UILabel  *tiplable =[[UILabel alloc]initWithFrame:CGRectMake(0,0,kDeviceWidth,30)];
-    tiplable.textColor=[UIColor whiteColor];
-    tiplable.textAlignment=NSTextAlignmentCenter;
-    tiplable.font =[UIFont systemFontOfSize:14];
-    tiplable.text=@"弹幕可拖动";
-    [tipView addSubview:tiplable];
-    tipView.alpha=1;
-    [self.view addSubview:tipView];
+//    tipView =[[UIView alloc]initWithFrame:CGRectMake(0, kDeviceWidth+64, kDeviceWidth, 30)];
+//    tipView.backgroundColor=[[UIColor blackColor]colorWithAlphaComponent:0.7];
+//    UILabel  *tiplable =[[UILabel alloc]initWithFrame:CGRectMake(0,0,kDeviceWidth,30)];
+//    tiplable.textColor=[UIColor whiteColor];
+//    tiplable.textAlignment=NSTextAlignmentCenter;
+//    tiplable.font =[UIFont systemFontOfSize:14];
+//    tiplable.text=@"弹幕可拖动";
+//    [tipView addSubview:tiplable];
+//    tipView.alpha=1;
+//    [self.view addSubview:tipView];
     
 }
 -(void)createStageView
 {
-     stageView = [[StageView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceWidth)];
-     stageView.stageInfo=self.stageInfo;
-    [stageView configStageViewforStageInfoDict];
-       NSLog(@" 在 添加弹幕页面的   stagedict = %@",self.stageInfo);
-     [_myScorllerView addSubview:stageView];
+//     stageView = [[StageView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceWidth)];
+//     stageView.stageInfo=self.stageInfo;
+//    [stageView configStageViewforStageInfoDict];
+//       NSLog(@" 在 添加弹幕页面的   stagedict = %@",self.stageInfo);
+//     [_myScorllerView addSubview:stageView];
+    self.stageImageView =[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceWidth*(9.0/16))];
+    self.stageImageView.contentMode=UIViewContentModeScaleAspectFill;
+    self.stageImageView.clipsToBounds=YES;
+    [_myScorllerView addSubview:self.stageImageView];
+    
+    NSString *photostring=[NSString stringWithFormat:@"%@%@!w640",kUrlStage,self.stageInfo.photo];
+    [self.stageImageView   sd_setImageWithURL:[NSURL URLWithString:photostring] placeholderImage:nil options:(SDWebImageLowPriority|SDWebImageRetryFailed)];
+ 
+    UIView  *_layerView =[[UIView alloc]initWithFrame:CGRectMake(0, self.stageImageView.frame.size.height-100, kDeviceWidth-10, 100)];
+    [self.stageImageView addSubview:_layerView];
+    
+    CAGradientLayer * _gradientLayer = [CAGradientLayer layer];  // 设置渐变效果
+    _gradientLayer.bounds = _layerView.bounds;
+    _gradientLayer.borderWidth = 0;
+    
+    _gradientLayer.frame = _layerView.bounds;
+    _gradientLayer.colors = [NSArray arrayWithObjects:
+                             (id)[[UIColor clearColor] CGColor],
+                             (id)[[UIColor blackColor] CGColor], nil, nil];
+    _gradientLayer.startPoint = CGPointMake(0.5, 0.5);
+    _gradientLayer.endPoint = CGPointMake(0.5, 1.0);
+    [_layerView.layer insertSublayer:_gradientLayer atIndex:0];
+    
+    
+//    markLable=[ZCControl createLabelWithFrame:CGRectMake(20,40,_layerView.frame.size.width-40, 60) Font:20 Text:@"弹幕文字"];
+//    markLable.font =[UIFont boldSystemFontOfSize:20];
+//    //markLable.backgroundColor=[[UIColor blackColor] colorWithAlphaComponent:0.4];
+//    if (IsIphone6plus) {
+//        markLable.font=[UIFont boldSystemFontOfSize:24];
+//    }
+//    markLable.textColor=[UIColor whiteColor];
+//    markLable.text=Weibo.content;
+//    markLable.lineBreakMode=NSLineBreakByCharWrapping;
+//    markLable.contentMode=UIViewContentModeBottom;
+//    markLable.textAlignment=NSTextAlignmentCenter;
+//    [_layerView addSubview:markLable];
+//
+    
+    
+    _myTextView=[[UITextView alloc]initWithFrame:CGRectMake(10,self.stageImageView.frame.size.height-60, kDeviceWidth-20, 60)];
+    _myTextView.delegate=self;
+    // [_myTextView addPlaceHolder:@"输入弹幕"];
+    _myTextView.textColor=[UIColor whiteColor];
+    _myTextView.font= [UIFont boldSystemFontOfSize:22];
+    if (IsIphone6plus) {
+        _myTextView.font =[UIFont boldSystemFontOfSize:24];
+    }
+    
+    _myTextView.backgroundColor=[UIColor clearColor];
+    _myTextView.layer.cornerRadius=4;
+    _myTextView.layer.borderWidth=0.5;
+    _myTextView.layer.borderColor=VLight_GrayColor.CGColor;
+    _myTextView.maximumZoomScale=3;
+    _myTextView.returnKeyType=UIReturnKeyDone;
+    _myTextView.scrollEnabled=YES;
+    _myTextView.textAlignment=NSTextAlignmentCenter;
+    _myTextView.autoresizingMask=UIViewAutoresizingFlexibleHeight;
+    _myTextView.selectedRange = NSMakeRange(0,0);  //默认光标从第一个开始
+    [_myTextView becomeFirstResponder];
+    [self.stageImageView addSubview:_myTextView];
+    
 }
+/*
 -(void)createButtomView
 {
      _toolBar=[[UIToolbar alloc]initWithFrame:CGRectMake(0,kDeviceHeight-50-kHeightNavigation, kDeviceWidth, 50)];
@@ -242,7 +308,7 @@
      [_toolBar addSubview:publishBtn];
      [self.view addSubview:_toolBar];
 }
-
+*/
 
 -(void)dealNavClick:(UIButton *) button
 {
@@ -258,7 +324,7 @@
     else if (button.tag==99)
     {
         //点击确定按钮
-         [self  PushlicInScreen];
+         //[self  PushlicInScreen];
         
     }
     else if (button.tag==102)
@@ -278,6 +344,7 @@
         [self presentViewController:na animated:YES completion:nil];
     }
 }
+/*
 //把markview 添加到屏幕
 -(void)PushlicInScreen
 {
@@ -318,10 +385,10 @@
     [stageView addSubview:_myMarkView];
     
     //在标签上添加一个手势
-     UIPanGestureRecognizer   *pan=[[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(handelPan:)];
-    [_myMarkView addGestureRecognizer:pan];
+   //  UIPanGestureRecognizer   *pan=[[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(handelPan:)];
+    //[_myMarkView addGestureRecognizer:pan];
 
-}
+}*/
 //手动创建微博对象
 -(void)createWeibomodel
 {
@@ -435,7 +502,8 @@
     //设置标签
     return markView;
 }
-
+/*
+ 
 -(void)handelPan:(UIPanGestureRecognizer*)gestureRecognizer{
     
     [UIView animateWithDuration:0.5 animations:^{
@@ -459,8 +527,7 @@
     X =[NSString stringWithFormat:@"%f",((_myMarkView.frame.origin.x+_myMarkView.frame.size.width)/width)*100];
     Y=[NSString stringWithFormat:@"%f",((markViewY+markviewHight2)/width)*100];
     
- 
-}
+}*/
 # pragma  mark  发布数据请求
 //确定发布
 -(void)PublicRuqest
@@ -704,8 +771,7 @@
 -(void)textViewDidEndEditing:(UITextView *)textView
 {
    // [_myTextView resignFirstResponder];
-    ///[self PushlicInScreen];
-}
+ }
  -(void)textViewDidChangeSelection:(UITextView *)textView
 {
     
@@ -713,12 +779,14 @@
 //点击键盘上的return键执行这个方法
 -(BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
-    //if ([text isEqualToString:@"\n"]) {
+    if ([text isEqualToString:@"\n"]) {
      //   [self PushlicInScreen];
-       // return NO;
-    //}
-    //return YES;
+        [_myTextView resignFirstResponder];
+        return NO;
+ 
+    }
     return YES;
+    
 }
 
 
@@ -866,22 +934,11 @@
     TagView *tagview =[[TagView alloc]initWithWeiboInfo:self.weiboInfo AndTagInfo:tagmodel  delegate:self isCanClick:YES backgoundImage:imagename isLongTag:YES];
     [tagview setbigTag:YES];
     tagview.tag=1000+index;
-    //tagview.titleLable.text=tagText;
-//    tagview.tag=1000+index;
-//    tagview.delegete=self;
-//    [tagview setTagViewIsClick:YES];
-//    tagview.titleLable.text=tagText;
-//    CGSize  Tsize =[tagText boundingRectWithSize:CGSizeMake(MAXFLOAT, TagHeight) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:[NSDictionary dictionaryWithObject:tagview.titleLable.font forKey:NSFontAttributeName] context:nil].size;
-//    
-//    tagview.tagBgImageview.image =[imagename stretchableImageWithLeftCapWidth:15 topCapHeight:15];
-//    tagview.frame=CGRectMake(0,0, Tsize.width+10, TagHeight+6);
     return tagview;
 }
 //点击标签，删除操作
 -(void)TapViewClick:(TagView *)tagView Withweibo:(weiboInfoModel *)weiboInfo withTagInfo:(TagModel *)tagInfo
 {
-    
-    //NSLog(@"=========tagView %d",tagView.tag);
     if(TAGArray.count>0)
     {
        [TAGArray  removeObjectAtIndex:tagView.tag-1000];

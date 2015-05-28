@@ -621,8 +621,12 @@
 #pragma  mark  ------- searchBardelgate------------
 -(BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar
 {
-    UINavigationController  *search=[[UINavigationController alloc]initWithRootViewController:[MovieSearchViewController new]];
+    
+    MovieSearchViewController *vc= [MovieSearchViewController new];
+    vc.pageType=NSSearchSourceTypeMovieList;
+    UINavigationController  *search=[[UINavigationController alloc]initWithRootViewController:vc];
       search.modalTransitionStyle=UIModalTransitionStyleCrossDissolve;
+    
       [self presentViewController:search animated:YES completion:nil];
     return NO;
 }

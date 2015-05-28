@@ -17,14 +17,15 @@
 #import "UIImageView+WebCache.h"
 #import "DoubanUpImageViewController.h"
 #import "SmallImageCollectionViewCell.h"
-@interface ShowSelectPhotoViewController ()<UICollectionViewDelegateFlowLayout,UICollectionViewDataSource,UICollectionViewDelegate>
+#import "UploadImageViewController.h"
+@interface ShowSelectPhotoViewController ()<UICollectionViewDelegateFlowLayout,UICollectionViewDataSource,UICollectionViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 {
     UISegmentedControl *segment;
     int  page1;
     int  page2;
     UICollectionViewFlowLayout    *layout;
+    UIButton * upLoadimageBtn;
     
-
 }
 @property(nonatomic,strong) NSMutableArray  *dataArray1;
 @property(nonatomic,strong) NSMutableArray  *dataArray2;
@@ -52,9 +53,11 @@
     [button setTitle:@"取消" forState:UIControlStateNormal];
     [button setTitleColor:VBlue_color forState:UIControlStateNormal];
     button.frame=CGRectMake(10, 10, 40, 30);
-    button.titleLabel.font =[UIFont boldSystemFontOfSize:18];
-    [button addTarget:self action:@selector(cancle) forControlEvents:UIControlEventTouchUpInside];
+    [button setTitleColor:VGray_color forState:UIControlStateNormal];
+    //button.titleLabel.font =[UIFont boldSystemFontOfSize:18];
+    [button addTarget:self action:@selector(navigationbtnClick:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem  *barButton=[[UIBarButtonItem alloc]initWithCustomView:button];
+    button.tag=99;
     self.navigationItem.leftBarButtonItem=barButton;
 
     [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color.png"] forBarMetrics:UIBarMetricsDefault];
@@ -75,13 +78,72 @@
     [segment addTarget:self action:@selector(segmentClick:) forControlEvents:UIControlEventValueChanged];
     [self.navigationItem setTitleView:segment];
     
- }
--(void)cancle
-{
-    [self dismissViewControllerAnimated:YES completion:nil];
+    
+    
+    
+    
+    upLoadimageBtn=[ZCControl createButtonWithFrame:CGRectMake(0,0,40,30) ImageName:nil Target:self Action:@selector(navigationbtnClick:) Title:nil];
+    upLoadimageBtn.tag=100;
+    [upLoadimageBtn setTitle:@"上传" forState:UIControlStateNormal];
+    [upLoadimageBtn setTitleColor:VGray_color forState:UIControlStateNormal];
+   // [upLoadimageBtn setImage:[UIImage imageNamed:@"up_picture_blue.png"] forState:UIControlStateNormal];
+    UIBarButtonItem  *rigthbar =[[UIBarButtonItem alloc]initWithCustomView:upLoadimageBtn];
+    self.navigationItem.rightBarButtonItem=rigthbar;
+
     
 }
--(void)segmentClick:(UISegmentedControl *)seg
+-(void)navigationbtnClick:(UIButton *) btn
+{
+    if (btn.tag==99) {
+        [self dismissViewControllerAnimated:YES completion:nil];
+
+        
+    }
+    else if (btn.tag==100)
+    {
+        UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+        picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        picker.delegate = self;
+        //设置选择后的图片可被编辑
+        picker.allowsEditing = YES;
+        // UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:picker];
+        [self.navigationController presentViewController:picker animated:YES completion:nil];
+        
+
+    }
+}
+
+#pragma mark  ---
+#pragma mark  -----imagePickerControlldelegate
+#pragma mark  ----
+//当选择一张图片后进入这里
+-(void)imagePickerController:(UIImagePickerController*)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    NSString *type = [info objectForKey:UIImagePickerControllerMediaType];
+    //当选择的类型是图片
+    if ([type isEqualToString:@"public.image"])
+    {
+        //先把图片转成NSData
+        UIImage* image = [info objectForKey:UIImagePickerControllerOriginalImage];
+        [self dismissViewControllerAnimated:NO completion:^{
+            UploadImageViewController  *upload=[[UploadImageViewController alloc]init];
+            upload.upimage=image;
+            //upload.movie_Id=self.movieId;
+            //upload.movie_Id=moviedetailmodel.douban_id;
+            [self.navigationController pushViewController:upload animated:YES];
+        }];
+    }
+    
+}
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+    
+    [picker dismissViewControllerAnimated:YES completion:nil];
+}
+
+
+ -(void)segmentClick:(UISegmentedControl *)seg
 {
     if(seg.selectedSegmentIndex==0)
     {

@@ -13,6 +13,7 @@
 #import "FinderViewController.h"
 //在这里调选中的状态的字体颜色
 #import "AppDelegate.h"
+#import "MovieSearchViewController.h"
 #define  TabSelectColor   [UIColor colorWithRed:0.0/255 green:146.0/255 blue:255.0/255 alpha:1]
 //以后在这里调整正常字体的颜色
 #define  TabNorColor      [UIColor colorWithRed:175.0/255 green:180.0/255 blue:201.0/255 alpha:1]
@@ -105,10 +106,12 @@
     }
     else if (button.tag==BUTTON_START_TAG+2)
     {
-        AddViewController  *add =[AddViewController new];
+        MovieSearchViewController  *add =[MovieSearchViewController new];
+        add.pageType=NSSearchSourceTypeAddCard;
         UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:add];
         AppDelegate  *delegate =(AppDelegate *)[[UIApplication sharedApplication] delegate];
         UIWindow  *window=[delegate window];
+        
         [window.rootViewController presentViewController:na animated:YES completion:nil];
 
      

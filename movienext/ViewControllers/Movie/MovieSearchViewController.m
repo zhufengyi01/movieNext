@@ -71,6 +71,10 @@
     [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color.png"] forBarMetrics:UIBarMetricsDefault];
     search=[[UISearchBar alloc]initWithFrame:CGRectMake(30, 10, 0, 28)];
     search.placeholder=@"搜索电影";
+    if (self.pageType==NSSearchSourceTypeAddCard) {
+        search.placeholder=@"添加要添加的电影";
+
+    }
     search.delegate=self;
     search.searchBarStyle=UISearchBarStyleMinimal;
     search.showsCancelButton=YES;
@@ -193,6 +197,7 @@
 }
 -(void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
 {
+    [searchBar resignFirstResponder];
     
     [self dismissViewControllerAnimated:YES completion:nil];
 }
