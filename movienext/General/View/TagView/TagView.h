@@ -42,6 +42,10 @@
 //是否是大标签
 -(void)setbigTag:(BOOL) isbig;
 
+//设置是否圆角
+-(void)setcornerRadius:(BOOL) isRadius;
+
+
 ///设置tag是否可以被点击
 //-(void)setTagViewIsClick:(BOOL) isCanClick;
 @end

@@ -941,6 +941,7 @@
         CommonStageCell *cell = (CommonStageCell *)(button.superview.superview.superview.superview);
         //NSIndexPath  *indexpath = [NSIndexPath indexPathForRow:Rowindex inSection:1];
         //CommonStageCell  *cell=(CommonStageCell *)[_HotMoVieTableView cellForRowAtIndexPath:indexpath];
+        
         UIImage  *image=[Function getImage:cell.stageView WithSize:CGSizeMake(kStageWidth, kStageWidth)];
         if (UMShareStyle==1) {//使用controller方式分享
                     UMShareViewController  *shareVC=[[UMShareViewController alloc]init];

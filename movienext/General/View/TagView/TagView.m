@@ -47,8 +47,7 @@
     self.tagBgImageview.backgroundColor = VBlue_color;
     self.tagBgImageview.image =[_backgroundImage stretchableImageWithLeftCapWidth:10 topCapHeight:20];
     [self addSubview:self.tagBgImageview];
-    
-    //添加文字
+     //添加文字
     self.titleLable=[ZCControl createLabelWithFrame:CGRectMake(0,0, 60, 30) Font:TagTextFont14 Text:@"标签"];
     self.titleLable.textColor=[UIColor whiteColor];
     self.titleLable.font =[UIFont systemFontOfSize:TagTextFont14];
@@ -83,6 +82,16 @@
     self.frame=CGRectMake(0, 0,self.frame.size.width+8, self.frame.size.height+6);
     self.titleLable.frame=CGRectMake(0,0,self.frame.size.width, self.frame.size.height);
 }
+
+//设置是否圆角
+-(void)setcornerRadius:(BOOL) isRadius;
+{
+    //设置是否圆角
+    self.layer.cornerRadius=TagViewConrnerRed;
+
+}
+
+
 //点击本身执行跳转到具有这个标签的剧情
 -(void)dealTapSelf:(UITapGestureRecognizer *) tap
 {

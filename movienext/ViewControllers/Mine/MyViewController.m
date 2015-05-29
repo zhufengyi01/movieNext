@@ -806,6 +806,7 @@
 {
     userAddmodel  *model =[_addedDataArray objectAtIndex:index];
     NSDictionary *parameters = @{@"weibo_id":model.weiboInfo.Id,@"remove_type":@"0",@"user_id":userCenter.user_id};
+    
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:[NSString stringWithFormat:@"%@/weibo/remove", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {

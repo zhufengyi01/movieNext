@@ -21,14 +21,15 @@
 #import "UMShareViewController2.h"
 #import "UMSocial.h"
 #import "Masonry.h"
+#import "UMShareView.h"
 #import "UIButton+Block.h"
 //#import "AddTagViewController.h"
 #define  BOOKMARK_WORD_LIMIT 1000
-@interface AddMarkViewController ()<UIAlertViewDelegate,UIScrollViewDelegate,UITextViewDelegate,TagViewDelegate,UIAlertViewDelegate,UMShareViewController2Delegate,UMSocialUIDelegate,UMSocialDataDelegate>
+@interface AddMarkViewController ()<UIAlertViewDelegate,UIScrollViewDelegate,UITextViewDelegate,TagViewDelegate,UIAlertViewDelegate,UMShareViewController2Delegate,UMSocialUIDelegate,UMSocialDataDelegate,UMShareViewDelegate>
 {
     UIScrollView *_myScorllerView;
     UIToolbar    *_toolBar;
-    UIButton     *textLeftButton;
+    //UIButton     *textLeftButton;
     UITextView   *_myTextView;
     MarkView     *_myMarkView;
     NSString     *X;
@@ -45,7 +46,7 @@
     weiboInfoModel      *weibomodel;
     NSMutableArray      *TAGArray;        //把第一个标签到第二个标签存储在数组中
     weiboInfoModel *weibo;
-    
+    UIView *shareView;
   //  UILabel  *markLable;
 }
 @property(nonatomic,strong) UIImageView  *stageImageView;  //剧照的图片
@@ -84,7 +85,6 @@
     [self createStageView];
     [self createButtomView];
    // [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardDidShowNotification object:nil];
-    
 
 }
 -(void)createNavigation
@@ -134,7 +134,6 @@
     if (self.weiboInfo) {
         NSArray  *array =self.weiboInfo.tagArray;
         for (int i=0;i<array.count; i++) {
-//            NSString *tag =[[[array objectAtIndex:i] objectForKey:@"tag"] objectForKey:@""];
             TagModel *tagmodel =[array objectAtIndex:i];
             NSString  *tagString =tagmodel.tagDetailInfo.title;
             NSMutableDictionary  *dict =[NSMutableDictionary  dictionaryWithObject:tagString forKey:@"TAG"];
@@ -243,25 +242,38 @@
 }
 -(void)createButtomView
 {
-    
-    
+
     float height =kDeviceHeight-kHeightNavigation-(kDeviceWidth)*(9.0/16);
-    
-    UIView  *shareView=[[UIView alloc]initWithFrame:CGRectMake(0,kHeightNavigation+(kDeviceWidth)*(9.0/16), kDeviceWidth, height)];
+  shareView=[[UIView alloc]initWithFrame:CGRectMake(0,kHeightNavigation+(kDeviceWidth)*(9.0/16), kDeviceWidth, height)];
     shareView.userInteractionEnabled=YES;
     shareView.backgroundColor =[UIColor whiteColor];
     [self.view addSubview:shareView];
     
     
-   textLeftButton =[ZCControl createButtonWithFrame:CGRectMake(10,10, 60, 40) ImageName:nil Target:self Action:@selector(buttombtnClick:) Title:nil];
-    //[textLeftButton setImage:[UIImage imageNamed:@"add_tag_icon"] forState:UIControlStateNormal];
-    textLeftButton.backgroundColor = VLight_GrayColor;
-    [textLeftButton setTitle:@"添加标签" forState:UIControlStateNormal];
-    textLeftButton.tag=99;
+    taglable =[[M80AttributedLabel alloc]initWithFrame:CGRectZero];
+    taglable.backgroundColor =[UIColor clearColor];
+    taglable.lineSpacing=5.0;
+    taglable.font=[UIFont systemFontOfSize:MarkTextFont14];
+    if (IsIphone6plus) {
+        taglable.font =[UIFont systemFontOfSize:MarkTextFont16];
+    }
     
-    [shareView addSubview:textLeftButton];
+    //初始化的时候添加一个添加标签的按钮就好了
+    TagView  *tagView =[self createTagViewWithtagText:@"添加标签" withIndex:999 withBgImage:nil];
+    [tagView setcornerRadius:YES];
+    tagView.titleLable.textColor=VBlue_color;
+    tagView.tagBgImageview.backgroundColor =[UIColor whiteColor];
+    tagView.layer.borderColor=VBlue_color.CGColor;
+    tagView.layer.borderWidth=2;
+    
+    [taglable appendView:tagView margin:UIEdgeInsetsMake(0, 0, 0, 0)];
+    CGSize  Tsize =[taglable sizeThatFits:CGSizeMake(kDeviceWidth-20, CGFLOAT_MAX)];
+    taglable.frame=CGRectMake(10,10, kDeviceWidth-20, Tsize.height);
 
+    [shareView addSubview:taglable];
     
+    
+    //添加发布按钮
    UIButton  *publishbtn =[ZCControl createButtonWithFrame:CGRectMake(60,height-45,kDeviceWidth-120,30) ImageName:nil Target:self Action:@selector(buttombtnClick:) Title:@"发布"];
     publishbtn.layer.cornerRadius=4;
     publishbtn.tag=100;
@@ -271,33 +283,13 @@
     [shareView addSubview:publishbtn];
     
     
-    
 
 }
 //下面的按钮添加标签按钮和发布按钮
 -(void)buttombtnClick:(UIButton *) btn
 {
-    if (btn.tag==99) {
-        if (TAGArray.count==5) {
-            UIAlertView  *al =[[UIAlertView alloc]initWithTitle:nil message:@"最多可以添加五个标签" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:nil, nil];
-            al.tag=1001;
-            [al show];
-            return;
-        }
-        AddTagViewController  *addtag =[[AddTagViewController alloc]init];
-        addtag.delegate=self;
-        addtag.modalTransitionStyle=UIModalTransitionStyleCrossDissolve;
-        UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:addtag];
-        //[self presentViewController:addtag animated:NO completion:nil];
-        [self presentViewController:na animated:YES completion:nil];
-
-        
-    }
-    else if (btn.tag==100)
-    {
-        
-        [self PublicRuqest];
-    }
+ 
+  [self PublicRuqest];
     
 }
 /*
@@ -591,13 +583,8 @@
 //确定发布
 -(void)PublicRuqest
 {
- //   RighttBtn.enabled=NO;
-//    if ([X intValue]==0||[Y intValue]==0) {
-//        X =[NSString stringWithFormat:@"%d",100];
-//        Y=[NSString stringWithFormat:@"%d",100];
-//    }
-    X=@"1";
-    Y=@"1";
+     X=@"40";
+    Y=@"40";
     InputStr = [_myTextView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     int x_percent=[X intValue];
     X=[NSString stringWithFormat:@"%d",x_percent];
@@ -677,6 +664,8 @@
         //更新
         urlString =[NSString stringWithFormat:@"%@/weibo/update",kApiBaseUrl];
     }
+    
+    
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:urlString parameters:parameter success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"  添加弹幕发布请求    JSON: %@", responseObject);
@@ -689,32 +678,32 @@
             Al.tag=1000;
             [Al show];
             
-            weibo =[[weiboInfoModel alloc]init];
-            if (weibo) {
-                [weibo setValuesForKeysWithDictionary:[responseObject objectForKey:@"model"]];
-                weiboUserInfoModel  *weibouser=[[weiboUserInfoModel alloc]init];
-                if (weibouser) {
-                  weibouser.logo=userCenter.logo;
-                  weibouser.username=userCenter.username;
-                  weibo.uerInfo=weibouser;
-                }
-                NSMutableArray  *tagarray =[[NSMutableArray alloc]init];
-                for (NSDictionary  *tagDict in [[responseObject objectForKey:@"model"] objectForKey:@"tags"]) {
-                    TagModel  *tagmodel =[[TagModel alloc]init];
-                    if (tagmodel) {
-                        [tagmodel  setValuesForKeysWithDictionary:tagDict];
-                        
-                        TagDetailModel  *tagdeltail =[[TagDetailModel alloc]init];
-                        if (tagdeltail) {
-                            [tagdeltail setValuesForKeysWithDictionary:[tagDict objectForKey:@"tag"]];
-                            tagmodel.tagDetailInfo=tagdeltail;
-                        }
-                        [tagarray addObject:tagmodel];
-                    }
-                }
-                weibo.tagArray=tagarray;
-            }
-            [self.stageInfo.weibosArray addObject:weibo];
+//            weibo =[[weiboInfoModel alloc]init];
+//            if (weibo) {
+//                [weibo setValuesForKeysWithDictionary:[responseObject objectForKey:@"model"]];
+//                weiboUserInfoModel  *weibouser=[[weiboUserInfoModel alloc]init];
+//                if (weibouser) {
+//                  weibouser.logo=userCenter.logo;
+//                  weibouser.username=userCenter.username;
+//                  weibo.uerInfo=weibouser;
+//                }
+//                NSMutableArray  *tagarray =[[NSMutableArray alloc]init];
+//                for (NSDictionary  *tagDict in [[responseObject objectForKey:@"model"] objectForKey:@"tags"]) {
+//                    TagModel  *tagmodel =[[TagModel alloc]init];
+//                    if (tagmodel) {
+//                        [tagmodel  setValuesForKeysWithDictionary:tagDict];
+//                        
+//                        TagDetailModel  *tagdeltail =[[TagDetailModel alloc]init];
+//                        if (tagdeltail) {
+//                            [tagdeltail setValuesForKeysWithDictionary:[tagDict objectForKey:@"tag"]];
+//                            tagmodel.tagDetailInfo=tagdeltail;
+//                        }
+//                        [tagarray addObject:tagmodel];
+//                    }
+//                }
+//                weibo.tagArray=tagarray;
+//            }
+//            [self.stageInfo.weibosArray addObject:weibo];
             //发布成功后，进入分享
  
         }
@@ -899,7 +888,7 @@
         //发布弹幕成功的返回
     if (buttonIndex==0) {
  
-        [self.delegate AddMarkViewControllerReturn];
+       // [self.delegate AddMarkViewControllerReturn];
         [self dismissViewControllerAnimated:YES completion:^{
             if (self.weiboInfo) {
                 //编辑状态，不分享,刷新tabview
@@ -908,12 +897,23 @@
                 }
             }
             else {
-                //编辑状态，不分享,刷新tabview
-               if (self.delegate&&[self.delegate respondsToSelector:@selector(AddMarkViewControllerReturn)]) {
+                
+                if (self.delegate&&[self.delegate respondsToSelector:@selector(AddMarkViewControllerReturn)]) {
                 [self.delegate AddMarkViewControllerReturn];
                 }
-             NSDictionary  *dict = [[NSDictionary alloc]initWithObjectsAndKeys:self.stageInfo,@"stageInfo",weibo,@"weiboInfo",self.delegate,@"delegate", nil];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"ShareViewAlert" object:nil userInfo:dict];
+                
+                //把分享添加到window上
+                
+                
+                UIImage  *image=[Function getImage:self.stageImageView WithSize:CGSizeMake(kStageWidth,  (kDeviceWidth-10)*(9.0/16))];
+
+                
+                UMShareView *ShareView =[[UMShareView alloc] initwithStageInfo:self.stageInfo ScreenImage:image delgate:self];
+                [ShareView show];
+
+                
+//                NSDictionary  *dict = [[NSDictionary alloc]initWithObjectsAndKeys:self.stageInfo,@"stageInfo",weibo,@"weiboInfo",self.delegate,@"delegate", nil];
+//                [[NSNotificationCenter defaultCenter] postNotificationName:@"ShareViewAlert" object:nil userInfo:dict];
             }
         
         }];
@@ -921,12 +921,11 @@
       }
     }
 }
+
+#pragma  mark ------------------------AddTagViewHandClickWithTagDelegate -----------------
 -(void)AddTagViewHandClickWithTag:(NSString *)tag
 {    
-//    if (TAGArray==nil) {
-//        TAGArray =[[NSMutableArray alloc]init];
-//    }
-
+    
     if (TAGArray.count==0) {
         NSMutableDictionary  *tag1Dict =[NSMutableDictionary dictionaryWithObject:tag forKey:@"TAG"];
         [TAGArray insertObject:tag1Dict atIndex:0];
@@ -953,7 +952,12 @@
         NSMutableDictionary  *tag5Dict =[NSMutableDictionary dictionaryWithObject:tag forKey:@"TAG"];
         [TAGArray insertObject:tag5Dict atIndex:4];
     }
-
+    //清楚了所有
+    if (taglable) {
+        [taglable  removeFromSuperview];
+        taglable=nil;
+    }
+    
 //创建标签文本
     taglable =[[M80AttributedLabel alloc]initWithFrame:CGRectZero];
     taglable.backgroundColor =[UIColor clearColor];
@@ -962,16 +966,25 @@
     if (IsIphone6plus) {
         taglable.font =[UIFont systemFontOfSize:MarkTextFont16];
     }
-    
     for (int i=0; i<TAGArray.count; i++) {
         NSDictionary  *dict =[TAGArray objectAtIndex:i];
          TagView   *tagview =[self createTagViewWithtagText:[dict objectForKey:@"TAG"] withIndex:i withBgImage:[UIImage imageNamed:@"tag_backgroud_color.png"]];
         [taglable appendView:tagview margin:UIEdgeInsetsMake(0, 10, 0, 0)];
     }
+    
+    TagView  *tagView =[self createTagViewWithtagText:@"添加标签" withIndex:999 withBgImage:nil];
+    [tagView setcornerRadius:YES];
+    tagView.titleLable.textColor=VBlue_color;
+    tagView.tagBgImageview.backgroundColor =[UIColor whiteColor];
+    tagView.layer.borderColor=VBlue_color.CGColor;
+    tagView.layer.borderWidth=2;
+
+    [taglable appendView:tagView margin:UIEdgeInsetsMake(0, 10, 0, 0)];
+
     CGSize Tsize =[taglable sizeThatFits:CGSizeMake(kDeviceWidth-20, CGFLOAT_MAX)];
     //位置和大小
-    taglable.frame=CGRectMake(10,50,kDeviceWidth-20, Tsize.height);
-      [_toolBar addSubview:taglable];
+    taglable.frame=CGRectMake(10,10,kDeviceWidth-20, Tsize.height);
+    [shareView addSubview:taglable];
     NSLog(@"==== add  tag====%f",_myTextView.frame.size.height);
     
 }
@@ -984,6 +997,10 @@
     tagdetail.title=tagText;
     tagmodel.tagDetailInfo=tagdetail;
     TagView *tagview =[[TagView alloc]initWithWeiboInfo:self.weiboInfo AndTagInfo:tagmodel  delegate:self isCanClick:YES backgoundImage:imagename isLongTag:YES];
+    [tagview setcornerRadius:YES];
+//    if (index==999) {//最后一个是添加按钮
+//        tagview.tagBgImageview.image=nil;
+//    }
     [tagview setbigTag:YES];
     tagview.tag=1000+index;
     return tagview;
@@ -991,82 +1008,84 @@
 //点击标签，删除操作
 -(void)TapViewClick:(TagView *)tagView Withweibo:(weiboInfoModel *)weiboInfo withTagInfo:(TagModel *)tagInfo
 {
+    
+    if (tagView.tag==1999) {  //表明点击的是添加标签按钮
+        AddTagViewController  *addtag =[[AddTagViewController alloc]init];
+        addtag.delegate=self;
+        addtag.modalTransitionStyle=UIModalTransitionStyleCrossDissolve;
+        UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:addtag];
+        //[self presentViewController:addtag animated:NO completion:nil];
+        [self presentViewController:na animated:YES completion:nil];
+    
+    }
+  else
+  {
+      if (TAGArray.count==5) {
+        UIAlertView  *al =[[UIAlertView alloc]initWithTitle:nil message:@"最多可以添加五个标签" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:nil, nil];
+        al.tag=1001;
+        [al show];
+        return;
+      }
+      
     if(TAGArray.count>0)
     {
        [TAGArray  removeObjectAtIndex:tagView.tag-1000];
     }
-    //删除完成后，清除所有的布局
-     //移除所有tagview的子视图
-    for (id view in taglable.subviews) {
-        if ([view isKindOfClass:[TagView class]]) {
-            TagView  *tag=(TagView *)view;
-            [tag removeFromSuperview];
-            tag=nil;
-        }
-    }
-    if (taglable) {
+     if (taglable) {
         [taglable removeFromSuperview];
         taglable=nil;
     }
-    
-    taglable =[[M80AttributedLabel alloc]initWithFrame:CGRectZero];
-    taglable.backgroundColor =[UIColor clearColor];
-    taglable.font=[UIFont systemFontOfSize:MarkTextFont14];
-    if(IsIphone6plus) {
+       taglable =[[M80AttributedLabel alloc]initWithFrame:CGRectZero];
+       taglable.backgroundColor =[UIColor clearColor];
+      taglable.lineSpacing=5;
+       taglable.font=[UIFont systemFontOfSize:MarkTextFont14];
+      if(IsIphone6plus) {
         taglable.font =[UIFont systemFontOfSize:MarkTextFont16];
-     }
-     if(keybordHeight==0)
-    {
-        keybordHeight=252.0;
-        if (IsIphone6) {
-            keybordHeight=258.0;
-        }
-        if (IsIphone6plus) {
-            keybordHeight=271.0;
-        }
-    }
-    NSLog(@"删除之后的数组====%@",TAGArray);
-
-
-    //然后从新开始渲染布局
+      }
+    
     for (int i=0; i<TAGArray.count; i++) {
-        
         NSDictionary  *dict =[TAGArray objectAtIndex:i];
         TagView   *tagview =[self createTagViewWithtagText:[dict objectForKey:@"TAG"] withIndex:i withBgImage:[UIImage imageNamed:@"tag_backgroud_color.png"]];
         [taglable appendView:tagview margin:UIEdgeInsetsMake(0, 10, 0, 0)];
     }
     
+    
+    TagView  *tagview =[self createTagViewWithtagText:@"添加标签" withIndex:999 withBgImage:nil];
+    [tagview setcornerRadius:YES];
+    tagView.titleLable.textColor=VBlue_color;
+      tagView.tagBgImageview.backgroundColor =[UIColor whiteColor];
+      tagView.layer.borderColor=VBlue_color.CGColor;
+      tagView.layer.borderWidth=2;
+
+    [taglable appendView:tagview margin:UIEdgeInsetsMake(0, 10, 0, 0)];
+    
+
     CGSize Tsize =[taglable sizeThatFits:CGSizeMake(kDeviceWidth-20, CGFLOAT_MAX)];
     //位置和大小
-    taglable.frame=CGRectMake(10,50,kDeviceWidth-20, Tsize.height);
-    _toolBar.frame=CGRectMake(_toolBar.frame.origin.x,kDeviceHeight-keybordHeight-50-Tsize.height,_toolBar.frame.size.width, 50+Tsize.height);
-    [_toolBar addSubview:taglable];
-    
-    _myTextView.frame=CGRectMake(_myTextView.frame.origin.x, 10,_myTextView.frame.size.width, 30);
-    
-    if (TAGArray.count==0) {
-        if(keybordHeight==0)
-        {
-            keybordHeight=252.0;
-            if (IsIphone6) {
-                keybordHeight=258.0;
-            }
-            if (IsIphone6plus) {
-                keybordHeight=271.0;
-            }
-        }
-        _toolBar.frame=CGRectMake(_toolBar.frame.origin.x,kDeviceHeight-keybordHeight-50,_toolBar.frame.size.width, 50);
-        [taglable removeFromSuperview];
-      }
-    if ([TAGArray count]>0) {
-        publishBtn.enabled=YES;
-    }
-    else
-    {
-        publishBtn.enabled=YES;
-    }
+    taglable.frame=CGRectMake(10,10,kDeviceWidth-20, Tsize.height);
+    [shareView addSubview:taglable];
 
+    
 }
+}
+
+//
+
+        
+//    //然后从新开始渲染布局
+//    for (int i=0; i<TAGArray.count; i++) {
+//        NSDictionary  *dict =[TAGArray objectAtIndex:i];
+//        TagView   *tagview =[self createTagViewWithtagText:[dict objectForKey:@"TAG"] withIndex:i withBgImage:[UIImage imageNamed:@"tag_backgroud_color.png"]];
+//        [taglable appendView:tagview margin:UIEdgeInsetsMake(0, 10, 0, 0)];
+//    }
+//    
+//    CGSize Tsize =[taglable sizeThatFits:CGSizeMake(kDeviceWidth-20, CGFLOAT_MAX)];
+//    //位置和大小
+//    taglable.frame=CGRectMake(10,50,kDeviceWidth-20, Tsize.height);
+//    _toolBar.frame=CGRectMake(_toolBar.frame.origin.x,kDeviceHeight-keybordHeight-50-Tsize.height,_toolBar.frame.size.width, 50+Tsize.height);
+//    [_toolBar addSubview:taglable];
+    
+
 /*
 #pragma mark - Navigation
 
