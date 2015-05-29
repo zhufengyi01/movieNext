@@ -28,6 +28,7 @@
 #import "MovieDetailViewController.h"
 #import "AppDelegate.h"
 #import "UMShareView.h"
+#import "UserDataCenter.h"
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
 #import "M80AttributedLabel.h"
@@ -296,9 +297,6 @@
         Like_lable.text=[NSString stringWithFormat:@"%@",_WeiboInfo.like_count];
     }
     
-
-    
-    
     [like_btn addSubview:Like_lable];
     for (int i=0; i<self.upweiboArray.count; i++) {
         UpweiboModel *upmodel=self.upweiboArray[i];
@@ -319,9 +317,22 @@
 //点赞实现的方法
 -(void)clickLike:(UIButton *) btn
 {
-    
+    UserDataCenter  * userCenter =[UserDataCenter shareInstance];
+    if ([userCenter.is_admin intValue]>0) {
+        //管理员用户//请求随机用户，然后点一次变身一次
+        [self requestChangeUserRand4];
+        
+        starImageView.image=[UIImage imageNamed:@"like_slected.png"];
+        [Function BasicAnimationwithkey:@"transform.scale" Duration:0.25 repeatcont:1 autoresverses:YES fromValue:1.0 toValue:1.5 View:starImageView];
+        // 把赞的数量+1
+        int like =[Like_lable.text intValue];
+        like = like+1;
+         Like_lable.text=[NSString stringWithFormat:@"%d",like];
+    }
+    else
+    {
+        //普通用户
     NSNumber  *operation;
-
     if (btn.selected==YES) {
         btn.selected=NO;
         //已赞的,再点击就要移除数组
@@ -334,8 +345,6 @@
                 break;
             }
         }
-        
-
         starImageView.image=[UIImage imageNamed:@"like_nomoal.png"];
         //把赞的数量-1
         int  like =   [Like_lable.text intValue];
@@ -370,9 +379,9 @@
         like=like+1;
         _WeiboInfo.like_count=[NSNumber numberWithInt:like];
         Like_lable.text=[NSString stringWithFormat:@"%@",_WeiboInfo.like_count];
+      }
+       [self LikeRequstData:_WeiboInfo withOperation:operation withuserId:userCenter.user_id];
     }
-    [self LikeRequstData:_WeiboInfo withOperation:operation];
-//   请求点赞接口
     
     
 }
@@ -417,6 +426,8 @@
     [shareView addSubview:addMarkButton];
     
 }
+
+
 
 -(TagView *) createTagViewWithweiboInfo:(weiboInfoModel *) weiboInfo andIndex:(NSInteger) index
 {
@@ -559,6 +570,28 @@
 #pragma  mark  ----RequestData
 #pragma  mark  ---
 
+//随机用户请求
+//变身请求的随机数种子请求，根据请求出来的随机种子 ，去请求点赞
+-(void)requestChangeUserRand4
+{
+    
+    UserDataCenter  *userCenter=[UserDataCenter shareInstance];
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    NSDictionary *parameters=@{@"user_id":userCenter.user_id};
+    [manager POST:[NSString stringWithFormat:@"%@/user/fakeuserid", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
+            NSLog(@"随机数种子请求成功=======%@",responseObject);
+            NSString  *usr_id =[responseObject objectForKey:@"user_id"];
+            [self LikeRequstData:_WeiboInfo withOperation:@1 withuserId:usr_id];
+            //请求点赞
+            
+         }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+    
+
+}
 //屏幕剧照
 -(void)requestRemoveStage:(NSString *) type
 {
@@ -620,14 +653,19 @@
     
 }
 
- //微博点赞请求
--(void)LikeRequstData:(weiboInfoModel  *) weiboInfo withOperation:(NSNumber *) operation
+//微博点赞请求
+
+
+
+
+//operation  == 1 点赞    为  0  取消点赞
+-(void)LikeRequstData:(weiboInfoModel  *) weiboInfo withOperation:(NSNumber *) operation withuserId:(NSString*)user_id
 {
-    UserDataCenter  *userCenter=[UserDataCenter shareInstance];
+   //UserDataCenter  *userCenter=[UserDataCenter shareInstance];
     NSNumber  *weiboId=weiboInfo.Id;
-    NSString  *userId=userCenter.user_id;
     NSNumber  *author_id=weiboInfo.uerInfo.Id;
-    NSDictionary *parameters=@{@"weibo_id":weiboId,@"user_id":userId,@"author_id":author_id,@"operation":operation};
+    NSDictionary *parameters=@{@"weibo_id":weiboId,@"user_id":user_id,@"author_id":author_id,@"operation":operation};
+    
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     //manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
     NSString *urlString = [NSString stringWithFormat:@"%@/weibo/up", kApiBaseUrl];
@@ -722,7 +760,7 @@
 }
 
 //变身请求的随机数种子
--(void)requestChangeUserRand4
+/*-(void)requestChangeUserRand4
 {
     
     UserDataCenter  *userCenter=[UserDataCenter shareInstance];
@@ -736,8 +774,7 @@
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
-    
-}
+}*/
 //跟换用户的数据请求
 -(void)requestChangeUser:( NSString *) author_id
 {
@@ -934,7 +971,9 @@
 #pragma  mark  -------
 -(void)ToolViewHandClick:(UIButton *)button :(MarkView *)markView weiboDict:(weiboInfoModel *)weiboDict StageInfo:(stageInfoModel *)stageInfoDict
 {
-    
+    UserDataCenter  *userCenter=[UserDataCenter shareInstance];
+
+
     _TweiboInfo =weiboDict;
     _TstageInfo=stageInfoDict;
     if (button.tag==10000) {
@@ -1004,7 +1043,7 @@
         }
         [self layoutMarkViewWithMarkView:markView WeiboInfo:weiboDict];
         ////发送到服务器
-        [self LikeRequstData:weiboDict withOperation:operation];
+        [self LikeRequstData:weiboDict withOperation:operation withuserId:userCenter.user_id];
         
     }else if (button.tag==10003)
     {

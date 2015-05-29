@@ -18,8 +18,10 @@
 #import "DoubanUpImageViewController.h"
 #import "SmallImageCollectionViewCell.h"
 #import "UploadImageViewController.h"
-@interface ShowSelectPhotoViewController ()<UICollectionViewDelegateFlowLayout,UICollectionViewDataSource,UICollectionViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
+#import "LoadingView.h"
+@interface ShowSelectPhotoViewController ()<UICollectionViewDelegateFlowLayout,UICollectionViewDataSource,UICollectionViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,LoadingViewDelegate>
 {
+    LoadingView         *loadView;
     UISegmentedControl *segment;
     int  page1;
     int  page2;
@@ -42,7 +44,7 @@
     [self initData];
     [self initUI];
     [self requestData];
-    
+  //  [self creatLoadView];
 
 }
 #pragma  mark  -------CreatUI;
@@ -77,8 +79,6 @@
     
     [segment addTarget:self action:@selector(segmentClick:) forControlEvents:UIControlEventValueChanged];
     [self.navigationItem setTitleView:segment];
-    
-    
     
     
     
@@ -128,7 +128,7 @@
         [self dismissViewControllerAnimated:NO completion:^{
             UploadImageViewController  *upload=[[UploadImageViewController alloc]init];
             upload.upimage=image;
-            //upload.movie_Id=self.movieId;
+            upload.movie_Id=self.movie_id;
             //upload.movie_Id=moviedetailmodel.douban_id;
             [self.navigationController pushViewController:upload animated:YES];
         }];
@@ -195,6 +195,13 @@
     [self.view addSubview:_myConllectionView];
     [self setupHeadView];
     [self setupFootView];
+}
+-(void)creatLoadView
+{
+    loadView =[[LoadingView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight)];
+    loadView.delegate=self;
+    //[self.view addSubview:loadView];
+    
 }
 
 - (void)setupHeadView
@@ -274,13 +281,22 @@
     [request setHTTPMethod:@"GET"];
     NSOperationQueue * queue = [[NSOperationQueue alloc] init];
     [NSURLConnection sendAsynchronousRequest:request queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
-        //NSLog(@"response start");
-        if (connectionError) {
+        
+         if (connectionError) {
             //NSLog(@"httpresponse code error %@", connectionError);
+            
+            [loadView showFailLoadData];
+            
         } else {
+            [loadView stopAnimation];
+            [loadView removeFromSuperview];
+            
+
+
             NSInteger responseCode = [(NSHTTPURLResponse *)response statusCode];
             NSString *responseString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
             if (responseCode == 200) {
+                
                 responseString = [Function getNoNewLine:responseString];
                 
                 NSString * pattern = @"http:\\/\\/img\\d\\.douban\\.com\\/view\\/photo\\/thumb\\/public\\/p\\d+\\.(jpg|jpeg|png)";
@@ -310,12 +326,18 @@
         [self.myConllectionView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
             } else {
                 NSLog(@"error");
+                
+                [loadView showFailLoadData];
+
             }
         }
     }];
 
-    
-    
+}
+-(void)reloadDataClick
+{
+    [self requestData];
+    [loadView hidenFailLoadAndShowAnimation];
 }
 #pragma  mark
 #pragma mark - UICollectionViewDataSource ----
@@ -342,14 +364,14 @@
     SmallImageCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"smallcell" forIndexPath:indexPath];
     //在这里先将内容给清除一下, 然后再加载新的, 添加完内容之后先动画, 在cell消失的时候做清理工作
     
-         //stageInfoModel  *model=[_dataArray objectAtIndex:indexPath.row];
-        cell.imageView.backgroundColor=VStageView_color;
+         cell.imageView.backgroundColor=VStageView_color;
         NSURL  *urlString ;
          if (segment.selectedSegmentIndex==0) {
              
              if (self.dataArray1.count>indexPath.row) {
              urlString =[NSURL URLWithString:[self.dataArray1 objectAtIndex:indexPath.row]];
-                 [cell.imageView sd_setImageWithURL:urlString placeholderImage:nil];
+       //          [cell.imageView sd_setImageWithURL:urlString placeholderImage:nil];
+            [cell.imageView sd_setImageWithURL:urlString placeholderImage:nil options:(SDWebImageRetryFailed|SDWebImageLowPriority)];
 
              }
          }
@@ -357,8 +379,8 @@
         {
             if (self.dataArray2.count>indexPath.row) {
             urlString =[NSURL URLWithString:[self.dataArray2 objectAtIndex:indexPath.row]];
-                [cell.imageView sd_setImageWithURL:urlString placeholderImage:nil];
-
+               // [cell.imageView sd_setImageWithURL:urlString placeholderImage:nil];
+                [cell.imageView sd_setImageWithURL:urlString placeholderImage:nil options:(SDWebImageRetryFailed|SDWebImageLowPriority)];
             }
 
         }

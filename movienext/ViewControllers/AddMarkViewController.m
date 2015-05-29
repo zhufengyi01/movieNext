@@ -21,6 +21,7 @@
 #import "UMShareViewController2.h"
 #import "UMSocial.h"
 #import "Masonry.h"
+#import "UIButton+Block.h"
 //#import "AddTagViewController.h"
 #define  BOOKMARK_WORD_LIMIT 1000
 @interface AddMarkViewController ()<UIAlertViewDelegate,UIScrollViewDelegate,UITextViewDelegate,TagViewDelegate,UIAlertViewDelegate,UMShareViewController2Delegate,UMSocialUIDelegate,UMSocialDataDelegate>
@@ -57,16 +58,12 @@
     self.navigationController.navigationBar.alpha=1;
     self.navigationController.navigationBar.hidden=YES;
     self.tabBarController.tabBar.hidden=YES;
-    if (_myTextView) {
-     //   [_myTextView becomeFirstResponder];
-    }
-    _myTextView.frame= CGRectMake(50, 10, kDeviceWidth-120, 30);
+    //_myTextView.frame= CGRectMake(50, 10, kDeviceWidth-120, 30);
 }
 
 //页面已经出现的时候执行这个   所以在执行代理完成后再执行通知的方法
 -(void)viewDidAppear:(BOOL)animated
 {
-    
     if(_myTextView)
     {
         [_myTextView becomeFirstResponder];
@@ -85,7 +82,7 @@
     //[[NSNotificationCenter defaultCenter ]addObserver:self selector:@selector(keyboardWillHiden:) name:UIKeyboardWillHideNotification object:nil];
     [self createMyScrollerView];
     [self createStageView];
-    //[self createButtomView];
+    [self createButtomView];
    // [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardDidShowNotification object:nil];
     
 
@@ -107,12 +104,14 @@
     [naview addSubview:leftBtn];
    // UIBarButtonItem  *leftBarButton=[[UIBarButtonItem alloc]initWithCustomView:leftBtn];
    // self.navigationItem.leftBarButtonItem=leftBarButton;
+    
+    UILabel  *lable =[ZCControl createLabelWithFrame:CGRectMake((kDeviceWidth-100)/2, 25, 100, 30) Font:15 Text:@"添加文字"];
+    lable.font=[UIFont systemFontOfSize:14];
+    lable.textAlignment=NSTextAlignmentCenter;
+    lable.textColor=VBlue_color;
+    [naview addSubview:lable];
     if (self.weiboInfo) {
-    UILabel  *lable =[ZCControl createLabelWithFrame:CGRectMake((kDeviceWidth-100)/2, 20, 100, 30) Font:15 Text:@"编辑"];
-        lable.font=[UIFont boldSystemFontOfSize:18];
-        lable.textAlignment=NSTextAlignmentCenter;
-        lable.textColor=VBlue_color;
-        [naview addSubview:lable];
+        lable.text=@"编辑";
     }
     RighttBtn= [UIButton buttonWithType:UIButtonTypeSystem];
     RighttBtn.frame=CGRectMake(kDeviceWidth-70, 20, 60, 40);
@@ -124,7 +123,7 @@
     
     RighttBtn.titleLabel.font=[UIFont boldSystemFontOfSize:18];
     RighttBtn.hidden=YES;
-    [naview addSubview:RighttBtn];
+    //[naview addSubview:RighttBtn];
     //self.navigationItem.rightBarButtonItem=[[UIBarButtonItem alloc]initWithCustomView:RighttBtn];
 
 }
@@ -219,7 +218,7 @@
 //
     
     
-    _myTextView=[[UITextView alloc]initWithFrame:CGRectMake(10,self.stageImageView.frame.size.height-60, kDeviceWidth-20, 60)];
+    _myTextView=[[UITextView alloc]initWithFrame:CGRectMake(10,(kDeviceWidth*(9.0/16))-80, kDeviceWidth-20, 45)];
     _myTextView.delegate=self;
     // [_myTextView addPlaceHolder:@"输入弹幕"];
     _myTextView.textColor=[UIColor whiteColor];
@@ -229,9 +228,9 @@
     }
     
     _myTextView.backgroundColor=[UIColor clearColor];
-    _myTextView.layer.cornerRadius=4;
-    _myTextView.layer.borderWidth=0.5;
-    _myTextView.layer.borderColor=VLight_GrayColor.CGColor;
+   // _myTextView.layer.cornerRadius=4;
+    //_myTextView.layer.borderWidth=0.5;
+    //_myTextView.layer.borderColor=VLight_GrayColor.CGColor;
     _myTextView.maximumZoomScale=3;
     _myTextView.returnKeyType=UIReturnKeyDone;
     _myTextView.scrollEnabled=YES;
@@ -240,6 +239,65 @@
     _myTextView.selectedRange = NSMakeRange(0,0);  //默认光标从第一个开始
     [_myTextView becomeFirstResponder];
     [self.stageImageView addSubview:_myTextView];
+    
+}
+-(void)createButtomView
+{
+    
+    
+    float height =kDeviceHeight-kHeightNavigation-(kDeviceWidth)*(9.0/16);
+    
+    UIView  *shareView=[[UIView alloc]initWithFrame:CGRectMake(0,kHeightNavigation+(kDeviceWidth)*(9.0/16), kDeviceWidth, height)];
+    shareView.userInteractionEnabled=YES;
+    shareView.backgroundColor =[UIColor whiteColor];
+    [self.view addSubview:shareView];
+    
+    
+   textLeftButton =[ZCControl createButtonWithFrame:CGRectMake(10,10, 60, 40) ImageName:nil Target:self Action:@selector(buttombtnClick:) Title:nil];
+    //[textLeftButton setImage:[UIImage imageNamed:@"add_tag_icon"] forState:UIControlStateNormal];
+    textLeftButton.backgroundColor = VLight_GrayColor;
+    [textLeftButton setTitle:@"添加标签" forState:UIControlStateNormal];
+    textLeftButton.tag=99;
+    
+    [shareView addSubview:textLeftButton];
+
+    
+   UIButton  *publishbtn =[ZCControl createButtonWithFrame:CGRectMake(60,height-45,kDeviceWidth-120,30) ImageName:nil Target:self Action:@selector(buttombtnClick:) Title:@"发布"];
+    publishbtn.layer.cornerRadius=4;
+    publishbtn.tag=100;
+    publishbtn.titleLabel.font =[UIFont boldSystemFontOfSize:16];
+    //[addMarkButton setBackgroundImage:[UIImage imageNamed:@"btn_add_select.png"] forState:UIControlStateHighlighted];
+    publishbtn.backgroundColor = VBlue_color;
+    [shareView addSubview:publishbtn];
+    
+    
+    
+
+}
+//下面的按钮添加标签按钮和发布按钮
+-(void)buttombtnClick:(UIButton *) btn
+{
+    if (btn.tag==99) {
+        if (TAGArray.count==5) {
+            UIAlertView  *al =[[UIAlertView alloc]initWithTitle:nil message:@"最多可以添加五个标签" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:nil, nil];
+            al.tag=1001;
+            [al show];
+            return;
+        }
+        AddTagViewController  *addtag =[[AddTagViewController alloc]init];
+        addtag.delegate=self;
+        addtag.modalTransitionStyle=UIModalTransitionStyleCrossDissolve;
+        UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:addtag];
+        //[self presentViewController:addtag animated:NO completion:nil];
+        [self presentViewController:na animated:YES completion:nil];
+
+        
+    }
+    else if (btn.tag==100)
+    {
+        
+        [self PublicRuqest];
+    }
     
 }
 /*
@@ -318,7 +376,8 @@
         [self dismissViewControllerAnimated:YES completion:nil];
     }
     else if (button.tag==101)
-    {        [self  PublicRuqest];
+    {
+        [self  PublicRuqest];
         //执行发布的方法
     }
     else if (button.tag==99)
@@ -388,7 +447,7 @@
    //  UIPanGestureRecognizer   *pan=[[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(handelPan:)];
     //[_myMarkView addGestureRecognizer:pan];
 
-}*/
+}
 //手动创建微博对象
 -(void)createWeibomodel
 {
@@ -459,7 +518,7 @@
 }
 
 
-
+*/
 #pragma mark 内部弹幕的方法
 - (MarkView *) createMarkViewWithDict:(weiboInfoModel *)weibodict andIndex:(NSInteger)index{
     MarkView *markView=[[MarkView alloc]initWithFrame:CGRectZero];
@@ -533,10 +592,13 @@
 -(void)PublicRuqest
 {
  //   RighttBtn.enabled=NO;
-    if ([X intValue]==0||[Y intValue]==0) {
-        X =[NSString stringWithFormat:@"%d",100];
-        Y=[NSString stringWithFormat:@"%d",100];
-    }
+//    if ([X intValue]==0||[Y intValue]==0) {
+//        X =[NSString stringWithFormat:@"%d",100];
+//        Y=[NSString stringWithFormat:@"%d",100];
+//    }
+    X=@"1";
+    Y=@"1";
+    InputStr = [_myTextView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     int x_percent=[X intValue];
     X=[NSString stringWithFormat:@"%d",x_percent];
     int y_percent=[Y intValue];
@@ -547,6 +609,8 @@
 
     NSDictionary *parameter;
     if (TAGArray.count==0) {
+        
+        
      parameter = @{@"user_id": userid,@"content":InputStr,@"stage_id":stageId,@"x_percent":X,@"y_percent":Y};
         if (self.weiboInfo) {
             parameter = @{@"user_id":userid,@"content":InputStr,@"stage_id":stageId,@"x_percent":X,@"y_percent":Y,@"weibo_id":self.weiboInfo.Id};
@@ -688,7 +752,7 @@
     NSLog(@"didFinishGetUMSocialDataResponse第二部执行这个");
      [self.navigationController popViewControllerAnimated:NO];
 }
-
+/*
 //发布弹幕请求
 #pragma mark 键盘的通知事件
 -(void)keyboardWillShow:(NSNotification * )  notification
@@ -750,16 +814,10 @@
     NSLog(@"====will show keyboard  tag====%f",_myTextView.frame.size.height);
 
 }
+
+*/
 -(void)keyboardWillHiden:(NSNotification *) notification
 {
- 
-//    [UIView  animateWithDuration:0.1 animations:^{
-//        CGRect  tframe=_toolBar.frame;
-//        tframe.origin.y=kDeviceHeight-50-kHeightNavigation;
-//        _toolBar.frame=tframe;
-//    } completion:^(BOOL finished) {
-//        
-//    }];
 
 }
 #pragma  mark  ---UItextViewDelegate-------------
@@ -799,16 +857,10 @@
 
 
 -(void)textViewDidChange:(UITextView *)textView{
-    //防止光标抖动
-   
-    if (textView==_myTextView) {
-        if ([Function isBlankString:_myTextView.text]==NO) {
-            publishBtn.enabled=YES;
-        }
-        else
-        {
-            publishBtn.enabled=YES;
-        }
+    if (_myTextView.contentSize.height<80) {
+        CGRect  frame = _myTextView.frame;
+        frame.size.height=_myTextView.contentSize.height+0;
+        _myTextView.frame=frame;
     }
  }
 
