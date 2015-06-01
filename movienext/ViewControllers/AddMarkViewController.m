@@ -219,6 +219,7 @@
     _myTextView.maximumZoomScale=3;
     _myTextView.returnKeyType=UIReturnKeyDone;
     _myTextView.scrollEnabled=YES;
+    _myTextView.layoutManager.allowsNonContiguousLayout=NO;
     //_myTextView.autoresizingMask=UIViewAutoresizingFlexibleHeight;
     _myTextView.selectedRange = NSMakeRange(0,0);  //默认光标从第一个开始
     [_myTextView becomeFirstResponder];
