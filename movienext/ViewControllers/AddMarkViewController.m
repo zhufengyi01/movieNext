@@ -227,9 +227,9 @@
     }
     
     _myTextView.backgroundColor=[UIColor clearColor];
-   // _myTextView.layer.cornerRadius=4;
-    //_myTextView.layer.borderWidth=0.5;
-    //_myTextView.layer.borderColor=VLight_GrayColor.CGColor;
+    _myTextView.layer.cornerRadius=4;
+    _myTextView.layer.borderWidth=0.5;
+    _myTextView.layer.borderColor=VLight_GrayColor.CGColor;
     _myTextView.maximumZoomScale=3;
     _myTextView.returnKeyType=UIReturnKeyDone;
     _myTextView.layoutManager.allowsNonContiguousLayout=NO;
