@@ -83,8 +83,11 @@
     [self createStageView];
     //创建底部的分享
     [self createButtonView1];
-    [self createShareToolBar];
-    [self createToolBar];
+    
+    if (!self.weiboInfo) {
+        [self createShareToolBar];
+    }
+     [self createToolBar];
     
 }
 -(void)createNav
@@ -109,7 +112,10 @@
     moreButton.hidden=NO;
     [moreButton setTitleColor:VGray_color forState:UIControlStateNormal];
     UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithCustomView:moreButton];
-    self.navigationItem.rightBarButtonItem=item;
+    if (!self.weiboInfo) {
+        self.navigationItem.rightBarButtonItem=item;
+
+    }
 
 }
 -(void)createScrollView
@@ -181,10 +187,16 @@
     }
     markLable.textColor=[UIColor whiteColor];
     if (self.stageInfo.weibosArray.count==0) {
-        return;
+        //return;
     }
     weiboInfoModel *weibomodel =[self.stageInfo.weibosArray objectAtIndex:0];
+    if (self.weiboInfo) {
+        weibomodel =self.weiboInfo;
+    }
     markLable.text=weibomodel.content;
+    if (self.weiboInfo) {
+        markLable.text=self.weiboInfo.content;
+    }
     markLable.lineBreakMode=NSLineBreakByCharWrapping;
     markLable.contentMode=UIViewContentModeBottom;
     markLable.textAlignment=NSTextAlignmentCenter;
@@ -193,6 +205,7 @@
 }
  -(void)createButtonView1
 {
+    
     BgView2=[[UIView alloc]initWithFrame:CGRectMake(0,stageView.frame.origin.y+stageView.frame.size.height, kDeviceWidth, 45)];
     //改变toolar 的颜色
     BgView2.backgroundColor=View_ToolBar;
@@ -217,9 +230,12 @@
     
     //显示微博的头像
     if ([self.stageInfo.weibosArray count] ==0) {
-        return;
+        //return;
     }
     _WeiboInfo =[self.stageInfo.weibosArray objectAtIndex:0];
+    if (self.weiboInfo) {
+        _WeiboInfo=self.weiboInfo;
+    }
     NSString  *uselogoString =[NSString stringWithFormat:@"%@%@!thumb",kUrlAvatar,_WeiboInfo.uerInfo.logo];
     [MovieLogoImageView sd_setImageWithURL:[NSURL URLWithString:uselogoString] placeholderImage:[UIImage imageNamed:@"user_normal.png"]];
 
@@ -857,6 +873,9 @@
     
     MyViewController  *myVC=[[MyViewController alloc]init];
     weiboInfoModel *model = [self.stageInfo.weibosArray objectAtIndex:0];
+    if (self.weiboInfo) {
+        model=self.weiboInfo;
+    }
     myVC.author_id =[NSString stringWithFormat:@"%@",model.uerInfo.Id];
     [self.navigationController pushViewController:myVC animated:YES];
 

@@ -303,6 +303,7 @@
 		0059EDC91B05F40A00C2ACA1 /* MJExtensionConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 0059EDC81B05F40A00C2ACA1 /* MJExtensionConfig.m */; };
 		005AFB5A1AA5F41900D80CFB /* CommonStageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 005AFB591AA5F41900D80CFB /* CommonStageCell.m */; };
 		005C5B431AA9622100208782 /* MovieDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 005C5B421AA9622100208782 /* MovieDetailViewController.m */; };
+		005EE5E61B18640200CCB018 /* NewAddViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 005EE5E51B18640200CCB018 /* NewAddViewController.m */; };
 		00665A071ACE2D3900010BED /* terms.html in Resources */ = {isa = PBXBuildFile; fileRef = 00665A061ACE2D3900010BED /* terms.html */; };
 		00665A0A1ACE7B6200010BED /* ChangeSelfTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00665A091ACE7B6200010BED /* ChangeSelfTableViewCell.m */; };
 		00665A121ACEA65300010BED /* UserHeadChangeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00665A111ACEA65300010BED /* UserHeadChangeViewController.m */; };
@@ -892,6 +893,8 @@
 		005AFB591AA5F41900D80CFB /* CommonStageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonStageCell.m; sourceTree = "<group>"; };
 		005C5B411AA9622100208782 /* MovieDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MovieDetailViewController.h; path = ViewControllers/MovieDetailViewController.h; sourceTree = SOURCE_ROOT; };
 		005C5B421AA9622100208782 /* MovieDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MovieDetailViewController.m; path = ViewControllers/MovieDetailViewController.m; sourceTree = SOURCE_ROOT; };
+		005EE5E41B18640200CCB018 /* NewAddViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewAddViewController.h; sourceTree = "<group>"; };
+		005EE5E51B18640200CCB018 /* NewAddViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewAddViewController.m; sourceTree = "<group>"; };
 		00665A061ACE2D3900010BED /* terms.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = terms.html; sourceTree = "<group>"; };
 		00665A081ACE7B6200010BED /* ChangeSelfTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChangeSelfTableViewCell.h; sourceTree = "<group>"; };
 		00665A091ACE7B6200010BED /* ChangeSelfTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChangeSelfTableViewCell.m; sourceTree = "<group>"; };
@@ -1947,6 +1950,15 @@
 			path = ../ViewControllers/MJExtension;
 			sourceTree = "<group>";
 		};
+		005EE5E31B18635700CCB018 /* NewAdd */ = {
+			isa = PBXGroup;
+			children = (
+				005EE5E41B18640200CCB018 /* NewAddViewController.h */,
+				005EE5E51B18640200CCB018 /* NewAddViewController.m */,
+			);
+			path = NewAdd;
+			sourceTree = "<group>";
+		};
 		00665A0F1ACEA5B100010BED /* ChangeUserInfo */ = {
 			isa = PBXGroup;
 			children = (
@@ -2010,6 +2022,7 @@
 		006F77201B0DEF0E00EF3EF0 /* AdminManager */ = {
 			isa = PBXGroup;
 			children = (
+				005EE5E31B18635700CCB018 /* NewAdd */,
 				006F77211B0DEF3200EF3EF0 /* AdmListViewController.h */,
 				006F77221B0DEF3200EF3EF0 /* AdmListViewController.m */,
 				006F77241B0DEF4900EF3EF0 /* AdmCustomListViewController.h */,
@@ -3067,6 +3080,7 @@
 				00354C5B1ABF030C00F650AA /* AFSecurityPolicy.m in Sources */,
 				000850E91B09CCF700E6009C /* NSString+RemoveEmoji.m in Sources */,
 				00AA540F1AA2C525004096F8 /* NSDate+Additions.m in Sources */,
+				005EE5E61B18640200CCB018 /* NewAddViewController.m in Sources */,
 				0059EDC01B05D50900C2ACA1 /* stageInfoModel.m in Sources */,
 				00AA54101AA2C525004096F8 /* NSString+Additions.m in Sources */,
 				00963BBC1B0323E10069CBD9 /* NSArray+MASAdditions.m in Sources */,

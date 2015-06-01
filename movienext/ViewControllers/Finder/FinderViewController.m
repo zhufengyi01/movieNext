@@ -223,8 +223,6 @@
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     NSString *urlString=[NSString stringWithFormat:@"%@/weibo/discover", kApiBaseUrl];
     
-    
-    
     [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
         if ([[responseObject objectForKey:@"code"] intValue]==0) {
@@ -252,6 +250,7 @@
         }
         
      } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+         sharebtn.hidden=YES;
          [loadView showFailLoadData];
          
         NSLog(@"Error: %@", error);

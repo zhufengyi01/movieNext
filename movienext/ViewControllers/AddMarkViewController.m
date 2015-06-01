@@ -232,6 +232,7 @@
     //_myTextView.layer.borderColor=VLight_GrayColor.CGColor;
     _myTextView.maximumZoomScale=3;
     _myTextView.returnKeyType=UIReturnKeyDone;
+    _myTextView.layoutManager.allowsNonContiguousLayout=NO;
     _myTextView.scrollEnabled=YES;
     _myTextView.textAlignment=NSTextAlignmentCenter;
     _myTextView.autoresizingMask=UIViewAutoresizingFlexibleHeight;
@@ -583,8 +584,10 @@
 //确定发布
 -(void)PublicRuqest
 {
-     X=@"40";
-    Y=@"40";
+    int x=arc4random()%100-1;
+    int  y =arc4random()%100-1;
+    X=[NSString stringWithFormat:@"%d",x];
+    Y=[NSString stringWithFormat:@"%d",y];
     InputStr = [_myTextView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     int x_percent=[X intValue];
     X=[NSString stringWithFormat:@"%d",x_percent];
