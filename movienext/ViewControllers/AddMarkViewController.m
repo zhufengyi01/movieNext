@@ -93,12 +93,15 @@
     naview.userInteractionEnabled=YES;
     naview.backgroundColor =[UIColor whiteColor];
     [self.view addSubview:naview];
+    
     UIButton  *leftBtn= [UIButton buttonWithType:UIButtonTypeSystem];
-    leftBtn.frame=CGRectMake(10, 20, 60, 40);
+    leftBtn.frame=CGRectMake(0, 20, 60, 40);
+    leftBtn.titleLabel.font =[UIFont systemFontOfSize:16];
     [leftBtn setTitleColor:VGray_color forState:UIControlStateNormal];
     [leftBtn setTitle:@"取消" forState:UIControlStateNormal];
     //leftBtn.titleLabel.font=[UIFont boldSystemFontOfSize:18];
-    [leftBtn setTitleEdgeInsets:UIEdgeInsetsMake(0, -15, 0, 0)];
+    
+    [leftBtn setTitleEdgeInsets:UIEdgeInsetsMake(0, -0, 0,10)];
     [leftBtn addTarget:self action:@selector(dealNavClick:) forControlEvents:UIControlEventTouchUpInside];
     leftBtn.tag=100;
     [naview addSubview:leftBtn];
@@ -106,7 +109,7 @@
    // self.navigationItem.leftBarButtonItem=leftBarButton;
     
     UILabel  *lable =[ZCControl createLabelWithFrame:CGRectMake((kDeviceWidth-100)/2, 25, 100, 30) Font:15 Text:@"添加文字"];
-    lable.font=[UIFont systemFontOfSize:14];
+    lable.font=[UIFont systemFontOfSize:16];
     lable.textAlignment=NSTextAlignmentCenter;
     lable.textColor=VBlue_color;
     [naview addSubview:lable];
@@ -158,27 +161,10 @@
     _myScorllerView.delegate=self;
     _myScorllerView.bounces=YES;
     [self.view addSubview:_myScorllerView];
-    
-//    tipView =[[UIView alloc]initWithFrame:CGRectMake(0, kDeviceWidth+64, kDeviceWidth, 30)];
-//    tipView.backgroundColor=[[UIColor blackColor]colorWithAlphaComponent:0.7];
-//    UILabel  *tiplable =[[UILabel alloc]initWithFrame:CGRectMake(0,0,kDeviceWidth,30)];
-//    tiplable.textColor=[UIColor whiteColor];
-//    tiplable.textAlignment=NSTextAlignmentCenter;
-//    tiplable.font =[UIFont systemFontOfSize:14];
-//    tiplable.text=@"弹幕可拖动";
-//    [tipView addSubview:tiplable];
-//    tipView.alpha=1;
-//    [self.view addSubview:tipView];
-    
-}
+ }
 -(void)createStageView
 {
-//     stageView = [[StageView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceWidth)];
-//     stageView.stageInfo=self.stageInfo;
-//    [stageView configStageViewforStageInfoDict];
-//       NSLog(@" 在 添加弹幕页面的   stagedict = %@",self.stageInfo);
-//     [_myScorllerView addSubview:stageView];
-    self.stageImageView =[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceWidth*(9.0/16))];
+     self.stageImageView =[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceWidth*(9.0/16))];
     self.stageImageView.contentMode=UIViewContentModeScaleAspectFill;
     self.stageImageView.clipsToBounds=YES;
     [_myScorllerView addSubview:self.stageImageView];
@@ -202,21 +188,6 @@
     [_layerView.layer insertSublayer:_gradientLayer atIndex:0];
     
     
-//    markLable=[ZCControl createLabelWithFrame:CGRectMake(20,40,_layerView.frame.size.width-40, 60) Font:20 Text:@"弹幕文字"];
-//    markLable.font =[UIFont boldSystemFontOfSize:20];
-//    //markLable.backgroundColor=[[UIColor blackColor] colorWithAlphaComponent:0.4];
-//    if (IsIphone6plus) {
-//        markLable.font=[UIFont boldSystemFontOfSize:24];
-//    }
-//    markLable.textColor=[UIColor whiteColor];
-//    markLable.text=Weibo.content;
-//    markLable.lineBreakMode=NSLineBreakByCharWrapping;
-//    markLable.contentMode=UIViewContentModeBottom;
-//    markLable.textAlignment=NSTextAlignmentCenter;
-//    [_layerView addSubview:markLable];
-//
-    
-    
     _myTextView=[[UITextView alloc]initWithFrame:CGRectMake(10,(kDeviceWidth*(9.0/16))-80, kDeviceWidth-20, 45)];
     _myTextView.delegate=self;
     // [_myTextView addPlaceHolder:@"输入弹幕"];
@@ -225,11 +196,10 @@
     if (IsIphone6plus) {
         _myTextView.font =[UIFont boldSystemFontOfSize:24];
     }
-    
     _myTextView.backgroundColor=[UIColor clearColor];
-    _myTextView.layer.cornerRadius=4;
-    _myTextView.layer.borderWidth=0.5;
-    _myTextView.layer.borderColor=VLight_GrayColor.CGColor;
+    //_myTextView.layer.cornerRadius=4;
+    //_myTextView.layer.borderWidth=0.5;
+    //_myTextView.layer.borderColor=VLight_GrayColor.CGColor;
     _myTextView.maximumZoomScale=3;
     _myTextView.returnKeyType=UIReturnKeyDone;
     _myTextView.layoutManager.allowsNonContiguousLayout=NO;
@@ -239,7 +209,9 @@
     _myTextView.selectedRange = NSMakeRange(0,0);  //默认光标从第一个开始
     [_myTextView becomeFirstResponder];
     [self.stageImageView addSubview:_myTextView];
-    
+    if (self.weiboInfo) {//编辑
+        _myTextView.text =self.weiboInfo.content;
+    }
 }
 -(void)createButtomView
 {
@@ -259,6 +231,16 @@
         taglable.font =[UIFont systemFontOfSize:MarkTextFont16];
     }
     
+    //从编辑进来的
+    if (self.weiboInfo) {
+        for (int i=0; i<self.weiboInfo.tagArray.count; i++) {
+           // NSDictionary  *dict =[TAGArray objectAtIndex:i];
+            TagModel  *tagmodel =[self.weiboInfo.tagArray objectAtIndex:i];
+            TagView   *tagview =[self createTagViewWithtagText:tagmodel.tagDetailInfo.title withIndex:i withBgImage:[UIImage imageNamed:@"tag_backgroud_color.png"]];
+            [taglable appendView:tagview margin:UIEdgeInsetsMake(0, 10, 0, 0)];
+        }
+    }
+    
     //初始化的时候添加一个添加标签的按钮就好了
     TagView  *tagView =[self createTagViewWithtagText:@"添加标签" withIndex:999 withBgImage:nil];
     [tagView setcornerRadius:YES];
@@ -267,7 +249,7 @@
     tagView.layer.borderColor=VBlue_color.CGColor;
     tagView.layer.borderWidth=2;
     
-    [taglable appendView:tagView margin:UIEdgeInsetsMake(0, 0, 0, 0)];
+    [taglable appendView:tagView margin:UIEdgeInsetsMake(0, 10, 0, 0)];
     CGSize  Tsize =[taglable sizeThatFits:CGSizeMake(kDeviceWidth-20, CGFLOAT_MAX)];
     taglable.frame=CGRectMake(10,10, kDeviceWidth-20, Tsize.height);
 
@@ -293,74 +275,6 @@
   [self PublicRuqest];
     
 }
-/*
--(void)createButtomView
-{
-     _toolBar=[[UIToolbar alloc]initWithFrame:CGRectMake(0,kDeviceHeight-50-kHeightNavigation, kDeviceWidth, 50)];
-     //_toolBar.barTintColor=[UIColor redColor];   //背景颜色
-     // [self.navigat setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color.png"] forBarMetrics:UIBarMetricsDefault];
-     [_toolBar setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color.png"] forToolbarPosition:UIBarPositionAny barMetrics:UIBarMetricsDefault];
-         _toolBar.tintColor=VGray_color;  //内容颜色
-
-        [UIView  animateWithDuration:0.1 animations:^{
-            CGRect  tframe=_toolBar.frame;
-            if (keybordHeight==0) {
-                keybordHeight=252.0;
-                if (IsIphone6) {
-                    keybordHeight=258.0;
-                }
-                if (IsIphone6plus) {
-                    keybordHeight=271;
-                }
-            }
-            tframe.origin.y=kDeviceHeight-keybordHeight-50;
-             _toolBar.frame=tframe;
-    
-        } completion:^(BOOL finished) {
-        }];
-    //添加一个按钮到标签搜索页
-    textLeftButton =[ZCControl createButtonWithFrame:CGRectMake(5,5, 40, 40) ImageName:nil Target:self Action:@selector(dealNavClick:) Title:nil];
-    [textLeftButton setImage:[UIImage imageNamed:@"add_tag_icon"] forState:UIControlStateNormal];
-    textLeftButton.tag=102;
-    [_toolBar addSubview:textLeftButton];
-    
-     _myTextView=[[UITextView alloc]initWithFrame:CGRectMake(50, 10, kDeviceWidth-120, 30)];
-    _myTextView.delegate=self;
-   // [_myTextView addPlaceHolder:@"输入弹幕"];
-    _myTextView.textColor=VGray_color;
-    _myTextView.font= [UIFont systemFontOfSize:16];
-    _myTextView.backgroundColor=[UIColor clearColor];
-    _myTextView.layer.cornerRadius=4;
-    _myTextView.layer.borderWidth=0.5;
-    _myTextView.layer.borderColor=VLight_GrayColor.CGColor;
-    _myTextView.maximumZoomScale=3;
-    _myTextView.returnKeyType=UIReturnKeyDone;
-    _myTextView.scrollEnabled=YES;
-    //_myTextView.autoresizingMask=UIViewAutoresizingFlexibleHeight;
-    _myTextView.selectedRange = NSMakeRange(0,0);  //默认光标从第一个开始
-    [_myTextView becomeFirstResponder];
-    [_toolBar addSubview:_myTextView];
-    
-    //编辑
-    if (self.weiboInfo) {
-        //
-        _myTextView.text=self.weiboInfo.content;
-        
-    }
-     publishBtn=[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-60, 10, 50, 28) ImageName:@"loginoutbackgroundcolor.png" Target:self Action:@selector(dealNavClick:) Title:@"确定"];
-     publishBtn.enabled=NO;
-     publishBtn.titleLabel.font=[UIFont systemFontOfSize:14];
-     publishBtn.layer.cornerRadius=4;
-     publishBtn.tag=99;
-     if (self.weiboInfo) {
-         publishBtn.enabled=YES;
-    }
-     publishBtn.clipsToBounds=YES;
-     [_toolBar addSubview:publishBtn];
-     [self.view addSubview:_toolBar];
-}
-*/
-
 -(void)dealNavClick:(UIButton *) button
 {
     
@@ -396,190 +310,8 @@
         [self presentViewController:na animated:YES completion:nil];
     }
 }
-/*
-//把markview 添加到屏幕
--(void)PushlicInScreen
-{
-    //方法只是去掉左右两边的空格；
-    InputStr = [_myTextView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-    if (TAGArray.count==0&&InputStr.length==0) {
-        UIAlertView  *al  =[[UIAlertView alloc]initWithTitle:nil message:@"请输入标签或弹幕" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-        [al show];
-        return;
-    }
-
-    //发布到屏幕之后需要把输入框退回去
-    [_myTextView resignFirstResponder];
-       CGRect  iframe =_toolBar.frame;
-       iframe.origin.y=kDeviceHeight;
-       _toolBar.frame=iframe;
-    [UIView animateWithDuration:0.3 animations:^{
-        tipView.alpha=1;
-    } completion:^(BOOL finished) {
-        
-    }];
-    RighttBtn.hidden=NO;
-    RighttBtn.titleLabel.textColor=VBlue_color;
-     //清楚原来添加的弹幕
-    for (UIView *view in stageView.subviews) {
-        if ([view isKindOfClass:[MarkView class]]) {
-            [view removeFromSuperview];
-        }
-    }
-    
-    //创建微博对象
-    [self createWeibomodel];
-   _myMarkView = [self createMarkViewWithDict:weibomodel andIndex:1000];
-    _myMarkView.weiboInfo=weibomodel;
-    _myMarkView.isAnimation=YES;
-    [_myMarkView setValueWithWeiboInfo:weibomodel];
-  //  _myMarkView.delegate=self;
-    [stageView addSubview:_myMarkView];
-    
-    //在标签上添加一个手势
-   //  UIPanGestureRecognizer   *pan=[[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(handelPan:)];
-    //[_myMarkView addGestureRecognizer:pan];
-
-}
-//手动创建微博对象
--(void)createWeibomodel
-{
-
-    //计算弹幕的长度
-    CGSize  Msize= [InputStr  boundingRectWithSize:CGSizeMake(kDeviceWidth/2, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:[UIFont systemFontOfSize:14] forKey:NSFontAttributeName] context:nil].size;
-    //标签的宽度
-    NSMutableString  *tagString =[[NSMutableString alloc]init];
-    for (int i=0; i<TAGArray.count; i++) {
-        if (i<2) {
-            [tagString appendString:[[TAGArray objectAtIndex:i] objectForKey:@"TAG"]];
-        }
-    }
-    CGSize  Tsize =[tagString  boundingRectWithSize:CGSizeMake(kDeviceWidth/2, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:[UIFont systemFontOfSize:14] forKey:NSFontAttributeName] context:nil].size;
-    //如果标签的宽度大于字的宽度
-    if (Tsize.width>Msize.width) {
-        Msize=Tsize;
-        if (Msize.width>kDeviceWidth/2) {
-            Msize.width=kDeviceWidth/2;
-        }
-    }
-    int  markViewWidth = (int)Msize.width+23+5+5+11+5;
-     int   markViewHeight =(int) Msize.height+6;
-    if (TAGArray.count>0) {
-        markViewHeight=markViewHeight+TagHeight+5;
-    }
-    int  width=kStageWidth;
-    float  x=arc4random()%(width-markViewWidth);//要求x在0~~~（宽度-markViewWidth）
-    float  y=arc4random()%((width-markViewHeight/2)+markViewHeight/2-markViewHeight);  //要求y在markviewheight.y/2 ~~~~~~~(高度--markViewheigth/2)
-    X =[NSString stringWithFormat:@"%f",((x+markViewWidth)/width)*100];
-    Y=[NSString stringWithFormat:@"%f",((y+markViewHeight/2)/width)*100];
-    
-    //开始创建weibo对象
-      weibomodel =[[weiboInfoModel alloc]init];
-    if (weibomodel) {
-        //添加微博信息
-        weibomodel.content=InputStr;
-        weibomodel.x_percent=X;
-        weibomodel.y_percent=Y;
-        //1.添加用户信息
-        weiboUserInfoModel *usermodel = [[weiboUserInfoModel alloc]init];
-        if (usermodel) {
-            usermodel.username=userCenter.username;
-            usermodel.logo=userCenter.logo;
-            usermodel.Id= [NSNumber numberWithInt: [userCenter.user_id intValue]];
-            weibomodel.uerInfo=usermodel;
-        }
-        
-        //2.添加stage信息
-        weibomodel.stageInfo=self.stageInfo;
-        NSMutableArray  *tagArray =[[NSMutableArray alloc]init];
-        //添加标签数组
-        for (int i=0; i<TAGArray.count; i++) {
-            TagModel  *tagmodel =[[TagModel alloc]init];
-            if (tagmodel) {
-                TagDetailModel  *tagdetail =[[TagDetailModel alloc]init];
-                if (tagdetail) {
-                    tagdetail.title = [[TAGArray  objectAtIndex:i] objectForKey:@"TAG"];
-                    tagmodel.tagDetailInfo=tagdetail;
-                }
-                [tagArray addObject:tagmodel];
-            }
-        }
-        //标签数组
-        weibomodel.tagArray=tagArray;
-    }
-    
-}
 
 
-*/
-#pragma mark 内部弹幕的方法
-- (MarkView *) createMarkViewWithDict:(weiboInfoModel *)weibodict andIndex:(NSInteger)index{
-    MarkView *markView=[[MarkView alloc]initWithFrame:CGRectZero];
-    //设置tag 值为了在下面去取出来循环轮播
-    markView.tag=1000+index;
-    float  x=[weibodict.x_percent floatValue];   //位置的百分比
-    float  y=[weibodict.y_percent floatValue];
-    NSString  *weiboTitleString=weibodict.content;
-    NSString  *UpString=[NSString stringWithFormat:@"%@",weibodict.like_count];//weibodict.ups;
-    //计算标题的size
-    CGSize  Msize=[weiboTitleString boundingRectWithSize:CGSizeMake(kDeviceWidth/2,MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:markView.TitleLable.font forKey:NSFontAttributeName] context:nil].size;
-    // 计算赞数量的size
-    CGSize Usize=[UpString boundingRectWithSize:CGSizeMake(40,MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:markView.ZanNumLable.font forKey:NSFontAttributeName] context:nil].size;
-    float hight=kStageWidth;
-    //计算赞数量的长度
-    float  Uwidth=[UpString floatValue]==0?0:Usize.width;
-    //宽度=字的宽度+左头像图片的宽度＋赞图片的宽度＋赞数量的宽度+中间两个空格2+2
-    float markViewWidth = Msize.width+23+Uwidth+5+5+11+5;
-    float markViewHeight = Msize.height+6;
-    if (weibodict.tagArray.count>0) {
-        markViewHeight=markViewHeight+25;
-    }
-    if(IsIphone6plus)
-    {
-        markViewWidth=markViewWidth+10;
-        markViewHeight=markViewHeight+4;
-    }
-    float markViewX = (x*kStageWidth)/100-markViewWidth;
-    markViewX = MIN(MAX(markViewX, 5.0f), kStageWidth-markViewWidth-5);
-    float markViewY = (y*hight)/100 - markViewHeight/2;
-    markViewY = MIN(MAX(markViewY, 5.0f), hight-markViewHeight-5);
-#pragma mark 设置气泡的大小和位置
-    markView.frame=CGRectMake(markViewX, markViewY, markViewWidth, markViewHeight);
-    markView.TitleLable.text=weiboTitleString;
-    
-    NSString   *headurl =[NSString stringWithFormat:@"%@%@",kUrlAvatar,weibodict.uerInfo.logo];
-    [markView.LeftImageView sd_setImageWithURL:[NSURL URLWithString:headurl] placeholderImage:[UIImage imageNamed:@"user_normal"]];
-    markView.ZanNumLable.text=[NSString stringWithFormat:@"%@",weibodict.like_count];
-
-    //设置标签
-    return markView;
-}
-/*
- 
--(void)handelPan:(UIPanGestureRecognizer*)gestureRecognizer{
-    
-    [UIView animateWithDuration:0.5 animations:^{
-        tipView.alpha=0;
-    } completion:^(BOOL finished) {
-        
-    }];
-
-   //获取平移手势对象在stageView的位置点，并将这个点作为self.aView的center,这样就实现了拖动的效果
-    CGPoint curPoint = [gestureRecognizer locationInView:stageView];
-    CGFloat xoffset = _myMarkView.frame.size.width/2.0;
-    CGFloat yoffset = _myMarkView.frame.size.height/2.0;
-    float width=kDeviceWidth;
-    CGFloat x = MIN(width-xoffset,  MAX(xoffset, curPoint.x) );
-    CGFloat y = MIN(width-yoffset,  MAX(yoffset, curPoint.y) );
-    _myMarkView.center = CGPointMake(x, y);
-    NSLog(@"mark ----x ==%f   y===%f",_myMarkView.frame.origin.x,_myMarkView.frame.origin.y);
-    float  markViewY=_myMarkView.frame.origin.y;
-    float  markviewHight2 =_myMarkView.frame.size.height/2;
-    //发布的右下中部的位置
-    X =[NSString stringWithFormat:@"%f",((_myMarkView.frame.origin.x+_myMarkView.frame.size.width)/width)*100];
-    Y=[NSString stringWithFormat:@"%f",((markViewY+markviewHight2)/width)*100];
-    
-}*/
 # pragma  mark  发布数据请求
 //确定发布
 -(void)PublicRuqest
@@ -667,7 +399,6 @@
         //更新
         urlString =[NSString stringWithFormat:@"%@/weibo/update",kApiBaseUrl];
     }
-    
     
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:urlString parameters:parameter success:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -1021,6 +752,7 @@
         [self presentViewController:na animated:YES completion:nil];
     
     }
+    
   else
   {
       if (TAGArray.count==5) {
@@ -1055,14 +787,13 @@
     
     TagView  *tagview =[self createTagViewWithtagText:@"添加标签" withIndex:999 withBgImage:nil];
     [tagview setcornerRadius:YES];
-    tagView.titleLable.textColor=VBlue_color;
-      tagView.tagBgImageview.backgroundColor =[UIColor whiteColor];
-      tagView.layer.borderColor=VBlue_color.CGColor;
-      tagView.layer.borderWidth=2;
+    tagview.titleLable.textColor=VBlue_color;
+      tagview.tagBgImageview.backgroundColor =[UIColor whiteColor];
+      tagview.layer.borderColor=VBlue_color.CGColor;
+      tagview.layer.borderWidth=2;
 
     [taglable appendView:tagview margin:UIEdgeInsetsMake(0, 10, 0, 0)];
-    
-
+      
     CGSize Tsize =[taglable sizeThatFits:CGSizeMake(kDeviceWidth-20, CGFLOAT_MAX)];
     //位置和大小
     taglable.frame=CGRectMake(10,10,kDeviceWidth-20, Tsize.height);
@@ -1072,24 +803,7 @@
 }
 }
 
-//
-
-        
-//    //然后从新开始渲染布局
-//    for (int i=0; i<TAGArray.count; i++) {
-//        NSDictionary  *dict =[TAGArray objectAtIndex:i];
-//        TagView   *tagview =[self createTagViewWithtagText:[dict objectForKey:@"TAG"] withIndex:i withBgImage:[UIImage imageNamed:@"tag_backgroud_color.png"]];
-//        [taglable appendView:tagview margin:UIEdgeInsetsMake(0, 10, 0, 0)];
-//    }
-//    
-//    CGSize Tsize =[taglable sizeThatFits:CGSizeMake(kDeviceWidth-20, CGFLOAT_MAX)];
-//    //位置和大小
-//    taglable.frame=CGRectMake(10,50,kDeviceWidth-20, Tsize.height);
-//    _toolBar.frame=CGRectMake(_toolBar.frame.origin.x,kDeviceHeight-keybordHeight-50-Tsize.height,_toolBar.frame.size.width, 50+Tsize.height);
-//    [_toolBar addSubview:taglable];
-    
-
-/*
+ /*
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation

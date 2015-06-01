@@ -106,6 +106,9 @@
     _moviewName.lineBreakMode=NSLineBreakByTruncatingTail;
     [logosupView addSubview:_moviewName];
     
+    if (!_stageInfo.movieInfo) {
+        return;
+     }
     NSMutableString  *namstr =[[NSMutableString alloc]initWithString:_stageInfo.movieInfo.name];
     NSString  *str=namstr;
     if (namstr.length>8) {

@@ -18,6 +18,7 @@
 @property (nonatomic, strong) stageInfoModel *stageInfo;
 @property(nonatomic,strong) NSMutableArray   *upweiboArray;
 
-@property(nonatomic,strong) weiboInfoModel *weiboInfo;
+
+@property(nonatomic,strong) weiboInfoModel *weiboInfo;  //如果是从管理员入口，并且是最新的话，传递weiboInfo 
 
 @end

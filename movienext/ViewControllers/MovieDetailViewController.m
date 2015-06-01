@@ -172,8 +172,13 @@
     {
      logoString =[NSString stringWithFormat:@"%@%@!w100h100",kUrlMoviePoster,self.movielogo];
     }
+    
     [MovieLogoImageView sd_setImageWithURL:[NSURL URLWithString:logoString] placeholderImage:[UIImage imageNamed:@"Moments.png"]];
     NSString  *nameStr=self.moviename;
+    if (self.pageSourceType==NSMovieSourcePageAdminCloseStageViewController) {
+         nameStr=@"已屏蔽剧照";
+        MovieLogoImageView.frame=CGRectZero;
+    }
     nameStr =[Function htmlString:nameStr];
     float nameW=kDeviceWidth*0.6;
     CGSize   Nsize =[nameStr boundingRectWithSize:CGSizeMake(nameW, 25) options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes:[NSDictionary dictionaryWithObject:[UIFont systemFontOfSize:16] forKey:NSFontAttributeName] context:nil].size;
@@ -191,10 +196,6 @@
     UIBarButtonItem  *rigthbar =[[UIBarButtonItem alloc]initWithCustomView:upLoadimageBtn];
     self.navigationItem.rightBarButtonItem=rigthbar;
     
-    if (self.pageSourceType==NSMovieSourcePageAdminCloseStageViewController) {
-        self.navigationItem.titleView=nil;
-        self.navigationItem.rightBarButtonItem=nil;
-    }
 }
 
 -(void)uploadImageFromAbumdAndDouban

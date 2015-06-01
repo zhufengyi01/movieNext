@@ -42,6 +42,7 @@ typedef NS_ENUM(NSInteger,NSAddMarkPageSource)
 @property(nonatomic,strong) ModelsModel     *model;
 
 //管理员编辑标签的时候必须传递weibo_id
+
 @property(nonatomic,strong)weiboInfoModel *weiboInfo;
 
 @end

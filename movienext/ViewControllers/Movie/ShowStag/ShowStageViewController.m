@@ -92,16 +92,15 @@
 -(void)createNav
 {
     NSString  *titleString =[Function htmlString: self.stageInfo.movieInfo.name ];
-    UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:30 Text:titleString];
+    UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 30) Font:30 Text:titleString];
     titleLable.textColor=VBlue_color;
-
-    titleLable.font=[UIFont systemFontOfSize:14];
+    titleLable.font=[UIFont systemFontOfSize:16];
     titleLable.textColor=VGray_color;
     titleLable.textAlignment=NSTextAlignmentCenter;
     self.navigationItem.titleView=titleLable;
     
     //更多
-    moreButton=[ZCControl createButtonWithFrame:CGRectMake(kStageWidth-135, 9, 30, 25) ImageName:nil Target:self Action:@selector(cellButtonClick:) Title:@""];
+    moreButton=[ZCControl createButtonWithFrame:CGRectMake(kStageWidth-135, 9, 30, 25) ImageName:nil Target:self Action:@selector(NavigationButtonClick:) Title:@""];
     [moreButton setImage:[UIImage imageNamed:@"three_points"] forState:UIControlStateNormal];
     //moreButton.backgroundColor=VBlue_color;
     //moreButton.backgroundColor =[UIColor redColor];
@@ -306,6 +305,7 @@
     }
     
     [like_btn addSubview:Like_lable];
+    
     for (int i=0; i<self.upweiboArray.count; i++) {
         UpweiboModel *upmodel=self.upweiboArray[i];
         //weiboInfoModel  *weiboInfo =[self.stageInfo.weibosArray objectAtIndex:0];
@@ -326,7 +326,7 @@
 -(void)clickLike:(UIButton *) btn
 {
     UserDataCenter  * userCenter =[UserDataCenter shareInstance];
-    if ([userCenter.is_admin intValue]>0) {
+    /*if ([userCenter.is_admin intValue]>0) {
         //管理员用户//请求随机用户，然后点一次变身一次
         [self requestChangeUserRand4];
         
@@ -338,7 +338,7 @@
          Like_lable.text=[NSString stringWithFormat:@"%d",like];
     }
     else
-    {
+    {*/
         //普通用户
     NSNumber  *operation;
     if (btn.selected==YES) {
@@ -370,6 +370,33 @@
     }
     else if (btn.selected==NO)
     {
+        
+//        CGRect  starframe =leftButtomButton.frame;
+//        
+//        UIImageView  *addone =[[UIImageView alloc]initWithFrame:CGRectMake(kDeviceWidth-70, starframe.origin.y-10, 10, 10)];
+//        addone.backgroundColor =[UIColor redColor];
+//        [BgView2 addSubview:addone];
+//        
+//        
+//        
+//        [UIView animateWithDuration:1 animations:^{
+//            // 改变位置
+//            CGRect  addframe = addone.frame;
+//            addframe.origin.y=addframe.origin.y-50;
+//            //大小
+//            addframe.size=CGSizeMake(1, 0);
+//            addone.frame=addframe;
+//            
+//            addone.alpha=0;
+//            
+//            
+//        } completion:^(BOOL finished) {
+//            [addone removeFromSuperview];
+//            ///addone=nil;
+//            
+//        }];
+    
+        
         btn.selected=YES;
         //未赞
         operation =[NSNumber numberWithInt:1];
@@ -389,7 +416,7 @@
         Like_lable.text=[NSString stringWithFormat:@"%@",_WeiboInfo.like_count];
       }
        [self LikeRequstData:_WeiboInfo withOperation:operation withuserId:userCenter.user_id];
-    }
+    //}
     
     
 }
@@ -410,6 +437,18 @@
     //创建标签，但是这个标签的内容是弹幕的内容
     self.tagLable=[[M80AttributedLabel alloc]initWithFrame:CGRectZero];
     self.tagLable.backgroundColor =[UIColor clearColor];
+    
+    
+    if (self.weiboInfo) {//如果
+        TagView *tagview = [self createTagViewWithweiboInfo:self.weiboInfo andIndex:300];
+        [self.tagLable appendView:tagview margin:UIEdgeInsetsMake(0, 0, 0, 10)];
+        self.tagLable.lineSpacing=5;
+        self.tagLable.numberOfLines=0;
+        tagview.tagBgImageview.backgroundColor =VLight_GrayColor;
+        tagview.titleLable.textColor=[UIColor whiteColor];
+     
+    }
+    else {
     for (int i=0; i<self.stageInfo.weibosArray.count; i++) {
         TagView *tagview = [self createTagViewWithweiboInfo:self.stageInfo.weibosArray[i] andIndex:i];
          [self.tagLable appendView:tagview margin:UIEdgeInsetsMake(0, 0, 0, 10)];
@@ -419,6 +458,7 @@
             tagview.tagBgImageview.backgroundColor =VLight_GrayColor;
             tagview.titleLable.textColor=[UIColor whiteColor];
         }
+      }
     }
     //标签的高度
     CGSize Tagsize =[self.tagLable sizeThatFits:CGSizeMake(kDeviceWidth-20, CGFLOAT_MAX)];
@@ -426,7 +466,7 @@
     [tagScrollView addSubview:self.tagLable];
     tagScrollView.contentSize=CGSizeMake(kDeviceWidth-20, Tagsize.height+20);
 
-    addMarkButton =[ZCControl createButtonWithFrame:CGRectMake(60,200-45,kDeviceWidth-120,30) ImageName:nil Target:self Action:@selector(ScreenButtonClick:) Title:@"是的，现在分享"];
+    addMarkButton =[ZCControl createButtonWithFrame:CGRectMake(60,200-45,kDeviceWidth-120,30) ImageName:nil Target:self Action:@selector(ShareButtonClick:) Title:@"是的，现在分享"];
     addMarkButton.layer.cornerRadius=4;
     addMarkButton.titleLabel.font =[UIFont boldSystemFontOfSize:16];
     //[addMarkButton setBackgroundImage:[UIImage imageNamed:@"btn_add_select.png"] forState:UIControlStateHighlighted];
@@ -576,6 +616,50 @@
 
 #pragma  mark  ----RequestData
 #pragma  mark  ---
+
+//管理员用户的点赞和点踩
+-(void)requestUpAndDownWithDeretion:(NSString *)direction;
+{
+    
+    UserDataCenter  *userCenter=[UserDataCenter shareInstance];
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    NSDictionary *parameters=@{@"user_id":userCenter.user_id,@"stage_id":self.stageInfo.Id,@"weibo_id":_WeiboInfo.Id,@"direction":direction};
+    
+    [manager POST:[NSString stringWithFormat:@"%@/weibo/adjust", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
+            //改变likelable 的状态
+            if ([direction isEqualToString:@"up"]) {//点赞
+                int like =[_WeiboInfo.like_count intValue];
+                like = like + 1;
+                _WeiboInfo.like_count =[NSNumber numberWithInt:like];
+                
+            }
+            else if([direction isEqualToString:@"down"]){
+                int like =[_WeiboInfo.like_count intValue];
+                like = like -1;
+                _WeiboInfo.like_count =[NSNumber numberWithInt:like];
+
+            }
+            //在主线程中更新likelable 的文字
+            
+            //获取子线程
+           // dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                
+            //});
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                Like_lable.text=[NSString stringWithFormat:@"%@",_WeiboInfo.like_count];
+
+            });
+            
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+    
+    
+}
+
 
 //随机用户请求
 //变身请求的随机数种子请求，根据请求出来的随机种子 ，去请求点赞
@@ -841,6 +925,8 @@
 }
 -(void)UMShareViewHandClick:(UIButton *)button ShareImage:(UIImage *)shareImage StageInfoModel:(stageInfoModel *)StageInfo
 {
+    
+    
     NSArray  *sharearray =[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQzone, UMShareToSina, nil];
     [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
     [[UMSocialControllerService defaultControllerService] setShareText:StageInfo.movieInfo.name shareImage:shareImage socialUIDelegate:self];
@@ -875,8 +961,10 @@
 
 }
 // 分享
--(void)ScreenButtonClick:(UIButton  *) button
+-(void)ShareButtonClick:(UIButton  *) button
 {
+    
+    
     UIImage  *image=[Function getImage:stageView WithSize:CGSizeMake(kStageWidth, (kDeviceWidth-10)*(9.0/16))];
     if (UMShareStyle==1) {
         UMShareViewController  *shareVC=[[UMShareViewController alloc]init];
@@ -889,8 +977,13 @@
     }
     else if (UMShareStyle==0)
     {
-        UMShareView *ShareView =[[UMShareView alloc] initwithStageInfo:self.stageInfo ScreenImage:image delgate:self];
-        [ShareView show];
+        if (self.weiboInfo) {
+            self.stageInfo=self.weiboInfo.stageInfo;
+        }
+        
+        UMShareView *shareView =[[UMShareView alloc] initwithStageInfo:self.stageInfo ScreenImage:image delgate:self];
+        [shareView show];
+        
 
     }
 }
@@ -910,12 +1003,12 @@
     UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:AddMarkVC];
     [self.navigationController presentViewController:na animated:NO completion:nil];
 }
--(void)cellButtonClick:(UIButton  *) button
+-(void)NavigationButtonClick:(UIButton  *) button
 {
      UserDataCenter  *userCenter =[UserDataCenter shareInstance];
     //点击了更多
     if ([userCenter.is_admin intValue]>0) {
-        UIActionSheet  *Act=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"内容投诉",@"版权投诉",@"图片信息",@"[切换剧照到审核/正式版]",@"[屏蔽剧照]",@"[编辑弹幕]",@"[屏蔽弹幕]",@"[恢复剧照]",nil];
+        UIActionSheet  *Act=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"内容投诉",@"版权投诉",@"图片信息",@"[切换剧照到审核/正式版]",@"[屏蔽剧照]",@"[编辑弹幕]",@"[屏蔽弹幕]",@"[恢复剧照]",@"[点赞]",@"[点踩]",nil];
         Act.tag=507;
         [Act showInView:Act];
     }
@@ -1189,6 +1282,16 @@
        {
            //恢复剧照
            [self requestRemoveStage:@"1"];
+       }
+       else if (buttonIndex==8)
+       {
+           
+           [self requestUpAndDownWithDeretion:@"up"];
+           
+       }
+       else if (buttonIndex==9)
+       {
+           [self requestUpAndDownWithDeretion:@"down"];
        }
      }
 }
