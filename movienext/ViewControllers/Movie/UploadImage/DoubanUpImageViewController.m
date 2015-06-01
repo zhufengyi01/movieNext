@@ -42,10 +42,11 @@
     RighttBtn.frame=CGRectMake(0, 0, 40, 30);
     [RighttBtn addTarget:self action:@selector(dealRightNavClick:) forControlEvents:UIControlEventTouchUpInside];
     RighttBtn.tag=101;
-    RighttBtn.titleLabel.font=[UIFont systemFontOfSize:18];
+   // RighttBtn.titleLabel.font=[UIFont systemFontOfSize:18];
+    RighttBtn.titleEdgeInsets=UIEdgeInsetsMake(0, 10, 0, -10);
     [RighttBtn setTitleColor:VBlue_color forState:UIControlStateNormal];
     [RighttBtn setTitle:@"确定" forState:UIControlStateNormal];
-    RighttBtn.titleLabel.font=[UIFont boldSystemFontOfSize:16];
+    //RighttBtn.titleLabel.font=[UIFont boldSystemFontOfSize:16];
     self.navigationItem.rightBarButtonItem=[[UIBarButtonItem alloc]initWithCustomView:RighttBtn];
     
     

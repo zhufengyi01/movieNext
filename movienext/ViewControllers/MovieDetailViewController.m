@@ -171,9 +171,7 @@
     else
     {
      logoString =[NSString stringWithFormat:@"%@%@!w100h100",kUrlMoviePoster,self.movielogo];
-    
     }
-    
     [MovieLogoImageView sd_setImageWithURL:[NSURL URLWithString:logoString] placeholderImage:[UIImage imageNamed:@"Moments.png"]];
     NSString  *nameStr=self.moviename;
     nameStr =[Function htmlString:nameStr];
@@ -187,9 +185,12 @@
     
     upLoadimageBtn=[ZCControl createButtonWithFrame:CGRectMake(0,0,25,25) ImageName:nil Target:self Action:@selector(uploadImageFromAbumdAndDouban) Title:nil];
     upLoadimageBtn.tag=201;
+    //upLoadimageBtn.backgroundColor = [UIColor redColor];
+    upLoadimageBtn.imageEdgeInsets= UIEdgeInsetsMake(5, 10, 0, -10);
     [upLoadimageBtn setImage:[UIImage imageNamed:@"up_picture_blue.png"] forState:UIControlStateNormal];
     UIBarButtonItem  *rigthbar =[[UIBarButtonItem alloc]initWithCustomView:upLoadimageBtn];
     self.navigationItem.rightBarButtonItem=rigthbar;
+    
     if (self.pageSourceType==NSMovieSourcePageAdminCloseStageViewController) {
         self.navigationItem.titleView=nil;
         self.navigationItem.rightBarButtonItem=nil;

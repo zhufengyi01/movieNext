@@ -84,10 +84,9 @@
     //创建底部的分享
     [self createButtonView1];
     
-    if (!self.weiboInfo) {
-        [self createShareToolBar];
-    }
-     [self createToolBar];
+    [self createShareToolBar];
+    
+  //  [self createToolBar];
     
 }
 -(void)createNav
@@ -101,13 +100,12 @@
     titleLable.textAlignment=NSTextAlignmentCenter;
     self.navigationItem.titleView=titleLable;
     
-   // UIBarButtonItem  *barbutton =[[UIBarButtonItem alloc]initWithCustomView:titleLable];
-    //self.navigationItem.backBarButtonItem = barbutton;
-   
     //更多
     moreButton=[ZCControl createButtonWithFrame:CGRectMake(kStageWidth-135, 9, 30, 25) ImageName:nil Target:self Action:@selector(cellButtonClick:) Title:@""];
     [moreButton setImage:[UIImage imageNamed:@"three_points"] forState:UIControlStateNormal];
     //moreButton.backgroundColor=VBlue_color;
+    //moreButton.backgroundColor =[UIColor redColor];
+    moreButton.imageEdgeInsets=UIEdgeInsetsMake(0, 10, 0, -10);
     moreButton.layer.cornerRadius=2;
     moreButton.hidden=NO;
     [moreButton setTitleColor:VGray_color forState:UIControlStateNormal];
@@ -153,6 +151,7 @@
     stageView.isAnimation = YES;
     stageView.delegate=self;
     stageView.stageInfo=self.stageInfo;
+    
    // stageView.weibosArray = self.stageInfo.weibosArray;
     [stageView configStageViewforStageInfoDict];
     [BgView addSubview:stageView];
@@ -186,14 +185,13 @@
         markLable.font=[UIFont boldSystemFontOfSize:24];
     }
     markLable.textColor=[UIColor whiteColor];
-    if (self.stageInfo.weibosArray.count==0) {
-        //return;
+    weiboInfoModel *weibomodel;
+    if (self.stageInfo.weibosArray.count>0) {
+        weibomodel =[self.stageInfo.weibosArray objectAtIndex:0];
     }
-    weiboInfoModel *weibomodel =[self.stageInfo.weibosArray objectAtIndex:0];
-    if (self.weiboInfo) {
-        weibomodel =self.weiboInfo;
-    }
-    markLable.text=weibomodel.content;
+   
+     markLable.text=weibomodel.content;
+    
     if (self.weiboInfo) {
         markLable.text=self.weiboInfo.content;
     }
@@ -215,30 +213,24 @@
     
     leftButtomButton=[UIButton buttonWithType:UIButtonTypeCustom];
     leftButtomButton.frame=CGRectMake(10, 5, 140, 35);
-    //leftButtomButton.backgroundColor=[[UIColor redColor]colorWithAlphaComponent:0.2];
-    //[leftButtomButton setBackgroundImage:[[UIImage imageNamed:@"movie_button_bg"] stretchableImageWithLeftCapWidth:15 topCapHeight:15] forState:UIControlStateNormal];
-    
+   
     [leftButtomButton addTarget:self action:@selector(StageMovieButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     [BgView2 addSubview:leftButtomButton];
+    
+    
 
     MovieLogoImageView=[[UIImageView alloc]initWithFrame:CGRectMake(0,0,30, 30)];
     MovieLogoImageView.layer.cornerRadius=15;
-//    if (self.stageInfo.movieInfo.logo) {
-//        NSString  *logoString =[NSString stringWithFormat:@"%@%@!w100h100",kUrlMoviePoster,self.stageInfo.movieInfo.logo];
-//        [MovieLogoImageView sd_setImageWithURL:[NSURL URLWithString:logoString] placeholderImage:[UIImage imageNamed:@"loading_image_all.png"]];
-//    }
-    
-    //显示微博的头像
-    if ([self.stageInfo.weibosArray count] ==0) {
-        //return;
-    }
-    _WeiboInfo =[self.stageInfo.weibosArray objectAtIndex:0];
-    if (self.weiboInfo) {
-        _WeiboInfo=self.weiboInfo;
+     //显示微博的头像
+
+     if (self.stageInfo.weibosArray.count>0) {
+        _WeiboInfo =[self.stageInfo.weibosArray objectAtIndex:0];
     }
     NSString  *uselogoString =[NSString stringWithFormat:@"%@%@!thumb",kUrlAvatar,_WeiboInfo.uerInfo.logo];
+    if (self.weiboInfo) {
+        uselogoString=[NSString stringWithFormat:@"%@%@!thumb",kUrlAvatar,self.weiboInfo.uerInfo.logo];
+    }
     [MovieLogoImageView sd_setImageWithURL:[NSURL URLWithString:uselogoString] placeholderImage:[UIImage imageNamed:@"user_normal.png"]];
-
     MovieLogoImageView.layer.masksToBounds = YES;
     [leftButtomButton addSubview:MovieLogoImageView];
     
@@ -516,7 +508,6 @@
 
 //创建底部的视图
 -(void)createToolBar
-
 {
     _toolBar=[[ButtomToolView alloc]initWithFrame:CGRectMake(0,0,kDeviceWidth,kDeviceHeight)];
     _toolBar.delegete=self;
@@ -680,6 +671,9 @@
    //UserDataCenter  *userCenter=[UserDataCenter shareInstance];
     NSNumber  *weiboId=weiboInfo.Id;
     NSNumber  *author_id=weiboInfo.uerInfo.Id;
+    if (!weiboInfo) {
+        return;
+    }
     NSDictionary *parameters=@{@"weibo_id":weiboId,@"user_id":user_id,@"author_id":author_id,@"operation":operation};
     
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
@@ -991,8 +985,7 @@
 -(void)ToolViewHandClick:(UIButton *)button :(MarkView *)markView weiboDict:(weiboInfoModel *)weiboDict StageInfo:(stageInfoModel *)stageInfoDict
 {
     UserDataCenter  *userCenter=[UserDataCenter shareInstance];
-
-
+    
     _TweiboInfo =weiboDict;
     _TstageInfo=stageInfoDict;
     if (button.tag==10000) {

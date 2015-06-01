@@ -55,6 +55,7 @@
     [button setTitle:@"取消" forState:UIControlStateNormal];
     [button setTitleColor:VBlue_color forState:UIControlStateNormal];
     button.frame=CGRectMake(10, 10, 40, 30);
+    button.titleEdgeInsets=UIEdgeInsetsMake(0, -10,0, 10);
     [button setTitleColor:VGray_color forState:UIControlStateNormal];
     //button.titleLabel.font =[UIFont boldSystemFontOfSize:18];
     [button addTarget:self action:@selector(navigationbtnClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -84,6 +85,7 @@
     
     upLoadimageBtn=[ZCControl createButtonWithFrame:CGRectMake(0,0,40,30) ImageName:nil Target:self Action:@selector(navigationbtnClick:) Title:nil];
     upLoadimageBtn.tag=100;
+    upLoadimageBtn.titleEdgeInsets=UIEdgeInsetsMake(0, 10, 0, -10);
     [upLoadimageBtn setTitle:@"上传" forState:UIControlStateNormal];
     [upLoadimageBtn setTitleColor:VGray_color forState:UIControlStateNormal];
    // [upLoadimageBtn setImage:[UIImage imageNamed:@"up_picture_blue.png"] forState:UIControlStateNormal];
