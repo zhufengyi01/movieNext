@@ -40,10 +40,7 @@
     UIScrollView *scrollView;
     UIView *BgView2;
     UIButton  *ScreenButton;
-    UIButton  *addMarkButton;
-    //   UMShareView  *shareView;
-    StageView *stageView;
-    MarkView       *_mymarkView;
+     MarkView       *_mymarkView;
     UIImageView *BgView;
     UIButton  *_tanlogoButton;
     
@@ -62,8 +59,17 @@
     UIButton  *like_btn;
     
     UIView  *ShareView;
-}
-@property(nonatomic,strong) M80AttributedLabel  *tagLable;
+    
+    UIButton *ShareButton;  //分享
+    UIButton  *addMarkButton;  //添加弹幕
+
+ }
+@property(nonatomic,strong) M80AttributedLabel  *tagLable;  //弹幕的混排
+
+@property(nonatomic,strong) M80AttributedLabel  *centerTagLable;  //中间
+
+@property(nonatomic,strong) UIImageView   *stageImageView;
+
 @end
 
 @implementation ShowStageViewController
@@ -82,7 +88,7 @@
     //[self createTopView];
     [self createStageView];
     //创建底部的分享
-    [self createButtonView1];
+    [self createCenterContentView];
     
     [self createShareToolBar];
     
@@ -131,7 +137,7 @@
     BgView =[[UIImageView alloc]initWithFrame:CGRectMake(0,0,kDeviceWidth-0, (kDeviceWidth-0)*(9.0/16))];
     BgView.clipsToBounds=YES;
     [BgView.layer setShadowOffset:CGSizeMake(kDeviceWidth, 20)];
-    [BgView.layer setShadowColor:[UIColor blackColor].CGColor];
+    //[BgView.layer setShadowColor:[UIColor blackColor].CGColor];
     [BgView.layer setShadowRadius:10];
     BgView.backgroundColor=View_ToolBar;
    // BgView.layer.cornerRadius=4;
@@ -140,29 +146,44 @@
     [scrollView addSubview:BgView];
     
     
-    ShareView =[[UIView alloc]initWithFrame:CGRectMake(5, 5, kDeviceWidth-10, (kDeviceWidth-10)*(9.0/16))];
+    
+    
+    
+    //最后要分享出去的图
+    ShareView =[[UIView alloc]initWithFrame:CGRectMake(10,10, kDeviceWidth-20, (kDeviceWidth-20)*(9.0/16))];
     ShareView.userInteractionEnabled=YES;
-    ShareView.backgroundColor=[UIColor redColor];
+    //ShareView.backgroundColor=[UIColor redColor];
     [BgView addSubview:ShareView];
+    
+    
+    self.stageImageView =[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth-20,(kDeviceWidth-20)*(9.0/16))];
+     self.stageImageView.contentMode=UIViewContentModeScaleAspectFill;
+    self.stageImageView.clipsToBounds=YES;
+    NSString *photostring=[NSString stringWithFormat:@"%@%@!w640",kUrlStage,self.stageInfo.photo];
+    [self.stageImageView   sd_setImageWithURL:[NSURL URLWithString:photostring] placeholderImage:nil options:(SDWebImageLowPriority|SDWebImageRetryFailed)];
+    [ShareView addSubview:self.stageImageView];
+    
+
   
-    
-    stageView = [[StageView alloc] initWithFrame:CGRectMake(5,5,kDeviceWidth-10, (kDeviceWidth-10)*(9.0/16))];
-    stageView.isAnimation = YES;
-    stageView.delegate=self;
-    stageView.stageInfo=self.stageInfo;
-    
-   // stageView.weibosArray = self.stageInfo.weibosArray;
-    [stageView configStageViewforStageInfoDict];
-    [BgView addSubview:stageView];
-    [stageView startAnimation];
+//    stageView = [[StageView alloc] initWithFrame:CGRectMake(10,10,kDeviceWidth-10, (kDeviceWidth-20)*(9.0/16))];
+//    stageView.isAnimation = YES;
+//    stageView.delegate=self;
+//    stageView.stageInfo=self.stageInfo;
+//    
+//   // stageView.weibosArray = self.stageInfo.weibosArray;
+//    [stageView configStageViewforStageInfoDict];
+//    
+//    [BgView addSubview:stageView];
+//    
+//    [stageView startAnimation];
     
    // UITapGestureRecognizer  *tap =[[UITapGestureRecognizer alloc]initWithTarget:self /action:@selector(showAndHidenMarkViews)];
     //[stageView addGestureRecognizer:tap];
     
     //创建剧照上的渐变背景文字
     
-    UIView  *_layerView =[[UIView alloc]initWithFrame:CGRectMake(0, stageView.frame.size.height-100, kDeviceWidth-10, 100)];
-    [stageView addSubview:_layerView];
+    UIView  *_layerView =[[UIView alloc]initWithFrame:CGRectMake(0, self.stageImageView.frame.size.height-100, kDeviceWidth-10, 100)];
+    [self.stageImageView addSubview:_layerView];
     
     CAGradientLayer * _gradientLayer = [CAGradientLayer layer];  // 设置渐变效果
     _gradientLayer.bounds = _layerView.bounds;
@@ -200,10 +221,10 @@
     [_layerView addSubview:markLable];
 
 }
- -(void)createButtonView1
+ -(void)createCenterContentView
 {
     
-    BgView2=[[UIView alloc]initWithFrame:CGRectMake(0,stageView.frame.origin.y+stageView.frame.size.height, kDeviceWidth, 45)];
+    BgView2=[[UIView alloc]initWithFrame:CGRectMake(0,self.stageImageView.frame.origin.y+self.stageImageView.frame.size.height+5, kDeviceWidth, 45 +0)];
     //改变toolar 的颜色
     BgView2.backgroundColor=View_ToolBar;
     [self.view bringSubviewToFront:BgView2];
@@ -282,7 +303,7 @@
     
     
     //点赞的按钮 上面放一张图片 右边放文字
-     like_btn =[ZCControl createButtonWithFrame:CGRectMake(kStageWidth-65,10,70,25) ImageName:nil Target:self Action:@selector(clickLike:) Title:@""];
+     like_btn =[ZCControl createButtonWithFrame:CGRectMake(kStageWidth-70,10,70,25) ImageName:nil Target:self Action:@selector(clickLike:) Title:@""];
     like_btn.backgroundColor=View_BackGround;
     [BgView2 addSubview:like_btn];
     
@@ -319,6 +340,11 @@
              starImageView.image=[UIImage imageNamed:@"like_nomoal.png"];
         }
     }
+    
+    
+    
+    
+    
 
 }
 #pragma mark 星星点赞方法
@@ -439,10 +465,11 @@
     self.tagLable.backgroundColor =[UIColor clearColor];
     
     
-    if (self.weiboInfo) {//如果
+    if (self.weiboInfo) {//如果 从管理员的最新页进来
         TagView *tagview = [self createTagViewWithweiboInfo:self.weiboInfo andIndex:300];
+        [tagview setbigTag:YES];
         [self.tagLable appendView:tagview margin:UIEdgeInsetsMake(0, 0, 0, 10)];
-        self.tagLable.lineSpacing=5;
+        self.tagLable.lineSpacing=10;
         self.tagLable.numberOfLines=0;
         tagview.tagBgImageview.backgroundColor =VLight_GrayColor;
         tagview.titleLable.textColor=[UIColor whiteColor];
@@ -451,8 +478,9 @@
     else {
     for (int i=0; i<self.stageInfo.weibosArray.count; i++) {
         TagView *tagview = [self createTagViewWithweiboInfo:self.stageInfo.weibosArray[i] andIndex:i];
+        [tagview setbigTag:YES];
          [self.tagLable appendView:tagview margin:UIEdgeInsetsMake(0, 0, 0, 10)];
-        self.tagLable.lineSpacing=5;
+         self.tagLable.lineSpacing=10;
         self.tagLable.numberOfLines=0;
         if (i==0) {
             tagview.tagBgImageview.backgroundColor =VLight_GrayColor;
@@ -465,26 +493,37 @@
     self.tagLable.frame=CGRectMake(0, 0, kDeviceWidth-20, Tagsize.height);
     [tagScrollView addSubview:self.tagLable];
     tagScrollView.contentSize=CGSizeMake(kDeviceWidth-20, Tagsize.height+20);
+    
+//   底部的分享和添加按钮
 
-    addMarkButton =[ZCControl createButtonWithFrame:CGRectMake(60,200-45,kDeviceWidth-120,30) ImageName:nil Target:self Action:@selector(ShareButtonClick:) Title:@"是的，现在分享"];
-    addMarkButton.layer.cornerRadius=4;
+    ShareButton =[ZCControl createButtonWithFrame:CGRectMake(0,200-45,kDeviceWidth/2,45) ImageName:nil Target:self Action:@selector(ShareButtonClick:) Title:@"现在分享"];
+     ShareButton.titleLabel.font =[UIFont boldSystemFontOfSize:16];
+    [ShareButton setTitleColor:VBlue_color forState:UIControlStateNormal];
+    //ShareButton.backgroundColor =[UIColor redColor];
+    [ShareButton setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color"] forState:UIControlStateNormal];
+     [shareView addSubview:ShareButton];
+    
+   
+    addMarkButton =[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth/2,200-45,kDeviceWidth/2,45) ImageName:nil Target:self Action:@selector(ShareButtonClick:) Title:@"我要添加"];
     addMarkButton.titleLabel.font =[UIFont boldSystemFontOfSize:16];
-    //[addMarkButton setBackgroundImage:[UIImage imageNamed:@"btn_add_select.png"] forState:UIControlStateHighlighted];
-    addMarkButton.backgroundColor = VBlue_color;
+     [addMarkButton setTitleColor:VBlue_color forState:UIControlStateNormal];
+    //addMarkButton.backgroundColor=[UIColor redColor];
+    [addMarkButton setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color"] forState:UIControlStateNormal];
     [shareView addSubview:addMarkButton];
     
+
 }
 
 
 
 -(TagView *) createTagViewWithweiboInfo:(weiboInfoModel *) weiboInfo andIndex:(NSInteger) index
 {
-    
     TagView *tagview =[[TagView alloc]initWithWeiboInfo:weiboInfo AndTagInfo:nil delegate:self isCanClick:YES backgoundImage:nil isLongTag:NO];
+    [tagview setcornerRadius:4];
     tagview.tagBgImageview.backgroundColor =VLight_GrayColor_apla;
     tagview.titleLable.textColor=VGray_color;
     tagview.tag=2000+index;
-    [tagview setbigTag:YES];
+    //[tagview setbigTag:YES];
     return tagview;
 }
 
@@ -557,7 +596,7 @@
 
 #pragma mark 点击屏幕显示和隐藏marview
 //显示隐藏markview
--(void)hidenAndShowMarkView:(UIButton *) button
+/*-(void)hidenAndShowMarkView:(UIButton *) button
 {
     [stageView showAndHidenMarkView:button.selected];
     
@@ -610,7 +649,7 @@
             }
         }
     }
-}
+}*/
 
 
 
@@ -964,27 +1003,20 @@
 -(void)ShareButtonClick:(UIButton  *) button
 {
     
-    
-    UIImage  *image=[Function getImage:stageView WithSize:CGSizeMake(kStageWidth, (kDeviceWidth-10)*(9.0/16))];
-    if (UMShareStyle==1) {
-        UMShareViewController  *shareVC=[[UMShareViewController alloc]init];
-        shareVC.StageInfo=self.stageInfo;
-        shareVC.screenImage=image;
-        shareVC.delegate=self;
-        UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:shareVC];
-        [self presentViewController:na animated:YES completion:nil];
-   
-    }
-    else if (UMShareStyle==0)
-    {
+    if (button==ShareButton) {  //分享有关
+    UIImage  *image=[Function getImage:ShareView WithSize:CGSizeMake(kStageWidth, (kDeviceWidth-10)*(9.0/16))];
         if (self.weiboInfo) {
             self.stageInfo=self.weiboInfo.stageInfo;
         }
-        
         UMShareView *shareView =[[UMShareView alloc] initwithStageInfo:self.stageInfo ScreenImage:image delgate:self];
         [shareView show];
         
-
+    }
+    else if (button==addMarkButton)//添加有关
+    {
+        
+        [self addMarkButtonClick:button];
+        
     }
 }
 
@@ -998,9 +1030,7 @@
     AddMarkVC.delegate=self;
    // AddMarkVC.model=self.stageInfo;
     AddMarkVC.stageInfo=self.stageInfo;
-  //  AddMarkVC.pageSoureType=NSAddMarkPageSourceDefault;
- //   [self.navigationController pushViewController:AddMarkVC animated:NO];
-    UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:AddMarkVC];
+     UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:AddMarkVC];
     [self.navigationController presentViewController:na animated:NO completion:nil];
 }
 -(void)NavigationButtonClick:(UIButton  *) button
@@ -1025,7 +1055,7 @@
 #pragma  mark -------AddMarkViewControllerReturn  --Delegete-------------
 -(void)AddMarkViewControllerReturn
 {
-    [stageView configStageViewforStageInfoDict];
+  //  [stageView configStageViewforStageInfoDict];
     
 }
 #pragma mark  -----

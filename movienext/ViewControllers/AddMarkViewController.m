@@ -96,9 +96,10 @@
     
     UIButton  *leftBtn= [UIButton buttonWithType:UIButtonTypeSystem];
     leftBtn.frame=CGRectMake(0, 20, 60, 40);
-    leftBtn.titleLabel.font =[UIFont systemFontOfSize:16];
+    leftBtn.titleLabel.font =[UIFont systemFontOfSize:18];
     [leftBtn setTitleColor:VGray_color forState:UIControlStateNormal];
     [leftBtn setTitle:@"取消" forState:UIControlStateNormal];
+    leftBtn.titleLabel.adjustsFontSizeToFitWidth=NO;
     //leftBtn.titleLabel.font=[UIFont boldSystemFontOfSize:18];
     
     [leftBtn setTitleEdgeInsets:UIEdgeInsetsMake(0, -0, 0,10)];
@@ -109,7 +110,8 @@
    // self.navigationItem.leftBarButtonItem=leftBarButton;
     
     UILabel  *lable =[ZCControl createLabelWithFrame:CGRectMake((kDeviceWidth-100)/2, 25, 100, 30) Font:15 Text:@"添加文字"];
-    lable.font=[UIFont systemFontOfSize:16];
+    lable.adjustsFontSizeToFitWidth=NO;
+    lable.font=[UIFont systemFontOfSize:18];
     lable.textAlignment=NSTextAlignmentCenter;
     lable.textColor=VBlue_color;
     [naview addSubview:lable];
@@ -122,6 +124,7 @@
     RighttBtn.tag=101;
    // [RighttBtn setTitleColor:VGray_color forState:UIControlStateNormal];
     [RighttBtn setTitle:@"发布" forState:UIControlStateNormal];
+    RighttBtn.titleLabel.adjustsFontSizeToFitWidth=NO;
     [RighttBtn setTitleEdgeInsets:UIEdgeInsetsMake(0, 0, 0, -10)];
     
     RighttBtn.titleLabel.font=[UIFont boldSystemFontOfSize:18];
@@ -243,7 +246,8 @@
     
     //初始化的时候添加一个添加标签的按钮就好了
     TagView  *tagView =[self createTagViewWithtagText:@"添加标签" withIndex:999 withBgImage:nil];
-    [tagView setcornerRadius:YES];
+    //[tagView setcornerRadius:YES];
+    [tagView setcornerRadius:4];
     tagView.titleLable.textColor=VBlue_color;
     tagView.tagBgImageview.backgroundColor =[UIColor whiteColor];
     tagView.layer.borderColor=VBlue_color.CGColor;
@@ -707,7 +711,7 @@
     }
     
     TagView  *tagView =[self createTagViewWithtagText:@"添加标签" withIndex:999 withBgImage:nil];
-    [tagView setcornerRadius:YES];
+    [tagView setcornerRadius:4];
     tagView.titleLable.textColor=VBlue_color;
     tagView.tagBgImageview.backgroundColor =[UIColor whiteColor];
     tagView.layer.borderColor=VBlue_color.CGColor;
@@ -731,7 +735,7 @@
     tagdetail.title=tagText;
     tagmodel.tagDetailInfo=tagdetail;
     TagView *tagview =[[TagView alloc]initWithWeiboInfo:self.weiboInfo AndTagInfo:tagmodel  delegate:self isCanClick:YES backgoundImage:imagename isLongTag:YES];
-    [tagview setcornerRadius:YES];
+    [tagview setcornerRadius:4];
 //    if (index==999) {//最后一个是添加按钮
 //        tagview.tagBgImageview.image=nil;
 //    }
@@ -786,7 +790,7 @@
     
     
     TagView  *tagview =[self createTagViewWithtagText:@"添加标签" withIndex:999 withBgImage:nil];
-    [tagview setcornerRadius:YES];
+    [tagview setcornerRadius:4];
     tagview.titleLable.textColor=VBlue_color;
       tagview.tagBgImageview.backgroundColor =[UIColor whiteColor];
       tagview.layer.borderColor=VBlue_color.CGColor;

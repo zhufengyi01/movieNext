@@ -161,9 +161,8 @@
                         [model setValuesForKeysWithDictionary:modelDict];
                         stageInfoModel *stagemodel =[[stageInfoModel alloc]init];
                         if (stagemodel) {
+                            if (![[modelDict objectForKey:@"stage"] isKindOfClass:[NSNull class]]) {
                             [stagemodel setValuesForKeysWithDictionary:[modelDict objectForKey:@"stage"]];
-                            
-                            
                             movieInfoModel *moviemodel=[[movieInfoModel alloc]init];
                             if (moviemodel) {
                                 [moviemodel setValuesForKeysWithDictionary:[[modelDict objectForKey:@"stage"] objectForKey:@"movie"]];
@@ -176,14 +175,11 @@
                                 weiboInfoModel *weibomodel =[[weiboInfoModel alloc]init];
                                 if (weibomodel) {
                                     [weibomodel setValuesForKeysWithDictionary:weibodict];
-                                    
-                                   
                                     NSMutableArray  *tagArray =[[NSMutableArray alloc]init];
                                     for (NSDictionary *tagDict in [weibodict objectForKey:@"tags"]) {
                                         TagModel *tagmodel =[[TagModel alloc]init];
                                         if (tagmodel) {
                                             [tagmodel setValuesForKeysWithDictionary:tagDict];
-                                            
                                             TagDetailModel  *tagDetail =[[TagDetailModel alloc]init];
                                             if (tagDetail) {
                                                 [tagDetail setValuesForKeysWithDictionary:[tagDict objectForKey:@"tag"]];
@@ -193,7 +189,6 @@
                                         }
                                     }
                                     weibomodel.tagArray=tagArray;
-                                    
                                     weiboUserInfoModel *usermoel =[[weiboUserInfoModel alloc]init];
                                     if (usermoel) {
                                         [usermoel setValuesForKeysWithDictionary:[weibodict objectForKey:@"user"]];
@@ -204,7 +199,7 @@
                             }
                             stagemodel.weibosArray=weiboarray;
                             model.stageInfo=stagemodel;
-                            
+                        }
                         }
                         
                         if(self.dataArray==nil)

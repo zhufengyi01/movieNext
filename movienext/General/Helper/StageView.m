@@ -67,7 +67,7 @@
     }
   //  float x=0;
    // float y=0;
-    float width=kDeviceWidth-10;
+    float width=kDeviceWidth-20;
     float hight=width*(9/16.0);
 //    if (ImageWith>ImgeHight) {
 //          x=0;

@@ -78,38 +78,55 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    if (indexPath.row==0) {
-        [self.navigationController pushViewController:[AdmCustomListViewController new] animated:YES];
+    
+    switch (indexPath.row) {
+        case ADM_TYPE_USER:
+            [self.navigationController pushViewController:[AdmCustomListViewController new] animated:YES];
+            break;
+         case ADM_TYPE_EMOJ:
+        {
+            TagModel  *tagmodel =[[TagModel alloc]init];
+            TagDetailModel  *tagdetail =[[TagDetailModel alloc]init];
+            tagdetail.Id=@"532";
+            tagdetail.title=@"表情包";
+            tagdetail.created_by=@"56";
+            tagmodel.tagDetailInfo=tagdetail;
+            
+            TagToStageViewController  *tostage =[TagToStageViewController new];
+            tostage.tagInfo=tagmodel;
+            [self.navigationController pushViewController:tostage animated:YES];
+
+            break;}
+            
+         case ADM_TYPE_CLOSE_STAGE:
+        {
+            MovieDetailViewController *movied =[[MovieDetailViewController alloc]init];
+            movied.pageSourceType=NSMovieSourcePageAdminCloseStageViewController;
+            [self.navigationController pushViewController:movied animated:YES];
+
+            break;
+        }
+        case ADM_TYPE_CLOSE_WEIBO:
+        {
+            NewAddViewController *new  =[NewAddViewController new];
+            new.pageType=NSNewAddPageSoureTypeCloseWeiboList;
+            [self.navigationController pushViewController:new animated:YES];
+            break;
+        }
+        case ADM_TYPE_NEW_ADD:
+        {
+            NewAddViewController *new  =[NewAddViewController new];
+            new.pageType=NSNewAddPageSoureTypeNewList;
+            [self.navigationController pushViewController:new animated:YES];
+
+            break;
+        }
+        default:
+            break;
+            
+            
     }
-    else if (indexPath.row==1) {
-        
-        TagModel  *tagmodel =[[TagModel alloc]init];
-        TagDetailModel  *tagdetail =[[TagDetailModel alloc]init];
-        tagdetail.Id=@"532";
-        tagdetail.title=@"表情包";
-        tagdetail.created_by=@"56";
-        tagmodel.tagDetailInfo=tagdetail;
-        
-        TagToStageViewController  *tostage =[TagToStageViewController new];
-        tostage.tagInfo=tagmodel;
-        [self.navigationController pushViewController:tostage animated:YES];
-     } else if (indexPath.row==2) {
-         
-         MovieDetailViewController *movied =[[MovieDetailViewController alloc]init];
-         movied.pageSourceType=NSMovieSourcePageAdminCloseStageViewController;
-         [self.navigationController pushViewController:movied animated:YES];
-         
-     } else if (indexPath.row==3) {
-         
-     }
-    else if (indexPath.row==4)
-    {
-     
-        NewAddViewController *new  =[NewAddViewController new];
-        [self.navigationController pushViewController:new animated:YES];
-        
-    }
-}
+ }
 
 
 - (void)didReceiveMemoryWarning {

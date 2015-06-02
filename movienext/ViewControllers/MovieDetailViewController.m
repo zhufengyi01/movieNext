@@ -638,6 +638,7 @@
       //  NSLog(@"  电影详情页面的电影信息数据JSON: %@", responseObject);
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
             NSDictionary  *dict =[responseObject objectForKey:@"model"];
+            
             ShowSelectPhotoViewController  *vc =[[ShowSelectPhotoViewController alloc]init];
             vc.douban_id=[dict objectForKey:@"douban_id"];
             vc.movie_id=self.movieId;

@@ -35,7 +35,7 @@
     _titleLab.text=@"";
     _titleLab.textAlignment = NSTextAlignmentCenter;
     _titleLab.textColor = [UIColor whiteColor];
-    _titleLab.font = [UIFont systemFontOfSize:16];
+    _titleLab.font = [UIFont boldSystemFontOfSize:16];
     [self.contentView addSubview:_titleLab];
 }
 

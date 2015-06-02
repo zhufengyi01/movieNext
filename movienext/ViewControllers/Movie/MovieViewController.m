@@ -622,11 +622,10 @@
 -(BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar
 {
     
-    MovieSearchViewController *vc= [MovieSearchViewController new];
-    vc.pageType=NSSearchSourceTypeMovieList;
-    UINavigationController  *search=[[UINavigationController alloc]initWithRootViewController:vc];
-      search.modalTransitionStyle=UIModalTransitionStyleCrossDissolve;
-    
+     MovieSearchViewController *vc= [MovieSearchViewController new];
+     vc.pageType=NSSearchSourceTypeMovieList;
+     UINavigationController  *search=[[UINavigationController alloc]initWithRootViewController:vc];
+     search.modalTransitionStyle=UIModalTransitionStyleCrossDissolve;
       [self presentViewController:search animated:YES completion:nil];
     return NO;
 }

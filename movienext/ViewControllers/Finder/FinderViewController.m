@@ -145,7 +145,6 @@
     //设置分享内容和回调对象
     
     [UMSocialSnsPlatformManager getSocialPlatformWithName:[sharearray  objectAtIndex:button.tag-10000]].snsClickHandler(self,[UMSocialControllerService defaultControllerService],YES);
-    
 }
 
 
@@ -227,7 +226,7 @@
 - (void)requestData {
     UserDataCenter  *userCenter=[UserDataCenter shareInstance];
     NSString *userId=userCenter.user_id;
-    NSDictionary *parameters= @{@"user_id":userId};
+    NSDictionary *parameters= @{@"user_id":userId,@"Version":Version};
     
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     NSString *urlString=[NSString stringWithFormat:@"%@/weibo/discover", kApiBaseUrl];

@@ -122,7 +122,7 @@
 
         NSString  *select  =[indexSelectDict objectForKey:@"isSelect"];
 
-        [indexSelectDict setValue:[NSString stringWithFormat:@"%d",button.tag] forKey:@"isSelect"];
+        [indexSelectDict setValue:[NSString stringWithFormat:@"%ld",button.tag] forKey:@"isSelect"];
        if (button.selected==NO) {
         button.selected=YES;
            

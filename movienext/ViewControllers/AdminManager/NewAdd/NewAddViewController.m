@@ -56,8 +56,12 @@
 }
 -(void)createNavigation
 {
- 
-    UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:@"最新添加"];
+    
+   NSString  *titleString=@"最新添加";
+    if (self.pageType==NSNewAddPageSoureTypeCloseWeiboList) {
+        titleString =@"已屏蔽的微博";
+    }
+    UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:titleString];
     titleLable.textColor=VBlue_color;
     
     titleLable.font=[UIFont boldSystemFontOfSize:18];
@@ -163,7 +167,17 @@
     //UserDataCenter *userCenter =[UserDataCenter shareInstance];
     NSDictionary *parameters = @{@"user_id":userCenter.user_id};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager POST:[NSString stringWithFormat:@"%@/weibo/listrecently?per-page=%d&page=%d", kApiBaseUrl,pageSize,page] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    NSString  *urlString;
+    if (self.pageType==NSNewAddPageSoureTypeNewList) {
+       urlString =[NSString stringWithFormat:@"%@/weibo/listrecently?per-page=%d&page=%d", kApiBaseUrl,pageSize,page];
+
+    }
+    else if(self.pageType==NSNewAddPageSoureTypeCloseWeiboList)
+    {
+        urlString =[NSString stringWithFormat:@"%@/weibo/block-list?per-page=%d&page=%d", kApiBaseUrl,pageSize,page];
+
+    }
+    [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
             pageCount=[[responseObject objectForKey:@"pageCount"] intValue];
             NSMutableArray   *array  = [[NSMutableArray alloc]initWithArray:[responseObject objectForKey:@"models"]];
@@ -175,15 +189,19 @@
                     //用户的信息
                     weiboUserInfoModel  *usermodel =[[weiboUserInfoModel alloc]init];
                     if (usermodel) {
-                        [usermodel setValuesForKeysWithDictionary:[newdict objectForKey:@"user"]];
-                        weibomodel.uerInfo=usermodel;
+                        if (![[newdict objectForKey:@"user"] isKindOfClass:[NSNull class]]) {
+                            [usermodel setValuesForKeysWithDictionary:[newdict objectForKey:@"user"]];
+                            weibomodel.uerInfo=usermodel;
+                        }
+                       
                     }
-                    
                 // 剧情信息
                     stageInfoModel  *stagemodel =[[stageInfoModel alloc]init];
                     if (stagemodel) {
+                        if (![[newdict objectForKey:@"stage"]  isKindOfClass:[NSNull class]]) {
                         [stagemodel setValuesForKeysWithDictionary:[newdict objectForKey:@"stage"]];
                         weibomodel.stageInfo=stagemodel;
+                       }
                     }
                     NSMutableArray  *tagArray =[[NSMutableArray alloc]init];
               //标签数组

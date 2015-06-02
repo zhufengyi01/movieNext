@@ -45,11 +45,12 @@
 #pragma  mark  三方平台key  设置
 #define kUmengKey @"53e9e548fd98c5e4a90017c6"
 #define SSOSinRedirectURL  @"http://sns.whalecloud.com/sina2/callback"
-#define weiChatShareKey  @"wxf2ee2163c0aceaa0"
-#define weiChatShareSecret @"ce1e16a6fa8b594e614eda18903cd22c"
+
+#define weiChatShareKey  @"wx8bbffc786bbcdfce"
+#define weiChatShareSecret @"1bd345fa522360c857c39f74030f4a92"
 
 //#define   Review   1          ///上传appstore版本  1 为审核
-#define   Version  @"1.0"       //版本信息  1.0.1 审核版         1.0 正常版
+#define   Version  @"1.0.1"       //版本信息  1.0.1 审核版         1.0 正常版
 #define   UMShareStyle  0      //分享1使用controller方式分享    0 使用view 方式分享
 
 
@@ -96,8 +97,8 @@
 
 #define kUserKey @"userinfo"  ///用户信息
 
-#define  kWeiChatKey  wxf2ee2163c0aceaa0
-#define  kWeiChatSecret ce1e16a6fa8b594e614eda18903cd22c
+#define IS_FIRST_LOGIN  @"ISFIRST"
+
 //weibo  MarkView大小控制
 //坐标图片的大小控制
 

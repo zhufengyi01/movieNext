@@ -79,15 +79,15 @@
 }
 -(void)setbigTag:(BOOL) isbig;
 {
-    self.frame=CGRectMake(0, 0,self.frame.size.width+8, self.frame.size.height+6);
+    self.frame=CGRectMake(0, 0,self.frame.size.width+10, self.frame.size.height+10);
     self.titleLable.frame=CGRectMake(0,0,self.frame.size.width, self.frame.size.height);
 }
 
 //设置是否圆角
--(void)setcornerRadius:(BOOL) isRadius;
+-(void)setcornerRadius:(NSInteger) corner;
 {
     //设置是否圆角
-    self.layer.cornerRadius=TagViewConrnerRed;
+    self.layer.cornerRadius=corner;
 
 }
 

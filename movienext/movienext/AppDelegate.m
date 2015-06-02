@@ -26,7 +26,7 @@
 #import "AFNetworkActivityIndicatorManager.h"
 #import "Constant.h"
 #import "Function.h"
-
+#import "GiderPageViewController.h"
 @interface AppDelegate ()
 
 @end
@@ -37,17 +37,24 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     NSDictionary  *userInfo=[[NSUserDefaults  standardUserDefaults] objectForKey:kUserKey];
-   if (userInfo) {  //用户已经登陆
-       [Function getUserInfoWith:userInfo];
-       self.window.rootViewController =[CustmoTabBarController new];
-
+    NSString      *firstlogin =[[NSUserDefaults standardUserDefaults] objectForKey:IS_FIRST_LOGIN];
+    if (![firstlogin isEqualToString:@"YES"]) {//是第一次进入应用
+        [[NSUserDefaults standardUserDefaults] setObject:@"YES" forKey:IS_FIRST_LOGIN];
+        UINavigationController  *GNa=[[UINavigationController alloc]initWithRootViewController:[GiderPageViewController new]];
+        self.window.rootViewController=GNa;
     }
     else {
+        if (userInfo) {  //用户已经登陆
+          [Function getUserInfoWith:userInfo];
+          self.window.rootViewController =[CustmoTabBarController new];
+         }
+        else {
          //用户没有登陆
-        UINavigationController  *loginNa=[[UINavigationController alloc]initWithRootViewController:[LoginViewController new]];
-        self.window.rootViewController=loginNa;
-       // self.window.rootViewController=[LoginViewController new];
-     }
+         UINavigationController  *loginNa=[[UINavigationController alloc]initWithRootViewController:[LoginViewController new]];
+           self.window.rootViewController=loginNa;
+      
+        }
+    }
     self.window.backgroundColor=[UIColor whiteColor];
     //自动显示和隐藏请求时的状态提示
     [[AFNetworkActivityIndicatorManager sharedManager] setEnabled:YES];

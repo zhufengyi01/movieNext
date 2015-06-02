@@ -32,6 +32,8 @@
 #import "SearchmovieTableViewCell.h"
 #import "UIImage+ImageWithColor.h"
 #import "MovieDetailViewController.h"
+#import "ShowSelectPhotoViewController.h"
+
 @interface MovieSearchViewController ()<UISearchBarDelegate,UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate>
 {
     LoadingView   *loadView;
@@ -72,7 +74,7 @@
     search=[[UISearchBar alloc]initWithFrame:CGRectMake(30, 10, 0, 28)];
     search.placeholder=@"搜索电影";
     if (self.pageType==NSSearchSourceTypeAddCard) {
-        search.placeholder=@"添加要添加的电影";
+        search.placeholder=@"搜索要添加的电影";
 
     }
     search.delegate=self;
@@ -94,6 +96,45 @@
     _myTableView.separatorInset=UIEdgeInsetsMake(0, -110, 0, 0);
     [self.view addSubview:_myTableView];
 }
+
+
+#pragma  mark   -------------------数据请求
+//根据豆瓣id  请求movieid
+-(void)requestMovieIdWithdoubanId:(NSString *) douban_Id
+{
+    
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    NSDictionary *parameters = @{@"douban_id": douban_Id};
+    
+    [manager POST:[NSString stringWithFormat:@"%@/movie/create", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if ([[responseObject  objectForKey:@"code"] intValue]==0) {
+            
+            NSLog(@"responseobject = %@", responseObject);
+            NSDictionary *detail = [responseObject objectForKey:@"model"];
+            NSString * movie_id = [detail objectForKey:@"id"];
+            
+            //请求完成后执行跳转页面
+            ShowSelectPhotoViewController  *vc =[[ShowSelectPhotoViewController alloc]init];
+            vc.douban_id=douban_Id;
+            vc.movie_id=movie_id;
+            UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+            self.navigationItem.backBarButtonItem=item;
+            UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:vc];
+            [self presentViewController:na animated:YES completion:nil];
+            
+
+            
+         }
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+        [loadView showNullView:@"没有数据..."];
+        
+    }];
+    
+}
+
 -(void)requestData
 {
     if ([search.text isEqualToString:@"00"]) {
@@ -156,6 +197,7 @@
     }
     if (_dataArray.count > indexPath.row) {
      [cell setCellValue:[_dataArray  objectAtIndex:(long)indexPath.row]];
+    
     }
  
      return cell;
@@ -168,17 +210,23 @@
      [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (tableView==_myTableView) {
        if (_dataArray.count > indexPath.row) {
-            MovieDetailViewController  *mvdetail =[[MovieDetailViewController alloc]init];
-            mvdetail.douban_Id=[[_dataArray objectAtIndex:indexPath.row]  objectForKey:@"doubanId"];
-            mvdetail.pageSourceType=NSMovieSourcePageSearchListController; //从电影列表页今日电影详细页面
-           mvdetail.pageSourceType=NSMovieSourcePageSearchListController;
-           mvdetail.movielogo=[[_dataArray objectAtIndex:indexPath.row] objectForKey:@"smallimage"];
-           
-           mvdetail.moviename=[[_dataArray objectAtIndex:indexPath.row] objectForKey:@"title"];
-           UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"搜索" style:UIBarButtonItemStylePlain target:nil action:nil];
-           self.navigationItem.backBarButtonItem=item;
+           if (self.pageType==NSSearchSourceTypeMovieList) {
+              MovieDetailViewController  *mvdetail =[[MovieDetailViewController alloc]init];
+              mvdetail.douban_Id=[[_dataArray objectAtIndex:indexPath.row]  objectForKey:@"doubanId"];
+              mvdetail.pageSourceType=NSMovieSourcePageSearchListController; //从电影列表页今日电影详细页面
+              mvdetail.pageSourceType=NSMovieSourcePageSearchListController;
+              mvdetail.movielogo=[[_dataArray objectAtIndex:indexPath.row] objectForKey:@"smallimage"];
+              mvdetail.moviename=[[_dataArray objectAtIndex:indexPath.row] objectForKey:@"title"];
+              UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"搜索" style:UIBarButtonItemStylePlain target:nil action:nil];
+             self.navigationItem.backBarButtonItem=item;
             [self.navigationController pushViewController:mvdetail animated:YES];
-           
+           }
+           else if(self.pageType==NSSearchSourceTypeAddCard) //从添加电影进入  直接进去添加
+           {
+               NSDictionary  *dict =[_dataArray objectAtIndex:indexPath.row];
+               //根据豆瓣id 请求电影信息
+               [self requestMovieIdWithdoubanId:[dict objectForKey:@"doubanId"]];
+           }
         }
     }
 
