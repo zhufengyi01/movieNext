@@ -680,6 +680,7 @@
 //点击小图模式的时候，跳转到大图模式
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
+///<<<<<<< HEAD
     NSString  *Btag =[self.buttonStateDict objectForKey:@"YES"];
     if ([Btag isEqualToString:@"100"]) {
         
@@ -707,6 +708,10 @@
         [self.navigationController pushViewController:vc animated:YES];
     }
     
+//=======
+
+
+//>>>>>>> 50eafa284be22c6879e4e40308803b143a59b341
 }
 
 //设置头尾部内容
@@ -836,7 +841,7 @@
 }
 -(void)UMShareViewHandClick:(UIButton *)button ShareImage:(UIImage *)shareImage StageInfoModel:(stageInfoModel *)StageInfo
 {
-    NSArray  *sharearray =[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQzone, UMShareToSina, nil];
+    NSArray  *sharearray =[NSArray arrayWithObjects:UMShareToWechatTimeline,UMShareToWechatSession, UMShareToSina, nil];
     [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
     [[UMSocialControllerService defaultControllerService] setShareText:StageInfo.movieInfo.name shareImage:shareImage socialUIDelegate:self];
     //设置分享内容和回调对象

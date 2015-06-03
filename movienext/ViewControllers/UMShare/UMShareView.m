@@ -8,6 +8,7 @@
 
 #import "UMShareView.h"
 #import "ZCControl.h"
+#import "MyButton.h"
 #import "Constant.h"
 #import "Function.h"
 @implementation UMShareView
@@ -29,7 +30,7 @@
         self.frame=CGRectMake(0, 0,kDeviceWidth,kDeviceHeight);
         self.backgroundColor =[[UIColor blackColor] colorWithAlphaComponent:0];
         
-        float height=(kDeviceWidth/4)+(kDeviceWidth-20)*(9.0/16)+40+30;
+        float height=(kDeviceWidth/4)+(kDeviceWidth-20)*(9.0/16)+40+30+50;
         backView =[[UIView alloc]initWithFrame:CGRectMake(0,kDeviceHeight, kDeviceWidth, height)];
         backView.userInteractionEnabled=YES;
         backView.backgroundColor =[UIColor whiteColor];
@@ -51,14 +52,6 @@
 }
 -(void)createNavigation
 {
-    UIButton  *button=[UIButton buttonWithType:UIButtonTypeCustom];
-    [button setTitle:@"取消" forState:UIControlStateNormal];
-    [button setTitleColor:VGray_color forState:UIControlStateNormal];
-    button.frame=CGRectMake(0, 0, 60, 40);
-    button.titleLabel.font =[UIFont systemFontOfSize:14];
-    [button addTarget:self action:@selector(CancleShareClick) forControlEvents:UIControlEventTouchUpInside];
-    [backView addSubview:button];
-
     UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake((kDeviceWidth-100)/2, 0, 100, 40) Font:14 Text:@"分享"];
     titleLable.textColor=VGray_color;
     titleLable.textAlignment=NSTextAlignmentCenter;
@@ -72,7 +65,7 @@
 -(void)CancleShareClick
 {
     [UIView animateWithDuration:KShow_ShareView_Time animations:^{
-        float height=(kDeviceWidth/4)+(kDeviceWidth-20)*(9.0/16)+40+30;
+        float height=(kDeviceWidth/4)+(kDeviceWidth-20)*(9.0/16)+40+30+50;
         backView.frame=CGRectMake(0, kDeviceHeight, kDeviceWidth,height);
     } completion:^(BOOL finished) {
         [self removeFromSuperview];
@@ -133,34 +126,72 @@
 }
 -(void)createButtomView
 {
-    buttomView=[[UIView alloc]initWithFrame:CGRectMake(0,backView.frame.size.height-(kDeviceWidth/4), kDeviceWidth, kDeviceWidth/4)];
+    
+    UIView *lineV = [[UIView alloc] initWithFrame:CGRectMake(0, backView.frame.size.height-(kDeviceWidth/4)-40-5, kDeviceWidth, 0.5)];
+    lineV.backgroundColor = VLight_GrayColor;
+    [backView addSubview:lineV];
+    
+    buttomView=[[UIView alloc]initWithFrame:CGRectMake(0,backView.frame.size.height-(kDeviceWidth/4)-40, kDeviceWidth, (kDeviceWidth)/4)];
     buttomView.backgroundColor=[UIColor whiteColor];
     buttomView.userInteractionEnabled=YES;
     [backView addSubview:buttomView];
 #pragma create four button
-    NSArray  *imageArray=[NSArray arrayWithObjects:@"wechat_share_icon.png",@"moments_share_icon.png",@"qzone_share_icon.png",@"weibo_share_icon.png", nil];
+    NSArray  *imageArray=[NSArray arrayWithObjects:@"moment_share.png",@"wechat_share.png",@"weibo_share.png", @"download.png", nil];
+    NSArray *titleArray = [NSArray arrayWithObjects:@"朋友圈", @"微信", @"微博", @"保存", nil];
     
     for (int i=0; i<4; i++) {
-        double   x=(kDeviceWidth/4)*i;
-        double   y=0;
-        UIButton  *    btn = [ZCControl createButtonWithFrame:CGRectMake(x,y, kDeviceWidth/4, kDeviceWidth/4) ImageName:imageArray[i] Target:self Action:@selector(handShareButtonClick:) Title:nil];
+        double   x=(buttomView.bounds.size.width/4)*i;
+        double   y=10;
+        MyButton *btn = [MyButton buttonWithType:UIButtonTypeCustom];
+        [btn setFrame:CGRectMake(x,y, kDeviceWidth/4, kDeviceWidth/4) ImageName:imageArray[i] Target:self Action:@selector(handShareButtonClick:) Title:titleArray[i] Font:12];
+//        [btn setImage:[UIImage imageNamed:imageArray[i]] forState:UIControlStateNormal];
         btn.tag=10000+i;
+        [btn setTitleColor:VBlue_color forState:UIControlStateNormal];
         btn.backgroundColor=[UIColor whiteColor];
+//        int titleWith = btn.titleLabel.bounds.size.width;
+//        btn.imageEdgeInsets = UIEdgeInsetsMake(5, 20, 20, titleWith);
+//        btn.titleEdgeInsets = UIEdgeInsetsMake(40, i==0 ? -50-titleWith : -40-titleWith, 0, 0);
+//        btn.titleLabel.font = [UIFont systemFontOfSize:14];
         [buttomView addSubview:btn];
-        
     }
+    
+    UIButton  *button=[UIButton buttonWithType:UIButtonTypeCustom];
+    [button setTitle:@"取消" forState:UIControlStateNormal];
+    [button setTitleColor:VGray_color forState:UIControlStateNormal];
+    button.frame=CGRectMake(20, backView.frame.size.height-50, kDeviceWidth-40, 40);
+    button.titleLabel.font =[UIFont systemFontOfSize:14];
+    button.backgroundColor = VLight_GrayColor;
+    button.layer.cornerRadius = 3;
+    [button addTarget:self action:@selector(CancleShareClick) forControlEvents:UIControlEventTouchUpInside];
+    [backView addSubview:button];
 }
 //点击分享
 -(void)handShareButtonClick:(UIButton *) button
 {
-     logosupView.hidden=NO;
+    logosupView.hidden=NO;
     shareImage=[Function getImage:shareView WithSize:CGSizeMake(kDeviceWidth-20, (kDeviceWidth-20)*(9.0/16)+20)];
+    
+    if (button.tag == 10003) {
+        UIImageWriteToSavedPhotosAlbum(shareImage, self, @selector(image:didFinishSavingWithError:contextInfo:), nil);
+        return;
+    }
     if (_delegate &&[_delegate respondsToSelector:@selector(UMShareViewHandClick:ShareImage:StageInfoModel:)]) {
         [_delegate UMShareViewHandClick:button ShareImage:shareImage StageInfoModel:_stageInfo];
         }
     
     [self CancleShareClick];
     
+}
+
+- (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error
+  contextInfo:(void *)contextInfo
+{
+    if (error != NULL)
+    {
+        NSLog(@"保存失败");
+    } else {
+        NSLog(@"已保存到相册");
+    }
 }
 
 //以动画形式显示出分享视图
@@ -170,7 +201,7 @@
     
     [AppView addSubview:self];
     [UIView animateWithDuration:KShow_ShareView_Time animations:^{
-        float height=(kDeviceWidth/4)+(kDeviceWidth-20)*(9.0/16)+40+30;
+        float height=(kDeviceWidth/4)+(kDeviceWidth-20)*(9.0/16)+40+30+50;
         backView.frame=CGRectMake(0, kDeviceHeight-height, kDeviceWidth, height);
         self.backgroundColor =[[UIColor blackColor] colorWithAlphaComponent:0.5];
 
