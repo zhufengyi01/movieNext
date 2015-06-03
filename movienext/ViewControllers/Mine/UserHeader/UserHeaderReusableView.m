@@ -15,6 +15,9 @@
 -(instancetype)initWithFrame:(CGRect)frame{
     if (self = [super initWithFrame:frame]) {
         userCenter =[UserDataCenter shareInstance];
+        buttonStateDict=[[NSMutableDictionary alloc]init];
+        [buttonStateDict setObject:@"100" forKey:@"YES"];
+        self.backgroundColor =[UIColor redColor];
         [self createUI];
     }
     return self;
@@ -25,6 +28,7 @@
     //创建基本ui
     UIView *viewHeader = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, 130)];
     viewHeader.backgroundColor =[UIColor whiteColor];
+    [self addSubview:viewHeader];
 
     
     //头像
@@ -36,11 +40,7 @@
     ivAvatar.layer.borderWidth=3;
     
     //ivAvatar.backgroundColor = [UIColor redColor];
-    NSURL   *imageURL;
-    if (self.userInfomodel) {
-        imageURL =[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!thumb",kUrlAvatar,self.userInfomodel.logo]];
-    }
-    [ivAvatar sd_setImageWithURL:imageURL placeholderImage:[UIImage imageNamed:@"user_normal.png"]];
+
     [viewHeader addSubview:ivAvatar];
     
 //    if ([userCenter.is_admin  intValue]>0) {
@@ -58,11 +58,7 @@
     lblUsername = [[UILabel alloc] initWithFrame:CGRectMake(ivAvatar.frame.origin.x+ivAvatar.frame.size.width+10, ivAvatar.frame.origin.y, 200, 20)];
     lblUsername.font = [UIFont boldSystemFontOfSize:15];
     lblUsername.textColor = VGray_color;
-    if (self.userInfomodel) {
-        lblUsername.text=[NSString stringWithFormat:@"%@",self.userInfomodel.username];
-    }
     [viewHeader addSubview:lblUsername];
-
     
     
     UILabel  *lbl1=[ZCControl createLabelWithFrame:CGRectMake(lblUsername.frame.origin.x,lblUsername.frame.origin.y+lblUsername.frame.size.height+5, 35, 20) Font:14 Text:@"内容"];
@@ -74,10 +70,6 @@
     lblCount = [[UILabel alloc] initWithFrame:CGRectMake(lbl1.frame.origin.x+lbl1.frame.size.width, lblUsername.frame.origin.y+lblUsername.frame.size.height+5, 25, 20)];
     //  lblCount.backgroundColor=[UIColor yellowColor];
     lblCount.font = [UIFont systemFontOfSize:14];
-    
-    if (self.userInfomodel) {
-        lblCount.text=[NSString stringWithFormat:@"%@",self.userInfomodel.weibo_count];
-    }
     lblCount.textColor = VGray_color;
     //lblCount.backgroundColor = [UIColor purpleColor];
     [viewHeader addSubview:lblCount];
@@ -92,9 +84,6 @@
     lblZanCout.font = [UIFont systemFontOfSize:14];
     //  lblZanCout.backgroundColor=[UIColor blueColor];
     lblZanCout.textColor = VGray_color;
-    if (self.userInfomodel) {
-        lblZanCout.text  =[NSString stringWithFormat:@"%@",self.userInfomodel.liked_count];
-    }
     [viewHeader addSubview:lblZanCout];
     
     //简介
@@ -110,18 +99,17 @@
     [viewHeader addSubview:lblBrief];
     
     
-    UIButton  *addButton=[ZCControl createButtonWithFrame:CGRectMake(0,  lblBrief.frame.origin.y+lblBrief.frame.size.height+25, kDeviceWidth/2, 40) ImageName:nil Target:self Action:@selector(dealSegmentClick:) Title:@"添加"];
+    addButton=[ZCControl createButtonWithFrame:CGRectMake(0,  lblBrief.frame.origin.y+lblBrief.frame.size.height+25, kDeviceWidth/2, 40) ImageName:nil Target:self Action:@selector(dealSegmentClick:) Title:@"添加"];
     [addButton setTitleColor:VGray_color forState:UIControlStateNormal];
     [addButton setTitleColor:VBlue_color forState:UIControlStateSelected];
-//    if ([[buttonStateDict objectForKey:@"100"] isEqualToString:@"YES"]) {
-//        [addButton setSelected:YES];
-//    }
-//    else{
-//        [addButton setSelected:NO];
-//    }
+    if ([[buttonStateDict objectForKey:@"YES"] isEqualToString:@"100"]) {
+        [addButton setSelected:YES];
+    }
+    else{
+        [addButton setSelected:NO];
+    }
     addButton.titleLabel.font=[UIFont systemFontOfSize:16];
-    //addButton.backgroundColor=VLight_GrayColor;
-    addButton.tag=100;
+     addButton.tag=100;
     [viewHeader addSubview:addButton];
     
     
@@ -130,15 +118,15 @@
     lineView.backgroundColor=VLight_GrayColor;
     [viewHeader addSubview:lineView];
     
-    UIButton  *zanButton=[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth/2,  lblBrief.frame.origin.y+lblBrief.frame.size.height+25, kDeviceWidth/2, 40) ImageName:nil Target:self Action:@selector(dealSegmentClick:) Title:@"赞"];
+    zanButton=[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth/2,  lblBrief.frame.origin.y+lblBrief.frame.size.height+25, kDeviceWidth/2, 40) ImageName:nil Target:self Action:@selector(dealSegmentClick:) Title:@"赞"];
     [zanButton setTitleColor:VGray_color forState:UIControlStateNormal];
     [zanButton setTitleColor:VBlue_color forState:UIControlStateSelected];
-//    if ([[buttonStateDict objectForKey:@"101"] isEqualToString:@"YES"]) {
-//        [zanButton setSelected:YES];
-//    }
-//    else{
-//        [zanButton setSelected:NO];
-//    }
+    if ([[buttonStateDict objectForKey:@"YES"] isEqualToString:@"101"]) {
+        [zanButton setSelected:YES];
+    }
+    else{
+        [zanButton setSelected:NO];
+    }
     zanButton.titleLabel.font=[UIFont systemFontOfSize:16];
     zanButton.tag=101;
     [viewHeader addSubview:zanButton];
@@ -150,16 +138,37 @@
 
 
 //设置ui 的值
--(void)setcollectionHeaderViewValue;
+-(void)setcollectionHeaderViewValueWithUserInfo:(weiboUserInfoModel *) userInfo;
 {
-    
+    NSURL   *imageURL;
+    //头像
+         imageURL =[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!thumb",kUrlAvatar,userInfo.logo]];
+    [ivAvatar sd_setImageWithURL:imageURL placeholderImage:[UIImage imageNamed:@"user_normal.png"]];
+    //用户名
+         lblUsername.text=[NSString stringWithFormat:@"%@",userInfo.username];
+    //添加的数量
+         lblCount.text=[NSString stringWithFormat:@"%@",userInfo.weibo_count];
+    lblZanCout.text =[NSString stringWithFormat:@"%@",userInfo.liked_count];
+     lblBrief.text=userInfo.brief;
     
     
 }
 
 -(void)dealSegmentClick:(UIButton *) button
 {
-    if (self.delegate &&[self.delegate respondsToSelector:@selector(changeCollectionHandClick:)]) {
+      [buttonStateDict setObject:[NSString stringWithFormat:@"%d",button.tag] forKey:@"YES"];
+    if ([[buttonStateDict objectForKey:@"YES"] isEqualToString:@"100"]) {
+        
+        [addButton  setSelected:YES];
+        [zanButton setSelected:NO];
+    }
+    else if([[buttonStateDict objectForKey:@"YES"] isEqualToString:@"101"]){
+        [addButton setSelected:NO];
+        [zanButton setSelected:YES];
+    }
+    
+  
+     if (self.delegate &&[self.delegate respondsToSelector:@selector(changeCollectionHandClick:)]) {
         [self.delegate changeCollectionHandClick:button];
     }
 }
