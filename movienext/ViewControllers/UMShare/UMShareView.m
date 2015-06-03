@@ -144,14 +144,9 @@
         double   y=10;
         MyButton *btn = [MyButton buttonWithType:UIButtonTypeCustom];
         [btn setFrame:CGRectMake(x,y, kDeviceWidth/4, kDeviceWidth/4) ImageName:imageArray[i] Target:self Action:@selector(handShareButtonClick:) Title:titleArray[i] Font:12];
-//        [btn setImage:[UIImage imageNamed:imageArray[i]] forState:UIControlStateNormal];
         btn.tag=10000+i;
         [btn setTitleColor:VBlue_color forState:UIControlStateNormal];
         btn.backgroundColor=[UIColor whiteColor];
-//        int titleWith = btn.titleLabel.bounds.size.width;
-//        btn.imageEdgeInsets = UIEdgeInsetsMake(5, 20, 20, titleWith);
-//        btn.titleEdgeInsets = UIEdgeInsetsMake(40, i==0 ? -50-titleWith : -40-titleWith, 0, 0);
-//        btn.titleLabel.font = [UIFont systemFontOfSize:14];
         [buttomView addSubview:btn];
     }
     
@@ -160,11 +155,12 @@
     [button setTitleColor:VGray_color forState:UIControlStateNormal];
     button.frame=CGRectMake(20, backView.frame.size.height-50, kDeviceWidth-40, 40);
     button.titleLabel.font =[UIFont systemFontOfSize:14];
-    button.backgroundColor = VLight_GrayColor;
+    button.backgroundColor = VLight_GrayColor_apla;
     button.layer.cornerRadius = 3;
     [button addTarget:self action:@selector(CancleShareClick) forControlEvents:UIControlEventTouchUpInside];
     [backView addSubview:button];
 }
+
 //点击分享
 -(void)handShareButtonClick:(UIButton *) button
 {

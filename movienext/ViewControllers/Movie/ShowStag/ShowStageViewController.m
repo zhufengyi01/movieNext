@@ -379,7 +379,7 @@
         starImageView.image=[UIImage imageNamed:@"like_nomoal.png"];
         //把赞的数量-1
         int  like =   [Like_lable.text intValue];
-        like=like-1;
+        like=like>0 ? like-1 : 0;
         _WeiboInfo.like_count=[NSNumber numberWithInt:like];
 
         if ([_WeiboInfo.like_count intValue]==0) {
@@ -993,6 +993,8 @@
         model=self.weiboInfo;
     }
     myVC.author_id =[NSString stringWithFormat:@"%@",model.uerInfo.Id];
+    UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+    self.navigationItem.backBarButtonItem=item;
     [self.navigationController pushViewController:myVC animated:YES];
 
 }
@@ -1116,6 +1118,8 @@
         }
         MyViewController   *myVc=[[MyViewController alloc]init];
         myVc.author_id=weiboDict.created_by;
+        UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+        self.navigationItem.backBarButtonItem=item;
         [self.navigationController pushViewController:myVc animated:YES];
     }
 #pragma mark     -----------分享
@@ -1204,6 +1208,8 @@
         TagToStageViewController  *vc=[[TagToStageViewController alloc]init];
         vc.weiboInfo=weiboInfo;
         vc.tagInfo=tagInfo;
+        UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+        self.navigationItem.backBarButtonItem=item;
         [self.navigationController pushViewController:vc animated:YES];
     
 }

@@ -23,7 +23,7 @@
 -(void)createUI
 {
  
-    self.backgroundColor=[UIColor redColor];
+//    self.backgroundColor=[UIColor redColor];
     LogoImage =[[UIImageView alloc]initWithFrame:CGRectMake(0, 0,m_frame.size.width, m_frame.size.height-30)];
     [self.contentView addSubview:LogoImage];
     

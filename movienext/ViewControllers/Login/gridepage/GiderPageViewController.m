@@ -34,6 +34,7 @@
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
 }
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -42,8 +43,8 @@
 }
 -(void)createUI
 {
-    self.myScorllerView =[[UIScrollView alloc]initWithFrame:CGRectMake(0, 0,kDeviceWidth, kDeviceHeight-0)];
-    self.myScorllerView.contentSize=CGSizeMake(kDeviceWidth*3, kDeviceHeight-20);
+    self.myScorllerView =[[UIScrollView alloc]initWithFrame:CGRectMake(0, -20,kDeviceWidth, kDeviceHeight+20)];
+    self.myScorllerView.contentSize=CGSizeMake(kDeviceWidth*3, kDeviceHeight);
     self.myScorllerView.pagingEnabled=YES;
     self.myScorllerView.bounces=NO;
     self.myScorllerView.showsHorizontalScrollIndicator=NO;
@@ -72,7 +73,7 @@
         if (i==2) {
             imageview.userInteractionEnabled=YES;
             UIButton  *btn =[UIButton buttonWithType:UIButtonTypeCustom];
-            btn.frame=CGRectMake((kDeviceWidth-110)/2, kDeviceHeight-160, 110, 32);
+            btn.frame=CGRectMake((kDeviceWidth-140)/2, kDeviceHeight-140, 140, 42);
             
              [btn addTarget:self action:@selector(goLogin) forControlEvents:UIControlEventTouchUpInside];
             

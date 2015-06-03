@@ -132,7 +132,7 @@
     [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color.png"] forBarMetrics:UIBarMetricsDefault];
 
     UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:@"我的"];
-    titleLable.textColor=VBlue_color;
+    titleLable.textColor=VLight_GrayColor;
     
     titleLable.font=[UIFont boldSystemFontOfSize:18];
     titleLable.textAlignment=NSTextAlignmentCenter;
@@ -656,7 +656,7 @@
             if (_addedDataArray.count>indexPath.row) {
             userAddmodel  *model =[_addedDataArray objectAtIndex:indexPath.row];
             
-            cell.backgroundColor =[UIColor redColor];
+//            cell.backgroundColor =[UIColor redColor];
             NSURL  *url =[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w340h340",kUrlStage,model.weiboInfo.stageInfo.photo]];
             [cell.imageView sd_setImageWithURL:url placeholderImage:nil options:(SDWebImageRetryFailed|SDWebImageLowPriority)];
             cell.titleLab.text=model.weiboInfo.content;
@@ -666,7 +666,7 @@
         {
             if (_upedDataArray.count > indexPath.row) {
             userAddmodel  *model =[_upedDataArray objectAtIndex:indexPath.row];
-            cell.backgroundColor =[UIColor redColor];
+//            cell.backgroundColor =[UIColor redColor];
             NSURL  *url =[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w340h340",kUrlStage,model.weiboInfo.stageInfo.photo]];
             [cell.imageView sd_setImageWithURL:url placeholderImage:nil options:(SDWebImageRetryFailed|SDWebImageLowPriority)];
             cell.titleLab.text=model.weiboInfo.content;

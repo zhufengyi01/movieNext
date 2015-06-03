@@ -87,7 +87,7 @@
     [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color.png"] forBarMetrics:UIBarMetricsDefault];
     
     UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:@"发现"];
-    titleLable.textColor=VBlue_color;
+    titleLable.textColor=VLight_GrayColor;
     
     titleLable.font=[UIFont boldSystemFontOfSize:18];
     titleLable.textAlignment=NSTextAlignmentCenter;
@@ -107,10 +107,11 @@
 //    
     sharebtn=[UIButton buttonWithType:UIButtonTypeCustom];
      //[sharebtn setBackgroundImage:[UIImage imageNamed:@"find_share.png"] forState:UIControlStateNormal];
-    [sharebtn setImage:[UIImage imageNamed:@"find_share"] forState:UIControlStateNormal];
-    sharebtn.frame=CGRectMake(0, 0, 25, 25);
+//    [sharebtn setImage:[UIImage imageNamed:@"find_share"] forState:UIControlStateNormal];
+    sharebtn.frame=CGRectMake(0, 0, 40, 25);
     sharebtn.tag=1001;
-    //[sharebtn setTitleColor:VBlue_color forState:UIControlStateNormal];
+    [sharebtn setTitle:@"分享" forState:UIControlStateNormal];
+    [sharebtn setTitleColor:VBlue_color forState:UIControlStateNormal];
     [sharebtn addTarget:self action:@selector(naviagetionItemClick:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem  *rigthbarButton=[[UIBarButtonItem alloc]initWithCustomView:sharebtn];
     self.navigationItem.rightBarButtonItem=rigthbarButton;
