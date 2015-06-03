@@ -154,17 +154,21 @@
             NSInteger responseCode = [(NSHTTPURLResponse *)response statusCode];
             NSString *responseString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
             if (responseCode == 200) {
-                NSLog(@"responseString = %@", responseString);
                 if ( responseString == nil ) {
                     NSLog(@"没有数据");
+                    //添加一个无内容的笑脸
                 } else {
                     responseString = [Function getNoNewLine:responseString];
                 
                     NSString     * pattern = @"<a class=\"nbg\" href=\"http://movie\\.douban\\.com/subject/(\\d+)/\".*>\n.*<img src=\"(.*)\" alt=\"(.*?)\".*?/>";
                     NSMutableArray *doubanInfos = [[DoubanService shareInstance] getDoubanInfosByResponse:responseString withpattern:pattern type:NServiceTypeSearch];
                     _dataArray = doubanInfos;
-                    // NSLog(@"------_dataArray -=====%@",_dataArray);
-                    [_myTableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
+                    if (_dataArray.count>0) {
+                        // NSLog(@"------_dataArray -=====%@",_dataArray);
+                        [_myTableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
+                    } else {
+                        //添加一个无内容的笑脸
+                    }
                 }
             } else {
                 NSLog(@"error");
@@ -223,7 +227,7 @@
               mvdetail.pageSourceType=NSMovieSourcePageSearchListController;
               mvdetail.movielogo=[[_dataArray objectAtIndex:indexPath.row] objectForKey:@"smallimage"];
               mvdetail.moviename=[[_dataArray objectAtIndex:indexPath.row] objectForKey:@"title"];
-              UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"搜索" style:UIBarButtonItemStylePlain target:nil action:nil];
+              UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
              self.navigationItem.backBarButtonItem=item;
             [self.navigationController pushViewController:mvdetail animated:YES];
            }
@@ -244,10 +248,11 @@
 -(void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
 {
     [self requestData];
-    //[searchBar resignFirstResponder];
+//    [searchBar resignFirstResponder];
 }
 -(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
+    [searchBar resignFirstResponder];
 }
 -(void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
 {

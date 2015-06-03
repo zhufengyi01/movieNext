@@ -10,6 +10,7 @@
 #import "MarkView.h"
 #import "weiboInfoModel.h"
 #import "stageInfoModel.h"
+
 @protocol StageViewDelegate <NSObject>
 //把信息又返回，给controller
 -(void)StageViewHandClickMark:(weiboInfoModel  *) weiboDict withmarkView:(id) markView StageInfoDict:(stageInfoModel *)stageInfoDict;

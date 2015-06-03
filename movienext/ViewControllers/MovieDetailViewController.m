@@ -188,11 +188,13 @@
     self.navigationItem.titleView=titleView;
     [self.navigationItem.titleView setContentMode:UIViewContentModeCenter];
     
-    upLoadimageBtn=[ZCControl createButtonWithFrame:CGRectMake(0,0,25,25) ImageName:nil Target:self Action:@selector(uploadImageFromAbumdAndDouban) Title:nil];
+    upLoadimageBtn=[ZCControl createButtonWithFrame:CGRectMake(0,0,40,25) ImageName:nil Target:self Action:@selector(uploadImageFromAbumdAndDouban) Title:@"添加"];
     upLoadimageBtn.tag=201;
+    [upLoadimageBtn.titleLabel setFont:[UIFont systemFontOfSize:16]];
     //upLoadimageBtn.backgroundColor = [UIColor redColor];
-    upLoadimageBtn.imageEdgeInsets= UIEdgeInsetsMake(5, 10, 0, -10);
-    [upLoadimageBtn setImage:[UIImage imageNamed:@"up_picture_blue.png"] forState:UIControlStateNormal];
+    [upLoadimageBtn setTitleColor:VBlue_color forState:UIControlStateNormal];
+    upLoadimageBtn.imageEdgeInsets= UIEdgeInsetsMake(5, 20, 0, -10);
+//    [upLoadimageBtn setImage:[UIImage imageNamed:@"up_picture_blue.png"] forState:UIControlStateNormal];
     UIBarButtonItem  *rigthbar =[[UIBarButtonItem alloc]initWithCustomView:upLoadimageBtn];
     self.navigationItem.rightBarButtonItem=rigthbar;
     
@@ -867,9 +869,8 @@
          vc.upweiboArray=_upWeiboArray;
          vc.stageInfo = stagemodel;
          
-          UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:nil action:nil];
+          UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
          self.navigationItem.backBarButtonItem=item;
-
         [self.navigationController pushViewController:vc animated:YES];
      }
 }
@@ -1213,6 +1214,8 @@
         NSLog(@"点击头像  微博dict  ＝====%@ ======出现的stageinfo  ＝＝＝＝＝＝%@",weiboDict,stageInfoDict);
         MyViewController   *myVc=[[MyViewController alloc]init];
         myVc.author_id=weiboDict.created_by;
+        UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+        self.navigationItem.backBarButtonItem=item;
         [self.navigationController pushViewController:myVc animated:YES];
 
     }
@@ -1297,6 +1300,8 @@
     TagToStageViewController  *vc=[[TagToStageViewController alloc]init];
     vc.weiboInfo=weiboInfo;
     vc.tagInfo=tagInfo;
+    UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+    self.navigationItem.backBarButtonItem=item;
     [self.navigationController pushViewController:vc animated:YES];
     
 }

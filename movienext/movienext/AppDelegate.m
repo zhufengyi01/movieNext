@@ -38,6 +38,8 @@
     // Override point for customization after application launch.
     NSDictionary  *userInfo=[[NSUserDefaults  standardUserDefaults] objectForKey:kUserKey];
     NSString      *firstlogin =[[NSUserDefaults standardUserDefaults] objectForKey:IS_FIRST_LOGIN];
+#warning 临时有这句话, 上线的时候去掉
+    firstlogin = @"NO"; 
     if (![firstlogin isEqualToString:@"YES"]) {//是第一次进入应用
         [[NSUserDefaults standardUserDefaults] setObject:@"YES" forKey:IS_FIRST_LOGIN];
         UINavigationController  *GNa=[[UINavigationController alloc]initWithRootViewController:[GiderPageViewController new]];

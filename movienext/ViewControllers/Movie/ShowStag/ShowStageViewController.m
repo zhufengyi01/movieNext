@@ -996,6 +996,8 @@
         model=self.weiboInfo;
     }
     myVC.author_id =[NSString stringWithFormat:@"%@",model.uerInfo.Id];
+    UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+    self.navigationItem.backBarButtonItem=item;
     [self.navigationController pushViewController:myVC animated:YES];
 
 }
@@ -1119,6 +1121,8 @@
         }
         MyViewController   *myVc=[[MyViewController alloc]init];
         myVc.author_id=weiboDict.created_by;
+        UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+        self.navigationItem.backBarButtonItem=item;
         [self.navigationController pushViewController:myVc animated:YES];
     }
 #pragma mark     -----------分享
@@ -1207,6 +1211,8 @@
         TagToStageViewController  *vc=[[TagToStageViewController alloc]init];
         vc.weiboInfo=weiboInfo;
         vc.tagInfo=tagInfo;
+        UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+        self.navigationItem.backBarButtonItem=item;
         [self.navigationController pushViewController:vc animated:YES];
     
 }
