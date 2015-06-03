@@ -173,6 +173,7 @@
     
     if (button.tag == 10003) {
         UIImageWriteToSavedPhotosAlbum(shareImage, self, @selector(image:didFinishSavingWithError:contextInfo:), nil);
+        //[self removeFromSuperview];
         return;
     }
     if (_delegate &&[_delegate respondsToSelector:@selector(UMShareViewHandClick:ShareImage:StageInfoModel:)]) {
@@ -192,13 +193,15 @@
         UIAlertView  *Al =[[UIAlertView alloc]initWithTitle:nil message:@"保存失败" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
         [Al show];
         NSLog(@"保存失败");
+        
     } else {
         UIAlertView  *Al =[[UIAlertView alloc]initWithTitle:nil message:@"保存成功" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
         [Al show];
         NSLog(@"已保存到相册");
+        UIAlertView  *al =[[UIAlertView alloc]initWithTitle:nil message:@"图片保存成功" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+        [al show];
     }
 }
-
 //以动画形式显示出分享视图
 -(void)show
 {

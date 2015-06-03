@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "userAddmodel.h"
 @protocol NotificationTableViewCellDelegate <NSObject>
 -(void)NotificationClick:(UIButton *) button indexPath:(NSInteger) index;
 @end
@@ -21,5 +22,6 @@
     NSInteger  _index;
 }
 @property (assign,nonatomic)id <NotificationTableViewCellDelegate> delegate;
--(void)setValueforCell:(NSDictionary  *) dict index: (NSInteger )index;
+
+-(void)setValueforCell:(userAddmodel *) model  index: (NSInteger )index;
 @end

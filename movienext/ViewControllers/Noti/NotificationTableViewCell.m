@@ -63,22 +63,20 @@
     [super layoutSubviews];
     
 }
-
--(void)setValueforCell:(NSDictionary  *) dict index: (NSInteger )index;
-
+-(void)setValueforCell:(userAddmodel *) model  index: (NSInteger )index;
 {
-    _index=index;
-    if ([dict objectForKey:@"user"]) {
-        NSString *logoString=[NSString stringWithFormat:@"%@%@", kUrlAvatar, [[dict objectForKey:@"user"] objectForKey:@"logo"]];
-    [logoButton sd_setBackgroundImageWithURL:[NSURL URLWithString:logoString ] forState:UIControlStateNormal placeholderImage:HeadImagePlaceholder];
-     }
     
-    if (![[dict objectForKey:@"weibo"]  isKindOfClass:[NSNull class]]) {
-        NSString *urlString =[NSString stringWithFormat:@"%@%@!w340h340",kUrlStage,[[[dict objectForKey:@"weibo"]  objectForKey:@"stage"] objectForKey:@"photo"]];
+    
+    _index=index;
+         NSString *logoString=[NSString stringWithFormat:@"%@%@", kUrlAvatar,model.weiboInfo.uerInfo.logo];
+    
+    [logoButton sd_setBackgroundImageWithURL:[NSURL URLWithString:logoString ] forState:UIControlStateNormal placeholderImage:HeadImagePlaceholder];
+         NSString *urlString =[NSString stringWithFormat:@"%@%@!w340h340",kUrlStage,model.weiboInfo.stageInfo.photo];
         
     [stageImage sd_setImageWithURL:[NSURL URLWithString:urlString] placeholderImage:[UIImage imageNamed:@"loading_image_all.png"] options:SDWebImageRetryFailed];
-    }
-    NSString  *nameStr=[[dict objectForKey:@"user"] objectForKey:@"username"];
+    //}
+    NSString  *nameStr=model.weiboInfo.uerInfo.username;
+    
     titleLable.text =nameStr;
     CGSize  Namesize =[nameStr boundingRectWithSize:CGSizeMake(kDeviceWidth-100-50, MAXFLOAT) options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes:[NSDictionary dictionaryWithObject:titleLable.font forKey:NSFontAttributeName] context:nil].size;
     
@@ -86,14 +84,14 @@
     titleButon.frame=titleLable.frame;
     Zanlable.frame=CGRectMake(titleLable.frame.origin.x+Namesize.width+0, titleLable.frame.origin.y, 60,titleLable.frame.size.height);
     
-    if ([dict objectForKey:@"updated_at"]) {
+   // if ([dict objectForKey:@"updated_at"]) {
          //NSString *dateStr=[Function getTimeIntervalfromInerterval:[dict objectForKey:@"updated_at"]];
         //dateLable.text=dateStr;
-        NSDate  *comfromTimesp =[NSDate dateWithTimeIntervalSince1970:[[dict objectForKey:@"updated_at"] intValue]];
+        NSDate  *comfromTimesp =[NSDate dateWithTimeIntervalSince1970:[model.updated_at intValue]];
         NSString  *da = [NSDate timeInfoWithDate:comfromTimesp];
         dateLable.text=da;
 
-    }
+    //}
     
 }
 -(void)dealCellClick:(UIButton *) button

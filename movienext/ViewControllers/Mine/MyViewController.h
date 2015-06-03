@@ -25,7 +25,6 @@
 @property(nonatomic,strong)     NSMutableArray    *upedDataArray;
 
 
-
 @property(nonatomic,strong) NSMutableDictionary  *buttonStateDict;
 
 @end
