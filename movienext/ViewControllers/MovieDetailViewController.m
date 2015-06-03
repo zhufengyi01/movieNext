@@ -834,22 +834,6 @@
     //在这里先将内容给清除一下, 然后再加载新的, 添加完内容之后先动画, 在cell消失的时候做清理工作
     if (_dataArray.count>indexPath.row) {
     stageInfoModel  *model=[_dataArray objectAtIndex:indexPath.row];
-//    if (bigModel ==YES) {
-//        BigImageCollectionViewCell *cell = (BigImageCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"bigcell" forIndexPath:indexPath];
-//        if (_dataArray.count>indexPath.row) {
-//            cell.weibosArray=model.weibosArray;
-//            cell.backgroundColor=View_BackGround;
-//            cell.stageInfo=model;
-//            cell.delegate=self;
-//            [cell ConfigCellWithIndexPath:indexPath.row];
-//            cell.StageView.delegate=self;
-//    
-//          
-//        }
-//        [cell.StageView startAnimation];
-//        return cell;
-//    } else {
-      
         cell.imageView.backgroundColor=VStageView_color;
         NSURL  *url =[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w340h340",kUrlStage,model.photo]];
         //[cell.imageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w340h340",kUrlStage,model.photo]] placeholderImage:[UIImage imageNamed:nil]];
@@ -874,8 +858,7 @@
 {
     if (bigModel==YES&&collectionView==_myConllectionView) {
         //点击cell 隐藏弹幕，再点击隐藏
-        //NSLog(@"didDeselectRowAtIndexPath  =====%ld",indexPath.row);
-      //  BigImageCollectionViewCell   *cell=(BigImageCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
+ 
      } else {
          
 
@@ -884,15 +867,7 @@
          vc.upweiboArray=_upWeiboArray;
          vc.stageInfo = stagemodel;
          
-//         NSMutableString  *backstr=[[NSMutableString alloc]initWithString:stagemodel.movieInfo.name];
-//         NSString *str;
-//         if(backstr.length>5)
-//         {
-//             str=[backstr substringToIndex:5];
-//             str =[NSString stringWithFormat:@"%@...",str];
-//         }
-
-         UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:nil action:nil];
+          UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:nil action:nil];
          self.navigationItem.backBarButtonItem=item;
 
         [self.navigationController pushViewController:vc animated:YES];

@@ -18,4 +18,14 @@
 
 @property (nonatomic, strong) NSString * author_id;//当前正在查看的作者ID
 
+
+@property(nonatomic,strong)UICollectionView  *myConllectionView;
+
+@property(nonatomic,strong)     NSMutableArray    *addedDataArray;
+@property(nonatomic,strong)     NSMutableArray    *upedDataArray;
+
+
+
+@property(nonatomic,strong) NSMutableDictionary  *buttonStateDict;
+
 @end

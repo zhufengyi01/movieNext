@@ -35,15 +35,15 @@
 #import "TagToStageViewController.h"
 #import "UpweiboModel.h"
 #import "UMShareView.h"
+#import "ShowStageViewController.h"
+#import "SmallImageCollectionViewCell.h"
+#import "UserHeaderReusableView.h"
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
-
-@interface MyViewController ()<UITableViewDataSource, UITableViewDelegate,StageViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UIActionSheetDelegate,UMSocialDataDelegate,UMSocialUIDelegate,CommonStageCellDelegate,UMShareViewControllerDelegate,UMShareViewController2Delegate,UMShareViewDelegate>
+@interface MyViewController ()<UITableViewDataSource, UITableViewDelegate,StageViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UIActionSheetDelegate,UMSocialDataDelegate,UMSocialUIDelegate,CommonStageCellDelegate,UMShareViewControllerDelegate,UMShareViewController2Delegate,UMShareViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UICollectionViewDelegate,UserHeaderReusableViewDelegate>
 {
-    //UISegmentedControl *segment;
-    UITableView   *_tableView;
-    NSMutableArray    *_addedDataArray;
-    NSMutableArray    *_upedDataArray;
+  
+    UICollectionViewFlowLayout    *layout;
    // NSMutableDictionary  *_userInfoDict;
     LoadingView   *loadView;
     int page1;
@@ -61,7 +61,7 @@
     MarkView       *_mymarkView;
      int  productCount;
     //保存头部视图按钮的状态
-    NSMutableDictionary  *buttonStateDict;
+    //NSMutableDictionary  *buttonStateDict;
     NSMutableDictionary  *IsNullStateDict; //纪录添加还是赞的数据为空
    // HotMovieModel  *_Tmodel;  ///用户删除的时候存储的model
     NSInteger  Rowindex;
@@ -72,7 +72,6 @@
 
 }
 @end
-
 @implementation MyViewController
 -(void)viewWillAppear:(BOOL)animated
 {
@@ -87,49 +86,42 @@
     {
         self.tabBarController.tabBar.hidden=NO;
     }
-    [[NSNotificationCenter defaultCenter]  addObserver:self selector:@selector(changeUser) name:@"initUser" object:nil];
+   // [[NSNotificationCenter defaultCenter]  addObserver:self selector:@selector(changeUser) name:@"initUser" object:nil];
     //NSNotificationCenter  *c= [NSNotificationCenter defaultCenter];
-    [[UINavigationBar appearance] setShadowImage:[UIImage imageWithColor:tabBar_line size:CGSizeMake(kDeviceWidth, 1)]];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshTableView) name:@"RefeshTableview" object:nil];
-
-    
+   // [[UINavigationBar appearance] setShadowImage:[UIImage imageWithColor:tabBar_line size:CGSizeMake(kDeviceWidth, 1)]];
+    //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshTableView) name:@"RefeshTableview" object:nil];
 
     
  }
--(void)changeUser
-{
-    if (_tableView) {
-        [_tableView  removeFromSuperview];
-        _tableView=nil;
-        [self requestUserInfo];
-
-    }
-}
+//-(void)changeUser
+//{
+//    if (_tableView) {
+//        [_tableView  removeFromSuperview];
+//        _tableView=nil;
+//        [self requestUserInfo];
+//
+//    }
+//}
 -(void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:YES];
- 
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"RefeshTableview" object:nil];
+ //   [[NSNotificationCenter defaultCenter] removeObserver:self name:@"RefeshTableview" object:nil];
  }
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     [self createNavigation];
     [self initData];
-
      [self requestUserInfo];
-    
-    //[self requestData];
-    [self createToolBar];
+    [self requestData];
+   // [self createToolBar];
     //[self createShareView];
     if (self.author_id&&![self.author_id isEqualToString:@"0"]) {
         //如果有用户id 并且用户的id 不为0
         self.navigationItem.rightBarButtonItem=nil;
         self.navigationItem.titleView=nil;
     }
-   
 }
-
 -(void)initData {
     page1=1;
     page2=1;
@@ -139,13 +131,13 @@
     isShowMark=YES;
     _addedDataArray = [[NSMutableArray alloc] init];
     _upedDataArray = [[NSMutableArray alloc] init];
-    buttonStateDict=[[NSMutableDictionary alloc]init];
-    [buttonStateDict setValue:@"YES" forKey:@"100"];
+    self.buttonStateDict=[[NSMutableDictionary alloc]init];
+    //默认第一个选择状态
+    [self.buttonStateDict setValue:@"YES" forKey:@"100"];
     //纪录那个数据为空
     IsNullStateDict =[[NSMutableDictionary  alloc]init];
     [IsNullStateDict setValue:@"NO" forKey:@"ONE"];
     [IsNullStateDict setValue:@"NO" forKey:@"TWO"];
-    
     userInfomodel=[[weiboUserInfoModel alloc]init];
     if (self.author_id&&![self.author_id isEqualToString:@"0"]) {
         //如果有用户id 并且用户的id 不为0
@@ -172,245 +164,111 @@
     [button addTarget:self action:@selector(GotoSettingClick:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem  *barButton=[[UIBarButtonItem alloc]initWithCustomView:button];
     self.navigationItem.rightBarButtonItem=barButton;
-    
-    
 }
 //点击可刷新
--(void)refreshTableView
+//-(void)refreshTableView
+//{
+//    [CommonStageCe  headerBeginRefreshing];
+//}
+-(void)createCollectionView
 {
-    [_tableView  headerBeginRefreshing];
-}
-
-
--(void)createTableView
-{
-    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight-kHeightNavigation-kHeigthTabBar+10)];
-    _tableView.backgroundColor=View_BackGround;
-    _tableView.separatorStyle=UITableViewCellSeparatorStyleNone;
-    _tableView.delegate = self;
-    _tableView.dataSource = self;
-    [self.view addSubview:_tableView];
-    //是从别人的页面进来的不是自己的
-    if (self.author_id.length>0&&![self.author_id isEqualToString:@"0"]) {
-        _tableView.frame=CGRectMake(0, 0, kDeviceWidth, kDeviceHeight-kHeightNavigation);
-    }
-
-    userCenter=[UserDataCenter shareInstance];
-    NSString  *signature=[NSString stringWithFormat:@"%@", userInfomodel.brief];
-    if (signature==nil) {
-        signature=@"";
-    }
-     UIView *viewHeader = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, 130)];
-    viewHeader.backgroundColor =[UIColor whiteColor];
-     int ivAvatarWidth = 50;
-    ivAvatar = [[UIImageView alloc] initWithFrame:CGRectMake(20, 20, ivAvatarWidth, ivAvatarWidth)];
-    ivAvatar.layer.cornerRadius = ivAvatarWidth * 0.5;
-    ivAvatar.layer.masksToBounds = YES;
-    ivAvatar.layer.borderColor=VBlue_color.CGColor;
-    ivAvatar.layer.borderWidth=3;
-
-    //ivAvatar.backgroundColor = [UIColor redColor];
-    NSURL   *imageURL;
-    if (userInfomodel) {
-        imageURL =[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!thumb",kUrlAvatar,userInfomodel.logo]];
-    }
-    [ivAvatar sd_setImageWithURL:imageURL placeholderImage:[UIImage imageNamed:@"user_normal.png"]];
-   
     
-    [viewHeader addSubview:ivAvatar];
-    
-      if ([userCenter.is_admin  intValue]>0) {
-          //在头像上添加一个手势，实现变成功能
-          UIView  *view =[[UIView alloc]initWithFrame:ivAvatar.frame];
-          view.backgroundColor =[ UIColor clearColor];
-          [viewHeader addSubview:view];
-          UILongPressGestureRecognizer  *longPressHeader =[[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(longPressHead:)];
-          
-          [view addGestureRecognizer:longPressHeader];
-
-    }
-    
-    
-    lblUsername = [[UILabel alloc] initWithFrame:CGRectMake(ivAvatar.frame.origin.x+ivAvatar.frame.size.width+10, ivAvatar.frame.origin.y, 200, 20)];
-    lblUsername.font = [UIFont boldSystemFontOfSize:15];
-    lblUsername.textColor = VGray_color;
-    if (userInfomodel) {
-        lblUsername.text=[NSString stringWithFormat:@"%@",userInfomodel.username];
-    }
-     [viewHeader addSubview:lblUsername];
-    
-    UILabel  *lbl1=[ZCControl createLabelWithFrame:CGRectMake(lblUsername.frame.origin.x,lblUsername.frame.origin.y+lblUsername.frame.size.height+5, 35, 20) Font:14 Text:@"内容"];
-    lbl1.textColor=VBlue_color;
-   // lbl1.backgroundColor =[UIColor redColor];
-    [viewHeader addSubview:lbl1];
-    
-    //内容的数量
-    lblCount = [[UILabel alloc] initWithFrame:CGRectMake(lbl1.frame.origin.x+lbl1.frame.size.width, lblUsername.frame.origin.y+lblUsername.frame.size.height+5, 25, 20)];
-  //  lblCount.backgroundColor=[UIColor yellowColor];
-    lblCount.font = [UIFont systemFontOfSize:14];
-
-    if (userInfomodel) {
-        lblCount.text=[NSString stringWithFormat:@"%@",userInfomodel.weibo_count];
-    }
-     lblCount.textColor = VGray_color;
-    //lblCount.backgroundColor = [UIColor purpleColor];
-    [viewHeader addSubview:lblCount];
-    
-    
-    UILabel  *lbl2=[ZCControl createLabelWithFrame:CGRectMake(lblCount.frame.origin.x+lblCount.frame.size.width,lblUsername.frame.origin.y+lblUsername.frame.size.height+5, 35, 20) Font:14 Text:@"被赞"];
-    lbl2.textColor=VBlue_color;
-    //lbl2.backgroundColor=[UIColor grayColor];
-    [viewHeader addSubview:lbl2];
-
-    //赞的数量
-    lblZanCout = [[UILabel alloc] initWithFrame:CGRectMake(lbl2.frame.origin.x+lbl2.frame.size.width,lblCount.frame.origin.y , 50, 20)];
-    lblZanCout.font = [UIFont systemFontOfSize:14];
-  //  lblZanCout.backgroundColor=[UIColor blueColor];
-    lblZanCout.textColor = VGray_color;
-    if (userInfomodel) {
-        lblZanCout.text  =[NSString stringWithFormat:@"%@",userInfomodel.liked_count];
-    }
-     [viewHeader addSubview:lblZanCout];
-    
-   //简介
-    lblBrief = [[UILabel alloc] initWithFrame:CGRectMake(ivAvatar.frame.origin.x+ivAvatar.frame.size.width+10,lblCount.frame.origin.y+lblCount.frame.size.height+10, kDeviceWidth-ivAvatar.frame.origin.x-ivAvatar.frame.size.width-20, 20)];
-    lblBrief.numberOfLines=0;
-    lblBrief.font = [UIFont systemFontOfSize:14];
-    
-    CGSize  Msize= [signature boundingRectWithSize:CGSizeMake(kDeviceWidth-80, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:lblBrief.font forKey:NSFontAttributeName] context:nil].size;
-    lblBrief.textColor = VGray_color;
-   // lblBrief.backgroundColor = [UIColor orangeColor];
-    lblBrief.text=signature;
-    lblBrief.frame=CGRectMake(ivAvatar.frame.origin.x+ivAvatar.frame.size.width+10,lblCount.frame.origin.y+lblCount.frame.size.height+10, kDeviceWidth-ivAvatar.frame.origin.x-ivAvatar.frame.size.width-20, Msize.height);
-      [viewHeader addSubview:lblBrief];
-    
-    
-    UIButton  *addButton=[ZCControl createButtonWithFrame:CGRectMake(0,  lblBrief.frame.origin.y+lblBrief.frame.size.height+25, kDeviceWidth/2, 40) ImageName:nil Target:self Action:@selector(dealSegmentClick:) Title:@"添加"];
-    [addButton setTitleColor:VGray_color forState:UIControlStateNormal];
-    [addButton setTitleColor:VBlue_color forState:UIControlStateSelected];
-    if ([[buttonStateDict objectForKey:@"100"] isEqualToString:@"YES"]) {
-        [addButton setSelected:YES];
-    }
-    else{
-        [addButton setSelected:NO];
-    }
-    addButton.titleLabel.font=[UIFont systemFontOfSize:16];
-    //addButton.backgroundColor=VLight_GrayColor;
-    addButton.tag=100;
-    [viewHeader addSubview:addButton];
-    
-    UIView  *lineView=[[UIView alloc]initWithFrame:CGRectMake(kDeviceWidth/2,addButton.frame.origin.y+10,0.5,20)];
-    lineView.backgroundColor=VLight_GrayColor;
-    [viewHeader addSubview:lineView];
-    
-    UIButton  *zanButton=[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth/2,  lblBrief.frame.origin.y+lblBrief.frame.size.height+25, kDeviceWidth/2, 40) ImageName:nil Target:self Action:@selector(dealSegmentClick:) Title:@"赞"];
-    [zanButton setTitleColor:VGray_color forState:UIControlStateNormal];
-    [zanButton setTitleColor:VBlue_color forState:UIControlStateSelected];
-    if ([[buttonStateDict objectForKey:@"101"] isEqualToString:@"YES"]) {
-        [zanButton setSelected:YES];
-    }
-    else{
-        [zanButton setSelected:NO];
-    }
-    zanButton.titleLabel.font=[UIFont systemFontOfSize:16];
-    zanButton.tag=101;
-    [viewHeader addSubview:zanButton];
-
-    [self createLoadview];
-    //修改了loadview的frame
-    if (loadView) {
-        float  y=zanButton.frame.origin.y+zanButton.frame.size.height;
-        loadView.frame=CGRectMake(0, y, kDeviceWidth, kDeviceHeight-y-kHeightNavigation);
-    }
-    
-    viewHeader.frame=CGRectMake(0, 0, kDeviceWidth,addButton.frame.origin.y+addButton.frame.size.height);
-    [_tableView setTableHeaderView:viewHeader];
-    [self setupRefresh];
+    layout=[[UICollectionViewFlowLayout alloc]init];
+    //layout.minimumInteritemSpacing=10; //cell之间左右的
+    //layout.minimumLineSpacing=10;      //cell上下间隔
+    //layout.itemSize=CGSizeMake(80,140);  //cell的大小
+     layout.sectionInset=UIEdgeInsetsMake(0,0,64, 0); //整个偏移量 上左下右
+     _myConllectionView =[[UICollectionView alloc]initWithFrame:CGRectMake(0,0,kDeviceWidth, kDeviceHeight-20-0) collectionViewLayout:layout];
+    [layout setHeaderReferenceSize:CGSizeMake(_myConllectionView.frame.size.width,200)];
+    _myConllectionView.backgroundColor=View_BackGround;
+    //注册大图模式
+     //注册小图模式
+    [_myConllectionView registerClass:[SmallImageCollectionViewCell class] forCellWithReuseIdentifier:@"smallcell"];
+    // 注册头部视图
+    //[_myConllectionView registerClass:[MovieHeadView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"headerView"];
+    _myConllectionView.delegate=self;
+    _myConllectionView.dataSource=self;
+    [self.view addSubview:_myConllectionView];
+    [self setupHeadView];
+    [self setupFootView];
 
 }
 //长按进入虚拟用户选择
--(void)longPressHead:(UILongPressGestureRecognizer  *) longPressHeader
+//-(void)longPressHead:(UILongPressGestureRecognizer  *) longPressHeader
+//{
+//    if (longPressHeader.state==UIGestureRecognizerStateBegan) {
+//        
+//        [self.navigationController pushViewController:[ChangeSelfViewController new] animated:YES];
+//    }
+//}
+
+-(void)setupHeadView
 {
-    if (longPressHeader.state==UIGestureRecognizerStateBegan) {
+    __unsafe_unretained typeof(self) vc = self;
+    // 添加下拉刷新头部控件
+    [_myConllectionView addHeaderWithCallback:^{
+        //for (int i=100; i<102;i++ ) {
+        NSString *Btag =[vc.buttonStateDict objectForKey:@"YES"];
+           // UIButton  *btn =(UIButton *)[vc.view viewWithTag:i];
+            if ([Btag isEqualToString:@"100"]) {
+                if (vc.addedDataArray.count>0) {
+                    [vc.addedDataArray removeAllObjects];
+                }
+                page1=1;
+                [vc requestData];
+                
+            }
+            else if ([Btag isEqualToString:@"101"])
+            {
+                if (vc.upedDataArray.count>0) {
+                    [vc.upedDataArray removeAllObjects];
+                }
+                page2=1;
+                [vc requestData];
+            }
+       // }
+
         
-        [self.navigationController pushViewController:[ChangeSelfViewController new] animated:YES];
-    }
+        // 模拟延迟加载数据，因此2秒后才调用）
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            //[vc.myConllectionView reloadData];
+            // 结束刷新
+            [vc.myConllectionView headerEndRefreshing];
+        });
+    }];
 }
 
--(void)setupRefresh
+- (void)setupFootView
 {
-    // 1.下拉刷新(进入刷新状态就会调用self的headerRereshing)
-    [_tableView addHeaderWithTarget:self action:@selector(headerRereshing)];
-    //  #warning 自动刷新(一进入程序就下拉刷新)
-    //if (!self.author_id &&[self.author_id isEqualToString:@""]) {
-            [_tableView headerBeginRefreshing];
-    //}
-    // 2.上拉加载更多(进入刷新状态就会调用self的footerRereshing)
-    [_tableView addFooterWithTarget:self action:@selector(footerRereshing)];
-}
-#pragma mark 开始进入刷新状态
-- (void)headerRereshing
-{
-    
-    for (int i=100; i<102;i++ ) {
-        UIButton  *btn =(UIButton *)[self.view viewWithTag:i];
-        if (btn.tag==100&&btn.selected==YES) {
-            if (_addedDataArray.count>0) {
-                [_addedDataArray removeAllObjects];
+    __unsafe_unretained typeof(self) vc = self;
+    // 添加上拉刷新尾部控件
+    [vc.myConllectionView addFooterWithCallback:^{
+        for (int i=100; i<102;i++ ) {
+            UIButton  *btn =(UIButton *)[self.view viewWithTag:i];
+            if (btn.tag==100&&btn.selected==YES) {
+                if (pageCount1>page1) {
+                    page1=page1+1;
+                    [self requestData];
+                }
             }
-            page1=1;
-            [self requestData];
-
-        }
-        else if (btn.tag==101&&btn.selected==YES)
-        {
-            if (_upedDataArray.count>0) {
-                [_upedDataArray removeAllObjects];
-            }
-            page2=1;
-            [self requestData];
-        }
-    }
-    // 2.2秒后刷新表格UI
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        // 刷新表格
-        [_tableView reloadData];
-        // (最好在刷新表格后调用)调用endRefreshing可以结束刷新状态
-        [_tableView headerEndRefreshing];
-    });
-}
-
-- (void)footerRereshing
-{
-
- 
-    for (int i=100; i<102;i++ ) {
-        UIButton  *btn =(UIButton *)[self.view viewWithTag:i];
-        if (btn.tag==100&&btn.selected==YES) {
-            if (pageCount1>page1) {
-              page1=page1+1;
-            [self requestData];
+            else if (btn.tag==101&&btn.selected==YES)
+            {
+                if (pageCount2>page2) {
+                    page2=page2+1;
+                    [self requestData];
+                }
             }
         }
-        else if (btn.tag==101&&btn.selected==YES)
-        {
-            if (pageCount2>page2) {
-            page2=page2+1;
-            [self requestData];
-        }
-    }
-    }
 
-    
-    // 2.2秒后刷新表格UI
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        // 刷新表格
-        [_tableView reloadData];
-        // (最好在刷新表格后调用)调用endRefreshing可以结束刷新状态
-        [_tableView footerEndRefreshing];
-    });
+        // 进入刷新状态就会回调这个Block
+               // 模拟延迟加载数据，因此2秒后才调用）
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            //  [vc.myConllectionView reloadData];
+            // 结束刷新
+            [vc.myConllectionView footerEndRefreshing];
+        });
+    }];
 }
-
 
 
 -(void)dealSegmentClick:(UIButton *) button
@@ -424,17 +282,17 @@
         else if(button.selected==NO)
         {
             button.selected=YES;
-            [buttonStateDict setValue:@"YES" forKey:@"100"];
+            [self.buttonStateDict setValue:@"YES" forKey:@"100"];
             //把赞设置为选择状态
             UIButton  *btn =(UIButton *)[self.view viewWithTag:101];
             btn.selected=NO;
-            [buttonStateDict setValue:@"NO" forKey:@"101"];
-            [_tableView reloadData];
+            [self.buttonStateDict setValue:@"NO" forKey:@"101"];
+            [self.myConllectionView reloadData];
             if (_addedDataArray.count==0) {
                 [self requestData];
             }
             if ( [[IsNullStateDict objectForKey:@"ONE"] isEqualToString:@"YES"]) {
-                [_tableView addSubview:loadView];
+                [self.myConllectionView addSubview:loadView];
             }
             else
             {
@@ -453,17 +311,17 @@
         {
            button.selected=YES;
          
-          [buttonStateDict setValue:@"YES" forKey:@"101"];
+          [self.buttonStateDict setValue:@"YES" forKey:@"101"];
          //把赞设置为选择状态
-          UIButton  *btn =(UIButton *)[self.view viewWithTag:100];
-          [buttonStateDict setValue:@"NO" forKey:@"100"];
-          btn.selected=NO;
-          [_tableView reloadData];
+          //UIButton  *btn =(UIButton *)[self.view viewWithTag:100];
+          [self.buttonStateDict setValue:@"NO" forKey:@"100"];
+          ///btn.selected=NO;
+          [self.myConllectionView reloadData];
            if (_upedDataArray.count==0) {
             [self requestData];
            }
           if ( [[IsNullStateDict objectForKey:@"TWO"] isEqualToString:@"YES"]) {
-                [_tableView addSubview:loadView];
+                [self.myConllectionView addSubview:loadView];
             }
             else
             {
@@ -473,7 +331,7 @@
         }
     }
     
-    NSLog(@"buttonStateDict=======%@",buttonStateDict);
+   // NSLog(@"buttonStateDict=======%@",buttonStateDict);
 }
 - (void)createLoadview
 {
@@ -554,9 +412,6 @@
     
 }
 
-
-
-
 -(void)requestUserInfo
 {
     NSString  *userId;
@@ -572,16 +427,8 @@
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:[NSString stringWithFormat:@"%@/user/info", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
-          ///  NSLog(@"请求的用户数据========%@",responseObject);
-//            if (_userInfoDict ==nil){
-//                _userInfoDict=[[NSMutableDictionary alloc]init];
-//            }
-//            _userInfoDict =[responseObject objectForKey:@"detail"];
-//            productCount=[[_userInfoDict objectForKey:@"product_count"]  intValue];
             [userInfomodel setValuesForKeysWithDictionary:[responseObject objectForKey:@"model"]];
-        
-            [self createTableView];
-            
+            [self createCollectionView];
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
@@ -590,41 +437,37 @@
 }
 - (void)requestData{
     NSString  *autorid;
+    UserDataCenter  *user=[UserDataCenter shareInstance];
     if (self.author_id>0&&![self.author_id isEqualToString:@"0"]) {
         autorid=self.author_id;
     }
     else
     {
-        UserDataCenter  *user=[UserDataCenter shareInstance];
         autorid=user.user_id;
     }
     //user_id是当前用户的ID
-    NSDictionary *parameters = @{@"user_id":userCenter.user_id,@"author_id":autorid};
+    NSDictionary *parameters = @{@"user_id":user.user_id,@"author_id":autorid};
     NSString * section;
     int  page;
-    for (int i=100; i<102;i++ ) {
-        UIButton  *btn =(UIButton *)[self.view viewWithTag:i];
-        if (btn.tag==100&&btn.selected==YES) {
-            section= @"user-create-weibo/list";
-
-            page=page1;
-        }
-        else if (btn.tag==101&&btn.selected==YES)
-        {
-            section=@"user-up-weibo/list";
-            page=page2;
-        }
+    if ([[self.buttonStateDict objectForKey:@"YES"] isEqualToString:@"100"]) {
+        section= @"user-create-weibo/list";
+        page=page1;
     }
-    NSLog(@" parameters  ====%@",parameters);
+    else
+    {
+        section=@"user-up-weibo/list";
+        page=page2;
+
+    }
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
      NSString *urlString =[NSString stringWithFormat:@"%@/%@?per-page=%d&page=%d", kApiBaseUrl, section,pageSize,page];
     [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject objectForKey:@"code"] intValue]==0) {
-            //NSLog(@"个人页面返回的数据====%@",responseObject);
+            NSLog(@"个人页面返回的数据====%@",responseObject);
              NSMutableArray  *Detailarray=[responseObject objectForKey:@"models"];
-        for (int i=100; i<102;i++ ) {
-            UIButton  *btn =(UIButton *)[self.view viewWithTag:i];
-            if (btn.tag==100&&btn.selected==YES) {
+        //for (int i=100; i<102;i++ ) {
+            NSString  *Btag = [self.buttonStateDict objectForKey:@"YES"];
+            if ([Btag isEqualToString:@"100"]) {
                 pageCount1=[[responseObject objectForKey:@"pageCount"] intValue];
 
                 for (NSDictionary  *addDict  in Detailarray) {
@@ -673,9 +516,6 @@
                             }
                         }
                         weibomodel.tagArray=tagArray;
-
-                        
-                        
                         
                         
                         model.weiboInfo=weibomodel;
@@ -701,7 +541,7 @@
 
             if (_addedDataArray.count==0) {
                 [IsNullStateDict setValue:@"YES" forKey:@"ONE"];
-                [_tableView addSubview:loadView];
+                [self.myConllectionView addSubview:loadView];
                 [loadView showNullView:@"没有数据"];
             }
             else
@@ -709,10 +549,10 @@
                 [IsNullStateDict setValue:@"NO" forKey:@"ONE"];
                 [loadView stopAnimation];
                 [loadView removeFromSuperview];
-                [_tableView reloadData];
+                [self.myConllectionView reloadData];
             }
         }
-        else if(btn.tag==101&&btn.selected==YES)
+        else if([Btag isEqualToString:@"101"])
         {
             pageCount2=[[responseObject objectForKey:@"pageCount"] intValue];
 
@@ -778,7 +618,7 @@
         
             if (_upedDataArray.count==0) {
                   [IsNullStateDict setValue:@"YES" forKey:@"TWO"];
-                [_tableView addSubview:loadView];
+                [self.myConllectionView addSubview:loadView];
                 [loadView showNullView:@"没有数据"];
             }
             else
@@ -786,12 +626,12 @@
                 [IsNullStateDict setValue:@"NO" forKey:@"TWO"];
                 [loadView stopAnimation];
                 [loadView removeFromSuperview];
-                [_tableView reloadData];
+                [self.myConllectionView reloadData];
                 
             }
-            [_tableView reloadData];
+            [self.myConllectionView reloadData];
         }
-        }
+        
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"下载失败 Error: %@", error);
@@ -813,150 +653,101 @@
             if (_addedDataArray.count>0) {
             [_addedDataArray removeObjectAtIndex:index];
             }
-            [_tableView reloadData];
+            [self.myConllectionView reloadData];
             
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
 }
-//微博点赞请求
-/*-(void)LikeRequstData:(WeiboModel  *) weiboDict StageInfo :(stageInfoModel *) stageInfoDict
+#pragma  mark
+#pragma mark - UICollectionViewDataSource ----
+
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
-    NSNumber  *weiboId=weiboDict.Id;
-    NSNumber  *stageId=stageInfoDict.Id;
-    NSString  *movieId=stageInfoDict.movie_id;
-    NSString  *movieName=stageInfoDict.movieInfo.name;
-    NSString  *userId=userCenter.user_id;
-    NSString  *autorId =weiboDict.user_id;
-    NSNumber  *uped;
    
-    if ([weiboDict.uped  integerValue] ==0) {
-        uped=[NSNumber numberWithInt:0];
-    }
-    else
-    {
-        uped=[NSNumber numberWithInt:1];
-    }
-    NSDictionary *parameters = @{@"weibo_id":weiboId, @"stage_id":stageId,@"movie_id":movieId,@"movie_name":movieName,@"user_id":userId,@"author_id":autorId,@"operation":uped};
-    
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager POST:[NSString stringWithFormat:@"%@/weiboUp/up", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        if ([[responseObject  objectForKey:@"return_code"]  intValue]==10000) {
-            NSLog(@"点赞成功========%@",responseObject);
-            
-            
-        }
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Error: %@", error);
-    }];
-    
-}*/
+    return 1;
+}
 
-
-#pragma mark  -----
-#pragma mark --------UItableViewDelegate
-#pragma mark  -------
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
+    
+    return 10;
+ }
 
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    SmallImageCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"smallcell" forIndexPath:indexPath];
+    
     for (int i=100; i<102;i++ ) {
         UIButton  *btn =(UIButton *)[self.view viewWithTag:i];
         if (btn.tag==100&&btn.selected==YES) {
-            return _addedDataArray.count;
-
+            userAddmodel  *model =[_addedDataArray objectAtIndex:indexPath.row];
+            cell.backgroundColor =[UIColor redColor];
+            NSURL  *url =[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w340h340",kUrlStage,model.weiboInfo.stageInfo.photo]];
+            [cell.imageView sd_setImageWithURL:url placeholderImage:nil options:(SDWebImageRetryFailed|SDWebImageLowPriority)];
+            cell.titleLab.text=model.weiboInfo.content;
         }
         else if (btn.tag==101&&btn.selected==YES)
         {
-            return _upedDataArray.count;
-        }
-        
+            userAddmodel  *model =[_upedDataArray objectAtIndex:indexPath.row];
+            cell.backgroundColor =[UIColor redColor];
+            NSURL  *url =[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w340h340",kUrlStage,model.weiboInfo.stageInfo.photo]];
+            [cell.imageView sd_setImageWithURL:url placeholderImage:nil options:(SDWebImageRetryFailed|SDWebImageLowPriority)];
+            cell.titleLab.text=model.weiboInfo.content;
+            
+         }
     }
 
+    return cell;
+}
+//点击小图模式的时候，跳转到大图模式
+-(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+
+    
+}
+
+//设置头尾部内容
+-(UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
+ {
+     UICollectionReusableView *reusableView = nil;
+     if (kind == UICollectionElementKindSectionHeader) {
+    //定制头部视图的内容
+     UserHeaderReusableView *headerV = (UserHeaderReusableView *)[collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"headerView" forIndexPath:indexPath];
+      headerV.delegate=self;
+     headerV.userInfomodel=userInfomodel;
+     [headerV setcollectionHeaderViewValue];
+      reusableView = headerV;
+ }
+ return reusableView;
+ }
+#pragma  mark ----
+#pragma  mark -----UICollectionViewLayoutDelegate
+#pragma  mark ----
+
+// 设置每个item的尺寸
+-(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
+    return CGSizeMake((kDeviceWidth-5)/2,(kDeviceWidth-10)/3);
+}
+
+-(UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
+{
+     return UIEdgeInsetsMake(0,0, 5,0);
+}
+//左右间距
+-(CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
+{
     return 0;
 }
-
--(CGFloat )tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return kStageWidth+45+10;
-}
--(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+//上下
+-(CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section
 {
-    CommonStageCell  *cell;
-    for (int i=100; i<102;i++ ) {
-        UIButton  *btn =(UIButton *)[self.view viewWithTag:i];
-    if  (btn.tag==100&&btn.selected==YES) {
-       
-        static NSString *cellID=@"CELL1";
-        cell= (CommonStageCell *)[tableView dequeueReusableCellWithIdentifier:cellID];
-        if (!cell) {
-            cell=[[CommonStageCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
-            cell.selectionStyle=UITableViewCellSelectionStyleNone;
-            cell.backgroundColor=View_BackGround;
-        }
-            cell.pageType=NSPageSourceTypeMyAddedViewController;
-             if (self.author_id.length==0||[self.author_id isEqualToString:@"0"]) {  //表示直接进入这个页面的话，这个为空
-                cell.userPage=NSUserPageTypeMySelfController;
-            }
-            else {
-                cell.userPage=NSUserPageTypeOthersController;
-            }
-        if (_addedDataArray.count>indexPath.row) {
-            userAddmodel  *model =[_addedDataArray objectAtIndex:indexPath.row];
-
-            cell.weiboInfo=model.weiboInfo;
-            //小闪动标签的数组
-            cell.delegate=self;
-            cell.stageInfo=model.weiboInfo.stageInfo;
-            [cell ConfigsetCellindexPath:indexPath.row];
-            cell.stageView.delegate=self;
-            
-        }
-        return cell;
-    }
-    else if (btn.tag==101&&btn.selected==YES)
-    {
-        static NSString *cellID=@"CELL2";
-        cell= (CommonStageCell *)[tableView dequeueReusableCellWithIdentifier:cellID];
-        if (!cell) {
-            cell=[[CommonStageCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
-            cell.selectionStyle=UITableViewCellSelectionStyleNone;
-            cell.backgroundColor=View_BackGround;
-        }
-            cell.pageType=NSPageSourceTypeMyupedViewController;
-            if (_upedDataArray.count>indexPath.row) {
-                userAddmodel  *model  =[_upedDataArray objectAtIndex:indexPath.row];
-
-            cell.weiboInfo =model.weiboInfo;
-            cell.stageInfo=model.weiboInfo.stageInfo;
-            [cell ConfigsetCellindexPath:indexPath.row];
-            cell.stageView.delegate=self;
-            cell.delegate=self;
-            
-          }
-        return cell;
-     }
-    }
-    
-    return cell;
-    
+     return 5;
 }
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    
-    
-    CommonStageCell   *cell=(CommonStageCell *)[tableView cellForRowAtIndexPath:indexPath];
-    if (isShowMark==YES) {
-        [cell showAndHidenMarkViews:YES];
-        isShowMark=NO;
-    }
-    else if (isShowMark==NO)
-    {
-        isShowMark=YES;
-        [cell showAndHidenMarkViews:NO];
-    }
 
- 
-}
+
+
 //设置页面
 -(void)GotoSettingClick:(UIButton  *) button
 {

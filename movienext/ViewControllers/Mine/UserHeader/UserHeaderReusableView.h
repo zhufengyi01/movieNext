@@ -1,0 +1,34 @@
+//
+//  UserHeaderReusableView.h
+//  movienext
+//
+//  Created by 风之翼 on 15/6/2.
+//  Copyright (c) 2015年 redianying. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+#import "weiboUserInfoModel.h"
+#import "UserDataCenter.h"
+@protocol UserHeaderReusableViewDelegate  <NSObject>
+
+-(void)changeCollectionHandClick : (UIButton *) btn;
+
+@end
+
+@interface UserHeaderReusableView : UICollectionReusableView
+{
+    UIImageView  *ivAvatar;  // 头像
+    UserDataCenter  *userCenter;
+    UILabel  *lblUsername;
+    UILabel *lblCount;
+    UILabel *lblZanCout;
+    UILabel *lblBrief;   //简介
+    
+}
+@property(nonatomic,assign) id <UserHeaderReusableViewDelegate> delegate;
+//用户信息
+@property(nonatomic,strong)  weiboUserInfoModel  *userInfomodel;
+
+-(void)setcollectionHeaderViewValue;
+
+@end

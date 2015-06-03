@@ -323,6 +323,7 @@
 		006BC7441ADE5C1500DE0C0D /* open_danmu@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 006BC7401ADE5C1500DE0C0D /* open_danmu@3x.png */; };
 		006F77231B0DEF3200EF3EF0 /* AdmListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 006F77221B0DEF3200EF3EF0 /* AdmListViewController.m */; };
 		006F77261B0DEF4900EF3EF0 /* AdmCustomListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 006F77251B0DEF4900EF3EF0 /* AdmCustomListViewController.m */; };
+		0071777E1B1DB2AB001F5D79 /* UserHeaderReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0071777D1B1DB2AB001F5D79 /* UserHeaderReusableView.m */; };
 		007427321AAD3F3B0034047D /* AddMarkViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 007427311AAD3F3B0034047D /* AddMarkViewController.m */; };
 		0074273B1AADAB9B0034047D /* UIImage+Blur.m in Sources */ = {isa = PBXBuildFile; fileRef = 007427351AADAB9B0034047D /* UIImage+Blur.m */; };
 		0074273C1AADAB9B0034047D /* UIImage+ImageWithColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 007427371AADAB9B0034047D /* UIImage+ImageWithColor.m */; };
@@ -938,6 +939,8 @@
 		006F77221B0DEF3200EF3EF0 /* AdmListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AdmListViewController.m; sourceTree = "<group>"; };
 		006F77241B0DEF4900EF3EF0 /* AdmCustomListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdmCustomListViewController.h; sourceTree = "<group>"; };
 		006F77251B0DEF4900EF3EF0 /* AdmCustomListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AdmCustomListViewController.m; sourceTree = "<group>"; };
+		0071777C1B1DB2AB001F5D79 /* UserHeaderReusableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserHeaderReusableView.h; sourceTree = "<group>"; };
+		0071777D1B1DB2AB001F5D79 /* UserHeaderReusableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserHeaderReusableView.m; sourceTree = "<group>"; };
 		007427301AAD3F3B0034047D /* AddMarkViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddMarkViewController.h; sourceTree = "<group>"; };
 		007427311AAD3F3B0034047D /* AddMarkViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddMarkViewController.m; sourceTree = "<group>"; };
 		007427341AADAB9B0034047D /* UIImage+Blur.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Blur.h"; sourceTree = "<group>"; };
@@ -2051,6 +2054,15 @@
 			path = AdminManager;
 			sourceTree = "<group>";
 		};
+		0071777B1B1DB255001F5D79 /* UserHeader */ = {
+			isa = PBXGroup;
+			children = (
+				0071777C1B1DB2AB001F5D79 /* UserHeaderReusableView.h */,
+				0071777D1B1DB2AB001F5D79 /* UserHeaderReusableView.m */,
+			);
+			path = UserHeader;
+			sourceTree = "<group>";
+		};
 		007427331AADAB9B0034047D /* UIImage-Helpers */ = {
 			isa = PBXGroup;
 			children = (
@@ -2514,6 +2526,7 @@
 				0014E3061AC55AEF0078CABD /* thanks */,
 				000B091E1AA3007600B8D13A /* SettingViewController.h */,
 				000B091F1AA3007600B8D13A /* SettingViewController.m */,
+				0071777B1B1DB255001F5D79 /* UserHeader */,
 				00AA53FF1AA2C525004096F8 /* MyViewController.h */,
 				00AA54001AA2C525004096F8 /* MyViewController.m */,
 			);
@@ -3038,6 +3051,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				008363181AE4F86E00806897 /* Function.m in Sources */,
+				0071777E1B1DB2AB001F5D79 /* UserHeaderReusableView.m in Sources */,
 				00354C5C1ABF030C00F650AA /* AFURLConnectionOperation.m in Sources */,
 				006739561AA491250087C240 /* MJRefreshFooterView.m in Sources */,
 				000850B31B09C87900E6009C /* UIButton+Block.m in Sources */,

@@ -48,8 +48,9 @@
     self.tagBgImageview.image =[_backgroundImage stretchableImageWithLeftCapWidth:10 topCapHeight:20];
     [self addSubview:self.tagBgImageview];
      //添加文字
-    self.titleLable=[ZCControl createLabelWithFrame:CGRectMake(0,0, 60, 30) Font:TagTextFont14 Text:@"标签"];
+    self.titleLable=[ZCControl createLabelWithFrame:CGRectMake(0,0, 60, 30) Font:TagTextFont16 Text:@"标签"];
     self.titleLable.textColor=[UIColor whiteColor];
+    
     self.titleLable.font =[UIFont systemFontOfSize:TagTextFont14];
     if (IsIphone6plus) {
         self.titleLable.font=[UIFont systemFontOfSize:TagTextFont16];
@@ -70,8 +71,8 @@
     CGSize  Tsize =[self.titleLable.text boundingRectWithSize:CGSizeMake(MAXFLOAT, TagHeight) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:[NSDictionary dictionaryWithObject:self.titleLable.font forKey:NSFontAttributeName] context:nil].size;
     //不是长微博
     if (_isLongtag==NO) {
-        if (Tsize.width>120){
-            Tsize.width=120;
+        if (Tsize.width>(kDeviceWidth-80)/2){
+            Tsize.width=(kDeviceWidth-80)/2;
         }
     }
     self.frame=CGRectMake(0, 0, Tsize.width+10, TagHeight);
