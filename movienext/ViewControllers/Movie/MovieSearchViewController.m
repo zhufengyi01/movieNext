@@ -140,6 +140,7 @@
     if ([search.text isEqualToString:@"00"]) {
         return;
     }
+    
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
     NSString *urlStr = [NSString stringWithFormat:@"http://movie.douban.com/subject_search?search_text=%@&cat=1002", [search.text URLEncodedString] ];
     [request setURL:[NSURL URLWithString:urlStr]];
@@ -153,13 +154,18 @@
             NSInteger responseCode = [(NSHTTPURLResponse *)response statusCode];
             NSString *responseString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
             if (responseCode == 200) {
-                responseString = [Function getNoNewLine:responseString];
+                NSLog(@"responseString = %@", responseString);
+                if ( responseString == nil ) {
+                    NSLog(@"没有数据");
+                } else {
+                    responseString = [Function getNoNewLine:responseString];
                 
-                NSString     * pattern = @"<a class=\"nbg\" href=\"http://movie\\.douban\\.com/subject/(\\d+)/\".*>\n.*<img src=\"(.*)\" alt=\"(.*?)\".*?/>";
-                NSMutableArray *doubanInfos = [[DoubanService shareInstance] getDoubanInfosByResponse:responseString withpattern:pattern type:NServiceTypeSearch];
-                _dataArray = doubanInfos;
-               // NSLog(@"------_dataArray -=====%@",_dataArray);
-                [_myTableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
+                    NSString     * pattern = @"<a class=\"nbg\" href=\"http://movie\\.douban\\.com/subject/(\\d+)/\".*>\n.*<img src=\"(.*)\" alt=\"(.*?)\".*?/>";
+                    NSMutableArray *doubanInfos = [[DoubanService shareInstance] getDoubanInfosByResponse:responseString withpattern:pattern type:NServiceTypeSearch];
+                    _dataArray = doubanInfos;
+                    // NSLog(@"------_dataArray -=====%@",_dataArray);
+                    [_myTableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
+                }
             } else {
                 NSLog(@"error");
             }
