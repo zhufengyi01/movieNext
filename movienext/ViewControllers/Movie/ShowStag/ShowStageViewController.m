@@ -382,7 +382,7 @@
         starImageView.image=[UIImage imageNamed:@"like_nomoal.png"];
         //把赞的数量-1
         int  like =   [Like_lable.text intValue];
-        like=like-1;
+        like=like>0 ? like-1 : 0;
         _WeiboInfo.like_count=[NSNumber numberWithInt:like];
 
         if ([_WeiboInfo.like_count intValue]==0) {

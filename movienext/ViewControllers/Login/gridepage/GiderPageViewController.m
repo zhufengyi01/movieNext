@@ -73,7 +73,7 @@
         if (i==2) {
             imageview.userInteractionEnabled=YES;
             UIButton  *btn =[UIButton buttonWithType:UIButtonTypeCustom];
-            btn.frame=CGRectMake((kDeviceWidth-140)/2, kDeviceHeight-150, 140, 42);
+            btn.frame=CGRectMake((kDeviceWidth-140)/2, kDeviceHeight-140, 140, 42);
             
              [btn addTarget:self action:@selector(goLogin) forControlEvents:UIControlEventTouchUpInside];
             
