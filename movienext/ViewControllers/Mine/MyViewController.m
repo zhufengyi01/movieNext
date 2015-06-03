@@ -155,7 +155,7 @@
     //layout.minimumLineSpacing=10;      //cell上下间隔
     //layout.itemSize=CGSizeMake(80,140);  //cell的大小
      layout.sectionInset=UIEdgeInsetsMake(0,0,64, 0); //整个偏移量 上左下右
-     _myConllectionView =[[UICollectionView alloc]initWithFrame:CGRectMake(0,0,kDeviceWidth, kDeviceHeight-20-0-100) collectionViewLayout:layout];
+     _myConllectionView =[[UICollectionView alloc]initWithFrame:CGRectMake(0,0,kDeviceWidth, kDeviceHeight-0-0-100) collectionViewLayout:layout];
     [layout setHeaderReferenceSize:CGSizeMake(_myConllectionView.frame.size.width,160)];
     _myConllectionView.backgroundColor=View_BackGround;
     //注册大图模式
@@ -651,7 +651,6 @@
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     SmallImageCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"smallcell" forIndexPath:indexPath];
-    
     NSString  *Btag = [self.buttonStateDict objectForKey:@"YES"];
         if ([Btag isEqualToString:@"100"]) {
             if (_addedDataArray.count>indexPath.row) {
@@ -708,10 +707,6 @@
         [self.navigationController pushViewController:vc animated:YES];
     }
     
-//=======
-
-
-//>>>>>>> 50eafa284be22c6879e4e40308803b143a59b341
 }
 
 //设置头尾部内容
@@ -732,8 +727,6 @@
  -(void)changeCollectionHandClick:(UIButton *)btn
 {
     
-    [self.buttonStateDict setObject:[NSString stringWithFormat:@"%d",btn.tag] forKey:@"YES"];
-    
     if(btn.tag==100)
     {
         NSLog(@"点击了第一个按钮");
@@ -742,11 +735,13 @@
         }
         else if(btn.selected==YES)
         {
+            [self.buttonStateDict setObject:@"100" forKey:@"YES"];
             
-            [self.myConllectionView reloadData];
+
             if (_addedDataArray.count==0) {
                 [self requestData];
             }
+            [self.myConllectionView reloadData];
             if ( [[IsNullStateDict objectForKey:@"ONE"] isEqualToString:@"YES"]) {
                 [self.myConllectionView addSubview:loadView];
             }
@@ -765,11 +760,13 @@
         }
         else if(btn.selected==YES)
         {
+            [self.buttonStateDict setObject:@"101" forKey:@"YES"];
             
-            [self.myConllectionView reloadData];
+   
             if (_upedDataArray.count==0) {
                 [self requestData];
             }
+            [self.myConllectionView reloadData];
             if ( [[IsNullStateDict objectForKey:@"TWO"] isEqualToString:@"YES"]) {
                 [self.myConllectionView addSubview:loadView];
             }
@@ -777,12 +774,8 @@
             {
                 [loadView removeFromSuperview];
             }
-            
         }
     }
-
-    
-    
 }
 #pragma  mark ----
 #pragma  mark -----UICollectionViewLayoutDelegate

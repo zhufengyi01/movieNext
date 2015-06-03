@@ -23,6 +23,8 @@
 #import "UserDataCenter.h"
 #import "ZCControl.h"
 #import "MJRefresh.h"
+#import "userAddmodel.h"
+#import "ShowStageViewController.h"
 @interface NotificationViewController ()<UITableViewDataSource,UITableViewDelegate,LoadingViewDelegate,NotificationTableViewCellDelegate>
 {
     LoadingView         *loadView;
@@ -160,7 +162,37 @@
             if (_dataArray==nil) {
                 _dataArray=[[NSMutableArray alloc]init];
             }
-            [_dataArray addObjectsFromArray:[responseObject objectForKey:@"models"]];
+            //解析数据[_dataArray addObjectsFromArray:[responseObject objectForKey:@"models"]];
+            NSMutableArray  *array =[[NSMutableArray alloc]initWithArray:[responseObject objectForKey:@"models"]];
+            
+            if (_dataArray==nil) {
+                _dataArray =[[NSMutableArray alloc]init];
+            }
+            for (NSDictionary  *noDcit in array) {
+                userAddmodel  *model =[[userAddmodel alloc]init];
+                if (model) {
+                    [model setValuesForKeysWithDictionary:noDcit];
+                    weiboInfoModel *weibomodel =[[weiboInfoModel alloc]init];
+                    if (weibomodel) {
+                        if (![[noDcit objectForKey:@"weibo"] isKindOfClass:[NSNull class]]) {
+                        [weibomodel setValuesForKeysWithDictionary:[noDcit objectForKey:@"weibo"]];
+                            
+                        weiboUserInfoModel *user =[[weiboUserInfoModel alloc]init];
+                        [user setValuesForKeysWithDictionary:[[noDcit objectForKey:@"weibo"] objectForKey:@"user"]];
+                        weibomodel.uerInfo=user;
+                        
+                        stageInfoModel *stagemodel =[[stageInfoModel alloc]init];
+                        [stagemodel setValuesForKeysWithDictionary:[[noDcit objectForKey:@"weibo"] objectForKey:@"stage"]];
+                        weibomodel.stageInfo=stagemodel;
+                        model.weiboInfo=weibomodel;
+                     }
+                    }
+                    weiboUserInfoModel  *user =[[weiboUserInfoModel alloc]init];
+                    model.userInfo=user;
+                    [_dataArray addObject:model];
+                }
+            }
+         
             if ([_dataArray count]==0) {
                 [loadView showNullView:@"还没有消息"];
                 return ;
@@ -169,7 +201,6 @@
             {
               [loadView stopAnimation];
               [loadView removeFromSuperview];
-            
               [_myTableView reloadData];
           }
         }
@@ -214,10 +245,22 @@
         cell.selectionStyle=UITableViewCellSelectionStyleNone;
     }
     if (_dataArray.count>indexPath.row) {
-        [cell setValueforCell:[_dataArray  objectAtIndex:indexPath.row] index:indexPath.row];
+        //[cell setValueforCell:[_dataArray  objectAtIndex:indexPath.row] index:indexPath.row];
+        userAddmodel  *model =[_dataArray objectAtIndex:indexPath.row];
+        [cell setValueforCell:model index:indexPath.row];
         cell.delegate=self;
     }
     return cell;
+}
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    ShowStageViewController *vc = [[ShowStageViewController alloc] init];
+    userAddmodel  *model =[_dataArray objectAtIndex:indexPath.row];
+    vc.stageInfo=model.weiboInfo.stageInfo;
+    UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+    self.navigationItem.backBarButtonItem=item;
+    [self.navigationController pushViewController:vc animated:YES];
+    
 }
 ////这个方法
 //-(void)dealHeadClick:(UIButton  *)button

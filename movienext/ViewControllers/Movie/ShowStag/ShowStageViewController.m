@@ -146,9 +146,6 @@
     [scrollView addSubview:BgView];
     
     
-    
-    
-    
     //最后要分享出去的图
     ShareView =[[UIView alloc]initWithFrame:CGRectMake(10,10, kDeviceWidth-20, (kDeviceWidth-20)*(9.0/16))];
     ShareView.userInteractionEnabled=YES;
@@ -1004,7 +1001,7 @@
 {
     
     if (button==ShareButton) {  //分享有关
-    UIImage  *image=[Function getImage:ShareView WithSize:CGSizeMake(kStageWidth, (kDeviceWidth-10)*(9.0/16))];
+    UIImage  *image=[Function getImage:ShareView WithSize:CGSizeMake(kStageWidth-10, (kDeviceWidth-20)*(9.0/16))];
         if (self.weiboInfo) {
             self.stageInfo=self.weiboInfo.stageInfo;
         }
