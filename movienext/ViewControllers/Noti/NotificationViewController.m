@@ -60,7 +60,7 @@
     [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color.png"] forBarMetrics:UIBarMetricsDefault];
 
     UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:@"消息"];
-    titleLable.textColor=VLight_GrayColor;
+    titleLable.textColor=VGray_color;
     titleLable.font=[UIFont boldSystemFontOfSize:18];
     titleLable.textAlignment=NSTextAlignmentCenter;
     self.navigationItem.titleView=titleLable;
@@ -279,12 +279,12 @@
 -(void)NotificationClick:(UIButton *)button indexPath:(NSInteger)index
 {
     if (button.tag==100||button.tag==101) {
-        NSLog(@"button.tag = %ld", button.tag);
-        MyViewController  *myVC=[[MyViewController alloc]init];
-        NSDictionary *dict = [_dataArray objectAtIndex:index];
-        myVC.author_id = [[dict valueForKey:@"user"] objectForKey:@"id"];
-         [self.navigationController pushViewController:myVC animated:YES];
+      //  NSLog(@"button.tag = %ld", button.tag);
         
+        MyViewController  *myVC=[[MyViewController alloc]init];
+        userAddmodel *model =[_dataArray objectAtIndex:index];
+        myVC.author_id=[NSString stringWithFormat:@"%@",model.weiboInfo.uerInfo.Id];
+         [self.navigationController pushViewController:myVC animated:YES];
     }
    
 }

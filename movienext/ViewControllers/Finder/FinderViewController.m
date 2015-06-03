@@ -111,6 +111,7 @@
     sharebtn.frame=CGRectMake(0, 0, 40, 25);
     sharebtn.tag=1001;
     [sharebtn setTitle:@"分享" forState:UIControlStateNormal];
+    [sharebtn setTitleEdgeInsets:UIEdgeInsetsMake(0, 10, 0, -10)];
     [sharebtn setTitleColor:VBlue_color forState:UIControlStateNormal];
     [sharebtn addTarget:self action:@selector(naviagetionItemClick:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem  *rigthbarButton=[[UIBarButtonItem alloc]initWithCustomView:sharebtn];

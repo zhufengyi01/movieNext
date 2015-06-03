@@ -69,6 +69,9 @@
     stageInfoModel  *_TStageInfo;
     weiboInfoModel      *_TweiboInfo;
     BOOL  isShowMark;
+    
+    NSMutableArray  *_addWeiboArray ;
+    NSMutableArray   *_upWeiboArray;
 
 }
 @end
@@ -99,11 +102,6 @@
      [self requestUserInfo];
      [self requestData];
     
-     if (self.author_id&&![self.author_id isEqualToString:@"0"]) {
-        //如果有用户id 并且用户的id 不为0
-        self.navigationItem.rightBarButtonItem=nil;
-        self.navigationItem.titleView=nil;
-    }
 }
 -(void)initData{
     page1=1;
@@ -115,6 +113,10 @@
      userCenter  = [UserDataCenter shareInstance];
     _addedDataArray = [[NSMutableArray alloc] init];
     _upedDataArray = [[NSMutableArray alloc] init];
+    
+    
+    _addWeiboArray =  [[NSMutableArray alloc]init];
+    _upWeiboArray =[[NSMutableArray alloc]init];
     self.buttonStateDict=[[NSMutableDictionary alloc]init];
     //默认第一个选择状态
     [self.buttonStateDict setValue:@"100" forKey:@"YES"];
@@ -131,9 +133,13 @@
 {
     [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color.png"] forBarMetrics:UIBarMetricsDefault];
 
-    UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:@"我的"];
-    titleLable.textColor=VLight_GrayColor;
-    
+    NSString  *titleString=@"我的";
+    if (self.author_id&&![self.author_id isEqualToString:@"0"]) {
+         titleString=@"他的主页";
+    }
+
+    UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:titleString];
+    titleLable.textColor=VGray_color;
     titleLable.font=[UIFont boldSystemFontOfSize:18];
     titleLable.textAlignment=NSTextAlignmentCenter;
     self.navigationItem.titleView=titleLable;
@@ -145,6 +151,12 @@
     [button addTarget:self action:@selector(GotoSettingClick:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem  *barButton=[[UIBarButtonItem alloc]initWithCustomView:button];
     self.navigationItem.rightBarButtonItem=barButton;
+    if (self.author_id&&![self.author_id isEqualToString:@"0"]) {
+        //如果有用户id 并且用户的id 不为0
+        self.navigationItem.rightBarButtonItem=nil;
+        self.navigationItem.titleView=nil;
+    }
+
 }
 
 -(void)createCollectionView
@@ -177,6 +189,7 @@
     [_myConllectionView addHeaderWithCallback:^{
          NSString *Btag =[vc.buttonStateDict objectForKey:@"YES"];
              if ([Btag isEqualToString:@"100"]) {
+                 
                 if (vc.addedDataArray.count>0) {
                     [vc.addedDataArray removeAllObjects];
                 }
@@ -212,8 +225,6 @@
                 page1=page1+1;
                 [self requestData];
             }
-
-            
         }
         else if ([Btag isEqualToString:@"101"])
         {
@@ -221,8 +232,6 @@
                 page2=page2+1;
                 [self requestData];
             }
-
-         
         }
         // 进入刷新状态就会回调这个Block
                // 模拟延迟加载数据，因此2秒后才调用）
@@ -277,8 +286,7 @@
          
           [self.buttonStateDict setValue:@"YES" forKey:@"101"];
          //把赞设置为选择状态
-          //UIButton  *btn =(UIButton *)[self.view viewWithTag:100];
-          [self.buttonStateDict setValue:@"NO" forKey:@"100"];
+           [self.buttonStateDict setValue:@"NO" forKey:@"100"];
           ///btn.selected=NO;
           [self.myConllectionView reloadData];
            if (_upedDataArray.count==0) {
@@ -394,8 +402,10 @@
             
             
             [userInfomodel setValuesForKeysWithDictionary:[responseObject objectForKey:@"model"]];
-             userInfomodel.logo =userCenter.logo;
-            //[self requestData];
+            if (!userInfomodel.logo) {
+                userInfomodel.logo =userCenter.logo;
+            }
+          
             [self createCollectionView];
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -406,7 +416,6 @@
 - (void)requestData{
     
     NSString  *autorid;
-    
     UserDataCenter  *user=[UserDataCenter shareInstance];
     if (self.author_id>0&&![self.author_id isEqualToString:@"0"]) {
         autorid=self.author_id;
@@ -433,15 +442,15 @@
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
      NSString *urlString =[NSString stringWithFormat:@"%@/%@?per-page=%d&page=%d", kApiBaseUrl, section,pageSize,page];
     
+    NSLog(@"=======urlstring ==%@",urlString);
     [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject objectForKey:@"code"] intValue]==0) {
             NSLog(@"个人页面返回的数据====%@",responseObject);
-            
              NSMutableArray  *Detailarray=[responseObject objectForKey:@"models"];
              NSString  *Btag = [self.buttonStateDict objectForKey:@"YES"];
             if ([Btag isEqualToString:@"100"]) {
                 pageCount1=[[responseObject objectForKey:@"pageCount"] intValue];
-
+                
                 for (NSDictionary  *addDict  in Detailarray) {
                 userAddmodel  *model=[[userAddmodel alloc]init];
                 if (model) {
@@ -449,11 +458,9 @@
                     weiboInfoModel *weibomodel =[[weiboInfoModel alloc]init];
                     if (![[addDict objectForKey:@"weibo"] isKindOfClass:[NSNull class]]) {
                         [weibomodel setValuesForKeysWithDictionary:[addDict objectForKey:@"weibo"]];
-                    
                         stageInfoModel  *stagemodel =[[stageInfoModel alloc]init];
                         if (stagemodel) {
                             if (![[[addDict objectForKey:@"weibo"] objectForKey:@"stage"] isKindOfClass:[NSNull class]]) {
-                                
                             [stagemodel setValuesForKeysWithDictionary:[[addDict objectForKey:@"weibo"] objectForKey:@"stage"]];
                             movieInfoModel *moviemodel =[[movieInfoModel alloc]init];
                             if (moviemodel) {
@@ -488,28 +495,26 @@
                             }
                         }
                         weibomodel.tagArray=tagArray;
-                        
-                        
                         model.weiboInfo=weibomodel;
+                        
                         if (_addedDataArray ==nil) {
                             _addedDataArray=[[NSMutableArray alloc]init];
                         }
-
                         [_addedDataArray addObject:model];
                     }
                 }
             }
-                //点赞的数组
-//            for (NSDictionary  *updict in [responseObject objectForKey:@"upweibos"]) {
-//                UpweiboModel *upmodel =[[UpweiboModel alloc]init];
-//                if (upmodel) {
-//                    [upmodel setValuesForKeysWithDictionary:updict];
-//                    if (_upWeiboArray==nil) {
-//                        _upWeiboArray =[[NSMutableArray alloc]init];
-//                    }
-//                    [_upWeiboArray addObject:upmodel];
-//                    }
-//                }
+          // 添加的点赞的数组
+            for (NSDictionary  *updict in [responseObject objectForKey:@"upweibos"]) {
+                UpweiboModel *upmodel =[[UpweiboModel alloc]init];
+                if (upmodel) {
+                    [upmodel setValuesForKeysWithDictionary:updict];
+                    if (_addWeiboArray==nil) {
+                        _addWeiboArray =[[NSMutableArray alloc]init];
+                    }
+                    [_addWeiboArray addObject:upmodel];
+                    }
+            }
 
             if (_addedDataArray.count==0) {
                 [IsNullStateDict setValue:@"YES" forKey:@"ONE"];
@@ -523,12 +528,11 @@
                 [loadView removeFromSuperview];
                 [self.myConllectionView reloadData];
             }
-                [self.myConllectionView reloadData];
+            [self.myConllectionView reloadData];
         }
         else if([Btag isEqualToString:@"101"])
         {
             pageCount2=[[responseObject objectForKey:@"pageCount"] intValue];
-
             if (_upedDataArray ==nil) {
                 _upedDataArray=[[NSMutableArray alloc]init];
             }
@@ -580,15 +584,24 @@
                             }
                         }
                         weibomodel.tagArray=tagArray;
-
-                        
                         model.weiboInfo=weibomodel;
                         [_upedDataArray addObject:model];
                     }
                 }
             }
 
-        
+            // 添加的点赞的数组
+            for (NSDictionary  *updict in [responseObject objectForKey:@"upweibos"]) {
+                UpweiboModel *upmodel =[[UpweiboModel alloc]init];
+                if (upmodel) {
+                    [upmodel setValuesForKeysWithDictionary:updict];
+                    if (_upWeiboArray==nil) {
+                        _upWeiboArray =[[NSMutableArray alloc]init];
+                    }
+                    [_upWeiboArray addObject:upmodel];
+                }
+            }
+
             if (_upedDataArray.count==0) {
                   [IsNullStateDict setValue:@"YES" forKey:@"TWO"];
                 [self.myConllectionView addSubview:loadView];
@@ -644,8 +657,16 @@
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    
-    return 10;
+ 
+    NSString  *Btag = [self.buttonStateDict objectForKey:@"YES"];
+    if ([Btag isEqualToString:@"100"]) {
+        return  self.addedDataArray.count;
+    }
+    else if ([Btag isEqualToString:@"101"])
+    {
+        return self.upedDataArray.count;
+    }
+    return 0;
  }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
@@ -655,9 +676,7 @@
         if ([Btag isEqualToString:@"100"]) {
             if (_addedDataArray.count>indexPath.row) {
             userAddmodel  *model =[_addedDataArray objectAtIndex:indexPath.row];
-            
-//            cell.backgroundColor =[UIColor redColor];
-            NSURL  *url =[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w340h340",kUrlStage,model.weiboInfo.stageInfo.photo]];
+             NSURL  *url =[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w340h340",kUrlStage,model.weiboInfo.stageInfo.photo]];
             [cell.imageView sd_setImageWithURL:url placeholderImage:nil options:(SDWebImageRetryFailed|SDWebImageLowPriority)];
             cell.titleLab.text=model.weiboInfo.content;
             }
@@ -666,8 +685,7 @@
         {
             if (_upedDataArray.count > indexPath.row) {
             userAddmodel  *model =[_upedDataArray objectAtIndex:indexPath.row];
-//            cell.backgroundColor =[UIColor redColor];
-            NSURL  *url =[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w340h340",kUrlStage,model.weiboInfo.stageInfo.photo]];
+             NSURL  *url =[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w340h340",kUrlStage,model.weiboInfo.stageInfo.photo]];
             [cell.imageView sd_setImageWithURL:url placeholderImage:nil options:(SDWebImageRetryFailed|SDWebImageLowPriority)];
             cell.titleLab.text=model.weiboInfo.content;
             }
@@ -679,13 +697,13 @@
 //点击小图模式的时候，跳转到大图模式
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-///<<<<<<< HEAD
     NSString  *Btag =[self.buttonStateDict objectForKey:@"YES"];
     if ([Btag isEqualToString:@"100"]) {
         
         ShowStageViewController *vc = [[ShowStageViewController alloc] init];
         userAddmodel *model=[_addedDataArray objectAtIndex:indexPath.row];
-       // vc.upweiboArray=_upWeiboArray;
+        vc.upweiboArray=_addWeiboArray;
+        
         vc.stageInfo = model.weiboInfo.stageInfo;
         
         UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
@@ -698,12 +716,10 @@
     {
         ShowStageViewController *vc = [[ShowStageViewController alloc] init];
         userAddmodel *model=[_upedDataArray objectAtIndex:indexPath.row];
-        
-       // vc.upweiboArray=_upWeiboArray;
+       vc.upweiboArray=_upWeiboArray;
         vc.stageInfo =model.weiboInfo.stageInfo;
         UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
         self.navigationItem.backBarButtonItem=item;
-        
         [self.navigationController pushViewController:vc animated:YES];
     }
     

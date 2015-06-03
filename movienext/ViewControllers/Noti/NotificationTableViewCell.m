@@ -68,14 +68,10 @@
     
     
     _index=index;
-    //if () {
-        NSString *logoString=[NSString stringWithFormat:@"%@%@", kUrlAvatar,model.weiboInfo.uerInfo.logo];
+         NSString *logoString=[NSString stringWithFormat:@"%@%@", kUrlAvatar,model.weiboInfo.uerInfo.logo];
     
     [logoButton sd_setBackgroundImageWithURL:[NSURL URLWithString:logoString ] forState:UIControlStateNormal placeholderImage:HeadImagePlaceholder];
-     //}
-    
-    //if (![[dict objectForKey:@"weibo"]  isKindOfClass:[NSNull class]]) {
-        NSString *urlString =[NSString stringWithFormat:@"%@%@!w340h340",kUrlStage,model.weiboInfo.stageInfo.photo];
+         NSString *urlString =[NSString stringWithFormat:@"%@%@!w340h340",kUrlStage,model.weiboInfo.stageInfo.photo];
         
     [stageImage sd_setImageWithURL:[NSURL URLWithString:urlString] placeholderImage:[UIImage imageNamed:@"loading_image_all.png"] options:SDWebImageRetryFailed];
     //}

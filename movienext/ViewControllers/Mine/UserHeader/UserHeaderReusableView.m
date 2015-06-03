@@ -142,7 +142,7 @@
 {
     NSURL   *imageURL;
     //头像
-         imageURL =[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!thumb",kUrlAvatar,userInfo.logo]];
+    imageURL =[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!thumb",kUrlAvatar,userInfo.logo]];
     [ivAvatar sd_setImageWithURL:imageURL placeholderImage:[UIImage imageNamed:@"user_normal.png"]];
     //用户名
          lblUsername.text=[NSString stringWithFormat:@"%@",userInfo.username];

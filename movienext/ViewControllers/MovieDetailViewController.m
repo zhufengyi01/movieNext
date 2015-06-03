@@ -188,12 +188,13 @@
     self.navigationItem.titleView=titleView;
     [self.navigationItem.titleView setContentMode:UIViewContentModeCenter];
     
-    upLoadimageBtn=[ZCControl createButtonWithFrame:CGRectMake(0,0,40,25) ImageName:nil Target:self Action:@selector(uploadImageFromAbumdAndDouban) Title:@"添加"];
+    upLoadimageBtn=[ZCControl createButtonWithFrame:CGRectMake(0,0,50,25) ImageName:nil Target:self Action:@selector(uploadImageFromAbumdAndDouban) Title:@"添加"];
     upLoadimageBtn.tag=201;
-    [upLoadimageBtn.titleLabel setFont:[UIFont systemFontOfSize:16]];
+    [upLoadimageBtn.titleLabel setFont:[UIFont systemFontOfSize:18]];
     //upLoadimageBtn.backgroundColor = [UIColor redColor];
     [upLoadimageBtn setTitleColor:VBlue_color forState:UIControlStateNormal];
-    upLoadimageBtn.imageEdgeInsets= UIEdgeInsetsMake(5, 20, 0, -10);
+    upLoadimageBtn.titleEdgeInsets =UIEdgeInsetsMake(0, 15, 0, -15);
+   // upLoadimageBtn.imageEdgeInsets= UIEdgeInsetsMake(5, 20, 0, -20);
 //    [upLoadimageBtn setImage:[UIImage imageNamed:@"up_picture_blue.png"] forState:UIControlStateNormal];
     UIBarButtonItem  *rigthbar =[[UIBarButtonItem alloc]initWithCustomView:upLoadimageBtn];
     self.navigationItem.rightBarButtonItem=rigthbar;
