@@ -496,20 +496,19 @@
     
 //   底部的分享和添加按钮
 
-    ShareButton =[ZCControl createButtonWithFrame:CGRectMake(0,200-45,kDeviceWidth/2,45) ImageName:nil Target:self Action:@selector(ShareButtonClick:) Title:@"现在分享"];
-     ShareButton.titleLabel.font =[UIFont boldSystemFontOfSize:16];
-    [ShareButton setTitleColor:VBlue_color forState:UIControlStateNormal];
+    addMarkButton =[ZCControl createButtonWithFrame:CGRectMake(0,200-45,kDeviceWidth/2,45) ImageName:nil Target:self Action:@selector(ShareButtonClick:) Title:@"我要添加"];
+     addMarkButton.titleLabel.font =[UIFont boldSystemFontOfSize:16];
+    [addMarkButton setTitleColor:VBlue_color forState:UIControlStateNormal];
     //ShareButton.backgroundColor =[UIColor redColor];
-    [ShareButton setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color"] forState:UIControlStateNormal];
-     [shareView addSubview:ShareButton];
-    
-   
-    addMarkButton =[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth/2,200-45,kDeviceWidth/2,45) ImageName:nil Target:self Action:@selector(ShareButtonClick:) Title:@"我要添加"];
-    addMarkButton.titleLabel.font =[UIFont boldSystemFontOfSize:16];
-     [addMarkButton setTitleColor:VBlue_color forState:UIControlStateNormal];
-    //addMarkButton.backgroundColor=[UIColor redColor];
     [addMarkButton setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color"] forState:UIControlStateNormal];
-    [shareView addSubview:addMarkButton];
+     [shareView addSubview:addMarkButton];
+   
+    ShareButton =[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth/2,200-45,kDeviceWidth/2,45) ImageName:nil Target:self Action:@selector(ShareButtonClick:) Title:@"我要分享"];
+    ShareButton.titleLabel.font =[UIFont boldSystemFontOfSize:16];
+     [ShareButton setTitleColor:VBlue_color forState:UIControlStateNormal];
+    //addMarkButton.backgroundColor=[UIColor redColor];
+    [ShareButton setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color"] forState:UIControlStateNormal];
+    [shareView addSubview:ShareButton];
     
 
 }
