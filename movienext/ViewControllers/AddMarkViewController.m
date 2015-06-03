@@ -56,12 +56,12 @@
 
 -(void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
     self.navigationController.navigationBar.alpha=1;
     self.navigationController.navigationBar.hidden=YES;
     self.tabBarController.tabBar.hidden=YES;
     //_myTextView.frame= CGRectMake(50, 10, kDeviceWidth-120, 30);
 }
-
 //页面已经出现的时候执行这个   所以在执行代理完成后再执行通知的方法
 -(void)viewDidAppear:(BOOL)animated
 {

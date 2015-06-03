@@ -11,6 +11,7 @@
 #import "MyButton.h"
 #import "Constant.h"
 #import "Function.h"
+#import "MobClick.h"
 @implementation UMShareView
 
 /*
@@ -166,6 +167,9 @@
 {
     logosupView.hidden=NO;
     shareImage=[Function getImage:shareView WithSize:CGSizeMake(kDeviceWidth-20, (kDeviceWidth-20)*(9.0/16)+20)];
+    
+    NSArray *eventArray = [NSArray arrayWithObjects:@"share_moment", @"share_wechat", @"share_weibo", @"share_download", nil];
+    [MobClick event:eventArray[button.tag-1000]];
     
     if (button.tag == 10003) {
         UIImageWriteToSavedPhotosAlbum(shareImage, self, @selector(image:didFinishSavingWithError:contextInfo:), nil);

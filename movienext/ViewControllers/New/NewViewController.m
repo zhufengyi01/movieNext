@@ -79,7 +79,6 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [MobClick beginLogPageView:@"最新热门"];
     
     self.navigationController.navigationBar.hidden=NO;
     self.navigationController.navigationBar.alpha=1;
@@ -98,14 +97,6 @@
     }
    // [[NSNotificationCenter defaultCenter] removeObserver:self name:@"RefeshTableview" object:nil];
     
-}
--(void)viewWillDisappear:(BOOL)animated
-{
-    //开始切换标签栏执行
-    [super viewWillDisappear:animated];
-    [MobClick endLogPageView:@"最新热门"];
-
-
 }
 
 //遇到上面的问题 最直接的解决方法就是在controller的viewDidAppear里面去调用present。这样可以确保view hierarchy的层次结构不乱。

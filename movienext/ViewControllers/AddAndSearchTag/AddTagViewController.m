@@ -20,10 +20,11 @@
 @implementation AddTagViewController
 -(void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
     self.navigationController.navigationItem.leftBarButtonItem=nil;
     self.navigationController.navigationBar.hidden=NO;
-    
 }
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.

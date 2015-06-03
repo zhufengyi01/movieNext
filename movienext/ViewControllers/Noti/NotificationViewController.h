@@ -6,8 +6,8 @@
 //  Copyright (c) 2015年 redianying. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "RootViewController.h"
 
-@interface NotificationViewController : UIViewController
+@interface NotificationViewController : RootViewController
 
 @end
