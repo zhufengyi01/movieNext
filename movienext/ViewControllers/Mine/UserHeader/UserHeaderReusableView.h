@@ -23,12 +23,15 @@
     UILabel *lblCount;
     UILabel *lblZanCout;
     UILabel *lblBrief;   //简介
+    NSMutableDictionary  *buttonStateDict;
+    UIButton  *addButton;  
+    UIButton  *zanButton;
     
 }
 @property(nonatomic,assign) id <UserHeaderReusableViewDelegate> delegate;
 //用户信息
-@property(nonatomic,strong)  weiboUserInfoModel  *userInfomodel;
+//@property(nonatomic,strong)  weiboUserInfoModel  *userInfomodel;
 
--(void)setcollectionHeaderViewValue;
+-(void)setcollectionHeaderViewValueWithUserInfo:(weiboUserInfoModel *) userInfo;
 
 @end

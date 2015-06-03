@@ -86,64 +86,45 @@
     {
         self.tabBarController.tabBar.hidden=NO;
     }
-   // [[NSNotificationCenter defaultCenter]  addObserver:self selector:@selector(changeUser) name:@"initUser" object:nil];
-    //NSNotificationCenter  *c= [NSNotificationCenter defaultCenter];
-   // [[UINavigationBar appearance] setShadowImage:[UIImage imageWithColor:tabBar_line size:CGSizeMake(kDeviceWidth, 1)]];
-    //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshTableView) name:@"RefeshTableview" object:nil];
-
-    
  }
-//-(void)changeUser
-//{
-//    if (_tableView) {
-//        [_tableView  removeFromSuperview];
-//        _tableView=nil;
-//        [self requestUserInfo];
-//
-//    }
-//}
 -(void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:YES];
- //   [[NSNotificationCenter defaultCenter] removeObserver:self name:@"RefeshTableview" object:nil];
- }
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    [self createNavigation];
-    [self initData];
+     [self createNavigation];
+     [self initData];
      [self requestUserInfo];
-    [self requestData];
-   // [self createToolBar];
-    //[self createShareView];
-    if (self.author_id&&![self.author_id isEqualToString:@"0"]) {
+     [self requestData];
+    
+     if (self.author_id&&![self.author_id isEqualToString:@"0"]) {
         //如果有用户id 并且用户的id 不为0
         self.navigationItem.rightBarButtonItem=nil;
         self.navigationItem.titleView=nil;
     }
 }
--(void)initData {
+-(void)initData{
     page1=1;
     page2=1;
     pageSize=20;
     pageCount1=1;
     pageCount2=1;
     isShowMark=YES;
+     userCenter  = [UserDataCenter shareInstance];
     _addedDataArray = [[NSMutableArray alloc] init];
     _upedDataArray = [[NSMutableArray alloc] init];
     self.buttonStateDict=[[NSMutableDictionary alloc]init];
     //默认第一个选择状态
-    [self.buttonStateDict setValue:@"YES" forKey:@"100"];
+    [self.buttonStateDict setValue:@"100" forKey:@"YES"];
+    
     //纪录那个数据为空
     IsNullStateDict =[[NSMutableDictionary  alloc]init];
     [IsNullStateDict setValue:@"NO" forKey:@"ONE"];
     [IsNullStateDict setValue:@"NO" forKey:@"TWO"];
     userInfomodel=[[weiboUserInfoModel alloc]init];
-    if (self.author_id&&![self.author_id isEqualToString:@"0"]) {
-        //如果有用户id 并且用户的id 不为0
-       // _userInfoDict =[[NSMutableDictionary alloc]init];
-    }
-
+   
 }
 #pragma mark - CreateUI
 -(void)createNavigation
@@ -165,11 +146,7 @@
     UIBarButtonItem  *barButton=[[UIBarButtonItem alloc]initWithCustomView:button];
     self.navigationItem.rightBarButtonItem=barButton;
 }
-//点击可刷新
-//-(void)refreshTableView
-//{
-//    [CommonStageCe  headerBeginRefreshing];
-//}
+
 -(void)createCollectionView
 {
     
@@ -178,39 +155,28 @@
     //layout.minimumLineSpacing=10;      //cell上下间隔
     //layout.itemSize=CGSizeMake(80,140);  //cell的大小
      layout.sectionInset=UIEdgeInsetsMake(0,0,64, 0); //整个偏移量 上左下右
-     _myConllectionView =[[UICollectionView alloc]initWithFrame:CGRectMake(0,0,kDeviceWidth, kDeviceHeight-20-0) collectionViewLayout:layout];
-    [layout setHeaderReferenceSize:CGSizeMake(_myConllectionView.frame.size.width,200)];
+     _myConllectionView =[[UICollectionView alloc]initWithFrame:CGRectMake(0,0,kDeviceWidth, kDeviceHeight-20-0-100) collectionViewLayout:layout];
+    [layout setHeaderReferenceSize:CGSizeMake(_myConllectionView.frame.size.width,160)];
     _myConllectionView.backgroundColor=View_BackGround;
     //注册大图模式
      //注册小图模式
     [_myConllectionView registerClass:[SmallImageCollectionViewCell class] forCellWithReuseIdentifier:@"smallcell"];
     // 注册头部视图
-    //[_myConllectionView registerClass:[MovieHeadView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"headerView"];
+    [_myConllectionView registerClass:[UserHeaderReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"headerView"];
     _myConllectionView.delegate=self;
     _myConllectionView.dataSource=self;
     [self.view addSubview:_myConllectionView];
     [self setupHeadView];
     [self setupFootView];
-
 }
-//长按进入虚拟用户选择
-//-(void)longPressHead:(UILongPressGestureRecognizer  *) longPressHeader
-//{
-//    if (longPressHeader.state==UIGestureRecognizerStateBegan) {
-//        
-//        [self.navigationController pushViewController:[ChangeSelfViewController new] animated:YES];
-//    }
-//}
 
 -(void)setupHeadView
 {
     __unsafe_unretained typeof(self) vc = self;
     // 添加下拉刷新头部控件
     [_myConllectionView addHeaderWithCallback:^{
-        //for (int i=100; i<102;i++ ) {
-        NSString *Btag =[vc.buttonStateDict objectForKey:@"YES"];
-           // UIButton  *btn =(UIButton *)[vc.view viewWithTag:i];
-            if ([Btag isEqualToString:@"100"]) {
+         NSString *Btag =[vc.buttonStateDict objectForKey:@"YES"];
+             if ([Btag isEqualToString:@"100"]) {
                 if (vc.addedDataArray.count>0) {
                     [vc.addedDataArray removeAllObjects];
                 }
@@ -226,9 +192,6 @@
                 page2=1;
                 [vc requestData];
             }
-       // }
-
-        
         // 模拟延迟加载数据，因此2秒后才调用）
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             //[vc.myConllectionView reloadData];
@@ -243,23 +206,24 @@
     __unsafe_unretained typeof(self) vc = self;
     // 添加上拉刷新尾部控件
     [vc.myConllectionView addFooterWithCallback:^{
-        for (int i=100; i<102;i++ ) {
-            UIButton  *btn =(UIButton *)[self.view viewWithTag:i];
-            if (btn.tag==100&&btn.selected==YES) {
-                if (pageCount1>page1) {
-                    page1=page1+1;
-                    [self requestData];
-                }
+        NSString *Btag =[vc.buttonStateDict objectForKey:@"YES"];
+        if ([Btag isEqualToString:@"100"]) {
+            if (pageCount1>page1) {
+                page1=page1+1;
+                [self requestData];
             }
-            else if (btn.tag==101&&btn.selected==YES)
-            {
-                if (pageCount2>page2) {
-                    page2=page2+1;
-                    [self requestData];
-                }
-            }
-        }
 
+            
+        }
+        else if ([Btag isEqualToString:@"101"])
+        {
+            if (pageCount2>page2) {
+                page2=page2+1;
+                [self requestData];
+            }
+
+         
+        }
         // 进入刷新状态就会回调这个Block
                // 模拟延迟加载数据，因此2秒后才调用）
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -338,80 +302,80 @@
     loadView =[[LoadingView alloc]initWithFrame:CGRectMake(0, 200, kDeviceWidth, kDeviceHeight-kHeightNavigation-200)];
 }
 
-//创建底部的视图
--(void)createToolBar
-
-{
-    _toolBar=[[ButtomToolView alloc]initWithFrame:CGRectMake(0,0,kDeviceWidth,kDeviceHeight)];
-    _toolBar.delegete=self;
-    
-}
+////创建底部的视图
+//-(void)createToolBar
+//
+//{
+//    _toolBar=[[ButtomToolView alloc]initWithFrame:CGRectMake(0,0,kDeviceWidth,kDeviceHeight)];
+//    _toolBar.delegete=self;
+//    
+//}
 
 
 #pragma  mark -----
 #pragma  mark ------  DataRequest 
 #pragma  mark ----
 //举报剧情
--(void)requestReportweibo
-{
-     NSDictionary *parameters = @{@"reported_user_id":_TweiboInfo.uerInfo.Id,@"weibo_id":_TweiboInfo.Id,@"reason":@"",@"user_id":userCenter.user_id};
-    
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager POST:[NSString stringWithFormat:@"%@/report-weibo/create", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
-            NSLog(@"随机数种子请求成功=======%@",responseObject);
-            UIAlertView  *Al =[[UIAlertView alloc]initWithTitle:nil message:@"你的举报已成功,我们会在24小时内处理" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-            [Al show];
-            
-        }
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Error: %@", error);
-    }];
-    
-}
+//-(void)requestReportweibo
+//{
+//     NSDictionary *parameters = @{@"reported_user_id":_TweiboInfo.uerInfo.Id,@"weibo_id":_TweiboInfo.Id,@"reason":@"",@"user_id":userCenter.user_id};
+//    
+//    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+//    [manager POST:[NSString stringWithFormat:@"%@/report-weibo/create", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+//        if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
+//            NSLog(@"随机数种子请求成功=======%@",responseObject);
+//            UIAlertView  *Al =[[UIAlertView alloc]initWithTitle:nil message:@"你的举报已成功,我们会在24小时内处理" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+//            [Al show];
+//            
+//        }
+//    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+//        NSLog(@"Error: %@", error);
+//    }];
+//    
+//}
 
 
 
 //举报剧情
--(void)requestReportSatge
-{
-    // NSString *type=@"1";
-    NSString  *stageId=@"";
-    NSString  *author_id=@"";
-    for (int i=100; i<102;i++ ) {
-        UIButton  *btn =(UIButton *)[self.view viewWithTag:i];
-        if (btn.tag==100&&btn.selected==YES) {
-            userAddmodel *model =[_addedDataArray objectAtIndex:Rowindex];
-            stageId=[NSString stringWithFormat:@"%@",model.weiboInfo.stageInfo.Id];
-            author_id=model.weiboInfo.stageInfo.created_by;
-
-        }
-        else if (btn.tag==101&&btn.selected==YES)
-        {
-         
-            userAddmodel *model =[_upedDataArray objectAtIndex:Rowindex];
-            stageId=[NSString stringWithFormat:@"%@",model.weiboInfo.stageInfo.Id];
-            author_id=model.weiboInfo.stageInfo.created_by;
-
-        }
-    }
-    
-    NSDictionary *parameters = @{@"reported_user_id":author_id,@"stage_id":stageId,@"reason":@"",@"user_id":userCenter.user_id};
-    
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager POST:[NSString stringWithFormat:@"%@/report-stage/create", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
-            NSLog(@"随机数种子请求成功=======%@",responseObject);
-            UIAlertView  *Al =[[UIAlertView alloc]initWithTitle:nil message:@"你的举报已成功,我们会在24小时内处理" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-            [Al show];
-            
-        }
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Error: %@", error);
-    }];
-    
-}
-
+//-(void)requestReportSatge
+//{
+//    // NSString *type=@"1";
+//    NSString  *stageId=@"";
+//    NSString  *author_id=@"";
+//    for (int i=100; i<102;i++ ) {
+//        UIButton  *btn =(UIButton *)[self.view viewWithTag:i];
+//        if (btn.tag==100&&btn.selected==YES) {
+//            userAddmodel *model =[_addedDataArray objectAtIndex:Rowindex];
+//            stageId=[NSString stringWithFormat:@"%@",model.weiboInfo.stageInfo.Id];
+//            author_id=model.weiboInfo.stageInfo.created_by;
+//
+//        }
+//        else if (btn.tag==101&&btn.selected==YES)
+//        {
+//         
+//            userAddmodel *model =[_upedDataArray objectAtIndex:Rowindex];
+//            stageId=[NSString stringWithFormat:@"%@",model.weiboInfo.stageInfo.Id];
+//            author_id=model.weiboInfo.stageInfo.created_by;
+//
+//        }
+//    }
+//    
+//    NSDictionary *parameters = @{@"reported_user_id":author_id,@"stage_id":stageId,@"reason":@"",@"user_id":userCenter.user_id};
+//    
+//    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+//    [manager POST:[NSString stringWithFormat:@"%@/report-stage/create", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+//        if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
+//            NSLog(@"随机数种子请求成功=======%@",responseObject);
+//            UIAlertView  *Al =[[UIAlertView alloc]initWithTitle:nil message:@"你的举报已成功,我们会在24小时内处理" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+//            [Al show];
+//            
+//        }
+//    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+//        NSLog(@"Error: %@", error);
+//    }];
+//    
+//}
+//
 -(void)requestUserInfo
 {
     NSString  *userId;
@@ -427,7 +391,11 @@
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:[NSString stringWithFormat:@"%@/user/info", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
+            
+            
             [userInfomodel setValuesForKeysWithDictionary:[responseObject objectForKey:@"model"]];
+             userInfomodel.logo =userCenter.logo;
+            //[self requestData];
             [self createCollectionView];
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -436,7 +404,9 @@
     
 }
 - (void)requestData{
+    
     NSString  *autorid;
+    
     UserDataCenter  *user=[UserDataCenter shareInstance];
     if (self.author_id>0&&![self.author_id isEqualToString:@"0"]) {
         autorid=self.author_id;
@@ -453,20 +423,22 @@
         section= @"user-create-weibo/list";
         page=page1;
     }
-    else
+    else if([[self.buttonStateDict objectForKey:@"YES"] isEqualToString:@"101"])
     {
         section=@"user-up-weibo/list";
         page=page2;
 
     }
+    
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
      NSString *urlString =[NSString stringWithFormat:@"%@/%@?per-page=%d&page=%d", kApiBaseUrl, section,pageSize,page];
+    
     [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject objectForKey:@"code"] intValue]==0) {
             NSLog(@"个人页面返回的数据====%@",responseObject);
+            
              NSMutableArray  *Detailarray=[responseObject objectForKey:@"models"];
-        //for (int i=100; i<102;i++ ) {
-            NSString  *Btag = [self.buttonStateDict objectForKey:@"YES"];
+             NSString  *Btag = [self.buttonStateDict objectForKey:@"YES"];
             if ([Btag isEqualToString:@"100"]) {
                 pageCount1=[[responseObject objectForKey:@"pageCount"] intValue];
 
@@ -551,6 +523,7 @@
                 [loadView removeFromSuperview];
                 [self.myConllectionView reloadData];
             }
+                [self.myConllectionView reloadData];
         }
         else if([Btag isEqualToString:@"101"])
         {
@@ -679,32 +652,60 @@
 {
     SmallImageCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"smallcell" forIndexPath:indexPath];
     
-    for (int i=100; i<102;i++ ) {
-        UIButton  *btn =(UIButton *)[self.view viewWithTag:i];
-        if (btn.tag==100&&btn.selected==YES) {
+    NSString  *Btag = [self.buttonStateDict objectForKey:@"YES"];
+        if ([Btag isEqualToString:@"100"]) {
+            if (_addedDataArray.count>indexPath.row) {
             userAddmodel  *model =[_addedDataArray objectAtIndex:indexPath.row];
+            
             cell.backgroundColor =[UIColor redColor];
             NSURL  *url =[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w340h340",kUrlStage,model.weiboInfo.stageInfo.photo]];
             [cell.imageView sd_setImageWithURL:url placeholderImage:nil options:(SDWebImageRetryFailed|SDWebImageLowPriority)];
             cell.titleLab.text=model.weiboInfo.content;
+            }
         }
-        else if (btn.tag==101&&btn.selected==YES)
+        else if ([Btag isEqualToString:@"101"])
         {
+            if (_upedDataArray.count > indexPath.row) {
             userAddmodel  *model =[_upedDataArray objectAtIndex:indexPath.row];
             cell.backgroundColor =[UIColor redColor];
             NSURL  *url =[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w340h340",kUrlStage,model.weiboInfo.stageInfo.photo]];
             [cell.imageView sd_setImageWithURL:url placeholderImage:nil options:(SDWebImageRetryFailed|SDWebImageLowPriority)];
             cell.titleLab.text=model.weiboInfo.content;
+            }
             
-         }
-    }
+        }
 
     return cell;
 }
 //点击小图模式的时候，跳转到大图模式
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-
+    NSString  *Btag =[self.buttonStateDict objectForKey:@"YES"];
+    if ([Btag isEqualToString:@"100"]) {
+        
+        ShowStageViewController *vc = [[ShowStageViewController alloc] init];
+        userAddmodel *model=[_addedDataArray objectAtIndex:indexPath.row];
+       // vc.upweiboArray=_upWeiboArray;
+        vc.stageInfo = model.weiboInfo.stageInfo;
+        
+        UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+        self.navigationItem.backBarButtonItem=item;
+        
+        [self.navigationController pushViewController:vc animated:YES];
+        
+    }
+    else if ([Btag isEqualToString:@"101"])
+    {
+        ShowStageViewController *vc = [[ShowStageViewController alloc] init];
+        userAddmodel *model=[_upedDataArray objectAtIndex:indexPath.row];
+        
+       // vc.upweiboArray=_upWeiboArray;
+        vc.stageInfo =model.weiboInfo.stageInfo;
+        UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+        self.navigationItem.backBarButtonItem=item;
+        
+        [self.navigationController pushViewController:vc animated:YES];
+    }
     
 }
 
@@ -716,12 +717,68 @@
     //定制头部视图的内容
      UserHeaderReusableView *headerV = (UserHeaderReusableView *)[collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"headerView" forIndexPath:indexPath];
       headerV.delegate=self;
-     headerV.userInfomodel=userInfomodel;
-     [headerV setcollectionHeaderViewValue];
+         
+     [headerV setcollectionHeaderViewValueWithUserInfo:userInfomodel];
       reusableView = headerV;
- }
+  }
  return reusableView;
- }
+}
+
+ -(void)changeCollectionHandClick:(UIButton *)btn
+{
+    
+    [self.buttonStateDict setObject:[NSString stringWithFormat:@"%d",btn.tag] forKey:@"YES"];
+    
+    if(btn.tag==100)
+    {
+        NSLog(@"点击了第一个按钮");
+        if (btn.selected==NO) {
+            //已经选择的情况下，点击这个没有反应
+        }
+        else if(btn.selected==YES)
+        {
+            
+            [self.myConllectionView reloadData];
+            if (_addedDataArray.count==0) {
+                [self requestData];
+            }
+            if ( [[IsNullStateDict objectForKey:@"ONE"] isEqualToString:@"YES"]) {
+                [self.myConllectionView addSubview:loadView];
+            }
+            else
+            {
+                [loadView removeFromSuperview];
+            }
+        }
+    }
+    else if(btn.tag==101)
+    {
+        NSLog(@"点击了第er个按钮");
+        
+        if (btn.selected==NO) {
+            
+        }
+        else if(btn.selected==YES)
+        {
+            
+            [self.myConllectionView reloadData];
+            if (_upedDataArray.count==0) {
+                [self requestData];
+            }
+            if ( [[IsNullStateDict objectForKey:@"TWO"] isEqualToString:@"YES"]) {
+                [self.myConllectionView addSubview:loadView];
+            }
+            else
+            {
+                [loadView removeFromSuperview];
+            }
+            
+        }
+    }
+
+    
+    
+}
 #pragma  mark ----
 #pragma  mark -----UICollectionViewLayoutDelegate
 #pragma  mark ----
@@ -757,7 +814,7 @@
 
 #pragma  mark  =====ButtonClick
 #pragma  mark  -----UMButtomViewshareViewDlegate-------
--(void)UMShareViewControllerHandClick:(UIButton *)button ShareImage:(UIImage *)shareImage StageInfoModel:(stageInfoModel *)StageInfo
+/*-(void)UMShareViewControllerHandClick:(UIButton *)button ShareImage:(UIImage *)shareImage StageInfoModel:(stageInfoModel *)StageInfo
 {
     NSArray  *sharearray =[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQzone, UMShareToSina, nil];
     [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
@@ -813,7 +870,7 @@
 {
     NSLog(@"didFinishGetUMSocialDataResponse第二部执行这个");
     
-    
+ 
 }
 
 #pragma mark   -----commonStageCelldelegate  ---------------------------------------------
@@ -944,7 +1001,7 @@
                 }
             }
             //版权问题
-            [self sendFeedBackWithStageInfo: stageInfo];
+          //  [self sendFeedBackWithStageInfo: stageInfo];
 
         }
         else if(buttonIndex==2)
@@ -989,8 +1046,8 @@
     }
     
 }
-
-- (void)sendFeedBackWithStageInfo:(stageInfoModel *)stageInfo
+*/
+/*- (void)sendFeedBackWithStageInfo:(stageInfoModel *)stageInfo
 {
     //    [self showNativeFeedbackWithAppkey:UMENT_APP_KEY];
     Class mailClass = (NSClassFromString(@"MFMailComposeViewController"));
@@ -1014,7 +1071,7 @@
 }
 -(void)displayComposerSheet:(stageInfoModel *) stageInfo
 {
-    MFMailComposeViewController *picker = [[MFMailComposeViewController alloc] init];/*MFMailComposeViewController邮件发送选择器*/
+    MFMailComposeViewController *picker = [[MFMailComposeViewController alloc] init];/*MFMailComposeViewController邮件发送选择器
     picker.mailComposeDelegate = self;
     
     // Custom NavgationBar background And set the backgroup picture
@@ -1049,10 +1106,11 @@
     [picker setMessageBody:emailBody isHTML:NO];
     [picker setSubject:[NSString stringWithFormat:@"版权投诉"]];/*emailpicker标题主题行*/
     
-    [self presentViewController:picker animated:YES completion:nil];
+    //[self presentViewController:picker animated:YES completion:nil];
     //        [self.navigationController presentViewController:picker animated:YES completion:nil];
     //        [self.navigationController pushViewController:picker animated:YES];
-}
+//}
+/*
 -(void)launchMailAppOnDevice
 {
     NSString *recipients = @"mailto:dcj3sjt@gmail.com&subject=Pocket Truth or Dare Support";
@@ -1088,11 +1146,11 @@
     }
     [controller dismissViewControllerAnimated:YES completion:nil];
 }
-
+*/
 #pragma mark   ---
 #pragma mark   ----stageViewDelegate   -----------
 #pragma mark    ---
--(void)StageViewHandClickMark:(weiboInfoModel *)weiboDict withmarkView:(id)markView StageInfoDict:(stageInfoModel *)stageInfoDict
+/*-(void)StageViewHandClickMark:(weiboInfoModel *)weiboDict withmarkView:(id)markView StageInfoDict:(stageInfoModel *)stageInfoDict
 {
     ///执行buttonview 弹出
      MarkView   *mv=(MarkView *)markView;
@@ -1189,33 +1247,6 @@
 #pragma mark  ----------点赞--------------
     else  if(button.tag==10002)
     {
-        //改变赞的状态
-//        //点击了赞
-//        NSLog(@" 点赞 前 微博dict  ＝====uped====%@    ups===%@",weiboDict.uped,weiboDict.ups);
-//        if ([weiboDict.uped intValue]==0)
-//        {
-//            weiboDict.uped=[NSNumber numberWithInt:1];
-//            int ups=[weiboDict.ups intValue];
-//            ups =ups+[weiboDict.uped intValue];
-//            weiboDict.ups=[NSNumber numberWithInt:ups];
-//            //重新给markview 赋值，改变markview的frame
-//            [self layoutMarkViewWithMarkView:markView WeiboInfo:weiboDict];
-//            
-//        }
-//        else  {
-//            
-//            weiboDict.uped=[NSNumber numberWithInt:0];
-//            int ups=[weiboDict.ups intValue];
-//            ups =ups-1;
-//            weiboDict.ups=[NSNumber numberWithInt:ups];
-//            [self layoutMarkViewWithMarkView:markView WeiboInfo:weiboDict];
-//        }
-//        
-//        ////发送到服务器
-//        [self LikeRequstData:weiboDict StageInfo:stageInfoDict];
-        
-        
-        
         
     }
 }
@@ -1234,7 +1265,7 @@
     vc.tagInfo=tagInfo;
     [self.navigationController pushViewController:vc animated:YES];
     
-}
+}*/
 
 
 //重新布局markview
