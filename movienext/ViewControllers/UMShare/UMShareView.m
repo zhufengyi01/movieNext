@@ -32,7 +32,7 @@
         self.backgroundColor =[[UIColor blackColor] colorWithAlphaComponent:0];
         
         float height=(kDeviceWidth/4)+(kDeviceWidth-20)*(9.0/16)+40+30+50;
-        backView =[[UIView alloc]initWithFrame:CGRectMake(0,kDeviceHeight, kDeviceWidth, height)];
+         backView =[[UIView alloc]initWithFrame:CGRectMake(0,kDeviceHeight, kDeviceWidth, height)];
         backView.userInteractionEnabled=YES;
         backView.backgroundColor =[UIColor whiteColor];
       //用于截取点击self的事件
@@ -46,18 +46,37 @@
         //添加手势
         UITapGestureRecognizer  *tap =[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(CancleShareClick)];
         [self addGestureRecognizer:tap];
-
-        
     }
     return self;
 }
 -(void)createNavigation
 {
-    UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake((kDeviceWidth-100)/2, 0, 100, 40) Font:14 Text:@"分享"];
-    titleLable.textColor=VGray_color;
-    titleLable.textAlignment=NSTextAlignmentCenter;
-    [backView addSubview:titleLable];
+     self.tipLable=[[M80AttributedLabel alloc]initWithFrame:CGRectZero];
+    //NSMutableAttributedString  *attrstr =[[NSMutableAttributedString alloc]initWithString:@"分享"];
+    self.tipLable.textColor=VGray_color;
+    self.tipLable.font=[UIFont systemFontOfSize:14];
+    //[self.tipLable appendText:@"分享"];
+    self.tipLable.backgroundColor =[UIColor clearColor];
+    self.tipLable.textAlignment=kCTTextAlignmentCenter;
+   // CGSize Tsize =[self.tipLable sizeThatFits:CGSizeMake(kDeviceWidth,CGFLOAT_MAX)];
+    self.tipLable.frame=CGRectMake(0, 10, kDeviceWidth, 30);
+    [backView addSubview:self.tipLable];
 }
+-(void)setShareLable;
+{
+     
+     if (self.pageType==UMShareTypeSuccess) {
+        UIImageView *sucImage =[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 15, 15)];
+         sucImage.image =[UIImage imageNamed:@"sucseed_add"];
+         [self.tipLable appendView:sucImage margin:UIEdgeInsetsMake(0, 0,0,5)];
+         self.tipLable.font=[UIFont systemFontOfSize:12];
+         [self.tipLable appendText:@"发布成功,卡片将出现在发现页,快去分享吧!"];
+    }
+     else {
+         [self.tipLable appendText:@"分享"];
+     }
+}
+
 //截获点击屏幕的事件
 -(void)click
 {
@@ -139,7 +158,6 @@
 #pragma create four button
     NSArray  *imageArray=[NSArray arrayWithObjects:@"moment_share.png",@"wechat_share.png",@"weibo_share.png", @"download.png", nil];
     NSArray *titleArray = [NSArray arrayWithObjects:@"朋友圈", @"微信", @"微博", @"保存", nil];
-    
     for (int i=0; i<4; i++) {
         double   x=(buttomView.bounds.size.width/4)*i;
         double   y=10;
@@ -195,9 +213,7 @@
         NSLog(@"保存失败");
         
     } else {
-        UIAlertView  *Al =[[UIAlertView alloc]initWithTitle:nil message:@"保存成功" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-        [Al show];
-        NSLog(@"已保存到相册");
+       
         UIAlertView  *al =[[UIAlertView alloc]initWithTitle:nil message:@"图片保存成功" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
         [al show];
     }

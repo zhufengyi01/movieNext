@@ -366,6 +366,8 @@
 		009044781AD3F3D0009CF318 /* selected_icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 009044741AD3F3D0009CF318 /* selected_icon@3x.png */; };
 		009044791AD3F3D0009CF318 /* unselect_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 009044751AD3F3D0009CF318 /* unselect_icon@2x.png */; };
 		0090447A1AD3F3D0009CF318 /* unselect_icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 009044761AD3F3D0009CF318 /* unselect_icon@3x.png */; };
+		0092A7CF1B1FEF8F00836D6B /* sucseed_add@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0092A7CD1B1FEF8F00836D6B /* sucseed_add@2x.png */; };
+		0092A7D01B1FEF8F00836D6B /* sucseed_add@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0092A7CE1B1FEF8F00836D6B /* sucseed_add@3x.png */; };
 		00963BB61B0323E10069CBD9 /* MASCompositeConstraint.m in Sources */ = {isa = PBXBuildFile; fileRef = 00963BA01B0323E10069CBD9 /* MASCompositeConstraint.m */; };
 		00963BB71B0323E10069CBD9 /* MASConstraint.m in Sources */ = {isa = PBXBuildFile; fileRef = 00963BA31B0323E10069CBD9 /* MASConstraint.m */; };
 		00963BB81B0323E10069CBD9 /* MASConstraintMaker.m in Sources */ = {isa = PBXBuildFile; fileRef = 00963BA51B0323E10069CBD9 /* MASConstraintMaker.m */; };
@@ -998,6 +1000,8 @@
 		009044741AD3F3D0009CF318 /* selected_icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "selected_icon@3x.png"; sourceTree = "<group>"; };
 		009044751AD3F3D0009CF318 /* unselect_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "unselect_icon@2x.png"; sourceTree = "<group>"; };
 		009044761AD3F3D0009CF318 /* unselect_icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "unselect_icon@3x.png"; sourceTree = "<group>"; };
+		0092A7CD1B1FEF8F00836D6B /* sucseed_add@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sucseed_add@2x.png"; sourceTree = "<group>"; };
+		0092A7CE1B1FEF8F00836D6B /* sucseed_add@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sucseed_add@3x.png"; sourceTree = "<group>"; };
 		00963B9F1B0323E10069CBD9 /* MASCompositeConstraint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MASCompositeConstraint.h; sourceTree = "<group>"; };
 		00963BA01B0323E10069CBD9 /* MASCompositeConstraint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MASCompositeConstraint.m; sourceTree = "<group>"; };
 		00963BA11B0323E10069CBD9 /* MASConstraint+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MASConstraint+Private.h"; sourceTree = "<group>"; };
@@ -1432,6 +1436,8 @@
 		000B08FB1AA2EB8C00B8D13A /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				0092A7CD1B1FEF8F00836D6B /* sucseed_add@2x.png */,
+				0092A7CE1B1FEF8F00836D6B /* sucseed_add@3x.png */,
 				402DE3691B1EA3260018CBC6 /* download@2x.png */,
 				402DE36A1B1EA3260018CBC6 /* download@3x.png */,
 				402DE36B1B1EA3260018CBC6 /* moment_share@2x.png */,
@@ -2890,6 +2896,7 @@
 				000B09E41AA30CB900B8D13A /* loginoutbackgroundcolor.png in Resources */,
 				003E74FB1AB1A29F0080F7A8 /* btn_share_select@3x.png in Resources */,
 				00431FE81ADD188700416E1F /* signup_sure_press@3x.png in Resources */,
+				0092A7CF1B1FEF8F00836D6B /* sucseed_add@2x.png in Resources */,
 				003F67071AC2BAFE00DB3E5E /* notice_image headloading@3x.png in Resources */,
 				002A12EB1B01A999003A001F /* dan_close@3x.png in Resources */,
 				000FBB3A1B131D3000C28025 /* like_slected@2x.png in Resources */,
@@ -2991,6 +2998,7 @@
 				000B09A91AA3029800B8D13A /* logo_first screem.png in Resources */,
 				0086C0F21B1583D10013F540 /* Like_hub@2x.png in Resources */,
 				008363521AE51F8200806897 /* up_picture_blue@3x.png in Resources */,
+				0092A7D01B1FEF8F00836D6B /* sucseed_add@3x.png in Resources */,
 				00431FC01ADD054200416E1F /* login_alpa_backgroundcolor.png in Resources */,
 				00DF5E611AE5F7CB0063CCBC /* unselect_icon@3x.png in Resources */,
 				00E0D47F1AB54A3D00048399 /* btn_delete@3x.png in Resources */,
@@ -3414,8 +3422,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-2";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Beijing Zuijiao Technology Company";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Beijing Zuijiao Technology Company";
 				ENABLE_STRICT_OBJC_MSGSEND = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3433,7 +3441,7 @@
 					"$(PROJECT_DIR)/Libs/UMAnalytics_Sdk_3.4.8",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "ca993ee7-8f71-4e27-bc13-4e2338226631";
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -3446,8 +3454,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-2";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Beijing Zuijiao Technology Company";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Beijing Zuijiao Technology Company";
 				ENABLE_STRICT_OBJC_MSGSEND = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3465,7 +3473,7 @@
 					"$(PROJECT_DIR)/Libs/UMAnalytics_Sdk_3.4.8",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "ca993ee7-8f71-4e27-bc13-4e2338226631";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
 			};

@@ -43,18 +43,17 @@
 
     [viewHeader addSubview:ivAvatar];
     
-//    if ([userCenter.is_admin  intValue]>0) {
-//        //在头像上添加一个手势，实现变成功能
-//        UIView  *view =[[UIView alloc]initWithFrame:ivAvatar.frame];
-//        view.backgroundColor =[ UIColor clearColor];
-//        [viewHeader addSubview:view];
-//        UILongPressGestureRecognizer  *longPressHeader =[[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(longPressHead:)];
-//        
-//        [view addGestureRecognizer:longPressHeader];
-//        
-//    }
-//    
-//    
+    if ([userCenter.is_admin  intValue]>0) {
+        //在头像上添加一个手势，实现变成功能
+        UIView  *view =[[UIView alloc]initWithFrame:ivAvatar.frame];
+        view.backgroundColor =[ UIColor clearColor];
+        [viewHeader addSubview:view];
+        UILongPressGestureRecognizer  *longPressHeader =[[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(longPressHead:)];
+        [view addGestureRecognizer:longPressHeader];
+        
+    }
+    
+    
     lblUsername = [[UILabel alloc] initWithFrame:CGRectMake(ivAvatar.frame.origin.x+ivAvatar.frame.size.width+10, ivAvatar.frame.origin.y, 200, 20)];
     lblUsername.font = [UIFont boldSystemFontOfSize:15];
     lblUsername.textColor = VGray_color;
@@ -118,7 +117,7 @@
     lineView.backgroundColor=VLight_GrayColor;
     [viewHeader addSubview:lineView];
     
-    zanButton=[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth/2,  lblBrief.frame.origin.y+lblBrief.frame.size.height+25, kDeviceWidth/2, 40) ImageName:nil Target:self Action:@selector(dealSegmentClick:) Title:@"赞"];
+    zanButton=[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth/2,  lblBrief.frame.origin.y+lblBrief.frame.size.height+25, kDeviceWidth/2, 40) ImageName:nil Target:self Action:@selector(dealSegmentClick:) Title:@"喜欢"];
     [zanButton setTitleColor:VGray_color forState:UIControlStateNormal];
     [zanButton setTitleColor:VBlue_color forState:UIControlStateSelected];
     if ([[buttonStateDict objectForKey:@"YES"] isEqualToString:@"101"]) {
@@ -171,5 +170,10 @@
      if (self.delegate &&[self.delegate respondsToSelector:@selector(changeCollectionHandClick:)]) {
         [self.delegate changeCollectionHandClick:button];
     }
+}
+-(void)longPressHead:(UITapGestureRecognizer *) tap
+{
+    //长按变身
+    
 }
 @end

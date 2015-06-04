@@ -134,6 +134,7 @@
         UIImage  *image=[Function getImage:self.stageImageView WithSize:CGSizeMake(kStageWidth, (kDeviceWidth-10)*(9.0/16))];
         
         UMShareView *ShareView =[[UMShareView alloc] initwithStageInfo:weiboInfo.stageInfo ScreenImage:image delgate:self];
+        [ShareView setShareLable];
         [ShareView show];
     }
 }
@@ -177,7 +178,6 @@
             pageIndex++;
             if (self.pageContent.count>pageIndex) {
                 [self performSelector:@selector(changeStageViewImageAndmarkLable) withObject:nil afterDelay:1];
-                
             }
      
         }
@@ -221,6 +221,20 @@
     NSString *photostring=[NSString stringWithFormat:@"%@%@!w640",kUrlStage,weiboInfo.stageInfo.photo];
     [self.stageImageView   sd_setImageWithURL:[NSURL URLWithString:photostring] placeholderImage:nil options:(SDWebImageLowPriority|SDWebImageRetryFailed)];
     markLable.text=weiboInfo.content;
+    
+    NSString  *uselogoString =[NSString stringWithFormat:@"%@%@!thumb",kUrlAvatar,weiboInfo.uerInfo.logo];
+    [headLogoImageView sd_setImageWithURL:[NSURL URLWithString:uselogoString] placeholderImage:[UIImage imageNamed:@"user_normal.png"]];
+    
+    NSString  *nameStr =weiboInfo.uerInfo.username;
+    //用户名
+    CGSize  Nsize =[nameStr boundingRectWithSize:CGSizeMake(100, 27) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:[NSDictionary dictionaryWithObject:userNameLable.font forKey:NSFontAttributeName] context:nil].size;
+    userNameLable.frame=CGRectMake(35,0, Nsize.width+4, 30);
+    float  height =(kDeviceWidth-10)*(9.0/16);
+    leftButtomButton.frame=CGRectMake(10,5+height+8, 30+5+userNameLable.frame.size.width, 27);
+    userNameLable.text=[NSString stringWithFormat:@"%@",nameStr];
+    Like_lable.text=[NSString stringWithFormat:@"%@",weiboInfo.like_count];
+    
+
 
 }
 
@@ -464,20 +478,8 @@
     
     if (self.pageContent.count>pageIndex) {
        weiboInfoModel   *weiboInfo =[self.pageContent objectAtIndex:pageIndex];
-        //头像
-        NSString  *uselogoString =[NSString stringWithFormat:@"%@%@!thumb",kUrlAvatar,weiboInfo.uerInfo.logo];
-        [headLogoImageView sd_setImageWithURL:[NSURL URLWithString:uselogoString] placeholderImage:[UIImage imageNamed:@"user_normal.png"]];
-
-        NSString  *nameStr =weiboInfo.content;
-       //用户名
-        CGSize  Nsize =[nameStr boundingRectWithSize:CGSizeMake(100, 27) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:[NSDictionary dictionaryWithObject:userNameLable.font forKey:NSFontAttributeName] context:nil].size;
-        userNameLable.frame=CGRectMake(35,0, Nsize.width+4, 30);
-        float  height =(kDeviceWidth-10)*(9.0/16);
-        leftButtomButton.frame=CGRectMake(10,5+height+8, 30+5+userNameLable.frame.size.width, 27);
-        userNameLable.text=[NSString stringWithFormat:@"%@",nameStr];
-        Like_lable.text=[NSString stringWithFormat:@"%@",weiboInfo.like_count];
         
-       if (btn.tag==99) {
+      if (btn.tag==99) {
         //喜欢
         [self LikeRequstData:weiboInfo withOperation:@1];
        

@@ -48,17 +48,17 @@
 
     
     UserDataCenter  *userCenter =[UserDataCenter shareInstance];
-   // if ([userCenter.is_admin intValue ]>0) {
+   if ([userCenter.is_admin intValue ]>0) {
     UIButton  *button=[UIButton buttonWithType:UIButtonTypeCustom];
     [button setTitle:@"管理员" forState:UIControlStateNormal];
+    [button setTitleEdgeInsets:UIEdgeInsetsMake(0, 10, 0, -10)];
    // [button setBackgroundImage:[UIImage imageNamed:@"setting.png"] forState:UIControlStateNormal];
     [button setTitleColor:VBlue_color forState:UIControlStateNormal];
     button.frame=CGRectMake(0, 0, 60, 40);
     [button addTarget:self action:@selector(adminClick:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem  *barButton=[[UIBarButtonItem alloc]initWithCustomView:button];
     self.navigationItem.rightBarButtonItem=barButton;
-    //}
-   
+    }
     self.view.backgroundColor=View_BackGround;
     appdelegate = [[UIApplication sharedApplication]delegate ];
     window=appdelegate.window;

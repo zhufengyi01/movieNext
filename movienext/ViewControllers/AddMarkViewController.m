@@ -261,7 +261,7 @@
     
     
     //添加发布按钮
-   UIButton  *publishbtn =[ZCControl createButtonWithFrame:CGRectMake(60,height-45,kDeviceWidth-120,30) ImageName:nil Target:self Action:@selector(buttombtnClick:) Title:@"发布"];
+   UIButton  *publishbtn =[ZCControl createButtonWithFrame:CGRectMake(50,height-55,kDeviceWidth-100,35) ImageName:nil Target:self Action:@selector(buttombtnClick:) Title:@"发布"];
     publishbtn.layer.cornerRadius=4;
     publishbtn.tag=100;
     publishbtn.titleLabel.font =[UIFont boldSystemFontOfSize:16];
@@ -412,9 +412,16 @@
             if (self.weiboInfo) {
                 message=@"编辑成功";
             }
-            UIAlertView  *Al=[[UIAlertView alloc]initWithTitle:nil message:message delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
-            Al.tag=1000;
-            [Al show];
+            //UIAlertView  *Al=[[UIAlertView alloc]initWithTitle:nil message:message delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
+            //Al.tag=1000;
+            //[Al show];
+            UIImage  *image=[Function getImage:self.stageImageView WithSize:CGSizeMake(kStageWidth,  (kDeviceWidth-10)*(9.0/16))];
+            UMShareView *ShareView =[[UMShareView alloc] initwithStageInfo:self.stageInfo ScreenImage:image delgate:self];
+            ShareView.pageType=UMShareTypeSuccess;
+            [ShareView setShareLable];
+            [ShareView show];
+            
+
             
 //            weibo =[[weiboInfoModel alloc]init];
 //            if (weibo) {
@@ -577,7 +584,7 @@
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    //[_myTextView resignFirstResponder];
+    [_myTextView resignFirstResponder];
 }
  //有时候我们要控件自适应输入的文本的内容的高度，只要在textViewDidChange的代理方法中加入调整控件大小的代理即可
 
@@ -636,19 +643,13 @@
             }
             else {
                 
-                if (self.delegate&&[self.delegate respondsToSelector:@selector(AddMarkViewControllerReturn)]) {
+                /*if (self.delegate&&[self.delegate respondsToSelector:@selector(AddMarkViewControllerReturn)]) {
                 [self.delegate AddMarkViewControllerReturn];
-                }
+                }*/
                 
                 //把分享添加到window上
                 
                 
-                UIImage  *image=[Function getImage:self.stageImageView WithSize:CGSizeMake(kStageWidth,  (kDeviceWidth-10)*(9.0/16))];
-
-                
-                UMShareView *ShareView =[[UMShareView alloc] initwithStageInfo:self.stageInfo ScreenImage:image delgate:self];
-                [ShareView show];
-
                 
 //                NSDictionary  *dict = [[NSDictionary alloc]initWithObjectsAndKeys:self.stageInfo,@"stageInfo",weibo,@"weiboInfo",self.delegate,@"delegate", nil];
 //                [[NSNotificationCenter defaultCenter] postNotificationName:@"ShareViewAlert" object:nil userInfo:dict];
@@ -807,8 +808,7 @@
     
 }
 }
-
- /*
+  /*
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
