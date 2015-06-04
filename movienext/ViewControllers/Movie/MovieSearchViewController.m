@@ -37,10 +37,7 @@
 @interface MovieSearchViewController ()<UISearchBarDelegate,UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate, LoadingViewDelegate>
 {
     LoadingView   *loadView;
-    //UITableView   *_myTableView;
-   // NSMutableArray    *_dataArray;
-    UISearchBar  *search;
-    
+     UISearchBar  *search;
 }
 @property(nonatomic,strong) UITableView  *myTableView;
 @property(nonatomic,strong) NSMutableArray *dataArray;
@@ -71,8 +68,7 @@
 {
     loadView =[[LoadingView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight)];
     loadView.delegate=self;
-    [loadView stopAnimation];
-    loadView.hidden = YES;
+    loadView.hidden=YES;
     [self.view addSubview:loadView];
     
 }
@@ -109,9 +105,7 @@
 
 #pragma  mark   -------------------数据请求
 
-- (void)reloadDataClick {
-    [loadView hidenFailLoadAndShowAnimation];
-}
+
 
 //根据豆瓣id  请求movieid
 -(void)requestMovieIdWithdoubanId:(NSString *) douban_Id
@@ -130,13 +124,12 @@
             ShowSelectPhotoViewController  *vc =[[ShowSelectPhotoViewController alloc]init];
             vc.douban_id=douban_Id;
             vc.movie_id=movie_id;
+            vc.movie_name=[detail objectForKey:@"name"];
             UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
             self.navigationItem.backBarButtonItem=item;
             UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:vc];
             [self presentViewController:na animated:YES completion:nil];
-            
-
-            
+        
          }
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -151,10 +144,10 @@
 
 -(void)requestData
 {
-    if ([search.text isEqualToString:@"00"]) {
-        return;
-    }
-    
+//    if ([search.text isEqualToString:@"00"]) {
+//        return;
+//    }
+    loadView.hidden=NO;
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
     NSString *urlStr = [NSString stringWithFormat:@"http://movie.douban.com/subject_search?search_text=%@&cat=1002", [search.text URLEncodedString] ];
     [request setURL:[NSURL URLWithString:urlStr]];
@@ -164,7 +157,9 @@
         //NSLog(@"response start");
         if (connectionError) {
             NSLog(@"httpresponse code error %@", connectionError);
+            [loadView showFailLoadData];
         } else {
+            loadView.hidden=YES;
             NSInteger responseCode = [(NSHTTPURLResponse *)response statusCode];
             NSString *responseString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
             if (responseCode == 200) {
@@ -188,13 +183,19 @@
                     }
                 }
             } else {
+                [loadView showFailLoadData];
                 
                 NSLog(@"error");
             }
         }
     }];
-
 }
+-(void)reloadDataClick
+{
+    [loadView hidenFailLoadAndShowAnimation];
+    [self requestData];
+}
+
 #pragma mark --
 #pragma mark  -UITableViewDelegate
 #pragma  mark --
@@ -202,13 +203,11 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
       return 1;
 }
-
 //表格的行高度
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     return 90;
 
 }
-
 //表格的行数
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
         return _dataArray.count;
@@ -245,6 +244,7 @@
               mvdetail.pageSourceType=NSMovieSourcePageSearchListController;
               mvdetail.movielogo=[[_dataArray objectAtIndex:indexPath.row] objectForKey:@"smallimage"];
               mvdetail.moviename=[[_dataArray objectAtIndex:indexPath.row] objectForKey:@"title"];
+               
               UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
              self.navigationItem.backBarButtonItem=item;
             [self.navigationController pushViewController:mvdetail animated:YES];
@@ -266,8 +266,7 @@
 -(void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
 {
     [self requestData];
-//    [searchBar resignFirstResponder];
-}
+ }
 -(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
     [searchBar resignFirstResponder];

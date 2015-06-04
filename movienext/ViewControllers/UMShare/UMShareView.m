@@ -119,8 +119,8 @@
     _moviewName.lineBreakMode=NSLineBreakByTruncatingTail;
     [logosupView addSubview:_moviewName];
     
-    if (!_stageInfo.movieInfo) {
-        return;
+    if (!_stageInfo.movieInfo|!_stageInfo.movieInfo.name) {
+        _stageInfo.movieInfo.name=@"";
      }
     NSMutableString  *namstr =[[NSMutableString alloc]initWithString:_stageInfo.movieInfo.name];
     NSString  *str=namstr;
@@ -187,7 +187,8 @@
     shareImage=[Function getImage:shareView WithSize:CGSizeMake(kDeviceWidth-20, (kDeviceWidth-20)*(9.0/16)+20)];
     
     NSArray *eventArray = [NSArray arrayWithObjects:@"share_moment", @"share_wechat", @"share_weibo", @"share_download", nil];
-    [MobClick event:eventArray[button.tag-1000]];
+    
+    [MobClick event:eventArray[button.tag-10000]];
     
     if (button.tag == 10003) {
         UIImageWriteToSavedPhotosAlbum(shareImage, self, @selector(image:didFinishSavingWithError:contextInfo:), nil);
@@ -211,7 +212,6 @@
         UIAlertView  *Al =[[UIAlertView alloc]initWithTitle:nil message:@"保存失败" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
         [Al show];
         NSLog(@"保存失败");
-        
     } else {
        
         UIAlertView  *al =[[UIAlertView alloc]initWithTitle:nil message:@"图片保存成功" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];

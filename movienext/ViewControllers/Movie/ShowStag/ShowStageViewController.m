@@ -32,7 +32,7 @@
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
 #import "M80AttributedLabel.h"
-@interface ShowStageViewController() <ButtomToolViewDelegate,StageViewDelegate,AddMarkViewControllerDelegate,UMShareViewControllerDelegate,UMSocialDataDelegate,UMSocialUIDelegate,UIActionSheetDelegate,UMShareViewController2Delegate,UMShareViewDelegate,TagViewDelegate>
+@interface ShowStageViewController() <ButtomToolViewDelegate,StageViewDelegate,AddMarkViewControllerDelegate,UMShareViewControllerDelegate,UMSocialDataDelegate,UMSocialUIDelegate,UIActionSheetDelegate,UMShareViewController2Delegate,UMShareViewDelegate,TagViewDelegate,UIAlertViewDelegate>
 {
     ButtomToolView *_toolBar;
     UIButton  *moreButton;
@@ -161,6 +161,7 @@
      self.stageImageView.contentMode=UIViewContentModeScaleAspectFill;
     self.stageImageView.clipsToBounds=YES;
     NSString *photostring=[NSString stringWithFormat:@"%@%@!w640",kUrlStage,self.stageInfo.photo];
+    
     [self.stageImageView   sd_setImageWithURL:[NSURL URLWithString:photostring] placeholderImage:nil options:(SDWebImageLowPriority|SDWebImageRetryFailed)];
     [ShareView addSubview:self.stageImageView];
     
@@ -314,9 +315,6 @@
     
     //点赞的按钮 上面放一张图片 右边放文字
      like_btn =[ZCControl createButtonWithFrame:CGRectMake(kStageWidth-70,10,70,25) ImageName:nil Target:self Action:@selector(clickLike:) Title:@""];
-    if (IsIphone6plus) {
-        like_btn.frame=CGRectMake(kStageWidth-80, 10, 80, 32);
-    }
     like_btn.layer.cornerRadius=4;
     like_btn.clipsToBounds=YES;
     like_btn.backgroundColor=View_BackGround;
@@ -327,11 +325,16 @@
     starImageView.image =[UIImage imageNamed:@"like_nomoal.png"];
     [like_btn addSubview:starImageView];
     
-    
     //赞的文字
     Like_lable =[ZCControl createLabelWithFrame:CGRectMake(20,0,40, 25) Font:14 Text:@""];
     Like_lable.textColor=VGray_color;
     Like_lable.textAlignment=NSTextAlignmentCenter;
+    if (IsIphone6plus) {
+        like_btn.frame=CGRectMake(kStageWidth-80, 10, 80, 32);
+        starImageView.frame=CGRectMake(15, 12, 14, 12);
+        Like_lable.frame=CGRectMake(20, 0, 60, 32);
+    }
+
     if ([_WeiboInfo.like_count intValue]==0) {
         Like_lable.text=[NSString stringWithFormat:@"喜欢"];
     }
@@ -494,7 +497,6 @@
        [self LikeRequstData:_WeiboInfo withOperation:operation withuserId:userCenter.user_id];
     //}
     
-    
 }
 //创建固定于地步的分享按钮
 -(void)createShareToolBar
@@ -512,11 +514,12 @@
     //创建标签，但是这个标签的内容是弹幕的内容
     self.tagLable=[[M80AttributedLabel alloc]initWithFrame:CGRectZero];
     self.tagLable.backgroundColor =[UIColor clearColor];
+    self.tagLable.numberOfLines=1;
     
     
     if (self.weiboInfo) {//如果 从管理员的最新页进来
         TagView *tagview = [self createTagViewWithweiboInfo:self.weiboInfo andIndex:300];
-        [tagview setbigTagWithSize:CGSizeMake(10, 10)];
+        [tagview setbigTagWithSize:CGSizeMake(10, 12)];
         [self.tagLable appendView:tagview margin:UIEdgeInsetsMake(0, 0, 0, 5)];
         self.tagLable.lineSpacing=5;
         self.tagLable.numberOfLines=0;
@@ -526,7 +529,7 @@
     else {
     for (int i=0; i<self.stageInfo.weibosArray.count; i++) {
         TagView *tagview = [self createTagViewWithweiboInfo:self.stageInfo.weibosArray[i] andIndex:i];
-        [tagview setbigTagWithSize:CGSizeMake(10, 10)];
+        [tagview setbigTagWithSize:CGSizeMake(10, 12)];
          [self.tagLable appendView:tagview margin:UIEdgeInsetsMake(0, 0, 0, 5)];
          self.tagLable.lineSpacing=5;
         self.tagLable.numberOfLines=0;
@@ -651,63 +654,7 @@
 }
 
 
-#pragma mark 点击屏幕显示和隐藏marview
-//显示隐藏markview
-/*-(void)hidenAndShowMarkView:(UIButton *) button
-{
-    [stageView showAndHidenMarkView:button.selected];
-    
-    if (button.selected==NO) {
-        NSLog(@"执行了隐藏 view ");
-        button.selected=YES;
-        for (UIView  *view  in stageView.subviews) {
-            if  ([view isKindOfClass:[MarkView class]]) {
-                MarkView  *mv =(MarkView *)view;
-                mv.hidden=YES;
-                
-            }
-        }
-    }
-    else if (button.selected==YES)
-    {
-        NSLog(@"执行了显示view ");
-        button.selected=NO;
-        for (UIView  *view  in stageView.subviews) {
-            if  ([view isKindOfClass:[MarkView class]]) {
-                MarkView  *mv =(MarkView *)view;
-                mv.hidden=NO;
-            }
-        }
-    }
-}
-
--(void)showAndHidenMarkViews
-{
-    if (isShowMark==NO) {
-        [stageView showAndHidenMarkView:NO];
-        isShowMark=YES;
-        NSLog(@"执行了隐藏 view ");
-        for (id view  in stageView.subviews) {
-            if  ([view isKindOfClass:[MarkView class]]) {
-                MarkView  *mv =(MarkView *)view;
-                mv.hidden=YES;
-            }
-        }
-    }
-    else if (isShowMark==YES)
-    {
-        NSLog(@"执行了显示view ");
-        isShowMark=NO;
-        [stageView showAndHidenMarkView:YES];
-        for (id   view  in stageView.subviews) {
-            if  ([view isKindOfClass:[MarkView class]]) {
-                MarkView  *mv =(MarkView *)view;
-                mv.hidden=NO;
-            }
-        }
-    }
-}*/
-
+  
 
 
 #pragma  mark  ----RequestData
@@ -931,22 +878,22 @@
     
 }
 //删除微博的接口
--(void)requestDelectDataWithweiboId:(NSString  *) weiboId
+-(void)requestDelectDataWithweiboId:(NSString  *) weiboId WithremoveType:(NSString *)type
 {
     UserDataCenter *userCenter=[UserDataCenter shareInstance];
-    NSDictionary *parameters = @{@"weibo_id":weiboId,@"user_id":userCenter.user_id};
+    NSDictionary *parameters = @{@"weibo_id":weiboId,@"user_id":userCenter.user_id,@"remove_type":type};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:[NSString stringWithFormat:@"%@/weibo/remove", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
             NSLog(@"删除数据成功=======%@",responseObject);
             UIAlertView  *Al=[[UIAlertView alloc]initWithTitle:nil message:@"删除成功" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            Al.tag=3000;
             [Al show];
             
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
-    
 }
 
 //变身请求的随机数种子
@@ -1103,9 +1050,17 @@
     }
     else
     {
-        UIActionSheet  *Act=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"内容投诉",@"版权投诉",@"图片信息", nil];
+        if (self.pageType==NSStagePapeTypeMyAdd) {
+            UIActionSheet  *Act=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"删除卡片",nil];
+            Act.tag=800;
+            [Act showInView:Act];
+        }
+        else
+        {
+        UIActionSheet  *Act=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"内容投诉",@"版权投诉",@"图片信息",nil];
         Act.tag=507;
         [Act showInView:Act];
+        }
     }
     
 
@@ -1279,7 +1234,7 @@
     if (actionSheet.tag==500) {
         if (buttonIndex==0) {
             //删除
-            [self requestDelectDataWithweiboId:[NSString stringWithFormat:@"%@",_TweiboInfo.Id]];
+            [self requestDelectDataWithweiboId:[NSString stringWithFormat:@"%@",_TweiboInfo.Id] WithremoveType:@"1"];
             
         }
         else if(buttonIndex==1)
@@ -1367,9 +1322,9 @@
 
        }
        else if (buttonIndex==6)
-       {
+       {// 屏蔽弹幕
            NSString *weibo_id =[NSString stringWithFormat:@"%@",_WeiboInfo.Id];
-           [self requestDelectDataWithweiboId:weibo_id];
+           [self requestDelectDataWithweiboId:weibo_id WithremoveType:@"1"];
        }
        else if (buttonIndex==7)
        {
@@ -1387,8 +1342,26 @@
            [self requestUpAndDownWithDeretion:@"down"];
        }
      }
+    else if (actionSheet.tag==800)
+    {// 普通用户在个人页进来删除自己发布的弹幕
+        if (buttonIndex==0) {
+        //删除卡片
+        NSString *weibo_id =[NSString stringWithFormat:@"%@",_WeiboInfo.Id];
+        [self requestDelectDataWithweiboId:weibo_id WithremoveType:@"0"];
+        }
+        
+    }
 }
 
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (alertView.tag==3000) {
+        if (self.pageType==NSStagePapeTypeMyAdd) {
+            //返回
+            [self.navigationController popViewControllerAnimated:YES];
+        }
+    }
+}
 
 - (void)sendFeedBackWithStageInfo:(stageInfoModel *)stageInfo
 

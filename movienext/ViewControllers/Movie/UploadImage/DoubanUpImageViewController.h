@@ -13,6 +13,7 @@
 @property (nonatomic,strong) NSString   *movie_id;
 
 @property(nonatomic,strong) NSString  *movie_name;
+
 @property(nonatomic,strong) UIImage     *upimage;
 
 @property(nonatomic,strong) NSString  *photourl;

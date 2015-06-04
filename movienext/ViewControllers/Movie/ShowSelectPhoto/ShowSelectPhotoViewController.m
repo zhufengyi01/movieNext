@@ -56,7 +56,7 @@
     [button setTitleColor:VBlue_color forState:UIControlStateNormal];
     button.frame=CGRectMake(10, 10, 40, 30);
     button.titleEdgeInsets=UIEdgeInsetsMake(0, -10,0, 10);
-    [button setTitleColor:VGray_color forState:UIControlStateNormal];
+    [button setTitleColor:VBlue_color forState:UIControlStateNormal];
     //button.titleLabel.font =[UIFont boldSystemFontOfSize:18];
     [button addTarget:self action:@selector(navigationbtnClick:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem  *barButton=[[UIBarButtonItem alloc]initWithCustomView:button];
@@ -87,7 +87,7 @@
     upLoadimageBtn.tag=100;
     upLoadimageBtn.titleEdgeInsets=UIEdgeInsetsMake(0, 10, 0, -10);
     [upLoadimageBtn setTitle:@"上传" forState:UIControlStateNormal];
-    [upLoadimageBtn setTitleColor:VGray_color forState:UIControlStateNormal];
+    [upLoadimageBtn setTitleColor:VBlue_color forState:UIControlStateNormal];
    // [upLoadimageBtn setImage:[UIImage imageNamed:@"up_picture_blue.png"] forState:UIControlStateNormal];
     UIBarButtonItem  *rigthbar =[[UIBarButtonItem alloc]initWithCustomView:upLoadimageBtn];
     self.navigationItem.rightBarButtonItem=rigthbar;
@@ -202,7 +202,7 @@
 {
     loadView =[[LoadingView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight)];
     loadView.delegate=self;
-    //[self.view addSubview:loadView];
+    [self.view addSubview:loadView];
     
 }
 
@@ -293,7 +293,6 @@
             [loadView stopAnimation];
             [loadView removeFromSuperview];
             
-
 
             NSInteger responseCode = [(NSHTTPURLResponse *)response statusCode];
             NSString *responseString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
@@ -414,6 +413,7 @@
     }
     vc.upimage=cell.imageView.image;
     vc.movie_name=self.movie_name;
+    
     vc.movie_id=self.movie_id;
     if (urlString) {
     vc.photourl=urlString;

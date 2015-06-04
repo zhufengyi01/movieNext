@@ -250,7 +250,7 @@
 -(void)initData
 {
     page=1;
-    pageSize=15;
+    pageSize=16;
     pageCount=0;
     bigModel=NO;
     tagId=@"0";
@@ -842,9 +842,8 @@
     stageInfoModel  *model=[_dataArray objectAtIndex:indexPath.row];
         cell.imageView.backgroundColor=VStageView_color;
         NSURL  *url =[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w340h340",kUrlStage,model.photo]];
-        //[cell.imageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w340h340",kUrlStage,model.photo]] placeholderImage:[UIImage imageNamed:nil]];
         
-        [cell.imageView sd_setImageWithURL:url placeholderImage:nil options:(SDWebImageRetryFailed|SDWebImageLowPriority)];
+         [cell.imageView sd_setImageWithURL:url placeholderImage:nil options:(SDWebImageRetryFailed|SDWebImageLowPriority)];
         
         if ( model.weibosArray.count>0) {
             //cell.titleLab.hidden = NO;

@@ -8,42 +8,40 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="iN0-l3-epB">
-            <rect key="frame" x="0.0" y="0.0" width="480" height="480"/>
+            <rect key="frame" x="0.0" y="0.0" width="441" height="494"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="  Copyright (c) 2015 影弹" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="8ie-xW-0ye">
-                    <rect key="frame" x="151" y="440" width="178" height="15"/>
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="  Copyright (c) 2015 电影卡片" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="8ie-xW-0ye">
+                    <rect key="frame" x="132" y="439" width="178" height="15"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="178" id="7uA-gO-Ocy"/>
+                        <constraint firstAttribute="height" constant="15" id="mua-5C-SNh"/>
+                    </constraints>
                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                     <color key="textColor" red="0.0" green="0.5725490196078431" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="first_screen_slogan@3x.png" translatesAutoresizingMaskIntoConstraints="NO" id="Ty2-Sr-DIQ">
-                    <rect key="frame" x="150" y="200" width="180" height="125"/>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="first_screen_slogan.png" translatesAutoresizingMaskIntoConstraints="NO" id="eoc-W5-wgb">
+                    <rect key="frame" x="106" y="180" width="230" height="120"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="230" id="Uis-u9-C7w"/>
+                        <constraint firstAttribute="height" constant="120" id="dKr-AV-u14"/>
+                    </constraints>
                 </imageView>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstAttribute="centerX" secondItem="Ty2-Sr-DIQ" secondAttribute="centerX" id="30c-gy-45P"/>
-                <constraint firstAttribute="bottom" secondItem="8ie-xW-0ye" secondAttribute="bottom" constant="25" id="4JZ-ea-POa"/>
-                <constraint firstItem="Ty2-Sr-DIQ" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="125" id="8TL-bQ-UUA"/>
-                <constraint firstAttribute="bottom" secondItem="8ie-xW-0ye" secondAttribute="bottom" constant="20" id="Kzo-t9-V3l"/>
-                <constraint firstItem="8ie-xW-0ye" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="20" symbolic="YES" id="MfP-vx-nX0"/>
-                <constraint firstAttribute="centerX" secondItem="8ie-xW-0ye" secondAttribute="centerX" id="ZEH-qu-HZ9"/>
-                <constraint firstAttribute="centerX" secondItem="8ie-xW-0ye" secondAttribute="centerX" id="v5B-QM-qTx"/>
+                <constraint firstItem="eoc-W5-wgb" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="180" id="SIC-SO-Jah"/>
+                <constraint firstAttribute="centerX" secondItem="eoc-W5-wgb" secondAttribute="centerX" id="bbB-2c-U1m"/>
+                <constraint firstAttribute="centerX" secondItem="8ie-xW-0ye" secondAttribute="centerX" id="dcI-Cn-6tD"/>
+                <constraint firstAttribute="bottom" secondItem="8ie-xW-0ye" secondAttribute="bottom" constant="40" id="jT9-Ri-Srt"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <variation key="default">
-                <mask key="constraints">
-                    <exclude reference="Kzo-t9-V3l"/>
-                    <exclude reference="MfP-vx-nX0"/>
-                    <exclude reference="ZEH-qu-HZ9"/>
-                </mask>
-            </variation>
-            <point key="canvasLocation" x="548" y="455"/>
+            <point key="canvasLocation" x="528.5" y="462"/>
         </view>
     </objects>
     <resources>
-        <image name="first_screen_slogan@3x.png" width="540" height="375"/>
+        <image name="first_screen_slogan.png" width="230" height="120"/>
     </resources>
 </document>

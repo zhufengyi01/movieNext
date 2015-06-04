@@ -13,11 +13,17 @@
 #import "TagView.h"
 #import "TagToStageViewController.h"
 #import "AddMarkViewController.h"
+
+typedef  NS_ENUM(NSInteger,NSStagePapeType)
+{
+    NSStagePapeTypeDefult,
+    NSStagePapeTypeMyAdd //个人页面进来的，可以删除
+};
 @interface ShowStageViewController : RootViewController <TagViewDelegate,AddMarkViewControllerDelegate>
 
 @property (nonatomic, strong) stageInfoModel *stageInfo;
 @property(nonatomic,strong) NSMutableArray   *upweiboArray;
-
+@property(nonatomic,assign) NSStagePapeType  pageType;
 @property(nonatomic,strong) weiboInfoModel *weiboInfo;  //如果是从管理员入口，并且是最新的话，传递weiboInfo 
 
 @end

@@ -44,8 +44,7 @@
 {
   
     UICollectionViewFlowLayout    *layout;
-   // NSMutableDictionary  *_userInfoDict;
-    LoadingView   *loadView;
+     LoadingView   *loadView;
     int page1;
     int page2;
     int pageSize;
@@ -69,7 +68,6 @@
     stageInfoModel  *_TStageInfo;
     weiboInfoModel      *_TweiboInfo;
     BOOL  isShowMark;
-    
     NSMutableArray  *_addWeiboArray ;
     NSMutableArray   *_upWeiboArray;
 
@@ -102,6 +100,7 @@
      [self initData];
      [self requestUserInfo];
      [self requestData];
+    [self createLoadview];
     
 }
 -(void)initData{
@@ -114,7 +113,6 @@
      userCenter  = [UserDataCenter shareInstance];
     _addedDataArray = [[NSMutableArray alloc] init];
     _upedDataArray = [[NSMutableArray alloc] init];
-    
     
     _addWeiboArray =  [[NSMutableArray alloc]init];
     _upWeiboArray =[[NSMutableArray alloc]init];
@@ -311,6 +309,7 @@
 - (void)createLoadview
 {
     loadView =[[LoadingView alloc]initWithFrame:CGRectMake(0, 200, kDeviceWidth, kDeviceHeight-kHeightNavigation-200)];
+    [self.view addSubview:loadView];
 }
 
 ////创建底部的视图
@@ -679,6 +678,7 @@
             if (_addedDataArray.count>indexPath.row) {
             userAddmodel  *model =[_addedDataArray objectAtIndex:indexPath.row];
              NSURL  *url =[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w340h340",kUrlStage,model.weiboInfo.stageInfo.photo]];
+                
             [cell.imageView sd_setImageWithURL:url placeholderImage:nil options:(SDWebImageRetryFailed|SDWebImageLowPriority)];
             cell.titleLab.text=model.weiboInfo.content;
             }
@@ -705,12 +705,11 @@
         ShowStageViewController *vc = [[ShowStageViewController alloc] init];
         userAddmodel *model=[_addedDataArray objectAtIndex:indexPath.row];
         vc.upweiboArray=_addWeiboArray;
-        
         vc.stageInfo = model.weiboInfo.stageInfo;
         vc.weiboInfo=model.weiboInfo;
+        vc.pageType=NSStagePapeTypeMyAdd;//用户添加的
         UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
         self.navigationItem.backBarButtonItem=item;
-        
         [self.navigationController pushViewController:vc animated:YES];
         
     }

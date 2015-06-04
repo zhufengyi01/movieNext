@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0000A4111AC013C8000DCE80 /* first_screen_slogan.png in Resources */ = {isa = PBXBuildFile; fileRef = 0000A40E1AC013C8000DCE80 /* first_screen_slogan.png */; };
 		0000A4121AC013C8000DCE80 /* first_screen_slogan@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0000A40F1AC013C8000DCE80 /* first_screen_slogan@2x.png */; };
 		0000A4131AC013C8000DCE80 /* first_screen_slogan@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0000A4101AC013C8000DCE80 /* first_screen_slogan@3x.png */; };
 		000221D61ABFF79E00FC0D65 /* moments_share_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 000221CE1ABFF79E00FC0D65 /* moments_share_icon@2x.png */; };
@@ -496,9 +495,6 @@
 		402DE3781B1EA3260018CBC6 /* weibo_share@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 402DE3701B1EA3260018CBC6 /* weibo_share@3x.png */; };
 		402DE37E1B1EAFCF0018CBC6 /* MyButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 402DE37D1B1EAFCF0018CBC6 /* MyButton.m */; };
 		4076AF011AA9B0D2006DC466 /* StageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4076AF001AA9B0D2006DC466 /* StageView.m */; };
-		4093904C1AB2D2C700FABA50 /* first_screen_slogan@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 409390491AB2D2C700FABA50 /* first_screen_slogan@2x.png */; };
-		4093904D1AB2D2C700FABA50 /* first_screen_slogan@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4093904A1AB2D2C700FABA50 /* first_screen_slogan@3x.png */; };
-		4093904E1AB2D2C700FABA50 /* first_screen_slogan.png in Resources */ = {isa = PBXBuildFile; fileRef = 4093904B1AB2D2C700FABA50 /* first_screen_slogan.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -512,7 +508,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0000A40E1AC013C8000DCE80 /* first_screen_slogan.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = first_screen_slogan.png; path = ../first_screen_slogan.png; sourceTree = "<group>"; };
 		0000A40F1AC013C8000DCE80 /* first_screen_slogan@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "first_screen_slogan@2x.png"; path = "../first_screen_slogan@2x.png"; sourceTree = "<group>"; };
 		0000A4101AC013C8000DCE80 /* first_screen_slogan@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "first_screen_slogan@3x.png"; path = "../first_screen_slogan@3x.png"; sourceTree = "<group>"; };
 		000221CE1ABFF79E00FC0D65 /* moments_share_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "moments_share_icon@2x.png"; sourceTree = "<group>"; };
@@ -1222,9 +1217,6 @@
 		402DE37D1B1EAFCF0018CBC6 /* MyButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MyButton.m; path = MyButton/MyButton.m; sourceTree = "<group>"; };
 		4076AEFF1AA9B0D2006DC466 /* StageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StageView.h; path = General/Helper/StageView.h; sourceTree = SOURCE_ROOT; };
 		4076AF001AA9B0D2006DC466 /* StageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = StageView.m; path = General/Helper/StageView.m; sourceTree = SOURCE_ROOT; };
-		409390491AB2D2C700FABA50 /* first_screen_slogan@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "first_screen_slogan@2x.png"; sourceTree = "<group>"; };
-		4093904A1AB2D2C700FABA50 /* first_screen_slogan@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "first_screen_slogan@3x.png"; sourceTree = "<group>"; };
-		4093904B1AB2D2C700FABA50 /* first_screen_slogan.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = first_screen_slogan.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1510,7 +1502,6 @@
 				00BA5F6C1AC13C1800BC3039 /* login_button_sina_press@3x.png */,
 				00539A061AC0565C00DC8BD7 /* notice_icon@2x.png */,
 				000221CE1ABFF79E00FC0D65 /* moments_share_icon@2x.png */,
-				0000A40E1AC013C8000DCE80 /* first_screen_slogan.png */,
 				0000A40F1AC013C8000DCE80 /* first_screen_slogan@2x.png */,
 				0000A4101AC013C8000DCE80 /* first_screen_slogan@3x.png */,
 				000221CF1ABFF79E00FC0D65 /* moments_share_icon@3x.png */,
@@ -1535,9 +1526,6 @@
 				0043E9611AB2DAF500209C3A /* login_button_wechat.png */,
 				0043E9621AB2DAF500209C3A /* login_button_wechat@2x.png */,
 				0043E9631AB2DAF500209C3A /* login_button_wechat@3x.png */,
-				409390491AB2D2C700FABA50 /* first_screen_slogan@2x.png */,
-				4093904A1AB2D2C700FABA50 /* first_screen_slogan@3x.png */,
-				4093904B1AB2D2C700FABA50 /* first_screen_slogan.png */,
 				003E74D01AB1A29F0080F7A8 /* btn_add_default@2x.png */,
 				003E74D11AB1A29F0080F7A8 /* btn_add_default@3x.png */,
 				003E74D31AB1A29F0080F7A8 /* btn_add_select@2x.png */,
@@ -2844,11 +2832,9 @@
 				000B098E1AA3029800B8D13A /* icon@3x.png in Resources */,
 				402DE3731B1EA3260018CBC6 /* moment_share@2x.png in Resources */,
 				002A12EA1B01A999003A001F /* dan_close@2x.png in Resources */,
-				4093904D1AB2D2C700FABA50 /* first_screen_slogan@3x.png in Resources */,
 				000B09C41AA3029800B8D13A /* Qzone.png in Resources */,
 				00CCEBF21AE136B40072E1B3 /* cell_background_color.png in Resources */,
 				000B09B41AA3029800B8D13A /* Moments@3x.png in Resources */,
-				4093904C1AB2D2C700FABA50 /* first_screen_slogan@2x.png in Resources */,
 				00AA53121AA2C3F4004096F8 /* Main.storyboard in Resources */,
 				0087940A1AF0E1BE007313CB /* alert_close@2x.png in Resources */,
 				003E74F51AB1A29F0080F7A8 /* btn_like_select@3x.png in Resources */,
@@ -3004,7 +2990,6 @@
 				00E0D47F1AB54A3D00048399 /* btn_delete@3x.png in Resources */,
 				000B09B21AA3029800B8D13A /* Moments.png in Resources */,
 				0053E9081ACBA08D00C11CB4 /* feed_tab_butten_normal@3x.png in Resources */,
-				4093904E1AB2D2C700FABA50 /* first_screen_slogan.png in Resources */,
 				000B09A11AA3029800B8D13A /* login_button_qq@2x.png in Resources */,
 				000B09D01AA3029800B8D13A /* single_switch(gray)@3x.png in Resources */,
 				000B09961AA3029800B8D13A /* like@3x.png in Resources */,
@@ -3017,7 +3002,6 @@
 				006BC7431ADE5C1500DE0C0D /* open_danmu@2x.png in Resources */,
 				000B09981AA3029800B8D13A /* liked@2x.png in Resources */,
 				000FBB421B131D6B00C28025 /* add_tab_butten@2x.png in Resources */,
-				0000A4111AC013C8000DCE80 /* first_screen_slogan.png in Resources */,
 				00415FE51B005D10004FAD71 /* movie_button_bg@2x.png in Resources */,
 				0053E90E1ACBA08D00C11CB4 /* me_tab_butten_normal@3x.png in Resources */,
 				009044781AD3F3D0009CF318 /* selected_icon@3x.png in Resources */,
@@ -3422,8 +3406,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-2";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Beijing Zuijiao Technology Company";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Beijing Zuijiao Technology Company";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_STRICT_OBJC_MSGSEND = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3441,7 +3425,7 @@
 					"$(PROJECT_DIR)/Libs/UMAnalytics_Sdk_3.4.8",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "ca993ee7-8f71-4e27-bc13-4e2338226631";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -3454,8 +3438,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-2";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Beijing Zuijiao Technology Company";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Beijing Zuijiao Technology Company";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_STRICT_OBJC_MSGSEND = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3473,7 +3457,7 @@
 					"$(PROJECT_DIR)/Libs/UMAnalytics_Sdk_3.4.8",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "ca993ee7-8f71-4e27-bc13-4e2338226631";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
 			};

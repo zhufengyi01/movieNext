@@ -107,7 +107,7 @@
     TopImageView.userInteractionEnabled=YES;
     [self.view addSubview:TopImageView];
     
-    NSArray  *titleArray =@[@"影院热映",@"网上热门",@"动漫"];
+    NSArray  *titleArray =@[@"热门电影",@"热门剧集",@"热门动漫"];
     for (int i =0; i<BUTTON_COUNT; i++) {
         
         double  x=i*(kDeviceWidth/3);

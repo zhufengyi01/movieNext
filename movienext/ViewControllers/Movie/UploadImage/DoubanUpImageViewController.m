@@ -113,6 +113,7 @@
             AddMarkViewController  *vc =[[AddMarkViewController alloc]init];
             stageInfoModel  *model =[[stageInfoModel alloc]init];
             movieInfoModel  *movieInfo =[[movieInfoModel alloc]init];
+            
             movieInfo.name =self.movie_name;
             vc.pageSoureType=NSAddMarkPageSourceDoubanUploadImage;
             movieInfo.Id=self.movie_id;

@@ -22,8 +22,8 @@
 @property(nonatomic,strong)UICollectionView  *myConllectionView;
 
 @property(nonatomic,strong)     NSMutableArray    *addedDataArray;
-@property(nonatomic,strong)     NSMutableArray    *upedDataArray;
 
+@property(nonatomic,strong)     NSMutableArray    *upedDataArray;
 
 @property(nonatomic,strong) NSMutableDictionary  *buttonStateDict;
 
