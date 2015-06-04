@@ -34,7 +34,7 @@
 -(void)createNaviagtion
 {
     UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:@"管理员"];
-    titleLable.textColor=VBlue_color;
+    titleLable.textColor=VGray_color;
     titleLable.font=[UIFont boldSystemFontOfSize:18];
     titleLable.textAlignment=NSTextAlignmentCenter;
     self.navigationItem.titleView=titleLable;
@@ -81,7 +81,11 @@
     
     switch (indexPath.row) {
         case ADM_TYPE_USER:
+        {
+            UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+            self.navigationItem.backBarButtonItem=item;
             [self.navigationController pushViewController:[AdmCustomListViewController new] animated:YES];
+        }
             break;
          case ADM_TYPE_EMOJ:
         {
@@ -94,6 +98,8 @@
             
             TagToStageViewController  *tostage =[TagToStageViewController new];
             tostage.tagInfo=tagmodel;
+            UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+            self.navigationItem.backBarButtonItem=item;
             [self.navigationController pushViewController:tostage animated:YES];
 
             break;}
@@ -102,6 +108,8 @@
         {
             MovieDetailViewController *movied =[[MovieDetailViewController alloc]init];
             movied.pageSourceType=NSMovieSourcePageAdminCloseStageViewController;
+            UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+            self.navigationItem.backBarButtonItem=item;
             [self.navigationController pushViewController:movied animated:YES];
 
             break;
@@ -110,6 +118,8 @@
         {
             NewAddViewController *new  =[NewAddViewController new];
             new.pageType=NSNewAddPageSoureTypeCloseWeiboList;
+            UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+            self.navigationItem.backBarButtonItem=item;
             [self.navigationController pushViewController:new animated:YES];
             break;
         }
@@ -117,6 +127,8 @@
         {
             NewAddViewController *new  =[NewAddViewController new];
             new.pageType=NSNewAddPageSoureTypeNewList;
+            UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+            self.navigationItem.backBarButtonItem=item;
             [self.navigationController pushViewController:new animated:YES];
 
             break;
