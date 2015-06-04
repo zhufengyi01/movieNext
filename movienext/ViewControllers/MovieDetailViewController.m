@@ -287,7 +287,7 @@
 {
     TagView *tagview =[[TagView alloc]initWithWeiboInfo:nil AndTagInfo:tagmodel delegate:self isCanClick:YES backgoundImage:nil isLongTag:YES];
     tagview.tagBgImageview.backgroundColor=VLight_GrayColor;
-    [tagview setbigTag:YES];
+    [tagview setbigTagWithSize:CGSizeMake(8, 6)];
     tagview.tag=2000+index;
     tagview.titleLable.textColor=VGray_color;
     if (index==0) {

@@ -40,8 +40,7 @@
 
 
 //是否是大标签
--(void)setbigTag:(BOOL) isbig;
-
+-(void)setbigTagWithSize:(CGSize) Size;
 
 
 //设置圆角的幅度

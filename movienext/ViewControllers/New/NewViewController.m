@@ -97,15 +97,12 @@
         }
     }
    // [[NSNotificationCenter defaultCenter] removeObserver:self name:@"RefeshTableview" object:nil];
-    
 }
 -(void)viewWillDisappear:(BOOL)animated
 {
     //开始切换标签栏执行
     [super viewWillDisappear:animated];
     [MobClick endLogPageView:@"最新热门"];
-
-
 }
 
 //遇到上面的问题 最直接的解决方法就是在controller的viewDidAppear里面去调用present。这样可以确保view hierarchy的层次结构不乱。
@@ -118,9 +115,7 @@
 {
     //标签栏已经切换成功执行这个
     [super viewDidDisappear:YES];
- 
     //[[NSNotificationCenter defaultCenter] removeObserver:self name:@"RefeshTableview" object:nil];
-
 }
 - (void)viewDidLoad {
     [super viewDidLoad];

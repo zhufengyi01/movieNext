@@ -41,8 +41,6 @@
    // NSMutableArray    *_dataArray;
     UISearchBar  *search;
     
-    
-
 }
 @property(nonatomic,strong) UITableView  *myTableView;
 @property(nonatomic,strong) NSMutableArray *dataArray;
@@ -66,7 +64,7 @@
     [self createNavigation];
     [self initData];
     [self initUI];
-    [self creatLoadView];
+    //[self creatLoadView];
 }
 
 -(void)creatLoadView
@@ -143,28 +141,19 @@
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
-        [loadView showNullView:@"没有数据..."];
+        //[loadView showNullView:@"没有数据..."];
         
     }];
     
 }
 
-- (void)hideLoadingView{
-    [loadView stopAnimation];
-    loadView.hidden = YES;
-}
 
-- (void)showLoadingView{
-    [loadView startAnimation];
-    loadView.hidden = NO;
-}
 
 -(void)requestData
 {
     if ([search.text isEqualToString:@"00"]) {
         return;
     }
-    [self showLoadingView];
     
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
     NSString *urlStr = [NSString stringWithFormat:@"http://movie.douban.com/subject_search?search_text=%@&cat=1002", [search.text URLEncodedString] ];

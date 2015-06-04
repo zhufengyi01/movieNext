@@ -198,7 +198,7 @@
 {
     
     TagView *tagview =[[TagView alloc]initWithWeiboInfo:self.weiboInfo AndTagInfo:tagmodel delegate:self isCanClick:YES backgoundImage:nil isLongTag:YES];
-    [tagview setbigTag:YES];
+    //[tagview setbigTag:YES];
      return tagview;
 }
 

@@ -78,9 +78,9 @@
     self.frame=CGRectMake(0, 0, Tsize.width+10, TagHeight);
     self.titleLable.frame=CGRectMake(3,0, self.frame.size.width-6,self.frame.size.height);
 }
--(void)setbigTag:(BOOL) isbig;
+-(void)setbigTagWithSize:(CGSize) Size;
 {
-    self.frame=CGRectMake(0, 0,self.frame.size.width+10, self.frame.size.height+10);
+    self.frame=CGRectMake(0, 0,self.frame.size.width+Size.width, self.frame.size.height+Size.height);
     self.titleLable.frame=CGRectMake(0,0,self.frame.size.width, self.frame.size.height);
 }
 

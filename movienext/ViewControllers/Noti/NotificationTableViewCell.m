@@ -68,14 +68,14 @@
     
     
     _index=index;
-         NSString *logoString=[NSString stringWithFormat:@"%@%@", kUrlAvatar,model.weiboInfo.uerInfo.logo];
+         NSString *logoString=[NSString stringWithFormat:@"%@%@", kUrlAvatar,model.userInfo.logo];
     
     [logoButton sd_setBackgroundImageWithURL:[NSURL URLWithString:logoString ] forState:UIControlStateNormal placeholderImage:HeadImagePlaceholder];
          NSString *urlString =[NSString stringWithFormat:@"%@%@!w340h340",kUrlStage,model.weiboInfo.stageInfo.photo];
         
     [stageImage sd_setImageWithURL:[NSURL URLWithString:urlString] placeholderImage:[UIImage imageNamed:@"loading_image_all.png"] options:SDWebImageRetryFailed];
     //}
-    NSString  *nameStr=model.weiboInfo.uerInfo.username;
+    NSString  *nameStr=model.userInfo.username;
     
     titleLable.text =nameStr;
     CGSize  Namesize =[nameStr boundingRectWithSize:CGSizeMake(kDeviceWidth-100-50, MAXFLOAT) options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes:[NSDictionary dictionaryWithObject:titleLable.font forKey:NSFontAttributeName] context:nil].size;

@@ -188,7 +188,10 @@
                      }
                     }
                     weiboUserInfoModel  *user =[[weiboUserInfoModel alloc]init];
-                    model.userInfo=user;
+                    if (user) {
+                        [user setValuesForKeysWithDictionary:[noDcit objectForKey:@"user"]];
+                        model.userInfo=user;
+                    }
                     [_dataArray addObject:model];
                 }
             }
@@ -257,6 +260,7 @@
     ShowStageViewController *vc = [[ShowStageViewController alloc] init];
     userAddmodel  *model =[_dataArray objectAtIndex:indexPath.row];
     vc.stageInfo=model.weiboInfo.stageInfo;
+    vc.weiboInfo=model.weiboInfo;
     UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
     self.navigationItem.backBarButtonItem=item;
     [self.navigationController pushViewController:vc animated:YES];
@@ -283,7 +287,7 @@
         
         MyViewController  *myVC=[[MyViewController alloc]init];
         userAddmodel *model =[_dataArray objectAtIndex:index];
-        myVC.author_id=[NSString stringWithFormat:@"%@",model.weiboInfo.uerInfo.Id];
+        myVC.author_id=[NSString stringWithFormat:@"%@",model.userInfo.Id];
          [self.navigationController pushViewController:myVC animated:YES];
     }
    

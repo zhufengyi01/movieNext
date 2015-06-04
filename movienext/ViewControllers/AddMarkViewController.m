@@ -739,7 +739,8 @@
 //    if (index==999) {//最后一个是添加按钮
 //        tagview.tagBgImageview.image=nil;
 //    }
-    [tagview setbigTag:YES];
+   // [tagview setbigTag:YES];
+    [tagview setbigTagWithSize:CGSizeMake(8, 6)];
     tagview.tag=1000+index;
     return tagview;
 }

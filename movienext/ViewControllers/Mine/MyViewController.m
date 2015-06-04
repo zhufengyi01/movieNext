@@ -132,12 +132,10 @@
 -(void)createNavigation
 {
     [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color.png"] forBarMetrics:UIBarMetricsDefault];
-
     NSString  *titleString=@"我的";
     if (self.author_id&&![self.author_id isEqualToString:@"0"]) {
          titleString=@"他的主页";
     }
-
     UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:titleString];
     titleLable.textColor=VGray_color;
     titleLable.font=[UIFont boldSystemFontOfSize:18];
@@ -168,6 +166,10 @@
     //layout.itemSize=CGSizeMake(80,140);  //cell的大小
      layout.sectionInset=UIEdgeInsetsMake(0,0,64, 0); //整个偏移量 上左下右
      _myConllectionView =[[UICollectionView alloc]initWithFrame:CGRectMake(0,0,kDeviceWidth, kDeviceHeight-0-0-100) collectionViewLayout:layout];
+    if (self.author_id&&![self.author_id isEqualToString:@"0"]) {
+        //如果有用户id 并且用户的id 不为0
+        _myConllectionView.frame=CGRectMake(0, 0, kDeviceWidth, kDeviceHeight-60);
+     }
     [layout setHeaderReferenceSize:CGSizeMake(_myConllectionView.frame.size.width,160)];
     _myConllectionView.backgroundColor=View_BackGround;
     //注册大图模式
@@ -705,7 +707,7 @@
         vc.upweiboArray=_addWeiboArray;
         
         vc.stageInfo = model.weiboInfo.stageInfo;
-        
+        vc.weiboInfo=model.weiboInfo;
         UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
         self.navigationItem.backBarButtonItem=item;
         
@@ -717,6 +719,7 @@
         ShowStageViewController *vc = [[ShowStageViewController alloc] init];
         userAddmodel *model=[_upedDataArray objectAtIndex:indexPath.row];
        vc.upweiboArray=_upWeiboArray;
+        vc.weiboInfo=model.weiboInfo;
         vc.stageInfo =model.weiboInfo.stageInfo;
         UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
         self.navigationItem.backBarButtonItem=item;
