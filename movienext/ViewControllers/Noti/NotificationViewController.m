@@ -290,9 +290,10 @@
         MyViewController  *myVC=[[MyViewController alloc]init];
         userAddmodel *model =[_dataArray objectAtIndex:index];
         myVC.author_id=[NSString stringWithFormat:@"%@",model.userInfo.Id];
+        UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+        self.navigationItem.backBarButtonItem=item;
          [self.navigationController pushViewController:myVC animated:YES];
     }
-   
 }
 -(void)dealloc
 {

@@ -824,7 +824,8 @@
 //设置页面
 -(void)GotoSettingClick:(UIButton  *) button
 {
-    
+    UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+    self.navigationItem.backBarButtonItem=item;
     [self.navigationController pushViewController:[SettingViewController new] animated:YES];
 }
 

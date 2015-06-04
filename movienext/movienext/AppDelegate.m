@@ -44,25 +44,23 @@
         [[NSUserDefaults standardUserDefaults] setObject:@"YES" forKey:IS_FIRST_LOGIN];
         UINavigationController  *GNa=[[UINavigationController alloc]initWithRootViewController:[GiderPageViewController new]];
         self.window.rootViewController=GNa;
-    }
-    else {
+    } else {
         if (userInfo) {  //用户已经登陆
-          [Function getUserInfoWith:userInfo];
-          self.window.rootViewController =[CustmoTabBarController new];
-         }
-        else {
-         //用户没有登陆
-         UINavigationController  *loginNa=[[UINavigationController alloc]initWithRootViewController:[LoginViewController new]];
-           self.window.rootViewController=loginNa;
-      
+            [Function getUserInfoWith:userInfo];
+            self.window.rootViewController =[CustmoTabBarController new];
+        } else {
+            //用户没有登陆
+            UINavigationController  *loginNa=[[UINavigationController alloc]initWithRootViewController:[LoginViewController new]];
+            self.window.rootViewController=loginNa;
         }
     }
     self.window.backgroundColor=[UIColor whiteColor];
     //自动显示和隐藏请求时的状态提示
     [[AFNetworkActivityIndicatorManager sharedManager] setEnabled:YES];
-
+    
     //初始化友盟组件
     [self initUmeng];
+    
     return YES;
 }
 /**
@@ -82,7 +80,7 @@
     //如果您没有设置加密模式，SDK的加密模式为NO（不加密）。
     [MobClick setEncryptEnabled:YES];
     
-   // 您可以设置在应用切入后台时，是否进入background模式。
+    // 您可以设置在应用切入后台时，是否进入background模式。
     //对于支持backgound模式的APP，SDK可以确保在进入后台时，完成对日志的持久化工作，保证数据的完整性。您可以通过以下方法对后台模式进行设置：
     [MobClick setBackgroundTaskEnabled:YES];
     
@@ -95,13 +93,13 @@
     [UMSocialData openLog:YES];
     [UMSocialConfig setSupportedInterfaceOrientations:UIInterfaceOrientationMaskPortrait];
     NSString *shareAppUrl = @"http://um0.cn/47MUuq/";
-   // [UMSocialWechatHandler setWXAppId:@"wxacf55d5740f7290f" appSecret:@"d2f735f634c9933f774fab162b809943" url:shareAppUrl];
-     [UMSocialWechatHandler setWXAppId:weiChatShareKey appSecret:weiChatShareSecret url:shareAppUrl];
+    // [UMSocialWechatHandler setWXAppId:@"wxacf55d5740f7290f" appSecret:@"d2f735f634c9933f774fab162b809943" url:shareAppUrl];
+    [UMSocialWechatHandler setWXAppId:weiChatShareKey appSecret:weiChatShareSecret url:shareAppUrl];
     
     //    QQ100551660 的16进制是 05FE4BEC
     //    1103486275 41C5DD43
     [UMSocialQQHandler setQQWithAppId:@"1103486275" appKey:@"htGJ2JFqtS2GTmM2" url:@"http://www.redianying.com"];
-  //  [UMSocialSinaHandler openSSOWithRedirectURL:@"https://api.weibo.com/oauth2default.html"];
+    //  [UMSocialSinaHandler openSSOWithRedirectURL:@"https://api.weibo.com/oauth2default.html"];
     [UMSocialSinaHandler openSSOWithRedirectURL:SSOSinRedirectURL];
 }
 
