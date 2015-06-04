@@ -52,7 +52,7 @@
     UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:self.tagInfo.tagDetailInfo.title];
     titleLable.textColor=VGray_color;
     
-    titleLable.font=[UIFont boldSystemFontOfSize:18];
+    titleLable.font=[UIFont systemFontOfSize:18];
     titleLable.textAlignment=NSTextAlignmentCenter;
     self.navigationItem.titleView=titleLable;
     

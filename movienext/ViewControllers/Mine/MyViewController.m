@@ -441,7 +441,6 @@
         page=page2;
 
     }
-    
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
      NSString *urlString =[NSString stringWithFormat:@"%@/%@?per-page=%d&page=%d", kApiBaseUrl, section,pageSize,page];
     

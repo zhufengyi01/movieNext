@@ -116,13 +116,13 @@
     //moreButton.backgroundColor =[UIColor redColor];
     moreButton.imageEdgeInsets=UIEdgeInsetsMake(0, 10, 0, -10);
     moreButton.layer.cornerRadius=2;
-    moreButton.hidden=NO;
+    //moreButton.hidden=NO;
     [moreButton setTitleColor:VGray_color forState:UIControlStateNormal];
     UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithCustomView:moreButton];
-    if (!self.weiboInfo) {
+    //if (!self.weiboInfo) {
         self.navigationItem.rightBarButtonItem=item;
 
-    }
+    //}
 
 }
 -(void)createScrollView
@@ -249,6 +249,10 @@
      if (self.stageInfo.weibosArray.count>0) {
         _WeiboInfo =[self.stageInfo.weibosArray objectAtIndex:0];
     }
+    else if (self.weiboInfo)
+    {
+        _WeiboInfo=self.weiboInfo;
+    }
     NSString  *uselogoString =[NSString stringWithFormat:@"%@%@!thumb",kUrlAvatar,_WeiboInfo.uerInfo.logo];
     if (self.weiboInfo) {
         uselogoString=[NSString stringWithFormat:@"%@%@!thumb",kUrlAvatar,self.weiboInfo.uerInfo.logo];
@@ -279,7 +283,7 @@
 
     
     
-    //更多
+    /*更多
     //moreButton=[ZCControl createButtonWithFrame:CGRectMake(kStageWidth-135, 9, 30, 25) ImageName:@"more_icon_default.png" Target:self Action:@selector(cellButtonClick:) Title:@""];
     //moreButton.layer.cornerRadius=2;
     //moreButton.hidden=NO;
@@ -305,11 +309,16 @@
     addMarkButton =[ZCControl createButtonWithFrame:CGRectMake(kStageWidth-55,10,45,25) ImageName:@"btn_add_default.png" Target:self Action:@selector(addMarkButtonClick:) Title:@""];
     [addMarkButton setBackgroundImage:[UIImage imageNamed:@"btn_add_select.png"] forState:UIControlStateHighlighted];
     //[BgView2 addSubview:addMarkButton];
-    
+    */
     
     
     //点赞的按钮 上面放一张图片 右边放文字
      like_btn =[ZCControl createButtonWithFrame:CGRectMake(kStageWidth-70,10,70,25) ImageName:nil Target:self Action:@selector(clickLike:) Title:@""];
+    if (IsIphone6plus) {
+        like_btn.frame=CGRectMake(kStageWidth-80, 10, 80, 32);
+    }
+    like_btn.layer.cornerRadius=4;
+    like_btn.clipsToBounds=YES;
     like_btn.backgroundColor=View_BackGround;
     [BgView2 addSubview:like_btn];
     
@@ -371,7 +380,10 @@
     if (_WeiboInfo.tagArray.count>0) {
         for (int i=0; i<_WeiboInfo.tagArray.count; i++) {
         TagView  *tagView= [[TagView alloc]initWithWeiboInfo:_WeiboInfo AndTagInfo:_WeiboInfo.tagArray[i] delegate:self isCanClick:YES backgoundImage:nil isLongTag:NO];
-            [tagView setcornerRadius:2];
+            [tagView setcornerRadius:4];
+            [tagView setbigTagWithSize:CGSizeMake(8,4)];
+            tagView.tag=5000+i;
+            
             tagView.backgroundColor =[UIColor redColor];
             [self.WeiboTagLable appendView:tagView margin:UIEdgeInsetsMake(5, 10, 0, 0)];
         }
@@ -487,7 +499,6 @@
 //创建固定于地步的分享按钮
 -(void)createShareToolBar
 {
- 
     UIView  *shareView=[[UIView alloc]initWithFrame:CGRectMake(0, kDeviceHeight-200-kHeightNavigation, kDeviceWidth, 200)];
     shareView.userInteractionEnabled=YES;
     shareView.backgroundColor =[UIColor whiteColor];
@@ -506,8 +517,8 @@
     if (self.weiboInfo) {//如果 从管理员的最新页进来
         TagView *tagview = [self createTagViewWithweiboInfo:self.weiboInfo andIndex:300];
         [tagview setbigTagWithSize:CGSizeMake(10, 10)];
-        [self.tagLable appendView:tagview margin:UIEdgeInsetsMake(0, 0, 0, 10)];
-        self.tagLable.lineSpacing=10;
+        [self.tagLable appendView:tagview margin:UIEdgeInsetsMake(0, 0, 0, 5)];
+        self.tagLable.lineSpacing=5;
         self.tagLable.numberOfLines=0;
         tagview.tagBgImageview.backgroundColor =VLight_GrayColor;
         tagview.titleLable.textColor=[UIColor whiteColor];
@@ -516,8 +527,8 @@
     for (int i=0; i<self.stageInfo.weibosArray.count; i++) {
         TagView *tagview = [self createTagViewWithweiboInfo:self.stageInfo.weibosArray[i] andIndex:i];
         [tagview setbigTagWithSize:CGSizeMake(10, 10)];
-         [self.tagLable appendView:tagview margin:UIEdgeInsetsMake(0, 0, 0, 10)];
-         self.tagLable.lineSpacing=10;
+         [self.tagLable appendView:tagview margin:UIEdgeInsetsMake(0, 0, 0, 5)];
+         self.tagLable.lineSpacing=5;
         self.tagLable.numberOfLines=0;
         if (i==0) {
             tagview.tagBgImageview.backgroundColor =VLight_GrayColor;
@@ -552,7 +563,7 @@
 -(TagView *) createTagViewWithweiboInfo:(weiboInfoModel *) weiboInfo andIndex:(NSInteger) index
 {
     TagView *tagview =[[TagView alloc]initWithWeiboInfo:weiboInfo AndTagInfo:nil delegate:self isCanClick:YES backgoundImage:nil isLongTag:NO];
-    [tagview setcornerRadius:4];
+    [tagview setcornerRadius:2];
     tagview.tagBgImageview.backgroundColor =VLight_GrayColor_apla;
     tagview.titleLable.textColor=VGray_color;
     tagview.tag=2000+index;
@@ -564,8 +575,8 @@
 -(void)TapViewClick:(TagView *)tagView Withweibo:(weiboInfoModel *)weiboInfo withTagInfo:(TagModel *)tagInfo
 {
     
-    _WeiboInfo=weiboInfo;
-
+    if (tagView.tag<5000) {  // 点击的是微博标签
+      _WeiboInfo=weiboInfo;
      dispatch_async(dispatch_get_main_queue(), ^{
          [self createWeiboTagView];
 
@@ -607,7 +618,17 @@
     movieNameLable.frame=CGRectMake(35,0, Nsize.width+4, 30);
     leftButtomButton.frame=CGRectMake(10, 9, 30+5+movieNameLable.frame.size.width, 27);
     movieNameLable.text=[NSString stringWithFormat:@"%@",nameStr];
+    }
+    else
+    {
+        //跳转到标签列表页
+        TagToStageViewController  *vc=[[TagToStageViewController alloc]init];
+        vc.weiboInfo=weiboInfo;
+        vc.tagInfo=tagInfo;
+        [self.navigationController pushViewController:vc animated:YES];
+        
 
+    }
     
 
 }
@@ -1047,6 +1068,7 @@
             self.stageInfo=self.weiboInfo.stageInfo;
         }
         UMShareView *shareView =[[UMShareView alloc] initwithStageInfo:self.stageInfo ScreenImage:image delgate:self];
+        [shareView setShareLable];
         [shareView show];
     }
     else if (button==addMarkButton)//添加有关

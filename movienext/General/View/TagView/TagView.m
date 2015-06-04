@@ -71,8 +71,8 @@
     CGSize  Tsize =[self.titleLable.text boundingRectWithSize:CGSizeMake(MAXFLOAT, TagHeight) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:[NSDictionary dictionaryWithObject:self.titleLable.font forKey:NSFontAttributeName] context:nil].size;
     //不是长微博
     if (_isLongtag==NO) {
-        if (Tsize.width>(kDeviceWidth-80)/2){
-            Tsize.width=(kDeviceWidth-80)/2;
+        if (Tsize.width>(kDeviceWidth-20)){
+            Tsize.width=(kDeviceWidth-20);
         }
     }
     self.frame=CGRectMake(0, 0, Tsize.width+10, TagHeight);

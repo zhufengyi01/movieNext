@@ -215,7 +215,6 @@
          [_HotMoVieTableView reloadData];
 
      }
-
 }
 -(void)createHotView
 {

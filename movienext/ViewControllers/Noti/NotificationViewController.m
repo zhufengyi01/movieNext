@@ -246,7 +246,7 @@
     NotificationTableViewCell  *cell=[tableView dequeueReusableCellWithIdentifier:cellID];
     if (!cell) {
         cell=[[NotificationTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
-        cell.selectionStyle=UITableViewCellSelectionStyleNone;
+        cell.selectionStyle=UITableViewCellSelectionStyleGray;
     }
     if (_dataArray.count>indexPath.row) {
         //[cell setValueforCell:[_dataArray  objectAtIndex:indexPath.row] index:indexPath.row];
@@ -258,6 +258,7 @@
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     ShowStageViewController *vc = [[ShowStageViewController alloc] init];
     userAddmodel  *model =[_dataArray objectAtIndex:indexPath.row];
     vc.stageInfo=model.weiboInfo.stageInfo;

@@ -8,7 +8,14 @@
 
 #import <UIKit/UIKit.h>
 #import "stageInfoModel.h"
+#import "M80AttributedLabel.h"
 #define KShow_ShareView_Time 0.3
+typedef NS_ENUM(NSInteger, UMShareType)
+{
+    UMShareTypeDefult,
+    UMShareTypeSuccess
+};
+
 @protocol UMShareViewDelegate <NSObject>
 
 -(void)UMShareViewHandClick:(UIButton *) button ShareImage:(UIImage *)shareImage StageInfoModel :(stageInfoModel *) StageInfo;
@@ -39,11 +46,11 @@
     
 }
 -(instancetype)initwithStageInfo:(stageInfoModel *) StageInfo ScreenImage:(UIImage *) screenImage delgate:(id<UMShareViewDelegate>) delegate;
+@property(nonatomic,assign) UMShareType  pageType;
+@property(nonatomic,strong) M80AttributedLabel  *tipLable;
 
-//@property (nonatomic,strong)id<UMShareViewDelegate> delegate;
-//@property(nonatomic,strong) stageInfoModel  *StageInfo;
-//截取cell 的图片
-//@property(nonatomic,strong)UIImage         *screenImage;
+-(void)setShareLable;
+
 //显示出来
 -(void)show;
 @end
