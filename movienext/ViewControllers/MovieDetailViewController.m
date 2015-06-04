@@ -89,13 +89,16 @@
 @implementation MovieDetailViewController
 -(void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
     //下面透明度的设置，效果是设置了导航条的高度的多少倍，不是透明度多少
   ///  self.navigationController.navigationBar.alpha=0.4;
     self.navigationController.navigationBar.hidden=NO;
     self.tabBarController.tabBar.hidden=YES;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(requestMovieData) name:@"RefreshMovieDeatail" object:nil];
 
+
 }
+
 -(void)viewDidAppear:(BOOL)animated
 {
     self.navigationController.navigationBar.hidden=NO;

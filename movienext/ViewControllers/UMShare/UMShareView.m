@@ -11,6 +11,7 @@
 #import "MyButton.h"
 #import "Constant.h"
 #import "Function.h"
+#import "MobClick.h"
 @implementation UMShareView
 
 /*
@@ -167,6 +168,9 @@
     logosupView.hidden=NO;
     shareImage=[Function getImage:shareView WithSize:CGSizeMake(kDeviceWidth-20, (kDeviceWidth-20)*(9.0/16)+20)];
     
+    NSArray *eventArray = [NSArray arrayWithObjects:@"share_moment", @"share_wechat", @"share_weibo", @"share_download", nil];
+    [MobClick event:eventArray[button.tag-1000]];
+    
     if (button.tag == 10003) {
         UIImageWriteToSavedPhotosAlbum(shareImage, self, @selector(image:didFinishSavingWithError:contextInfo:), nil);
         //[self removeFromSuperview];
@@ -183,11 +187,16 @@
 - (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error
   contextInfo:(void *)contextInfo
 {
+    [self CancleShareClick];
     if (error != NULL)
     {
+        UIAlertView  *Al =[[UIAlertView alloc]initWithTitle:nil message:@"保存失败" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+        [Al show];
         NSLog(@"保存失败");
         
     } else {
+        UIAlertView  *Al =[[UIAlertView alloc]initWithTitle:nil message:@"保存成功" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+        [Al show];
         NSLog(@"已保存到相册");
         UIAlertView  *al =[[UIAlertView alloc]initWithTitle:nil message:@"图片保存成功" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
         [al show];
