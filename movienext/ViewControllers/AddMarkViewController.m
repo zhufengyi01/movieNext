@@ -24,6 +24,8 @@
 #import "UMShareView.h"
 #import "UIButton+Block.h"
 //#import "AddTagViewController.h"
+#import "UploadProgressView.h"
+#import "AddLoadingView.h"
 #define  BOOKMARK_WORD_LIMIT 1000
 @interface AddMarkViewController ()<UIAlertViewDelegate,UIScrollViewDelegate,UITextViewDelegate,TagViewDelegate,UIAlertViewDelegate,UMShareViewController2Delegate,UMSocialUIDelegate,UMSocialDataDelegate,UMShareViewDelegate>
 {
@@ -48,6 +50,8 @@
     weiboInfoModel *weibo;
     UIView *shareView;
     //  UILabel  *markLable;
+    
+    AddLoadingView  *loading;
 }
 @property(nonatomic,strong) UIImageView  *stageImageView;  //剧照的图片
 
@@ -170,6 +174,7 @@
     self.stageImageView =[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceWidth*(9.0/16))];
     self.stageImageView.contentMode=UIViewContentModeScaleAspectFill;
     self.stageImageView.clipsToBounds=YES;
+    self.stageImageView.userInteractionEnabled=YES;
     [_myScorllerView addSubview:self.stageImageView];
     
     NSString *photostring=[NSString stringWithFormat:@"%@%@!w640",kUrlStage,self.stageInfo.photo];
@@ -200,15 +205,16 @@
         _myTextView.font =[UIFont boldSystemFontOfSize:24];
     }
     _myTextView.backgroundColor=[UIColor clearColor];
-    //_myTextView.layer.cornerRadius=4;
-    //_myTextView.layer.borderWidth=0.5;
-    //_myTextView.layer.borderColor=VLight_GrayColor.CGColor;
-    _myTextView.maximumZoomScale=3;
+    _myTextView.layer.cornerRadius=4;
+     _myTextView.layer.borderWidth=0.5;
+    _myTextView.layer.allowsEdgeAntialiasing=YES;
+    _myTextView.layer.borderColor=VLight_GrayColor.CGColor;
+    //_myTextView.maximumZoomScale=3;
     _myTextView.returnKeyType=UIReturnKeyDone;
     _myTextView.layoutManager.allowsNonContiguousLayout=NO;
-    _myTextView.scrollEnabled=YES;
+    //_myTextView.scrollEnabled=YES;
     _myTextView.textAlignment=NSTextAlignmentCenter;
-    _myTextView.autoresizingMask=UIViewAutoresizingFlexibleHeight;
+   // _myTextView.autoresizingMask=UIViewAutoresizingFlexibleHeight;
     _myTextView.selectedRange = NSMakeRange(0,0);  //默认光标从第一个开始
     [_myTextView becomeFirstResponder];
     [self.stageImageView addSubview:_myTextView];
@@ -320,6 +326,10 @@
 //确定发布
 -(void)PublicRuqest
 {
+    
+    loading = [[AddLoadingView alloc]initWithtitle:@"正在发布"];
+    [loading show];
+    
     int x=arc4random()%100-1;
     int  y =arc4random()%100-1;
     X=[NSString stringWithFormat:@"%d",x];
@@ -408,10 +418,14 @@
     [manager POST:urlString parameters:parameter success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"  添加弹幕发布请求    JSON: %@", responseObject);
         if ([[responseObject  objectForKey:@"code"] intValue]==0) {
-            NSString *message =@"发布成功";
-            if (self.weiboInfo) {
-                message=@"编辑成功";
-            }
+            
+            [loading remove];
+            
+            
+//            NSString *message =@"发布成功";
+//            if (self.weiboInfo) {
+//                message=@"编辑成功";
+//            }
             //UIAlertView  *Al=[[UIAlertView alloc]initWithTitle:nil message:message delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
             //Al.tag=1000;
             //[Al show];

@@ -10,8 +10,7 @@
 
 @interface UploadProgressView : UIView
 {
-    //UploadProgressView  *_myProgressView;
-    CGRect  m_frame;
+     CGRect  m_frame;
     UILabel  *tipLable;
 }
 @property(nonatomic,strong)  UIProgressView*  myProgressView;

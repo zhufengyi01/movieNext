@@ -35,7 +35,6 @@
 #define IsIphone6                [UIScreen mainScreen].bounds.size.height==667
 #define IsIphone6plus            [UIScreen mainScreen].bounds.size.height==736
 
-
 #define kHeightNavigation 64
 #define kHeigthTabBar     49
 #define kMarkWidth 22
@@ -50,7 +49,7 @@
 #define weiChatShareSecret @"1bd345fa522360c857c39f74030f4a92"
 
 //#define   Review   1          ///上传appstore版本  1 为审核
-#define   Version  @"1.0"       //版本信息  1.0.1 审核版         1.0 正常版
+#define   Version  @"1.0.1"       //版本信息  1.0.1 审核版         1.0 正常版
 #define   UMShareStyle  0      //分享1使用controller方式分享    0 使用view 方式分享
 
 
@@ -81,7 +80,6 @@
 #define HeadImagePlaceholder  [UIImage imageNamed:@"notice_image headloading.png"]
 
 #define GetAppDelegate()   ((AppDelegate*)[[UIApplication sharedApplication] delegate])
-
 #define AppView  [UIApplication sharedApplication].delegate.window
 
 //动画定义

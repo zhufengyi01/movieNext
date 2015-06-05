@@ -357,6 +357,7 @@
 		0087940B1AF0E1BE007313CB /* alert_close@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 008794071AF0E1BE007313CB /* alert_close@3x.png */; };
 		0087940C1AF0E1BE007313CB /* alert_more@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 008794081AF0E1BE007313CB /* alert_more@2x.png */; };
 		0087940D1AF0E1BE007313CB /* alert_more@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 008794091AF0E1BE007313CB /* alert_more@3x.png */; };
+		0088FBF61B214AC60046FEF2 /* AddLoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0088FBF51B214AC60046FEF2 /* AddLoadingView.m */; };
 		008B0B0B1AB307CD0054767E /* login out.png in Resources */ = {isa = PBXBuildFile; fileRef = 008B0B081AB307CD0054767E /* login out.png */; };
 		008B0B0C1AB307CD0054767E /* login out@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 008B0B091AB307CD0054767E /* login out@2x.png */; };
 		008B0B0D1AB307CD0054767E /* login out@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 008B0B0A1AB307CD0054767E /* login out@3x.png */; };
@@ -987,6 +988,8 @@
 		008794071AF0E1BE007313CB /* alert_close@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "alert_close@3x.png"; sourceTree = "<group>"; };
 		008794081AF0E1BE007313CB /* alert_more@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "alert_more@2x.png"; sourceTree = "<group>"; };
 		008794091AF0E1BE007313CB /* alert_more@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "alert_more@3x.png"; sourceTree = "<group>"; };
+		0088FBF41B214AC60046FEF2 /* AddLoadingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddLoadingView.h; sourceTree = "<group>"; };
+		0088FBF51B214AC60046FEF2 /* AddLoadingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddLoadingView.m; sourceTree = "<group>"; };
 		008B0B081AB307CD0054767E /* login out.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login out.png"; sourceTree = "<group>"; };
 		008B0B091AB307CD0054767E /* login out@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login out@2x.png"; sourceTree = "<group>"; };
 		008B0B0A1AB307CD0054767E /* login out@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login out@3x.png"; sourceTree = "<group>"; };
@@ -2133,6 +2136,15 @@
 			path = my_Hub;
 			sourceTree = "<group>";
 		};
+		0088FBF31B214A9A0046FEF2 /* AddLodingView */ = {
+			isa = PBXGroup;
+			children = (
+				0088FBF41B214AC60046FEF2 /* AddLoadingView.h */,
+				0088FBF51B214AC60046FEF2 /* AddLoadingView.m */,
+			);
+			path = AddLodingView;
+			sourceTree = "<group>";
+		};
 		00963B9E1B0323E10069CBD9 /* Masonry */ = {
 			isa = PBXGroup;
 			children = (
@@ -2656,6 +2668,7 @@
 				00218C8C1AE0E60B006B79B4 /* MarView */,
 				00218C8D1AE0E620006B79B4 /* StageView */,
 				00218C8E1AE0E637006B79B4 /* AlertView */,
+				0088FBF31B214A9A0046FEF2 /* AddLodingView */,
 				00218C8F1AE0E652006B79B4 /* UploadPressView */,
 			);
 			name = View;
@@ -3144,6 +3157,7 @@
 				000851131B09CDC000E6009C /* UIDevice+Hardware.m in Sources */,
 				0059EDC21B05D50900C2ACA1 /* TagModel.m in Sources */,
 				00ECAE1C1B0999DF0039597E /* NSDate+Utilities.m in Sources */,
+				0088FBF61B214AC60046FEF2 /* AddLoadingView.m in Sources */,
 				00963BB91B0323E10069CBD9 /* MASLayoutConstraint.m in Sources */,
 				00ECAE1B1B0999DF0039597E /* NSDate+TimeAgo.m in Sources */,
 				0008510A1B09CD4800E6009C /* UIImage+FX.m in Sources */,

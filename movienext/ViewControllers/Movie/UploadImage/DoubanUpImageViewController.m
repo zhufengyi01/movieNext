@@ -14,7 +14,7 @@
 #import "AddMarkViewController.h"
 #import "stageInfoModel.h"
 #import  "UIImageView+WebCache.h"
-
+#import "AddLoadingView.h"
 @interface DoubanUpImageViewController ()
 
 @end
@@ -65,7 +65,7 @@
     imageView.contentMode=UIViewContentModeScaleAspectFill;
     imageView.clipsToBounds=YES;
   
-  //  [imageView  sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",self.photourl]] placeholderImage:nil];
+
     [imageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",self.photourl]] placeholderImage:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
 //        CGSize  Isize=imageView.image.size;
 //        float x=0;
@@ -85,10 +85,8 @@
 //            width=(Isize.width/Isize.height)*kDeviceWidth;
 //            x=(kDeviceWidth-width)/2;
 //        }
-        
         float  height = kDeviceWidth*(9.0/16);
         imageView.frame=CGRectMake(0,(kDeviceHeight-height-kHeightNavigation)/2,kDeviceWidth,kDeviceWidth*(9.0/16));
- 
     }];
     
     [bgView addSubview:imageView];
@@ -100,20 +98,18 @@
 }
 -(void)requestupphoto
 {
+    AddLoadingView  *loading =[[AddLoadingView alloc]initWithtitle:@"正在添加"];
+    [loading show];
     UserDataCenter  *userCenter=[UserDataCenter shareInstance];
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     NSDictionary *parameters=@{@"movie_id":self.movie_id,@"photo":self.photourl,@"user_id":userCenter.user_id};
     [manager POST:[NSString stringWithFormat:@"%@/stage/create-from-douban",kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
             NSLog(@"创建成功=======%@",responseObject);
-            
-//            UIAlertView *al =[[UIAlertView alloc]initWithTitle:@"删除成功" message:nil delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-//            [al show];
-            
+            [loading remove];
             AddMarkViewController  *vc =[[AddMarkViewController alloc]init];
             stageInfoModel  *model =[[stageInfoModel alloc]init];
             movieInfoModel  *movieInfo =[[movieInfoModel alloc]init];
-            
             movieInfo.name =self.movie_name;
             vc.pageSoureType=NSAddMarkPageSourceDoubanUploadImage;
             movieInfo.Id=self.movie_id;
@@ -123,7 +119,6 @@
           //  UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:vc];
             //[self.navigationController presentViewController:vc animated:YES completion:nil];
             [self.navigationController pushViewController:vc animated:NO];
-            
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);

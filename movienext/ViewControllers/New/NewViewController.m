@@ -54,7 +54,6 @@
     NSMutableArray    *_newDataArray;
     int page1;
     int page2;
-    
     int pagesize;
     int pageCount1;
     int pageCount2;
@@ -72,7 +71,7 @@
     NSNumber        *_stage_Id;
     NSMutableArray  *_upWeiboArray;
     NSInteger Rowindex;
-}
+ }
 @end
 
 @implementation NewViewController

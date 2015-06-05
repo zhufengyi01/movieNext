@@ -28,6 +28,8 @@
 #import "Function.h"
 #import "GiderPageViewController.h"
 @interface AppDelegate ()
+//是否为测试版
+@property(nonatomic,strong) NSString  *IS_CHECK;
 
 @end
 
@@ -35,33 +37,54 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
-    NSDictionary  *userInfo=[[NSUserDefaults  standardUserDefaults] objectForKey:kUserKey];
-    NSString      *firstlogin =[[NSUserDefaults standardUserDefaults] objectForKey:IS_FIRST_LOGIN];
-#warning 临时有这句话, 上线的时候去掉
-    //firstlogin = @"NO";
-    if (![firstlogin isEqualToString:@"YES"]) {//是第一次进入应用
-        [[NSUserDefaults standardUserDefaults] setObject:@"YES" forKey:IS_FIRST_LOGIN];
-        UINavigationController  *GNa=[[UINavigationController alloc]initWithRootViewController:[GiderPageViewController new]];
-        self.window.rootViewController=GNa;
-    } else {
-        if (userInfo) {  //用户已经登陆
-            [Function getUserInfoWith:userInfo];
-            self.window.rootViewController =[CustmoTabBarController new];
-        } else {
-            //用户没有登陆
-            UINavigationController  *loginNa=[[UINavigationController alloc]initWithRootViewController:[LoginViewController new]];
-            self.window.rootViewController=loginNa;
-        }
-    }
-    self.window.backgroundColor=[UIColor whiteColor];
-    //自动显示和隐藏请求时的状态提示
-    [[AFNetworkActivityIndicatorManager sharedManager] setEnabled:YES];
-    
+    // Override point for customization after application launch
+    //默认是审核版
+    self.IS_CHECK=@"1";
     //初始化友盟组件
     [self initUmeng];
-    
+    // 友盟自定义事件
+    //[MobClick updateOnlineConfig];
+    // NSString  *is_App_Check = [MobClick getConfigParams:@"First_Start_Image"];
+    //判断是否是审核
+    [self requestisReview];
+  
+     self.window.backgroundColor=[UIColor whiteColor];
+    //自动显示和隐藏请求时的状态提示
+    [[AFNetworkActivityIndicatorManager sharedManager] setEnabled:YES];
     return YES;
+}
+
+-(void)createRootViewController:(NSString *) is_App_Check
+{
+ 
+#pragma mark  判断是否是审核版
+    if ([is_App_Check intValue] ==1) {//是否是审核版 yes表示是非审核版，走正常的路线，审核版的话直接走非启动页
+        // 不需要启动图
+        UINavigationController  *loginNa=[[UINavigationController alloc]initWithRootViewController:[LoginViewController new]];
+        self.window.rootViewController=loginNa;
+    }
+    else {
+        NSDictionary  *userInfo=[[NSUserDefaults  standardUserDefaults] objectForKey:kUserKey];
+        NSString      *firstlogin =[[NSUserDefaults standardUserDefaults] objectForKey:IS_FIRST_LOGIN];
+#warning 临时有这句话, 上线的时候去掉
+        //firstlogin = @"NO";
+        if (![firstlogin isEqualToString:@"YES"]) {//是第一次进入应用
+            [[NSUserDefaults standardUserDefaults] setObject:@"YES" forKey:IS_FIRST_LOGIN];
+            UINavigationController  *GNa=[[UINavigationController alloc]initWithRootViewController:[GiderPageViewController new]];
+            self.window.rootViewController=GNa;
+            
+        } else {
+            if (userInfo) {  //用户已经登陆
+                [Function getUserInfoWith:userInfo];
+                self.window.rootViewController =[CustmoTabBarController new];
+            } else {
+                //用户没有登陆
+                UINavigationController  *loginNa=[[UINavigationController alloc]initWithRootViewController:[LoginViewController new]];
+                self.window.rootViewController=loginNa;
+            }
+        }
+    }
+
 }
 /**
  *  初始化友盟组件, 配置SSO
@@ -83,9 +106,7 @@
     // 您可以设置在应用切入后台时，是否进入background模式。
     //对于支持backgound模式的APP，SDK可以确保在进入后台时，完成对日志的持久化工作，保证数据的完整性。您可以通过以下方法对后台模式进行设置：
     [MobClick setBackgroundTaskEnabled:YES];
-    
-    
-    
+
     [UMSocialData setAppKey:kUmengKey];
     //    BOOL isOauth = [UMSocialAccountManager isOauthWithPlatform:UMShareToSina];
     //    LOG(@"isoauth = %d", isOauth);
@@ -102,6 +123,25 @@
     //  [UMSocialSinaHandler openSSOWithRedirectURL:@"https://api.weibo.com/oauth2default.html"];
     [UMSocialSinaHandler openSSOWithRedirectURL:SSOSinRedirectURL];
 }
+// 是否是审核版, 返回1 审核版   0 正式版
+-(void)requestisReview
+{
+     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    NSString *urlString =[NSString stringWithFormat:@"%@/user/review-mode", kApiBaseUrl];
+    [manager POST:urlString parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+         if ([responseObject objectForKey:@"code"]) {
+            self.IS_CHECK=[responseObject objectForKey:@"code"];
+        }
+        [self createRootViewController:self.IS_CHECK];
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+        [self createRootViewController:self.IS_CHECK];
+    }];
+    
+}
+
 
 /*
  友盟sso 在APPdelegate中实现下面的回调方法

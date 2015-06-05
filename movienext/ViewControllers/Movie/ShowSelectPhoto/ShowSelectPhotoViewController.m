@@ -27,11 +27,13 @@
     int  page2;
     UICollectionViewFlowLayout    *layout;
     UIButton * upLoadimageBtn;
+
     
 }
 @property(nonatomic,strong) NSMutableArray  *dataArray1;
 @property(nonatomic,strong) NSMutableArray  *dataArray2;
 @property(nonatomic,strong) UICollectionView  *myConllectionView;
+@property(nonatomic,strong) NSString  *IS_CHECK;  //是否是审核版 1  代表是审核版   0代表是正式版
 
 @end
 
@@ -43,9 +45,9 @@
     [self creatNavigation];
     [self initData];
     [self initUI];
-    [self requestData];
-  //  [self creatLoadView];
-
+    //判断是否是审核版
+    [self requestisReview];
+  
 }
 #pragma  mark  -------CreatUI;
 -(void)creatNavigation
@@ -177,6 +179,7 @@
     self.dataArray2 =[[NSMutableArray alloc]init];
     page1=0;
     page2=0;
+    self.IS_CHECK=@"1";
     
 }
 -(void)initUI
@@ -208,7 +211,6 @@
 
 - (void)setupHeadView
 {
-    
     __unsafe_unretained typeof(self) vc = self;
     // 添加下拉刷新头部控件
     [self.myConllectionView addHeaderWithCallback:^{
@@ -264,10 +266,28 @@
     }];
 }
 
+-(void)requestisReview
+{
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    NSString *urlString =[NSString stringWithFormat:@"%@/user/review-mode", kApiBaseUrl];
+    [manager POST:urlString parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        if ([responseObject objectForKey:@"code"]) {
+            self.IS_CHECK=[responseObject objectForKey:@"code"];
+        }
+        [self requestData];
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+    
+}
 
 -(void)requestData
 {
-    
+    if ([self.IS_CHECK intValue]==1) {
+        return;
+    }
      //   UserDataCenter *userCenter =[UserDataCenter shareInstance];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
     NSString *urlstr;
@@ -286,7 +306,6 @@
         
          if (connectionError) {
             //NSLog(@"httpresponse code error %@", connectionError);
-            
             [loadView showFailLoadData];
             
         } else {
@@ -365,7 +384,7 @@
     SmallImageCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"smallcell" forIndexPath:indexPath];
     //在这里先将内容给清除一下, 然后再加载新的, 添加完内容之后先动画, 在cell消失的时候做清理工作
     
-         cell.imageView.backgroundColor=VStageView_color;
+       cell.imageView.backgroundColor=VStageView_color;
         NSURL  *urlString ;
          if (segment.selectedSegmentIndex==0) {
              
@@ -404,16 +423,14 @@
     }
     else if(segment.selectedSegmentIndex==1)
     {
-        if (self.dataArray1.count>indexPath.row) {
+        if (self.dataArray2.count>indexPath.row) {
         urlString =[self.dataArray2 objectAtIndex:indexPath.row];
             urlString=   [urlString stringByReplacingOccurrencesOfString:@"albumicon" withString:@"photo"];
 
-            
         }
     }
     vc.upimage=cell.imageView.image;
     vc.movie_name=self.movie_name;
-    
     vc.movie_id=self.movie_id;
     if (urlString) {
     vc.photourl=urlString;

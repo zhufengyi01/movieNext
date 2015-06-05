@@ -50,9 +50,6 @@
     [super viewWillAppear:YES];
     [[UINavigationBar appearance] setShadowImage:[UIImage imageWithColor:tabBar_line size:CGSizeMake(kDeviceWidth, 1)]];
     
-    if (search) {
-        [search becomeFirstResponder];
-    }
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -80,14 +77,30 @@
     search.placeholder=@"搜索电影";
     if (self.pageType==NSSearchSourceTypeAddCard) {
         search.placeholder=@"搜索要添加的电影";
-
     }
     search.delegate=self;
     search.searchBarStyle=UISearchBarStyleMinimal;
-    search.showsCancelButton=YES;
+    //search.showsCancelButton=YES;
     [search becomeFirstResponder];
     self.navigationItem.titleView=search;
     
+    
+    
+    UIButton  *button=[UIButton buttonWithType:UIButtonTypeCustom];
+    [button setTitle:@"取消" forState:UIControlStateNormal];
+    [button setTitleEdgeInsets:UIEdgeInsetsMake(0, 10, 0, -10)];
+     [button setTitleColor:VBlue_color forState:UIControlStateNormal];
+    button.frame=CGRectMake(0, 0, 40, 30);
+    button.titleEdgeInsets=UIEdgeInsetsMake(0,10, 0, -10);
+        [button addTarget:self action:@selector(CancleClick) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem  *barButton=[[UIBarButtonItem alloc]initWithCustomView:button];
+    self.navigationItem.rightBarButtonItem=barButton;
+    
+    
+}
+-(void)CancleClick
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 -(void)initData
 {
