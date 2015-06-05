@@ -58,7 +58,6 @@
     ///当前微博的内容   初始化的时候，取了点赞数组的第一个元素
     weiboInfoModel  *_WeiboInfo;
     UIButton  *like_btn;
-    
     UIView  *ShareView;
     
     UIButton *ShareButton;  //分享
@@ -126,7 +125,6 @@
 
 -(void)createStageView
 {
-    
     //分享出来的不是这个view
     BgView =[[UIImageView alloc]initWithFrame:CGRectMake(0,0,kDeviceWidth-0, (kDeviceWidth-0)*(9.0/16)+45+0)];
     BgView.clipsToBounds=YES;
@@ -143,24 +141,22 @@
     //最后要分享出去的图
     ShareView =[[UIView alloc]initWithFrame:CGRectMake(10,10, kDeviceWidth-20, (kDeviceWidth-20)*(9.0/16))];
     ShareView.userInteractionEnabled=YES;
-    //ShareView.backgroundColor=[UIColor redColor];
+    ShareView.backgroundColor=[UIColor blackColor];
     [BgView addSubview:ShareView];
     
     
+    
+    //分享的view 上面放一张图片
     self.stageImageView =[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth-20,(kDeviceWidth-20)*(9.0/16))];
      self.stageImageView.contentMode=UIViewContentModeScaleAspectFill;
     self.stageImageView.clipsToBounds=YES;
     NSString *photostring=[NSString stringWithFormat:@"%@%@!w640",kUrlStage,self.stageInfo.photo];
-    
     [self.stageImageView   sd_setImageWithURL:[NSURL URLWithString:photostring] placeholderImage:nil options:(SDWebImageLowPriority|SDWebImageRetryFailed)];
     [ShareView addSubview:self.stageImageView];
     
-
     //创建剧照上的渐变背景文字
-    
-    UIView  *_layerView =[[UIView alloc]initWithFrame:CGRectMake(0, self.stageImageView.frame.size.height-100, kDeviceWidth-10, 100)];
+    UIView  *_layerView =[[UIView alloc]initWithFrame:CGRectMake(0, self.stageImageView.frame.size.height-100, kDeviceWidth-20, 100)];
     [self.stageImageView addSubview:_layerView];
-    
     CAGradientLayer * _gradientLayer = [CAGradientLayer layer];  // 设置渐变效果
     _gradientLayer.bounds = _layerView.bounds;
     _gradientLayer.borderWidth = 0;
@@ -175,19 +171,22 @@
     
     
     markLable=[ZCControl createLabelWithFrame:CGRectMake(20,40,_layerView.frame.size.width-40, 60) Font:20 Text:@"弹幕文字"];
-    markLable.font =[UIFont boldSystemFontOfSize:20];
+    markLable.font =[UIFont boldSystemFontOfSize:23];
     //markLable.backgroundColor=[[UIColor blackColor] colorWithAlphaComponent:0.4];
+    if (IsIphone6) {
+        markLable.frame=CGRectMake(20, 30, _layerView.frame.size.width-40, 65);
+        markLable.font =[UIFont boldSystemFontOfSize:25];
+    }
     if (IsIphone6plus) {
-        markLable.font=[UIFont boldSystemFontOfSize:24];
+        markLable.frame=CGRectMake(20, 20,_layerView.frame.size.width-40, 70);
+        markLable.font=[UIFont boldSystemFontOfSize:28];
     }
     markLable.textColor=[UIColor whiteColor];
     weiboInfoModel *weibomodel;
     if (self.stageInfo.weibosArray.count>0) {
         weibomodel =[self.stageInfo.weibosArray objectAtIndex:0];
     }
-   
      markLable.text=weibomodel.content;
-    
     if (self.weiboInfo) {
         markLable.text=self.weiboInfo.content;
     }
@@ -195,6 +194,7 @@
     markLable.contentMode=UIViewContentModeBottom;
     markLable.textAlignment=NSTextAlignmentCenter;
     [_layerView addSubview:markLable];
+    
     //创建中间的工具栏
     [self createCenterContentView];
     [self createWeiboTagView];
@@ -260,7 +260,7 @@
     [BgView2 addSubview:like_btn];
     
     //赞的星星
-    starImageView=[[UIImageView alloc]initWithFrame:CGRectMake(10, 8, 14,12)];
+    starImageView=[[UIImageView alloc]initWithFrame:CGRectMake(10, 7, 14,12)];
     starImageView.image =[UIImage imageNamed:@"like_nomoal.png"];
     [like_btn addSubview:starImageView];
     
@@ -270,7 +270,7 @@
     Like_lable.textAlignment=NSTextAlignmentCenter;
     if (IsIphone6plus) {
         like_btn.frame=CGRectMake(kStageWidth-80, 10, 80, 32);
-        starImageView.frame=CGRectMake(15, 12, 14, 12);
+        starImageView.frame=CGRectMake(15, 10, 14, 12);
         Like_lable.frame=CGRectMake(20, 0, 60, 32);
     }
 
@@ -654,8 +654,6 @@
     }];
     
 }
-
-
 
 -(void)requestmoveReviewToNormal:(NSString *) stageId
 {
@@ -1391,6 +1389,10 @@
     
 }
 
+-(void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+}
 
 //- (void)handleComplete {
 //    [self dismissViewControllerAnimated:NO completion:^{ }];

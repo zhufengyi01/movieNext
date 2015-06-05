@@ -205,14 +205,14 @@
         _myTextView.font =[UIFont boldSystemFontOfSize:24];
     }
     _myTextView.backgroundColor=[UIColor clearColor];
-    _myTextView.layer.cornerRadius=4;
-     _myTextView.layer.borderWidth=0.5;
+    //_myTextView.layer.cornerRadius=4;
+     //_myTextView.layer.borderWidth=0.5;
     _myTextView.layer.allowsEdgeAntialiasing=YES;
     _myTextView.layer.borderColor=VLight_GrayColor.CGColor;
     //_myTextView.maximumZoomScale=3;
     _myTextView.returnKeyType=UIReturnKeyDone;
     _myTextView.layoutManager.allowsNonContiguousLayout=NO;
-    //_myTextView.scrollEnabled=YES;
+    _myTextView.scrollEnabled=YES;
     _myTextView.textAlignment=NSTextAlignmentCenter;
    // _myTextView.autoresizingMask=UIViewAutoresizingFlexibleHeight;
     _myTextView.selectedRange = NSMakeRange(0,0);  //默认光标从第一个开始

@@ -279,8 +279,7 @@
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
-    }];
-    
+    }];    
 }
 
 -(void)requestData

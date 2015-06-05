@@ -122,6 +122,7 @@
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
+        [loading remove];
     }];
     
 }
