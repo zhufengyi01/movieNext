@@ -23,9 +23,7 @@
 #define kBucketStage @"next-stage"
 #define kBucketFeed @"next-feed"
 #define kBucketAvatar @"next-avatar"
-
 #define kPassCodeWeibo @"QdthYmI7sp/5CsaqdTpYU5t0UrI="
-
 
 #pragma  mark    宽高设置
 #define kDeviceWidth        [UIScreen mainScreen].bounds.size.width
@@ -74,7 +72,6 @@
 #define VStageView_color [UIColor colorWithRed:23.0/255 green:23.0/255 blue:23.0/255 alpha:1]
 
 #define ShareLogo_color  [UIColor colorWithRed:210.0/255 green:202.0/255 blue:187.0/255 alpha:1]
-
 
 //头像占位图片
 #define HeadImagePlaceholder  [UIImage imageNamed:@"notice_image headloading.png"]

@@ -284,7 +284,7 @@
 
 -(void)requestData
 {
-    if ([self.IS_CHECK intValue]==1) {
+    if ([self.IS_CHECK intValue]==0) {
         return;
     }
      //   UserDataCenter *userCenter =[UserDataCenter shareInstance];

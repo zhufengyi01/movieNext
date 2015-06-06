@@ -677,6 +677,7 @@
         urlString =[NSString stringWithFormat:@"%@/stage/list?per-page=%d&page=%d",kApiBaseUrl,pageSize,page];
         parameter = @{@"movie_id": _movieId, @"user_id": userCenter.user_id,@"Version":Version};
     }
+    
      //}
     else   if (self.pageSourceType==NSMovieSourcePageAdminCloseStageViewController) {
         urlString =[NSString stringWithFormat:@"%@/stage/block-list?per-page=%d&page=%d",kApiBaseUrl,pageSize,page];
@@ -762,7 +763,6 @@
             loadView.failTitle.text =@"还没有内容，快来添加一条吧！";
             [loadView.failBtn setTitle:@"添加" forState:UIControlStateNormal];
             [loadView showFailLoadData];
-
         }
     }
         
@@ -779,7 +779,12 @@
 {
     //[self requestData];
     //[loadView hidenFailLoadAndShowAnimation];
-    [self uploadImageFromAbumdAndDouban];
+    if ([loadView.failTitle.text isEqualToString:@"添加"]) {
+            [self uploadImageFromAbumdAndDouban];
+    }
+    else {
+        [self requestData];
+    }
     
 }
 #pragma  mark -----

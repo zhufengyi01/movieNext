@@ -58,7 +58,7 @@
 {
  
 #pragma mark  判断是否是审核版
-    if ([is_App_Check intValue] ==1) {//是否是审核版 yes表示是非审核版，走正常的路线，审核版的话直接走非启动页
+    if ([is_App_Check intValue] ==0) {//是否是审核版 yes表示是非审核版，走正常的路线，审核版的话直接走非启动页
         // 不需要启动图
         UINavigationController  *loginNa=[[UINavigationController alloc]initWithRootViewController:[LoginViewController new]];
         self.window.rootViewController=loginNa;
