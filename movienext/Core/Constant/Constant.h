@@ -49,7 +49,7 @@
 #define weiChatShareSecret @"ce1e16a6fa8b594e614eda18903cd22c"
 
 //#define   Review   1          ///上传appstore版本  1 为审核
-#define   Version  @"1.0.1"       //版本信息  1.0.1 审核版         1.0 正常版
+#define   Version  @"1.0"       //版本信息  1.0.1 审核版         1.0 正常版
 #define   UMShareStyle  0      //分享1使用controller方式分享    0 使用view 方式分享
 
 
