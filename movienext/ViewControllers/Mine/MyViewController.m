@@ -38,6 +38,8 @@
 #import "ShowStageViewController.h"
 #import "SmallImageCollectionViewCell.h"
 #import "UserHeaderReusableView.h"
+static const CGFloat MJDuration = 2.0;
+
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
 @interface MyViewController ()<UITableViewDataSource, UITableViewDelegate,StageViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UIActionSheetDelegate,UMSocialDataDelegate,UMSocialUIDelegate,CommonStageCellDelegate,UMShareViewControllerDelegate,UMShareViewController2Delegate,UMShareViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UICollectionViewDelegate,UserHeaderReusableViewDelegate>
@@ -161,10 +163,13 @@
 {
     
     layout=[[UICollectionViewFlowLayout alloc]init];
+
     //layout.minimumInteritemSpacing=10; //cell之间左右的
     //layout.minimumLineSpacing=10;      //cell上下间隔
     //layout.itemSize=CGSizeMake(80,140);  //cell的大小
      layout.sectionInset=UIEdgeInsetsMake(0,0,64, 0); //整个偏移量 上左下右
+    
+    _myConllectionView.backgroundColor =[UIColor clearColor];
      _myConllectionView =[[UICollectionView alloc]initWithFrame:CGRectMake(0,0,kDeviceWidth, kDeviceHeight-0-0-100) collectionViewLayout:layout];
     if (self.author_id&&![self.author_id isEqualToString:@"0"]) {
         //如果有用户id 并且用户的id 不为0
@@ -180,13 +185,94 @@
     _myConllectionView.delegate=self;
     _myConllectionView.dataSource=self;
     [self.view addSubview:_myConllectionView];
-    [self setupHeadView];
-    [self setupFootView];
+    //[self setupHeadView];
+    //[self setupFootView];
+    [self setupRefreshView];
 }
 
+
+- (void)setupRefreshView
+{
+    __weak typeof(self) weakSelf = self;
+    
+    // 下拉刷新
+    [self.myConllectionView addLegendHeaderWithRefreshingBlock:^{
+        // 增加5条假数据
+        /*for (int i = 0; i<10; i++) {
+            [weakSelf.colors insertObject:MJRandomColor atIndex:0];
+        }*/
+        
+        NSString *Btag =[weakSelf.buttonStateDict objectForKey:@"YES"];
+        if ([Btag isEqualToString:@"100"]) {
+            
+            if (weakSelf.addedDataArray.count>0) {
+                [weakSelf.addedDataArray removeAllObjects];
+            }
+            page1=1;
+            [weakSelf requestData];
+            
+        }
+        else if ([Btag isEqualToString:@"101"])
+        {
+            if (weakSelf.upedDataArray.count>0) {
+                [weakSelf.upedDataArray removeAllObjects];
+            }
+            page2=1;
+            [weakSelf requestData];
+        }
+        // 模拟延迟加载数据，因此2秒后才调用（真实开发中，可以移除这段gcd代码）
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(MJDuration * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [weakSelf.myConllectionView reloadData];
+            
+            // 结束刷新
+            [weakSelf.myConllectionView.header endRefreshing];
+        });
+    }];
+   // [self.myConllectionView.header beginRefreshing];
+    
+    // 上拉刷新
+    [self.myConllectionView addLegendFooterWithRefreshingBlock:^{
+        // 增加5条假数据
+        /*for (int i = 0; i<5; i++) {
+            [weakSelf.colors addObject:MJRandomColor];
+        }*/
+        NSString *Btag =[weakSelf.buttonStateDict objectForKey:@"YES"];
+        if ([Btag isEqualToString:@"100"]) {
+            if (pageCount1>page1) {
+                page1=page1+1;
+                [weakSelf requestData];
+            }
+        }
+        else if ([Btag isEqualToString:@"101"])
+        {
+            if (pageCount2>page2) {
+                page2=page2+1;
+                [weakSelf requestData];
+            }
+        }
+
+        
+        // 模拟延迟加载数据，因此2秒后才调用（真实开发中，可以移除这段gcd代码）
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(MJDuration * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [weakSelf.myConllectionView reloadData];
+            
+            // 结束刷新
+            [weakSelf.myConllectionView.footer endRefreshing];
+        });
+    }];
+    // 默认先隐藏footer
+    self.myConllectionView.footer.hidden = YES;
+}
+
+
+/*
 -(void)setupHeadView
 {
     __unsafe_unretained typeof(self) vc = self;
+    [self.myConllectionView.footer setTitle:@"下拉刷新" forState:MJRefreshFooterStateIdle];
+    [self.myConllectionView.footer setTitle:@"加载更多" forState:MJRefreshFooterStateRefreshing];
+    //[self.myConllectionView.footer setTitle:@"没有更多数据" forState:MJRefreshFooterStateNoMoreData];
+    
     // 添加下拉刷新头部控件
     [_myConllectionView addHeaderWithCallback:^{
          NSString *Btag =[vc.buttonStateDict objectForKey:@"YES"];
@@ -244,7 +330,7 @@
         });
     }];
 }
-
+*/
 
 -(void)dealSegmentClick:(UIButton *) button
 {

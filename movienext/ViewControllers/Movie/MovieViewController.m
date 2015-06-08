@@ -198,12 +198,12 @@
 }
 -(void)initData
 {
-    page1=1;
-    page2=1;
-    page3=1;
-    pageCount1=1;
-    pageCount2=1;
-    pageCount3=1;
+     page1=1;
+     page2=1;
+     page3=1;
+     pageCount1=1;
+     pageCount2=1;
+     pageCount3=1;
      pageSize=12;
     _dataArray1=[[NSMutableArray alloc]init];
     _dataArray2=[[NSMutableArray alloc]init];
