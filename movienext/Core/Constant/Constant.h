@@ -51,7 +51,6 @@
 #define   UMShareStyle  0      //分享1使用controller方式分享    0 使用view 方式分享
 
 
-
 #pragma  mark 颜色设置
 #define kAppTintColor [UIColor colorWithRed:0.0/255.0 green:146.0/255.0 blue:255.0/255.0 alpha:1]
 //项目背景颜色

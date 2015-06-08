@@ -731,8 +731,10 @@
                 
                 movieInfoModel  *moviemodel =[[movieInfoModel alloc]init];
                 if (moviemodel) {
+                    if (![[stageDict objectForKey:@"movie"] isKindOfClass:[NSNull class]]) {
                     [moviemodel setValuesForKeysWithDictionary:[stageDict objectForKey:@"movie"]];
                     stagemodel.movieInfo=moviemodel;
+                    }
                 
                 }
                 if (_dataArray==nil) {
