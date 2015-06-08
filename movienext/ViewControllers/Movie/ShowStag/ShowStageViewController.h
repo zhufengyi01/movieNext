@@ -19,11 +19,20 @@ typedef  NS_ENUM(NSInteger,NSStagePapeType)
     NSStagePapeTypeDefult,
     NSStagePapeTypeMyAdd //个人页面进来的，可以删除
 };
+@protocol ShowStageviewControllerDelegate <NSObject>
+
+//删除完成返回刷新
+-(void)reloadMyAddCollectionView;
+
+@end
+
 @interface ShowStageViewController : RootViewController <TagViewDelegate,AddMarkViewControllerDelegate>
 
 @property (nonatomic, strong) stageInfoModel *stageInfo;
 @property(nonatomic,strong) NSMutableArray   *upweiboArray;
 @property(nonatomic,assign) NSStagePapeType  pageType;
-@property(nonatomic,strong) weiboInfoModel *weiboInfo;  //如果是从管理员入口，并且是最新的话，传递weiboInfo 
+@property(nonatomic,strong) weiboInfoModel *weiboInfo;  //如果是从管理员入口，并且是最新的话，传递weiboInfo
 
+#warning 个人添加
+@property(nonatomic,strong) NSMutableArray  *addWeiboArray;  //个人页进来的，传递整个数组，删除完成后，移除数组内容，并且刷新
 @end

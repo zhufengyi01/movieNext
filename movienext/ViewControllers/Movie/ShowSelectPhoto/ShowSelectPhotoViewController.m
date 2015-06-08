@@ -132,6 +132,7 @@
         [self dismissViewControllerAnimated:NO completion:^{
             UploadImageViewController  *upload=[[UploadImageViewController alloc]init];
             upload.upimage=image;
+            upload.movie_name=self.movie_name;
             upload.movie_Id=self.movie_id;
             //upload.movie_Id=moviedetailmodel.douban_id;
             [self.navigationController pushViewController:upload animated:YES];
@@ -284,8 +285,9 @@
 
 -(void)requestData
 {
-    if ([self.IS_CHECK intValue]==0) {
-        return;
+#warning 上线的时候需要去去掉return的注视
+    if ([self.IS_CHECK intValue]==1) {
+        //return;
     }
      //   UserDataCenter *userCenter =[UserDataCenter shareInstance];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];

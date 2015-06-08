@@ -19,6 +19,8 @@ typedef NS_ENUM(NSInteger, UMShareType)
 @protocol UMShareViewDelegate <NSObject>
 
 -(void)UMShareViewHandClick:(UIButton *) button ShareImage:(UIImage *)shareImage StageInfoModel :(stageInfoModel *) StageInfo;
+//取消分享，应该返回上一页
+-(void)UMCancleShareClick;
 
 @end
 

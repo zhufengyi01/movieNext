@@ -178,6 +178,7 @@
     [_myScorllerView addSubview:self.stageImageView];
     
     NSString *photostring=[NSString stringWithFormat:@"%@%@!w640",kUrlStage,self.stageInfo.photo];
+    
     [self.stageImageView   sd_setImageWithURL:[NSURL URLWithString:photostring] placeholderImage:nil options:(SDWebImageLowPriority|SDWebImageRetryFailed)];
     
     UIView  *_layerView =[[UIView alloc]initWithFrame:CGRectMake(0, self.stageImageView.frame.size.height-100, kDeviceWidth-10, 100)];
@@ -371,7 +372,6 @@
             parameter = @{@"user_id": userid,@"content":InputStr,@"stage_id":stageId,@"weibo_id":self.weiboInfo.Id,@"x_percent":X,@"y_percent":Y,@"tags[0]":tag1,@"tags[1]":tag2};
             
         }
-        
     }
     else if (TAGArray.count==3)
     {
@@ -409,6 +409,7 @@
     }
     
     NSString *urlString =[NSString stringWithFormat:@"%@/weibo/create", kApiBaseUrl];
+    
     if (self.weiboInfo) {
         //更新
         urlString =[NSString stringWithFormat:@"%@/weibo/update",kApiBaseUrl];
@@ -418,10 +419,7 @@
     [manager POST:urlString parameters:parameter success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"  添加弹幕发布请求    JSON: %@", responseObject);
         if ([[responseObject  objectForKey:@"code"] intValue]==0) {
-            
             [loading remove];
-            
-            
 //            NSString *message =@"发布成功";
 //            if (self.weiboInfo) {
 //                message=@"编辑成功";
@@ -467,6 +465,9 @@
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
+        [loading remove];
+        UIAlertView  *Al =[[UIAlertView alloc]initWithTitle:nil message:@"发布失败，请稍候重试" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+          [Al show];
     }];
     
 }
@@ -481,7 +482,12 @@
     //设置分享内容和回调对象
     
     [UMSocialSnsPlatformManager getSocialPlatformWithName:[sharearray  objectAtIndex:button.tag-10000]].snsClickHandler(self,[UMSocialControllerService defaultControllerService],YES);
-    
+}
+//友盟取消分享
+-(void)UMCancleShareClick
+{
+ 
+    [self.navigationController dismissViewControllerAnimated:NO completion:nil];
 }
 -(void)didCloseUIViewController:(UMSViewControllerType)fromViewControllerType
 {

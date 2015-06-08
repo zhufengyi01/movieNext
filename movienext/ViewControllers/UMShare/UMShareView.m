@@ -91,6 +91,20 @@
         [self removeFromSuperview];
     }];
 }
+//点击取消需要返回
+-(void)cancleshareClick
+{
+    
+    if (_delegate&&[_delegate respondsToSelector:@selector(UMCancleShareClick)]) {
+        [_delegate UMCancleShareClick];
+    }
+    [UIView animateWithDuration:KShow_ShareView_Time animations:^{
+        float height=(kDeviceWidth/4)+(kDeviceWidth-20)*(9.0/16)+40+30+50;
+        backView.frame=CGRectMake(0, kDeviceHeight, kDeviceWidth,height);
+    } completion:^(BOOL finished) {
+        [self removeFromSuperview];
+    }];
+}
 
 -(void)createShareView
 {
@@ -122,7 +136,9 @@
     if (!_stageInfo.movieInfo|!_stageInfo.movieInfo.name) {
         _stageInfo.movieInfo.name=@"";
      }
+    
     NSMutableString  *namstr =[[NSMutableString alloc]initWithString:_stageInfo.movieInfo.name];
+    
     NSString  *str=namstr;
     if (namstr.length>8) {
        str= [namstr substringToIndex:8];
@@ -176,7 +192,7 @@
     button.titleLabel.font =[UIFont systemFontOfSize:14];
     button.backgroundColor = VLight_GrayColor_apla;
     button.layer.cornerRadius = 3;
-    [button addTarget:self action:@selector(CancleShareClick) forControlEvents:UIControlEventTouchUpInside];
+    [button addTarget:self action:@selector(cancleshareClick) forControlEvents:UIControlEventTouchUpInside];
     [backView addSubview:button];
 }
 

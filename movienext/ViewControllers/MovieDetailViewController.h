@@ -31,6 +31,7 @@ typedef NS_ENUM(NSInteger,NSMovieSourcePage)
 
 
 @property(nonatomic,strong) NSString  *douban_Id;
+
 @property(nonatomic,assign) NSMovieSourcePage   pageSourceType;
 
 //viod  返回类型

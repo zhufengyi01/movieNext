@@ -11,4 +11,5 @@
 @interface UploadImageViewController : RootViewController
 @property (nonatomic,strong)UIImage   *upimage;
 @property(nonatomic,strong) NSString *movie_Id;
+@property(nonatomic,strong)NSString *movie_name;
 @end

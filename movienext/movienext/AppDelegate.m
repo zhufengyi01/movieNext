@@ -56,9 +56,11 @@
 
 -(void)createRootViewController:(NSString *) is_App_Check
 {
+#warning 暂时设置为 0   永远都不会走直接版本，回走正式版
+
  
 #pragma mark  判断是否是审核版
-    if ([is_App_Check intValue] ==0) {//是否是审核版 yes表示是非审核版，走正常的路线，审核版的话直接走非启动页
+    if ([is_App_Check intValue] ==1) {//是否是审核版 yes表示是非审核版，走正常的路线，审核版的话直接走非启动页
         // 不需要启动图
         UINavigationController  *loginNa=[[UINavigationController alloc]initWithRootViewController:[LoginViewController new]];
         self.window.rootViewController=loginNa;
@@ -66,7 +68,7 @@
     else {
         NSDictionary  *userInfo=[[NSUserDefaults  standardUserDefaults] objectForKey:kUserKey];
         NSString      *firstlogin =[[NSUserDefaults standardUserDefaults] objectForKey:IS_FIRST_LOGIN];
-#warning 临时有这句话, 上线的时候去掉
+
         //firstlogin = @"NO";
         if (![firstlogin isEqualToString:@"YES"]) {//是第一次进入应用
             [[NSUserDefaults standardUserDefaults] setObject:@"YES" forKey:IS_FIRST_LOGIN];
@@ -126,7 +128,10 @@
 // 是否是审核版, 返回1 审核版   0 正式版
 -(void)requestisReview
 {
-     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    
+#warning 提交审核的时候需要开启
+    [self createRootViewController:@"0"];
+     /*AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     NSString *urlString =[NSString stringWithFormat:@"%@/user/review-mode", kApiBaseUrl];
     [manager POST:urlString parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
@@ -138,7 +143,7 @@
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
         [self createRootViewController:self.IS_CHECK];
-    }];
+    }];*/
     
 }
 

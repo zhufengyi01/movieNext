@@ -783,6 +783,8 @@
             [self uploadImageFromAbumdAndDouban];
     }
     else {
+        [loadView hidenFailLoadAndShowAnimation];
+
         [self requestData];
     }
     

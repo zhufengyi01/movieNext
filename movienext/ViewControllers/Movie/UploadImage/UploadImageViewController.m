@@ -44,7 +44,7 @@
     
     UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 120, 20) Font:16 Text:@"预览"];
     titleLable.textColor=VBlue_color;
-    titleLable.font=[UIFont systemFontOfSize:16];
+    titleLable.font=[UIFont systemFontOfSize:18];
     titleLable.textAlignment=NSTextAlignmentCenter;
     self.navigationItem.titleView=titleLable;
  
@@ -55,7 +55,7 @@
     RighttBtn.tag=101;
      [RighttBtn setTitleColor:VBlue_color forState:UIControlStateNormal];
     RighttBtn.titleEdgeInsets=UIEdgeInsetsMake(0, 10, 0, -10);
-    RighttBtn.titleLabel.font =[UIFont systemFontOfSize:16];
+    RighttBtn.titleLabel.font =[UIFont systemFontOfSize:18];
     [RighttBtn setTitle:@"确定" forState:UIControlStateNormal];
      self.navigationItem.rightBarButtonItem=[[UIBarButtonItem alloc]initWithCustomView:RighttBtn];
 }
@@ -195,6 +195,9 @@
         if (stageInfo) {
             [stageInfo setValuesForKeysWithDictionary:_myDict];
             stageInfo.photo=[parameter objectForKey:@"photo"];
+            movieInfoModel  *moviemodel =[[movieInfoModel alloc]init];
+            moviemodel.name = self.movie_name;
+             stageInfo.movieInfo=moviemodel;
         }
         
         AddMarkViewController  *Addmark =[[AddMarkViewController alloc]init];
