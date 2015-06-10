@@ -10,6 +10,8 @@
 
 @interface MovieViewController : UIViewController
 @property(nonatomic,strong)UICollectionView  *myConllectionView;
+@property(nonatomic,strong)UICollectionView  *RecommendCollectionView;  //推荐
+@property(nonatomic,strong) NSMutableArray      *dataArray0;
 @property(nonatomic,strong) NSMutableArray      *dataArray1;
 @property(nonatomic,strong) NSMutableArray      *dataArray2;
 @property(nonatomic,strong) NSMutableArray      *dataArray3;

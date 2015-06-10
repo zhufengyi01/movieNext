@@ -138,7 +138,6 @@
      }
     
     NSMutableString  *namstr =[[NSMutableString alloc]initWithString:_stageInfo.movieInfo.name];
-    
     NSString  *str=namstr;
     if (namstr.length>8) {
        str= [namstr substringToIndex:8];

@@ -29,25 +29,34 @@
 #import "UIButton+Block.h"
 #import "UIImage-Helpers.h"
 #import "AdmListViewController.h"
+#import "SmallImageCollectionViewCell.h"
+#import "ShowStageViewController.h"
 //#import "SearchMovieViewController.h"
 #define  BUTTON_COUNT  3
-static const CGFloat MJDuration = 0.6;
+static const CGFloat MJDuration = 0.1;
+
 
 @interface MovieViewController ()<UISearchBarDelegate,UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout,LoadingViewDelegate,MovieCollectionViewCellDelegate,UIActionSheetDelegate>
 {
     LoadingView         *loadView;
     int pageSize;
     NSString  *startId;
+    int page0;  //推荐
     int page1;
     int page2;
     int page3;
+    int pageCount0;
     int pageCount1;
     int pageCount2;
     int pageCount3;
     
     NSInteger Rowindex;
 }
+@property(nonatomic,strong) UIScrollView   *myScorollerView;
 
+@property(nonatomic,strong) UIView *RecommentView;   //推荐
+
+@property(nonatomic,strong)UIView  *feedView;     //电影
 @end
 
 @implementation MovieViewController
@@ -79,10 +88,11 @@ static const CGFloat MJDuration = 0.6;
     //创建导航
     //self.view.backgroundColor=[UIColor whiteColor];
     [self createNavigation];
+    [self createMyScrollerView];
     [self createSegmentView];
     [self initData];
     [self initUI];
-    [self creatLoadView];
+    //[self creatLoadView];
 }
 -(void)createNavigation
 {
@@ -104,7 +114,9 @@ static const CGFloat MJDuration = 0.6;
             [self.navigationController pushViewController:[AdmListViewController new] animated:YES];
         }];
     }
- 
+   //创建两个按钮  //推荐和电影
+    
+    
     UIButton  *searchbutton=[UIButton buttonWithType:UIButtonTypeCustom];
       [searchbutton setImage:[UIImage imageNamed:@"search_icon.png"] forState:UIControlStateNormal];
     searchbutton.frame=CGRectMake(0, 0, 40, 30);
@@ -122,15 +134,27 @@ static const CGFloat MJDuration = 0.6;
     }];
 }
 
--(void)adminClick:(UIButton *) btn
+-(void)createMyScrollerView
 {
-}
-//点击可刷新
--(void)refreshTableView
-{
- //   [self.myConllectionView  headerBeginRefreshing];
-}
+    self.myScorollerView =[[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight-kHeigthTabBar)];
+    self.myScorollerView.contentSize=CGSizeMake(kDeviceWidth*2, kDeviceHeight-kHeigthTabBar-kHeightNavigation);
+    self.myScorollerView.delegate=self;
+    self.myScorollerView.bounces=NO;
+    self.myScorollerView.pagingEnabled=YES;
+    [self.view addSubview:self.myScorollerView];
+    
+    self.RecommentView=[[UIView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight-kHeigthTabBar)];
+    self.RecommentView.backgroundColor =[UIColor redColor];
+    self.RecommentView.userInteractionEnabled=YES;
+    [self.myScorollerView addSubview:self.RecommentView];
+    
+    self.feedView=[[UIView alloc] initWithFrame:CGRectMake(kDeviceWidth, 0, kDeviceWidth, kDeviceHeight-kHeigthTabBar)];
+    self.feedView.backgroundColor =[UIColor yellowColor];
+    self.feedView.userInteractionEnabled=YES;
+    [self.myScorollerView addSubview:self.feedView];
 
+    
+}
 
 -(void)createSegmentView
 {
@@ -139,7 +163,7 @@ static const CGFloat MJDuration = 0.6;
     ///TopImageView.image=[UIImage imageNamed:@"tab_switch.png"];
     TopImageView.backgroundColor=[UIColor whiteColor];
     TopImageView.userInteractionEnabled=YES;
-    [self.view addSubview:TopImageView];
+    [self.feedView addSubview:TopImageView];
     
     NSArray  *titleArray =@[@"热门电影",@"热门剧集",@"热门动漫"];
     for (int i =0; i<BUTTON_COUNT; i++) {
@@ -169,7 +193,7 @@ static const CGFloat MJDuration = 0.6;
         if(btn.selected==NO)
         {
            for ( int i=0; i<3; i++) {
-             UIButton  *button=(UIButton *)[self.view viewWithTag:i+100];
+             UIButton  *button=(UIButton *)[self.feedView viewWithTag:i+100];
              button.selected=NO;
             }
             btn.selected=YES;
@@ -183,7 +207,7 @@ static const CGFloat MJDuration = 0.6;
         if(btn.selected==NO)
         {
             for ( int i=0; i<3; i++) {
-                UIButton  *button=(UIButton *)[self.view viewWithTag:i+100];
+                UIButton  *button=(UIButton *)[self.feedView viewWithTag:i+100];
                 button.selected=NO;
             }
             btn.selected=YES;
@@ -200,7 +224,7 @@ static const CGFloat MJDuration = 0.6;
         if(btn.selected==NO)
         {
             for ( int i=0; i<3; i++) {
-                UIButton  *button=(UIButton *)[self.view viewWithTag:i+100];
+                UIButton  *button=(UIButton *)[self.feedView viewWithTag:i+100];
                 button.selected=NO;
             }
             btn.selected=YES;
@@ -226,13 +250,16 @@ static const CGFloat MJDuration = 0.6;
 }
 -(void)initData
 {
+     page0=1;
      page1=1;
      page2=1;
      page3=1;
+     pageCount0=1;
      pageCount1=1;
      pageCount2=1;
      pageCount3=1;
      pageSize=12;
+    _dataArray0=[[NSMutableArray alloc]init];
     _dataArray1=[[NSMutableArray alloc]init];
     _dataArray2=[[NSMutableArray alloc]init];
     _dataArray3=[[NSMutableArray alloc]init];
@@ -241,6 +268,26 @@ static const CGFloat MJDuration = 0.6;
 -(void)initUI
 {
     
+    ///创建推荐的collectionview
+   UICollectionViewFlowLayout  *   Relayout=[[UICollectionViewFlowLayout alloc]init];
+    Relayout.minimumInteritemSpacing=0; //cell之间左右的
+    Relayout.minimumLineSpacing=5;      //cell上下间隔
+    Relayout.sectionInset=UIEdgeInsetsMake(0,0,64, 0); //整个偏移量 上左下右
+    self.RecommendCollectionView =[[UICollectionView alloc]initWithFrame:CGRectMake(0,0,kDeviceWidth, kDeviceHeight-20-0) collectionViewLayout:Relayout];
+    //[layout setHeaderReferenceSize:CGSizeMake(_myConllectionView.frame.size.width, kDeviceHeight/3+64+110)];
+    
+    self.RecommendCollectionView.backgroundColor=View_BackGround;
+     //注册小图模式
+    [self.RecommendCollectionView registerClass:[SmallImageCollectionViewCell class] forCellWithReuseIdentifier:@"smallcell"];
+ 
+    self.RecommendCollectionView.delegate=self;
+    self.RecommendCollectionView.dataSource=self;
+    [self.RecommentView addSubview:self.RecommendCollectionView];
+    [self setRecommtUprefresh];
+
+    
+    
+    //创建电影的collectionview
     UICollectionViewFlowLayout    *layout=[[UICollectionViewFlowLayout alloc]init];
     layout.minimumInteritemSpacing=20; //cell之间左右的
     layout.minimumLineSpacing=20;      //cell上下间隔
@@ -252,11 +299,81 @@ static const CGFloat MJDuration = 0.6;
     [_myConllectionView registerClass:[MovieCollectionViewCell class] forCellWithReuseIdentifier:@"cell"];
     _myConllectionView.delegate=self;
     _myConllectionView.dataSource=self;
-    [self.view addSubview:_myConllectionView];
+    [self.feedView addSubview:_myConllectionView];
+    
     [self setUprefresh];
      /**
      *  集成刷新控件
      */
+}
+-(void)setRecommtUprefresh
+{
+    __weak typeof(self) weakSelf = self;
+    // 下拉刷新
+    [self.RecommendCollectionView addLegendHeaderWithRefreshingBlock:^{
+        // 增加5条假数据
+        /*for (int i = 0; i<10; i++) {
+         [weakSelf.colors insertObject:MJRandomColor atIndex:0];
+         }*/
+        page0=1;
+        if (weakSelf.dataArray0.count>0) {
+            [weakSelf.dataArray0 removeAllObjects];
+        }
+        // 进入刷新状态就会回调这个Block
+        [weakSelf requestRecommendData];
+        
+        // 设置文字
+        [weakSelf.RecommendCollectionView.header setTitle:@"下拉刷新..." forState:MJRefreshHeaderStateIdle];
+        [weakSelf.RecommendCollectionView.header setTitle:@"释放刷新..." forState:MJRefreshHeaderStatePulling];
+        [weakSelf.RecommendCollectionView.header setTitle:@"正在刷新..." forState:MJRefreshHeaderStateRefreshing];
+        //隐藏时间
+        weakSelf.myConllectionView.header.updatedTimeHidden=YES;
+        
+        // 设置字体
+        //weakSelf.myConllectionView.header.font = [UIFont systemFontOfSize:12];
+        
+        // 设置颜色
+        // weakSelf.myConllectionView.header.textColor = VGray_color;
+        // 模拟延迟加载数据，因此2秒后才调用（真实开发中，可以移除这段gcd代码）
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(MJDuration * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [weakSelf.RecommendCollectionView reloadData];
+            
+            // 结束刷新
+            [weakSelf.RecommendCollectionView.header endRefreshing];
+        });
+    }];
+    [self.RecommendCollectionView.header beginRefreshing];
+    
+    // 上拉刷新
+    [self.RecommendCollectionView addLegendFooterWithRefreshingBlock:^{
+        // 增加5条假数据
+        /*for (int i = 0; i<5; i++) {
+         [weakSelf.colors addObject:MJRandomColor];
+         }*/
+        // 进入刷新状态就会回调这个Block
+        if (pageCount0>page0) {
+            page0=page0+1;
+            [weakSelf requestRecommendData];
+            
+        }
+        // 设置文字
+        [weakSelf.RecommendCollectionView.footer setTitle:@"点击加载更多..." forState:MJRefreshFooterStateIdle];
+        [weakSelf.RecommendCollectionView.footer setTitle:@"加载更多..." forState:MJRefreshFooterStateRefreshing];
+        [weakSelf.RecommendCollectionView.footer setTitle:@"THE END" forState:MJRefreshFooterStateNoMoreData];
+        // 设置字体
+        // weakSelf.myConllectionView.footer.font = [UIFont systemFontOfSize:12];
+        // 设置颜色
+        //weakSelf.myConllectionView.footer.textColor = VGray_color;
+        // 模拟延迟加载数据，因此2秒后才调用（真实开发中，可以移除这段gcd代码）
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(MJDuration * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [weakSelf.RecommendCollectionView reloadData];
+            // 结束刷新
+            [weakSelf.RecommendCollectionView.footer endRefreshing];
+        });
+    }];
+    // 默认先隐藏footer
+    // self.myConllectionView.footer.hidden = YES;
+
 }
 - (void)setUprefresh
 {
@@ -340,7 +457,6 @@ static const CGFloat MJDuration = 0.6;
                     page1=page1+1;
                     [weakSelf requestData];
                 }
-            
             }
             else if(i==1&&btn.selected==YES)
             {
@@ -421,13 +537,80 @@ static const CGFloat MJDuration = 0.6;
     
 }
 
+-(void)requestRecommendData
+{
+    UserDataCenter *userCenter =[UserDataCenter shareInstance];
+    NSDictionary *parameters = @{@"user_id":userCenter.user_id};
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    NSString  *urlString;
+   
+        urlString =[NSString stringWithFormat:@"%@/weibo/list-recommend?per-page=%d&page=%d", kApiBaseUrl,pageSize,page0];
+    [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
+            pageCount0=[[responseObject objectForKey:@"pageCount"] intValue];
+            NSMutableArray   *array  = [[NSMutableArray alloc]initWithArray:[responseObject objectForKey:@"models"]];
+            for ( int i=0 ; i<array.count; i++) {
+                NSDictionary  *newdict  =[array objectAtIndex:i];
+                weiboInfoModel *weibomodel =[[weiboInfoModel alloc]init];
+                if (weibomodel) {
+                    [weibomodel setValuesForKeysWithDictionary:newdict];
+                    //用户的信息
+                    weiboUserInfoModel  *usermodel =[[weiboUserInfoModel alloc]init];
+                    if (usermodel) {
+                        if (![[newdict objectForKey:@"user"] isKindOfClass:[NSNull class]]) {
+                            [usermodel setValuesForKeysWithDictionary:[newdict objectForKey:@"user"]];
+                            weibomodel.uerInfo=usermodel;
+                        }
+                        
+                    }
+                    // 剧情信息
+                    stageInfoModel  *stagemodel =[[stageInfoModel alloc]init];
+                    if (stagemodel) {
+                        if (![[newdict objectForKey:@"stage"]  isKindOfClass:[NSNull class]]) {
+                            [stagemodel setValuesForKeysWithDictionary:[newdict objectForKey:@"stage"]];
+                            weibomodel.stageInfo=stagemodel;
+                        }
+                    }
+                    NSMutableArray  *tagArray =[[NSMutableArray alloc]init];
+                    //标签数组
+                    for ( NSDictionary  *tagdict in [newdict objectForKey:@"tags"]) {
+                        TagModel *tagmodel=[[TagModel alloc]init];
+                        if (tagmodel) {
+                            [tagmodel setValuesForKeysWithDictionary:tagdict];
+                            
+                            TagDetailModel *tagdetail =[[TagDetailModel alloc]init];
+                            if (tagdetail) {
+                                [tagdetail setValuesForKeysWithDictionary:[tagdict objectForKey:@"tag"]];
+                                tagmodel.tagDetailInfo=tagdetail;
+                            }
+                            [tagArray addObject:tagmodel];
+                        }
+                    }
+                    weibomodel.tagArray=tagArray;
+                    [self.dataArray0 addObject:weibomodel];
+                }
+                
+            }
+            
+            [self.myConllectionView reloadData];
+            
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+    
+}
+
+
+
 -(void)requestData
 {
     
     NSString  *type;
     int PAGE;
     for (int i=0;i<3;i++) {
-        UIButton  *btn=(UIButton *) [self.view viewWithTag:100+i];
+        UIButton  *btn=(UIButton *) [self.feedView viewWithTag:100+i];
         if (i==0&&btn.selected==YES) {
             type=@"1";
             PAGE=page1;
@@ -528,17 +711,15 @@ static const CGFloat MJDuration = 0.6;
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
-    if (collectionView==_myConllectionView) {
-        return 1;
-    }
-    return 0;
+    
+    return 1;
 }
-
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
     
+    if (collectionView==self.myConllectionView) {
     for (int i=0;i<3;i++) {
-        UIButton  *btn=(UIButton *) [self.view viewWithTag:100+i];
+        UIButton  *btn=(UIButton *) [self.feedView viewWithTag:100+i];
         if (i==0&&btn.selected==YES) {
             return _dataArray1.count;
             break;
@@ -554,7 +735,11 @@ static const CGFloat MJDuration = 0.6;
             return _dataArray3.count;
             break;
         }
-    
+      }
+    }
+    else if(collectionView==self.RecommendCollectionView)
+    {
+        return self.dataArray0.count;
     }
     return 0;
 
@@ -562,11 +747,10 @@ static const CGFloat MJDuration = 0.6;
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    
-    
+    if (collectionView==self.myConllectionView) {
     NSMutableArray  *array=[[NSMutableArray alloc]init];;
     for (int i=0;i<3;i++) {
-        UIButton  *btn=(UIButton *) [self.view viewWithTag:100+i];
+        UIButton  *btn=(UIButton *) [self.feedView viewWithTag:100+i];
         if (i==0&&btn.selected==YES) {
             array=_dataArray1;
             break;
@@ -582,29 +766,54 @@ static const CGFloat MJDuration = 0.6;
             break;
             
         }
-    }
-    MovieCollectionViewCell    *cell=(MovieCollectionViewCell*)[collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
-     if (array.count > indexPath.row) {
-    
-     [cell setValueforCell:[array  objectAtIndex:(long)indexPath.row] inRow:indexPath.row];
-      cell.delegate=self;
-     cell.Cellindex=indexPath.row;
-     cell.backgroundColor=[UIColor whiteColor];
-    }
+      }
+       MovieCollectionViewCell    *cell=(MovieCollectionViewCell*)[collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
+       if (array.count > indexPath.row) {
+        [cell setValueforCell:[array  objectAtIndex:(long)indexPath.row] inRow:indexPath.row];
+        cell.delegate=self;
+        cell.Cellindex=indexPath.row;
+        cell.backgroundColor=[UIColor whiteColor];
+        }
     return cell;
+    }
+    else if (collectionView==self.RecommendCollectionView)
+    {
+        SmallImageCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"smallcell" forIndexPath:indexPath];
+        //在这里先将内容给清除一下, 然后再加载新的, 添加完内容之后先动画, 在cell消失的时候做清理工作
+        if (self.dataArray0.count>indexPath.row) {
+            weiboInfoModel  *model=[self.dataArray0 objectAtIndex:indexPath.row];
+            cell.imageView.backgroundColor=VStageView_color;
+            NSURL  *url =[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w340h340",kUrlStage,model.stageInfo.photo]];
+            [cell.imageView sd_setImageWithURL:url placeholderImage:nil options:(SDWebImageRetryFailed|SDWebImageLowPriority)];
+            cell.titleLab.text=[NSString stringWithFormat:@"%@",model.content];
+            return cell;
+            
+        }
+        return cell;
+        
+    }
+    return nil;
 }
 
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
+    if (collectionView==self.myConllectionView) {
     int width = ((kDeviceWidth-6*16)/3);
     int movieNameMarginTop = 10;
     int movieNameHeight = 10;
     return CGSizeMake( width, width*1.5 + movieNameMarginTop + movieNameHeight);
+    }
+    else
+    {
+     return CGSizeMake((kDeviceWidth-5)/2,(kDeviceWidth-10)/3);
+    }
+    return CGSizeMake(0, 0);
 }
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (collectionView==self.myConllectionView) {
     NSMutableArray  *array=[[NSMutableArray alloc]init];;
     for (int i=0;i<3;i++) {
-        UIButton  *btn=(UIButton *) [self.view viewWithTag:100+i];
+        UIButton  *btn=(UIButton *) [self.feedView viewWithTag:100+i];
         if (i==0&&btn.selected==YES) {
             array=_dataArray1;
             break;
@@ -621,24 +830,29 @@ static const CGFloat MJDuration = 0.6;
         }
     }
     [self hidesBottomBarWhenPushed];
-    MovieDetailViewController *vc =  [MovieDetailViewController new];
-    if (array.count > indexPath.row) {
+      MovieDetailViewController *vc =  [MovieDetailViewController new];
+      if (array.count > indexPath.row) {
          NSDictionary *dict = [array  objectAtIndex:(long)indexPath.row];
         vc.movieId = [dict objectForKey:@"movie_id"];
         vc.moviename=[dict objectForKey:@"title"];
         vc.pageSourceType=NSMovieSourcePageMovieListController;
         vc.movielogo =[dict objectForKey:@"photo"];
-//        NSMutableString  *backstr=[[NSMutableString alloc]initWithString:[dict objectForKey:@"title"]];
-//        NSString *str=backstr;
-//        if(backstr.length>5)
-//        {
-//            str=[backstr substringToIndex:5];
-//            str =[NSString stringWithFormat:@"%@...",str];
-//        }
-        UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+         UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
        self.navigationItem.backBarButtonItem=item;
+      }
+     [self.navigationController pushViewController:vc animated:YES];
     }
-   [self.navigationController pushViewController:vc animated:YES];
+    else if (collectionView==self.RecommendCollectionView)
+    {
+        ShowStageViewController *vc = [[ShowStageViewController alloc] init];
+        weiboInfoModel *model=[self.dataArray0 objectAtIndex:indexPath.row];
+        vc.stageInfo = model.stageInfo;
+        vc.weiboInfo=model;
+        UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:nil action:nil];
+        self.navigationItem.backBarButtonItem=item;
+        [self.navigationController pushViewController:vc animated:YES];
+        
+    }
 }
 -(void)MovieCollectionViewlongPress:(NSInteger)cellRowIndex
 {
@@ -655,7 +869,7 @@ static const CGFloat MJDuration = 0.6;
         if (buttonIndex==0) {
             NSString *movie_id;
             for (int i=0;i<3;i++) {
-                UIButton  *btn=(UIButton *) [self.view viewWithTag:100+i];
+                UIButton  *btn=(UIButton *) [self.feedView viewWithTag:100+i];
                 if (i==0&&btn.selected==YES) {
                     //请求删除接口
                     movie_id =[[_dataArray1 objectAtIndex:Rowindex]  objectForKey:@"id"];
@@ -686,7 +900,7 @@ static const CGFloat MJDuration = 0.6;
         NSString *forward_Id;
         NSString *behaind_Id;
         for (int i=0;i<3;i++) {
-            UIButton  *btn=(UIButton *) [self.view viewWithTag:100+i];
+            UIButton  *btn=(UIButton *) [self.feedView viewWithTag:100+i];
             if (i==0&&btn.selected==YES) {
                 if (Rowindex==0) {
                     UIAlertView  *Al =[[UIAlertView alloc]initWithTitle:nil message:@"不能前移了" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
@@ -739,7 +953,7 @@ static const CGFloat MJDuration = 0.6;
         NSString *forward_Id;
         NSString *behaind_Id;
         for (int i=0;i<3;i++) {
-            UIButton  *btn=(UIButton *) [self.view viewWithTag:100+i];
+            UIButton  *btn=(UIButton *) [self.feedView viewWithTag:100+i];
             if (i==0&&btn.selected==YES) {
                 if (Rowindex==self.dataArray1.count-1) {
                     UIAlertView  *Al =[[UIAlertView alloc]initWithTitle:nil message:@"不能后移了" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
@@ -784,22 +998,9 @@ static const CGFloat MJDuration = 0.6;
         [self requestOrderMovieWithforwardId:forward_Id AndbehindId:behaind_Id];
       }
     }
-
 }
 
-#pragma  mark  ------
-#pragma  mark  ------- searchBardelgate------------
-/*-(BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar
-{
-    
-     MovieSearchViewController *vc= [MovieSearchViewController new];
-     vc.pageType=NSSearchSourceTypeMovieList;
-     UINavigationController  *search=[[UINavigationController alloc]initWithRootViewController:vc];
-     search.modalTransitionStyle=UIModalTransitionStyleCrossDissolve;
-      [self presentViewController:search animated:YES completion:nil];
-    return NO;
-}*/
-- (void)didReceiveMemoryWarning {
+ - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }

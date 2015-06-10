@@ -39,6 +39,9 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch
     //默认是审核版
+    [[UILabel appearance] setFont:[UIFont fontWithName:@"FZLTHK—GBK1-0" size:20]];
+    [UIButton appearance].titleLabel.font =[UIFont fontWithName:@"FZLTHK—GBK1-0" size:20];
+
     self.IS_CHECK=@"1";
     //初始化友盟组件
     [self initUmeng];
