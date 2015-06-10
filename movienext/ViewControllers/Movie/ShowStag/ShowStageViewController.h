@@ -20,11 +20,15 @@ typedef  NS_ENUM(NSInteger,NSStagePapeType)
     NSStagePapeTypeMyAdd,     //个人页面进来的，可以删除
     NSStagePapeTypeStageList,  //电影列表页
     
+    //首页热门
+    NSStagePapeTypeHotStageList, //首页热门列表 
+    
     //管理管功能列表页
     NSStagePapeTypeAdmin_New_Add,  //最新添加
     NSStagePapeTypeAdmin_Dscorver,  //发现
     NSStagePapeTypeAdmin_Close_Weibo,  //屏蔽列表
     NSStagePapeTypeAdmin_Recommed  //推荐列表
+    
     
     
 };
