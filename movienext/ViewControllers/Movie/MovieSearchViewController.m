@@ -41,6 +41,10 @@
 }
 @property(nonatomic,strong) UITableView  *myTableView;
 @property(nonatomic,strong) NSMutableArray *dataArray;
+
+
+@property(nonatomic, retain) UITableView *historyTableView;
+@property(nonatomic, retain) NSMutableArray *historyMovieNames;
 @end
 
 @implementation MovieSearchViewController
@@ -84,8 +88,6 @@
     [search becomeFirstResponder];
     self.navigationItem.titleView=search;
     
-    
-    
     UIButton  *button=[UIButton buttonWithType:UIButtonTypeCustom];
     [button setTitle:@"取消" forState:UIControlStateNormal];
     [button setTitleEdgeInsets:UIEdgeInsetsMake(0, 10, 0, -10)];
@@ -112,7 +114,21 @@
     _myTableView.delegate=self;
     _myTableView.dataSource=self;
     _myTableView.separatorInset=UIEdgeInsetsMake(0, -110, 0, 0);
+//    _myTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.view addSubview:_myTableView];
+    
+    _historyTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, 320, 400) style:UITableViewStylePlain];
+    _historyTableView.delegate = self;
+    _historyTableView.dataSource = self;
+//    _historyTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    [_myTableView addSubview:_historyTableView];
+    
+    _historyMovieNames = [[NSUserDefaults standardUserDefaults] objectForKey:@"history"];
+    for (NSString *name in _historyMovieNames) {
+        NSLog(@"name = %@", name);
+    }
+    [_historyTableView reloadData];
+    
 }
 
 
@@ -160,6 +176,23 @@
 //    if ([search.text isEqualToString:@"00"]) {
 //        return;
 //    }
+    
+    //存储历史搜索开始
+    NSMutableArray *history = [NSMutableArray arrayWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:@"history"]];
+    if ([history containsObject:search.text]) { // 存在则移除
+        [history removeObject:search.text];
+    }
+    [history insertObject:search.text atIndex:0];
+    
+    if ([history count] > 6) {
+        [history removeLastObject];
+    }
+    [[NSUserDefaults standardUserDefaults] setObject:history forKey:@"history"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    //存储历史搜索结束
+    
+    _historyTableView.hidden = YES;
+    
     loadView.hidden=NO;
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
     NSString *urlStr = [NSString stringWithFormat:@"http://movie.douban.com/subject_search?search_text=%@&cat=1002", [search.text URLEncodedString] ];
@@ -218,29 +251,50 @@
 }
 //表格的行高度
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 90;
-
+    return tableView==_myTableView ? 90 : 44;
 }
 //表格的行数
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-        return _dataArray.count;
+    return tableView==_myTableView ? _dataArray.count : _historyMovieNames.count;
  }
 
 //配置Cell
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    static NSString  *cellID=@"CELL";
-    SearchmovieTableViewCell  *cell=(SearchmovieTableViewCell *)[tableView dequeueReusableCellWithIdentifier:cellID];
-    if (!cell) {
-        cell=[[SearchmovieTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+    if (tableView == _myTableView) {
+        static NSString  *cellID=@"CELL";
+        SearchmovieTableViewCell  *cell=(SearchmovieTableViewCell *)[tableView dequeueReusableCellWithIdentifier:cellID];
+        if (!cell) {
+            cell=[[SearchmovieTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+            cell.selectionStyle = UITableViewCellSelectionStyleGray;
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        }
+        if (_dataArray.count > indexPath.row) {
+         [cell setCellValue:[_dataArray  objectAtIndex:(long)indexPath.row]];
+        
+        }
+        return cell;
+    } else if (tableView == _historyTableView) {
+        static NSString *historyCell = @"historyCell";
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:historyCell];
+        if (!cell) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:historyCell];
+        }else{
+            for (UIView *view in [cell.contentView subviews]){
+                [view removeFromSuperview];
+            }
+        }
         cell.selectionStyle = UITableViewCellSelectionStyleGray;
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        cell.imageView.image = [UIImage imageNamed:@"make_searchbar_history"];
+        cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@""]];
+        cell.textLabel.text = [_historyMovieNames objectAtIndex:indexPath.row];
+        
+        UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0, 43, 320, 1)];
+        lineView.backgroundColor  = [UIColor colorWithRed:227.0f/255.0f green:227.0f/255.0f blue:227.0f/255.0f alpha:1];
+        [cell.contentView addSubview:lineView];
+         return cell;
     }
-    if (_dataArray.count > indexPath.row) {
-     [cell setCellValue:[_dataArray  objectAtIndex:(long)indexPath.row]];
     
-    }
- 
-     return cell;
+    return nil;
 }
 
 //选择了cell之后
@@ -269,6 +323,9 @@
                [self requestMovieIdWithdoubanId:[dict objectForKey:@"doubanId"]];
            }
         }
+    } else if (tableView == _historyTableView) {
+        search.text = [_historyMovieNames objectAtIndex:indexPath.row];
+        [self requestData];
     }
 
 }
@@ -278,10 +335,11 @@
 #pragma  mark  ----
 -(void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
 {
-    [self requestData];
+//    [self requestData];
  }
 -(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
+    [self requestData];
     [searchBar resignFirstResponder];
 }
 -(void)searchBarCancelButtonClicked:(UISearchBar *)searchBar

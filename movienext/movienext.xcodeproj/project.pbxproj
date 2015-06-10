@@ -494,6 +494,7 @@
 		00ECAE1B1B0999DF0039597E /* NSDate+TimeAgo.m in Sources */ = {isa = PBXBuildFile; fileRef = 00ECAE151B0999DF0039597E /* NSDate+TimeAgo.m */; };
 		00ECAE1C1B0999DF0039597E /* NSDate+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 00ECAE171B0999DF0039597E /* NSDate+Utilities.m */; };
 		00ECAE1D1B0999DF0039597E /* NSDateTimeAgo.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 00ECAE181B0999DF0039597E /* NSDateTimeAgo.bundle */; };
+		401860B61B283ADD0050A1AD /* make_searchbar_history@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 401860B51B283ADD0050A1AD /* make_searchbar_history@2x.png */; };
 		402DE3711B1EA3260018CBC6 /* download@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 402DE3691B1EA3260018CBC6 /* download@2x.png */; };
 		402DE3721B1EA3260018CBC6 /* download@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 402DE36A1B1EA3260018CBC6 /* download@3x.png */; };
 		402DE3731B1EA3260018CBC6 /* moment_share@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 402DE36B1B1EA3260018CBC6 /* moment_share@2x.png */; };
@@ -1229,6 +1230,7 @@
 		00ECAE161B0999DF0039597E /* NSDate+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Utilities.h"; sourceTree = "<group>"; };
 		00ECAE171B0999DF0039597E /* NSDate+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+Utilities.m"; sourceTree = "<group>"; };
 		00ECAE181B0999DF0039597E /* NSDateTimeAgo.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = NSDateTimeAgo.bundle; sourceTree = "<group>"; };
+		401860B51B283ADD0050A1AD /* make_searchbar_history@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "make_searchbar_history@2x.png"; sourceTree = "<group>"; };
 		402DE3691B1EA3260018CBC6 /* download@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "download@2x.png"; sourceTree = "<group>"; };
 		402DE36A1B1EA3260018CBC6 /* download@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "download@3x.png"; sourceTree = "<group>"; };
 		402DE36B1B1EA3260018CBC6 /* moment_share@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "moment_share@2x.png"; sourceTree = "<group>"; };
@@ -1452,6 +1454,7 @@
 		000B08FB1AA2EB8C00B8D13A /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				401860B51B283ADD0050A1AD /* make_searchbar_history@2x.png */,
 				00705B3C1B27EA210019B8FE /* guanliyuan@2x.png */,
 				00705B3D1B27EA210019B8FE /* guanliyuan@3x.png */,
 				00705B381B27E8FA0019B8FE /* search_icon@2x.png */,
@@ -3095,6 +3098,7 @@
 				003E74F71AB1A29F0080F7A8 /* btn_share_default@2x.png in Resources */,
 				00431FCC1ADD088900416E1F /* login_email_password@2x.png in Resources */,
 				008B0B0C1AB307CD0054767E /* login out@2x.png in Resources */,
+				401860B61B283ADD0050A1AD /* make_searchbar_history@2x.png in Resources */,
 				0087940B1AF0E1BE007313CB /* alert_close@3x.png in Resources */,
 				0053E9131ACBA08D00C11CB4 /* movie_tab_butten_normal@2x.png in Resources */,
 				000B09831AA3029800B8D13A /* add@2x.png in Resources */,
