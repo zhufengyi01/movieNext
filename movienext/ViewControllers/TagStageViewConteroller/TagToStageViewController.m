@@ -18,6 +18,8 @@
 #import "TapStageCollectionViewCell.h"
 #import "ModelsModel.h"
 #import "ShowStageViewController.h"
+static const CGFloat MJDuration = 0.2;
+
 
 @interface TagToStageViewController ()<UICollectionViewDelegateFlowLayout,UICollectionViewDataSource,UICollectionViewDelegate>
 {
@@ -60,7 +62,7 @@
 -(void)initData
 {
     page=1;
-    pageSize=16;
+    pageSize=20;
     self.dataArray=[[NSMutableArray alloc]init];
 }
 -(void)initUI
@@ -77,12 +79,85 @@
     _myConllectionView.delegate=self;
     _myConllectionView.dataSource=self;
     [self.view addSubview:_myConllectionView];
-    [self setupHeadView];
-    [self setupFootView];
+    [self setUprefresh];
+//    [self setupHeadView];
+//    [self setupFootView];
 
 
 }
-- (void)setupHeadView
+- (void)setUprefresh
+{
+    __weak typeof(self) weakSelf = self;
+    
+    // 下拉刷新
+    [self.myConllectionView addLegendHeaderWithRefreshingBlock:^{
+        // 增加5条假数据
+        /*for (int i = 0; i<10; i++) {
+         [weakSelf.colors insertObject:MJRandomColor atIndex:0];
+         }*/
+        page=1;
+        if (weakSelf.dataArray.count>0) {
+            [weakSelf.dataArray removeAllObjects];
+        }
+        // 进入刷新状态就会回调这个Block
+        [weakSelf requestData];
+        // 设置文字
+        [weakSelf.myConllectionView.header setTitle:@"下拉刷新..." forState:MJRefreshHeaderStateIdle];
+        [weakSelf.myConllectionView.header setTitle:@"释放刷新..." forState:MJRefreshHeaderStatePulling];
+        [weakSelf.myConllectionView.header setTitle:@"正在刷新..." forState:MJRefreshHeaderStateRefreshing];
+        //隐藏时间
+        weakSelf.myConllectionView.header.updatedTimeHidden=YES;
+        
+        // 设置字体
+        //weakSelf.myConllectionView.header.font = [UIFont systemFontOfSize:12];
+        
+        // 设置颜色
+        // weakSelf.myConllectionView.header.textColor = VGray_color;
+        // 模拟延迟加载数据，因此2秒后才调用（真实开发中，可以移除这段gcd代码）
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(MJDuration * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [weakSelf.myConllectionView reloadData];
+            
+            // 结束刷新
+            [weakSelf.myConllectionView.header endRefreshing];
+        });
+    }];
+    [self.myConllectionView.header beginRefreshing];
+    
+    // 上拉刷新
+    [self.myConllectionView addLegendFooterWithRefreshingBlock:^{
+        // 增加5条假数据
+        /*for (int i = 0; i<5; i++) {
+         [weakSelf.colors addObject:MJRandomColor];
+         }*/
+        // 进入刷新状态就会回调这个Block
+        if (pageCount>page) {
+            page=page+1;
+            [weakSelf requestData];
+        }
+        // 设置文字
+        [weakSelf.myConllectionView.footer setTitle:@"点击加载更多..." forState:MJRefreshFooterStateIdle];
+        [weakSelf.myConllectionView.footer setTitle:@"加载更多..." forState:MJRefreshFooterStateRefreshing];
+        [weakSelf.myConllectionView.footer setTitle:@"THE END" forState:MJRefreshFooterStateNoMoreData];
+        
+        // 设置字体
+        // weakSelf.myConllectionView.footer.font = [UIFont systemFontOfSize:12];
+        
+        // 设置颜色
+        //weakSelf.myConllectionView.footer.textColor = VGray_color;
+        // 模拟延迟加载数据，因此2秒后才调用（真实开发中，可以移除这段gcd代码）
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(MJDuration * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [weakSelf.myConllectionView reloadData];
+            
+            // 结束刷新
+            [weakSelf.myConllectionView.footer endRefreshing];
+        });
+    }];
+    // 默认先隐藏footer
+    // self.myConllectionView.footer.hidden = YES;
+}
+
+
+/*- (void)setupHeadView
 {
     
     __unsafe_unretained typeof(self) vc = self;
@@ -136,9 +211,8 @@
         });
         
     }];
-    
 }
-
+*/
 -(void)requestData
 {
     UserDataCenter *usercenter=[UserDataCenter shareInstance];
@@ -148,13 +222,10 @@
     NSString *urlString =[NSString stringWithFormat:@"%@/tag-stage/list?per-page=%d&page=%d", kApiBaseUrl,pageSize,page];
     [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
-            
-            //NSLog(@"  responseObject  ===%@ ",responseObject);
-            
+            //NSLog(@"  responseObject  ===%@ ",responseObject)
             NSMutableArray  *detailArray =[responseObject objectForKey:@"models"];
-
+            pageCount =[[responseObject objectForKey:@"pageCount"] intValue];
             if (detailArray.count>0) {
-                
                 for (NSDictionary  *modelDict in detailArray) {
                   ModelsModel  *model =[[ModelsModel alloc]init];
                     if (model) {

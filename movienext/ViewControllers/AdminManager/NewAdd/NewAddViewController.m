@@ -29,6 +29,9 @@
 
 #import "UIImageView+WebCache.h"
 
+static const CGFloat MJDuration = 0.1;
+
+
 @interface NewAddViewController ()<UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UICollectionViewDelegate,LoadingViewDelegate>
 {
     UICollectionViewFlowLayout    *layout;
@@ -51,7 +54,7 @@
     [self initData];
     [self initUI];
     [self createNavigation];
-    [self requestData];
+   // [self requestData];
 
 }
 -(void)createNavigation
@@ -60,6 +63,14 @@
    NSString  *titleString=@"最新添加";
     if (self.pageType==NSNewAddPageSoureTypeCloseWeiboList) {
         titleString =@"已屏蔽的微博";
+    }
+    else if(self.pageType==NSNewAddPageSoureTypeDecorver)
+    {
+        titleString=@"发现页列表";
+    }
+    else if (self.pageType==NSNewAddPageSoureTypeRecommed)
+    {
+        titleString=@"推荐列表";
     }
     UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:titleString];
     titleLable.textColor=VGray_color;
@@ -106,10 +117,85 @@
     _myConllectionView.dataSource=self;
     
     [self.view addSubview:_myConllectionView];
-    
-    [self setupHeadView];
-    [self setupFootView];
+    [self setUprefresh];
+//    [self setupHeadView];
+//    [self setupFootView];
 }
+- (void)setUprefresh
+{
+    __weak typeof(self) weakSelf = self;
+    
+    // 下拉刷新
+    [self.myConllectionView addLegendHeaderWithRefreshingBlock:^{
+        // 增加5条假数据
+        /*for (int i = 0; i<10; i++) {
+         [weakSelf.colors insertObject:MJRandomColor atIndex:0];
+         }*/
+        page=1;
+        if (weakSelf.dataArray.count>0) {
+            [weakSelf.dataArray removeAllObjects];
+        }
+        // 进入刷新状态就会回调这个Block
+        [weakSelf requestData];
+        
+       
+
+        // 设置文字
+        [weakSelf.myConllectionView.header setTitle:@"下拉刷新..." forState:MJRefreshHeaderStateIdle];
+        [weakSelf.myConllectionView.header setTitle:@"释放刷新..." forState:MJRefreshHeaderStatePulling];
+        [weakSelf.myConllectionView.header setTitle:@"正在刷新..." forState:MJRefreshHeaderStateRefreshing];
+        //隐藏时间
+        weakSelf.myConllectionView.header.updatedTimeHidden=YES;
+        
+        // 设置字体
+        //weakSelf.myConllectionView.header.font = [UIFont systemFontOfSize:12];
+        
+        // 设置颜色
+        // weakSelf.myConllectionView.header.textColor = VGray_color;
+        // 模拟延迟加载数据，因此2秒后才调用（真实开发中，可以移除这段gcd代码）
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(MJDuration * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [weakSelf.myConllectionView reloadData];
+            
+            // 结束刷新
+            [weakSelf.myConllectionView.header endRefreshing];
+        });
+    }];
+    [self.myConllectionView.header beginRefreshing];
+    
+    // 上拉刷新
+    [self.myConllectionView addLegendFooterWithRefreshingBlock:^{
+        // 增加5条假数据
+        /*for (int i = 0; i<5; i++) {
+         [weakSelf.colors addObject:MJRandomColor];
+         }*/
+        // 进入刷新状态就会回调这个Block
+        if (pageCount>page) {
+            page=page+1;
+            [weakSelf requestData];
+        }
+        // 设置文字
+        [weakSelf.myConllectionView.footer setTitle:@"点击加载更多..." forState:MJRefreshFooterStateIdle];
+        [weakSelf.myConllectionView.footer setTitle:@"加载更多..." forState:MJRefreshFooterStateRefreshing];
+        [weakSelf.myConllectionView.footer setTitle:@"THE END" forState:MJRefreshFooterStateNoMoreData];
+        
+        // 设置字体
+        // weakSelf.myConllectionView.footer.font = [UIFont systemFontOfSize:12];
+        
+        // 设置颜色
+        //weakSelf.myConllectionView.footer.textColor = VGray_color;
+        // 模拟延迟加载数据，因此2秒后才调用（真实开发中，可以移除这段gcd代码）
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(MJDuration * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [weakSelf.myConllectionView reloadData];
+            
+            // 结束刷新
+            [weakSelf.myConllectionView.footer endRefreshing];
+        });
+    }];
+    // 默认先隐藏footer
+    // self.myConllectionView.footer.hidden = YES;
+}
+
+/*
 
 - (void)setupHeadView
 {
@@ -153,7 +239,7 @@
             [vc.myConllectionView footerEndRefreshing];
         });
     }];
-}
+}*/
 
 -(void)creatLoadView
 {
@@ -175,9 +261,18 @@
     else if(self.pageType==NSNewAddPageSoureTypeCloseWeiboList)
     {
         urlString =[NSString stringWithFormat:@"%@/weibo/block-list?per-page=%d&page=%d", kApiBaseUrl,pageSize,page];
-
+    }
+    else if (self.pageType==NSNewAddPageSoureTypeDecorver)
+    {
+        urlString=[NSString stringWithFormat:@"%@/weibo/discover",kApiBaseUrl];
+    }
+    else if (self.pageType==NSNewAddPageSoureTypeRecommed)
+    {
+        urlString =[NSString stringWithFormat:@"%@/weibo/list-recommend?per-page=%d&page=%d", kApiBaseUrl,pageSize,page];
+   
     }
     [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
             pageCount=[[responseObject objectForKey:@"pageCount"] intValue];
             NSMutableArray   *array  = [[NSMutableArray alloc]initWithArray:[responseObject objectForKey:@"models"]];
@@ -278,6 +373,24 @@
         ShowStageViewController *vc = [[ShowStageViewController alloc] init];
         weiboInfoModel *model=[_dataArray objectAtIndex:indexPath.row];
         //vc.upweiboArray=_upWeiboArray;
+      if(self.pageType==NSNewAddPageSoureTypeNewList)
+      {
+          //最新添加
+          vc.pageType=NSStagePapeTypeAdmin_New_Add;
+      }
+      else if (self.pageType==NSNewAddPageSoureTypeCloseWeiboList)
+      {
+          //微博屏蔽
+          vc.pageType=NSStagePapeTypeAdmin_Close_Weibo;
+       }
+     else if (self.pageType==NSNewAddPageSoureTypeDecorver)
+       {
+          vc.pageType=NSStagePapeTypeAdmin_Dscorver;
+       }
+      else if (self.pageType==NSNewAddPageSoureTypeRecommed)
+      {
+          vc.pageType=NSStagePapeTypeAdmin_Recommed;
+      }
         vc.stageInfo = model.stageInfo;
        vc.weiboInfo=model;
         UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:nil action:nil];

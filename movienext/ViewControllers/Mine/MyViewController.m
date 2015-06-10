@@ -38,7 +38,7 @@
 #import "ShowStageViewController.h"
 #import "SmallImageCollectionViewCell.h"
 #import "UserHeaderReusableView.h"
-static const CGFloat MJDuration = 2.0;
+static const CGFloat MJDuration = 1.0;
 
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
@@ -194,23 +194,19 @@ static const CGFloat MJDuration = 2.0;
 - (void)setupRefreshView
 {
     __weak typeof(self) weakSelf = self;
-    
     // 下拉刷新
     [self.myConllectionView addLegendHeaderWithRefreshingBlock:^{
         // 增加5条假数据
-        /*for (int i = 0; i<10; i++) {
-            [weakSelf.colors insertObject:MJRandomColor atIndex:0];
-        }*/
-        
+//        for (int i = 0; i<10; i++) {
+//            [weakSelf.colors insertObject:MJRandomColor atIndex:0];
+//        }
         NSString *Btag =[weakSelf.buttonStateDict objectForKey:@"YES"];
         if ([Btag isEqualToString:@"100"]) {
-            
             if (weakSelf.addedDataArray.count>0) {
                 [weakSelf.addedDataArray removeAllObjects];
             }
             page1=1;
             [weakSelf requestData];
-            
         }
         else if ([Btag isEqualToString:@"101"])
         {
@@ -220,6 +216,13 @@ static const CGFloat MJDuration = 2.0;
             page2=1;
             [weakSelf requestData];
         }
+        // 设置文字
+        [weakSelf.myConllectionView.header setTitle:@"下拉刷新..." forState:MJRefreshHeaderStateIdle];
+        [weakSelf.myConllectionView.header setTitle:@"释放刷新..." forState:MJRefreshHeaderStatePulling];
+        [weakSelf.myConllectionView.header setTitle:@"正在刷新..." forState:MJRefreshHeaderStateRefreshing];
+        //隐藏时间
+        weakSelf.myConllectionView.header.updatedTimeHidden=YES;
+        
         // 模拟延迟加载数据，因此2秒后才调用（真实开发中，可以移除这段gcd代码）
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(MJDuration * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [weakSelf.myConllectionView reloadData];
@@ -228,19 +231,23 @@ static const CGFloat MJDuration = 2.0;
             [weakSelf.myConllectionView.header endRefreshing];
         });
     }];
-   // [self.myConllectionView.header beginRefreshing];
+   [self.myConllectionView.header beginRefreshing];
     
     // 上拉刷新
     [self.myConllectionView addLegendFooterWithRefreshingBlock:^{
         // 增加5条假数据
-        /*for (int i = 0; i<5; i++) {
-            [weakSelf.colors addObject:MJRandomColor];
-        }*/
+//        for (int i = 0; i<5; i++) {
+//            [weakSelf.colors addObject:MJRandomColor];
+//        }
         NSString *Btag =[weakSelf.buttonStateDict objectForKey:@"YES"];
         if ([Btag isEqualToString:@"100"]) {
             if (pageCount1>page1) {
                 page1=page1+1;
                 [weakSelf requestData];
+            }
+            else
+            {
+                [weakSelf.myConllectionView.footer noticeNoMoreData];
             }
         }
         else if ([Btag isEqualToString:@"101"])
@@ -249,8 +256,15 @@ static const CGFloat MJDuration = 2.0;
                 page2=page2+1;
                 [weakSelf requestData];
             }
+            else
+            {
+                [weakSelf.myConllectionView.footer noticeNoMoreData];
+            }
         }
-
+        // 设置文字
+        [weakSelf.myConllectionView.footer setTitle:@"点击加载更多..." forState:MJRefreshFooterStateIdle];
+        [weakSelf.myConllectionView.footer setTitle:@"加载更多..." forState:MJRefreshFooterStateRefreshing];
+        [weakSelf.myConllectionView.footer setTitle:@"THE END" forState:MJRefreshFooterStateNoMoreData];
         
         // 模拟延迟加载数据，因此2秒后才调用（真实开发中，可以移除这段gcd代码）
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(MJDuration * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -261,11 +275,10 @@ static const CGFloat MJDuration = 2.0;
         });
     }];
     // 默认先隐藏footer
-    self.myConllectionView.footer.hidden = YES;
+    //self.myConllectionView.footer.hidden = YES;
 }
-
-
 /*
+
 -(void)setupHeadView
 {
     __unsafe_unretained typeof(self) vc = self;
@@ -329,8 +342,7 @@ static const CGFloat MJDuration = 2.0;
             [vc.myConllectionView footerEndRefreshing];
         });
     }];
-}
-*/
+}*/
 
 -(void)dealSegmentClick:(UIButton *) button
 {
@@ -538,7 +550,7 @@ static const CGFloat MJDuration = 2.0;
              NSString  *Btag = [self.buttonStateDict objectForKey:@"YES"];
             if ([Btag isEqualToString:@"100"]) {
                 pageCount1=[[responseObject objectForKey:@"pageCount"] intValue];
-                
+              
                 for (NSDictionary  *addDict  in Detailarray) {
                 userAddmodel  *model=[[userAddmodel alloc]init];
                 if (model) {

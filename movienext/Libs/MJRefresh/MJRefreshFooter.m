@@ -13,6 +13,7 @@
 #import "MJRefreshHeader.h"
 #import "UIView+MJExtension.h"
 #import "UIScrollView+MJRefresh.h"
+#import "Constant.h"
 #import <objc/message.h>
 
 @interface MJRefreshFooter()
@@ -310,6 +311,10 @@
     self.stateLabel.textColor = textColor;
     [self.loadMoreButton setTitleColor:textColor forState:UIControlStateNormal];
     self.noMoreLabel.textColor = textColor;
+    
+    self.stateLabel.textColor=VGray_color;
+    [self.loadMoreButton setTitleColor:VGray_color forState:UIControlStateNormal];
+    self.noMoreLabel.textColor =VGray_color;
 }
 
 - (void)setFont:(UIFont *)font
@@ -319,6 +324,10 @@
     self.loadMoreButton.titleLabel.font = font;
     self.noMoreLabel.font = font;
     self.stateLabel.font = font;
+    
+    self.loadMoreButton.titleLabel.font=[UIFont systemFontOfSize:12];
+    self.noMoreLabel.font=[UIFont systemFontOfSize:12];
+    self.stateLabel.font =[UIFont systemFontOfSize:12];
 }
 
 - (void)setStateHidden:(BOOL)stateHidden

@@ -326,6 +326,10 @@
 		006BC7441ADE5C1500DE0C0D /* open_danmu@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 006BC7401ADE5C1500DE0C0D /* open_danmu@3x.png */; };
 		006F77231B0DEF3200EF3EF0 /* AdmListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 006F77221B0DEF3200EF3EF0 /* AdmListViewController.m */; };
 		006F77261B0DEF4900EF3EF0 /* AdmCustomListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 006F77251B0DEF4900EF3EF0 /* AdmCustomListViewController.m */; };
+		00705B3A1B27E8FA0019B8FE /* search_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 00705B381B27E8FA0019B8FE /* search_icon@2x.png */; };
+		00705B3B1B27E8FA0019B8FE /* search_icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 00705B391B27E8FA0019B8FE /* search_icon@3x.png */; };
+		00705B3E1B27EA210019B8FE /* guanliyuan@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 00705B3C1B27EA210019B8FE /* guanliyuan@2x.png */; };
+		00705B3F1B27EA210019B8FE /* guanliyuan@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 00705B3D1B27EA210019B8FE /* guanliyuan@3x.png */; };
 		0071777E1B1DB2AB001F5D79 /* UserHeaderReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0071777D1B1DB2AB001F5D79 /* UserHeaderReusableView.m */; };
 		007427321AAD3F3B0034047D /* AddMarkViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 007427311AAD3F3B0034047D /* AddMarkViewController.m */; };
 		0074273B1AADAB9B0034047D /* UIImage+Blur.m in Sources */ = {isa = PBXBuildFile; fileRef = 007427351AADAB9B0034047D /* UIImage+Blur.m */; };
@@ -958,6 +962,11 @@
 		006F77221B0DEF3200EF3EF0 /* AdmListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AdmListViewController.m; sourceTree = "<group>"; };
 		006F77241B0DEF4900EF3EF0 /* AdmCustomListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdmCustomListViewController.h; sourceTree = "<group>"; };
 		006F77251B0DEF4900EF3EF0 /* AdmCustomListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AdmCustomListViewController.m; sourceTree = "<group>"; };
+		00705ACF1B27D9BF0019B8FE /* FZLTHK 2.TTF */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FZLTHK 2.TTF"; sourceTree = "<group>"; };
+		00705B381B27E8FA0019B8FE /* search_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "search_icon@2x.png"; sourceTree = "<group>"; };
+		00705B391B27E8FA0019B8FE /* search_icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "search_icon@3x.png"; sourceTree = "<group>"; };
+		00705B3C1B27EA210019B8FE /* guanliyuan@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "guanliyuan@2x.png"; sourceTree = "<group>"; };
+		00705B3D1B27EA210019B8FE /* guanliyuan@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "guanliyuan@3x.png"; sourceTree = "<group>"; };
 		0071777C1B1DB2AB001F5D79 /* UserHeaderReusableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserHeaderReusableView.h; sourceTree = "<group>"; };
 		0071777D1B1DB2AB001F5D79 /* UserHeaderReusableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserHeaderReusableView.m; sourceTree = "<group>"; };
 		007427301AAD3F3B0034047D /* AddMarkViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddMarkViewController.h; sourceTree = "<group>"; };
@@ -1443,6 +1452,10 @@
 		000B08FB1AA2EB8C00B8D13A /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				00705B3C1B27EA210019B8FE /* guanliyuan@2x.png */,
+				00705B3D1B27EA210019B8FE /* guanliyuan@3x.png */,
+				00705B381B27E8FA0019B8FE /* search_icon@2x.png */,
+				00705B391B27E8FA0019B8FE /* search_icon@3x.png */,
 				0092A7CD1B1FEF8F00836D6B /* sucseed_add@2x.png */,
 				0092A7CE1B1FEF8F00836D6B /* sucseed_add@3x.png */,
 				402DE3691B1EA3260018CBC6 /* download@2x.png */,
@@ -2351,6 +2364,7 @@
 		00AA53511AA2C525004096F8 /* Libs */ = {
 			isa = PBXGroup;
 			children = (
+				00705ACF1B27D9BF0019B8FE /* FZLTHK 2.TTF */,
 				0064CD031B257660008A38F3 /* MJRefresh */,
 				0059ED921B05D2A800C2ACA1 /* MJExtension */,
 				00963B9E1B0323E10069CBD9 /* Masonry */,
@@ -2913,6 +2927,7 @@
 				00AA54431AA2C525004096F8 /* UMSCommentDetailController.xib in Resources */,
 				0086C0FB1B1592B30013F540 /* find_share@3x.png in Resources */,
 				000B09DE1AA3029800B8D13A /* Wechat@2x.png in Resources */,
+				00705B3F1B27EA210019B8FE /* guanliyuan@3x.png in Resources */,
 				000B09E41AA30CB900B8D13A /* loginoutbackgroundcolor.png in Resources */,
 				003E74FB1AB1A29F0080F7A8 /* btn_share_select@3x.png in Resources */,
 				00431FE81ADD188700416E1F /* signup_sure_press@3x.png in Resources */,
@@ -2932,6 +2947,7 @@
 				00431FDA1ADD0FAA00416E1F /* login_password_open@2x.png in Resources */,
 				00431FCB1ADD088900416E1F /* login_email_password.png in Resources */,
 				0087940C1AF0E1BE007313CB /* alert_more@2x.png in Resources */,
+				00705B3B1B27E8FA0019B8FE /* search_icon@3x.png in Resources */,
 				00AA54451AA2C525004096F8 /* UMSCommentInputControlleriPad.xib in Resources */,
 				000221D91ABFF79E00FC0D65 /* qzone_share_icon@3x.png in Resources */,
 				000B09D11AA3029800B8D13A /* single_switch@2x.png in Resources */,
@@ -2956,6 +2972,7 @@
 				000B09B31AA3029800B8D13A /* Moments@2x.png in Resources */,
 				000B09CA1AA3029800B8D13A /* setting.png in Resources */,
 				000B09DA1AA3029800B8D13A /* three_swtich(gray).png in Resources */,
+				00705B3E1B27EA210019B8FE /* guanliyuan@2x.png in Resources */,
 				001F0D531AF223BF004BE754 /* close_danmu@2x.png in Resources */,
 				0053E9061ACBA08D00C11CB4 /* feed_tab_butten_normal.png in Resources */,
 				0053E9111ACBA08D00C11CB4 /* me_tab_butten_press@3x.png in Resources */,
@@ -3043,6 +3060,7 @@
 				001F0D4E1AF22366004BE754 /* open_danmu.png@2x.png in Resources */,
 				003E74EB1AB1A29F0080F7A8 /* btn_add_default@2x.png in Resources */,
 				003E74F21AB1A29F0080F7A8 /* btn_like_default@3x.png in Resources */,
+				00705B3A1B27E8FA0019B8FE /* search_icon@2x.png in Resources */,
 				00AA53141AA2C3F4004096F8 /* Images.xcassets in Resources */,
 				000B098D1AA3029800B8D13A /* icon@2x.png in Resources */,
 				000B09D31AA3029800B8D13A /* slogan.png in Resources */,

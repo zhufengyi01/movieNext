@@ -19,6 +19,9 @@
 #import "SmallImageCollectionViewCell.h"
 #import "UploadImageViewController.h"
 #import "LoadingView.h"
+static const CGFloat MJDuration = 0.6;
+
+
 @interface ShowSelectPhotoViewController ()<UICollectionViewDelegateFlowLayout,UICollectionViewDataSource,UICollectionViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,LoadingViewDelegate>
 {
     LoadingView         *loadView;
@@ -199,8 +202,9 @@
     _myConllectionView.delegate=self;
     _myConllectionView.dataSource=self;
     [self.view addSubview:_myConllectionView];
-    [self setupHeadView];
-    [self setupFootView];
+    [self setUprefresh];
+//    [self setupHeadView];
+//    [self setupFootView];
 }
 -(void)creatLoadView
 {
@@ -210,62 +214,95 @@
     
 }
 
-- (void)setupHeadView
+- (void)setUprefresh
 {
-    __unsafe_unretained typeof(self) vc = self;
-    // 添加下拉刷新头部控件
-    [self.myConllectionView addHeaderWithCallback:^{
-
+    __weak typeof(self) weakSelf = self;
+    
+    // 下拉刷新
+    [self.myConllectionView addLegendHeaderWithRefreshingBlock:^{
+        // 增加5条假数据
+        /*for (int i = 0; i<10; i++) {
+         [weakSelf.colors insertObject:MJRandomColor atIndex:0];
+         }*/
+         // 进入刷新状态就会回调这个Block
+        [weakSelf requestData];
+        // 设置文字
+        [weakSelf.myConllectionView.header setTitle:@"下拉刷新..." forState:MJRefreshHeaderStateIdle];
+        [weakSelf.myConllectionView.header setTitle:@"释放刷新..." forState:MJRefreshHeaderStatePulling];
+        [weakSelf.myConllectionView.header setTitle:@"正在刷新..." forState:MJRefreshHeaderStateRefreshing];
+        //隐藏时间
+        weakSelf.myConllectionView.header.updatedTimeHidden=YES;
+        
         if(segment.selectedSegmentIndex==0)
         {
-           page1=1;
-          if (vc.dataArray1.count>0) {
-            [vc.dataArray1 removeAllObjects];
-           }
+            page1=1;
+            if (weakSelf.dataArray1.count>0) {
+                [weakSelf.dataArray1 removeAllObjects];
+            }
         }
         else if(segment.selectedSegmentIndex==1)
         {
             page2=1;
-            if (vc.dataArray2.count>0) {
-                [vc.dataArray2 removeAllObjects];
+            if (weakSelf.dataArray2.count>0) {
+                [weakSelf.dataArray2 removeAllObjects];
             }
         }
         // 进入刷新状态就会回调这个Block
-          [vc requestData];
-        // 模拟延迟加载数据，因此2秒后才调用）
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            //[vc.myConllectionView reloadData];
+        [weakSelf requestData];
+
+        // 设置字体
+        //weakSelf.myConllectionView.header.font = [UIFont systemFontOfSize:12];
+        
+        // 设置颜色
+        // weakSelf.myConllectionView.header.textColor = VGray_color;
+        // 模拟延迟加载数据，因此2秒后才调用（真实开发中，可以移除这段gcd代码）
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(MJDuration * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [weakSelf.myConllectionView reloadData];
+            
             // 结束刷新
-            [vc.myConllectionView headerEndRefreshing];
+            [weakSelf.myConllectionView.header endRefreshing];
         });
     }];
-#warning 自动刷新(一进入程序就下拉刷新)
-    // [vc.myConllectionView headerBeginRefreshing];
-}
-
-
-- (void)setupFootView
-{
-    __unsafe_unretained typeof(self) vc = self;
-    // 添加上拉刷新尾部控件
-    [vc.myConllectionView addFooterWithCallback:^{
+    [self.myConllectionView.header beginRefreshing];
+    
+    // 上拉刷新
+    [self.myConllectionView addLegendFooterWithRefreshingBlock:^{
+        // 增加5条假数据
+        /*for (int i = 0; i<5; i++) {
+         [weakSelf.colors addObject:MJRandomColor];
+         }*/
         // 进入刷新状态就会回调这个Block
         if (segment.selectedSegmentIndex==0) {
             page1=page1+1;
         }
         else if (segment.selectedSegmentIndex==1)
         {
-             page2=page2+1;
+            page2=page2+1;
         }
-            [vc requestData];
-        // 模拟延迟加载数据，因此2秒后才调用）
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            //  [vc.myConllectionView reloadData];
+        [weakSelf requestData];
+
+         // 设置文字
+        [weakSelf.myConllectionView.footer setTitle:@"点击加载更多..." forState:MJRefreshFooterStateIdle];
+        [weakSelf.myConllectionView.footer setTitle:@"加载更多..." forState:MJRefreshFooterStateRefreshing];
+        [weakSelf.myConllectionView.footer setTitle:@"THE END" forState:MJRefreshFooterStateNoMoreData];
+        
+        // 设置字体
+        // weakSelf.myConllectionView.footer.font = [UIFont systemFontOfSize:12];
+        
+        // 设置颜色
+        //weakSelf.myConllectionView.footer.textColor = VGray_color;
+        // 模拟延迟加载数据，因此2秒后才调用（真实开发中，可以移除这段gcd代码）
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(MJDuration * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [weakSelf.myConllectionView reloadData];
+            
             // 结束刷新
-            [vc.myConllectionView footerEndRefreshing];
+            [weakSelf.myConllectionView.footer endRefreshing];
         });
     }];
+    // 默认先隐藏footer
+    // self.myConllectionView.footer.hidden = YES;
 }
+
 
 -(void)requestisReview
 {
@@ -282,7 +319,6 @@
         NSLog(@"Error: %@", error);
     }];    
 }
-
 -(void)requestData
 {
 #warning 上线的时候需要去去掉return的注视
@@ -304,7 +340,6 @@
     [request setHTTPMethod:@"GET"];
     NSOperationQueue * queue = [[NSOperationQueue alloc] init];
     [NSURLConnection sendAsynchronousRequest:request queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
-        
          if (connectionError) {
             //NSLog(@"httpresponse code error %@", connectionError);
             [loadView showFailLoadData];
@@ -328,21 +363,25 @@
                     {
                         self.dataArray1 =[[NSMutableArray alloc]init];
                     }
-                    if (doubanInfos) {
+                    if (doubanInfos.count>0) {
                         [self.dataArray1 addObjectsFromArray:doubanInfos];
                      //   NSLog(@"====doubanInfo ===%@",doubanInfos);
+                        if (doubanInfos.count<40) {
+                            //[self.myConllectionView.footer noticeNoMoreData];
+                        }
                     }
-
-                }
+                 }
                else if (segment.selectedSegmentIndex==1)
                {
                    if (self.dataArray2==nil) {
                        self.dataArray2=[[NSMutableArray alloc]init];
                    }
-                   if (doubanInfos) {
+                   if (doubanInfos.count>0) {
                    [self.dataArray2 addObjectsFromArray:doubanInfos];
+                       if (doubanInfos.count<40) {
+                           [self.myConllectionView.footer noticeNoMoreData];
+                       }
                    }
-
                }
         [self.myConllectionView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
             } else {

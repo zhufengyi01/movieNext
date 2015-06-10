@@ -11,6 +11,7 @@
 #import "MJRefreshConst.h"
 #import "UIView+MJExtension.h"
 #import <objc/message.h>
+#import "Constant.h"
 #import "UIScrollView+MJExtension.h"
 
 @interface MJRefreshHeader()
@@ -318,6 +319,9 @@
     
     self.updatedTimeLabel.textColor = textColor;
     self.stateLabel.textColor = textColor;
+    
+    self.stateLabel.textColor=VGray_color;
+    self.updatedTimeLabel.textColor=VGray_color;
 }
 
 - (void)setFont:(UIFont *)font
@@ -326,6 +330,8 @@
     
     self.updatedTimeLabel.font = font;
     self.stateLabel.font = font;
+    self.stateLabel.font=[UIFont systemFontOfSize:12];
+    self.updatedTimeLabel.font=[UIFont systemFontOfSize:12];
 }
 
 - (void)setStateHidden:(BOOL)stateHidden
