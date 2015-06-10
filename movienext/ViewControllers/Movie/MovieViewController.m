@@ -34,11 +34,10 @@
 //#import "SearchMovieViewController.h"
 #define  BUTTON_COUNT  3
 #define  NaviTitle_Width  160
-#define  NaviTitle_Height 40
-#define  Lable_Line_Height 2
+#define  NaviTitle_Height 46
+#define  Lable_Line_Height 3
 
-static const CGFloat MJDuration = 0.4;
-
+static const CGFloat MJDuration = 0.6;
 
 @interface MovieViewController ()<UISearchBarDelegate,UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout,LoadingViewDelegate,MovieCollectionViewCellDelegate,UIActionSheetDelegate>
 {
@@ -216,9 +215,9 @@ static const CGFloat MJDuration = 0.4;
         double  height=40;
         UIButton  *btn=[ZCControl createButtonWithFrame:CGRectMake(x,y,width,height) ImageName:nil Target:self Action:@selector(dealSegmentClick:) Title:titleArray[i]];
         //=View_BackGround;
-        [btn setTitleColor:VGray_color forState:UIControlStateNormal];
+        [btn setTitleColor:VLight_GrayColor forState:UIControlStateNormal];
         [btn setTitleColor:VBlue_color forState:UIControlStateSelected];
-        btn.titleLabel.font=[UIFont boldSystemFontOfSize:15];
+        btn.titleLabel.font=[UIFont systemFontOfSize:15];
        // [btn setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color.png"] forState:UIControlStateNormal];
         btn.backgroundColor=  [UIColor colorWithPatternImage:[UIImage imageNamed:@"tabbar_backgroud_color.png"]];
         btn.tag=100+i;
@@ -316,7 +315,7 @@ static const CGFloat MJDuration = 0.4;
     Relayout.minimumInteritemSpacing=0; //cell之间左右的
     Relayout.minimumLineSpacing=5;      //cell上下间隔
     Relayout.sectionInset=UIEdgeInsetsMake(0,0,64, 0); //整个偏移量 上左下右
-    self.RecommendCollectionView =[[UICollectionView alloc]initWithFrame:CGRectMake(0,0,kDeviceWidth, kDeviceHeight-20-0) collectionViewLayout:Relayout];
+    self.RecommendCollectionView =[[UICollectionView alloc]initWithFrame:CGRectMake(0,0,kDeviceWidth, kDeviceHeight-kHeightNavigation-kHeigthTabBar-0) collectionViewLayout:Relayout];
     //[layout setHeaderReferenceSize:CGSizeMake(_myConllectionView.frame.size.width, kDeviceHeight/3+64+110)];
     
     self.RecommendCollectionView.backgroundColor=View_BackGround;
@@ -364,14 +363,12 @@ static const CGFloat MJDuration = 0.4;
         }
         // 进入刷新状态就会回调这个Block
         [weakSelf requestRecommendData];
-        
         // 设置文字
         [weakSelf.RecommendCollectionView.header setTitle:@"下拉刷新..." forState:MJRefreshHeaderStateIdle];
         [weakSelf.RecommendCollectionView.header setTitle:@"释放刷新..." forState:MJRefreshHeaderStatePulling];
         [weakSelf.RecommendCollectionView.header setTitle:@"正在刷新..." forState:MJRefreshHeaderStateRefreshing];
         //隐藏时间
-        weakSelf.myConllectionView.header.updatedTimeHidden=YES;
-        
+        weakSelf.RecommendCollectionView.header.updatedTimeHidden=YES;
         // 设置字体
         //weakSelf.myConllectionView.header.font = [UIFont systemFontOfSize:12];
         
@@ -397,7 +394,6 @@ static const CGFloat MJDuration = 0.4;
         if (pageCount0>page0) {
             page0=page0+1;
             [weakSelf requestRecommendData];
-            
         }
         // 设置文字
         [weakSelf.RecommendCollectionView.footer setTitle:@"点击加载更多..." forState:MJRefreshFooterStateIdle];
@@ -577,7 +573,6 @@ static const CGFloat MJDuration = 0.4;
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
-    
 }
 
 -(void)requestRecommendData
@@ -614,6 +609,11 @@ static const CGFloat MJDuration = 0.4;
                     if (stagemodel) {
                         if (![[newdict objectForKey:@"stage"]  isKindOfClass:[NSNull class]]) {
                             [stagemodel setValuesForKeysWithDictionary:[newdict objectForKey:@"stage"]];
+                            movieInfoModel *moviemodel = [[movieInfoModel alloc]init];
+                            if (moviemodel) {
+                                [moviemodel setValuesForKeysWithDictionary:[[newdict objectForKey:@"stage"] objectForKey:@"movie"]];
+                                stagemodel.movieInfo=moviemodel;
+                            }
                             weibomodel.stageInfo=stagemodel;
                         }
                     }
@@ -667,7 +667,6 @@ static const CGFloat MJDuration = 0.4;
         {
             type=@"3";
             PAGE=page3;
-            
         }
     }
     
@@ -887,7 +886,11 @@ static const CGFloat MJDuration = 0.4;
         ShowStageViewController *vc = [[ShowStageViewController alloc] init];
         vc.pageType=NSStagePapeTypeHotStageList;//热门页进入
         weiboInfoModel *model=[self.dataArray0 objectAtIndex:indexPath.row];
+        
+    //    movieInfoModel  *moviemodel =[[movieInfoModel alloc]init];
+    
         vc.stageInfo = model.stageInfo;
+    
         vc.weiboInfo=model;
         UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
         self.navigationItem.backBarButtonItem=item;
@@ -1054,8 +1057,7 @@ static const CGFloat MJDuration = 0.4;
         self.recommentBtn.selected=NO;
     }
     float x=self.nav_line_lable.frame.origin.x;
-    x=((NaviTitle_Width/2-0)/kDeviceWidth)*scrollView.contentOffset.x;
-    
+    x=((NaviTitle_Width/2)/kDeviceWidth)*scrollView.contentOffset.x;
     self.nav_line_lable.frame=CGRectMake(x, self.nav_line_lable.frame.origin.y, self.nav_line_lable.frame.size.width, self.nav_line_lable.frame.size.height);
     NSLog(@"~~~~~~%f",scrollView.contentOffset.x);
     }

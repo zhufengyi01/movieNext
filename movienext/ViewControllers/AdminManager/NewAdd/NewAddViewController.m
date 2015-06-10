@@ -60,17 +60,17 @@ static const CGFloat MJDuration = 0.1;
 -(void)createNavigation
 {
     
-   NSString  *titleString=@"最新添加";
+   NSString  *titleString=@"最新列表";
     if (self.pageType==NSNewAddPageSoureTypeCloseWeiboList) {
-        titleString =@"已屏蔽的微博";
+        titleString =@"已屏蔽列表";
     }
     else if(self.pageType==NSNewAddPageSoureTypeDecorver)
     {
-        titleString=@"发现页列表";
+        titleString=@"发现列表";
     }
     else if (self.pageType==NSNewAddPageSoureTypeRecommed)
     {
-        titleString=@"推荐列表";
+        titleString=@"热门列表";
     }
     UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:titleString];
     titleLable.textColor=VGray_color;

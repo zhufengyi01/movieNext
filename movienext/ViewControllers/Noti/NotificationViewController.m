@@ -313,7 +313,7 @@ static const CGFloat MJDuration = 1.0;
     userAddmodel  *model =[_dataArray objectAtIndex:indexPath.row];
     vc.stageInfo=model.weiboInfo.stageInfo;
     vc.weiboInfo=model.weiboInfo;
-    UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+     UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
     self.navigationItem.backBarButtonItem=item;
     [self.navigationController pushViewController:vc animated:YES];
     
@@ -341,6 +341,7 @@ static const CGFloat MJDuration = 1.0;
         userAddmodel *model =[_dataArray objectAtIndex:index];
         myVC.author_id=[NSString stringWithFormat:@"%@",model.userInfo.Id];
         UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+        myVC.pageType=NSMyPageTypeOthersController;
         self.navigationItem.backBarButtonItem=item;
          [self.navigationController pushViewController:myVC animated:YES];
     }

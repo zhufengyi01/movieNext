@@ -32,7 +32,7 @@
     TitleLable.textAlignment=NSTextAlignmentCenter;
     TitleLable.textColor=VGray_color;
     TitleLable.lineBreakMode=NSLineBreakByTruncatingTail;
-    TitleLable.font=[UIFont boldSystemFontOfSize:12];
+    TitleLable.font=[UIFont systemFontOfSize:12];
     [self.contentView addSubview:TitleLable];
     
     //只有管理员才能删除

@@ -38,11 +38,10 @@
     titleLable.font=[UIFont boldSystemFontOfSize:18];
     titleLable.textAlignment=NSTextAlignmentCenter;
     self.navigationItem.titleView=titleLable;
-
 }
 -(void)createUI
 {
-    _dataArray =[[NSMutableArray alloc]initWithObjects:@"用户列表",@"标签，表情包",@"已屏蔽剧照列表",@"已屏蔽弹幕列表",@"最新添加",@"最新发现页",@"热门列表",nil];
+    _dataArray =[[NSMutableArray alloc]initWithObjects:@"用户列表",@"标签，表情包",@"已屏蔽剧照列表",@"[-1级]  已屏蔽列表",@"[0级]  最新列表",@"[1级]  发现列表",@"[2级］热门列表",nil];
     _myTableView =[[UITableView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth,55*7) style:UITableViewStylePlain];
     _myTableView.delegate=self;
     _myTableView.dataSource=self;

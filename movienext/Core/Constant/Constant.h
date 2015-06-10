@@ -68,7 +68,7 @@
 //字体深灰色
 #define VGray_color      [UIColor colorWithRed:127.0/255 green:127.0/255 blue:139.0/255 alpha:1]
 //字体蓝色
-#define VBlue_color [UIColor colorWithRed:0/255 green:146.0/255 blue:255.0/255 alpha:1]
+#define VBlue_color [UIColor colorWithRed:16.0/255 green:111.0/255 blue:255.0/255 alpha:1]
 #define VStageView_color [UIColor colorWithRed:23.0/255 green:23.0/255 blue:23.0/255 alpha:1]
 
 #define ShareLogo_color  [UIColor colorWithRed:210.0/255 green:202.0/255 blue:187.0/255 alpha:1]

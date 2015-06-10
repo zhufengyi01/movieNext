@@ -133,23 +133,21 @@
             //管理员
             if (weakSelf.pageType==NSStagePapeTypeAdmin_New_Add) {
                 //最新添加
-                UIActionSheet  *al =[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"确定" destructiveButtonTitle:nil otherButtonTitles:@"[发送到 “发现”]",@"[发送到 “屏蔽”]", nil];
+                UIActionSheet  *al =[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"确定" destructiveButtonTitle:nil otherButtonTitles:@"[发送到 “发现”]",@"[发送到 “屏蔽”]",@"发送到  [ “热门” ]", nil];
                 al.tag=ADM_NEW_ADD;
                 [al showInView:weakSelf.view];
-                
             }
             else if (weakSelf.pageType==NSStagePapeTypeAdmin_Close_Weibo)
             {
                 //屏蔽的微博
-                UIActionSheet  *al =[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"确定" destructiveButtonTitle:nil otherButtonTitles:@"[发送到 “最新” ]", nil];
+                UIActionSheet  *al =[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"确定" destructiveButtonTitle:nil otherButtonTitles:@"[发送到 “最新” ]",@"发送到  [ “热门” ]", nil];
                 al.tag=ADM_CLOSE_STAGE;
                 [al showInView:weakSelf.view];
-                
             }
             else if (weakSelf.pageType==NSStagePapeTypeAdmin_Dscorver)
             {
                 //发现
-                UIActionSheet  *al =[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"确定" destructiveButtonTitle:nil otherButtonTitles:@"[发送到 “推荐” ]", nil];
+                UIActionSheet  *al =[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"确定" destructiveButtonTitle:nil otherButtonTitles:@"[发送到 “热门” ]", nil];
                 al.tag=ADM_DSCORVER;
                 [al showInView:weakSelf.view];
 
@@ -434,7 +432,6 @@
     CGRect bRect = BgView.frame;
     
     BgView.frame=CGRectMake(BgView.frame.origin.x, BgView.frame.origin.y,kDeviceWidth,bRect.size.height+TagContentView.frame.size.height);
-   
     
 }
 #pragma mark 星星点赞方法
@@ -1195,13 +1192,20 @@
          //屏蔽
             [self requestDelectDataWithweiboId:[NSString stringWithFormat:@"%@",_WeiboInfo.Id] WithremoveType:@"1"];
         }
+        else if (buttonIndex==2)
+        {
+          [self requestChangeStageStatusWithweiboId:[NSString stringWithFormat:@"%@",_WeiboInfo.Id] StatusType:@"3"];
+        }
     }
     else if (actionSheet.tag==ADM_CLOSE_STAGE)
     {
         if (buttonIndex==0) {
             //发送到最新
             [self requestChangeStageStatusWithweiboId:[NSString stringWithFormat:@"%@",_WeiboInfo.Id] StatusType:@"1"];
-            
+        }else if (buttonIndex==1)
+        {
+            [self requestChangeStageStatusWithweiboId:[NSString stringWithFormat:@"%@",_WeiboInfo.Id] StatusType:@"3"];
+   
         }
     }
     else if(actionSheet.tag==ADM_DSCORVER)
@@ -1210,7 +1214,7 @@
         if (buttonIndex==0) {
             [self requestChangeStageStatusWithweiboId:[NSString stringWithFormat:@"%@",_WeiboInfo.Id] StatusType:@"3"];
         }
-    }
+     }
     else if (actionSheet.tag==ADM_RECOMMEND)
     {
         //移动到发现
