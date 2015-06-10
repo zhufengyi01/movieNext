@@ -19,6 +19,7 @@
 {
     [super viewWillAppear:animated];
     self.tabBarController.tabBar.hidden=YES;
+    // test
     //下面透明度的设置，效果是设置了导航条的高度的多少倍，不是透明度多少
 //    self.navigationController.navigationBar.alpha=1;
     //设置半透明。
