@@ -1,4 +1,5 @@
 //
+//  剧照/截图页面
 //  ShowSelectPhotoViewController.h
 //  movienext
 //
@@ -11,7 +12,6 @@
 @interface ShowSelectPhotoViewController : RootViewController
 
 @property (nonatomic,strong) NSString  *douban_id;
-
 
 @property(nonatomic,strong) NSString  *movie_id;
 

@@ -11,8 +11,6 @@
 #import "LoginViewController.h"
 //导入网络框架
 #import "AFNetworking.h"
-//导入HUD框架
-//#import "SVProgressHUD.h"
 //导入友盟
 #import "MobClick.h"
 #import "UserDataCenter.h"

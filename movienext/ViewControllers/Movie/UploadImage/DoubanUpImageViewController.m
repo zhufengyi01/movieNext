@@ -67,26 +67,27 @@
   
 
     [imageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",self.photourl]] placeholderImage:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-//        CGSize  Isize=imageView.image.size;
-//        float x=0;
-//        float y=0;
-//        float width=0;
-//        float hight=0;
-//        if (Isize.width>Isize.height) {
-//            x=0;
-//            width=kDeviceWidth;
-//            hight=(Isize.height/Isize.width)*kDeviceWidth;
-//            y=(kDeviceWidth-hight)/2;
-//        }
-//        else
-//        {
-//            y=0;
-//            hight=kDeviceWidth;
-//            width=(Isize.width/Isize.height)*kDeviceWidth;
-//            x=(kDeviceWidth-width)/2;
-//        }
-        float  height = kDeviceWidth*(9.0/16);
-        imageView.frame=CGRectMake(0,(kDeviceHeight-height-kHeightNavigation)/2,kDeviceWidth,kDeviceWidth*(9.0/16));
+        CGSize  Isize=image.size;
+        float x=0;
+        float y=0;
+        float width=0;
+        float hight=0;
+        if (Isize.width>Isize.height) {
+            x=0;
+            width=kDeviceWidth;
+            hight=(Isize.height/Isize.width)*kDeviceWidth;
+            y=(kDeviceWidth-hight)/2;
+        }
+        else
+        {
+            y=0;
+            hight=kDeviceWidth;
+            width=(Isize.width/Isize.height)*kDeviceWidth;
+            x=(kDeviceWidth-width)/2;
+        }
+        imageView.frame=CGRectMake((kDeviceWidth-width)/2,(kDeviceHeight-hight)/2,width,hight);
+//        float  height = kDeviceWidth*(9.0/16);
+//        imageView.frame=CGRectMake(0,(kDeviceHeight-height-kHeightNavigation)/2,kDeviceWidth,kDeviceWidth*(9.0/16));
     }];
     
     [bgView addSubview:imageView];
