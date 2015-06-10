@@ -46,6 +46,8 @@
 #import "ShowSelectPhotoViewController.h"
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
+static const CGFloat MJDuration = 0.2;
+
 @interface MovieDetailViewController ()<UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UICollectionViewDelegate,MovieHeadViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UMSocialUIDelegate,UMSocialDataDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIScrollViewDelegate,BigImageCollectionViewCellDelegate,AddMarkViewControllerDelegate,UMShareViewControllerDelegate,UMShareViewController2Delegate,MFMailComposeViewControllerDelegate,LoadingViewDelegate,TagViewDelegate>
 
 {
@@ -94,7 +96,7 @@
   ///  self.navigationController.navigationBar.alpha=0.4;
     self.navigationController.navigationBar.hidden=NO;
     self.tabBarController.tabBar.hidden=YES;
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(requestMovieData) name:@"RefreshMovieDeatail" object:nil];
+  //  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(requestMovieData) name:@"RefreshMovieDeatail" object:nil];
 
 
 }
@@ -105,15 +107,15 @@
 
 
 }
--(void)requestMovieData
-{
-    page=1;
-    if (_dataArray.count >0) {
-        [_dataArray removeAllObjects];
-    }
-    [self requestData];
-    
-}
+//-(void)requestMovieData
+//{
+//    page=1;
+//    if (_dataArray.count >0) {
+//        [_dataArray removeAllObjects];
+//    }
+//    [self requestData];
+//    
+//}
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -129,7 +131,7 @@
     {
         // 从电影列表页进来的
         page=1;
-        [self requestData];
+        //[self requestData];
     }
     else if (self.pageSourceType ==NSMovieSourcePageAdminCloseStageViewController)
     {
@@ -201,7 +203,6 @@
 //    [upLoadimageBtn setImage:[UIImage imageNamed:@"up_picture_blue.png"] forState:UIControlStateNormal];
     UIBarButtonItem  *rigthbar =[[UIBarButtonItem alloc]initWithCustomView:upLoadimageBtn];
     self.navigationItem.rightBarButtonItem=rigthbar;
-    
 }
 
 -(void)uploadImageFromAbumdAndDouban
@@ -325,11 +326,86 @@
     _myConllectionView.dataSource=self;
     
     [self.view addSubview:_myConllectionView];
-    
-   [self setupHeadView];
-    [self setupFootView];
+    [self setUprefresh];
+//   [self setupHeadView];
+//    [self setupFootView];
 }
 
+
+- (void)setUprefresh
+{
+    __weak typeof(self) weakSelf = self;
+    
+    // 下拉刷新
+    [self.myConllectionView addLegendHeaderWithRefreshingBlock:^{
+        // 增加5条假数据
+        /*for (int i = 0; i<10; i++) {
+         [weakSelf.colors insertObject:MJRandomColor atIndex:0];
+         }*/
+        page=1;
+        if (weakSelf.dataArray.count>0) {
+            [weakSelf.dataArray removeAllObjects];
+        }
+        // 进入刷新状态就会回调这个Block
+        [weakSelf requestData];
+        // 设置文字
+        [weakSelf.myConllectionView.header setTitle:@"下拉刷新..." forState:MJRefreshHeaderStateIdle];
+        [weakSelf.myConllectionView.header setTitle:@"释放刷新..." forState:MJRefreshHeaderStatePulling];
+        [weakSelf.myConllectionView.header setTitle:@"正在刷新..." forState:MJRefreshHeaderStateRefreshing];
+        //隐藏时间
+        weakSelf.myConllectionView.header.updatedTimeHidden=YES;
+        
+        // 设置字体
+        //weakSelf.myConllectionView.header.font = [UIFont systemFontOfSize:12];
+        
+        // 设置颜色
+        // weakSelf.myConllectionView.header.textColor = VGray_color;
+        // 模拟延迟加载数据，因此2秒后才调用（真实开发中，可以移除这段gcd代码）
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(MJDuration * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [weakSelf.myConllectionView reloadData];
+            
+            // 结束刷新
+            [weakSelf.myConllectionView.header endRefreshing];
+        });
+    }];
+    [self.myConllectionView.header beginRefreshing];
+    
+    // 上拉刷新
+    [self.myConllectionView addLegendFooterWithRefreshingBlock:^{
+        // 增加5条假数据
+        /*for (int i = 0; i<5; i++) {
+         [weakSelf.colors addObject:MJRandomColor];
+         }*/
+        // 进入刷新状态就会回调这个Block
+        if (pageCount>page) {
+            page=page+1;
+            [weakSelf requestData];
+        }
+        // 设置文字
+        [weakSelf.myConllectionView.footer setTitle:@"点击加载更多..." forState:MJRefreshFooterStateIdle];
+        [weakSelf.myConllectionView.footer setTitle:@"加载更多..." forState:MJRefreshFooterStateRefreshing];
+        [weakSelf.myConllectionView.footer setTitle:@"THE END" forState:MJRefreshFooterStateNoMoreData];
+        
+        // 设置字体
+        // weakSelf.myConllectionView.footer.font = [UIFont systemFontOfSize:12];
+        
+        // 设置颜色
+        //weakSelf.myConllectionView.footer.textColor = VGray_color;
+                // 模拟延迟加载数据，因此2秒后才调用（真实开发中，可以移除这段gcd代码）
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(MJDuration * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [weakSelf.myConllectionView reloadData];
+            
+            // 结束刷新
+            [weakSelf.myConllectionView.footer endRefreshing];
+        });
+    }];
+    // 默认先隐藏footer
+    // self.myConllectionView.footer.hidden = YES;
+}
+
+
+
+/*
 - (void)setupHeadView
 {
     
@@ -373,7 +449,7 @@
         });
     }];
 }
-
+*/
 -(void)creatLoadView
 {
     loadView =[[LoadingView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight)];
@@ -613,8 +689,7 @@
         if (movie_id && [movie_id intValue]>0) {
             self.movieId = movie_id;
         }
-         //[self requestTagList];
-            [self requestData];
+            // [self requestData];
          }
 
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -731,8 +806,10 @@
                 
                 movieInfoModel  *moviemodel =[[movieInfoModel alloc]init];
                 if (moviemodel) {
-                    [moviemodel setValuesForKeysWithDictionary:[stageDict objectForKey:@"movie"]];
-                    stagemodel.movieInfo=moviemodel;
+                    if (![[stageDict objectForKey:@"movie"] isKindOfClass:[NSNull class]]) {
+                        [moviemodel setValuesForKeysWithDictionary:[stageDict objectForKey:@"movie"]];
+                        stagemodel.movieInfo=moviemodel;
+                    }
                 
                 }
                 if (_dataArray==nil) {
@@ -872,7 +949,7 @@
          stageInfoModel *stagemodel=[_dataArray objectAtIndex:indexPath.row];
          vc.upweiboArray=_upWeiboArray;
          vc.stageInfo = stagemodel;
-         
+         vc.pageType=NSStagePapeTypeStageList;
           UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
          self.navigationItem.backBarButtonItem=item;
         [self.navigationController pushViewController:vc animated:YES];

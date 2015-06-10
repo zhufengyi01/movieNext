@@ -9,7 +9,7 @@
 #import "ShowStageViewController.h"
 #import "StageView.h"
 #import "StageInfoModel.h"
-
+#import "UIButton+Block.h"
 #import "ZCControl.h"
 #import "Constant.h"
 #import "AddMarkViewController.h"
@@ -32,6 +32,17 @@
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
 #import "M80AttributedLabel.h"
+#define ADM_ACTION_TAG    1000   //管理管弹出框
+
+#define ADM_NEW_ADD       1003
+#define ADM_CLOSE_STAGE   1004
+#define ADM_DSCORVER      1005
+#define ADM_RECOMMEND     1006
+
+#define CUS_ACTION_TAG   1001   //普通用户弹出框
+#define CUSSEFT_ACTION_TAG   1002  //普通用户自己的页弹出框
+
+
 @interface ShowStageViewController() <ButtomToolViewDelegate,StageViewDelegate,AddMarkViewControllerDelegate,UMShareViewControllerDelegate,UMSocialDataDelegate,UMSocialUIDelegate,UIActionSheetDelegate,UMShareViewController2Delegate,UMShareViewDelegate,TagViewDelegate,UIAlertViewDelegate>
 {
     ButtomToolView *_toolBar;
@@ -87,14 +98,20 @@
     [self createNav];
      [self createScrollView];
      [self createStageView];
-    if (!self.stageInfo.weibosArray) {
+    if (self.stageInfo.weibosArray.count>0) {
+        _WeiboInfo=[self.stageInfo.weibosArray objectAtIndex:0];
+    }
+    else
+    {
         _WeiboInfo=self.weiboInfo;
     }
+
     [self createShareToolBar];
-    
 }
 -(void)createNav
 {
+    __weak typeof(self) weakSelf = self;
+
     NSString  *titleString =[Function htmlString: self.stageInfo.movieInfo.name ];
     UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 30) Font:30 Text:titleString];
     titleLable.textColor=VBlue_color;
@@ -102,17 +119,86 @@
     titleLable.textColor=VGray_color;
     titleLable.textAlignment=NSTextAlignmentCenter;
     self.navigationItem.titleView=titleLable;
-    
+    UserDataCenter  *usecenter =[UserDataCenter shareInstance];
+        UIButton  *admOper =[UIButton buttonWithType:UIButtonTypeCustom];
+        admOper.frame=CGRectMake(0, 0, 30, 25);
+        admOper.hidden=YES;
+       [admOper setTitleColor:VGray_color forState:UIControlStateNormal];
+       [admOper setTitle:@"管" forState:UIControlStateNormal];
+       //[admOper setImage:[UIImage imageNamed:@"three_points"] forState:UIControlStateNormal];
+        [admOper  addActionHandler:^(NSInteger tag) {
+            //管理员
+            if (weakSelf.pageType==NSStagePapeTypeAdmin_New_Add) {
+                //最新添加
+                UIActionSheet  *al =[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"确定" destructiveButtonTitle:nil otherButtonTitles:@"[发送到 “发现”]",@"[发送到 “屏蔽”]", nil];
+                al.tag=ADM_NEW_ADD;
+                [al showInView:weakSelf.view];
+                
+            }
+            else if (weakSelf.pageType==NSStagePapeTypeAdmin_Close_Weibo)
+            {
+                //屏蔽的微博
+                UIActionSheet  *al =[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"确定" destructiveButtonTitle:nil otherButtonTitles:@"[发送到 “最新” ]", nil];
+                al.tag=ADM_CLOSE_STAGE;
+                [al showInView:weakSelf.view];
+
+                
+            }
+            else if (weakSelf.pageType==NSStagePapeTypeAdmin_Dscorver)
+            {
+                //发现
+                UIActionSheet  *al =[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"确定" destructiveButtonTitle:nil otherButtonTitles:@"[发送到 “推荐” ]", nil];
+                al.tag=ADM_DSCORVER;
+                [al showInView:weakSelf.view];
+
+                
+            }
+            else if (weakSelf.pageType==NSStagePapeTypeAdmin_Recommed)
+            {
+                // 推荐
+                
+            }
+            else {
+            UIActionSheet  *Act=[[UIActionSheet alloc]initWithTitle:nil delegate:weakSelf cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"[切换剧照到审核/正式版]",@"[编辑弹幕]",@"[屏蔽弹幕]",@"[点赞]",@"[点踩]",nil];
+            Act.tag=ADM_ACTION_TAG;
+            [Act showInView:weakSelf.view];
+            }
+        }];
+        UIBarButtonItem  *aditme =[[UIBarButtonItem alloc]initWithCustomView:admOper];
     //更多
-    moreButton=[ZCControl createButtonWithFrame:CGRectMake(kStageWidth-135, 9, 30, 25) ImageName:nil Target:self Action:@selector(NavigationButtonClick:) Title:@""];
+    //moreButton=[ZCControl createButtonWithFrame:CGRectMake(kStageWidth-135, 9, 30, 25) ImageName:nil Target:self Action:@selector(NavigationButtonClick:) Title:@""];
+    moreButton =[UIButton buttonWithType:UIButtonTypeCustom];
+    moreButton.frame=CGRectMake(0, 0, 30, 25);
     [moreButton setImage:[UIImage imageNamed:@"three_points"] forState:UIControlStateNormal];
-    //moreButton.backgroundColor=VBlue_color;
-    //moreButton.backgroundColor =[UIColor redColor];
-    moreButton.imageEdgeInsets=UIEdgeInsetsMake(0, 10, 0, -10);
-    moreButton.layer.cornerRadius=2;
+     moreButton.imageEdgeInsets=UIEdgeInsetsMake(0, 10, 0, -10);
+    [moreButton addActionHandler:^(NSInteger tag) {
+       // UserDataCenter  *userCenter =[UserDataCenter shareInstance];
+        //点击了更多
+            if (self.pageType==NSStagePapeTypeMyAdd) {
+                UIActionSheet  *Act=[[UIActionSheet alloc]initWithTitle:nil delegate:weakSelf cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"删除卡片",nil];
+                Act.tag=CUSSEFT_ACTION_TAG;
+                [Act showInView:weakSelf.view];
+            }
+            else
+            {
+                UIActionSheet  *Act=[[UIActionSheet alloc]initWithTitle:nil delegate:weakSelf cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"内容投诉",@"版权投诉",@"图片信息",nil];
+                Act.tag=CUS_ACTION_TAG;
+                [Act showInView:weakSelf.view];
+            }
+    }];
+    if ([usecenter.is_admin intValue] >0) {
+        admOper.hidden=NO;
+    }
+    //隐藏该隐藏的地方
+    if (self.pageType==NSStagePapeTypeAdmin_Close_Weibo||self.pageType==NSStagePapeTypeAdmin_Dscorver||self.pageType==NSStagePapeTypeAdmin_New_Add||self.pageType==NSStagePapeTypeAdmin_Recommed) {
+        moreButton.hidden=YES;
+    }
+
     [moreButton setTitleColor:VGray_color forState:UIControlStateNormal];
     UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithCustomView:moreButton];
-         self.navigationItem.rightBarButtonItem=item;
+    self.navigationItem.rightBarButtonItems =@[item,aditme];
+    
+    
 }
 -(void)createScrollView
 {
@@ -560,6 +646,25 @@
 
 #pragma  mark  ----RequestData
 #pragma  mark  ---
+//status为2是移到发现/电影页, status为3是移到推荐页
+-(void)requestChangeStageStatusWithweiboId:(NSString *)weiboId StatusType:(NSString *) status
+{
+    UserDataCenter  *userCenter=[UserDataCenter shareInstance];
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    NSDictionary *parameters=@{@"user_id":userCenter.user_id,@"weibo_id":weiboId,@"status":status};
+    
+    [manager POST:[NSString stringWithFormat:@"%@/weibo/change-status", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
+            UIAlertView  * al =[[UIAlertView alloc]initWithTitle:nil message:@"操作成功" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            [al show];
+            //请求点赞
+            
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+}
+
 
 //管理员用户的点赞和点踩
 -(void)requestUpAndDownWithDeretion:(NSString *)direction;
@@ -623,8 +728,6 @@
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
-    
-
 }
 //屏幕剧照
 -(void)requestRemoveStage:(NSString *) type
@@ -719,8 +822,7 @@
 {
     // NSString *type=@"1";
     UserDataCenter *userCenter =[UserDataCenter shareInstance];
-    NSDictionary *parameters = @{@"reported_user_id":_TweiboInfo.uerInfo.Id,@"weibo_id":_TweiboInfo.Id,@"reason":@"",@"user_id":userCenter.user_id};
-    
+    NSDictionary *parameters = @{@"reported_user_id":_WeiboInfo.uerInfo.Id,@"weibo_id":_WeiboInfo.Id,@"reason":@"",@"user_id":userCenter.user_id};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:[NSString stringWithFormat:@"%@/report-weibo/create", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
@@ -784,7 +886,7 @@
     [manager POST:[NSString stringWithFormat:@"%@/weibo/remove", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
             NSLog(@"删除数据成功=======%@",responseObject);
-            UIAlertView  *Al=[[UIAlertView alloc]initWithTitle:nil message:@"删除成功" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            UIAlertView  *Al=[[UIAlertView alloc]initWithTitle:nil message:@"屏蔽成功" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
             Al.tag=3000;
             [Al show];
             
@@ -878,7 +980,7 @@
 //跳转到个人页
 -(void)StageMovieButtonClick:(UIButton *) button
 {
- 
+
     MyViewController  *myVC=[[MyViewController alloc]init];
     weiboInfoModel *model = [self.stageInfo.weibosArray objectAtIndex:0];
     if (self.weiboInfo) {
@@ -922,33 +1024,7 @@
      UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:AddMarkVC];
     [self.navigationController presentViewController:na animated:NO completion:nil];
 }
--(void)NavigationButtonClick:(UIButton  *) button
-{
-     UserDataCenter  *userCenter =[UserDataCenter shareInstance];
-    //点击了更多
-    if ([userCenter.is_admin intValue]>0) {
-        UIActionSheet  *Act=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"内容投诉",@"版权投诉",@"图片信息",@"[切换剧照到审核/正式版]",@"[屏蔽剧照]",@"[编辑弹幕]",@"[屏蔽弹幕]",@"[恢复剧照]",@"[点赞]",@"[点踩]",nil];
-        Act.tag=507;
-        [Act showInView:Act];
-    }
-    else
-    {
-        if (self.pageType==NSStagePapeTypeMyAdd) {
-            UIActionSheet  *Act=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"删除卡片",nil];
-            Act.tag=800;
-            [Act showInView:Act];
-        }
-        else
-        {
-        UIActionSheet  *Act=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"内容投诉",@"版权投诉",@"图片信息",nil];
-        Act.tag=507;
-        [Act showInView:Act];
-        }
-    }
-    
 
-
-}
 #pragma  mark -------AddMarkViewControllerReturn  --Delegete-------------
 -(void)AddMarkViewControllerReturn
 {
@@ -958,7 +1034,7 @@
 #pragma mark  -----
 #pragma mark  ---//点击了弹幕StaegViewDelegate
 #pragma mark  ----
--(void)StageViewHandClickMark:(weiboInfoModel *)weiboDict withmarkView:(id)markView StageInfoDict:(stageInfoModel *)stageInfoDict
+/*-(void)StageViewHandClickMark:(weiboInfoModel *)weiboDict withmarkView:(id)markView StageInfoDict:(stageInfoModel *)stageInfoDict
 {
     //获取markview的指针
     MarkView   *mv=(MarkView *)markView;
@@ -996,13 +1072,11 @@
             [_toolBar removeFromSuperview];
         }
     }
-    
-    
-}
+}*/
 #pragma mark   ------
 #pragma mark   -------- ButtomToolViewDelegate
 #pragma  mark  -------
--(void)ToolViewHandClick:(UIButton *)button :(MarkView *)markView weiboDict:(weiboInfoModel *)weiboDict StageInfo:(stageInfoModel *)stageInfoDict
+/*-(void)ToolViewHandClick:(UIButton *)button :(MarkView *)markView weiboDict:(weiboInfoModel *)weiboDict StageInfo:(stageInfoModel *)stageInfoDict
 {
     UserDataCenter  *userCenter=[UserDataCenter shareInstance];
     
@@ -1095,7 +1169,7 @@
 
         }
     }
-}
+}*/
 -(void)ToolViewTagHandClickTagView:(TagView *)tagView withweiboinfo:(weiboInfoModel *)weiboInfo WithTagInfo:(TagModel *)tagInfo
 {
     
@@ -1114,7 +1188,7 @@
 }
 -(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    if (actionSheet.tag==500) {
+   /* if (actionSheet.tag==500) {
         if (buttonIndex==0) {
             //删除
             [self requestDelectDataWithweiboId:[NSString stringWithFormat:@"%@",_TweiboInfo.Id] WithremoveType:@"1"];
@@ -1233,6 +1307,105 @@
         [self requestDelectDataWithweiboId:weibo_id WithremoveType:@"0"];
         }
         
+    }*/
+    if (actionSheet.tag==ADM_ACTION_TAG) {
+        //管理员的
+        if (buttonIndex==0) {
+          //切换剧照到审核版
+            NSString  *stageId;
+            // stageInfoModel *model=[_dataArray objectAtIndex:Rowindex];
+            stageId=[NSString stringWithFormat:@"%@",self.stageInfo.Id];
+            //移动到审核版或者正常
+            [self requestmoveReviewToNormal:stageId];
+            
+        }
+     
+        else if (buttonIndex==1)
+        {
+            // 编辑弹幕
+            //弹幕编辑
+            AddMarkViewController  *AddMarkVC=[[AddMarkViewController alloc]init];
+            AddMarkVC.stageInfo=self.stageInfo;
+            AddMarkVC.weiboInfo=_TweiboInfo;
+            AddMarkVC.delegate=self;
+            [self presentViewController:AddMarkVC animated:NO completion:nil];
+
+            
+        }else if (buttonIndex==2)
+        {
+            // 屏蔽弹幕
+            NSString *weibo_id =[NSString stringWithFormat:@"%@",_WeiboInfo.Id];
+            [self requestDelectDataWithweiboId:weibo_id WithremoveType:@"1"];
+        }
+        else if (buttonIndex==3)
+        {
+            //点赞
+            [self requestUpAndDownWithDeretion:@"up"];
+
+        }
+        else if (buttonIndex==4)
+        {
+            // 踩
+            [self requestUpAndDownWithDeretion:@"down"];
+
+        }
+    }
+    else if (actionSheet.tag==CUS_ACTION_TAG)
+    {
+     //普通用户
+        if (buttonIndex==0) {
+            //确认举报
+            [self requestReportweibo];
+        }else if (buttonIndex==1)
+        {
+            //版权投诉
+            [self sendFeedBackWithStageInfo:self.stageInfo];
+            
+        }else if(buttonIndex==2)
+        {
+            //图片信息
+            ScanMovieInfoViewController * scanvc =[ScanMovieInfoViewController new];
+            scanvc.stageInfo=self.stageInfo;
+            [self presentViewController:scanvc animated:YES completion:nil];
+        }
+        
+    }
+    else if (actionSheet.tag==CUSSEFT_ACTION_TAG)
+    {
+        //普通用户自己删除
+        if(buttonIndex==0)
+        {
+            NSString *weibo_id =[NSString stringWithFormat:@"%@",_WeiboInfo.Id];
+            [self requestDelectDataWithweiboId:weibo_id WithremoveType:@"0"];
+        }
+    }
+    else if (actionSheet.tag==ADM_NEW_ADD)
+    {
+        //发送到发现
+        if (buttonIndex==0) {
+            [self requestChangeStageStatusWithweiboId:[NSString stringWithFormat:@"%@",_WeiboInfo.Id] StatusType:@"2"];
+        }
+        else if (buttonIndex==1)
+        {
+         //屏蔽
+            [self requestDelectDataWithweiboId:[NSString stringWithFormat:@"%@",_WeiboInfo.Id] WithremoveType:@"1"];
+        }
+    }
+    else if (actionSheet.tag==ADM_CLOSE_STAGE)
+    {
+        if (buttonIndex==0) {
+            //发送到最新
+            [self requestChangeStageStatusWithweiboId:[NSString stringWithFormat:@"%@",_WeiboInfo.Id] StatusType:@"1"];
+            
+        }
+    }
+    else if(actionSheet.tag==ADM_DSCORVER)
+    {
+        //发送到推荐
+        if (buttonIndex==0) {
+            [self requestChangeStageStatusWithweiboId:[NSString stringWithFormat:@"%@",_WeiboInfo.Id] StatusType:@"3"];
+        }
+
     }
 }
 

@@ -25,15 +25,19 @@
 #import "MJRefresh.h"
 #import "userAddmodel.h"
 #import "ShowStageViewController.h"
+static const CGFloat MJDuration = 1.0;
+
 @interface NotificationViewController ()<UITableViewDataSource,UITableViewDelegate,LoadingViewDelegate,NotificationTableViewCellDelegate>
 {
     LoadingView         *loadView;
-    UITableView         *_myTableView;
+    //UITableView         *_myTableView;
     NSMutableArray      *_dataArray;
     int page;
     int pageSize;
     int pageCount;
 }
+
+@property(nonatomic,strong) UITableView   *myTableView;
 @end
 
 @implementation NotificationViewController
@@ -44,16 +48,16 @@
     self.navigationController.navigationBar.alpha=1;
     self.tabBarController.tabBar.hidden=NO;
     
-    [[NSNotificationCenter defaultCenter]  addObserver:self selector:@selector(changeUser) name:@"initUser" object:nil];
+//    [[NSNotificationCenter defaultCenter]  addObserver:self selector:@selector(changeUser) name:@"initUser" object:nil];
  
 
 }
--(void)changeUser
+/*-(void)changeUser
 {
     if (_myTableView) {
         [self headerRereshing];
     }
-}
+}*/
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -69,14 +73,14 @@
     [self initData];
     [self initUI];
      [self creatLoadView];
-    //[self requestData];
+    [self requestData];
     
 }
 -(void)creatLoadView
 {
     loadView =[[LoadingView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight)];
     loadView.delegate=self;
-    [self.view addSubview:loadView];
+    [self.myTableView addSubview:loadView];
     
 }
 -(void)initData
@@ -94,9 +98,10 @@
     _myTableView.backgroundColor=[UIColor whiteColor];
     //_myTableView.separatorInset=UIEdgeInsetsMake(0, -110, 0, 0);
     [self.view addSubview:_myTableView];
-    [self tablefootView];
-    //集成mjrefresh
-    [self setupRefresh];
+     [self tablefootView];
+    
+     //集成mjrefresh
+    [self steupRefresh];
     /**
      *  集成刷新控件
      */
@@ -107,49 +112,88 @@
     footView.backgroundColor=[UIColor clearColor];
     [_myTableView setTableFooterView:footView];
 }
--(void)setupRefresh
+- (void)steupRefresh
 {
-        // 1.下拉刷新(进入刷新状态就会调用self的headerRereshing)
-        [_myTableView addHeaderWithTarget:self action:@selector(headerRereshing)];
-    //  #warning 自动刷新(一进入程序就下拉刷新)
-        [_myTableView headerBeginRefreshing];
-        // 2.上拉加载更多(进入刷新状态就会调用self的footerRereshing)
-        [_myTableView addFooterWithTarget:self action:@selector(footerRereshing)];
+    // 添加传统的下拉刷新
+    // 设置回调（一旦进入刷新状态，就调用target的action，也就是调用self的loadNewData方法）
+    [self.myTableView addLegendHeaderWithRefreshingTarget:self refreshingAction:@selector(loadNewData)];
+    
+    // 设置文字
+    [self.myTableView.header setTitle:@"下拉刷新..." forState:MJRefreshHeaderStateIdle];
+    [self.myTableView.header setTitle:@"释放刷新..." forState:MJRefreshHeaderStatePulling];
+    [self.myTableView.header setTitle:@"正在刷新..." forState:MJRefreshHeaderStateRefreshing];
+    //隐藏时间
+    self.myTableView.header.updatedTimeHidden=YES;
+    
+    // 设置字体
+    self.myTableView.header.font = [UIFont systemFontOfSize:12];
+    
+    // 设置颜色
+    self.myTableView.header.textColor = VGray_color;
+    
+    // 马上进入刷新状态
+   // [self.myTableView.header beginRefreshing];
+    
+    // 此时self.tableView.header == self.tableView.legendHeader
+
+
+#pragma mark UITableView + 上拉刷新 自定义文字
+    // 添加传统的上拉刷新
+    // 设置回调（一旦进入刷新状态，就调用target的action，也就是调用self的loadMoreData方法）
+    [self.myTableView addLegendFooterWithRefreshingTarget:self refreshingAction:@selector(loadMoreData)];
+    
+    // 设置文字
+    [self.myTableView.footer setTitle:@"点击加载更多..." forState:MJRefreshFooterStateIdle];
+    [self.myTableView.footer setTitle:@"加载更多..." forState:MJRefreshFooterStateRefreshing];
+    [self.myTableView.footer setTitle:@"THE END" forState:MJRefreshFooterStateNoMoreData];
+    
+    // 设置字体
+    self.myTableView.footer.font = [UIFont systemFontOfSize:12];
+    
+    // 设置颜色
+    self.myTableView.footer.textColor = VGray_color;
+    
+    // 此时self.tableView.footer == self.tableView.legendFooter
 }
-#pragma mark 开始进入刷新状态
-- (void)headerRereshing
+//下拉刷新
+-(void)loadNewData
 {
+    
+    [self.myTableView.footer resetNoMoreData];
     page=1;
     if (_dataArray.count>0) {
         [_dataArray removeAllObjects];
     }
     
     [self requestData];
-    // 2.2秒后刷新表格UI
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        // 刷新表格
-        //[_myTableView reloadData];
-        // (最好在刷新表格后调用)调用endRefreshing可以结束刷新状态
-        [_myTableView headerEndRefreshing];
-    });
-}
 
-- (void)footerRereshing
-{
-    if (pageCount>page) {
-    page++;
-    [self  requestData];
-    }
-    // 2.2秒后刷新表格UI
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    // 2.模拟2秒后刷新表格UI（真实开发中，可以移除这段gcd代码）
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(MJDuration * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         // 刷新表格
-        //[_myTableView reloadData];
+        [self.myTableView reloadData];
         
-        // (最好在刷新表格后调用)调用endRefreshing可以结束刷新状态
-        [_myTableView footerEndRefreshing];
+        // 拿到当前的下拉刷新控件，结束刷新状态
+        [self.myTableView.header endRefreshing];
     });
 }
+// 加载更多
+-(void)loadMoreData
+{
+    
+    if (pageCount>page) {
+        page++;
+        [self  requestData];
+    }
 
+    // 2.模拟2秒后刷新表格UI（真实开发中，可以移除这段gcd代码）
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(MJDuration * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        // 刷新表格
+        [self.myTableView reloadData];
+        
+        // 拿到当前的上拉刷新控件，结束刷新状态
+        [self.myTableView.footer endRefreshing];
+    });
+}
 
 -(void)requestData
 {
@@ -163,6 +207,12 @@
             if (_dataArray==nil) {
                 _dataArray=[[NSMutableArray alloc]init];
             }
+            pageCount=[[responseObject objectForKey:@"pageCount"] intValue];
+            if (page==pageCount) {
+                [self.myTableView.footer noticeNoMoreData];
+                [self.myTableView.footer setTextColor:VLight_GrayColor];
+            }
+            
             //解析数据[_dataArray addObjectsFromArray:[responseObject objectForKey:@"models"]];
             NSMutableArray  *array =[[NSMutableArray alloc]initWithArray:[responseObject objectForKey:@"models"]];
             
