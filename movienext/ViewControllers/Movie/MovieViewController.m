@@ -33,7 +33,11 @@
 #import "ShowStageViewController.h"
 //#import "SearchMovieViewController.h"
 #define  BUTTON_COUNT  3
-static const CGFloat MJDuration = 0.1;
+#define  NaviTitle_Width  160
+#define  NaviTitle_Height 40
+#define  Lable_Line_Height 2
+
+static const CGFloat MJDuration = 0.4;
 
 
 @interface MovieViewController ()<UISearchBarDelegate,UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout,LoadingViewDelegate,MovieCollectionViewCellDelegate,UIActionSheetDelegate>
@@ -49,7 +53,6 @@ static const CGFloat MJDuration = 0.1;
     int pageCount1;
     int pageCount2;
     int pageCount3;
-    
     NSInteger Rowindex;
 }
 @property(nonatomic,strong) UIScrollView   *myScorollerView;
@@ -57,6 +60,13 @@ static const CGFloat MJDuration = 0.1;
 @property(nonatomic,strong) UIView *RecommentView;   //推荐
 
 @property(nonatomic,strong)UIView  *feedView;     //电影
+
+@property(nonatomic,strong) UIButton  *recommentBtn;  //推荐按钮
+
+@property(nonatomic,strong) UIButton  *feedBtn;
+
+@property(nonatomic,strong)UILabel  *nav_line_lable;
+
 @end
 
 @implementation MovieViewController
@@ -114,8 +124,42 @@ static const CGFloat MJDuration = 0.1;
             [self.navigationController pushViewController:[AdmListViewController new] animated:YES];
         }];
     }
+    UIView *naviTitleView=[[UIView alloc]initWithFrame:CGRectMake(0, 0, NaviTitle_Width, NaviTitle_Height)];
+    //naviTitleView.backgroundColor =[UIColor yellowColor];
+    naviTitleView.userInteractionEnabled=YES;
+    self.navigationItem.titleView=naviTitleView;
    //创建两个按钮  //推荐和电影
+    self.recommentBtn =[UIButton buttonWithType:UIButtonTypeCustom];
+    self.recommentBtn.frame=CGRectMake(0, 0, NaviTitle_Width/2, NaviTitle_Height);
+    [self.recommentBtn setTitle:@"热门" forState:UIControlStateNormal];
+    [self.recommentBtn.titleLabel setFont:[UIFont systemFontOfSize:16]];
+    [self.recommentBtn setTitleColor:VLight_GrayColor forState:UIControlStateNormal];
+    [self.recommentBtn setTitleColor:VBlue_color forState:UIControlStateSelected];
+    self.recommentBtn.selected=YES;
+    //self.recommentBtn.backgroundColor =[UIColor redColor];
+    __weak typeof(self) weakSelf = self;
     
+    [self.recommentBtn addActionHandler:^(NSInteger tag) {
+        [weakSelf.myScorollerView setContentOffset:CGPointMake(0, 0) animated:YES];
+    }];
+    [naviTitleView addSubview:self.recommentBtn];
+    
+    self.feedBtn =[UIButton buttonWithType:UIButtonTypeCustom];
+    self.feedBtn.frame=CGRectMake(NaviTitle_Width/2, 0, NaviTitle_Width/2, NaviTitle_Height);
+    [self.feedBtn setTitle:@"电影" forState:UIControlStateNormal];
+    [self.feedBtn.titleLabel setFont:[UIFont systemFontOfSize:16]];
+    self.feedBtn.selected=NO;
+    //self.feedBtn.backgroundColor =[UIColor blueColor];
+    [self.feedBtn setTitleColor:VLight_GrayColor forState:UIControlStateNormal];
+    [self.feedBtn setTitleColor:VBlue_color forState:UIControlStateSelected];
+    [self.feedBtn addActionHandler:^(NSInteger tag) {
+        [weakSelf.myScorollerView setContentOffset:CGPointMake(kDeviceWidth, 0) animated:YES];
+    }];
+    [naviTitleView addSubview:self.feedBtn];
+  
+    self.nav_line_lable =[[UILabel alloc]initWithFrame:CGRectMake(0,NaviTitle_Height-Lable_Line_Height, NaviTitle_Width/2,Lable_Line_Height )];
+    self.nav_line_lable.backgroundColor =VBlue_color;
+    [naviTitleView addSubview:self.nav_line_lable];
     
     UIButton  *searchbutton=[UIButton buttonWithType:UIButtonTypeCustom];
       [searchbutton setImage:[UIImage imageNamed:@"search_icon.png"] forState:UIControlStateNormal];
@@ -144,16 +188,15 @@ static const CGFloat MJDuration = 0.1;
     [self.view addSubview:self.myScorollerView];
     
     self.RecommentView=[[UIView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight-kHeigthTabBar)];
-    self.RecommentView.backgroundColor =[UIColor redColor];
+    //self.RecommentView.backgroundColor =[UIColor redColor];
     self.RecommentView.userInteractionEnabled=YES;
     [self.myScorollerView addSubview:self.RecommentView];
     
     self.feedView=[[UIView alloc] initWithFrame:CGRectMake(kDeviceWidth, 0, kDeviceWidth, kDeviceHeight-kHeigthTabBar)];
-    self.feedView.backgroundColor =[UIColor yellowColor];
+    //self.feedView.backgroundColor =[UIColor yellowColor];
     self.feedView.userInteractionEnabled=YES;
     [self.myScorollerView addSubview:self.feedView];
 
-    
 }
 
 -(void)createSegmentView
@@ -549,6 +592,9 @@ static const CGFloat MJDuration = 0.1;
         
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
             pageCount0=[[responseObject objectForKey:@"pageCount"] intValue];
+            if (page0==pageCount0) {
+                [self.RecommendCollectionView.footer noticeNoMoreData];
+            }
             NSMutableArray   *array  = [[NSMutableArray alloc]initWithArray:[responseObject objectForKey:@"models"]];
             for ( int i=0 ; i<array.count; i++) {
                 NSDictionary  *newdict  =[array objectAtIndex:i];
@@ -562,7 +608,6 @@ static const CGFloat MJDuration = 0.1;
                             [usermodel setValuesForKeysWithDictionary:[newdict objectForKey:@"user"]];
                             weibomodel.uerInfo=usermodel;
                         }
-                        
                     }
                     // 剧情信息
                     stageInfoModel  *stagemodel =[[stageInfoModel alloc]init];
@@ -601,8 +646,6 @@ static const CGFloat MJDuration = 0.1;
     }];
     
 }
-
-
 
 -(void)requestData
 {
@@ -703,8 +746,6 @@ static const CGFloat MJDuration = 0.1;
     [self requestData];
     //点击完之后，动画又要开始旋转，同时隐藏了加载失败的背景
     [loadView hidenFailLoadAndShowAnimation];
-    
-    
 }
 
 #pragma mark - UICollectionViewDataSource
@@ -716,7 +757,6 @@ static const CGFloat MJDuration = 0.1;
 }
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    
     if (collectionView==self.myConllectionView) {
     for (int i=0;i<3;i++) {
         UIButton  *btn=(UIButton *) [self.feedView viewWithTag:100+i];
@@ -845,10 +885,11 @@ static const CGFloat MJDuration = 0.1;
     else if (collectionView==self.RecommendCollectionView)
     {
         ShowStageViewController *vc = [[ShowStageViewController alloc] init];
+        vc.pageType=NSStagePapeTypeHotStageList;//热门页进入
         weiboInfoModel *model=[self.dataArray0 objectAtIndex:indexPath.row];
         vc.stageInfo = model.stageInfo;
         vc.weiboInfo=model;
-        UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:nil action:nil];
+        UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
         self.navigationItem.backBarButtonItem=item;
         [self.navigationController pushViewController:vc animated:YES];
         
@@ -1000,6 +1041,25 @@ static const CGFloat MJDuration = 0.1;
     }
 }
 
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    if (scrollView==self.myScorollerView) {
+    int index=scrollView.contentOffset.x/kDeviceWidth;
+    if (index==0) {
+        self.recommentBtn.selected=YES;
+        self.feedBtn.selected=NO;
+    }
+    else{
+        self.feedBtn.selected=YES;
+        self.recommentBtn.selected=NO;
+    }
+    float x=self.nav_line_lable.frame.origin.x;
+    x=((NaviTitle_Width/2-0)/kDeviceWidth)*scrollView.contentOffset.x;
+    
+    self.nav_line_lable.frame=CGRectMake(x, self.nav_line_lable.frame.origin.y, self.nav_line_lable.frame.size.width, self.nav_line_lable.frame.size.height);
+    NSLog(@"~~~~~~%f",scrollView.contentOffset.x);
+    }
+}
  - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

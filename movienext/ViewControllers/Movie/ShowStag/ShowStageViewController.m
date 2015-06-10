@@ -32,12 +32,14 @@
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
 #import "M80AttributedLabel.h"
-#define ADM_ACTION_TAG    1000   //管理管弹出框
+#define ADM_ACTION_TAG    1000   //统一管理管弹出框
 
-#define ADM_NEW_ADD       1003
-#define ADM_CLOSE_STAGE   1004
-#define ADM_DSCORVER      1005
-#define ADM_RECOMMEND     1006
+#define ADM_NEW_ADD       1003  //最新添加
+#define ADM_CLOSE_STAGE   1004   //已屏蔽的弹幕
+#define ADM_DSCORVER      1005  // 发现
+#define ADM_RECOMMEND     1006    //管理员热门
+
+#define ADM_HOT_LIST       1007   //管理员热门进入
 
 #define CUS_ACTION_TAG   1001   //普通用户弹出框
 #define CUSSEFT_ACTION_TAG   1002  //普通用户自己的页弹出框
@@ -124,9 +126,10 @@
         admOper.frame=CGRectMake(0, 0, 30, 25);
         admOper.hidden=YES;
        [admOper setTitleColor:VGray_color forState:UIControlStateNormal];
-       [admOper setTitle:@"管" forState:UIControlStateNormal];
-       //[admOper setImage:[UIImage imageNamed:@"three_points"] forState:UIControlStateNormal];
-        [admOper  addActionHandler:^(NSInteger tag) {
+      ///[admOper setTitle:@"管" forState:UIControlStateNormal];
+       [admOper setImage:[UIImage imageNamed:@"guanliyuan.png"] forState:UIControlStateNormal];
+       [admOper setTitleColor:VBlue_color forState:UIControlStateNormal];
+          [admOper  addActionHandler:^(NSInteger tag) {
             //管理员
             if (weakSelf.pageType==NSStagePapeTypeAdmin_New_Add) {
                 //最新添加
@@ -141,7 +144,6 @@
                 UIActionSheet  *al =[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"确定" destructiveButtonTitle:nil otherButtonTitles:@"[发送到 “最新” ]", nil];
                 al.tag=ADM_CLOSE_STAGE;
                 [al showInView:weakSelf.view];
-
                 
             }
             else if (weakSelf.pageType==NSStagePapeTypeAdmin_Dscorver)
@@ -156,10 +158,20 @@
             else if (weakSelf.pageType==NSStagePapeTypeAdmin_Recommed)
             {
                 // 推荐
+                 UIActionSheet  *al =[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"确定" destructiveButtonTitle:nil otherButtonTitles:@"[发送到 “发现” ]", nil];
+                al.tag=ADM_RECOMMEND;
+                [al showInView:weakSelf.view];
                 
             }
+            else if (weakSelf.pageType==NSStagePapeTypeHotStageList)
+            {
+                //热门页进入
+                UIActionSheet  *Act=[[UIActionSheet alloc]initWithTitle:nil delegate:weakSelf cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"[切换剧照到审核/正式版]",@"[编辑弹幕]",@"[屏蔽弹幕]",@"[点赞]",@"[点踩]",nil];
+                Act.tag=ADM_HOT_LIST;
+                [Act showInView:weakSelf.view];
+            }
             else {
-            UIActionSheet  *Act=[[UIActionSheet alloc]initWithTitle:nil delegate:weakSelf cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"[切换剧照到审核/正式版]",@"[编辑弹幕]",@"[屏蔽弹幕]",@"[点赞]",@"[点踩]",nil];
+            UIActionSheet  *Act=[[UIActionSheet alloc]initWithTitle:nil delegate:weakSelf cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"[切换剧照到审核/正式版]",@"[编辑弹幕]",@"[屏蔽弹幕]",@"[点赞]",@"[点踩]",@"发送到  [ “热门” ]",nil];
             Act.tag=ADM_ACTION_TAG;
             [Act showInView:weakSelf.view];
             }
@@ -1031,145 +1043,6 @@
   //  [stageView configStageViewforStageInfoDict];
     
 }
-#pragma mark  -----
-#pragma mark  ---//点击了弹幕StaegViewDelegate
-#pragma mark  ----
-/*-(void)StageViewHandClickMark:(weiboInfoModel *)weiboDict withmarkView:(id)markView StageInfoDict:(stageInfoModel *)stageInfoDict
-{
-    //获取markview的指针
-    MarkView   *mv=(MarkView *)markView;
-    _mymarkView=mv;
-    if (mv.isSelected==YES) {  //当前已经选中的状态
-        [self SetToolBarValueWithDict:weiboDict markView:markView isSelect:YES StageInfo:stageInfoDict];
-    }
-    else if(mv.isSelected==NO)
-    {
-        NSLog(@"隐藏工具栏工具栏");
-        [self SetToolBarValueWithDict:weiboDict markView:markView isSelect:NO StageInfo:stageInfoDict];
-    }
-    
-}
-#pragma mark  ----- toolbar 上面的按钮，执行给toolbar 赋值，显示，弹出工具栏
--(void)SetToolBarValueWithDict:(weiboInfoModel  *)weiboDict markView:(id) markView isSelect:(BOOL ) isselect StageInfo:(stageInfoModel *) stageInfo
-{
-    //先对它赋值，然后让他弹出到界面
-    if (isselect==YES) {
-        _toolBar.alertView.frame=CGRectMake(15,0,kStageWidth-20, 100);
-        _toolBar.weiboInfo=weiboDict;
-        _toolBar.stageInfo=stageInfo;
-        _toolBar.markView=markView;
-        [_toolBar configToolBar];
-        [[[[UIApplication sharedApplication] delegate] window] addSubview:_toolBar ];
-        [_toolBar ShowButtomView];
-        
-    }
-    else if (isselect==NO)
-    {
-        //隐藏toolbar
-        if (_toolBar) {
-            [_toolBar HidenButtomView];
-            //从父视图中除掉工具栏
-            [_toolBar removeFromSuperview];
-        }
-    }
-}*/
-#pragma mark   ------
-#pragma mark   -------- ButtomToolViewDelegate
-#pragma  mark  -------
-/*-(void)ToolViewHandClick:(UIButton *)button :(MarkView *)markView weiboDict:(weiboInfoModel *)weiboDict StageInfo:(stageInfoModel *)stageInfoDict
-{
-    UserDataCenter  *userCenter=[UserDataCenter shareInstance];
-    
-    _TweiboInfo =weiboDict;
-    _TstageInfo=stageInfoDict;
-    if (button.tag==10000) {
-        ///点击了头像//进入个人页面
-        [_mymarkView CancelMarksetSelect];
-        if (_toolBar) {
-            [_toolBar HidenButtomView];
-            [_toolBar removeFromSuperview];
-        }
-        MyViewController   *myVc=[[MyViewController alloc]init];
-        myVc.author_id=weiboDict.created_by;
-        UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
-        self.navigationItem.backBarButtonItem=item;
-        [self.navigationController pushViewController:myVc animated:YES];
-    }
-#pragma mark     -----------分享
-    else if (button.tag==10001)
-    {
-        //点击了分享
-        //分享文字
-      //   UIImage  *image=[Function getImage:stageView WithSize:CGSizeMake(kDeviceWidth, kDeviceWidth)];
-        [_mymarkView CancelMarksetSelect];
-        if (_toolBar) {
-            [_toolBar HidenButtomView];
-            [_toolBar removeFromSuperview];
-        }
-        UMShareViewController2  *shareVC=[[UMShareViewController2 alloc]init];
-        shareVC.StageInfo=stageInfoDict;
-        shareVC.weiboInfo=weiboDict;
-        shareVC.delegate=self;
-        //UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:shareVC];
-        [self.navigationController presentViewController:shareVC animated:YES completion:nil];
-        
-     }
-#pragma mark  ----------点赞--------------
-    else  if(button.tag==10002)
-    {
-
-        NSNumber  *operation;
-        int tag=0;// 标志是否 已赞  如果tag＝1  已赞  否则tag＝0 是未赞的
-        for (int i=0; i<self.upweiboArray.count; i++) {
-            //已赞的
-            UpweiboModel *upmodel =self.upweiboArray[i];
-            
-            if ([upmodel.weibo_id intValue]==[weiboDict.Id intValue]) {
-                tag=1;
-                operation =[NSNumber numberWithInt:0];
-                int like=[weiboDict.like_count intValue];
-                like=like-1;
-                weiboDict.like_count=[NSNumber numberWithInt:like];
-                [self.upweiboArray removeObjectAtIndex:i];
-                break;
-            }
-        }
-        //查询到最后如果没有查到说明是没有赞过的微博,那么把这条赞信息添加到了赞数组中去
-        if (tag==0) {
-            //没有赞的
-            operation =[NSNumber numberWithInt:1];
-            UpweiboModel  *upmodel =[[UpweiboModel alloc]init];
-            upmodel.weibo_id=weiboDict.Id;
-            upmodel.created_at=weiboDict.created_at;
-            upmodel.created_by=weiboDict.created_by;
-            upmodel.updated_at=weiboDict.updated_at;
-            
-            int like=[weiboDict.like_count intValue];
-            like=like+1;
-            weiboDict.like_count=[NSNumber numberWithInt:like];
-            [self.upweiboArray addObject:upmodel];
-        }
-        [self layoutMarkViewWithMarkView:markView WeiboInfo:weiboDict];
-        ////发送到服务器
-        [self LikeRequstData:weiboDict withOperation:operation withuserId:userCenter.user_id];
-        
-    }else if (button.tag==10003)
-    {
-        UserDataCenter  *userCenter =[UserDataCenter shareInstance];
-        if ([userCenter.is_admin  intValue]>0) {
-            UIActionSheet   *ash=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"删除",@"变身",@"推荐",@"编辑", nil];
-            ash.tag=500;
-            [ash showInView:self.view];
-        }
-        else
-        {
-            UIActionSheet   *ash=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"举报" otherButtonTitles:nil, nil];
-            ash.tag=504;
-            [ash showInView:self.view];
-
-        }
-    }
-}*/
 -(void)ToolViewTagHandClickTagView:(TagView *)tagView withweiboinfo:(weiboInfoModel *)weiboInfo WithTagInfo:(TagModel *)tagInfo
 {
     
@@ -1188,126 +1061,6 @@
 }
 -(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-   /* if (actionSheet.tag==500) {
-        if (buttonIndex==0) {
-            //删除
-            [self requestDelectDataWithweiboId:[NSString stringWithFormat:@"%@",_TweiboInfo.Id] WithremoveType:@"1"];
-            
-        }
-        else if(buttonIndex==1)
-        {
-            ///变身
-            // [self.navigationController pushViewController:[ChangeSelfViewController new] animated:YES];
-            //请求随机数种子
-            [self requestChangeUserRand4];
-        }
-        else if(buttonIndex==2)
-        {
-            //推荐
-            [self requestrecommendDataWithStageId:[NSString stringWithFormat:@"%@",_TstageInfo.Id] weiboId:[NSString stringWithFormat:@"%@",_TweiboInfo.Id]];
-        }
-        else if (buttonIndex==3)
-        {
-            [_mymarkView CancelMarksetSelect];
-            if (_toolBar) {
-                [_toolBar HidenButtomView];
-                [_toolBar removeFromSuperview];
-                
-            }
-
-            //弹幕编辑
-            AddMarkViewController  *AddMarkVC=[[AddMarkViewController alloc]init];
-            AddMarkVC.stageInfo=self.stageInfo;
-            AddMarkVC.weiboInfo=_TweiboInfo;
-            AddMarkVC.delegate=self;
-            [self presentViewController:AddMarkVC animated:NO completion:nil];
-
-        }
-    }
-    else if (actionSheet.tag==504)
-    {
-        //确认举报
-        [self requestReportweibo];
-
-    }
-  
-   else if (actionSheet.tag==507) {
-        if (buttonIndex==0) {
-            //举报剧情
-            [self requestReportSatge];
-            
-        }
-        else if(buttonIndex==1)
-        {
-            //版权问题
-            
-            [self sendFeedBackWithStageInfo:self.stageInfo];
-            
-        }
-        else if(buttonIndex==2)
-        {
-            //           查看图片信息
-            
-            ScanMovieInfoViewController * scanvc =[ScanMovieInfoViewController new];
-            scanvc.stageInfo=self.stageInfo;
-            [self presentViewController:scanvc animated:YES completion:nil];
-        }
-        else if (buttonIndex==3)
-        {
-            NSString  *stageId;
-           // stageInfoModel *model=[_dataArray objectAtIndex:Rowindex];
-            stageId=[NSString stringWithFormat:@"%@",self.stageInfo.Id];
-            //移动到审核版或者正常
-            [self requestmoveReviewToNormal:stageId];
-
-        }
-        else if (buttonIndex==4)
-        {
-            //屏蔽剧照
-            [self requestRemoveStage:@"0"];
-        }
-       else if (buttonIndex==5)
-       {
-           //编辑弹幕功能
-           //弹幕编辑
-           AddMarkViewController  *AddMarkVC=[[AddMarkViewController alloc]init];
-           AddMarkVC.stageInfo=self.stageInfo;
-           //AddMarkVC.model=model;
-           AddMarkVC.weiboInfo=_WeiboInfo;
-           AddMarkVC.delegate=self;
-           [self presentViewController:AddMarkVC animated:NO completion:nil];
-
-       }
-       else if (buttonIndex==6)
-       {// 屏蔽弹幕
-           NSString *weibo_id =[NSString stringWithFormat:@"%@",_WeiboInfo.Id];
-           [self requestDelectDataWithweiboId:weibo_id WithremoveType:@"1"];
-       }
-       else if (buttonIndex==7)
-       {
-           //恢复剧照
-           [self requestRemoveStage:@"1"];
-       }
-       else if (buttonIndex==8)
-       {
-           
-           [self requestUpAndDownWithDeretion:@"up"];
-           
-       }
-       else if (buttonIndex==9)
-       {
-           [self requestUpAndDownWithDeretion:@"down"];
-       }
-     }
-    else if (actionSheet.tag==800)
-    {// 普通用户在个人页进来删除自己发布的弹幕
-        if (buttonIndex==0) {
-        //删除卡片
-        NSString *weibo_id =[NSString stringWithFormat:@"%@",_WeiboInfo.Id];
-        [self requestDelectDataWithweiboId:weibo_id WithremoveType:@"0"];
-        }
-        
-    }*/
     if (actionSheet.tag==ADM_ACTION_TAG) {
         //管理员的
         if (buttonIndex==0) {
@@ -1349,6 +1102,58 @@
             [self requestUpAndDownWithDeretion:@"down"];
 
         }
+        else if (buttonIndex==5)
+        {
+            //移动到热门
+            [self requestChangeStageStatusWithweiboId:[NSString stringWithFormat:@"%@",_WeiboInfo.Id] StatusType:@"3"];
+
+        }
+            
+    }
+    else if(actionSheet.tag==ADM_HOT_LIST)  //管理员从热门进入
+    {
+        //管理员的
+        if (buttonIndex==0) {
+            //切换剧照到审核版
+            NSString  *stageId;
+            // stageInfoModel *model=[_dataArray objectAtIndex:Rowindex];
+            stageId=[NSString stringWithFormat:@"%@",self.stageInfo.Id];
+            //移动到审核版或者正常
+            [self requestmoveReviewToNormal:stageId];
+            
+        }
+        
+        else if (buttonIndex==1)
+        {
+            // 编辑弹幕
+            //弹幕编辑
+            AddMarkViewController  *AddMarkVC=[[AddMarkViewController alloc]init];
+            AddMarkVC.stageInfo=self.stageInfo;
+            AddMarkVC.weiboInfo=_TweiboInfo;
+            AddMarkVC.delegate=self;
+            [self presentViewController:AddMarkVC animated:NO completion:nil];
+            
+            
+        }else if (buttonIndex==2)
+        {
+            // 屏蔽弹幕
+            NSString *weibo_id =[NSString stringWithFormat:@"%@",_WeiboInfo.Id];
+            [self requestDelectDataWithweiboId:weibo_id WithremoveType:@"1"];
+        }
+        else if (buttonIndex==3)
+        {
+            //点赞
+            [self requestUpAndDownWithDeretion:@"up"];
+            
+        }
+        else if (buttonIndex==4)
+        {
+            // 踩
+            [self requestUpAndDownWithDeretion:@"down"];
+            
+        }
+ 
+        
     }
     else if (actionSheet.tag==CUS_ACTION_TAG)
     {
@@ -1405,7 +1210,13 @@
         if (buttonIndex==0) {
             [self requestChangeStageStatusWithweiboId:[NSString stringWithFormat:@"%@",_WeiboInfo.Id] StatusType:@"3"];
         }
-
+    }
+    else if (actionSheet.tag==ADM_RECOMMEND)
+    {
+        //移动到发现
+        if (buttonIndex==0) {
+            [self requestChangeStageStatusWithweiboId:[NSString stringWithFormat:@"%@",_WeiboInfo.Id] StatusType:@"2"];
+        }
     }
 }
 
