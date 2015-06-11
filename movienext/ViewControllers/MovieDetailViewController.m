@@ -185,8 +185,8 @@ static const CGFloat MJDuration = 0.2;
         MovieLogoImageView.frame=CGRectZero;
     }
     nameStr =[Function htmlString:nameStr];
-    float nameW=kDeviceWidth*0.6;
-    CGSize   Nsize =[nameStr boundingRectWithSize:CGSizeMake(nameW, 25) options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes:[NSDictionary dictionaryWithObject:[UIFont systemFontOfSize:16] forKey:NSFontAttributeName] context:nil].size;
+    float nameW=200;//kDeviceWidth*0.6;
+    CGSize   Nsize =[nameStr boundingRectWithSize:CGSizeMake(nameW, 25) options:(NSStringDrawingUsesLineFragmentOrigin) attributes:[NSDictionary dictionaryWithObject:[UIFont systemFontOfSize:16] forKey:NSFontAttributeName] context:nil].size;
     movieNameLable.text=[NSString stringWithFormat:@"%@",nameStr];
     movieNameLable.frame=CGRectMake(35,8,Nsize.width+5, 25);
     titleView.frame=CGRectMake(0, 0, 30+5+movieNameLable.frame.size.width, 40);
