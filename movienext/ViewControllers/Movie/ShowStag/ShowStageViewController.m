@@ -766,6 +766,8 @@
         TagToStageViewController  *vc=[[TagToStageViewController alloc]init];
         vc.weiboInfo=weiboInfo;
         vc.tagInfo=tagInfo;
+        UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+        self.navigationItem.backBarButtonItem=item;
         [self.navigationController pushViewController:vc animated:YES];
     }
 }
