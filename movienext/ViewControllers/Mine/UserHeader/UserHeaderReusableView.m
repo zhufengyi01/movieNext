@@ -85,7 +85,7 @@
     [viewHeader addSubview:lblZanCout];
     
     //简介
-    lblBrief = [[UILabel alloc] initWithFrame:CGRectMake(ivAvatar.frame.origin.x+ivAvatar.frame.size.width+10,lblCount.frame.origin.y+lblCount.frame.size.height+10, 60, 20)];
+    lblBrief = [[UILabel alloc] initWithFrame:CGRectMake(ivAvatar.frame.origin.x+ivAvatar.frame.size.width+10,lblCount.frame.origin.y+lblCount.frame.size.height+10, kDeviceWidth - (ivAvatar.frame.origin.x+ivAvatar.frame.size.width+10), 20)];
     lblBrief.numberOfLines=0;
     lblBrief.font = [UIFont systemFontOfSize:14];
     
