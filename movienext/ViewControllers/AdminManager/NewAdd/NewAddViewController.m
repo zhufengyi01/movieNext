@@ -193,54 +193,7 @@ static const CGFloat MJDuration = 0.1;
     // 默认先隐藏footer
     // self.myConllectionView.footer.hidden = YES;
 }
-
-/*
- 
- - (void)setupHeadView
- {
- 
- __unsafe_unretained typeof(self) vc = self;
- // 添加下拉刷新头部控件
- [_myConllectionView addHeaderWithCallback:^{
- page=1;
- if (self.dataArray.count>0) {
- [vc.dataArray removeAllObjects];
- }
- // 进入刷新状态就会回调这个Block
- [vc requestData];
- 
- // 模拟延迟加载数据，因此2秒后才调用）
- dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
- //[vc.myConllectionView reloadData];
- // 结束刷新
- [vc.myConllectionView headerEndRefreshing];
- });
- }];
- #warning 自动刷新(一进入程序就下拉刷新)
- // [vc.myConllectionView headerBeginRefreshing];
- }
- 
- 
- - (void)setupFootView
- {
- __unsafe_unretained typeof(self) vc = self;
- // 添加上拉刷新尾部控件
- [vc.myConllectionView addFooterWithCallback:^{
- // 进入刷新状态就会回调这个Block
- if (pageCount>page) {
- page=page+1;
- [vc requestData];
- }
- // 模拟延迟加载数据，因此2秒后才调用）
- dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
- //  [vc.myConllectionView reloadData];
- // 结束刷新
- [vc.myConllectionView footerEndRefreshing];
- });
- }];
- }*/
-
--(void)creatLoadView
+ -(void)creatLoadView
 {
     loadView =[[LoadingView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight)];
     loadView.delegate=self;

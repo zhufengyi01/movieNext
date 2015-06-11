@@ -112,5 +112,7 @@
 #define  TagViewConrnerRed 4
 #define  TagHeight   20
 
+#define  KImageWidth_Height  9.0/16
+
 
 #endif

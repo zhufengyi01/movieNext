@@ -949,8 +949,8 @@
         }
         else if (UMShareStyle==0)//使用view方式分享
         {
-        UMShareView *ShareView =[[UMShareView alloc] initwithStageInfo:model.stageInfo ScreenImage:image delgate:self];
-        [ShareView show];
+      //  UMShareView *ShareView =[[UMShareView alloc] initwithStageInfo:model.stageInfo ScreenImage:image delgate:self];
+       // [ShareView show];
         }
         
      }

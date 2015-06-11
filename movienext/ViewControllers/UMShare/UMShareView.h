@@ -45,13 +45,17 @@ typedef NS_ENUM(NSInteger, UMShareType)
     stageInfoModel  *_stageInfo;
     UIImage *_screenImage;
     id <UMShareViewDelegate> _delegate;
-    
+    float shareheight;
 }
--(instancetype)initwithStageInfo:(stageInfoModel *) StageInfo ScreenImage:(UIImage *) screenImage delgate:(id<UMShareViewDelegate>) delegate;
+-(instancetype)initwithStageInfo:(stageInfoModel *) StageInfo ScreenImage:(UIImage *) screenImage delgate:(id<UMShareViewDelegate>) delegate andShareHeight:(float) Height;
+
 @property(nonatomic,assign) UMShareType  pageType;
 @property(nonatomic,strong) M80AttributedLabel  *tipLable;
 
+//分享头部视图
 -(void)setShareLable;
+
+-(void)setshareHeightwithFloat:(float) height;
 
 //显示出来
 -(void)show;

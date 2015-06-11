@@ -428,7 +428,7 @@
             //Al.tag=1000;
             //[Al show];
             UIImage  *image=[Function getImage:self.stageImageView WithSize:CGSizeMake(kStageWidth,  (kDeviceWidth-10)*(9.0/16))];
-            UMShareView *ShareView =[[UMShareView alloc] initwithStageInfo:self.stageInfo ScreenImage:image delgate:self];
+            UMShareView *ShareView =[[UMShareView alloc] initwithStageInfo:self.stageInfo ScreenImage:image delgate:self andShareHeight:self.stageImageView.frame.size.height];
             ShareView.pageType=UMShareTypeSuccess;
             [ShareView setShareLable];
             [ShareView show];

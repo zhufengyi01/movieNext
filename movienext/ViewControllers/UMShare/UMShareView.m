@@ -21,17 +21,17 @@
     // Drawing code
 }
 */
-
--(instancetype)initwithStageInfo:(stageInfoModel *) stageInfo ScreenImage:(UIImage *) screenImage delgate:(id<UMShareViewDelegate>) delegate
+-(instancetype)initwithStageInfo:(stageInfoModel *) StageInfo ScreenImage:(UIImage *) screenImage delgate:(id<UMShareViewDelegate>) delegate andShareHeight:(float) Height;
 {
     if ([super init]) {
         _delegate=delegate;
         _screenImage=screenImage;
-        _stageInfo=stageInfo;
+        _stageInfo=StageInfo;
+        shareheight=Height;
         self.frame=CGRectMake(0, 0,kDeviceWidth,kDeviceHeight);
         self.backgroundColor =[[UIColor blackColor] colorWithAlphaComponent:0];
         
-        float height=(kDeviceWidth/4)+(kDeviceWidth-20)*(9.0/16)+40+30+50;
+        float height=(kDeviceWidth/4)+Height+40+30+50;
          backView =[[UIView alloc]initWithFrame:CGRectMake(0,kDeviceHeight, kDeviceWidth, height)];
         backView.userInteractionEnabled=YES;
         backView.backgroundColor =[UIColor whiteColor];
@@ -77,6 +77,7 @@
      }
 }
 
+ 
 //截获点击屏幕的事件
 -(void)click
 {
@@ -85,7 +86,7 @@
 -(void)CancleShareClick
 {
     [UIView animateWithDuration:KShow_ShareView_Time animations:^{
-        float height=(kDeviceWidth/4)+(kDeviceWidth-20)*(9.0/16)+40+30+50;
+        float height=(kDeviceWidth/4)+shareheight+40+30+50;
         backView.frame=CGRectMake(0, kDeviceHeight, kDeviceWidth,height);
     } completion:^(BOOL finished) {
         [self removeFromSuperview];
@@ -99,7 +100,7 @@
         [_delegate UMCancleShareClick];
     }
     [UIView animateWithDuration:KShow_ShareView_Time animations:^{
-        float height=(kDeviceWidth/4)+(kDeviceWidth-20)*(9.0/16)+40+30+50;
+        float height=(kDeviceWidth/4)+shareheight+40+30+50;
         backView.frame=CGRectMake(0, kDeviceHeight, kDeviceWidth,height);
     } completion:^(BOOL finished) {
         [self removeFromSuperview];
@@ -108,18 +109,18 @@
 
 -(void)createShareView
 {
-    shareView =[[UIView alloc]initWithFrame:CGRectMake(10,40, kDeviceWidth-20, (kDeviceWidth-20)*(9.0/16)+20)];
+    shareView =[[UIView alloc]initWithFrame:CGRectMake(10,40, kDeviceWidth-20,shareheight+20)];
     shareView.userInteractionEnabled=YES;
     shareView.backgroundColor=View_BackGround;
     [backView addSubview:shareView];
     
-    _ShareimageView=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0,kDeviceWidth-20,(kDeviceWidth-20)*(9.0/16))];
+    _ShareimageView=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0,kDeviceWidth-20,shareheight)];
     _ShareimageView.backgroundColor=[UIColor redColor];
     _ShareimageView.image=_screenImage;
     [shareView addSubview:_ShareimageView];
     
     //放置电影名和标签的view
-    logosupView=[[UIView alloc]initWithFrame:CGRectMake(0,_ShareimageView.frame.origin.y+_ShareimageView.frame.size.height,kDeviceWidth-20, 20)];
+    logosupView=[[UIView alloc]initWithFrame:CGRectMake(0,_ShareimageView.frame.origin.y+_ShareimageView.frame.size.height-2,kDeviceWidth-20, 20)];
     logosupView.backgroundColor=[UIColor blackColor];
    // logosupView.hidden=YES;
     [shareView addSubview:logosupView];
@@ -197,7 +198,7 @@
 -(void)handShareButtonClick:(UIButton *) button
 {
     logosupView.hidden=NO;
-    shareImage=[Function getImage:shareView WithSize:CGSizeMake(kDeviceWidth-20, (kDeviceWidth-20)*(9.0/16)+20)];
+    shareImage=[Function getImage:shareView WithSize:CGSizeMake(kDeviceWidth-20, shareheight+20)];
     
     NSArray *eventArray = [NSArray arrayWithObjects:@"share_moment", @"share_wechat", @"share_weibo", @"share_download", nil];
     
@@ -237,7 +238,7 @@
     
     [AppView addSubview:self];
     [UIView animateWithDuration:KShow_ShareView_Time animations:^{
-        float height=(kDeviceWidth/4)+(kDeviceWidth-20)*(9.0/16)+40+30+50;
+        float height=(kDeviceWidth/4)+shareheight+40+30+50;
         backView.frame=CGRectMake(0, kDeviceHeight-height, kDeviceWidth, height);
         self.backgroundColor =[[UIColor blackColor] colorWithAlphaComponent:0.5];
 

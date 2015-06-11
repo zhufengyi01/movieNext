@@ -73,7 +73,7 @@
 {
     UIImage  *image=[Function getImage:stageView WithSize:CGSizeMake(kStageWidth, (kDeviceWidth-10)*(9.0/16))];
     
-    UMShareView *ShareView =[[UMShareView alloc] initwithStageInfo:self.weiboInfo.stageInfo ScreenImage:image delgate:self];
+    UMShareView *ShareView =[[UMShareView alloc] initwithStageInfo:self.weiboInfo.stageInfo ScreenImage:image delgate:self andShareHeight:stageView.frame.size.height];
     [ShareView setShareLable];
     [ShareView show];
     
