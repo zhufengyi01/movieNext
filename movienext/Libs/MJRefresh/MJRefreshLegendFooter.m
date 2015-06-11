@@ -39,7 +39,6 @@
         self.activityView.center = CGPointMake(self.mj_w * 0.5 - 100, self.mj_h * 0.5);
     }
 }
-
 #pragma mark - 公共方法
 - (void)setState:(MJRefreshFooterState)state
 {
