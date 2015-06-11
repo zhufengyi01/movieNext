@@ -41,7 +41,7 @@
     UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:@"设置"];
     titleLable.textColor=VGray_color;
     
-    titleLable.font=[UIFont boldSystemFontOfSize:18];
+    titleLable.font=[UIFont boldSystemFontOfSize:16];
     titleLable.textAlignment=NSTextAlignmentCenter;
     self.navigationItem.titleView=titleLable;
 
@@ -55,7 +55,7 @@
     button.frame=CGRectMake(0, 0, 60, 40);
     [button addTarget:self action:@selector(adminClick:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem  *barButton=[[UIBarButtonItem alloc]initWithCustomView:button];
-    self.navigationItem.rightBarButtonItem=barButton;
+   // self.navigationItem.rightBarButtonItem=barButton;
     }
     self.view.backgroundColor=View_BackGround;
     appdelegate = [[UIApplication sharedApplication]delegate ];

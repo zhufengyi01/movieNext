@@ -464,6 +464,8 @@
 		00BA5F6E1AC13C1800BC3039 /* login_button_sina_press@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 00BA5F6C1AC13C1800BC3039 /* login_button_sina_press@3x.png */; };
 		00BA5F741AC13D3600BC3039 /* back_Icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 00BA5F701AC13D3600BC3039 /* back_Icon@3x.png */; };
 		00BA5F761AC13D3600BC3039 /* back_Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 00BA5F721AC13D3600BC3039 /* back_Icon@2x.png */; };
+		00BEA2AA1B297C9F002A273A /* guanliyuan_detail@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 00BEA2A81B297C9F002A273A /* guanliyuan_detail@2x.png */; };
+		00BEA2AB1B297C9F002A273A /* guanliyuan_detail@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 00BEA2A91B297C9F002A273A /* guanliyuan_detail@3x.png */; };
 		00C10EDF1B1443310003DDF2 /* FindBeforeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00C10EDE1B1443310003DDF2 /* FindBeforeViewController.m */; };
 		00C604031AED179D008493D0 /* TagView.m in Sources */ = {isa = PBXBuildFile; fileRef = 00C604021AED179D008493D0 /* TagView.m */; };
 		00CAC3CA1AA31A3F008208E9 /* LoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 00CAC3C91AA31A3F008208E9 /* LoadingView.m */; };
@@ -494,6 +496,7 @@
 		00ECAE1B1B0999DF0039597E /* NSDate+TimeAgo.m in Sources */ = {isa = PBXBuildFile; fileRef = 00ECAE151B0999DF0039597E /* NSDate+TimeAgo.m */; };
 		00ECAE1C1B0999DF0039597E /* NSDate+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 00ECAE171B0999DF0039597E /* NSDate+Utilities.m */; };
 		00ECAE1D1B0999DF0039597E /* NSDateTimeAgo.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 00ECAE181B0999DF0039597E /* NSDateTimeAgo.bundle */; };
+		400930EA1B2963860099E1D9 /* AvatarBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 400930E91B2963860099E1D9 /* AvatarBrowser.m */; };
 		401860B61B283ADD0050A1AD /* make_searchbar_history@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 401860B51B283ADD0050A1AD /* make_searchbar_history@2x.png */; };
 		402DE3711B1EA3260018CBC6 /* download@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 402DE3691B1EA3260018CBC6 /* download@2x.png */; };
 		402DE3721B1EA3260018CBC6 /* download@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 402DE36A1B1EA3260018CBC6 /* download@3x.png */; };
@@ -1186,6 +1189,8 @@
 		00BA5F6C1AC13C1800BC3039 /* login_button_sina_press@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_button_sina_press@3x.png"; sourceTree = "<group>"; };
 		00BA5F701AC13D3600BC3039 /* back_Icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "back_Icon@3x.png"; sourceTree = "<group>"; };
 		00BA5F721AC13D3600BC3039 /* back_Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "back_Icon@2x.png"; sourceTree = "<group>"; };
+		00BEA2A81B297C9F002A273A /* guanliyuan_detail@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "guanliyuan_detail@2x.png"; sourceTree = "<group>"; };
+		00BEA2A91B297C9F002A273A /* guanliyuan_detail@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "guanliyuan_detail@3x.png"; sourceTree = "<group>"; };
 		00C10EDD1B1443310003DDF2 /* FindBeforeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FindBeforeViewController.h; sourceTree = "<group>"; };
 		00C10EDE1B1443310003DDF2 /* FindBeforeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FindBeforeViewController.m; sourceTree = "<group>"; };
 		00C604011AED179D008493D0 /* TagView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagView.h; sourceTree = "<group>"; };
@@ -1230,6 +1235,8 @@
 		00ECAE161B0999DF0039597E /* NSDate+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Utilities.h"; sourceTree = "<group>"; };
 		00ECAE171B0999DF0039597E /* NSDate+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+Utilities.m"; sourceTree = "<group>"; };
 		00ECAE181B0999DF0039597E /* NSDateTimeAgo.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = NSDateTimeAgo.bundle; sourceTree = "<group>"; };
+		400930E81B2963860099E1D9 /* AvatarBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AvatarBrowser.h; sourceTree = "<group>"; };
+		400930E91B2963860099E1D9 /* AvatarBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AvatarBrowser.m; sourceTree = "<group>"; };
 		401860B51B283ADD0050A1AD /* make_searchbar_history@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "make_searchbar_history@2x.png"; sourceTree = "<group>"; };
 		402DE3691B1EA3260018CBC6 /* download@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "download@2x.png"; sourceTree = "<group>"; };
 		402DE36A1B1EA3260018CBC6 /* download@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "download@3x.png"; sourceTree = "<group>"; };
@@ -1454,6 +1461,8 @@
 		000B08FB1AA2EB8C00B8D13A /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				00BEA2A81B297C9F002A273A /* guanliyuan_detail@2x.png */,
+				00BEA2A91B297C9F002A273A /* guanliyuan_detail@3x.png */,
 				401860B51B283ADD0050A1AD /* make_searchbar_history@2x.png */,
 				00705B3C1B27EA210019B8FE /* guanliyuan@2x.png */,
 				00705B3D1B27EA210019B8FE /* guanliyuan@3x.png */,
@@ -2360,6 +2369,8 @@
 				00AA534F1AA2C525004096F8 /* NSDateFunction.h */,
 				00AA53501AA2C525004096F8 /* NSDateFunction.m */,
 				00218C901AE0E66B006B79B4 /* Pilst */,
+				400930E81B2963860099E1D9 /* AvatarBrowser.h */,
+				400930E91B2963860099E1D9 /* AvatarBrowser.m */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -2928,6 +2939,7 @@
 				002E39171AC9439C00666AD0 /* liked_icon_light@2x.png in Resources */,
 				004AA6671B04A64000018F21 /* more_icon_default@2x.png in Resources */,
 				00AA54431AA2C525004096F8 /* UMSCommentDetailController.xib in Resources */,
+				00BEA2AB1B297C9F002A273A /* guanliyuan_detail@3x.png in Resources */,
 				0086C0FB1B1592B30013F540 /* find_share@3x.png in Resources */,
 				000B09DE1AA3029800B8D13A /* Wechat@2x.png in Resources */,
 				00705B3F1B27EA210019B8FE /* guanliyuan@3x.png in Resources */,
@@ -3039,6 +3051,7 @@
 				008363521AE51F8200806897 /* up_picture_blue@3x.png in Resources */,
 				0092A7D01B1FEF8F00836D6B /* sucseed_add@3x.png in Resources */,
 				00431FC01ADD054200416E1F /* login_alpa_backgroundcolor.png in Resources */,
+				00BEA2AA1B297C9F002A273A /* guanliyuan_detail@2x.png in Resources */,
 				00DF5E611AE5F7CB0063CCBC /* unselect_icon@3x.png in Resources */,
 				00E0D47F1AB54A3D00048399 /* btn_delete@3x.png in Resources */,
 				000B09B21AA3029800B8D13A /* Moments.png in Resources */,
@@ -3227,6 +3240,7 @@
 				00AA542B1AA2C525004096F8 /* SDWebImageCompat.m in Sources */,
 				00ABFC711AAAAB2200980824 /* BigImageCollectionViewCell.m in Sources */,
 				000850C41B09C9EF00E6009C /* UIScrollView+Pages.m in Sources */,
+				400930EA1B2963860099E1D9 /* AvatarBrowser.m in Sources */,
 				00DF5EFC1AE64FDF0063CCBC /* M80AttributedLabelURL.m in Sources */,
 				000850E41B09CCF700E6009C /* NSString+Base64.m in Sources */,
 				00AA54111AA2C525004096F8 /* DoubanService.m in Sources */,

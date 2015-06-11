@@ -60,9 +60,11 @@ static const CGFloat MJDuration = 0.6;
     [button setTitle:@"取消" forState:UIControlStateNormal];
     [button setTitleColor:VBlue_color forState:UIControlStateNormal];
     button.frame=CGRectMake(10, 10, 40, 30);
+
     button.titleEdgeInsets=UIEdgeInsetsMake(0, -10,0, 10);
-    [button setTitleColor:VBlue_color forState:UIControlStateNormal];
+    [button setTitleColor:VGray_color forState:UIControlStateNormal];
     //button.titleLabel.font =[UIFont boldSystemFontOfSize:18];
+    button.titleLabel.font =[UIFont systemFontOfSize:16];
     [button addTarget:self action:@selector(navigationbtnClick:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem  *barButton=[[UIBarButtonItem alloc]initWithCustomView:button];
     button.tag=99;
@@ -92,12 +94,12 @@ static const CGFloat MJDuration = 0.6;
     upLoadimageBtn.tag=100;
     upLoadimageBtn.titleEdgeInsets=UIEdgeInsetsMake(0, 10, 0, -10);
     [upLoadimageBtn setTitle:@"上传" forState:UIControlStateNormal];
-    [upLoadimageBtn setTitleColor:VBlue_color forState:UIControlStateNormal];
+    [upLoadimageBtn setTitleColor:VGray_color forState:UIControlStateNormal];
+    upLoadimageBtn.titleLabel.font =[UIFont systemFontOfSize:16];
    // [upLoadimageBtn setImage:[UIImage imageNamed:@"up_picture_blue.png"] forState:UIControlStateNormal];
     UIBarButtonItem  *rigthbar =[[UIBarButtonItem alloc]initWithCustomView:upLoadimageBtn];
     self.navigationItem.rightBarButtonItem=rigthbar;
 
-    
 }
 -(void)navigationbtnClick:(UIButton *) btn
 {

@@ -131,10 +131,11 @@
     UserDataCenter  *usecenter =[UserDataCenter shareInstance];
         UIButton  *admOper =[UIButton buttonWithType:UIButtonTypeCustom];
         admOper.frame=CGRectMake(0, 0, 30, 25);
+        admOper.imageEdgeInsets=UIEdgeInsetsMake(0, 10, 0, -10);
         admOper.hidden=YES;
        [admOper setTitleColor:VGray_color forState:UIControlStateNormal];
       ///[admOper setTitle:@"管" forState:UIControlStateNormal];
-       [admOper setImage:[UIImage imageNamed:@"guanliyuan.png"] forState:UIControlStateNormal];
+    [admOper setImage:[UIImage imageNamed:@"guanliyuan_detail"] forState:UIControlStateNormal];
        [admOper setTitleColor:VBlue_color forState:UIControlStateNormal];
           [admOper  addActionHandler:^(NSInteger tag) {
             //管理员
@@ -397,9 +398,16 @@
     [MovieLogoImageView sd_setImageWithURL:[NSURL URLWithString:uselogoString] placeholderImage:[UIImage imageNamed:@"user_normal.png"]];
     MovieLogoImageView.layer.masksToBounds = YES;
     
-    if (_WeiboInfo.uerInfo.fake == 0) {
-        NSLog(@"fake = 0");
+    ///给管理员添加查看是否为虚拟用户
+    UserDataCenter *userDataCenter = [UserDataCenter shareInstance];
+    if ([userDataCenter.is_admin intValue]>0 && [_WeiboInfo.uerInfo.fake intValue] == 0) {
+        UIImageView *ivFake = [[UIImageView alloc] initWithFrame:CGRectMake(MovieLogoImageView.bounds.size.width-10 , MovieLogoImageView.bounds.size.height-10, 6, 6)];
+        ivFake.backgroundColor = [UIColor blueColor];
+        ivFake.layer.masksToBounds = YES;
+        ivFake.layer.cornerRadius = 3;
+        [MovieLogoImageView addSubview:ivFake];
     }
+
     [leftButtomButton addSubview:MovieLogoImageView];
     
     movieNameLable =[[UILabel alloc]initWithFrame:CGRectMake(35,12, 120, 30)];

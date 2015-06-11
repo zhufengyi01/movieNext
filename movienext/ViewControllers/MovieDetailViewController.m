@@ -138,7 +138,6 @@ static const CGFloat MJDuration = 0.2;
         //管理员页面进来
         page=1;
         [self requestData];
-        
     }
     [self createToolBar];
     [self creatLoadView];
@@ -159,7 +158,7 @@ static const CGFloat MJDuration = 0.2;
     [titleView addSubview:MovieLogoImageView];
     //电影名
     UILabel  *movieNameLable =[[UILabel alloc]initWithFrame:CGRectMake(35,0, 120, 30)];
-    movieNameLable.font=[UIFont systemFontOfSize:18];
+    movieNameLable.font=[UIFont boldSystemFontOfSize:16];
     movieNameLable.textColor=VGray_color;
     // movieNameLable.numberOfLines=1;
     movieNameLable.lineBreakMode=NSLineBreakByTruncatingTail;
@@ -185,9 +184,10 @@ static const CGFloat MJDuration = 0.2;
         MovieLogoImageView.frame=CGRectZero;
     }
     nameStr =[Function htmlString:nameStr];
-    float nameW=200;//kDeviceWidth*0.6;
-    CGSize   Nsize =[nameStr boundingRectWithSize:CGSizeMake(nameW, 25) options:(NSStringDrawingUsesLineFragmentOrigin) attributes:[NSDictionary dictionaryWithObject:[UIFont systemFontOfSize:16] forKey:NSFontAttributeName] context:nil].size;
-    movieNameLable.text=[NSString stringWithFormat:@"%@",nameStr];
+     float nameW=kDeviceWidth*0.6;
+    
+    CGSize   Nsize =[nameStr boundingRectWithSize:CGSizeMake(nameW, 25) options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes:[NSDictionary dictionaryWithObject:movieNameLable.font forKey:NSFontAttributeName] context:nil].size;
+     movieNameLable.text=[NSString stringWithFormat:@"%@",nameStr];
     movieNameLable.frame=CGRectMake(35,8,Nsize.width+5, 25);
     titleView.frame=CGRectMake(0, 0, 30+5+movieNameLable.frame.size.width, 40);
     self.navigationItem.titleView=titleView;
@@ -195,9 +195,9 @@ static const CGFloat MJDuration = 0.2;
     
     upLoadimageBtn=[ZCControl createButtonWithFrame:CGRectMake(0,0,50,25) ImageName:nil Target:self Action:@selector(uploadImageFromAbumdAndDouban) Title:@"添加"];
     upLoadimageBtn.tag=201;
-    [upLoadimageBtn.titleLabel setFont:[UIFont systemFontOfSize:18]];
+    [upLoadimageBtn.titleLabel setFont:[UIFont systemFontOfSize:16]];
     //upLoadimageBtn.backgroundColor = [UIColor redColor];
-    [upLoadimageBtn setTitleColor:VBlue_color forState:UIControlStateNormal];
+    [upLoadimageBtn setTitleColor:VGray_color forState:UIControlStateNormal];
     upLoadimageBtn.titleEdgeInsets =UIEdgeInsetsMake(0, 15, 0, -15);
     // upLoadimageBtn.imageEdgeInsets= UIEdgeInsetsMake(5, 20, 0, -20);
     //    [upLoadimageBtn setImage:[UIImage imageNamed:@"up_picture_blue.png"] forState:UIControlStateNormal];

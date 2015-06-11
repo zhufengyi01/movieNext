@@ -100,7 +100,7 @@
     
     UIButton  *leftBtn= [UIButton buttonWithType:UIButtonTypeSystem];
     leftBtn.frame=CGRectMake(0, 20, 60, 40);
-    leftBtn.titleLabel.font =[UIFont systemFontOfSize:18];
+    leftBtn.titleLabel.font =[UIFont systemFontOfSize:16];
     [leftBtn setTitleColor:VGray_color forState:UIControlStateNormal];
     [leftBtn setTitle:@"取消" forState:UIControlStateNormal];
     leftBtn.titleLabel.adjustsFontSizeToFitWidth=NO;
@@ -115,9 +115,9 @@
     
     UILabel  *lable =[ZCControl createLabelWithFrame:CGRectMake((kDeviceWidth-100)/2, 25, 100, 30) Font:15 Text:@"添加文字"];
     lable.adjustsFontSizeToFitWidth=NO;
-    lable.font=[UIFont systemFontOfSize:18];
+    lable.font=[UIFont boldSystemFontOfSize:16];
     lable.textAlignment=NSTextAlignmentCenter;
-    lable.textColor=VBlue_color;
+    lable.textColor=VGray_color;
     [naview addSubview:lable];
     if (self.weiboInfo) {
         lable.text=@"编辑";
@@ -130,12 +130,10 @@
     [RighttBtn setTitle:@"发布" forState:UIControlStateNormal];
     RighttBtn.titleLabel.adjustsFontSizeToFitWidth=NO;
     [RighttBtn setTitleEdgeInsets:UIEdgeInsetsMake(0, 0, 0, -10)];
-    
-    RighttBtn.titleLabel.font=[UIFont boldSystemFontOfSize:18];
+    RighttBtn.titleLabel.font=[UIFont systemFontOfSize:16];
     RighttBtn.hidden=YES;
     //[naview addSubview:RighttBtn];
     //self.navigationItem.rightBarButtonItem=[[UIBarButtonItem alloc]initWithCustomView:RighttBtn];
-    
 }
 -(void)initData
 {
@@ -268,7 +266,7 @@
     
     
     //添加发布按钮
-    UIButton  *publishbtn =[ZCControl createButtonWithFrame:CGRectMake(50,height-55,kDeviceWidth-100,35) ImageName:nil Target:self Action:@selector(buttombtnClick:) Title:@"发布"];
+    UIButton  *publishbtn =[ZCControl createButtonWithFrame:CGRectMake(40,height-60,kDeviceWidth-80,40) ImageName:nil Target:self Action:@selector(buttombtnClick:) Title:@"发布"];
     publishbtn.layer.cornerRadius=4;
     publishbtn.tag=100;
     publishbtn.titleLabel.font =[UIFont boldSystemFontOfSize:16];

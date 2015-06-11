@@ -140,14 +140,17 @@ static const CGFloat MJDuration = 1.0;
     }
     UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:titleString];
     titleLable.textColor=VGray_color;
-    titleLable.font=[UIFont boldSystemFontOfSize:18];
+    titleLable.font=[UIFont boldSystemFontOfSize:16];
     titleLable.textAlignment=NSTextAlignmentCenter;
     self.navigationItem.titleView=titleLable;
     
     UIButton  *button=[UIButton buttonWithType:UIButtonTypeCustom];
-    //[button setTitle:@"设置" forState:UIControlStateNormal];
-    [button setBackgroundImage:[UIImage imageNamed:@"setting.png"] forState:UIControlStateNormal];
-    button.frame=CGRectMake(kDeviceWidth-30, 10, 18, 18);
+    [button setTitle:@"设置" forState:UIControlStateNormal];
+    ///[button setBackgroundImage:[UIImage imageNamed:@"setting.png"] forState:UIControlStateNormal];
+    button.frame=CGRectMake(0, 0, 40, 30);
+    button.titleLabel.font =[UIFont systemFontOfSize:16];
+    button.titleEdgeInsets=UIEdgeInsetsMake(0, 10, 0, -10);
+    [button setTitleColor:VGray_color forState:UIControlStateNormal];
     [button addTarget:self action:@selector(GotoSettingClick:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem  *barButton=[[UIBarButtonItem alloc]initWithCustomView:button];
     self.navigationItem.rightBarButtonItem=barButton;

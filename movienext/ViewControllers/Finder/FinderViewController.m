@@ -105,7 +105,7 @@
     
     UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:@"发现"];
     titleLable.textColor=VGray_color;
-    titleLable.font=[UIFont boldSystemFontOfSize:18];
+    titleLable.font=[UIFont boldSystemFontOfSize:16];
     titleLable.textAlignment=NSTextAlignmentCenter;
     self.navigationItem.titleView=titleLable;
     
@@ -119,7 +119,8 @@
     }];
      button.frame=CGRectMake(0, 0, 40, 40);
     button.tag=1000;
-    [button setTitleColor:VBlue_color forState:UIControlStateNormal];
+    button.titleLabel.font =[UIFont systemFontOfSize:16];
+    [button setTitleColor:VGray_color forState:UIControlStateNormal];
     //[button addTarget:self action:@selector(naviagetionItemClick:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem  *barButton=[[UIBarButtonItem alloc]initWithCustomView:button];
     self.navigationItem.leftBarButtonItem=barButton;
@@ -252,6 +253,13 @@
         h= kDeviceWidth-20;
         w=(kDeviceWidth-20)*(width/heigth);
         x=((kDeviceWidth-20)-w)/2;
+    }
+    else
+    {
+        x=0;
+        y=0;
+        w=kDeviceWidth-20;
+        h=(kDeviceWidth-20)*(9.0/16);
     }
     self.stageImageView.frame=CGRectMake(x, y, w, h);  //[[UIImageView alloc]initWithFrame:CGRectMake(x, y,w,h)];
     markLable.text=weiboInfo.content;

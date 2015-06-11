@@ -11,6 +11,7 @@
 #import "Constant.h"
 #import "UIImageView+WebCache.h"
 #import "UserDataCenter.h"
+#import "AvatarBrowser.h"
 @implementation UserHeaderReusableView
 -(instancetype)initWithFrame:(CGRect)frame{
     if (self = [super initWithFrame:frame]) {
@@ -38,21 +39,19 @@
     ivAvatar.layer.masksToBounds = YES;
     ivAvatar.layer.borderColor=VBlue_color.CGColor;
     ivAvatar.layer.borderWidth=3;
+    ivAvatar.userInteractionEnabled = YES;
     
-    //ivAvatar.backgroundColor = [UIColor redColor];
-
+    // 用户点击头像显示大图
+    UITapGestureRecognizer *avatarTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showBigAvatar:)];
+    [ivAvatar addGestureRecognizer:avatarTap];
+    
     [viewHeader addSubview:ivAvatar];
     
     if ([userCenter.is_admin  intValue]>0) {
         //在头像上添加一个手势，实现变成功能
-        UIView  *view =[[UIView alloc]initWithFrame:ivAvatar.frame];
-        view.backgroundColor =[ UIColor clearColor];
-        [viewHeader addSubview:view];
         UILongPressGestureRecognizer  *longPressHeader =[[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(longPressHead:)];
-        [view addGestureRecognizer:longPressHeader];
-        
+        [ivAvatar addGestureRecognizer:longPressHeader];
     }
-    
     
     lblUsername = [[UILabel alloc] initWithFrame:CGRectMake(ivAvatar.frame.origin.x+ivAvatar.frame.size.width+10, ivAvatar.frame.origin.y, 200, 20)];
     lblUsername.font = [UIFont boldSystemFontOfSize:15];
@@ -86,7 +85,7 @@
     [viewHeader addSubview:lblZanCout];
     
     //简介
-    lblBrief = [[UILabel alloc] initWithFrame:CGRectMake(ivAvatar.frame.origin.x+ivAvatar.frame.size.width+10,lblCount.frame.origin.y+lblCount.frame.size.height+10, 60, 20)];
+    lblBrief = [[UILabel alloc] initWithFrame:CGRectMake(ivAvatar.frame.origin.x+ivAvatar.frame.size.width+10,lblCount.frame.origin.y+lblCount.frame.size.height+10, kDeviceWidth - (ivAvatar.frame.origin.x+ivAvatar.frame.size.width+10), 20)];
     lblBrief.numberOfLines=0;
     lblBrief.font = [UIFont systemFontOfSize:14];
     
@@ -141,7 +140,7 @@
 {
     NSURL   *imageURL;
     //头像
-    imageURL =[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!thumb",kUrlAvatar,userInfo.logo]];
+    imageURL =[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kUrlAvatar,userInfo.logo]];
     [ivAvatar sd_setImageWithURL:imageURL placeholderImage:[UIImage imageNamed:@"user_normal.png"]];
     //用户名
          lblUsername.text=[NSString stringWithFormat:@"%@",userInfo.username];
@@ -176,4 +175,10 @@
     //长按变身
     
 }
+
+- (void)showBigAvatar:(UITapGestureRecognizer *)sender //显示大头像
+{
+    [AvatarBrowser showImage:(UIImageView*)sender.view];
+}
+
 @end

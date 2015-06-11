@@ -6,7 +6,7 @@
 //  Copyright (c) 2015年 redianying. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "RootViewController.h"
 #import "CommonStageCell.h"
 typedef NS_ENUM(NSInteger,NSMyPageType)
 {
@@ -14,7 +14,7 @@ typedef NS_ENUM(NSInteger,NSMyPageType)
     NSMyPageTypeOthersController   ///别人的页面进来
 };
 
-@interface MyViewController : UIViewController
+@interface MyViewController : RootViewController
 
 @property(nonatomic,assign) NSMyPageType   pageType; //区别自己还是别人
 

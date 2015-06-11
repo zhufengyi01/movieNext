@@ -90,10 +90,11 @@
     
     UIButton  *button=[UIButton buttonWithType:UIButtonTypeCustom];
     [button setTitle:@"取消" forState:UIControlStateNormal];
-    [button setTitleEdgeInsets:UIEdgeInsetsMake(0, 10, 0, -10)];
-     [button setTitleColor:VBlue_color forState:UIControlStateNormal];
+    [button setTitleColor:VBlue_color forState:UIControlStateNormal];
     button.frame=CGRectMake(0, 0, 40, 30);
-    button.titleEdgeInsets=UIEdgeInsetsMake(0,10, 0, -10);
+    button.titleLabel.font =[UIFont systemFontOfSize:16];
+    [button setTitleColor:VGray_color forState:UIControlStateNormal];
+    button.titleEdgeInsets=UIEdgeInsetsMake(0,5, 0, -5);
         [button addTarget:self action:@selector(CancleClick) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem  *barButton=[[UIBarButtonItem alloc]initWithCustomView:button];
     self.navigationItem.rightBarButtonItem=barButton;
