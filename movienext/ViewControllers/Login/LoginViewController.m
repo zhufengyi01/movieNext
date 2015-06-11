@@ -308,7 +308,7 @@
                             userCenter.verified=[detail objectForKey:@"verified"];
                             userCenter.sex=[detail objectForKey:@"sex"];
                             userCenter.signature=[detail objectForKey:@"brief"];
-                            userCenter.fake=@"1";
+                            userCenter.fake= @"1";
                             if ([detail objectForKey:@"fake"]) {
                                 userCenter.fake=[detail objectForKey:@"fake"];
                             }

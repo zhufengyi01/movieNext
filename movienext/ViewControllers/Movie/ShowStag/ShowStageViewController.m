@@ -330,6 +330,10 @@
     }
     [MovieLogoImageView sd_setImageWithURL:[NSURL URLWithString:uselogoString] placeholderImage:[UIImage imageNamed:@"user_normal.png"]];
     MovieLogoImageView.layer.masksToBounds = YES;
+    
+    if (_WeiboInfo.uerInfo.fake == 0) {
+        NSLog(@"fake = 0");
+    }
     [leftButtomButton addSubview:MovieLogoImageView];
     
     movieNameLable =[[UILabel alloc]initWithFrame:CGRectMake(35,12, 120, 30)];

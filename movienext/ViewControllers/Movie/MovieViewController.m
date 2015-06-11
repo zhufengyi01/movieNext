@@ -66,6 +66,8 @@ static const CGFloat MJDuration = 0.6;
 
 @property(nonatomic,strong)UILabel  *nav_line_lable;
 
+@property(nonatomic,strong) NSString  *IS_CHECK;  //是否是审核版 1  代表是审核版   0代表是正式版
+
 @end
 
 @implementation MovieViewController
@@ -96,6 +98,9 @@ static const CGFloat MJDuration = 0.6;
     
     //创建导航
     //self.view.backgroundColor=[UIColor whiteColor];
+    //判断是否是审核版
+    [self requestisReview];
+    
     [self createNavigation];
     [self createMyScrollerView];
     [self createSegmentView];
@@ -127,38 +132,49 @@ static const CGFloat MJDuration = 0.6;
     //naviTitleView.backgroundColor =[UIColor yellowColor];
     naviTitleView.userInteractionEnabled=YES;
     self.navigationItem.titleView=naviTitleView;
-   //创建两个按钮  //推荐和电影
-    self.recommentBtn =[UIButton buttonWithType:UIButtonTypeCustom];
-    self.recommentBtn.frame=CGRectMake(0, 0, NaviTitle_Width/2, NaviTitle_Height);
-    [self.recommentBtn setTitle:@"热门" forState:UIControlStateNormal];
-    [self.recommentBtn.titleLabel setFont:[UIFont systemFontOfSize:16]];
-    [self.recommentBtn setTitleColor:VLight_GrayColor forState:UIControlStateNormal];
-    [self.recommentBtn setTitleColor:VBlue_color forState:UIControlStateSelected];
-    self.recommentBtn.selected=YES;
-    //self.recommentBtn.backgroundColor =[UIColor redColor];
-    __weak typeof(self) weakSelf = self;
+#warning 审核的时候填写为1, 平时写上0
+    if ([self.IS_CHECK intValue]==0) {
+        UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 30) Font:30 Text:@"热门"];
+        titleLable.textColor=VBlue_color;
+        titleLable.font=[UIFont boldSystemFontOfSize:18];
+        titleLable.textColor=VGray_color;
+        titleLable.textAlignment=NSTextAlignmentCenter;
+        self.navigationItem.titleView=titleLable;
+    } else {
+       //创建两个按钮  //推荐和电影
+        self.recommentBtn =[UIButton buttonWithType:UIButtonTypeCustom];
+        self.recommentBtn.frame=CGRectMake(0, 0, NaviTitle_Width/2, NaviTitle_Height);
+        [self.recommentBtn setTitle:@"热门" forState:UIControlStateNormal];
+        [self.recommentBtn.titleLabel setFont:[UIFont systemFontOfSize:16]];
+        [self.recommentBtn setTitleColor:VLight_GrayColor forState:UIControlStateNormal];
+        [self.recommentBtn setTitleColor:VBlue_color forState:UIControlStateSelected];
+        self.recommentBtn.selected=YES;
+        //self.recommentBtn.backgroundColor =[UIColor redColor];
+        __weak typeof(self) weakSelf = self;
+        
+        [self.recommentBtn addActionHandler:^(NSInteger tag) {
+            [weakSelf.myScorollerView setContentOffset:CGPointMake(0, 0) animated:YES];
+        }];
+        [naviTitleView addSubview:self.recommentBtn];
     
-    [self.recommentBtn addActionHandler:^(NSInteger tag) {
-        [weakSelf.myScorollerView setContentOffset:CGPointMake(0, 0) animated:YES];
-    }];
-    [naviTitleView addSubview:self.recommentBtn];
-    
-    self.feedBtn =[UIButton buttonWithType:UIButtonTypeCustom];
-    self.feedBtn.frame=CGRectMake(NaviTitle_Width/2, 0, NaviTitle_Width/2, NaviTitle_Height);
-    [self.feedBtn setTitle:@"电影" forState:UIControlStateNormal];
-    [self.feedBtn.titleLabel setFont:[UIFont systemFontOfSize:16]];
-    self.feedBtn.selected=NO;
-    //self.feedBtn.backgroundColor =[UIColor blueColor];
-    [self.feedBtn setTitleColor:VLight_GrayColor forState:UIControlStateNormal];
-    [self.feedBtn setTitleColor:VBlue_color forState:UIControlStateSelected];
-    [self.feedBtn addActionHandler:^(NSInteger tag) {
-        [weakSelf.myScorollerView setContentOffset:CGPointMake(kDeviceWidth, 0) animated:YES];
-    }];
-    [naviTitleView addSubview:self.feedBtn];
+
+        self.feedBtn =[UIButton buttonWithType:UIButtonTypeCustom];
+        self.feedBtn.frame=CGRectMake(NaviTitle_Width/2, 0, NaviTitle_Width/2, NaviTitle_Height);
+        [self.feedBtn setTitle:@"电影" forState:UIControlStateNormal];
+        [self.feedBtn.titleLabel setFont:[UIFont systemFontOfSize:16]];
+        self.feedBtn.selected=NO;
+        //self.feedBtn.backgroundColor =[UIColor blueColor];
+        [self.feedBtn setTitleColor:VLight_GrayColor forState:UIControlStateNormal];
+        [self.feedBtn setTitleColor:VBlue_color forState:UIControlStateSelected];
+        [self.feedBtn addActionHandler:^(NSInteger tag) {
+            [weakSelf.myScorollerView setContentOffset:CGPointMake(kDeviceWidth, 0) animated:YES];
+        }];
+        [naviTitleView addSubview:self.feedBtn];
   
-    self.nav_line_lable =[[UILabel alloc]initWithFrame:CGRectMake(0,NaviTitle_Height-Lable_Line_Height, NaviTitle_Width/2,Lable_Line_Height )];
-    self.nav_line_lable.backgroundColor =VBlue_color;
-    [naviTitleView addSubview:self.nav_line_lable];
+        self.nav_line_lable =[[UILabel alloc]initWithFrame:CGRectMake(0,NaviTitle_Height-Lable_Line_Height, NaviTitle_Width/2,Lable_Line_Height )];
+        self.nav_line_lable.backgroundColor =VBlue_color;
+        [naviTitleView addSubview:self.nav_line_lable];
+    }
     
     UIButton  *searchbutton=[UIButton buttonWithType:UIButtonTypeCustom];
       [searchbutton setImage:[UIImage imageNamed:@"search_icon.png"] forState:UIControlStateNormal];
@@ -305,7 +321,6 @@ static const CGFloat MJDuration = 0.6;
     _dataArray1=[[NSMutableArray alloc]init];
     _dataArray2=[[NSMutableArray alloc]init];
     _dataArray3=[[NSMutableArray alloc]init];
-
 }
 -(void)initUI
 {
@@ -348,6 +363,24 @@ static const CGFloat MJDuration = 0.6;
      *  集成刷新控件
      */
 }
+
+-(void)requestisReview
+{
+    _IS_CHECK = @"1";
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    NSString *urlString =[NSString stringWithFormat:@"%@/user/review-mode", kApiBaseUrl];
+    [manager POST:urlString parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        if ([responseObject objectForKey:@"code"]) {
+            self.IS_CHECK=[responseObject objectForKey:@"code"];
+        }
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+}
+
 -(void)setRecommtUprefresh
 {
     __weak typeof(self) weakSelf = self;
@@ -586,11 +619,9 @@ static const CGFloat MJDuration = 0.6;
 -(void)requestRecommendData
 {
     UserDataCenter *userCenter =[UserDataCenter shareInstance];
-    NSDictionary *parameters = @{@"user_id":userCenter.user_id, @"status":@"3"};
+    NSDictionary *parameters = @{@"user_id":userCenter.user_id, @"status":@"3", @"Version":Version};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    NSString  *urlString;
-   
-        urlString =[NSString stringWithFormat:@"%@/weibo/list-by-status?per-page=%d&page=%d", kApiBaseUrl,pageSize,page0];
+    NSString  *urlString =[NSString stringWithFormat:@"%@/weibo/list-by-status?per-page=%d&page=%d", kApiBaseUrl,pageSize,page0];
     
     [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         [loadView stopAnimation];
