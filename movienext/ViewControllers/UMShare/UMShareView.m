@@ -125,22 +125,21 @@
     [shareView addSubview:logosupView];
     
     _moviewName= [ZCControl createLabelWithFrame:CGRectMake(0,0,kDeviceWidth-20, 20) Font:12 Text:@""];
-    _moviewName.textColor=VLight_GrayColor;
+    _moviewName.textColor=VGray_color;
     _moviewName.numberOfLines=0;
-  
+   
+    if (!_stageInfo.movieInfo|!_stageInfo.movieInfo.name) {
+        _stageInfo.movieInfo.name=@"";
+    }
     _moviewName.text=[NSString stringWithFormat:@"%@",_stageInfo.movieInfo.name];
     _moviewName.adjustsFontSizeToFitWidth=NO;
     _moviewName.lineBreakMode=NSLineBreakByTruncatingTail;
     [logosupView addSubview:_moviewName];
     
-    if (!_stageInfo.movieInfo|!_stageInfo.movieInfo.name) {
-        _stageInfo.movieInfo.name=@"";
-     }
-    
     NSMutableString  *namstr =[[NSMutableString alloc]initWithString:_stageInfo.movieInfo.name];
     NSString  *str=namstr;
-    if (namstr.length>8) {
-       str= [namstr substringToIndex:8];
+    if (namstr.length>20) {
+       str= [namstr substringToIndex:20];
        str =[str stringByAppendingString:@"..."];
     }
     _moviewName.text=[NSString stringWithFormat:@"《%@》 电影卡片",str];
@@ -183,7 +182,6 @@
         btn.backgroundColor=[UIColor whiteColor];
         [buttomView addSubview:btn];
     }
-    
     UIButton  *button=[UIButton buttonWithType:UIButtonTypeCustom];
     [button setTitle:@"取消" forState:UIControlStateNormal];
     [button setTitleColor:VGray_color forState:UIControlStateNormal];
@@ -228,7 +226,6 @@
         [Al show];
         NSLog(@"保存失败");
     } else {
-       
         UIAlertView  *al =[[UIAlertView alloc]initWithTitle:nil message:@"图片保存成功" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
         [al show];
     }

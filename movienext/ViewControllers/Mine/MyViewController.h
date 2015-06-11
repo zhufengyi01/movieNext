@@ -8,13 +8,15 @@
 
 #import <UIKit/UIKit.h>
 #import "CommonStageCell.h"
-/*typedef NS_ENUM(NSInteger,NSUserCente)
+typedef NS_ENUM(NSInteger,NSMyPageType)
 {
-    NSUserPageTypeMySelfController=100,
-    NSUserPageTypeOthersController=101,
+    NSMyPageTypeMySelfController,  //自己的中心进来
+    NSMyPageTypeOthersController   ///别人的页面进来
 };
-*/
+
 @interface MyViewController : UIViewController
+
+@property(nonatomic,assign) NSMyPageType   pageType; //区别自己还是别人
 
 @property (nonatomic, strong) NSString * author_id;//当前正在查看的作者ID
 

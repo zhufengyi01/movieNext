@@ -59,7 +59,6 @@ static const CGFloat MJDuration = 0.1;
 }
 -(void)createNavigation
 {
-    
     NSString  *titleString=@"微博最新";
     if (self.pageType==NSNewAddPageSoureTypeCloseWeiboList) {
         titleString =@"微博屏蔽";

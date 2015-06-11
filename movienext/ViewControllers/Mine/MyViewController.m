@@ -807,6 +807,9 @@ static const CGFloat MJDuration = 1.0;
         vc.stageInfo = model.weiboInfo.stageInfo;
         vc.weiboInfo=model.weiboInfo;
         vc.pageType=NSStagePapeTypeMyAdd;//用户添加的
+        if (self.pageType==NSMyPageTypeOthersController) {
+            vc.pageType=NSStagePapeTypeOthersAdd;
+        }
         UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
         self.navigationItem.backBarButtonItem=item;
         [self.navigationController pushViewController:vc animated:YES];

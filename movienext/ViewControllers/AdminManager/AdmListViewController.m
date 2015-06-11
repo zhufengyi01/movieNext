@@ -38,7 +38,6 @@
     titleLable.font=[UIFont boldSystemFontOfSize:18];
     titleLable.textAlignment=NSTextAlignmentCenter;
     self.navigationItem.titleView=titleLable;
-
 }
 -(void)createUI
 {
