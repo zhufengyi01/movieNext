@@ -1009,7 +1009,7 @@
 {
     
     if (button==ShareButton) {  //分享有关
-    UIImage  *image=[Function getImage:ShareView WithSize:CGSizeMake(kStageWidth-10, (kDeviceWidth-20)*(9.0/16))];
+    UIImage  *image=[Function getImage:ShareView WithSize:CGSizeMake(kStageWidth-10, (kDeviceWidth-20)*(9.0/16.0))];
         if (self.weiboInfo) {
             self.stageInfo=self.weiboInfo.stageInfo;
         }

@@ -222,7 +222,6 @@
                     if (_dataArray.count>0) {
                         // NSLog(@"------_dataArray -=====%@",_dataArray);
                         [_myTableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
-
                     } else {
                         //添加一个无内容的笑脸
                         [loadView showNullView:@"没有数据"];
