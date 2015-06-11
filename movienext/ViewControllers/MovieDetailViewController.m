@@ -159,7 +159,7 @@ static const CGFloat MJDuration = 0.2;
     [titleView addSubview:MovieLogoImageView];
     //电影名
     UILabel  *movieNameLable =[[UILabel alloc]initWithFrame:CGRectMake(35,0, 120, 30)];
-    movieNameLable.font=[UIFont systemFontOfSize:18];
+    movieNameLable.font=[UIFont systemFontOfSize:16];
     movieNameLable.textColor=VGray_color;
     // movieNameLable.numberOfLines=1;
     movieNameLable.lineBreakMode=NSLineBreakByTruncatingTail;
@@ -186,7 +186,8 @@ static const CGFloat MJDuration = 0.2;
     }
     nameStr =[Function htmlString:nameStr];
     float nameW=kDeviceWidth*0.6;
-    CGSize   Nsize =[nameStr boundingRectWithSize:CGSizeMake(nameW, 25) options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes:[NSDictionary dictionaryWithObject:[UIFont systemFontOfSize:16] forKey:NSFontAttributeName] context:nil].size;
+    
+    CGSize   Nsize =[nameStr boundingRectWithSize:CGSizeMake(nameW, 25) options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes:[NSDictionary dictionaryWithObject:movieNameLable.font forKey:NSFontAttributeName] context:nil].size;
     movieNameLable.text=[NSString stringWithFormat:@"%@",nameStr];
     movieNameLable.frame=CGRectMake(35,8,Nsize.width+5, 25);
     titleView.frame=CGRectMake(0, 0, 30+5+movieNameLable.frame.size.width, 40);
