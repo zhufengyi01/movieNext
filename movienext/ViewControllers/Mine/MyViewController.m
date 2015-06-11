@@ -176,7 +176,7 @@ static const CGFloat MJDuration = 1.0;
         _myConllectionView.frame=CGRectMake(0, 0, kDeviceWidth, kDeviceHeight-60);
      }
     [layout setHeaderReferenceSize:CGSizeMake(_myConllectionView.frame.size.width,160)];
-    _myConllectionView.backgroundColor=View_BackGround;
+    _myConllectionView.backgroundColor=[UIColor whiteColor];
     //注册大图模式
      //注册小图模式
     [_myConllectionView registerClass:[SmallImageCollectionViewCell class] forCellWithReuseIdentifier:@"smallcell"];

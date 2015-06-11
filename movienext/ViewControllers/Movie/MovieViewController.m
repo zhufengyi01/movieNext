@@ -101,7 +101,7 @@ static const CGFloat MJDuration = 0.6;
     [self createSegmentView];
     [self initData];
     [self initUI];
-    //[self creatLoadView];
+    [self creatLoadView];
 }
 -(void)createNavigation
 {
@@ -314,11 +314,11 @@ static const CGFloat MJDuration = 0.6;
    UICollectionViewFlowLayout  *   Relayout=[[UICollectionViewFlowLayout alloc]init];
     Relayout.minimumInteritemSpacing=0; //cell之间左右的
     Relayout.minimumLineSpacing=5;      //cell上下间隔
-    Relayout.sectionInset=UIEdgeInsetsMake(0,0,64, 0); //整个偏移量 上左下右
+    Relayout.sectionInset=UIEdgeInsetsMake(0,0,0, 0); //整个偏移量 上左下右
     self.RecommendCollectionView =[[UICollectionView alloc]initWithFrame:CGRectMake(0,0,kDeviceWidth, kDeviceHeight-kHeightNavigation-kHeigthTabBar-0) collectionViewLayout:Relayout];
     //[layout setHeaderReferenceSize:CGSizeMake(_myConllectionView.frame.size.width, kDeviceHeight/3+64+110)];
     
-    self.RecommendCollectionView.backgroundColor=View_BackGround;
+    self.RecommendCollectionView.backgroundColor=[UIColor whiteColor];
      //注册小图模式
     [self.RecommendCollectionView registerClass:[SmallImageCollectionViewCell class] forCellWithReuseIdentifier:@"smallcell"];
  
@@ -394,6 +394,10 @@ static const CGFloat MJDuration = 0.6;
         if (pageCount0>page0) {
             page0=page0+1;
             [weakSelf requestRecommendData];
+        }
+        else
+        {
+            [weakSelf.RecommendCollectionView.footer noticeNoMoreData];
         }
         // 设置文字
         [weakSelf.RecommendCollectionView.footer setTitle:@"点击加载更多..." forState:MJRefreshFooterStateIdle];
@@ -496,6 +500,10 @@ static const CGFloat MJDuration = 0.6;
                     page1=page1+1;
                     [weakSelf requestData];
                 }
+                else
+                {
+                    [weakSelf.myConllectionView.footer noticeNoMoreData];
+                }
             }
             else if(i==1&&btn.selected==YES)
             {
@@ -585,7 +593,8 @@ static const CGFloat MJDuration = 0.6;
         urlString =[NSString stringWithFormat:@"%@/weibo/list-by-status?per-page=%d&page=%d", kApiBaseUrl,pageSize,page0];
     
     [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        
+        [loadView stopAnimation];
+        [loadView removeFromSuperview];
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
             pageCount0=[[responseObject objectForKey:@"pageCount"] intValue];
             if (page0==pageCount0) {
@@ -639,11 +648,12 @@ static const CGFloat MJDuration = 0.6;
                 
             }
             
-            [self.myConllectionView reloadData];
+            [self.RecommendCollectionView reloadData];
             
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
+        [loadView showFailLoadData];
     }];
     
 }
@@ -670,11 +680,8 @@ static const CGFloat MJDuration = 0.6;
             PAGE=page3;
         }
     }
-    
-    
     NSDictionary  *parameters =@{@"type":type};
     NSString  *urlString=[NSString stringWithFormat:@"%@/feed/list?per-page=%d&page=%d",kApiBaseUrl,pageSize,PAGE];
-    
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
@@ -692,8 +699,7 @@ static const CGFloat MJDuration = 0.6;
                     }
                     NSArray  *detailarray=[responseObject objectForKey:@"models"];
                     pageCount1 =[[responseObject objectForKey:@"pageCount"] intValue];
-                    
-                  
+                   
                     if (detailarray.count>0) {
                         [_dataArray1 addObjectsFromArray:detailarray];
                     }
@@ -731,9 +737,7 @@ static const CGFloat MJDuration = 0.6;
             }
             
             [_myConllectionView reloadData];
-
         }
-        
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
         [loadView showFailLoadData];
@@ -743,6 +747,7 @@ static const CGFloat MJDuration = 0.6;
 //数据下载失败的时候执行这个方法
 -(void)reloadDataClick
 {
+    [self requestRecommendData];
     [self requestData];
     //点击完之后，动画又要开始旋转，同时隐藏了加载失败的背景
     [loadView hidenFailLoadAndShowAnimation];

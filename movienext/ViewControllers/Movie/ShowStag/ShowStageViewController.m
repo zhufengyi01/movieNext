@@ -984,7 +984,6 @@
     
     [UMSocialSnsPlatformManager getSocialPlatformWithName:[sharearray  objectAtIndex:button.tag-10000]].snsClickHandler(self,[UMSocialControllerService defaultControllerService],YES);
     
-
 }
 //跳转到个人页
 -(void)StageMovieButtonClick:(UIButton *) button
