@@ -578,11 +578,12 @@ static const CGFloat MJDuration = 0.6;
 -(void)requestRecommendData
 {
     UserDataCenter *userCenter =[UserDataCenter shareInstance];
-    NSDictionary *parameters = @{@"user_id":userCenter.user_id};
+    NSDictionary *parameters = @{@"user_id":userCenter.user_id, @"status":@"3"};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     NSString  *urlString;
    
-        urlString =[NSString stringWithFormat:@"%@/weibo/list-recommend?per-page=%d&page=%d", kApiBaseUrl,pageSize,page0];
+        urlString =[NSString stringWithFormat:@"%@/weibo/list-by-status?per-page=%d&page=%d", kApiBaseUrl,pageSize,page0];
+    
     [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
