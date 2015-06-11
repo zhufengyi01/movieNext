@@ -82,7 +82,8 @@ static const CGFloat MJDuration = 0.6;
     //}
    // [[UINavigationBar appearance] setShadowImage:[UIImage imageWithColor:[UIColor clearColor] size:CGSizeMake(kDeviceWidth, 1)]];
     
-    [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color.png"] forBarMetrics:UIBarMetricsDefault];
+    //[self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color.png"] forBarMetrics:UIBarMetricsDefault];
+    [self.navigationController.navigationBar  setBackgroundImage:[UIImage imageWithColor:[UIColor colorWithRed:243.0/255 green:243.0/255 blue:243.0/255 alpha:1]] forBarMetrics:UIBarMetricsDefault];
 
  
 }
@@ -145,7 +146,7 @@ static const CGFloat MJDuration = 0.6;
         self.recommentBtn =[UIButton buttonWithType:UIButtonTypeCustom];
         self.recommentBtn.frame=CGRectMake(0, 0, NaviTitle_Width/2, NaviTitle_Height);
         [self.recommentBtn setTitle:@"热门" forState:UIControlStateNormal];
-        [self.recommentBtn.titleLabel setFont:[UIFont systemFontOfSize:16]];
+        [self.recommentBtn.titleLabel setFont:[UIFont boldSystemFontOfSize:16]];
         [self.recommentBtn setTitleColor:VLight_GrayColor forState:UIControlStateNormal];
         [self.recommentBtn setTitleColor:VBlue_color forState:UIControlStateSelected];
         self.recommentBtn.selected=YES;
@@ -161,7 +162,7 @@ static const CGFloat MJDuration = 0.6;
         self.feedBtn =[UIButton buttonWithType:UIButtonTypeCustom];
         self.feedBtn.frame=CGRectMake(NaviTitle_Width/2, 0, NaviTitle_Width/2, NaviTitle_Height);
         [self.feedBtn setTitle:@"电影" forState:UIControlStateNormal];
-        [self.feedBtn.titleLabel setFont:[UIFont systemFontOfSize:16]];
+        [self.feedBtn.titleLabel setFont:[UIFont boldSystemFontOfSize:16]];
         self.feedBtn.selected=NO;
         //self.feedBtn.backgroundColor =[UIColor blueColor];
         [self.feedBtn setTitleColor:VLight_GrayColor forState:UIControlStateNormal];

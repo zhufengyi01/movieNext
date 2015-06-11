@@ -120,7 +120,7 @@
     [shareView addSubview:_ShareimageView];
     
     //放置电影名和标签的view
-    logosupView=[[UIView alloc]initWithFrame:CGRectMake(0,_ShareimageView.frame.origin.y+_ShareimageView.frame.size.height-2,kDeviceWidth-20, 20)];
+    logosupView=[[UIView alloc]initWithFrame:CGRectMake(0,_ShareimageView.frame.origin.y+_ShareimageView.frame.size.height-2,kDeviceWidth-20, 22)];
     logosupView.backgroundColor=[UIColor blackColor];
    // logosupView.hidden=YES;
     [shareView addSubview:logosupView];

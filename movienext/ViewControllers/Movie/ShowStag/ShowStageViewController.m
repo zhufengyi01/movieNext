@@ -131,10 +131,11 @@
     UserDataCenter  *usecenter =[UserDataCenter shareInstance];
         UIButton  *admOper =[UIButton buttonWithType:UIButtonTypeCustom];
         admOper.frame=CGRectMake(0, 0, 30, 25);
+        admOper.imageEdgeInsets=UIEdgeInsetsMake(0, 10, 0, -10);
         admOper.hidden=YES;
        [admOper setTitleColor:VGray_color forState:UIControlStateNormal];
       ///[admOper setTitle:@"管" forState:UIControlStateNormal];
-       [admOper setImage:[UIImage imageNamed:@"guanliyuan.png"] forState:UIControlStateNormal];
+    [admOper setImage:[UIImage imageNamed:@"guanliyuan_detail"] forState:UIControlStateNormal];
        [admOper setTitleColor:VBlue_color forState:UIControlStateNormal];
           [admOper  addActionHandler:^(NSInteger tag) {
             //管理员
@@ -225,8 +226,11 @@
     [self.view addSubview:scrollView];
 }
 
+
 -(void)createStageView
 {
+    
+    
     //分享出来的不是这个view
     BgView =[[UIImageView alloc]initWithFrame:CGRectMake(0,0,kDeviceWidth, (kDeviceWidth-0)*(9.0/16))];
     BgView.clipsToBounds=YES;
@@ -244,7 +248,6 @@
     //计算图片的宽高比
     float width = [self.stageInfo.width intValue];
     float heigth =[self.stageInfo.height intValue];
-    
     float x;
     float y=0;
     float w;
@@ -268,6 +271,13 @@
         h= kDeviceWidth-20;
         w=(kDeviceWidth-20)*(width/heigth);
         x=((kDeviceWidth-20)-w)/2;
+    }
+    else
+    {
+        x=0;
+        y=0;
+        h=(kDeviceWidth-20)*(9.0/16);
+        w=(kDeviceWidth-20);
     }
     
     //分享的view 上面放一张图片
@@ -331,12 +341,10 @@
     
     CGSize  Msize = [markLable.text boundingRectWithSize:CGSizeMake(kDeviceWidth-40, MAXFLOAT) options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes:[NSDictionary dictionaryWithObject:markLable.font forKey:NSFontAttributeName] context:nil].size;
     
-    
     self.ShareView.frame=CGRectMake(self.ShareView.frame.origin.x, self.ShareView.frame.origin.y, self.ShareView.frame.size.width, self.ShareView.frame.size.height+Msize.height-27);
     BgView.frame=CGRectMake(0, 0, kDeviceWidth, self.ShareView.frame.size.height+20);
 
-    
-    markLable.frame=CGRectMake(10, self.ShareView.frame.size.height-Msize.height ,self.ShareView.frame.size.width-20,Msize.height);
+    markLable.frame=CGRectMake(10, self.ShareView.frame.size.height-Msize.height-5 ,self.ShareView.frame.size.width-20,Msize.height);
     
     
     //创建中间的工具栏
@@ -351,7 +359,7 @@
     BgView2.backgroundColor=View_ToolBar;
     [self.view bringSubviewToFront:BgView2];
     [BgView addSubview:BgView2];
-    BgView.frame=CGRectMake(0, 0, kDeviceWidth, BgView.frame.size.height+45);
+    BgView.frame=CGRectMake(0, 0, kDeviceWidth, self.ShareView.frame.size.height+45+20);
     
     
     leftButtomButton=[UIButton buttonWithType:UIButtonTypeCustom];
@@ -479,9 +487,9 @@
     }
     
     TagContentView  = [[UIView alloc]initWithFrame:CGRectMake(0, BgView2.frame.origin.y+BgView2.frame.size.height, kDeviceWidth, 40)];
-    //TagContentView.backgroundColor =[UIColor redColor];
+    TagContentView.backgroundColor =[UIColor clearColor];
     [BgView addSubview:TagContentView];
-    
+
     self.WeiboTagLable=[[M80AttributedLabel alloc]initWithFrame:CGRectZero];
     self.WeiboTagLable.backgroundColor =[UIColor clearColor];
     self.WeiboTagLable.lineSpacing=5;
@@ -493,17 +501,21 @@
             [tagView setcornerRadius:4];
             [tagView setbigTagWithSize:CGSizeMake(8,4)];
             tagView.tag=5000+i;
-            
             tagView.backgroundColor =[UIColor redColor];
             [self.WeiboTagLable appendView:tagView margin:UIEdgeInsetsMake(5, 10, 0, 0)];
         }
     }
     CGSize  Tsize =[self.WeiboTagLable sizeThatFits:CGSizeMake(kDeviceWidth-20,CGFLOAT_MAX)];
     self.WeiboTagLable.frame=CGRectMake(0, 0, kDeviceWidth-20, Tsize.height+0);
-    TagContentView.frame=CGRectMake(0, BgView2.frame.origin.y+BgView2.frame.size.height+5, kDeviceWidth,Tsize.height+0);
-    //CGRect bRect = BgView.frame;
-    
-    BgView.frame=CGRectMake(0,0,kDeviceWidth,self.stageImageView.frame.origin.y+self.stageImageView.frame.size.height+45+TagContentView.frame.size.height+10+TagContentView.frame.size.height);
+    if (Tsize.height>10) {
+         TagContentView.frame=CGRectMake(0, BgView2.frame.origin.y+BgView2.frame.size.height+5, kDeviceWidth,Tsize.height+5);
+     }
+     else
+     {
+         TagContentView.frame=CGRectMake(0, BgView2.frame.origin.y+BgView2.frame.size.height, kDeviceWidth, 10);
+     }
+    BgView.frame=CGRectMake(0,0,kDeviceWidth,TagContentView.frame.origin.y+TagContentView.frame.size.height+0);
+  
     
 }
 #pragma mark 星星点赞方法
@@ -714,20 +726,16 @@
     tagView.tagBgImageview.backgroundColor =VLight_GrayColor;
     tagView.titleLable.textColor=[UIColor whiteColor];
     
-        
-  ///重新改变shareview的高度
+   ///重新改变shareview的高度
         markLable.text=weiboInfo.content;
         CGSize  Msize = [weiboInfo.content boundingRectWithSize:CGSizeMake(kDeviceWidth-40, MAXFLOAT) options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes:[NSDictionary dictionaryWithObject:markLable.font forKey:NSFontAttributeName] context:nil].size;
         
+        self.ShareView.frame=CGRectMake(10,10, self.ShareView.frame.size.width, self.stageImageView.frame.size.height+Msize.height-27);
+        BgView2.frame=CGRectMake(BgView2.frame.origin.x, self.ShareView.frame.origin.y+self.ShareView.frame.size.height+5, BgView2.frame.size.width, BgView2.frame.size.height);
+        BgView.frame=CGRectMake(0, 0, kDeviceWidth, self.ShareView.frame.size.height+45+20);
+        markLable.frame=CGRectMake(10, self.ShareView.frame.size.height-Msize.height-5 ,self.ShareView.frame.size.width-20,Msize.height);
         
         
-        self.ShareView.frame=CGRectMake(self.ShareView.frame.origin.x, self.ShareView.frame.origin.y, self.ShareView.frame.size.width, self.ShareView.frame.size.height+Msize.height-27);
-        BgView.frame=CGRectMake(0, 0, kDeviceWidth, self.ShareView.frame.size.height+20);
-        markLable.frame=CGRectMake(10, self.ShareView.frame.size.height-Msize.height ,self.ShareView.frame.size.width-20,Msize.height);
-        
-        
-    //从新布局中间视图
-    // BgView2.frame=CGRectMake(<#CGFloat x#>, <#CGFloat y#>, <#CGFloat width#>, <#CGFloat height#>);
     Like_lable.text=[NSString stringWithFormat:@"%@",_WeiboInfo.like_count];
     // 看是否已赞的
     for (int i=0; i<self.upweiboArray.count; i++) {
@@ -755,7 +763,6 @@
     movieNameLable.frame=CGRectMake(35,0, Nsize.width+4, 30);
     leftButtomButton.frame=CGRectMake(10, 9, 30+5+movieNameLable.frame.size.width, 27);
     movieNameLable.text=[NSString stringWithFormat:@"%@",nameStr];
-        
         
         
     }

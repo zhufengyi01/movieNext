@@ -66,7 +66,7 @@ static const CGFloat MJDuration = 1.0;
 
     UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:@"消息"];
     titleLable.textColor=VGray_color;
-    titleLable.font=[UIFont boldSystemFontOfSize:18];
+    titleLable.font=[UIFont boldSystemFontOfSize:16];
     titleLable.textAlignment=NSTextAlignmentCenter;
     self.navigationItem.titleView=titleLable;
    
