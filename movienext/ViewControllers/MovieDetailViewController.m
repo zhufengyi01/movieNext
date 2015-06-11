@@ -996,7 +996,7 @@ static const CGFloat MJDuration = 0.2;
     if (bigModel==YES) {
         return UIEdgeInsetsMake(0,0,0,0);
     }
-    return UIEdgeInsetsMake(0,0, 5,0);
+    return UIEdgeInsetsMake(5,0, 5,0);
 }
 //左右间距
 -(CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section

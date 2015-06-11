@@ -330,7 +330,7 @@ static const CGFloat MJDuration = 0.6;
    UICollectionViewFlowLayout  *   Relayout=[[UICollectionViewFlowLayout alloc]init];
     Relayout.minimumInteritemSpacing=0; //cell之间左右的
     Relayout.minimumLineSpacing=5;      //cell上下间隔
-    Relayout.sectionInset=UIEdgeInsetsMake(0,0,0, 0); //整个偏移量 上左下右
+    Relayout.sectionInset=UIEdgeInsetsMake(5,0,0, 0); //整个偏移量 上左下右
     self.RecommendCollectionView =[[UICollectionView alloc]initWithFrame:CGRectMake(0,0,kDeviceWidth, kDeviceHeight-kHeightNavigation-kHeigthTabBar-0) collectionViewLayout:Relayout];
     //[layout setHeaderReferenceSize:CGSizeMake(_myConllectionView.frame.size.width, kDeviceHeight/3+64+110)];
     
