@@ -41,7 +41,7 @@
 }
 -(void)createUI
 {
-    _dataArray =[[NSMutableArray alloc]initWithObjects:@"用户列表",@"标签，表情包",@"已屏蔽剧照列表",@"[-1级]  已屏蔽列表",@"[0级]  最新列表",@"[1级]  发现列表",@"[2级］热门列表",nil];
+    _dataArray =[[NSMutableArray alloc]initWithObjects:@"用户列表",@"标签，表情包",@"已屏蔽剧照列表",@"微博屏蔽",@"微博最新",@"微博发现",@"微博热门",nil];
     _myTableView =[[UITableView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth,55*7) style:UITableViewStylePlain];
     _myTableView.delegate=self;
     _myTableView.dataSource=self;

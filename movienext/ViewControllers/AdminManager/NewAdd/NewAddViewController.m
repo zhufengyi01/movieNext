@@ -35,13 +35,13 @@ static const CGFloat MJDuration = 0.1;
 @interface NewAddViewController ()<UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UICollectionViewDelegate,LoadingViewDelegate>
 {
     UICollectionViewFlowLayout    *layout;
-
+    
     int pageSize;
     int page;
     int pageCount;
     LoadingView         *loadView;
     UserDataCenter     *userCenter;
-
+    
     
 }
 @end
@@ -54,23 +54,22 @@ static const CGFloat MJDuration = 0.1;
     [self initData];
     [self initUI];
     [self createNavigation];
-   // [self requestData];
-
+    // [self requestData];
+    
 }
 -(void)createNavigation
 {
-    
-   NSString  *titleString=@"最新列表";
+    NSString  *titleString=@"微博最新";
     if (self.pageType==NSNewAddPageSoureTypeCloseWeiboList) {
-        titleString =@"已屏蔽列表";
+        titleString =@"微博屏蔽";
     }
     else if(self.pageType==NSNewAddPageSoureTypeDecorver)
     {
-        titleString=@"发现列表";
+        titleString=@"微博发现";
     }
     else if (self.pageType==NSNewAddPageSoureTypeRecommed)
     {
-        titleString=@"热门列表";
+        titleString=@"微博推荐";
     }
     UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:titleString];
     titleLable.textColor=VGray_color;
@@ -79,7 +78,7 @@ static const CGFloat MJDuration = 0.1;
     titleLable.textAlignment=NSTextAlignmentCenter;
     self.navigationItem.titleView=titleLable;
     
-
+    
 }
 -(void)initData
 {
@@ -101,8 +100,8 @@ static const CGFloat MJDuration = 0.1;
     //layout.minimumInteritemSpacing=10; //cell之间左右的
     //layout.minimumLineSpacing=10;      //cell上下间隔
     //layout.itemSize=CGSizeMake(80,140);  //cell的大小
-         layout.sectionInset=UIEdgeInsetsMake(0,0,64, 0); //整个偏移量 上左下右
-     _myConllectionView =[[UICollectionView alloc]initWithFrame:CGRectMake(0,0,kDeviceWidth, kDeviceHeight-20-0) collectionViewLayout:layout];
+    layout.sectionInset=UIEdgeInsetsMake(0,0,64, 0); //整个偏移量 上左下右
+    _myConllectionView =[[UICollectionView alloc]initWithFrame:CGRectMake(0,0,kDeviceWidth, kDeviceHeight-20-0) collectionViewLayout:layout];
     //[layout setHeaderReferenceSize:CGSizeMake(_myConllectionView.frame.size.width, kDeviceHeight/3+64+110)];
     
     _myConllectionView.backgroundColor=View_BackGround;
@@ -118,8 +117,8 @@ static const CGFloat MJDuration = 0.1;
     
     [self.view addSubview:_myConllectionView];
     [self setUprefresh];
-//    [self setupHeadView];
-//    [self setupFootView];
+    //    [self setupHeadView];
+    //    [self setupFootView];
 }
 - (void)setUprefresh
 {
@@ -138,8 +137,8 @@ static const CGFloat MJDuration = 0.1;
         // 进入刷新状态就会回调这个Block
         [weakSelf requestData];
         
-       
-
+        
+        
         // 设置文字
         [weakSelf.myConllectionView.header setTitle:@"下拉刷新..." forState:MJRefreshHeaderStateIdle];
         [weakSelf.myConllectionView.header setTitle:@"释放刷新..." forState:MJRefreshHeaderStatePulling];
@@ -196,50 +195,50 @@ static const CGFloat MJDuration = 0.1;
 }
 
 /*
-
-- (void)setupHeadView
-{
-    
-    __unsafe_unretained typeof(self) vc = self;
-    // 添加下拉刷新头部控件
-    [_myConllectionView addHeaderWithCallback:^{
-        page=1;
-        if (self.dataArray.count>0) {
-            [vc.dataArray removeAllObjects];
-        }
-        // 进入刷新状态就会回调这个Block
-        [vc requestData];
-        
-        // 模拟延迟加载数据，因此2秒后才调用）
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            //[vc.myConllectionView reloadData];
-            // 结束刷新
-            [vc.myConllectionView headerEndRefreshing];
-        });
-    }];
-#warning 自动刷新(一进入程序就下拉刷新)
-    // [vc.myConllectionView headerBeginRefreshing];
-}
-
-
-- (void)setupFootView
-{
-    __unsafe_unretained typeof(self) vc = self;
-    // 添加上拉刷新尾部控件
-    [vc.myConllectionView addFooterWithCallback:^{
-        // 进入刷新状态就会回调这个Block
-        if (pageCount>page) {
-            page=page+1;
-            [vc requestData];
-        }
-        // 模拟延迟加载数据，因此2秒后才调用）
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            //  [vc.myConllectionView reloadData];
-            // 结束刷新
-            [vc.myConllectionView footerEndRefreshing];
-        });
-    }];
-}*/
+ 
+ - (void)setupHeadView
+ {
+ 
+ __unsafe_unretained typeof(self) vc = self;
+ // 添加下拉刷新头部控件
+ [_myConllectionView addHeaderWithCallback:^{
+ page=1;
+ if (self.dataArray.count>0) {
+ [vc.dataArray removeAllObjects];
+ }
+ // 进入刷新状态就会回调这个Block
+ [vc requestData];
+ 
+ // 模拟延迟加载数据，因此2秒后才调用）
+ dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+ //[vc.myConllectionView reloadData];
+ // 结束刷新
+ [vc.myConllectionView headerEndRefreshing];
+ });
+ }];
+ #warning 自动刷新(一进入程序就下拉刷新)
+ // [vc.myConllectionView headerBeginRefreshing];
+ }
+ 
+ 
+ - (void)setupFootView
+ {
+ __unsafe_unretained typeof(self) vc = self;
+ // 添加上拉刷新尾部控件
+ [vc.myConllectionView addFooterWithCallback:^{
+ // 进入刷新状态就会回调这个Block
+ if (pageCount>page) {
+ page=page+1;
+ [vc requestData];
+ }
+ // 模拟延迟加载数据，因此2秒后才调用）
+ dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+ //  [vc.myConllectionView reloadData];
+ // 结束刷新
+ [vc.myConllectionView footerEndRefreshing];
+ });
+ }];
+ }*/
 
 -(void)creatLoadView
 {
@@ -251,28 +250,26 @@ static const CGFloat MJDuration = 0.1;
 -(void)requestData
 {
     //UserDataCenter *userCenter =[UserDataCenter shareInstance];
-    NSDictionary *parameters = @{@"user_id":userCenter.user_id};
+    NSDictionary *parameters;
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    NSString  *urlString;
+    NSString  *urlString =[NSString stringWithFormat:@"%@/weibo/list-by-status?per-page=%d&page=%d", kApiBaseUrl,pageSize,page];
     if (self.pageType==NSNewAddPageSoureTypeNewList) {
-       urlString =[NSString stringWithFormat:@"%@/weibo/listrecently?per-page=%d&page=%d", kApiBaseUrl,pageSize,page];
-
+        parameters = @{@"user_id":userCenter.user_id, @"status":@"1"};
     }
     else if(self.pageType==NSNewAddPageSoureTypeCloseWeiboList)
     {
-        urlString =[NSString stringWithFormat:@"%@/weibo/block-list?per-page=%d&page=%d", kApiBaseUrl,pageSize,page];
+        parameters = @{@"user_id":userCenter.user_id, @"status":@"0"};
     }
     else if (self.pageType==NSNewAddPageSoureTypeDecorver)
     {
-        urlString=[NSString stringWithFormat:@"%@/weibo/discover",kApiBaseUrl];
+        parameters = @{@"user_id":userCenter.user_id, @"status":@"2"};
     }
     else if (self.pageType==NSNewAddPageSoureTypeRecommed)
     {
-        urlString =[NSString stringWithFormat:@"%@/weibo/list-recommend?per-page=%d&page=%d", kApiBaseUrl,pageSize,page];
-   
+        parameters = @{@"user_id":userCenter.user_id, @"status":@"3"};
     }
     [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
-    
+        
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
             pageCount=[[responseObject objectForKey:@"pageCount"] intValue];
             NSMutableArray   *array  = [[NSMutableArray alloc]initWithArray:[responseObject objectForKey:@"models"]];
@@ -288,18 +285,18 @@ static const CGFloat MJDuration = 0.1;
                             [usermodel setValuesForKeysWithDictionary:[newdict objectForKey:@"user"]];
                             weibomodel.uerInfo=usermodel;
                         }
-                       
+                        
                     }
-                // 剧情信息
+                    // 剧情信息
                     stageInfoModel  *stagemodel =[[stageInfoModel alloc]init];
                     if (stagemodel) {
                         if (![[newdict objectForKey:@"stage"]  isKindOfClass:[NSNull class]]) {
-                        [stagemodel setValuesForKeysWithDictionary:[newdict objectForKey:@"stage"]];
-                        weibomodel.stageInfo=stagemodel;
-                       }
+                            [stagemodel setValuesForKeysWithDictionary:[newdict objectForKey:@"stage"]];
+                            weibomodel.stageInfo=stagemodel;
+                        }
                     }
                     NSMutableArray  *tagArray =[[NSMutableArray alloc]init];
-              //标签数组
+                    //标签数组
                     for ( NSDictionary  *tagdict in [newdict objectForKey:@"tags"]) {
                         TagModel *tagmodel=[[TagModel alloc]init];
                         if (tagmodel) {
@@ -313,7 +310,7 @@ static const CGFloat MJDuration = 0.1;
                             [tagArray addObject:tagmodel];
                         }
                     }
-                
+                    
                     weibomodel.tagArray=tagArray;
                     [self.dataArray addObject:weibomodel];
                 }
@@ -358,11 +355,11 @@ static const CGFloat MJDuration = 0.1;
         weiboInfoModel  *model=[_dataArray objectAtIndex:indexPath.row];
         cell.imageView.backgroundColor=VStageView_color;
         NSURL  *url =[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w340h340",kUrlStage,model.stageInfo.photo]];
-       
+        
         [cell.imageView sd_setImageWithURL:url placeholderImage:nil options:(SDWebImageRetryFailed|SDWebImageLowPriority)];
-       cell.titleLab.text=[NSString stringWithFormat:@"%@",model.content];
-         return cell;
-    
+        cell.titleLab.text=[NSString stringWithFormat:@"%@",model.content];
+        return cell;
+        
     }
     return cell;
 }
@@ -370,33 +367,33 @@ static const CGFloat MJDuration = 0.1;
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     
-        ShowStageViewController *vc = [[ShowStageViewController alloc] init];
-        weiboInfoModel *model=[_dataArray objectAtIndex:indexPath.row];
-        //vc.upweiboArray=_upWeiboArray;
-      if(self.pageType==NSNewAddPageSoureTypeNewList)
-      {
-          //最新添加
-          vc.pageType=NSStagePapeTypeAdmin_New_Add;
-      }
-      else if (self.pageType==NSNewAddPageSoureTypeCloseWeiboList)
-      {
-          //微博屏蔽
-          vc.pageType=NSStagePapeTypeAdmin_Close_Weibo;
-       }
-     else if (self.pageType==NSNewAddPageSoureTypeDecorver)
-       {
-          vc.pageType=NSStagePapeTypeAdmin_Dscorver;
-       }
-      else if (self.pageType==NSNewAddPageSoureTypeRecommed)
-      {
-          vc.pageType=NSStagePapeTypeAdmin_Recommed;
-      }
-        vc.stageInfo = model.stageInfo;
-       vc.weiboInfo=model;
-        UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:nil action:nil];
-        self.navigationItem.backBarButtonItem=item;
-        
-        [self.navigationController pushViewController:vc animated:YES];
+    ShowStageViewController *vc = [[ShowStageViewController alloc] init];
+    weiboInfoModel *model=[_dataArray objectAtIndex:indexPath.row];
+    //vc.upweiboArray=_upWeiboArray;
+    if(self.pageType==NSNewAddPageSoureTypeNewList)
+    {
+        //最新添加
+        vc.pageType=NSStagePapeTypeAdmin_New_Add;
+    }
+    else if (self.pageType==NSNewAddPageSoureTypeCloseWeiboList)
+    {
+        //微博屏蔽
+        vc.pageType=NSStagePapeTypeAdmin_Close_Weibo;
+    }
+    else if (self.pageType==NSNewAddPageSoureTypeDecorver)
+    {
+        vc.pageType=NSStagePapeTypeAdmin_Dscorver;
+    }
+    else if (self.pageType==NSNewAddPageSoureTypeRecommed)
+    {
+        vc.pageType=NSStagePapeTypeAdmin_Recommed;
+    }
+    vc.stageInfo = model.stageInfo;
+    vc.weiboInfo=model;
+    UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:nil action:nil];
+    self.navigationItem.backBarButtonItem=item;
+    
+    [self.navigationController pushViewController:vc animated:YES];
     
 }
 
@@ -423,31 +420,31 @@ static const CGFloat MJDuration = 0.1;
 // 设置每个item的尺寸
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
     return CGSizeMake((kDeviceWidth-5)/2,(kDeviceWidth-10)/3);
- }
+}
 
 -(UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
 {
-     return UIEdgeInsetsMake(0,0, 5,0);
+    return UIEdgeInsetsMake(0,0, 5,0);
 }
 //左右间距
 -(CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
 {
-     return 0;
+    return 0;
 }
 //上下
 -(CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section
 {
-     return 5;
+    return 5;
 }
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end
