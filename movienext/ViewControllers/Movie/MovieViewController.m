@@ -96,7 +96,9 @@ static const CGFloat MJDuration = 0.6;
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    [self requestUpdate];
+#warning 上线审核的时候需要注视掉
+         [self requestUpdate];
+    
     
     //创建导航
     //self.view.backgroundColor=[UIColor whiteColor];

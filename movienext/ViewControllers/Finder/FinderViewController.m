@@ -393,7 +393,6 @@
     //计算图片的宽高比
     float width = [weiboInfo.stageInfo.width intValue];
     float heigth =[weiboInfo.stageInfo.height intValue];
-    
     float x;
     float y=0;
     float w;
@@ -418,7 +417,13 @@
         w=(kDeviceWidth-20)*(width/heigth);
         x=((kDeviceWidth-20)-w)/2;
     }
-    
+    else
+    {
+        x=0;
+        y=0;
+        w=kDeviceWidth-20;
+        h=w*(9.0/16);
+    }
 
     self.stageImageView =[[UIImageView alloc]initWithFrame:CGRectMake(x, y,w,h)];
     weiboInfoModel *Weibo =[self.pageContent objectAtIndex:0];
