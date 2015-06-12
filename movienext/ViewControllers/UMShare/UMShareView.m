@@ -143,7 +143,7 @@
        str= [namstr substringToIndex:20];
        str =[str stringByAppendingString:@"..."];
     }
-    _moviewName.text=[NSString stringWithFormat:@"《%@》 电影卡片",str];
+    _moviewName.text=[NSString stringWithFormat:@"《%@》 电影卡片App",str];
     _moviewName.textAlignment=NSTextAlignmentCenter;
     
     

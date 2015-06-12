@@ -39,7 +39,7 @@
 
 static const CGFloat MJDuration = 0.6;
 
-@interface MovieViewController ()<UISearchBarDelegate,UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout,LoadingViewDelegate,MovieCollectionViewCellDelegate,UIActionSheetDelegate>
+@interface MovieViewController ()<UISearchBarDelegate,UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout,LoadingViewDelegate,MovieCollectionViewCellDelegate,UIActionSheetDelegate,UIAlertViewDelegate>
 {
     LoadingView         *loadView;
     int pageSize;
@@ -96,6 +96,7 @@ static const CGFloat MJDuration = 0.6;
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    [self requestUpdate];
     
     //创建导航
     //self.view.backgroundColor=[UIColor whiteColor];
@@ -785,6 +786,45 @@ static const CGFloat MJDuration = 0.6;
     [loadView hidenFailLoadAndShowAnimation];
 }
 
+-(void)requestUpdate
+{
+  //  https://fir.im/mov
+    //删除电影
+    [NSURLConnection sendAsynchronousRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://fir.im/api/v2/app/version/557a8f0b9bb7dc3e6c00285b?token=260fc3700aaf11e597435eaa6f4fb53848e89872"]] queue:[NSOperationQueue currentQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+        if (data) {
+            @try {
+                NSDictionary *result= [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+                
+                NSLog(@"=====%@",result);
+                //对比版本
+                NSString * version=result[@"version"]; //对应 CFBundleVersion, 对应Xcode项目配置"General"中的 Build
+                NSString * versionShort=result[@"versionShort"]; //对应 CFBundleShortVersionString, 对应Xcode项目配置"General"中的 Version
+                
+                NSString * localVersion=[[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"];
+                NSString * localVersionShort=[[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"];
+                
+                NSString *url=result[@"update_url"]; //如果有更新 需要用Safari打开的地址
+                NSString *changelog=result[@"changelog"]; //如果有更新 需要用Safari打开的地址
+                
+                
+                //这里放对比版本的逻辑  每个 app 对版本更新的理解都不同
+                //有的对比 version, 有的对比 build
+                
+                if (![versionShort isEqualToString:localVersionShort]) {
+                    UIAlertView  *al =[[UIAlertView alloc]initWithTitle:@"版本更新提示" message:@"电影卡片分享图增加App水印" delegate:self cancelButtonTitle:@"知道了" otherButtonTitles:@"去下载", nil];
+                    al.tag=100;
+                    [al show];
+                }
+                
+            }
+            @catch (NSException *exception) {
+                //返回格式错误 忽略掉
+            }
+        }
+        
+    }];
+}
+
 #pragma mark - UICollectionViewDataSource
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
@@ -1098,6 +1138,17 @@ static const CGFloat MJDuration = 0.6;
     x=((NaviTitle_Width/2)/kDeviceWidth)*scrollView.contentOffset.x;
     self.nav_line_lable.frame=CGRectMake(x, self.nav_line_lable.frame.origin.y, self.nav_line_lable.frame.size.width, self.nav_line_lable.frame.size.height);
     NSLog(@"~~~~~~%f",scrollView.contentOffset.x);
+    }
+}
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (alertView.tag==100) {
+        if (buttonIndex==0) {
+        }
+        else
+        {
+            [[UIApplication  sharedApplication] openURL:[NSURL URLWithString:@"https://fir.im/mcard"]];
+        }
     }
 }
  - (void)didReceiveMemoryWarning {

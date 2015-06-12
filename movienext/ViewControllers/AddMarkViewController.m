@@ -26,7 +26,12 @@
 //#import "AddTagViewController.h"
 #import "UploadProgressView.h"
 #import "AddLoadingView.h"
+
+#define  PULISH_TOOLBAR_HEIGHT 80
+
 #define  BOOKMARK_WORD_LIMIT 1000
+
+
 @interface AddMarkViewController ()<UIAlertViewDelegate,UIScrollViewDelegate,UITextViewDelegate,TagViewDelegate,UIAlertViewDelegate,UMShareViewController2Delegate,UMSocialUIDelegate,UMSocialDataDelegate,UMShareViewDelegate>
 {
     UIScrollView *_myScorllerView;
@@ -48,12 +53,17 @@
     weiboInfoModel      *weibomodel;
     NSMutableArray      *TAGArray;        //把第一个标签到第二个标签存储在数组中
     weiboInfoModel *weibo;
-    UIView *shareView;
+    //UIView *shareView;
     //  UILabel  *markLable;
     
     AddLoadingView  *loading;
 }
 @property(nonatomic,strong) UIImageView  *stageImageView;  //剧照的图片
+
+
+@property(nonatomic,strong) UIView      *ShareView;
+
+@property(nonatomic,strong) UIView       *TagContentView;
 
 @end
 @implementation AddMarkViewController
@@ -87,12 +97,14 @@
     //[[NSNotificationCenter defaultCenter ]addObserver:self selector:@selector(keyboardWillHiden:) name:UIKeyboardWillHideNotification object:nil];
     [self createMyScrollerView];
     [self createStageView];
-    [self createButtomView];
+    [self createAddTagView];
+    [self creatPushlishBar];
     // [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardDidShowNotification object:nil];
     
 }
 -(void)createNavigation
 {
+    __weak typeof(self) weakSelf = self;
     UIView  *naview= [[UIView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, 64)];
     naview.userInteractionEnabled=YES;
     naview.backgroundColor =[UIColor whiteColor];
@@ -104,10 +116,11 @@
     [leftBtn setTitleColor:VGray_color forState:UIControlStateNormal];
     [leftBtn setTitle:@"取消" forState:UIControlStateNormal];
     leftBtn.titleLabel.adjustsFontSizeToFitWidth=NO;
-    //leftBtn.titleLabel.font=[UIFont boldSystemFontOfSize:18];
-    
+    [leftBtn addActionHandler:^(NSInteger tag) {
+        [weakSelf dismissViewControllerAnimated:YES completion:nil];
+    }];
     [leftBtn setTitleEdgeInsets:UIEdgeInsetsMake(0, -0, 0,10)];
-    [leftBtn addTarget:self action:@selector(dealNavClick:) forControlEvents:UIControlEventTouchUpInside];
+    //[leftBtn addTarget:self action:@selector(dealNavClick:) forControlEvents:UIControlEventTouchUpInside];
     leftBtn.tag=100;
     [naview addSubview:leftBtn];
     // UIBarButtonItem  *leftBarButton=[[UIBarButtonItem alloc]initWithCustomView:leftBtn];
@@ -124,10 +137,13 @@
     }
     RighttBtn= [UIButton buttonWithType:UIButtonTypeSystem];
     RighttBtn.frame=CGRectMake(kDeviceWidth-70, 20, 60, 40);
-    [RighttBtn addTarget:self action:@selector(dealNavClick:) forControlEvents:UIControlEventTouchUpInside];
+   // [RighttBtn addTarget:self action:@selector(dealNavClick:) forControlEvents:UIControlEventTouchUpInside];
     RighttBtn.tag=101;
     // [RighttBtn setTitleColor:VGray_color forState:UIControlStateNormal];
     [RighttBtn setTitle:@"发布" forState:UIControlStateNormal];
+    [RighttBtn addActionHandler:^(NSInteger tag) {
+        [weakSelf  PublicRuqest];
+    }];
     RighttBtn.titleLabel.adjustsFontSizeToFitWidth=NO;
     [RighttBtn setTitleEdgeInsets:UIEdgeInsetsMake(0, 0, 0, -10)];
     RighttBtn.titleLabel.font=[UIFont systemFontOfSize:16];
@@ -153,26 +169,72 @@
 {
     //计算stagview 的高度
 
-    _myScorllerView =[[UIScrollView alloc]initWithFrame:CGRectMake(0, 64, kDeviceWidth,kDeviceHeight)];
+    _myScorllerView =[[UIScrollView alloc]initWithFrame:CGRectMake(0, 64, kDeviceWidth,kDeviceHeight-kHeightNavigation-PULISH_TOOLBAR_HEIGHT)];
     _myScorllerView.contentSize=CGSizeMake(kDeviceWidth,kDeviceHeight);
     _myScorllerView.delegate=self;
     _myScorllerView.bounces=YES;
+    _myScorllerView.backgroundColor =[UIColor whiteColor];
+    _myScorllerView.userInteractionEnabled=YES;
     [self.view addSubview:_myScorllerView];
 }
 -(void)createStageView
 {
-    self.stageImageView =[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceWidth*(9.0/16))];
+    //最后要分享出去的图
+    self.ShareView =[[UIView alloc]initWithFrame:CGRectMake(0,0, kDeviceWidth-0, (kDeviceWidth-0)*(9.0/16))];
+    self.ShareView.userInteractionEnabled=YES;
+    self.ShareView.backgroundColor=[UIColor blackColor];
+    [_myScorllerView addSubview:self.ShareView];
+   
+    CGRect  frame  = [Function getImageFrameWithwidth:[self.stageInfo.width intValue] height:[self.stageInfo.height intValue] inset:0];
+    
+    
+//    //计算图片的宽高比
+//    float width = [self.stageInfo.width intValue];
+//    float heigth =[self.stageInfo.height intValue];
+//    float x;
+//    float y=0;
+//    float w;
+//    float h;
+//    if (heigth/width>KImageWidth_Height&&(heigth/width<1)) { //
+//        x=0;
+//        y=0;
+//        w=kDeviceWidth-0;
+//        h=(kDeviceWidth-0)*(heigth/width);
+//    }
+//    else if (heigth/width<KImageWidth_Height)
+//    {
+//        x=0;
+//        y=0;
+//        w=kDeviceWidth-0;
+//        h=(kDeviceWidth-0)*KImageWidth_Height;
+//    }
+//    else if (heigth/width>1) //高大于宽度的时候  成正方形
+//    {
+//        y =0;
+//        h= kDeviceWidth-0;
+//        w=(kDeviceWidth-0)*(width/heigth);
+//        x=((kDeviceWidth-0)-w)/2;
+//    }
+//    else
+//    {
+//        x=0;
+//        y=0;
+//        h=(kDeviceWidth-0)*(9.0/16);
+//        w=(kDeviceWidth-0);
+//    }
+    self.stageImageView =[[UIImageView alloc]initWithFrame:frame];
     self.stageImageView.contentMode=UIViewContentModeScaleAspectFill;
     self.stageImageView.clipsToBounds=YES;
     self.stageImageView.userInteractionEnabled=YES;
-    [_myScorllerView addSubview:self.stageImageView];
+    [self.ShareView addSubview:self.stageImageView];
     
+    self.ShareView.frame=CGRectMake(0, 0, kDeviceWidth, self.stageImageView.frame.size.height);
     
     
     NSString *photostring=[NSString stringWithFormat:@"%@%@!w640",kUrlStage,self.stageInfo.photo];
     [self.stageImageView   sd_setImageWithURL:[NSURL URLWithString:photostring] placeholderImage:nil options:(SDWebImageLowPriority|SDWebImageRetryFailed)];
     
-    UIView  *_layerView =[[UIView alloc]initWithFrame:CGRectMake(0, self.stageImageView.frame.size.height-100, kDeviceWidth-10, 100)];
+    UIView  *_layerView =[[UIView alloc]initWithFrame:CGRectMake(0, self.stageImageView.frame.size.height-60, kDeviceWidth-0, 60)];
     [self.stageImageView addSubview:_layerView];
     
     CAGradientLayer * _gradientLayer = [CAGradientLayer layer];  // 设置渐变效果
@@ -188,19 +250,22 @@
     [_layerView.layer insertSublayer:_gradientLayer atIndex:0];
     
     
-    _myTextView=[[UITextView alloc]initWithFrame:CGRectMake(10,(kDeviceWidth*(9.0/16))-60, kDeviceWidth-20, 45)];
+ 
+    
+    _myTextView=[[UITextView alloc]initWithFrame:CGRectMake(10,self.ShareView.frame.size.height-35, kDeviceWidth-20, 40)];
     _myTextView.delegate=self;
     // [_myTextView addPlaceHolder:@"输入弹幕"];
     _myTextView.textColor=[UIColor whiteColor];
     _myTextView.font= [UIFont boldSystemFontOfSize:22];
+    
     if (IsIphone6plus) {
         _myTextView.font =[UIFont boldSystemFontOfSize:24];
     }
     _myTextView.backgroundColor=[UIColor clearColor];
     //_myTextView.layer.cornerRadius=4;
-     //_myTextView.layer.borderWidth=0.5;
+    //_myTextView.layer.borderWidth=0.5;
     _myTextView.layer.allowsEdgeAntialiasing=YES;
-    _myTextView.layer.borderColor=VLight_GrayColor.CGColor;
+    //_myTextView.layer.borderColor=VLight_GrayColor.CGColor;
     //_myTextView.maximumZoomScale=3;
     _myTextView.returnKeyType=UIReturnKeyDone;
     _myTextView.layoutManager.allowsNonContiguousLayout=NO;
@@ -209,19 +274,29 @@
    // _myTextView.autoresizingMask=UIViewAutoresizingFlexibleHeight;
     _myTextView.selectedRange = NSMakeRange(0,0);  //默认光标从第一个开始
     [_myTextView becomeFirstResponder];
-    [self.stageImageView addSubview:_myTextView];
     if (self.weiboInfo) {//编辑
         _myTextView.text =self.weiboInfo.content;
     }
+    [self.ShareView addSubview:_myTextView];
+
+    
+    
 }
--(void)createButtomView
+-(void)createAddTagView
 {
     
-    float height =kDeviceHeight-kHeightNavigation-(kDeviceWidth)*(9.0/16);
-    shareView=[[UIView alloc]initWithFrame:CGRectMake(0,kHeightNavigation+(kDeviceWidth)*(9.0/16), kDeviceWidth, height)];
-    shareView.userInteractionEnabled=YES;
-    shareView.backgroundColor =[UIColor whiteColor];
-    [self.view addSubview:shareView];
+    
+    self.TagContentView =[[UIView alloc]initWithFrame:CGRectMake(0,self.ShareView.frame.origin.y+self.ShareView.frame.size.height, kDeviceWidth, 100)];
+    self.TagContentView.userInteractionEnabled=YES;
+    self.TagContentView.backgroundColor =View_ToolBar;
+    [_myScorllerView addSubview:self.TagContentView];
+    
+//    float height =kDeviceHeight-kHeightNavigation-(kDeviceWidth)*(9.0/16);
+//    shareView=[[UIView alloc]initWithFrame:CGRectMake(0,kHeightNavigation+(kDeviceWidth)*(9.0/16), kDeviceWidth, height)];
+//    shareView.userInteractionEnabled=YES;
+//    shareView.backgroundColor =[UIColor yellowColor];
+//    
+//    [self.view addSubview:shareView];
     
     
     taglable =[[M80AttributedLabel alloc]initWithFrame:CGRectZero];
@@ -231,7 +306,6 @@
     if (IsIphone6plus) {
         taglable.font =[UIFont systemFontOfSize:MarkTextFont16];
     }
-    
     //从编辑进来的
     if (self.weiboInfo) {
         for (int i=0; i<self.weiboInfo.tagArray.count; i++) {
@@ -254,66 +328,30 @@
     [taglable appendView:tagView margin:UIEdgeInsetsMake(0, 0, 0, 0)];
     CGSize  Tsize =[taglable sizeThatFits:CGSizeMake(kDeviceWidth-20, CGFLOAT_MAX)];
     taglable.frame=CGRectMake(10,10, kDeviceWidth-20, Tsize.height);
+    [self.TagContentView addSubview:taglable];
     
-    [shareView addSubview:taglable];
+}
+-(void)creatPushlishBar
+{
+    UIView  *toolview =[[UIView alloc]initWithFrame:CGRectMake(0, kDeviceHeight-PULISH_TOOLBAR_HEIGHT, kDeviceWidth,PULISH_TOOLBAR_HEIGHT)];
+    toolview.backgroundColor =View_ToolBar;
+    [self.view addSubview:toolview];
     
-    
-    //添加发布按钮
-    UIButton  *publishbtn =[ZCControl createButtonWithFrame:CGRectMake(40,height-60,kDeviceWidth-80,40) ImageName:nil Target:self Action:@selector(buttombtnClick:) Title:@"发布"];
+    UIButton  *publishbtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    publishbtn.frame=CGRectMake(40,20,kDeviceWidth-80, 40);
+    [publishbtn setTitle:@"发布" forState:UIControlStateNormal];
     publishbtn.layer.cornerRadius=4;
+    [publishbtn addActionHandler:^(NSInteger tag) {
+        [self PublicRuqest];
+        
+    }];
     publishbtn.tag=100;
     publishbtn.titleLabel.font =[UIFont boldSystemFontOfSize:16];
-    //[addMarkButton setBackgroundImage:[UIImage imageNamed:@"btn_add_select.png"] forState:UIControlStateHighlighted];
     publishbtn.backgroundColor = VBlue_color;
-    [shareView addSubview:publishbtn];
-    
-    
-    
-}
-//下面的按钮添加标签按钮和发布按钮
--(void)buttombtnClick:(UIButton *) btn
-{
-    
-    [self PublicRuqest];
-    
-}
--(void)dealNavClick:(UIButton *) button
-{
-    
-    if (button.tag==100) {
-        //取消发布
-        [self dismissViewControllerAnimated:YES completion:nil];
-    }
-    else if (button.tag==101)
-    {
-        [self  PublicRuqest];
-        //执行发布的方法
-    }
-    else if (button.tag==99)
-    {
-        //点击确定按钮
-        //[self  PushlicInScreen];
-        
-    }
-    else if (button.tag==102)
-    {
-        //点击进入搜索添加标签页面
-        if (TAGArray.count==5) {
-            UIAlertView  *al =[[UIAlertView alloc]initWithTitle:nil message:@"最多可以添加五个标签" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:nil, nil];
-            al.tag=1001;
-            [al show];
-            return;
-        }
-        AddTagViewController  *addtag =[[AddTagViewController alloc]init];
-        addtag.delegate=self;
-        addtag.modalTransitionStyle=UIModalTransitionStyleCrossDissolve;
-        UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:addtag];
-        //[self presentViewController:addtag animated:NO completion:nil];
-        [self presentViewController:na animated:YES completion:nil];
-    }
-}
+    [toolview addSubview:publishbtn];
 
-
+    
+}
 # pragma  mark  发布数据请求
 //确定发布
 -(void)PublicRuqest
@@ -418,7 +456,7 @@
             //UIAlertView  *Al=[[UIAlertView alloc]initWithTitle:nil message:message delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
             //Al.tag=1000;
             //[Al show];
-            UIImage  *image=[Function getImage:self.stageImageView WithSize:CGSizeMake(kStageWidth,  (kDeviceWidth-10)*(9.0/16))];
+            UIImage  *image=[Function getImage:self.ShareView WithSize:CGSizeMake(kDeviceWidth-20,self.ShareView.frame.size.height)];
             UMShareView *ShareView =[[UMShareView alloc] initwithStageInfo:self.stageInfo ScreenImage:image delgate:self andShareHeight:self.stageImageView.frame.size.height];
             ShareView.pageType=UMShareTypeSuccess;
             [ShareView setShareLable];
@@ -462,8 +500,15 @@
     }];
     
 }
-
-
+-(void)keyboardWillShow:(NSNotification *) notifi
+{
+   //[ _myScorllerView setCenter:CGPointMake(kDeviceWidth/2, _myTextView.frame.origin.y)];
+    
+//     NSValue  *value  = [notifi.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
+//    CGSize  size = [value  CGRectValue].size;
+//   [ _myScorllerView setContentOffset:CGPointMake(0, size.height) animated:YES];
+//    
+}
 
 -(void)UMShareViewController2HandClick:(UIButton *)button ShareImage:(UIImage *)shareImage StageInfoModel:(stageInfoModel *)StageInfo
 {
@@ -503,6 +548,7 @@
 -(void)textViewDidBeginEditing:(UITextView *)textView
 {
     
+   // [_myScorllerView setContentOffset:CGPointMake(0, 200) animated:YES];
     
 }
 -(void)textViewDidEndEditing:(UITextView *)textView
@@ -533,14 +579,14 @@
 }
 //有时候我们要控件自适应输入的文本的内容的高度，只要在textViewDidChange的代理方法中加入调整控件大小的代理即可
 
-
-
 -(void)textViewDidChange:(UITextView *)textView{
-    if (_myTextView.contentSize.height<80) {
         CGRect  frame = _myTextView.frame;
         frame.size.height=_myTextView.contentSize.height+0;
         _myTextView.frame=frame;
-    }
+    
+    self.ShareView.frame=CGRectMake(0,0, kDeviceWidth, _myTextView.frame.size.height-40+self.stageImageView.frame.size.height);
+    self.TagContentView.frame=CGRectMake(0, self.ShareView.frame.origin.y+self.ShareView.frame.size.height, kDeviceWidth, 100);
+    
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -635,7 +681,7 @@
     CGSize Tsize =[taglable sizeThatFits:CGSizeMake(kDeviceWidth-20, CGFLOAT_MAX)];
     //位置和大小
     taglable.frame=CGRectMake(10,10,kDeviceWidth-20, Tsize.height);
-    [shareView addSubview:taglable];
+    [self.TagContentView addSubview:taglable];
     NSLog(@"==== add  tag====%f",_myTextView.frame.size.height);
     
 }
@@ -714,7 +760,7 @@
         CGSize Tsize =[taglable sizeThatFits:CGSizeMake(kDeviceWidth-20, CGFLOAT_MAX)];
         //位置和大小
         taglable.frame=CGRectMake(10,10,kDeviceWidth-20, Tsize.height);
-        [shareView addSubview:taglable];
+        [self.TagContentView addSubview:taglable];
         
         
     }

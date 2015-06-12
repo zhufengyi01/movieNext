@@ -172,8 +172,12 @@
 }
 -(void)longPressHead:(UITapGestureRecognizer *) tap
 {
+    if (tap.state==UIGestureRecognizerStateBegan) {
     //长按变身
-    
+      if (self.delegate && [self.delegate respondsToSelector:@selector(changeUserHandClick)]) {
+        [self.delegate changeUserHandClick];
+     }
+    }
 }
 
 - (void)showBigAvatar:(UITapGestureRecognizer *)sender //显示大头像

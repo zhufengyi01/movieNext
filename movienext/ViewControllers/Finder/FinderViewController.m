@@ -225,42 +225,43 @@
 {
     weiboInfoModel   *weiboInfo =[self.pageContent objectAtIndex:self.pageIndex];
     
+    CGRect  frame = [Function getImageFrameWithwidth:[weiboInfo.stageInfo.width intValue] height:[weiboInfo.stageInfo.height intValue] inset:20];
     //重新去布局图片
-    float width = [weiboInfo.stageInfo.width intValue];
-    float heigth =[weiboInfo.stageInfo.height intValue];
-    
-    float x;
-    float y=0;
-    float w;
-    float h;
-    if (heigth/width>KImageWidth_Height&&(heigth/width<1)) { //
-        x=0;
-        y=0;
-        w=kDeviceWidth-20;
-        h=(kDeviceWidth-20)*(heigth/width);
-    }
-    else if (heigth/width<KImageWidth_Height)
-    {
-        x=0;
-        y=0;
-        w=kDeviceWidth-20;
-        h=(kDeviceWidth-20)*KImageWidth_Height;
-    }
-    else if (heigth/width>1) //高大于宽度的时候  成正方形
-    {
-        y =0;
-        h= kDeviceWidth-20;
-        w=(kDeviceWidth-20)*(width/heigth);
-        x=((kDeviceWidth-20)-w)/2;
-    }
-    else
-    {
-        x=0;
-        y=0;
-        w=kDeviceWidth-20;
-        h=(kDeviceWidth-20)*(9.0/16);
-    }
-    self.stageImageView.frame=CGRectMake(x, y, w, h);  //[[UIImageView alloc]initWithFrame:CGRectMake(x, y,w,h)];
+//    float width = [weiboInfo.stageInfo.width intValue];
+//    float heigth =[weiboInfo.stageInfo.height intValue];
+//    
+//    float x;
+//    float y=0;
+//    float w;
+//    float h;
+//    if (heigth/width>KImageWidth_Height&&(heigth/width<1)) { //
+//        x=0;
+//        y=0;
+//        w=kDeviceWidth-20;
+//        h=(kDeviceWidth-20)*(heigth/width);
+//    }
+//    else if (heigth/width<KImageWidth_Height)
+//    {
+//        x=0;
+//        y=0;
+//        w=kDeviceWidth-20;
+//        h=(kDeviceWidth-20)*KImageWidth_Height;
+//    }
+//    else if (heigth/width>1) //高大于宽度的时候  成正方形
+//    {
+//        y =0;
+//        h= kDeviceWidth-20;
+//        w=(kDeviceWidth-20)*(width/heigth);
+//        x=((kDeviceWidth-20)-w)/2;
+//    }
+//    else
+//    {
+//        x=0;
+//        y=0;
+//        w=kDeviceWidth-20;
+//        h=(kDeviceWidth-20)*(9.0/16);
+//    }
+    self.stageImageView.frame=frame;  //[[UIImageView alloc]initWithFrame:CGRectMake(x, y,w,h)];
     markLable.text=weiboInfo.content;
     CGSize  Msize = [markLable.text boundingRectWithSize:CGSizeMake(kDeviceWidth-40, MAXFLOAT) options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes:[NSDictionary dictionaryWithObject:markLable.font forKey:NSFontAttributeName] context:nil].size;
     self.ShareView.frame=CGRectMake(self.ShareView.frame.origin.x, self.ShareView.frame.origin.y, self.ShareView.frame.size.width, self.stageImageView.frame.size.height+Msize.height-27);
@@ -442,7 +443,7 @@
     
     
     
-    UIView  *_layerView =[[UIView alloc]initWithFrame:CGRectMake(0, self.stageImageView.frame.size.height-100, kDeviceWidth-10, 100)];
+    UIView  *_layerView =[[UIView alloc]initWithFrame:CGRectMake(0, self.stageImageView.frame.size.height-60, kDeviceWidth-10, 60)];
     [self.stageImageView addSubview:_layerView];
     
     CAGradientLayer * _gradientLayer = [CAGradientLayer layer];  // 设置渐变效果
