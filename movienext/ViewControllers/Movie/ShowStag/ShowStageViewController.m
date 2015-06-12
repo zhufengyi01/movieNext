@@ -746,7 +746,7 @@
             starImageView.image=[UIImage imageNamed:@"like_slected.png"];
             break;
         }
-        else{
+        else {
             like_btn.selected=NO;
             starImageView.image=[UIImage imageNamed:@"like_nomoal.png"];
         }

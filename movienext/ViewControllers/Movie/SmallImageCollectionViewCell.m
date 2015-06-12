@@ -37,6 +37,31 @@
     _titleLab.textColor = [UIColor whiteColor];
     _titleLab.font = [UIFont boldSystemFontOfSize:16];
     [self.contentView addSubview:_titleLab];
+    
+    _ivAvatar = [[UIImageView alloc]initWithFrame:CGRectMake(5, 5, 20, 20)];
+    _ivAvatar.backgroundColor = [UIColor clearColor];
+    _ivAvatar.contentMode=UIViewContentModeScaleAspectFill;
+    _ivAvatar.clipsToBounds=YES;
+    _ivAvatar.layer.cornerRadius = 10;
+    [self.contentView addSubview:_ivAvatar];
+    
+    _ivLike = [[UIImageView alloc]initWithFrame:CGRectMake(m_frame.size.width-40, 10, 10, 10)];
+    _ivLike.backgroundColor = [UIColor clearColor];
+    [self.contentView addSubview:_ivLike];
+
+    _lblTime = [[UILabel alloc]initWithFrame:CGRectMake(30, 5, 40, 20)];
+    _lblTime.text=@"";
+    _lblTime.textAlignment = NSTextAlignmentCenter;
+    _lblTime.textColor = [UIColor whiteColor];
+    _lblTime.font = [UIFont boldSystemFontOfSize:12];
+    [self.contentView addSubview:_lblTime];
+    
+    _lblLikeCount = [[UILabel alloc]initWithFrame:CGRectMake(m_frame.size.width-30, 5, 30, 20)];
+    _lblLikeCount.text=@"";
+    _lblLikeCount.textAlignment = NSTextAlignmentCenter;
+    _lblLikeCount.textColor = [UIColor whiteColor];
+    _lblLikeCount.font = [UIFont boldSystemFontOfSize:12];
+    [self.contentView addSubview:_lblLikeCount];
 }
 
 @end
