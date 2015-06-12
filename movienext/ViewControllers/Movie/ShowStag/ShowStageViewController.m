@@ -124,7 +124,7 @@
     NSString  *titleString =[Function htmlString: self.stageInfo.movieInfo.name ];
     UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 30) Font:30 Text:titleString];
     titleLable.textColor=VBlue_color;
-    titleLable.font=[UIFont systemFontOfSize:16];
+    titleLable.font=[UIFont boldSystemFontOfSize:16];
     titleLable.textColor=VGray_color;
     titleLable.textAlignment=NSTextAlignmentCenter;
     self.navigationItem.titleView=titleLable;
@@ -781,6 +781,7 @@
 
 #pragma  mark  ----RequestData
 #pragma  mark  ---
+// status 0 屏蔽 1 最新/初始 2 发现/电影页 3 热门
 //status为2是移到发现/电影页, status为3是移到推荐页
 -(void)requestChangeStageStatusWithweiboId:(NSString *)weiboId StatusType:(NSString *) status
 {
@@ -1180,16 +1181,15 @@
             stageId=[NSString stringWithFormat:@"%@",self.stageInfo.Id];
             //移动到审核版或者正常
             [self requestmoveReviewToNormal:stageId];
-            
         }
-     
         else if (buttonIndex==1)
         {
             // 编辑弹幕
             //弹幕编辑
             AddMarkViewController  *AddMarkVC=[[AddMarkViewController alloc]init];
             AddMarkVC.stageInfo=self.stageInfo;
-            AddMarkVC.weiboInfo=_TweiboInfo;
+            AddMarkVC.weiboInfo=_WeiboInfo;
+            
             AddMarkVC.delegate=self;
             [self presentViewController:AddMarkVC animated:NO completion:nil];
 
@@ -1198,7 +1198,8 @@
         {
             // 屏蔽弹幕
             NSString *weibo_id =[NSString stringWithFormat:@"%@",_WeiboInfo.Id];
-            [self requestDelectDataWithweiboId:weibo_id WithremoveType:@"1"];
+          
+            [self requestChangeStageStatusWithweiboId:weibo_id StatusType:@"0"];
         }
         else if (buttonIndex==3)
         {
@@ -1239,7 +1240,7 @@
             //弹幕编辑
             AddMarkViewController  *AddMarkVC=[[AddMarkViewController alloc]init];
             AddMarkVC.stageInfo=self.stageInfo;
-            AddMarkVC.weiboInfo=_TweiboInfo;
+            AddMarkVC.weiboInfo=_WeiboInfo;
             AddMarkVC.delegate=self;
             [self presentViewController:AddMarkVC animated:NO completion:nil];
             
@@ -1248,7 +1249,8 @@
         {
             // 屏蔽弹幕
             NSString *weibo_id =[NSString stringWithFormat:@"%@",_WeiboInfo.Id];
-            [self requestDelectDataWithweiboId:weibo_id WithremoveType:@"1"];
+           
+            [self requestChangeStageStatusWithweiboId:weibo_id StatusType:@"0"];
         }
         else if (buttonIndex==3)
         {

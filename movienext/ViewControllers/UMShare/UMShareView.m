@@ -126,7 +126,7 @@
     [shareView addSubview:logosupView];
     
     _moviewName= [ZCControl createLabelWithFrame:CGRectMake(0,0,kDeviceWidth-20, 20) Font:12 Text:@""];
-    _moviewName.textColor=VGray_color;
+    _moviewName.textColor=ShareLogo_color;
     _moviewName.numberOfLines=0;
    
     if (!_stageInfo.movieInfo|!_stageInfo.movieInfo.name) {

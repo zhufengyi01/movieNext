@@ -133,7 +133,7 @@
         //分享
         weiboInfoModel   *weiboInfo =[weakSealf.pageContent objectAtIndex:weakSealf.pageIndex];
         
-        UIImage  *image=[Function getImage:weakSealf.stageImageView WithSize:CGSizeMake(kDeviceWidth-20, weakSealf.ShareView.frame.size.height)];
+        UIImage  *image=[Function getImage:weakSealf.ShareView WithSize:CGSizeMake(kDeviceWidth-20, weakSealf.ShareView.frame.size.height)];
         UMShareView *ShareView =[[UMShareView alloc] initwithStageInfo:weiboInfo.stageInfo ScreenImage:image delgate:weakSealf andShareHeight:weakSealf.ShareView.frame.size.height];
         [ShareView setShareLable];
         [ShareView show];
@@ -141,7 +141,8 @@
     }];
     [sharebtn setTitle:@"分享" forState:UIControlStateNormal];
     [sharebtn setTitleEdgeInsets:UIEdgeInsetsMake(0, 10, 0, -10)];
-    [sharebtn setTitleColor:VBlue_color forState:UIControlStateNormal];
+    sharebtn.titleLabel.font =[UIFont systemFontOfSize:16];
+    [sharebtn setTitleColor:VGray_color forState:UIControlStateNormal];
      UIBarButtonItem  *rigthbarButton=[[UIBarButtonItem alloc]initWithCustomView:sharebtn];
     self.navigationItem.rightBarButtonItem=rigthbarButton;
 
@@ -371,8 +372,7 @@
     [[self view] addSubview:[_pageController view]];
     
     */
-    
-        self.myScrollerView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight)];
+        self.myScrollerView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight-LIKE_BAR_HEIGHT)];
         self.myScrollerView.backgroundColor =View_BackGround;
         self.myScrollerView.contentSize = CGSizeMake(kDeviceWidth, kDeviceHeight);
         [self.view addSubview:self.myScrollerView];
@@ -482,7 +482,7 @@
     CGSize  Msize = [markLable.text boundingRectWithSize:CGSizeMake(kDeviceWidth-40, MAXFLOAT) options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes:[NSDictionary dictionaryWithObject:markLable.font forKey:NSFontAttributeName] context:nil].size;
     self.ShareView.frame=CGRectMake(self.ShareView.frame.origin.x, self.ShareView.frame.origin.y, self.ShareView.frame.size.width, self.stageImageView.frame.size.height+Msize.height-27);
     
-    self.bgView.frame=CGRectMake(0, 0, kDeviceWidth, self.ShareView.frame.size.height+20);
+    self.bgView.frame=CGRectMake(0, 0, kDeviceWidth, self.ShareView.frame.size.height+10);
     markLable.frame=CGRectMake(10, self.ShareView.frame.size.height-Msize.height-5 ,self.ShareView.frame.size.width-20,Msize.height);
     
     // 中间的视图
@@ -502,7 +502,7 @@
     self.UserView.backgroundColor =[UIColor whiteColor];
     [self.bgView addSubview:self.UserView];
     
-    self.bgView.frame=CGRectMake(0, 0,kDeviceWidth, self.UserView.frame.origin.y+self.UserView.frame.size.height+10);
+    self.bgView.frame=CGRectMake(0, 0,kDeviceWidth, self.UserView.frame.origin.y+self.UserView.frame.size.height+0);
     
      //创建头像按钮
      leftButtomButton=[UIButton buttonWithType:UIButtonTypeCustom];

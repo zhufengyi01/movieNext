@@ -71,7 +71,10 @@
 #define VBlue_color [UIColor colorWithRed:16.0/255 green:111.0/255 blue:255.0/255 alpha:1]
 #define VStageView_color [UIColor colorWithRed:23.0/255 green:23.0/255 blue:23.0/255 alpha:1]
 
-#define ShareLogo_color  [UIColor colorWithRed:210.0/255 green:202.0/255 blue:187.0/255 alpha:1]
+#define ShareLogo_color  [UIColor colorWithRed:74.0/255 green:74.0/255 blue:74.0/255 alpha:1]
+
+
+
 
 //头像占位图片
 #define HeadImagePlaceholder  [UIImage imageNamed:@"notice_image headloading.png"]

@@ -246,7 +246,15 @@ static const CGFloat MJDuration = 0.1;
                         if (![[newdict objectForKey:@"stage"]  isKindOfClass:[NSNull class]]) {
                             [stagemodel setValuesForKeysWithDictionary:[newdict objectForKey:@"stage"]];
                             weibomodel.stageInfo=stagemodel;
+                            movieInfoModel *moviemodel =[[movieInfoModel alloc]init];
+                            if (moviemodel) {
+                                [moviemodel  setValuesForKeysWithDictionary:[[newdict objectForKey:@"stage"] objectForKey:@"movie"]];
+                                stagemodel.movieInfo=moviemodel;
+                            }
+                            
                         }
+                        
+                        
                     }
                     NSMutableArray  *tagArray =[[NSMutableArray alloc]init];
                     //标签数组

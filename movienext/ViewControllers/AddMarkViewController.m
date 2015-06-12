@@ -152,16 +152,8 @@
 -(void)createMyScrollerView
 {
     //计算stagview 的高度
-    float  ImageWith=[self.stageInfo.width floatValue];
-    float  ImgeHight=[self.stageInfo.height floatValue];
-    float hight=0;
-    hight= kDeviceHeight;  // 计算的事bgview1的高度
-    if((ImgeHight/ImageWith) *kDeviceWidth>kDeviceHeight)
-    {
-        hight=  (ImgeHight/ImageWith) *kDeviceWidth;
-        _myScorllerView.bounces=YES;
-    }
-    _myScorllerView =[[UIScrollView alloc]initWithFrame:CGRectMake(0, 64, kDeviceWidth,hight)];
+
+    _myScorllerView =[[UIScrollView alloc]initWithFrame:CGRectMake(0, 64, kDeviceWidth,kDeviceHeight)];
     _myScorllerView.contentSize=CGSizeMake(kDeviceWidth,kDeviceHeight);
     _myScorllerView.delegate=self;
     _myScorllerView.bounces=YES;
@@ -175,8 +167,9 @@
     self.stageImageView.userInteractionEnabled=YES;
     [_myScorllerView addSubview:self.stageImageView];
     
-    NSString *photostring=[NSString stringWithFormat:@"%@%@!w640",kUrlStage,self.stageInfo.photo];
     
+    
+    NSString *photostring=[NSString stringWithFormat:@"%@%@!w640",kUrlStage,self.stageInfo.photo];
     [self.stageImageView   sd_setImageWithURL:[NSURL URLWithString:photostring] placeholderImage:nil options:(SDWebImageLowPriority|SDWebImageRetryFailed)];
     
     UIView  *_layerView =[[UIView alloc]initWithFrame:CGRectMake(0, self.stageImageView.frame.size.height-100, kDeviceWidth-10, 100)];
@@ -195,7 +188,7 @@
     [_layerView.layer insertSublayer:_gradientLayer atIndex:0];
     
     
-    _myTextView=[[UITextView alloc]initWithFrame:CGRectMake(10,(kDeviceWidth*(9.0/16))-80, kDeviceWidth-20, 45)];
+    _myTextView=[[UITextView alloc]initWithFrame:CGRectMake(10,(kDeviceWidth*(9.0/16))-60, kDeviceWidth-20, 45)];
     _myTextView.delegate=self;
     // [_myTextView addPlaceHolder:@"输入弹幕"];
     _myTextView.textColor=[UIColor whiteColor];
@@ -502,70 +495,6 @@
     NSLog(@"didFinishGetUMSocialDataResponse第二部执行这个");
     [self.navigationController popViewControllerAnimated:NO];
 }
-/*
- //发布弹幕请求
- #pragma mark 键盘的通知事件
- -(void)keyboardWillShow:(NSNotification * )  notification
- {
- 
- NSDictionary *info = [notification userInfo];
- NSValue *value = [info objectForKey:UIKeyboardFrameEndUserInfoKey];
- keyboardSize = [value CGRectValue].size;
- NSLog(@"will show     keyBoard   height  :%f", keyboardSize.height);
- keybordHeight=keyboardSize.height;
- CGRect  frame =_myTextView.frame;
- frame.size.height=30;
- _myTextView.frame=frame;
- CGSize Tsize =[taglable sizeThatFits:CGSizeMake(kDeviceWidth-20, CGFLOAT_MAX)];
- //位置和大小
- taglable.frame=CGRectMake(10,50,kDeviceWidth-20, Tsize.height);
- 
- 
- [UIView  animateWithDuration:0.1 animations:^{
- } completion:^(BOOL finished) {
- _toolBar.frame=CGRectMake(_toolBar.frame.origin.x,kDeviceHeight-keybordHeight-50-Tsize.height,_toolBar.frame.size.width, 50+Tsize.height);
- 
- }];
- if ([TAGArray count]>0) {
- publishBtn.enabled=YES;
- }
- else
- {
- publishBtn.enabled=YES;
- }
- if (self.weiboInfo) {
- publishBtn.enabled=YES;
- //把tag放到_toolBar上
- //创建标签文本
- taglable =[[M80AttributedLabel alloc]initWithFrame:CGRectZero];
- taglable.backgroundColor =[UIColor clearColor];
- taglable.lineSpacing=5.0;
- taglable.font=[UIFont systemFontOfSize:MarkTextFont14];
- if (IsIphone6plus) {
- taglable.font =[UIFont systemFontOfSize:MarkTextFont16];
- }
- 
- for (int i=0; i<TAGArray.count; i++) {
- NSDictionary  *dict =[TAGArray objectAtIndex:i];
- TagView   *tagview =[self createTagViewWithtagText:[dict objectForKey:@"TAG"] withIndex:i withBgImage:[UIImage imageNamed:@"tag_backgroud_color.png"]];
- [taglable appendView:tagview margin:UIEdgeInsetsMake(0, 10, 0, 0)];
- }
- CGSize Tsize =[taglable sizeThatFits:CGSizeMake(kDeviceWidth-20, CGFLOAT_MAX)];
- //位置和大小
- taglable.frame=CGRectMake(10,50,kDeviceWidth-20, Tsize.height);
- [_toolBar addSubview:taglable];
- [UIView  animateWithDuration:0.1 animations:^{
- } completion:^(BOOL finished) {
- _toolBar.frame=CGRectMake(_toolBar.frame.origin.x,kDeviceHeight-keybordHeight-50-Tsize.height,_toolBar.frame.size.width, 50+Tsize.height);
- 
- }];
- 
- }
- NSLog(@"====will show keyboard  tag====%f",_myTextView.frame.size.height);
- 
- }
- 
- */
 -(void)keyboardWillHiden:(NSNotification *) notification
 {
     
@@ -613,28 +542,6 @@
         _myTextView.frame=frame;
     }
 }
-
-
-//控制输入文字的长度和内容，可通调用以下代理方法实现
-/*-(BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
- {
- //这个方法比textdidchange先执行
- if (range.location>=60)
- {
- //控制输入文本的长度
- return  YES;
- }
- if ([text isEqualToString:@"\n"]) {
- //禁止输入换行
- return NO;
- }
- else
- {
- return YES;
- }
- return YES;
- 
- }*/
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

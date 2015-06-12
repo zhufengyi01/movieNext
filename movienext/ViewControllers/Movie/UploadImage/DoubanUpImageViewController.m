@@ -68,26 +68,61 @@
 
     [imageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",self.photourl]] placeholderImage:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         CGSize  Isize=image.size;
-        float x=0;
+//        float x=0;
+//        float y=0;
+//        float width=0;
+//        float hight=0;
+//        if (Isize.width>Isize.height) {
+//            x=0;
+//            width=kDeviceWidth;
+//            hight=(Isize.height/Isize.width)*kDeviceWidth;
+//            y=(kDeviceWidth-hight)/2;
+//        }
+//        else
+//        {
+//            y=0;
+//            hight=kDeviceWidth;
+//            width=(Isize.width/Isize.height)*kDeviceWidth;
+//            x=(kDeviceWidth-width)/2;
+//        }
+//        imageView.frame=CGRectMake((kDeviceWidth-width)/2,(kDeviceHeight-hight)/2,width,hight);
+//        
+//
+        //计算图片的宽高比
+        float width = Isize.width;
+        float heigth =Isize.height;
+        float x;
         float y=0;
-        float width=0;
-        float hight=0;
-        if (Isize.width>Isize.height) {
+        float w;
+        float h;
+        if (heigth/width>KImageWidth_Height&&(heigth/width<1)) { //
             x=0;
-            width=kDeviceWidth;
-            hight=(Isize.height/Isize.width)*kDeviceWidth;
-            y=(kDeviceWidth-hight)/2;
+            y=0;
+            w=kDeviceWidth-0;
+            h=(kDeviceWidth-0)*(heigth/width);
+        }
+        else if (heigth/width<KImageWidth_Height)
+        {
+            x=0;
+            y=0;
+            w=kDeviceWidth-0;
+            h=(kDeviceWidth-0)*KImageWidth_Height;
+        }
+        else if (heigth/width>1) //高大于宽度的时候  成正方形
+        {
+            y =0;
+            h= kDeviceWidth-0;
+            w=(kDeviceWidth-0)*(width/heigth);
+            x=((kDeviceWidth-0)-w)/2;
         }
         else
         {
+            x=0;
             y=0;
-            hight=kDeviceWidth;
-            width=(Isize.width/Isize.height)*kDeviceWidth;
-            x=(kDeviceWidth-width)/2;
+            h=(kDeviceWidth-0)*(9.0/16);
+            w=(kDeviceWidth-0);
         }
-        imageView.frame=CGRectMake((kDeviceWidth-width)/2,(kDeviceHeight-hight)/2,width,hight);
-//        float  height = kDeviceWidth*(9.0/16);
-//        imageView.frame=CGRectMake(0,(kDeviceHeight-height-kHeightNavigation)/2,kDeviceWidth,kDeviceWidth*(9.0/16));
+        imageView.frame=CGRectMake((kDeviceWidth-w)/2,(kDeviceHeight-kHeightNavigation-h)/2,w,h);
     }];
     
     [bgView addSubview:imageView];

@@ -53,9 +53,9 @@
     RighttBtn.frame=CGRectMake(0, 0, 40, 30);
     [RighttBtn addTarget:self action:@selector(dealRightNavClick:) forControlEvents:UIControlEventTouchUpInside];
     RighttBtn.tag=101;
-     [RighttBtn setTitleColor:VBlue_color forState:UIControlStateNormal];
+     [RighttBtn setTitleColor:VGray_color forState:UIControlStateNormal];
     RighttBtn.titleEdgeInsets=UIEdgeInsetsMake(0, 10, 0, -10);
-    RighttBtn.titleLabel.font =[UIFont systemFontOfSize:18];
+    RighttBtn.titleLabel.font =[UIFont systemFontOfSize:16];
     [RighttBtn setTitle:@"确定" forState:UIControlStateNormal];
      self.navigationItem.rightBarButtonItem=[[UIBarButtonItem alloc]initWithCustomView:RighttBtn];
 }
@@ -234,31 +234,42 @@
     imageView.contentMode=UIViewContentModeScaleAspectFill;
     [bgView addSubview:imageView];
     
-//     CGSize  Isize=self.upimage.size;
-//    float x=0;
-//    float y=0;
-//    float width=0;
-//    float hight=0;
-//    if (Isize.width>Isize.height) {
-//        x=0;
-//        width=kDeviceWidth;
-//        hight=(Isize.height/Isize.width)*kDeviceWidth;
-//        y=(kDeviceWidth-hight)/2;
-//    }
-//    else
-//    {
-//        y=0;
-//        hight=kDeviceWidth;
-//        width=(Isize.width/Isize.height)*kDeviceWidth;
-//        x=(kDeviceWidth-width)/2;
-//    }
-//
-    float  height =kDeviceWidth*(9.0/16);
-    float  y=(kDeviceHeight-height-kHeightNavigation)/2;
-    
-    imageView.frame=CGRectMake(0,y,kDeviceWidth,height);
-    
-    
+     CGSize  Isize=self.upimage.size;
+    float width = Isize.width;
+    float heigth =Isize.height;
+    float x;
+    float y=0;
+    float w;
+    float h;
+    if (heigth/width>KImageWidth_Height&&(heigth/width<1)) { //
+        x=0;
+        y=0;
+        w=kDeviceWidth-0;
+        h=(kDeviceWidth-0)*(heigth/width);
+    }
+    else if (heigth/width<KImageWidth_Height)
+    {
+        x=0;
+        y=0;
+        w=kDeviceWidth-0;
+        h=(kDeviceWidth-0)*KImageWidth_Height;
+    }
+    else if (heigth/width>1) //高大于宽度的时候  成正方形
+    {
+        y =0;
+        h= kDeviceWidth-0;
+        w=(kDeviceWidth-0)*(width/heigth);
+        x=((kDeviceWidth-0)-w)/2;
+    }
+    else
+    {
+        x=0;
+        y=0;
+        h=(kDeviceWidth-0)*(9.0/16);
+        w=(kDeviceWidth-0);
+    }
+    imageView.frame=CGRectMake((kDeviceWidth-w)/2,(kDeviceHeight-kHeightNavigation-h)/2,w,h);
+
 }
 -(void)createProgress
 {
