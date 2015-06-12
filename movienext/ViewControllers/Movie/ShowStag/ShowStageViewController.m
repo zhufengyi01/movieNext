@@ -421,7 +421,7 @@
     if (!nameStr) {
         nameStr =self.weiboInfo.uerInfo.username;
     }
-    CGSize  Nsize =[nameStr boundingRectWithSize:CGSizeMake(100, 27) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:[NSDictionary dictionaryWithObject:movieNameLable.font forKey:NSFontAttributeName] context:nil].size;
+    CGSize  Nsize =[nameStr boundingRectWithSize:CGSizeMake(kDeviceWidth-35-70, 27) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:[NSDictionary dictionaryWithObject:movieNameLable.font forKey:NSFontAttributeName] context:nil].size;
     movieNameLable.frame=CGRectMake(35,0, Nsize.width+4, 30);
     leftButtomButton.frame=CGRectMake(10, 9, 30+5+movieNameLable.frame.size.width, 27);
     movieNameLable.text=[NSString stringWithFormat:@"%@",nameStr];

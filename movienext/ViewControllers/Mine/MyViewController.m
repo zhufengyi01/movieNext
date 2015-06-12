@@ -42,7 +42,7 @@ static const CGFloat MJDuration = 1.0;
 
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
-@interface MyViewController ()<UITableViewDataSource, UITableViewDelegate,StageViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UIActionSheetDelegate,UMSocialDataDelegate,UMSocialUIDelegate,CommonStageCellDelegate,UMShareViewControllerDelegate,UMShareViewController2Delegate,UMShareViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UICollectionViewDelegate,UserHeaderReusableViewDelegate>
+@interface MyViewController ()<StageViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UIActionSheetDelegate,UMSocialDataDelegate,UMSocialUIDelegate,CommonStageCellDelegate,UMShareViewControllerDelegate,UMShareViewController2Delegate,UMShareViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UICollectionViewDelegate,UserHeaderReusableViewDelegate>
 {
   
     UICollectionViewFlowLayout    *layout;
@@ -1432,8 +1432,6 @@ static const CGFloat MJDuration = 1.0;
 {
       [[NSNotificationCenter defaultCenter]removeObserver:self name:@"initUser" object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"refreshTableView" object:nil];
- 
-
 }
 
 

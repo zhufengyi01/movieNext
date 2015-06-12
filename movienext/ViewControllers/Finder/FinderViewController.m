@@ -160,8 +160,6 @@
     [UMSocialSnsPlatformManager getSocialPlatformWithName:[sharearray  objectAtIndex:button.tag-10000]].snsClickHandler(self,[UMSocialControllerService defaultControllerService],YES);
 }
 
-
-
 -(void)initData
 {
     self.pageIndex=0;
