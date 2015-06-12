@@ -501,7 +501,7 @@
             [tagView setcornerRadius:4];
             [tagView setbigTagWithSize:CGSizeMake(8,4)];
             tagView.tag=5000+i;
-            tagView.backgroundColor =[UIColor redColor];
+//            tagView.backgroundColor =[UIColor redColor];
             [self.WeiboTagLable appendView:tagView margin:UIEdgeInsetsMake(5, 10, 0, 0)];
         }
     }

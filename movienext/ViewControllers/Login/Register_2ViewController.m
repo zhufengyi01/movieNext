@@ -106,7 +106,7 @@
     headImag.clipsToBounds=YES;
     headImag.tag=100;
     [headImag addTarget:self action:@selector(dealregiterClick:) forControlEvents:UIControlEventTouchUpInside];
-    headImag.backgroundColor=[UIColor redColor];
+//    headImag.backgroundColor=[UIColor redColor];
     [bgView addSubview:headImag];
     
     
