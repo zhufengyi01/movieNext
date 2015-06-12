@@ -517,4 +517,40 @@
     return [da length];
 }
 
++(CGRect) getImageFrameWithwidth:(float)width height :(float) height inset:(float)  inset
+{
+     float x;
+    float y=0;
+    float w;
+    float h;
+    if (height/width>KImageWidth_Height&&(height/width<1)) { //
+        x=0;
+        y=0;
+        w=kDeviceWidth-inset;
+        h=(kDeviceWidth-inset)*(height/width);
+    }
+    else if (height/width<KImageWidth_Height)
+    {
+        x=0;
+        y=0;
+        w=kDeviceWidth-inset;
+        h=(kDeviceWidth-inset)*KImageWidth_Height;
+    }
+    else if (height/width>1) //高大于宽度的时候  成正方形
+    {
+        y =0;
+        h= kDeviceWidth-inset;
+        w=(kDeviceWidth-inset)*(width/height);
+        x=((kDeviceWidth-20)-w)/2;
+    }
+    else
+    {
+        x=0;
+        y=0;
+        h=(kDeviceWidth-inset)*(9.0/16);
+        w=(kDeviceWidth-inset);
+    }
+    return CGRectMake(x, y, w, h);
+}
+
 @end

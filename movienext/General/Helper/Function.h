@@ -114,6 +114,10 @@ float getHeightByWidthAndHeight(float width, float height){
 //根据图片一个view 把这个view按照指定的大小绘画出来
 +(UIImage *)getImage:(UIView *) imageview WithSize:(CGSize) size;
 
+//获取图片的大小和位置
+
++(CGRect) getImageFrameWithwidth:(float)width height :(float) height inset:(float)  inset;
+
 
 //根据一张大的图片，把这个大的图片截取成一张小的图片
 +(UIImage *)getImageFromImage:(UIImage *) BigImage;

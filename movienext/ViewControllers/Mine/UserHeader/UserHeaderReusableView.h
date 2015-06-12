@@ -13,6 +13,9 @@
 
 -(void)changeCollectionHandClick : (UIButton *) btn;
 
+
+-(void)changeUserHandClick;//长按变身
+
 @end
 
 @interface UserHeaderReusableView : UICollectionReusableView

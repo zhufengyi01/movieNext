@@ -244,44 +244,44 @@
     self.ShareView.userInteractionEnabled=YES;
     self.ShareView.backgroundColor=[UIColor blackColor];
     [BgView addSubview:self.ShareView];
-    
+    CGRect frame =[Function getImageFrameWithwidth:[self.stageInfo.width intValue] height:[self.stageInfo.height intValue] inset:20];
     //计算图片的宽高比
-    float width = [self.stageInfo.width intValue];
-    float heigth =[self.stageInfo.height intValue];
-    float x;
-    float y=0;
-    float w;
-    float h;
-    if (heigth/width>KImageWidth_Height&&(heigth/width<1)) { //
-        x=0;
-        y=0;
-        w=kDeviceWidth-20;
-        h=(kDeviceWidth-20)*(heigth/width);
-    }
-    else if (heigth/width<KImageWidth_Height)
-    {
-        x=0;
-        y=0;
-        w=kDeviceWidth-20;
-        h=(kDeviceWidth-20)*KImageWidth_Height;
-    }
-    else if (heigth/width>1) //高大于宽度的时候  成正方形
-    {
-        y =0;
-        h= kDeviceWidth-20;
-        w=(kDeviceWidth-20)*(width/heigth);
-        x=((kDeviceWidth-20)-w)/2;
-    }
-    else
-    {
-        x=0;
-        y=0;
-        h=(kDeviceWidth-20)*(9.0/16);
-        w=(kDeviceWidth-20);
-    }
+//    float width = [self.stageInfo.width intValue];
+//    float heigth =[self.stageInfo.height intValue];
+//    float x;
+//    float y=0;
+//    float w;
+//    float h;
+//    if (heigth/width>KImageWidth_Height&&(heigth/width<1)) { //
+//        x=0;
+//        y=0;
+//        w=kDeviceWidth-20;
+//        h=(kDeviceWidth-20)*(heigth/width);
+//    }
+//    else if (heigth/width<KImageWidth_Height)
+//    {
+//        x=0;
+//        y=0;
+//        w=kDeviceWidth-20;
+//        h=(kDeviceWidth-20)*KImageWidth_Height;
+//    }
+//    else if (heigth/width>1) //高大于宽度的时候  成正方形
+//    {
+//        y =0;
+//        h= kDeviceWidth-20;
+//        w=(kDeviceWidth-20)*(width/heigth);
+//        x=((kDeviceWidth-20)-w)/2;
+//    }
+//    else
+//    {
+//        x=0;
+//        y=0;
+//        h=(kDeviceWidth-20)*(9.0/16);
+//        w=(kDeviceWidth-20);
+//    }
     
     //分享的view 上面放一张图片
-    self.stageImageView =[[UIImageView alloc]initWithFrame:CGRectMake(x, y,w,h)];
+    self.stageImageView =[[UIImageView alloc]initWithFrame:frame];
      self.stageImageView.contentMode=UIViewContentModeScaleAspectFill;
     self.stageImageView.clipsToBounds=YES;
     NSString *photostring=[NSString stringWithFormat:@"%@%@!w640",kUrlStage,self.stageInfo.photo];
@@ -296,7 +296,7 @@
     
     
     //创建剧照上的渐变背景文字
-    UIView  *_layerView =[[UIView alloc]initWithFrame:CGRectMake(0, self.stageImageView.frame.size.height-100, kDeviceWidth-20, 100)];
+    UIView  *_layerView =[[UIView alloc]initWithFrame:CGRectMake(0, self.stageImageView.frame.size.height-60, kDeviceWidth-20, 60)];
     [self.stageImageView addSubview:_layerView];
     CAGradientLayer * _gradientLayer = [CAGradientLayer layer];  // 设置渐变效果
     _gradientLayer.bounds = _layerView.bounds;
@@ -1189,7 +1189,6 @@
             AddMarkViewController  *AddMarkVC=[[AddMarkViewController alloc]init];
             AddMarkVC.stageInfo=self.stageInfo;
             AddMarkVC.weiboInfo=_WeiboInfo;
-            
             AddMarkVC.delegate=self;
             [self presentViewController:AddMarkVC animated:NO completion:nil];
 
@@ -1217,9 +1216,7 @@
         {
             //移动到热门
             [self requestChangeStageStatusWithweiboId:[NSString stringWithFormat:@"%@",_WeiboInfo.Id] StatusType:@"3"];
-
         }
-            
     }
     else if(actionSheet.tag==ADM_HOT_LIST)  //管理员从热门进入
     {
@@ -1233,12 +1230,10 @@
             [self requestmoveReviewToNormal:stageId];
             
         }
-        
         else if (buttonIndex==1)
         {
             // 编辑弹幕
-            //弹幕编辑
-            AddMarkViewController  *AddMarkVC=[[AddMarkViewController alloc]init];
+             AddMarkViewController  *AddMarkVC=[[AddMarkViewController alloc]init];
             AddMarkVC.stageInfo=self.stageInfo;
             AddMarkVC.weiboInfo=_WeiboInfo;
             AddMarkVC.delegate=self;
@@ -1304,8 +1299,11 @@
         }
         else if (buttonIndex==1)
         {
+            
          //屏蔽
-            [self requestDelectDataWithweiboId:[NSString stringWithFormat:@"%@",_WeiboInfo.Id] WithremoveType:@"1"];
+            //[self requestDelectDataWithweiboId:[NSString stringWithFormat:@"%@",_WeiboInfo.Id] WithremoveType:@"1"];
+            [self requestChangeStageStatusWithweiboId:[NSString stringWithFormat:@"%@",_WeiboInfo.Id]  StatusType:@"0"];
+            
         }
         else if (buttonIndex==2)
         {
