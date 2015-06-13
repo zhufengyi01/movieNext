@@ -31,6 +31,7 @@
 #import "AdmListViewController.h"
 #import "SmallImageCollectionViewCell.h"
 #import "ShowStageViewController.h"
+#import "NSDate+Extension.h"
 //#import "SearchMovieViewController.h"
 #define  BUTTON_COUNT  3
 #define  NaviTitle_Width  160
@@ -53,6 +54,7 @@ static const CGFloat MJDuration = 0.6;
     int pageCount2;
     int pageCount3;
     NSInteger Rowindex;
+    UserDataCenter  *userCenter;
 }
 @property(nonatomic,strong) UIScrollView   *myScorollerView;
 
@@ -66,7 +68,7 @@ static const CGFloat MJDuration = 0.6;
 
 @property(nonatomic,strong)UILabel  *nav_line_lable;
 
-@property(nonatomic,strong) NSString  *IS_CHECK;  //是否是审核版 1  代表是审核版   0代表是正式版
+//@property(nonatomic,strong) NSString  *IS_CHECK;  //是否是审核版 1  代表是审核版   0代表是正式版
 
 @end
 
@@ -97,20 +99,21 @@ static const CGFloat MJDuration = 0.6;
     [super viewDidLoad];
     // Do any additional setup after loading the view.
 #warning 上线审核的时候需要注视掉
-         [self requestUpdate];
-    
-    
+    //[self requestUpdate];
     //创建导航
     //self.view.backgroundColor=[UIColor whiteColor];
     //判断是否是审核版
-    [self requestisReview];
-    
+    //[self requestisReview];
     [self createNavigation];
+      [self initData];
     [self createMyScrollerView];
     [self createSegmentView];
-    [self initData];
+  
     [self initUI];
     [self creatLoadView];
+
+    
+    
 }
 -(void)createNavigation
 {
@@ -136,8 +139,9 @@ static const CGFloat MJDuration = 0.6;
     //naviTitleView.backgroundColor =[UIColor yellowColor];
     naviTitleView.userInteractionEnabled=YES;
     self.navigationItem.titleView=naviTitleView;
+    
 #warning 审核的时候填写为1, 平时写上0
-    if ([self.IS_CHECK intValue]==0) {
+    if ([userCenter.Is_Check intValue]==1) {
         UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 30) Font:30 Text:@"热门"];
         titleLable.textColor=VBlue_color;
         titleLable.font=[UIFont boldSystemFontOfSize:18];
@@ -179,7 +183,6 @@ static const CGFloat MJDuration = 0.6;
         self.nav_line_lable.backgroundColor =VBlue_color;
         [naviTitleView addSubview:self.nav_line_lable];
     }
-    
     UIButton  *searchbutton=[UIButton buttonWithType:UIButtonTypeCustom];
       [searchbutton setImage:[UIImage imageNamed:@"search_icon.png"] forState:UIControlStateNormal];
     searchbutton.frame=CGRectMake(0, 0, 40, 30);
@@ -195,12 +198,20 @@ static const CGFloat MJDuration = 0.6;
         search.modalTransitionStyle=UIModalTransitionStyleCrossDissolve;
         [self presentViewController:search animated:YES completion:nil];
     }];
+    
+    if ([userCenter.Is_Check intValue]==1) {
+        searchbutton.hidden=YES;
+    }
+
 }
 
 -(void)createMyScrollerView
 {
     self.myScorollerView =[[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight-kHeigthTabBar)];
     self.myScorollerView.contentSize=CGSizeMake(kDeviceWidth*2, kDeviceHeight-kHeigthTabBar-kHeightNavigation);
+    if ([userCenter.Is_Check  intValue]==1) {
+        self.myScorollerView.contentSize=CGSizeMake(kDeviceWidth, kDeviceHeight-kHeigthTabBar-kHeightNavigation);
+    }
     self.myScorollerView.delegate=self;
     self.myScorollerView.bounces=NO;
     self.myScorollerView.pagingEnabled=YES;
@@ -325,6 +336,7 @@ static const CGFloat MJDuration = 0.6;
     _dataArray1=[[NSMutableArray alloc]init];
     _dataArray2=[[NSMutableArray alloc]init];
     _dataArray3=[[NSMutableArray alloc]init];
+    userCenter  =[UserDataCenter shareInstance];
 }
 -(void)initUI
 {
@@ -368,22 +380,22 @@ static const CGFloat MJDuration = 0.6;
      */
 }
 
--(void)requestisReview
-{
-    _IS_CHECK = @"1";
-    
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    NSString *urlString =[NSString stringWithFormat:@"%@/user/review-mode", kApiBaseUrl];
-    [manager POST:urlString parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        
-        if ([responseObject objectForKey:@"code"]) {
-            self.IS_CHECK=[responseObject objectForKey:@"code"];
-        }
-        
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Error: %@", error);
-    }];
-}
+//-(void)requestisReview
+//{
+//    _IS_CHECK = @"1";
+//    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+//    NSString *urlString =[NSString stringWithFormat:@"%@/user/review-mode", kApiBaseUrl];
+//    [manager POST:urlString parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+//        
+//        if ([responseObject objectForKey:@"code"]) {
+//            self.IS_CHECK=[responseObject objectForKey:@"code"];
+//        }
+//        [self createNavigation];
+//        
+//    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+//        NSLog(@"Error: %@", error);
+//    }];
+//}
 
 -(void)setRecommtUprefresh
 {
@@ -906,7 +918,13 @@ static const CGFloat MJDuration = 0.6;
             [cell.imageView sd_setImageWithURL:url placeholderImage:nil options:(SDWebImageRetryFailed|SDWebImageLowPriority)];
             cell.titleLab.text=[NSString stringWithFormat:@"%@",model.content];
             
-            cell.lblTime.text = [Function friendlyTime:model.stageInfo.updated_at];
+            // cell.lblTime.text = [Function friendlyTime:model.stageInfo.updated_at];
+            NSDate  *comfromTimesp =[NSDate dateWithTimeIntervalSince1970:[model.updated_at intValue]];
+            NSString  *da = [NSDate timeInfoWithDate:comfromTimesp];
+            //dateLable.text=da;
+            cell.lblTime.text = da;
+            
+            
             cell.lblLikeCount.text = [NSString stringWithFormat:@"%d", [model.like_count intValue]];
             [cell.ivAvatar sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", kUrlAvatar, model.uerInfo.logo]]];
             cell.ivLike.image = [UIImage imageNamed:@"tiny_like"];

@@ -18,7 +18,7 @@
         userCenter =[UserDataCenter shareInstance];
         buttonStateDict=[[NSMutableDictionary alloc]init];
         [buttonStateDict setObject:@"100" forKey:@"YES"];
-        self.backgroundColor =[UIColor redColor];
+        self.backgroundColor =[UIColor clearColor];
         [self createUI];
     }
     return self;

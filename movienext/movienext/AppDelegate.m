@@ -48,7 +48,6 @@
     // NSString  *is_App_Check = [MobClick getConfigParams:@"First_Start_Image"];
     //判断是否是审核
     [self requestisReview];
-  
      self.window.backgroundColor=[UIColor whiteColor];
     //自动显示和隐藏请求时的状态提示
     [[AFNetworkActivityIndicatorManager sharedManager] setEnabled:YES];
@@ -87,7 +86,6 @@
             }
         }
     }
-
 }
 /**
  *  初始化友盟组件, 配置SSO
@@ -129,22 +127,23 @@
 // 是否是审核版, 返回1 审核版   0 正式版
 -(void)requestisReview
 {
-    
 #warning 提交审核的时候需要开启
-    [self createRootViewController:@"0"];
-     /*AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+   
+     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     NSString *urlString =[NSString stringWithFormat:@"%@/user/review-mode", kApiBaseUrl];
     [manager POST:urlString parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
          if ([responseObject objectForKey:@"code"]) {
             self.IS_CHECK=[responseObject objectForKey:@"code"];
         }
+        UserDataCenter  *user =[UserDataCenter shareInstance];
+        user.Is_Check=self.IS_CHECK;
         [self createRootViewController:self.IS_CHECK];
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
         [self createRootViewController:self.IS_CHECK];
-    }];*/
+    }];
     
 }
 

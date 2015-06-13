@@ -30,13 +30,15 @@ static const CGFloat MJDuration = 0.6;
     int  page2;
     UICollectionViewFlowLayout    *layout;
     UIButton * upLoadimageBtn;
+    
+    UserDataCenter  *userCenter;
 
     
 }
 @property(nonatomic,strong) NSMutableArray  *dataArray1;
 @property(nonatomic,strong) NSMutableArray  *dataArray2;
 @property(nonatomic,strong) UICollectionView  *myConllectionView;
-@property(nonatomic,strong) NSString  *IS_CHECK;  //是否是审核版 1  代表是审核版   0代表是正式版
+//@property(nonatomic,strong) NSString  *IS_CHECK;  //是否是审核版 1  代表是审核版   0代表是正式版
 
 @end
 
@@ -48,8 +50,9 @@ static const CGFloat MJDuration = 0.6;
     [self creatNavigation];
     [self initData];
     [self initUI];
+    [self creatLoadView];
     //判断是否是审核版
-    [self requestisReview];
+    
   
 }
 #pragma  mark  -------CreatUI;
@@ -105,7 +108,7 @@ static const CGFloat MJDuration = 0.6;
 {
     if (btn.tag==99) {
         [self dismissViewControllerAnimated:YES completion:nil];
-
+       
         
     }
     else if (btn.tag==100)
@@ -185,7 +188,7 @@ static const CGFloat MJDuration = 0.6;
     self.dataArray2 =[[NSMutableArray alloc]init];
     page1=0;
     page2=0;
-    self.IS_CHECK=@"1";
+    userCenter =[UserDataCenter shareInstance];
     
 }
 -(void)initUI
@@ -306,7 +309,7 @@ static const CGFloat MJDuration = 0.6;
 }
 
 
--(void)requestisReview
+/*-(void)requestisReview
 {
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     NSString *urlString =[NSString stringWithFormat:@"%@/user/review-mode", kApiBaseUrl];
@@ -320,13 +323,17 @@ static const CGFloat MJDuration = 0.6;
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];    
-}
+}*/
 -(void)requestData
 {
 #warning 上线的时候需要去去掉return的注视
-    if ([self.IS_CHECK intValue]==1) {
-        //return;
+    if ([userCenter.Is_Check intValue]==1) {
+        loadView.failTitle.text =@"还没有内容，快来添加一条吧！";
+        [loadView.failBtn setTitle:@"添加" forState:UIControlStateNormal];
+        [loadView showFailLoadData];
+        return;
     }
+    [loadView removeFromSuperview];
      //   UserDataCenter *userCenter =[UserDataCenter shareInstance];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
     NSString *urlstr;
@@ -398,8 +405,21 @@ static const CGFloat MJDuration = 0.6;
 }
 -(void)reloadDataClick
 {
-    [self requestData];
-    [loadView hidenFailLoadAndShowAnimation];
+    if ([loadView.failBtn.titleLabel.text isEqualToString:@"添加"]) {
+        UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+        picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        picker.delegate = self;
+        //设置选择后的图片可被编辑
+        picker.allowsEditing = YES;
+        // UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:picker];
+        [self.navigationController presentViewController:picker animated:YES completion:nil];
+
+     }
+    else {
+        [self requestData];
+        [loadView hidenFailLoadAndShowAnimation];
+
+    }
 }
 #pragma  mark
 #pragma mark - UICollectionViewDataSource ----

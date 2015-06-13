@@ -26,6 +26,7 @@
 //#import "AddTagViewController.h"
 #import "UploadProgressView.h"
 #import "AddLoadingView.h"
+#import  "MyViewController.h"
 
 #define  PULISH_TOOLBAR_HEIGHT 80
 
@@ -186,42 +187,7 @@
     [_myScorllerView addSubview:self.ShareView];
    
     CGRect  frame  = [Function getImageFrameWithwidth:[self.stageInfo.width intValue] height:[self.stageInfo.height intValue] inset:0];
-    
-    
-//    //计算图片的宽高比
-//    float width = [self.stageInfo.width intValue];
-//    float heigth =[self.stageInfo.height intValue];
-//    float x;
-//    float y=0;
-//    float w;
-//    float h;
-//    if (heigth/width>KImageWidth_Height&&(heigth/width<1)) { //
-//        x=0;
-//        y=0;
-//        w=kDeviceWidth-0;
-//        h=(kDeviceWidth-0)*(heigth/width);
-//    }
-//    else if (heigth/width<KImageWidth_Height)
-//    {
-//        x=0;
-//        y=0;
-//        w=kDeviceWidth-0;
-//        h=(kDeviceWidth-0)*KImageWidth_Height;
-//    }
-//    else if (heigth/width>1) //高大于宽度的时候  成正方形
-//    {
-//        y =0;
-//        h= kDeviceWidth-0;
-//        w=(kDeviceWidth-0)*(width/heigth);
-//        x=((kDeviceWidth-0)-w)/2;
-//    }
-//    else
-//    {
-//        x=0;
-//        y=0;
-//        h=(kDeviceWidth-0)*(9.0/16);
-//        w=(kDeviceWidth-0);
-//    }
+
     self.stageImageView =[[UIImageView alloc]initWithFrame:frame];
     self.stageImageView.contentMode=UIViewContentModeScaleAspectFill;
     self.stageImageView.clipsToBounds=YES;
@@ -422,7 +388,6 @@
         if (self.weiboInfo) {
             parameter = @{@"user_id": userid,@"content":InputStr,@"stage_id":stageId,@"weibo_id":self.weiboInfo.Id,@"x_percent":X,@"y_percent":Y,@"tags[0]":tag1,@"tags[1]":tag2,@"tags[2]":tag3,@"tags[3]":tag4};
         }
-        
     }
     else if (TAGArray.count==5)
     {
@@ -449,18 +414,18 @@
         NSLog(@"  添加弹幕发布请求    JSON: %@", responseObject);
         if ([[responseObject  objectForKey:@"code"] intValue]==0) {
             [loading remove];
-//            NSString *message =@"发布成功";
-//            if (self.weiboInfo) {
-//                message=@"编辑成功";
-//            }
-            //UIAlertView  *Al=[[UIAlertView alloc]initWithTitle:nil message:message delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
-            //Al.tag=1000;
-            //[Al show];
-            UIImage  *image=[Function getImage:self.ShareView WithSize:CGSizeMake(kDeviceWidth-20,self.ShareView.frame.size.height)];
-            UMShareView *ShareView =[[UMShareView alloc] initwithStageInfo:self.stageInfo ScreenImage:image delgate:self andShareHeight:self.stageImageView.frame.size.height];
-            ShareView.pageType=UMShareTypeSuccess;
-            [ShareView setShareLable];
-            [ShareView show];
+          
+            [self dismissViewControllerAnimated:YES completion:^{
+                
+              //  [self.navigationController pushViewController:[MyViewController new] animated:NO];
+                
+                UIImage  *image=[Function getImage:self.ShareView WithSize:CGSizeMake(kDeviceWidth-20,self.ShareView.frame.size.height)];
+                UMShareView *ShareView =[[UMShareView alloc] initwithStageInfo:self.stageInfo ScreenImage:image delgate:self andShareHeight:self.stageImageView.frame.size.height];
+                ShareView.pageType=UMShareTypeSuccess;
+                [ShareView setShareLable];
+                [ShareView show];
+
+            } ];
             
             //            weibo =[[weiboInfoModel alloc]init];
             //            if (weibo) {
@@ -519,6 +484,16 @@
     
     [UMSocialSnsPlatformManager getSocialPlatformWithName:[sharearray  objectAtIndex:button.tag-10000]].snsClickHandler(self,[UMSocialControllerService defaultControllerService],YES);
 }
+-(void)UMShareViewHandClick:(UIButton *)button ShareImage:(UIImage *)shareImage StageInfoModel:(stageInfoModel *)StageInfo
+{
+    NSArray  *sharearray =[NSArray arrayWithObjects:UMShareToWechatTimeline,UMShareToWechatSession, UMShareToSina, nil];
+    [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
+    [[UMSocialControllerService defaultControllerService] setShareText:StageInfo.movieInfo.name shareImage:shareImage socialUIDelegate:self];
+    //设置分享内容和回调对象
+    
+    [UMSocialSnsPlatformManager getSocialPlatformWithName:[sharearray  objectAtIndex:button.tag-10000]].snsClickHandler(self,[UMSocialControllerService defaultControllerService],YES);
+}
+
 //友盟取消分享
 -(void)UMCancleShareClick
 {

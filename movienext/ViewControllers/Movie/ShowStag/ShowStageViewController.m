@@ -938,6 +938,7 @@
     if (!weiboInfo) {
         return;
     }
+    
     NSDictionary *parameters=@{@"weibo_id":weiboId,@"user_id":user_id,@"author_id":author_id,@"operation":operation};
     
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
