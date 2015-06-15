@@ -54,7 +54,6 @@ static const CGFloat MJDuration = 0.6;
     int pageCount2;
     int pageCount3;
     NSInteger Rowindex;
-    UserDataCenter  *userCenter;
 }
 @property(nonatomic,strong) UIScrollView   *myScorollerView;
 
@@ -117,7 +116,7 @@ static const CGFloat MJDuration = 0.6;
 }
 -(void)createNavigation
 {
-    // UserDataCenter  *userCenter =[UserDataCenter shareInstance];
+     UserDataCenter  *userCenter =[UserDataCenter shareInstance];
     if ([userCenter.is_admin intValue ]>0) {
         UIButton  *button=[UIButton buttonWithType:UIButtonTypeCustom];
         //[button setTitle:@"管理员" forState:UIControlStateNormal];
@@ -206,6 +205,7 @@ static const CGFloat MJDuration = 0.6;
 
 -(void)createMyScrollerView
 {
+     UserDataCenter  *userCenter =[UserDataCenter shareInstance];
     self.myScorollerView =[[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight-kHeigthTabBar)];
     self.myScorollerView.contentSize=CGSizeMake(kDeviceWidth*2, kDeviceHeight-kHeigthTabBar-kHeightNavigation);
     if ([userCenter.Is_Check  intValue]==1) {
@@ -335,7 +335,6 @@ static const CGFloat MJDuration = 0.6;
     _dataArray1=[[NSMutableArray alloc]init];
     _dataArray2=[[NSMutableArray alloc]init];
     _dataArray3=[[NSMutableArray alloc]init];
-    userCenter  =[UserDataCenter shareInstance];
     [[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(refreshRecommend)
                                                  name: @"requestRecommendData"
