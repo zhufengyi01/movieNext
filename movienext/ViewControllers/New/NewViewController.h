@@ -9,11 +9,11 @@
 #import <UIKit/UIKit.h>
 #import "MarkView.h"
 
-
+#import "RootViewController.h"
 
 // 点击气泡底部弹出的试图
 #import "ButtomToolView.h"
 #import "ChangeSelfViewController.h"
-@interface NewViewController : UIViewController
+@interface NewViewController : RootViewController
 
 @end

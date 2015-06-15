@@ -86,7 +86,7 @@
     checkBtn2=[ZCControl createButtonWithFrame:CGRectMake(checkBtn.frame.origin.x+checkBtn.frame.size.width,checkBtn.frame.origin.y, 120, 30) ImageName:nil Target:self Action:@selector(checkClick:) Title:@""];
     [checkBtn2 setTitleEdgeInsets:UIEdgeInsetsMake(5, 0, 0, 0)];
      //checkBtn2.backgroundColor=[UIColor blackColor];
-    [checkBtn2 setTitle:@"《影弹服务使用条款》" forState:UIControlStateNormal];
+    [checkBtn2 setTitle:@"《电影卡片服务使用条款》" forState:UIControlStateNormal];
     [checkBtn2 setTitleColor:[UIColor colorWithRed:216.0/255 green:216.0/255 blue:216.0/255 alpha:216.0/255] forState:UIControlStateNormal];
     checkBtn2.tag=101;
     

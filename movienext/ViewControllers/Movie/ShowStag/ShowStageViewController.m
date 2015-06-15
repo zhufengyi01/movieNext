@@ -1023,7 +1023,7 @@
     [manager POST:[NSString stringWithFormat:@"%@/weibo/remove", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
             NSLog(@"删除数据成功=======%@",responseObject);
-            UIAlertView  *Al=[[UIAlertView alloc]initWithTitle:nil message:@"屏蔽成功" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            UIAlertView  *Al=[[UIAlertView alloc]initWithTitle:nil message:@"删除成功" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
             Al.tag=3000;
             [Al show];
             
@@ -1288,8 +1288,9 @@
         //普通用户自己删除
         if(buttonIndex==0)
         {
-            NSString *weibo_id =[NSString stringWithFormat:@"%@",_WeiboInfo.Id];
-            [self requestDelectDataWithweiboId:weibo_id WithremoveType:@"0"];
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"确认删除吗?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+            alert.tag = 3001;
+            [alert show];
         }
     }
     else if (actionSheet.tag==ADM_NEW_ADD)
@@ -1344,6 +1345,11 @@
         if (self.pageType==NSStagePapeTypeMyAdd) {
             //返回
             [self.navigationController popViewControllerAnimated:YES];
+        }
+    } else if (alertView.tag==3001) {
+        if (buttonIndex==1) { // 点击确定再进行删除
+            NSString *weibo_id =[NSString stringWithFormat:@"%@",_WeiboInfo.Id];
+            [self requestDelectDataWithweiboId:weibo_id WithremoveType:@"0"];
         }
     }
 }

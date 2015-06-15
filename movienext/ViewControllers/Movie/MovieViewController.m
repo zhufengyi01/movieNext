@@ -337,6 +337,11 @@ static const CGFloat MJDuration = 0.6;
     _dataArray2=[[NSMutableArray alloc]init];
     _dataArray3=[[NSMutableArray alloc]init];
     userCenter  =[UserDataCenter shareInstance];
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(requestRecommendData)
+                                                 name: @"requestRecommendData"
+                                               object: nil];
+ 
 }
 -(void)initUI
 {
@@ -917,14 +922,13 @@ static const CGFloat MJDuration = 0.6;
             NSURL  *url =[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w340h340",kUrlStage,model.stageInfo.photo]];
             [cell.imageView sd_setImageWithURL:url placeholderImage:nil options:(SDWebImageRetryFailed|SDWebImageLowPriority)];
             cell.titleLab.text=[NSString stringWithFormat:@"%@",model.content];
-            
-            // cell.lblTime.text = [Function friendlyTime:model.stageInfo.updated_at];
+             // cell.lblTime.text = [Function friendlyTime:model.stageInfo.updated_at];
             NSDate  *comfromTimesp =[NSDate dateWithTimeIntervalSince1970:[model.created_at intValue]];
             NSString  *da = [NSDate timeInfoWithDate:comfromTimesp];
             //dateLable.text=da;
             cell.lblTime.text = da;
             
-            
+ 
             cell.lblLikeCount.text = [NSString stringWithFormat:@"%d", [model.like_count intValue]];
             [cell.ivAvatar sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", kUrlAvatar, model.uerInfo.logo]]];
             cell.ivLike.image = [UIImage imageNamed:@"tiny_like"];

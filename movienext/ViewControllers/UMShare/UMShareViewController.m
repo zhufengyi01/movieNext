@@ -106,7 +106,7 @@
     _moviewName.lineBreakMode=NSLineBreakByTruncatingTail;
     [logosupView addSubview:_moviewName];
     
-    logoLable=[ZCControl createLabelWithFrame:CGRectMake(kDeviceWidth-60,0, 50, 20) Font:12 Text:@"影弹App"];
+    logoLable=[ZCControl createLabelWithFrame:CGRectMake(kDeviceWidth-60,0, 50, 20) Font:12 Text:@"电影卡片App"];
     logoLable.textAlignment=NSTextAlignmentRight;
     logoLable.textColor=VLight_GrayColor;
     [logosupView addSubview:logoLable];
