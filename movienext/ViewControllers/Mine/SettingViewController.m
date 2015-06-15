@@ -126,6 +126,8 @@
     if (indexPath.row==0) {
         UserHeadChangeViewController  *vc =[UserHeadChangeViewController new];
         vc.pageType=NSHeadChangePageTypeSetting;
+        UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+        self.navigationItem.backBarButtonItem=item;
         [self.navigationController pushViewController:vc animated:YES];
         
     }

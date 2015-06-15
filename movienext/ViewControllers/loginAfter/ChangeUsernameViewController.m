@@ -26,7 +26,7 @@
     UILabel  *label= [ZCControl createLabelWithFrame:CGRectMake((kDeviceWidth-200)/2, 30, 200, 40) Font:16 Text:@"修改昵称"];
     label.font=[UIFont boldSystemFontOfSize:16];
     label.textAlignment=NSTextAlignmentCenter;
-    label.textColor=VBlue_color;
+    label.textColor=VGray_color;
     self.navigationItem.titleView=label;
     
     
