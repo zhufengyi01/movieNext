@@ -137,6 +137,8 @@
         }
         UserDataCenter  *user =[UserDataCenter shareInstance];
         user.Is_Check=self.IS_CHECK;
+        
+        
         [self createRootViewController:self.IS_CHECK];
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {

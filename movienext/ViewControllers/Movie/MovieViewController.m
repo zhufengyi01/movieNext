@@ -103,21 +103,17 @@ static const CGFloat MJDuration = 0.6;
     //创建导航
     //self.view.backgroundColor=[UIColor whiteColor];
     //判断是否是审核版
-    //[self requestisReview];
-    [self createNavigation];
+     [self createNavigation];
       [self initData];
     [self createMyScrollerView];
     [self createSegmentView];
-  
     [self initUI];
     [self creatLoadView];
 
-    
-    
 }
 -(void)createNavigation
 {
-    // UserDataCenter  *userCenter =[UserDataCenter shareInstance];
+     UserDataCenter  *userCenter =[UserDataCenter shareInstance];
     if ([userCenter.is_admin intValue ]>0) {
         UIButton  *button=[UIButton buttonWithType:UIButtonTypeCustom];
         //[button setTitle:@"管理员" forState:UIControlStateNormal];
@@ -201,7 +197,6 @@ static const CGFloat MJDuration = 0.6;
     if ([userCenter.Is_Check intValue]==1) {
         searchbutton.hidden=YES;
     }
-
 }
 
 -(void)createMyScrollerView
