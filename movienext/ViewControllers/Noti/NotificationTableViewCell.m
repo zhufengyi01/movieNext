@@ -84,14 +84,9 @@
     titleButon.frame=titleLable.frame;
     Zanlable.frame=CGRectMake(titleLable.frame.origin.x+Namesize.width+0, titleLable.frame.origin.y, 60,titleLable.frame.size.height);
     
-   // if ([dict objectForKey:@"updated_at"]) {
-         //NSString *dateStr=[Function getTimeIntervalfromInerterval:[dict objectForKey:@"updated_at"]];
-        //dateLable.text=dateStr;
-        NSDate  *comfromTimesp =[NSDate dateWithTimeIntervalSince1970:[model.updated_at intValue]];
+         NSDate  *comfromTimesp =[NSDate dateWithTimeIntervalSince1970:[model.updated_at intValue]];
         NSString  *da = [NSDate timeInfoWithDate:comfromTimesp];
         dateLable.text=da;
-
-    //}
     
 }
 -(void)dealCellClick:(UIButton *) button

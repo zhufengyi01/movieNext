@@ -115,7 +115,7 @@
     [backView addSubview:shareView];
     
     _ShareimageView=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0,kDeviceWidth-20,shareheight)];
-    _ShareimageView.backgroundColor=[UIColor redColor];
+//    _ShareimageView.backgroundColor=[UIColor redColor];
     _ShareimageView.image=_screenImage;
     [shareView addSubview:_ShareimageView];
     

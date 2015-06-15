@@ -919,7 +919,7 @@ static const CGFloat MJDuration = 0.6;
             cell.titleLab.text=[NSString stringWithFormat:@"%@",model.content];
             
             // cell.lblTime.text = [Function friendlyTime:model.stageInfo.updated_at];
-            NSDate  *comfromTimesp =[NSDate dateWithTimeIntervalSince1970:[model.updated_at intValue]];
+            NSDate  *comfromTimesp =[NSDate dateWithTimeIntervalSince1970:[model.created_at intValue]];
             NSString  *da = [NSDate timeInfoWithDate:comfromTimesp];
             //dateLable.text=da;
             cell.lblTime.text = da;
@@ -946,7 +946,9 @@ static const CGFloat MJDuration = 0.6;
     }
     else
     {
-     return CGSizeMake((kDeviceWidth-5)/2,(kDeviceWidth-10)/3);
+        double  w = (kDeviceWidth-5)/2;
+        double  h= w*(9.0/16);
+       return CGSizeMake(w,h);
     }
     return CGSizeMake(0, 0);
 }

@@ -338,7 +338,11 @@ static const CGFloat MJDuration = 0.2;
 
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
      //    return CGSizeMake((kDeviceWidth-10)/3,(kDeviceWidth-10)/3);
-    return CGSizeMake((kDeviceWidth-5)/2,(kDeviceWidth-10)/3);
+   // return CGSizeMake((kDeviceWidth-5)/2,(kDeviceWidth-10)/3);
+    double  w = (kDeviceWidth-5)/2;
+    double  h= w*(9.0/16);
+    return CGSizeMake(w,h);
+
 
 }
 -(UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section

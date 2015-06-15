@@ -56,7 +56,6 @@
 
 -(void)createRootViewController:(NSString *) is_App_Check
 {
-#warning 暂时设置为 0   永远都不会走直接版本，回走正式版
 
  
 #pragma mark  判断是否是审核版

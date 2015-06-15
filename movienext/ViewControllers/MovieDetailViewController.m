@@ -985,7 +985,11 @@ static const CGFloat MJDuration = 0.2;
     }
     else
     {
-        return CGSizeMake((kDeviceWidth-5)/2,(kDeviceWidth-10)/3);
+     //   return CGSizeMake((kDeviceWidth-5)/2,(kDeviceWidth-10)/3);
+        double  w = (kDeviceWidth-5)/2;
+        double  h= w*(9.0/16);
+        return CGSizeMake(w,h);
+
         
     }
     return CGSizeMake(0, 0);

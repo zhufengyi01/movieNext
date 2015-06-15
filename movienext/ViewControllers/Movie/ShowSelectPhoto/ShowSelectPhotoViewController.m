@@ -118,10 +118,7 @@ static const CGFloat MJDuration = 0.6;
         picker.delegate = self;
         //设置选择后的图片可被编辑
         picker.allowsEditing = YES;
-        // UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:picker];
-        [self.navigationController presentViewController:picker animated:YES completion:nil];
-        
-
+        [self presentViewController:picker animated:YES completion:nil];
     }
 }
 

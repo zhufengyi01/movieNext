@@ -71,7 +71,7 @@
 }
 -(void)createUI
 {
-    _dataArray =[[NSMutableArray alloc]initWithObjects:@"修改个人资料",@"分享给好小伙伴",@"清空缓存",@"意见反馈",@"特别感谢",nil];
+    _dataArray =[[NSMutableArray alloc]initWithObjects:@"修改个人资料",@"分享给小伙伴",@"清空缓存",@"意见反馈",@"特别感谢",nil];
     _myTableView =[[UITableView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, 220) style:UITableViewStylePlain];
     _myTableView.delegate=self;
     _myTableView.dataSource=self;
@@ -123,18 +123,17 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.row==0) {
-        
         UserHeadChangeViewController  *vc =[UserHeadChangeViewController new];
         vc.pageType=NSHeadChangePageTypeSetting;
         [self.navigationController pushViewController:vc animated:YES];
         
     }
      else if (indexPath.row==1) {
-        [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeApp;
-        [UMSocialSnsService presentSnsIconSheetView:self
+          [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeApp;
+          [UMSocialSnsService presentSnsIconSheetView:self
                                              appKey:kUmengKey
-                                          shareText:@"影弹"
-                                         shareImage:[UIImage imageNamed:@"icon.png"]
+                                          shareText:@"电影卡片"
+                                         shareImage:[UIImage imageNamed:@"movieCard_icon.png"]
                                     shareToSnsNames:[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQzone, UMShareToSina, nil]
                                            delegate:self];
     } else if (indexPath.row==2) {

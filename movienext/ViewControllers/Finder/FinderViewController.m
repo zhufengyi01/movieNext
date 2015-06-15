@@ -69,6 +69,11 @@
 
 @property(nonatomic,strong) UIScrollView  *myScrollerView;
 
+
+@property(nonatomic,strong) UILabel  *naviTitlLable ;
+
+@property(nonatomic,strong) UIView  *layerView;
+
 @end
 
 @implementation FinderViewController
@@ -103,11 +108,12 @@
     
     [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color.png"] forBarMetrics:UIBarMetricsDefault];
     
-    UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:@"发现"];
-    titleLable.textColor=VGray_color;
-    titleLable.font=[UIFont boldSystemFontOfSize:16];
-    titleLable.textAlignment=NSTextAlignmentCenter;
-    self.navigationItem.titleView=titleLable;
+    self.naviTitlLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:@""];
+    self.naviTitlLable.textColor=VGray_color;
+    self.naviTitlLable.font=[UIFont boldSystemFontOfSize:16];
+    self.naviTitlLable.textAlignment=NSTextAlignmentCenter;
+    self.navigationItem.titleView=self.naviTitlLable;
+    
     
     UIButton  *button=[UIButton buttonWithType:UIButtonTypeCustom];
     [button setTitle:@"返回" forState:UIControlStateNormal];
@@ -224,44 +230,14 @@
 -(void)changeStageViewImageAndmarkLable
 {
     weiboInfoModel   *weiboInfo =[self.pageContent objectAtIndex:self.pageIndex];
+    self.naviTitlLable.text=weiboInfo.stageInfo.movieInfo.name;
     
     CGRect  frame = [Function getImageFrameWithwidth:[weiboInfo.stageInfo.width intValue] height:[weiboInfo.stageInfo.height intValue] inset:20];
-    //重新去布局图片
-//    float width = [weiboInfo.stageInfo.width intValue];
-//    float heigth =[weiboInfo.stageInfo.height intValue];
-//    
-//    float x;
-//    float y=0;
-//    float w;
-//    float h;
-//    if (heigth/width>KImageWidth_Height&&(heigth/width<1)) { //
-//        x=0;
-//        y=0;
-//        w=kDeviceWidth-20;
-//        h=(kDeviceWidth-20)*(heigth/width);
-//    }
-//    else if (heigth/width<KImageWidth_Height)
-//    {
-//        x=0;
-//        y=0;
-//        w=kDeviceWidth-20;
-//        h=(kDeviceWidth-20)*KImageWidth_Height;
-//    }
-//    else if (heigth/width>1) //高大于宽度的时候  成正方形
-//    {
-//        y =0;
-//        h= kDeviceWidth-20;
-//        w=(kDeviceWidth-20)*(width/heigth);
-//        x=((kDeviceWidth-20)-w)/2;
-//    }
-//    else
-//    {
-//        x=0;
-//        y=0;
-//        w=kDeviceWidth-20;
-//        h=(kDeviceWidth-20)*(9.0/16);
-//    }
-    self.stageImageView.frame=frame;  //[[UIImageView alloc]initWithFrame:CGRectMake(x, y,w,h)];
+
+    self.stageImageView.frame=frame;
+    
+   self.layerView.frame= CGRectMake(0, self.stageImageView.frame.size.height-60, kDeviceWidth-10, 60);
+    
     markLable.text=weiboInfo.content;
     CGSize  Msize = [markLable.text boundingRectWithSize:CGSizeMake(kDeviceWidth-40, MAXFLOAT) options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes:[NSDictionary dictionaryWithObject:markLable.font forKey:NSFontAttributeName] context:nil].size;
     self.ShareView.frame=CGRectMake(self.ShareView.frame.origin.x, self.ShareView.frame.origin.y, self.ShareView.frame.size.width, self.stageImageView.frame.size.height+Msize.height-27);
@@ -371,6 +347,8 @@
     [[self view] addSubview:[_pageController view]];
     
     */
+    
+    
         self.myScrollerView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight-LIKE_BAR_HEIGHT)];
         self.myScrollerView.backgroundColor =View_BackGround;
         self.myScrollerView.contentSize = CGSizeMake(kDeviceWidth, kDeviceHeight);
@@ -390,42 +368,50 @@
     [self.bgView addSubview:self.ShareView];
     
       weiboInfoModel   *weiboInfo =[self.pageContent objectAtIndex:0];
-    //计算图片的宽高比
-    float width = [weiboInfo.stageInfo.width intValue];
-    float heigth =[weiboInfo.stageInfo.height intValue];
-    float x;
-    float y=0;
-    float w;
-    float h;
-    if (heigth/width>KImageWidth_Height&&(heigth/width<1)) { //
-        x=0;
-        y=0;
-        w=kDeviceWidth-20;
-        h=(kDeviceWidth-20)*(heigth/width);
-    }
-    else if (heigth/width<KImageWidth_Height)
-    {
-        x=0;
-        y=0;
-        w=kDeviceWidth-20;
-        h=(kDeviceWidth-20)*KImageWidth_Height;
-    }
-    else if (heigth/width>1) //高大于宽度的时候  成正方形
-    {
-        y =0;
-        h= kDeviceWidth-20;
-        w=(kDeviceWidth-20)*(width/heigth);
-        x=((kDeviceWidth-20)-w)/2;
-    }
-    else
-    {
-        x=0;
-        y=0;
-        w=kDeviceWidth-20;
-        h=w*(9.0/16);
-    }
+    
+    self.naviTitlLable.text=weiboInfo.stageInfo.movieInfo.name;
+    
+    
+    CGRect  frame = [Function getImageFrameWithwidth:[weiboInfo.stageInfo.width intValue] height:[weiboInfo.stageInfo.height intValue] inset:20];
+    
 
-    self.stageImageView =[[UIImageView alloc]initWithFrame:CGRectMake(x, y,w,h)];
+    
+//    //计算图片的宽高比
+//    float width = [weiboInfo.stageInfo.width intValue];
+//    float heigth =[weiboInfo.stageInfo.height intValue];
+//    float x;
+//    float y=0;
+//    float w;
+//    float h;
+//    if (heigth/width>KImageWidth_Height&&(heigth/width<1)) { //
+//        x=0;
+//        y=0;
+//        w=kDeviceWidth-20;
+//        h=(kDeviceWidth-20)*(heigth/width);
+//    }
+//    else if (heigth/width<KImageWidth_Height)
+//    {
+//        x=0;
+//        y=0;
+//        w=kDeviceWidth-20;
+//        h=(kDeviceWidth-20)*KImageWidth_Height;
+//    }
+//    else if (heigth/width>1) //高大于宽度的时候  成正方形
+//    {
+//        y =0;
+//        h= kDeviceWidth-20;
+//        w=(kDeviceWidth-20)*(width/heigth);
+//        x=((kDeviceWidth-20)-w)/2;
+//    }
+//    else
+//    {
+//        x=0;
+//        y=0;
+//        w=kDeviceWidth-20;
+//        h=w*(9.0/16);
+//    }
+//
+    self.stageImageView =[[UIImageView alloc]initWithFrame:frame];
     weiboInfoModel *Weibo =[self.pageContent objectAtIndex:0];
     self.stageImageView.contentMode=UIViewContentModeScaleAspectFill;
     self.stageImageView.clipsToBounds=YES;
@@ -448,7 +434,7 @@
     
     
     
-    UIView  *_layerView =[[UIView alloc]initWithFrame:CGRectMake(0, self.stageImageView.frame.size.height-60, kDeviceWidth-10, 60)];
+    _layerView =[[UIView alloc]initWithFrame:CGRectMake(0, self.stageImageView.frame.size.height-60, kDeviceWidth-10, 60)];
     [self.stageImageView addSubview:_layerView];
     
     CAGradientLayer * _gradientLayer = [CAGradientLayer layer];  // 设置渐变效果

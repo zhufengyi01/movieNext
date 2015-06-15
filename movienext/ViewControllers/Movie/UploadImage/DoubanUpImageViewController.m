@@ -68,26 +68,6 @@
 
     [imageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",self.photourl]] placeholderImage:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         CGSize  Isize=image.size;
-//        float x=0;
-//        float y=0;
-//        float width=0;
-//        float hight=0;
-//        if (Isize.width>Isize.height) {
-//            x=0;
-//            width=kDeviceWidth;
-//            hight=(Isize.height/Isize.width)*kDeviceWidth;
-//            y=(kDeviceWidth-hight)/2;
-//        }
-//        else
-//        {
-//            y=0;
-//            hight=kDeviceWidth;
-//            width=(Isize.width/Isize.height)*kDeviceWidth;
-//            x=(kDeviceWidth-width)/2;
-//        }
-//        imageView.frame=CGRectMake((kDeviceWidth-width)/2,(kDeviceHeight-hight)/2,width,hight);
-//        
-//
         //计算图片的宽高比
         float width = Isize.width;
         float heigth =Isize.height;

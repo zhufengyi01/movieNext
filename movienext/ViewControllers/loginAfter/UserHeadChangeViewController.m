@@ -48,7 +48,7 @@
     headImag.layer.borderColor=VBlue_color.CGColor;
     headImag.layer.borderWidth=4;
     headImag.clipsToBounds=YES;
-    headImag.backgroundColor=[UIColor redColor];
+//    headImag.backgroundColor=[UIColor redColor];
     NSURL   *imageURL;
     if (userCenter.logo) {
         imageURL =[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!thumb",kUrlAvatar,userCenter.logo]];

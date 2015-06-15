@@ -147,7 +147,7 @@
     
     stageView = [[StageView alloc] initWithFrame:CGRectMake(5,5,kDeviceWidth-10, (kDeviceWidth-10)*(9.0/16))];
     stageView.isAnimation = YES;
-    stageView.backgroundColor=[UIColor redColor];
+//    stageView.backgroundColor=[UIColor redColor];
     stageView.delegate=self;
     stageView.stageInfo=self.weiboInfo.stageInfo;
     // stageView.weibosArray = self.stageInfo.weibosArray;
