@@ -100,7 +100,7 @@
          self.selectedIndex=0;
          
          if (_previousSelectedIndex == 0) {
-#warning 在此处刷新一下热门页, 我之前是通过通知的方式刷新的, 你按照你习惯的方式刷新吧, 用代理或者通知
+             [[NSNotificationCenter defaultCenter] postNotificationName:@"requestRecommendData" object:nil];
          }
          
          _previousSelectedIndex = 0;

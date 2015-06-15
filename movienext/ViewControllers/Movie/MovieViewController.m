@@ -325,6 +325,11 @@ static const CGFloat MJDuration = 0.6;
     _dataArray1=[[NSMutableArray alloc]init];
     _dataArray2=[[NSMutableArray alloc]init];
     _dataArray3=[[NSMutableArray alloc]init];
+    
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(requestRecommendData)
+                                                 name: @"requestRecommendData"
+                                               object: nil];
 }
 -(void)initUI
 {

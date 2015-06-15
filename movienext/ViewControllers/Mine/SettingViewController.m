@@ -19,6 +19,7 @@
 #import "UserDataCenter.h"
 #import "AdmListViewController.h"
 #import <MessageUI/MFMailComposeViewController.h>
+#import "SDImageCache.h"
 @interface SettingViewController ()<UITableViewDataSource,UITableViewDelegate,UMSocialUIDelegate>
 {
     AppDelegate *appdelegate;
@@ -138,6 +139,11 @@
                                     shareToSnsNames:[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQzone, UMShareToSina, nil]
                                            delegate:self];
     } else if (indexPath.row==2) {
+        float tmpSize = [[SDImageCache sharedImageCache] getSize];
+        NSLog(@"tmpSize = %lfM", tmpSize / 1024 / 1024);
+        
+        [[SDImageCache sharedImageCache] clearDisk];
+        [[SDImageCache sharedImageCache] clearMemory];
         UIAlertView  *Al =[[UIAlertView alloc]initWithTitle:nil message:@"恭喜你，缓存清理成功" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
         [Al show];
     } else if (indexPath.row==3) {
@@ -240,7 +246,7 @@
     NSString * sysVersion = [myDevice systemVersion];
     NSString *emailBody = [NSString stringWithFormat:@"\n\n\n\n附属信息：\n\n%@ %@(%@)\n%@ / %@ / %@ IOS%@", appCurName, appCurVersion, appCurVersionNum, @"", @"", @"",  sysVersion];
     [picker setMessageBody:emailBody isHTML:NO];
-    [picker setSubject:[NSString stringWithFormat:@"反馈：我是电影%@(%@)", appCurVersion, appCurVersionNum]];/*emailpicker标题主题行*/
+    [picker setSubject:[NSString stringWithFormat:@"反馈：电影卡片%@(%@)", appCurVersion, appCurVersionNum]];/*emailpicker标题主题行*/
     
     [self presentViewController:picker animated:YES completion:nil];
     //        [self.navigationController presentViewController:picker animated:YES completion:nil];

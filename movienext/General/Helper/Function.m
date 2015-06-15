@@ -113,7 +113,7 @@
         localtime_r(&this_time, &tm_in);
         NSString *format = nil;
         
-        format = @"%-m-%-d";
+        format = @"%m-%-d";
         
         char buf[256] = {0};
         strftime(buf, sizeof(buf), [format UTF8String], &tm_in);
