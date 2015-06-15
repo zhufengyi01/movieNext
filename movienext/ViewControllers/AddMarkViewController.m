@@ -331,6 +331,12 @@
     X=[NSString stringWithFormat:@"%d",x];
     Y=[NSString stringWithFormat:@"%d",y];
     InputStr = [_myTextView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    
+    
+    if ([InputStr isEqualToString:@" "]||!InputStr) {
+        UIAlertView  *al =[[UIAlertView alloc]initWithTitle:nil message:@"对不起，内容不能为空" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+        [al show];
+    }
     int x_percent=[X intValue];
     X=[NSString stringWithFormat:@"%d",x_percent];
     int y_percent=[Y intValue];
@@ -341,8 +347,6 @@
     
     NSDictionary *parameter;
     if (TAGArray.count==0) {
-        
-        
         parameter = @{@"user_id": userid,@"content":InputStr,@"stage_id":stageId,@"x_percent":X,@"y_percent":Y};
         if (self.weiboInfo) {
             parameter = @{@"user_id":userid,@"content":InputStr,@"stage_id":stageId,@"x_percent":X,@"y_percent":Y,@"weibo_id":self.weiboInfo.Id};

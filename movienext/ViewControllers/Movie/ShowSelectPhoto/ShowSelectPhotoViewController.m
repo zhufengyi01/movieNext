@@ -306,24 +306,10 @@ static const CGFloat MJDuration = 0.6;
 }
 
 
-/*-(void)requestisReview
-{
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    NSString *urlString =[NSString stringWithFormat:@"%@/user/review-mode", kApiBaseUrl];
-    [manager POST:urlString parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        
-        if ([responseObject objectForKey:@"code"]) {
-            self.IS_CHECK=[responseObject objectForKey:@"code"];
-        }
-        [self requestData];
-        
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Error: %@", error);
-    }];    
-}*/
 -(void)requestData
 {
 #warning 上线的时候需要去去掉return的注视
+    
     if ([userCenter.Is_Check intValue]==1) {
         loadView.failTitle.text =@"还没有内容，快来添加一条吧！";
         [loadView.failBtn setTitle:@"添加" forState:UIControlStateNormal];

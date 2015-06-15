@@ -117,7 +117,7 @@ static const CGFloat MJDuration = 0.6;
 }
 -(void)createNavigation
 {
-    UserDataCenter  *userCenter =[UserDataCenter shareInstance];
+    // UserDataCenter  *userCenter =[UserDataCenter shareInstance];
     if ([userCenter.is_admin intValue ]>0) {
         UIButton  *button=[UIButton buttonWithType:UIButtonTypeCustom];
         //[button setTitle:@"管理员" forState:UIControlStateNormal];
@@ -140,7 +140,6 @@ static const CGFloat MJDuration = 0.6;
     naviTitleView.userInteractionEnabled=YES;
     self.navigationItem.titleView=naviTitleView;
     
-#warning 审核的时候填写为1, 平时写上0
     if ([userCenter.Is_Check intValue]==1) {
         UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 30) Font:30 Text:@"热门"];
         titleLable.textColor=VBlue_color;
@@ -338,14 +337,26 @@ static const CGFloat MJDuration = 0.6;
     _dataArray3=[[NSMutableArray alloc]init];
     userCenter  =[UserDataCenter shareInstance];
     [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(requestRecommendData)
+                                             selector: @selector(refreshRecommend)
                                                  name: @"requestRecommendData"
                                                object: nil];
  
 }
+//已经选中了tabbar的时候刷新
+-(void)refreshRecommend
+{
+    if (self.recommentBtn.selected==YES) {
+     [self.RecommendCollectionView.header beginRefreshing];
+    }
+    else if (self.feedBtn.selected==YES)
+    {
+        [self.myConllectionView.header beginRefreshing];
+    }
+    
+}
+
 -(void)initUI
 {
-    
     ///创建推荐的collectionview
    UICollectionViewFlowLayout  *   Relayout=[[UICollectionViewFlowLayout alloc]init];
     Relayout.minimumInteritemSpacing=0; //cell之间左右的
@@ -384,23 +395,6 @@ static const CGFloat MJDuration = 0.6;
      *  集成刷新控件
      */
 }
-
-//-(void)requestisReview
-//{
-//    _IS_CHECK = @"1";
-//    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-//    NSString *urlString =[NSString stringWithFormat:@"%@/user/review-mode", kApiBaseUrl];
-//    [manager POST:urlString parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
-//        
-//        if ([responseObject objectForKey:@"code"]) {
-//            self.IS_CHECK=[responseObject objectForKey:@"code"];
-//        }
-//        [self createNavigation];
-//        
-//    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-//        NSLog(@"Error: %@", error);
-//    }];
-//}
 
 -(void)setRecommtUprefresh
 {
