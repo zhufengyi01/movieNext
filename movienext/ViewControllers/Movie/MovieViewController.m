@@ -906,7 +906,7 @@ static const CGFloat MJDuration = 0.6;
             [cell.imageView sd_setImageWithURL:url placeholderImage:nil options:(SDWebImageRetryFailed|SDWebImageLowPriority)];
             cell.titleLab.text=[NSString stringWithFormat:@"%@",model.content];
             
-            cell.lblTime.text = [Function friendlyTime:model.stageInfo.updated_at];
+            cell.lblTime.text = [Function friendlyTime:model.updated_at];
             cell.lblLikeCount.text = [NSString stringWithFormat:@"%d", [model.like_count intValue]];
             [cell.ivAvatar sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", kUrlAvatar, model.uerInfo.logo]]];
             cell.ivLike.image = [UIImage imageNamed:@"tiny_like"];

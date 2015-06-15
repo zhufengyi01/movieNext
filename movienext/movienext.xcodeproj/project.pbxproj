@@ -966,7 +966,6 @@
 		006F77221B0DEF3200EF3EF0 /* AdmListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AdmListViewController.m; sourceTree = "<group>"; };
 		006F77241B0DEF4900EF3EF0 /* AdmCustomListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdmCustomListViewController.h; sourceTree = "<group>"; };
 		006F77251B0DEF4900EF3EF0 /* AdmCustomListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AdmCustomListViewController.m; sourceTree = "<group>"; };
-		00705ACF1B27D9BF0019B8FE /* FZLTHK 2.TTF */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FZLTHK 2.TTF"; sourceTree = "<group>"; };
 		00705B381B27E8FA0019B8FE /* search_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "search_icon@2x.png"; sourceTree = "<group>"; };
 		00705B391B27E8FA0019B8FE /* search_icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "search_icon@3x.png"; sourceTree = "<group>"; };
 		00705B3C1B27EA210019B8FE /* guanliyuan@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "guanliyuan@2x.png"; sourceTree = "<group>"; };
@@ -2384,7 +2383,6 @@
 		00AA53511AA2C525004096F8 /* Libs */ = {
 			isa = PBXGroup;
 			children = (
-				00705ACF1B27D9BF0019B8FE /* FZLTHK 2.TTF */,
 				0064CD031B257660008A38F3 /* MJRefresh */,
 				0059ED921B05D2A800C2ACA1 /* MJExtension */,
 				00963B9E1B0323E10069CBD9 /* Masonry */,

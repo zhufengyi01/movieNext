@@ -24,6 +24,7 @@
 
 @interface CustmoTabBarController ()<CustomTabBarDelegate>
 @property (nonatomic, strong) CustomTabBar * m_tabBar;
+@property(nonatomic) NSUInteger previousSelectedIndex;//上一个选择的是
 @end
 
 @implementation CustmoTabBarController
@@ -96,9 +97,13 @@
 {
     
      if (index==0) {
-        
          self.selectedIndex=0;
-      
+         
+         if (_previousSelectedIndex == 0) {
+#warning 在此处刷新一下热门页, 我之前是通过通知的方式刷新的, 你按照你习惯的方式刷新吧, 用代理或者通知
+         }
+         
+         _previousSelectedIndex = 0;
      }
     else if(index==1)
     {
@@ -116,12 +121,12 @@
     else if(index==3)
     {
         self.selectedIndex=1;
-        
+        _previousSelectedIndex = 1;
     }
     else if (index==4)
     {
         self.selectedIndex=2;
-        
+        _previousSelectedIndex = 2;
     }
 }
 
