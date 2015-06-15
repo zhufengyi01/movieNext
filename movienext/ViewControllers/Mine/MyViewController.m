@@ -38,8 +38,7 @@
 #import "ShowStageViewController.h"
 #import "SmallImageCollectionViewCell.h"
 #import "UserHeaderReusableView.h"
-static const CGFloat MJDuration = 1.0;
-
+static const CGFloat MJDuration = 0.2;
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
 @interface MyViewController ()<StageViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UIActionSheetDelegate,UMSocialDataDelegate,UMSocialUIDelegate,CommonStageCellDelegate,UMShareViewControllerDelegate,UMShareViewController2Delegate,UMShareViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UICollectionViewDelegate,UserHeaderReusableViewDelegate>

@@ -38,17 +38,10 @@
 #define ADM_CLOSE_STAGE   1004   //已屏蔽的弹幕
 #define ADM_DSCORVER      1005  // 发现
 #define ADM_RECOMMEND     1006    //管理员热门
-
 #define ADM_HOT_LIST       1007   //管理员热门进入
-
 #define CUS_ACTION_TAG   1001   //普通用户弹出框
 #define CUSSEFT_ACTION_TAG   1002  //普通用户自己的页弹出框
-
-
 #define  TOOLBAR_HEIGHT  160
-
-
-
 
 @interface ShowStageViewController() <ButtomToolViewDelegate,StageViewDelegate,AddMarkViewControllerDelegate,UMShareViewControllerDelegate,UMSocialDataDelegate,UMSocialUIDelegate,UIActionSheetDelegate,UMShareViewController2Delegate,UMShareViewDelegate,TagViewDelegate,UIAlertViewDelegate>
 {
@@ -76,9 +69,7 @@
     ///当前微博的内容   初始化的时候，取了点赞数组的第一个元素
     weiboInfoModel  *_WeiboInfo;
     UIButton  *like_btn;
-    //UIView  *ShareView;
-    
-    UIButton *ShareButton;  //分享
+     UIButton *ShareButton;  //分享
     UIButton  *addMarkButton;  //添加弹幕
 
  }
@@ -652,15 +643,24 @@
      addMarkButton =[UIButton buttonWithType:UIButtonTypeCustom];
     addMarkButton.frame=CGRectMake(0, TOOLBAR_HEIGHT-45, kDeviceWidth/2, 45);
     [addMarkButton setTitle:@"我要添加" forState:UIControlStateNormal];
+    if (self.pageType==NSStagePapeTypeAdmin_New_Add) {
+        //zui 心添加
+        [addMarkButton setTitle:@"移到发现" forState:UIControlStateNormal];
+    }
     
     [addMarkButton addActionHandler:^(NSInteger tag) {
-        
+        if (self.pageType==NSStagePapeTypeAdmin_New_Add) {
+            //移到发现
+            [weakSelf requestChangeStageStatusWithweiboId:[NSString stringWithFormat:@"%@",_WeiboInfo.Id] StatusType:@"2"];
+        }
+        else{
         AddMarkViewController  *AddMarkVC=[[AddMarkViewController alloc]init];
         AddMarkVC.delegate=weakSelf;
         // AddMarkVC.model=self.stageInfo;
         AddMarkVC.stageInfo=weakSelf.stageInfo;
         UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:AddMarkVC];
         [weakSelf.navigationController presentViewController:na animated:NO completion:nil];
+        }
 
     }];
      addMarkButton.titleLabel.font =[UIFont boldSystemFontOfSize:16];
@@ -672,8 +672,14 @@
     ShareButton =[UIButton buttonWithType:UIButtonTypeCustom];
     ShareButton.frame=CGRectMake(kDeviceWidth/2, TOOLBAR_HEIGHT-45, kDeviceWidth/2, 45);
     [ShareButton setTitle:@"我要分享" forState:UIControlStateNormal];
-    
+    if (self.pageType==NSStagePapeTypeAdmin_New_Add) {
+        [ShareButton setTitle:@"移到屏蔽" forState:UIControlStateNormal];
+    }
     [ShareButton addActionHandler:^(NSInteger tag) {
+        if (self.pageType==NSStagePapeTypeAdmin_New_Add) {
+            //移到屏蔽
+            [weakSelf requestChangeStageStatusWithweiboId:[NSString stringWithFormat:@"%@",_WeiboInfo.Id]  StatusType:@"0"];
+        }else{
         
         float  height = weakSelf.ShareView.frame.size.height;
         UIImage  *image=[Function getImage:weakSelf.ShareView WithSize:CGSizeMake(kDeviceWidth-20,height)];
@@ -681,9 +687,9 @@
             weakSelf.stageInfo=weakSelf.weiboInfo.stageInfo;
         }
         UMShareView *shareView =[[UMShareView alloc] initwithStageInfo:weakSelf.stageInfo ScreenImage:image delgate:weakSelf andShareHeight:height];
-        
         [shareView setShareLable];
         [shareView show];
+        }
 
     }];
     ShareButton.titleLabel.font =[UIFont boldSystemFontOfSize:16];
@@ -938,6 +944,7 @@
     if (!weiboInfo) {
         return;
     }
+    
     NSDictionary *parameters=@{@"weibo_id":weiboId,@"user_id":user_id,@"author_id":author_id,@"operation":operation};
     
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
@@ -1302,7 +1309,7 @@
         {
             
          //屏蔽
-            //[self requestDelectDataWithweiboId:[NSString stringWithFormat:@"%@",_WeiboInfo.Id] WithremoveType:@"1"];
+ 
             [self requestChangeStageStatusWithweiboId:[NSString stringWithFormat:@"%@",_WeiboInfo.Id]  StatusType:@"0"];
             
         }

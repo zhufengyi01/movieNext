@@ -124,7 +124,6 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.row==0) {
-        
         UserHeadChangeViewController  *vc =[UserHeadChangeViewController new];
         vc.pageType=NSHeadChangePageTypeSetting;
         UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
@@ -133,11 +132,12 @@
         
     }
      else if (indexPath.row==1) {
-        [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeApp;
-        [UMSocialSnsService presentSnsIconSheetView:self
+          [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeApp;
+          [UMSocialSnsService presentSnsIconSheetView:self
                                              appKey:kUmengKey
                                           shareText:@"电影卡片"
-                                         shareImage:[UIImage imageNamed:@"icon.png"]
+                                         shareImage:[UIImage imageNamed:@"movieCard_icon.png"]
+ 
                                     shareToSnsNames:[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQzone, UMShareToSina, nil]
                                            delegate:self];
     } else if (indexPath.row==2) {

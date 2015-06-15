@@ -423,13 +423,18 @@
     NSDate *curDate = [NSDate date];
     NSTimeInterval time = -[date timeIntervalSinceDate:curDate];
     
-    int month = (int)([curDate month] - [date month]);
-    int year = (int)([curDate year] - [date year]);
-    int day = (int)([curDate day] - [date day]);
+   // int month = (int)([curDate month] - [date month]);
+    //int year = (int)([curDate year] - [date year]);
+    //int day = (int)([curDate day] - [date day]);
     
     NSTimeInterval retTime = 1.0;
     if (time<60) {
-        return [NSString stringWithFormat:@"刚刚"];
+        if (time<10) {
+            return @"刚刚";
+        }
+        else {
+           return [NSString stringWithFormat:@"%.0f秒前",time];
+        }
     }
     if (time < 3600) { // 小于一小时
         retTime = time / 60;
@@ -442,9 +447,31 @@
     } else if (time < 3600 * 24 * 2) {
         return @"昨天";
     }
-    else if(time <3600*24*7)
+    else if (time<3600*24*3)
     {
-        return @"一周内";
+        return @"2天前";
+    }
+    else if(time<3600*24*4)
+    {
+        return @"3天前";
+    }
+    else if(time<3600*24*5)
+    {
+        return @"4天前";
+    }
+    else if (time<3600*24*6)
+    {
+        return @"5天前";
+    }
+    else
+    {
+        NSArray *arr =[dateString componentsSeparatedByString:@" "];
+        return [arr objectAtIndex:0];
+
+    }
+   /* else if(time <3600*24*7)
+    {
+        return @"1周内";
     }
     // 第一个条件是同年，且相隔时间在一个月内
     // 第二个条件是隔年，对于隔年，只能是去年12月与今年1月这种情况
@@ -483,7 +510,7 @@
         
         return [NSString stringWithFormat:@"%d年前", abs(year)];
     }
-    
+    */
     return @"1小时前";
 }
 

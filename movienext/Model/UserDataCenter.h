@@ -43,6 +43,8 @@
 @property (nonatomic,strong) NSString *first_login;
 @property(nonatomic,strong) NSString  *email;
 
+@property(nonatomic,strong) NSString *Is_Check;
+
 +(id)shareInstance;
 
 @end

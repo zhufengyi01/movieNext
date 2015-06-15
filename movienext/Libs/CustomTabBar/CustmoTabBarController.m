@@ -102,7 +102,6 @@
          if (_previousSelectedIndex == 0) {
              [[NSNotificationCenter defaultCenter] postNotificationName:@"requestRecommendData" object:nil];
          }
-         
          _previousSelectedIndex = 0;
      }
     else if(index==1)

@@ -18,7 +18,10 @@
         userCenter =[UserDataCenter shareInstance];
         buttonStateDict=[[NSMutableDictionary alloc]init];
         [buttonStateDict setObject:@"100" forKey:@"YES"];
-//        self.backgroundColor =[UIColor redColor];
+
+        self.backgroundColor =[UIColor clearColor];
+
+
         [self createUI];
     }
     return self;
@@ -29,9 +32,7 @@
     //创建基本ui
     UIView *viewHeader = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, 130)];
     viewHeader.backgroundColor =[UIColor whiteColor];
-    [self addSubview:viewHeader];
-
-    
+    [self addSubview:viewHeader];    
     //头像
     int ivAvatarWidth = 50;
     ivAvatar = [[UIImageView alloc] initWithFrame:CGRectMake(20, 20, ivAvatarWidth, ivAvatarWidth)];

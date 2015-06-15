@@ -50,8 +50,6 @@
 #define   Version  @"1.0.1"       //版本信息  1.0.1 审核版         1.0 正常版
 #define   UMShareStyle  0      //分享1使用controller方式分享    0 使用view 方式分享
 
-
-
 #pragma  mark 颜色设置
 #define kAppTintColor [UIColor colorWithRed:0.0/255.0 green:146.0/255.0 blue:255.0/255.0 alpha:1]
 //项目背景颜色
@@ -72,9 +70,6 @@
 #define VStageView_color [UIColor colorWithRed:23.0/255 green:23.0/255 blue:23.0/255 alpha:1]
 
 #define ShareLogo_color  [UIColor colorWithRed:74.0/255 green:74.0/255 blue:74.0/255 alpha:1]
-
-
-
 
 //头像占位图片
 #define HeadImagePlaceholder  [UIImage imageNamed:@"notice_image headloading.png"]
@@ -106,8 +101,6 @@
 #define MarkViewHead23     23
 #define MarkViewHead28     28
 #define MarkViewLike_Image11  11
-
-
 
 //标签相关定义
 #define  TagTextFont14 14
