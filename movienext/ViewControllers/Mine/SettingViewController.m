@@ -71,7 +71,7 @@
 }
 -(void)createUI
 {
-    _dataArray =[[NSMutableArray alloc]initWithObjects:@"修改个人资料",@"分享给好小伙伴",@"清空缓存",@"意见反馈",@"特别感谢",nil];
+    _dataArray =[[NSMutableArray alloc]initWithObjects:@"修改个人资料",@"分享给小伙伴",@"清空缓存",@"意见反馈",@"特别感谢",nil];
     _myTableView =[[UITableView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, 220) style:UITableViewStylePlain];
     _myTableView.delegate=self;
     _myTableView.dataSource=self;
@@ -133,7 +133,7 @@
         [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeApp;
         [UMSocialSnsService presentSnsIconSheetView:self
                                              appKey:kUmengKey
-                                          shareText:@"影弹"
+                                          shareText:@"电影卡片"
                                          shareImage:[UIImage imageNamed:@"icon.png"]
                                     shareToSnsNames:[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQzone, UMShareToSina, nil]
                                            delegate:self];

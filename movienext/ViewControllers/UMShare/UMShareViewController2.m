@@ -205,7 +205,7 @@
     logoView.backgroundColor =View_ToolBar;
     [shareView addSubview:logoView];
     
-    self.logoName=[ZCControl createLabelWithFrame:CGRectMake(_moviewName.frame.origin.x,0, kDeviceWidth-20,logoView.frame.size.height) Font:12 Text:@"Powered By 影弹"];
+    self.logoName=[ZCControl createLabelWithFrame:CGRectMake(_moviewName.frame.origin.x,0, kDeviceWidth-20,logoView.frame.size.height) Font:12 Text:@"Powered By 电影卡片"];
     self.logoName.adjustsFontSizeToFitWidth=NO;
     self.logoName.numberOfLines=1;
     self.logoName.textAlignment=NSTextAlignmentLeft;
