@@ -51,7 +51,7 @@
 //    headImag.backgroundColor=[UIColor redColor];
     NSURL   *imageURL;
     if (userCenter.logo) {
-        imageURL =[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!thumb",kUrlAvatar,userCenter.logo]];
+        imageURL =[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kUrlAvatar,userCenter.logo]];
     }
     [headImag addTarget:self action:@selector(changeHeadImage) forControlEvents:UIControlEventTouchUpInside];
     [headImag sd_setBackgroundImageWithURL:imageURL forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"user_normal.png"]];
@@ -125,6 +125,8 @@
 {
     ChangeUsernameViewController *vc=[ChangeUsernameViewController new];
     vc.delegate=self;
+    UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+    self.navigationItem.backBarButtonItem=item;
     [self.navigationController pushViewController:vc animated:YES];
     
 }
@@ -133,7 +135,6 @@
 -(void)changeUserName:(NSString *)userName
 {
     [nickButton setTitle:userName forState:UIControlStateNormal];
-    
 }
 //切换根视图控制器
 -(void)GotoCustomClick
