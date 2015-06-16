@@ -23,9 +23,8 @@
 
 - (void)createUI {
     //定义CELL单元格内容
-    _imageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, m_frame.size.width, m_frame.size.height)];
-    //_imageView.image=[UIImage imageNamed:@"loading_image_all"];
-    _imageView.backgroundColor = [UIColor clearColor];
+    _imageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0,self.frame.size.width,self.frame.size.height)];
+     _imageView.backgroundColor = [UIColor clearColor];
     _imageView.contentMode=UIViewContentModeScaleAspectFill;
     _imageView.clipsToBounds=YES;
     [self.contentView addSubview:_imageView];

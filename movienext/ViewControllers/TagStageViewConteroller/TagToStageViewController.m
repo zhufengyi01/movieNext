@@ -321,15 +321,12 @@ static const CGFloat MJDuration = 0.2;
       if (self.dataArray.count > indexPath.row) {
         ModelsModel  *model =[self.dataArray objectAtIndex:indexPath.row];
           cell.imageView.backgroundColor=VStageView_color;
-          NSURL  *photourl=[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w340h340",kUrlStage,model.stageInfo.photo]];
+          NSURL  *photourl=[NSURL URLWithString:[NSString stringWithFormat:@"%@%@%@",kUrlStage,model.stageInfo.photo,KIMAGE_SMALL]];
          [cell.imageView sd_setImageWithURL:photourl placeholderImage:nil];
-          
-//          if(model.stageInfo.movieInfo.name.length==0)
-//          {
-//              cell.titleLab.hidden=YES;
-//          }
+           if (model.stageInfo.weibosArray.count>0) {
           weiboInfoModel  *weiboinfo =[model.stageInfo.weibosArray objectAtIndex:0];
           cell.titleLab.text=[NSString stringWithFormat:@"%@",weiboinfo.content];
+          }
           
     }
     return cell;

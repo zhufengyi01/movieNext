@@ -921,7 +921,7 @@ static const CGFloat MJDuration = 0.2;
     if (_dataArray.count>indexPath.row) {
         stageInfoModel  *model=[_dataArray objectAtIndex:indexPath.row];
         cell.imageView.backgroundColor=VStageView_color;
-        NSURL  *url =[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w340h340",kUrlStage,model.photo]];
+        NSURL  *url =[NSURL URLWithString:[NSString stringWithFormat:@"%@%@%@",kUrlStage,model.photo,KIMAGE_SMALL]];
         
         [cell.imageView sd_setImageWithURL:url placeholderImage:nil options:(SDWebImageRetryFailed|SDWebImageLowPriority)];
         

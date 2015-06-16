@@ -39,10 +39,11 @@
 #import "SmallImageCollectionViewCell.h"
 #import "UserHeaderReusableView.h"
 #import "UIButton+Block.h"
+
 static const CGFloat MJDuration = 0.2;
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
-@interface MyViewController ()<StageViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UIActionSheetDelegate,UMSocialDataDelegate,UMSocialUIDelegate,CommonStageCellDelegate,UMShareViewControllerDelegate,UMShareViewController2Delegate,UMShareViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UICollectionViewDelegate,UserHeaderReusableViewDelegate,AddMarkViewControllerDelegate>
+@interface MyViewController ()<StageViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UIActionSheetDelegate,UMSocialDataDelegate,UMSocialUIDelegate,CommonStageCellDelegate,UMShareViewControllerDelegate,UMShareViewController2Delegate,UMShareViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UICollectionViewDelegate,UserHeaderReusableViewDelegate,AddMarkViewControllerDelegate,ShowStageviewControllerDelegate>
 {
   
     UICollectionViewFlowLayout    *layout;
@@ -104,8 +105,13 @@ static const CGFloat MJDuration = 0.2;
      [self requestUserInfo];
      [self requestData];
     [self createLoadview];
-    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(AddMarkViewControllerReturn) name:Refresh_USER_LIST object:nil];
 }
+-(void)reloadMyAddCollectionView
+{
+    [self.myConllectionView.header beginRefreshing];
+}
+
 #pragma mark   addMarkDelegate   ----------------------------------------
 -(void)AddMarkViewControllerReturn
 {
@@ -793,7 +799,7 @@ static const CGFloat MJDuration = 0.2;
         if ([Btag isEqualToString:@"100"]) {
             if (_addedDataArray.count>indexPath.row) {
             userAddmodel  *model =[_addedDataArray objectAtIndex:indexPath.row];
-             NSURL  *url =[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w340h340",kUrlStage,model.weiboInfo.stageInfo.photo]];
+             NSURL  *url =[NSURL URLWithString:[NSString stringWithFormat:@"%@%@%@",kUrlStage,model.weiboInfo.stageInfo.photo,KIMAGE_SMALL]];
                 
             [cell.imageView sd_setImageWithURL:url placeholderImage:nil options:(SDWebImageRetryFailed|SDWebImageLowPriority)];
             cell.titleLab.text=model.weiboInfo.content;
@@ -823,6 +829,7 @@ static const CGFloat MJDuration = 0.2;
         vc.upweiboArray=_addWeiboArray;
         vc.stageInfo = model.weiboInfo.stageInfo;
         vc.weiboInfo=model.weiboInfo;
+        vc.delegate=self;
         vc.pageType=NSStagePapeTypeMyAdd;//用户添加的
         if (self.pageType==NSMyPageTypeOthersController) {
             vc.pageType=NSStagePapeTypeOthersAdd;
