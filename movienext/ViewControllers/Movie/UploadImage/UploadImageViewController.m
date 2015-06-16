@@ -202,8 +202,11 @@
         
         AddMarkViewController  *Addmark =[[AddMarkViewController alloc]init];
         Addmark.stageInfo=stageInfo;
-        Addmark.pageSoureType=NSAddMarkPageSourceUploadImage;
-        [self.navigationController presentViewController:Addmark animated:NO completion:nil];
+        //Addmark.pageSoureType=NSAddMarkPageSourceUploadImage;
+            if (self.pageTpye==NSUploadImageSourceTypeAddCard) {
+                Addmark.pageSoureType=NSAddMarkPageSourceAddCard;
+            }
+        [self.navigationController pushViewController:Addmark animated:YES];
         }
         else
         {

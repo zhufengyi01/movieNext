@@ -20,7 +20,8 @@ typedef NS_ENUM(NSInteger,NSAddMarkPageSource)
 {
     NSAddMarkPageSourceDefault,
     NSAddMarkPageSourceUploadImage,
-    NSAddMarkPageSourceDoubanUploadImage
+    NSAddMarkPageSourceDoubanUploadImage,
+    NSAddMarkPageSourceAddCard,
 };
 //添加弹幕成功后，返回刷新stageview
 @protocol  AddMarkViewControllerDelegate <NSObject>

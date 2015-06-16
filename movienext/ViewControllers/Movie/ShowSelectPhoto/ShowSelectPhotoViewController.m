@@ -19,6 +19,7 @@
 #import "SmallImageCollectionViewCell.h"
 #import "UploadImageViewController.h"
 #import "LoadingView.h"
+#import "UIButton+Block.h"
 static const CGFloat MJDuration = 0.6;
 
 
@@ -63,14 +64,17 @@ static const CGFloat MJDuration = 0.6;
     [button setTitle:@"取消" forState:UIControlStateNormal];
     [button setTitleColor:VBlue_color forState:UIControlStateNormal];
     button.frame=CGRectMake(10, 10, 40, 30);
-
+    [button addActionHandler:^(NSInteger tag) {
+        [self.navigationController popViewControllerAnimated:YES];
+    }];
     button.titleEdgeInsets=UIEdgeInsetsMake(0, -10,0, 10);
     [button setTitleColor:VGray_color forState:UIControlStateNormal];
     //button.titleLabel.font =[UIFont boldSystemFontOfSize:18];
     button.titleLabel.font =[UIFont systemFontOfSize:16];
-    [button addTarget:self action:@selector(navigationbtnClick:) forControlEvents:UIControlEventTouchUpInside];
+   // [button addTarget:self action:@selector(navigationbtnClick:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem  *barButton=[[UIBarButtonItem alloc]initWithCustomView:button];
     button.tag=99;
+    
     self.navigationItem.leftBarButtonItem=barButton;
 
     [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color.png"] forBarMetrics:UIBarMetricsDefault];
@@ -93,7 +97,17 @@ static const CGFloat MJDuration = 0.6;
     
     
     
-    upLoadimageBtn=[ZCControl createButtonWithFrame:CGRectMake(0,0,40,30) ImageName:nil Target:self Action:@selector(navigationbtnClick:) Title:nil];
+    upLoadimageBtn=[ZCControl createButtonWithFrame:CGRectMake(0,0,40,30) ImageName:nil Target:self Action:nil Title:nil];
+    __weak typeof(self) WeakSelf = self;
+    [upLoadimageBtn addActionHandler:^(NSInteger tag) {
+        UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+        picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        picker.delegate =WeakSelf;
+        //设置选择后的图片可被编辑
+        picker.allowsEditing = YES;
+        [WeakSelf presentViewController:picker animated:YES completion:nil];
+
+    }];
     upLoadimageBtn.tag=100;
     upLoadimageBtn.titleEdgeInsets=UIEdgeInsetsMake(0, 10, 0, -10);
     [upLoadimageBtn setTitle:@"上传" forState:UIControlStateNormal];
@@ -104,23 +118,23 @@ static const CGFloat MJDuration = 0.6;
     self.navigationItem.rightBarButtonItem=rigthbar;
 
 }
--(void)navigationbtnClick:(UIButton *) btn
-{
-    if (btn.tag==99) {
-        [self dismissViewControllerAnimated:YES completion:nil];
-       
-        
-    }
-    else if (btn.tag==100)
-    {
-        UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-        picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-        picker.delegate = self;
-        //设置选择后的图片可被编辑
-        picker.allowsEditing = YES;
-        [self presentViewController:picker animated:YES completion:nil];
-    }
-}
+//-(void)navigationbtnClick:(UIButton *) btn
+//{
+//    if (btn.tag==99) {
+//        [self dismissViewControllerAnimated:YES completion:nil];
+//       
+//        
+//    }
+//    else if (btn.tag==100)
+//    {
+//        UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+//        picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+//        picker.delegate = self;
+//        //设置选择后的图片可被编辑
+//        picker.allowsEditing = YES;
+//        [self presentViewController:picker animated:YES completion:nil];
+//    }
+//}
 
 #pragma mark  ---
 #pragma mark  -----imagePickerControlldelegate
@@ -137,6 +151,9 @@ static const CGFloat MJDuration = 0.6;
         [self dismissViewControllerAnimated:NO completion:^{
             UploadImageViewController  *upload=[[UploadImageViewController alloc]init];
             upload.upimage=image;
+            if (self.pageType==NSShowSelectViewSoureTypeAddCard) {
+                upload.pageTpye=NSUploadImageSourceTypeAddCard;
+            }
             upload.movie_name=self.movie_name;
             upload.movie_Id=self.movie_id;
             //upload.movie_Id=moviedetailmodel.douban_id;
@@ -473,6 +490,10 @@ static const CGFloat MJDuration = 0.6;
             urlString=   [urlString stringByReplacingOccurrencesOfString:@"albumicon" withString:@"photo"];
 
         }
+    }
+    
+    if (self.pageType==NSShowSelectViewSoureTypeAddCard) {
+        vc.pageType=NSDoubanSourceTypeAddCard;
     }
     vc.upimage=cell.imageView.image;
     vc.movie_name=self.movie_name;

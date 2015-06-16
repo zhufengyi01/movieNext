@@ -8,8 +8,14 @@
 //
 
 #import "RootViewController.h"
-
+typedef NS_ENUM(NSInteger,NSShowSelectViewSoureType)
+{
+    NSShowSelectViewSoureTypeDefualt,//默认页面进来
+    NSShowSelectViewSoureTypeAddCard  // 卡片页面进来
+};
 @interface ShowSelectPhotoViewController : RootViewController
+
+@property(nonatomic,assign) NSShowSelectViewSoureType  pageType;
 
 @property (nonatomic,strong) NSString  *douban_id;
 
