@@ -466,12 +466,12 @@
     else
     {
         NSArray *arr =[dateString componentsSeparatedByString:@" "];
-        NSString  *str =[arr objectAtIndex:0];
-        NSMutableArray *Arr2 =[NSMutableArray arrayWithArray:[str componentsSeparatedByString:@"-"]];
-        return  [NSString stringWithFormat:@"%@月%@日",[Arr2 objectAtIndex:1],[Arr2 objectAtIndex:1]];
+//        NSString  *str =[arr objectAtIndex:0];
+//        NSMutableArray *Arr2 =[NSMutableArray arrayWithArray:[str componentsSeparatedByString:@"-"]];
+//        return  [NSString stringWithFormat:@"%@月%@日",[Arr2 objectAtIndex:1],[Arr2 objectAtIndex:1]];
+//        
         
-        
-      //  return ;
+        return [arr objectAtIndex:0];
     }
    /* else if(time <3600*24*7)
     {

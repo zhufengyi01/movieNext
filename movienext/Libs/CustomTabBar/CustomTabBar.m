@@ -95,7 +95,6 @@
 {
     
     if (button.tag==BUTTON_START_TAG+1) {
-     
     //发现
                 FinderViewController  *finder =[FinderViewController new];
                 UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:finder];
@@ -114,8 +113,6 @@
         
         [window.rootViewController presentViewController:na animated:YES completion:nil];
 
-     
-        
     }
     
     else{
@@ -125,8 +122,6 @@
         [indexSelectDict setValue:[NSString stringWithFormat:@"%ld",button.tag] forKey:@"isSelect"];
        if (button.selected==NO) {
         button.selected=YES;
-           
-
          [self resetButtonImagesWithButton:button];
            }
        // 针对代理协议里面有可选的代理时使用的方法可，respondsToSelector 就是判断self.m_delegate指向的对象有没有，这个方法--> buttonPresedInCustomTabBar:

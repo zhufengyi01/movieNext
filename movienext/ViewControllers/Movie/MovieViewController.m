@@ -915,8 +915,6 @@ static const CGFloat MJDuration = 0.6;
             NSString  *da = [NSDate timeInfoWithDate:comfromTimesp];
             //dateLable.text=da;
             cell.lblTime.text = da;
-            
- 
             cell.lblLikeCount.text = [NSString stringWithFormat:@"%d", [model.like_count intValue]];
             [cell.ivAvatar sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", kUrlAvatar, model.uerInfo.logo]]];
             cell.ivLike.image = [UIImage imageNamed:@"tiny_like"];
