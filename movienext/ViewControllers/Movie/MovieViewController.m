@@ -898,7 +898,7 @@ static const CGFloat MJDuration = 0.6;
         cell.Cellindex=indexPath.row;
         cell.backgroundColor=[UIColor whiteColor];
         }
-    return cell;
+       return cell;
     }
     else if (collectionView==self.RecommendCollectionView)
     {
@@ -911,7 +911,7 @@ static const CGFloat MJDuration = 0.6;
             [cell.imageView sd_setImageWithURL:url placeholderImage:nil options:(SDWebImageRetryFailed|SDWebImageLowPriority)];
             cell.titleLab.text=[NSString stringWithFormat:@"%@",model.content];
              // cell.lblTime.text = [Function friendlyTime:model.stageInfo.updated_at];
-            NSDate  *comfromTimesp =[NSDate dateWithTimeIntervalSince1970:[model.created_at intValue]];
+            NSDate  *comfromTimesp =[NSDate dateWithTimeIntervalSince1970:[model.updated_at intValue]];
             NSString  *da = [NSDate timeInfoWithDate:comfromTimesp];
             //dateLable.text=da;
             cell.lblTime.text = da;
