@@ -71,6 +71,10 @@ static const CGFloat MJDuration = 0.1;
     {
         titleString=@"微博推荐";
     }
+    else if (self.pageType==NSNewAddPageSoureTypeTiming)
+    {
+        titleString=@"微博已定时";
+    }
     UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:titleString];
     titleLable.textColor=VGray_color;
     
@@ -221,6 +225,11 @@ static const CGFloat MJDuration = 0.1;
     {
         parameters = @{@"user_id":userCenter.user_id, @"status":@"3"};
     }
+    else if (self.pageType==NSNewAddPageSoureTypeTiming)
+    {
+        parameters = @{@"user_id":userCenter.user_id, @"status":@"4"};
+    }
+    
     [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
@@ -349,9 +358,13 @@ static const CGFloat MJDuration = 0.1;
     {
         vc.pageType=NSStagePapeTypeAdmin_Recommed;
     }
+    else if (self.pageType==NSNewAddPageSoureTypeTiming)
+    {
+        vc.pageType=NSStagePapeTypeAdmin_Timing;
+    }
     vc.stageInfo = model.stageInfo;
     vc.weiboInfo=model;
-    UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:nil action:nil];
+    UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
     self.navigationItem.backBarButtonItem=item;
     
     [self.navigationController pushViewController:vc animated:YES];

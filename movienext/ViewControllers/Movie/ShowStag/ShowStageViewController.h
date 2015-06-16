@@ -29,7 +29,8 @@ typedef  NS_ENUM(NSInteger,NSStagePapeType)
     NSStagePapeTypeAdmin_New_Add,  //最新添加
     NSStagePapeTypeAdmin_Dscorver,  //发现
     NSStagePapeTypeAdmin_Close_Weibo,  //屏蔽列表
-    NSStagePapeTypeAdmin_Recommed  //推荐列表
+    NSStagePapeTypeAdmin_Recommed,  //推荐列表
+    NSStagePapeTypeAdmin_Timing,    //发送到定时页面
     
     
     

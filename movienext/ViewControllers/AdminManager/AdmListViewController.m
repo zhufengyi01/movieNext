@@ -41,8 +41,8 @@
 }
 -(void)createUI
 {
-    _dataArray =[[NSMutableArray alloc]initWithObjects:@"用户列表",@"标签，表情包",@"已屏蔽剧照列表",@"［-1级］微博屏蔽",@"［0级］微博最新",@"［1级］微博发现",@"［2级］微博热门",nil];
-    _myTableView =[[UITableView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth,55*7) style:UITableViewStylePlain];
+    _dataArray =[[NSMutableArray alloc]initWithObjects:@"用户列表",@"标签，表情包",@"已屏蔽剧照列表",@"［-1级］微博屏蔽",@"［0级］微博最新",@"［1级］微博发现",@"［2级］微博热门", @"［2级］已定时",nil];
+    _myTableView =[[UITableView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth,55*_dataArray.count) style:UITableViewStylePlain];
     _myTableView.delegate=self;
     _myTableView.dataSource=self;
     _myTableView.bounces=NO;
@@ -148,7 +148,16 @@
             UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
             self.navigationItem.backBarButtonItem=item;
             [self.navigationController pushViewController:new animated:YES];
-
+            break;
+        }
+        case ADM_TYPE_TIMING:
+        {
+            NewAddViewController *new  =[NewAddViewController new];
+            new.pageType=NSNewAddPageSoureTypeTiming;
+            UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+            self.navigationItem.backBarButtonItem=item;
+            [self.navigationController pushViewController:new animated:YES];
+            break;
         }
         default:
         break;

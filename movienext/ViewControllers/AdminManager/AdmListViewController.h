@@ -18,6 +18,7 @@ typedef NS_ENUM(NSInteger, ADM_TYPE)
     ADM_TYPE_NEW_ADD,      // 最新添加的微博
     ADM_TYPE_ADM_DESCORVER,   // 发现页
     ADM_TYPE_RECOMMEND,       //推荐列表
+    ADM_TYPE_TIMING,          //已定时
 };
 @interface AdmListViewController : RootViewController
 

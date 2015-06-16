@@ -130,35 +130,15 @@
        [admOper setTitleColor:VBlue_color forState:UIControlStateNormal];
           [admOper  addActionHandler:^(NSInteger tag) {
             //管理员
-            if (weakSelf.pageType==NSStagePapeTypeAdmin_New_Add) {
+            if (weakSelf.pageType==NSStagePapeTypeAdmin_New_Add
+                || weakSelf.pageType==NSStagePapeTypeAdmin_Close_Weibo
+                || weakSelf.pageType==NSStagePapeTypeAdmin_Dscorver
+                || weakSelf.pageType==NSStagePapeTypeAdmin_Recommed
+                || weakSelf.pageType==NSStagePapeTypeAdmin_Timing) {
                 //最新添加
-                UIActionSheet  *al =[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"确定" destructiveButtonTitle:nil otherButtonTitles:@"[发送到 “发现”]",@"[发送到 “屏蔽”]",@"发送到  [ “热门” ]", nil];
+                UIActionSheet  *al =[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"确定" destructiveButtonTitle:nil otherButtonTitles:@"[发送到 “发现”]",@"[发送到 “屏蔽”]",@"[发送到 “热门”]",@"[发送到 “最新”]", nil];
                 al.tag=ADM_NEW_ADD;
                 [al showInView:weakSelf.view];
-            }
-            else if (weakSelf.pageType==NSStagePapeTypeAdmin_Close_Weibo)
-            {
-                //屏蔽的微博
-                UIActionSheet  *al =[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"确定" destructiveButtonTitle:nil otherButtonTitles:@"[发送到 “最新” ]",@"发送到  [ “热门” ]", nil];
-                al.tag=ADM_CLOSE_STAGE;
-                [al showInView:weakSelf.view];
-            }
-            else if (weakSelf.pageType==NSStagePapeTypeAdmin_Dscorver)
-            {
-                //发现
-                UIActionSheet  *al =[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"确定" destructiveButtonTitle:nil otherButtonTitles:@"[发送到 “热门” ]", nil];
-                al.tag=ADM_DSCORVER;
-                [al showInView:weakSelf.view];
-
-                
-            }
-            else if (weakSelf.pageType==NSStagePapeTypeAdmin_Recommed)
-            {
-                // 推荐
-                 UIActionSheet  *al =[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"确定" destructiveButtonTitle:nil otherButtonTitles:@"[发送到 “发现” ]", nil];
-                al.tag=ADM_RECOMMEND;
-                [al showInView:weakSelf.view];
-                
             }
             else if (weakSelf.pageType==NSStagePapeTypeHotStageList)
             {
@@ -1316,31 +1296,9 @@
         else if (buttonIndex==2)
         {
           [self requestChangeStageStatusWithweiboId:[NSString stringWithFormat:@"%@",_WeiboInfo.Id] StatusType:@"3"];
-        }
-    }
-    else if (actionSheet.tag==ADM_CLOSE_STAGE)
-    {
-        if (buttonIndex==0) {
+        } else if (buttonIndex==3) {
             //发送到最新
             [self requestChangeStageStatusWithweiboId:[NSString stringWithFormat:@"%@",_WeiboInfo.Id] StatusType:@"1"];
-        }else if (buttonIndex==1)
-        {
-            [self requestChangeStageStatusWithweiboId:[NSString stringWithFormat:@"%@",_WeiboInfo.Id] StatusType:@"3"];
-   
-        }
-    }
-    else if(actionSheet.tag==ADM_DSCORVER)
-    {
-        //发送到推荐
-        if (buttonIndex==0) {
-            [self requestChangeStageStatusWithweiboId:[NSString stringWithFormat:@"%@",_WeiboInfo.Id] StatusType:@"3"];
-        }
-     }
-    else if (actionSheet.tag==ADM_RECOMMEND)
-    {
-        //移动到发现
-        if (buttonIndex==0) {
-            [self requestChangeStageStatusWithweiboId:[NSString stringWithFormat:@"%@",_WeiboInfo.Id] StatusType:@"2"];
         }
     }
 }

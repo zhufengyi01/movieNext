@@ -13,7 +13,8 @@ typedef NS_ENUM(NSInteger, NSNewAddPageSoureType)
     NSNewAddPageSoureTypeNewList,  //最新添加
     NSNewAddPageSoureTypeCloseWeiboList,  //已屏蔽的微博列表
     NSNewAddPageSoureTypeDecorver,   //发现
-    NSNewAddPageSoureTypeRecommed   //推荐列表
+    NSNewAddPageSoureTypeRecommed,   //推荐列表
+    NSNewAddPageSoureTypeTiming,    //已定时
 };
 
 
