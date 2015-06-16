@@ -46,7 +46,7 @@
         [self setMemory];
         [self createButtons];
         
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addnotifationPress) name:GOTO_USER_CENTER object:nil];
+      [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addnotifationPress) name:GOTO_USER_CENTER object:nil];
 
     }
     return self;
@@ -55,6 +55,8 @@
 {
     UIButton * button = (UIButton *)[self viewWithTag:BUTTON_START_TAG+4];
      [self buttonPressed:button];
+    //刷新个人页数据
+    [[NSNotificationCenter defaultCenter] postNotificationName:Refresh_USER_LIST object:nil];
 }
 
 
