@@ -103,7 +103,15 @@
 }
 -(void)CancleClick
 {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    
+    [search resignFirstResponder];
+    if (self.pageType==NSSearchSourceTypeAddCard) {
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }
+    else {
+        [self.navigationController popViewControllerAnimated:YES];
+
+    }
 }
 -(void)initData
 {
@@ -156,10 +164,14 @@
             vc.movie_id=movie_id;
             vc.movie_name=[detail objectForKey:@"name"];
             UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+             if (self.pageType==NSSearchSourceTypeAddCard) {
+                vc.pageType=NSShowSelectViewSoureTypeAddCard;
+            }
             self.navigationItem.backBarButtonItem=item;
-            UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:vc];
-            [self presentViewController:na animated:YES completion:nil];
-        
+            [self.navigationController pushViewController:vc  animated:YES];
+   
+            
+            
          }
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {

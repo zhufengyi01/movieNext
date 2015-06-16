@@ -127,14 +127,14 @@
             stageInfoModel  *model =[[stageInfoModel alloc]init];
             movieInfoModel  *movieInfo =[[movieInfoModel alloc]init];
             movieInfo.name =self.movie_name;
-            vc.pageSoureType=NSAddMarkPageSourceDoubanUploadImage;
+             if (self.pageType==NSDoubanSourceTypeAddCard) {
+                vc.pageSoureType=NSAddMarkPageSourceAddCard;
+            }
             movieInfo.Id=self.movie_id;
             model.movieInfo=movieInfo;
              [model setValuesForKeysWithDictionary:[responseObject objectForKey:@"model"]];
             vc.stageInfo=model;
-          //  UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:vc];
-            //[self.navigationController presentViewController:vc animated:YES completion:nil];
-            [self.navigationController pushViewController:vc animated:NO];
+             [self.navigationController pushViewController:vc animated:YES];
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);

@@ -67,7 +67,7 @@
     UIImageView  *starImageView;
     UILabel  *markLable;
     ///当前微博的内容   初始化的时候，取了点赞数组的第一个元素
-    weiboInfoModel  *_WeiboInfo;
+   // weiboInfoModel  *_WeiboInfo;
     UIButton  *like_btn;
      UIButton *ShareButton;  //分享
     UIButton  *addMarkButton;  //添加弹幕
@@ -81,6 +81,7 @@
 
 @property(nonatomic,strong) UIView  *ShareView;
 
+@property(nonatomic,strong) weiboInfoModel  *WeiboInfo;
 @end
 
 @implementation ShowStageViewController
@@ -236,40 +237,6 @@
     self.ShareView.backgroundColor=[UIColor blackColor];
     [BgView addSubview:self.ShareView];
     CGRect frame =[Function getImageFrameWithwidth:[self.stageInfo.width intValue] height:[self.stageInfo.height intValue] inset:20];
-    //计算图片的宽高比
-//    float width = [self.stageInfo.width intValue];
-//    float heigth =[self.stageInfo.height intValue];
-//    float x;
-//    float y=0;
-//    float w;
-//    float h;
-//    if (heigth/width>KImageWidth_Height&&(heigth/width<1)) { //
-//        x=0;
-//        y=0;
-//        w=kDeviceWidth-20;
-//        h=(kDeviceWidth-20)*(heigth/width);
-//    }
-//    else if (heigth/width<KImageWidth_Height)
-//    {
-//        x=0;
-//        y=0;
-//        w=kDeviceWidth-20;
-//        h=(kDeviceWidth-20)*KImageWidth_Height;
-//    }
-//    else if (heigth/width>1) //高大于宽度的时候  成正方形
-//    {
-//        y =0;
-//        h= kDeviceWidth-20;
-//        w=(kDeviceWidth-20)*(width/heigth);
-//        x=((kDeviceWidth-20)-w)/2;
-//    }
-//    else
-//    {
-//        x=0;
-//        y=0;
-//        h=(kDeviceWidth-20)*(9.0/16);
-//        w=(kDeviceWidth-20);
-//    }
     
     //分享的view 上面放一张图片
     self.stageImageView =[[UIImageView alloc]initWithFrame:frame];
@@ -651,15 +618,14 @@
     [addMarkButton addActionHandler:^(NSInteger tag) {
         if (self.pageType==NSStagePapeTypeAdmin_New_Add) {
             //移到发现
-            [weakSelf requestChangeStageStatusWithweiboId:[NSString stringWithFormat:@"%@",_WeiboInfo.Id] StatusType:@"2"];
+            [weakSelf requestChangeStageStatusWithweiboId:[NSString stringWithFormat:@"%@",weakSelf.WeiboInfo.Id] StatusType:@"2"];
         }
         else{
         AddMarkViewController  *AddMarkVC=[[AddMarkViewController alloc]init];
         AddMarkVC.delegate=weakSelf;
         // AddMarkVC.model=self.stageInfo;
         AddMarkVC.stageInfo=weakSelf.stageInfo;
-        UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:AddMarkVC];
-        [weakSelf.navigationController presentViewController:na animated:NO completion:nil];
+        [weakSelf.navigationController pushViewController:AddMarkVC animated:YES];
         }
 
     }];
@@ -678,7 +644,7 @@
     [ShareButton addActionHandler:^(NSInteger tag) {
         if (self.pageType==NSStagePapeTypeAdmin_New_Add) {
             //移到屏蔽
-            [weakSelf requestChangeStageStatusWithweiboId:[NSString stringWithFormat:@"%@",_WeiboInfo.Id]  StatusType:@"0"];
+            [weakSelf requestChangeStageStatusWithweiboId:[NSString stringWithFormat:@"%@",weakSelf.WeiboInfo.Id]  StatusType:@"0"];
         }else{
         
         float  height = weakSelf.ShareView.frame.size.height;

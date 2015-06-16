@@ -118,7 +118,7 @@
     [leftBtn setTitle:@"取消" forState:UIControlStateNormal];
     leftBtn.titleLabel.adjustsFontSizeToFitWidth=NO;
     [leftBtn addActionHandler:^(NSInteger tag) {
-        [weakSelf dismissViewControllerAnimated:YES completion:nil];
+        [weakSelf.navigationController popViewControllerAnimated:YES];
     }];
     [leftBtn setTitleEdgeInsets:UIEdgeInsetsMake(0, -0, 0,10)];
     //[leftBtn addTarget:self action:@selector(dealNavClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -244,9 +244,6 @@
         _myTextView.text =self.weiboInfo.content;
     }
     [self.ShareView addSubview:_myTextView];
-
-    
-    
 }
 -(void)createAddTagView
 {
@@ -417,19 +414,27 @@
     [manager POST:urlString parameters:parameter success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"  添加弹幕发布请求    JSON: %@", responseObject);
         if ([[responseObject  objectForKey:@"code"] intValue]==0) {
-            [loading remove];
-          
-            [self dismissViewControllerAnimated:YES completion:^{
-                
-              //  [self.navigationController pushViewController:[MyViewController new] animated:NO];
-                
-                UIImage  *image=[Function getImage:self.ShareView WithSize:CGSizeMake(kDeviceWidth-20,self.ShareView.frame.size.height)];
-                UMShareView *ShareView =[[UMShareView alloc] initwithStageInfo:self.stageInfo ScreenImage:image delgate:self andShareHeight:self.stageImageView.frame.size.height];
-                ShareView.pageType=UMShareTypeSuccess;
-                [ShareView setShareLable];
-                [ShareView show];
+            loading.titleLable.text=@"发布成功";
+            if ([loading respondsToSelector:@selector(remove)]) {
+                [loading performSelector:@selector(remove) withObject:nil afterDelay:1];
 
-            } ];
+            }
+            
+            if (self.pageSoureType==NSAddMarkPageSourceAddCard) {
+                [self.navigationController dismissViewControllerAnimated:NO completion:nil];
+            }
+             else {
+            [self.navigationController popToRootViewControllerAnimated:YES];
+            }
+//
+//
+//                UIImage  *image=[Function getImage:self.ShareView WithSize:CGSizeMake(kDeviceWidth-20,self.ShareView.frame.size.height)];
+//                UMShareView *ShareView =[[UMShareView alloc] initwithStageInfo:self.stageInfo ScreenImage:image delgate:self andShareHeight:self.stageImageView.frame.size.height];
+//                ShareView.pageType=UMShareTypeSuccess;
+//                [ShareView setShareLable];
+//                [ShareView show];
+//
+//            } ];
             
             //            weibo =[[weiboInfoModel alloc]init];
             //            if (weibo) {

@@ -721,8 +721,9 @@ static const CGFloat MJDuration = 0.2;
             
             UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
             self.navigationItem.backBarButtonItem=item;
-            UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:vc];
-            [self presentViewController:na animated:YES completion:nil];
+           // UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:vc];
+            ///[self presentViewController:na animated:YES completion:nil];
+            [self.navigationController pushViewController:vc animated:YES];
             
         }
         

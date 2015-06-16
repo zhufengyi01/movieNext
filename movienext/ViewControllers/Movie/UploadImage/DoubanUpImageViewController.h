@@ -8,8 +8,16 @@
 //
 
 #import "RootViewController.h"
+typedef NS_ENUM(NSInteger,NSDoubanSourceType)
+{
+    
+    NSDoubanSourceTypeDefault,
+    NSDoubanSourceTypeAddCard
+};
 
 @interface DoubanUpImageViewController : RootViewController
+
+@property(nonatomic,assign) NSDoubanSourceType  pageType;
 
 @property (nonatomic,strong) NSString   *movie_id;
 

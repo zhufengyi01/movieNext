@@ -32,6 +32,7 @@
 #import "SmallImageCollectionViewCell.h"
 #import "ShowStageViewController.h"
 #import "NSDate+Extension.h"
+#import "UpweiboModel.h"
 //#import "SearchMovieViewController.h"
 #define  BUTTON_COUNT  3
 #define  NaviTitle_Width  160
@@ -54,6 +55,7 @@ static const CGFloat MJDuration = 0.6;
     int pageCount2;
     int pageCount3;
     NSInteger Rowindex;
+    NSMutableArray  *_upWeiboArray;
 }
 @property(nonatomic,strong) UIScrollView   *myScorollerView;
 
@@ -188,9 +190,10 @@ static const CGFloat MJDuration = 0.6;
         self.navigationItem.backBarButtonItem=item;
         MovieSearchViewController *vc= [MovieSearchViewController new];
         vc.pageType=NSSearchSourceTypeMovieList;
-        UINavigationController  *search=[[UINavigationController alloc]initWithRootViewController:vc];
-        search.modalTransitionStyle=UIModalTransitionStyleCrossDissolve;
-        [self presentViewController:search animated:YES completion:nil];
+        //UINavigationController  *search=[[UINavigationController alloc]initWithRootViewController:vc];
+       // search.modalTransitionStyle=UIModalTransitionStyleCrossDissolve;
+        //[self presentViewController:search animated:YES completion:nil];
+        [self.navigationController pushViewController:vc animated:YES];
     }];
     
     if ([userCenter.Is_Check intValue]==1) {
@@ -330,6 +333,7 @@ static const CGFloat MJDuration = 0.6;
     _dataArray1=[[NSMutableArray alloc]init];
     _dataArray2=[[NSMutableArray alloc]init];
     _dataArray3=[[NSMutableArray alloc]init];
+    _upWeiboArray=[[NSMutableArray alloc]init];
     [[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(refreshRecommend)
                                                  name: @"requestRecommendData"
@@ -685,8 +689,20 @@ static const CGFloat MJDuration = 0.6;
                     weibomodel.tagArray=tagArray;
                     [self.dataArray0 addObject:weibomodel];
                 }
-                
             }
+            
+            //点赞的数组
+            for (NSDictionary  *updict in [responseObject objectForKey:@"upweibos"]) {
+                UpweiboModel *upmodel =[[UpweiboModel alloc]init];
+                if (upmodel) {
+                    [upmodel setValuesForKeysWithDictionary:updict];
+                    
+                    if (_upWeiboArray==nil) {
+                        _upWeiboArray =[[NSMutableArray alloc]init];
+                    }
+                    [_upWeiboArray addObject:upmodel];
+                }}
+
             
             [self.RecommendCollectionView reloadData];
             
@@ -909,6 +925,7 @@ static const CGFloat MJDuration = 0.6;
             cell.imageView.backgroundColor=VStageView_color;
             NSURL  *url =[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w340h340",kUrlStage,model.stageInfo.photo]];
             [cell.imageView sd_setImageWithURL:url placeholderImage:nil options:(SDWebImageRetryFailed|SDWebImageLowPriority)];
+            
             cell.titleLab.text=[NSString stringWithFormat:@"%@",model.content];
              // cell.lblTime.text = [Function friendlyTime:model.stageInfo.updated_at];
             NSDate  *comfromTimesp =[NSDate dateWithTimeIntervalSince1970:[model.updated_at intValue]];
@@ -985,7 +1002,7 @@ static const CGFloat MJDuration = 0.6;
     //    movieInfoModel  *moviemodel =[[movieInfoModel alloc]init];
     
         vc.stageInfo = model.stageInfo;
-    
+        vc.upweiboArray=_upWeiboArray;
         vc.weiboInfo=model;
         UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
         self.navigationItem.backBarButtonItem=item;
