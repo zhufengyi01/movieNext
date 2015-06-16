@@ -38,10 +38,11 @@
 #import "ShowStageViewController.h"
 #import "SmallImageCollectionViewCell.h"
 #import "UserHeaderReusableView.h"
+#import "UIButton+Block.h"
 static const CGFloat MJDuration = 0.2;
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
-@interface MyViewController ()<StageViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UIActionSheetDelegate,UMSocialDataDelegate,UMSocialUIDelegate,CommonStageCellDelegate,UMShareViewControllerDelegate,UMShareViewController2Delegate,UMShareViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UICollectionViewDelegate,UserHeaderReusableViewDelegate>
+@interface MyViewController ()<StageViewDelegate,StageViewDelegate,ButtomToolViewDelegate,UIActionSheetDelegate,UMSocialDataDelegate,UMSocialUIDelegate,CommonStageCellDelegate,UMShareViewControllerDelegate,UMShareViewController2Delegate,UMShareViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UICollectionViewDelegate,UserHeaderReusableViewDelegate,AddMarkViewControllerDelegate>
 {
   
     UICollectionViewFlowLayout    *layout;
@@ -105,6 +106,12 @@ static const CGFloat MJDuration = 0.2;
     [self createLoadview];
     
 }
+#pragma mark   addMarkDelegate   ----------------------------------------
+-(void)AddMarkViewControllerReturn
+{
+ 
+    [self.myConllectionView.header beginRefreshing];
+}
 -(void)initData{
     page1=1;
     page2=1;
@@ -150,7 +157,13 @@ static const CGFloat MJDuration = 0.2;
     button.titleLabel.font =[UIFont systemFontOfSize:16];
     button.titleEdgeInsets=UIEdgeInsetsMake(0, 10, 0, -10);
     [button setTitleColor:VGray_color forState:UIControlStateNormal];
-    [button addTarget:self action:@selector(GotoSettingClick:) forControlEvents:UIControlEventTouchUpInside];
+   // [button addTarget:self action:@selector(GotoSettingClick:) forControlEvents:UIControlEventTouchUpInside];
+    [button addActionHandler:^(NSInteger tag) {
+        UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+        self.navigationItem.backBarButtonItem=item;
+        [self.navigationController pushViewController:[SettingViewController new] animated:YES];
+
+    }];
     UIBarButtonItem  *barButton=[[UIBarButtonItem alloc]initWithCustomView:button];
     self.navigationItem.rightBarButtonItem=barButton;
     if (self.author_id&&![self.author_id isEqualToString:@"0"]) {
@@ -158,6 +171,8 @@ static const CGFloat MJDuration = 0.2;
         self.navigationItem.rightBarButtonItem=nil;
         self.navigationItem.titleView=nil;
     }
+    
+    
 
 }
 
@@ -926,12 +941,12 @@ static const CGFloat MJDuration = 0.2;
 
 
 //设置页面
--(void)GotoSettingClick:(UIButton  *) button
-{
-    UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
-    self.navigationItem.backBarButtonItem=item;
-    [self.navigationController pushViewController:[SettingViewController new] animated:YES];
-}
+//-(void)GotoSettingClick:(UIButton  *) button
+//{
+//    UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+//    self.navigationItem.backBarButtonItem=item;
+//    [self.navigationController pushViewController:[SettingViewController new] animated:YES];
+//}
 
 -(void)dealloc
 {

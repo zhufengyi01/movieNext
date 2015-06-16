@@ -78,8 +78,8 @@ static const CGFloat MJDuration = 0.6;
 {
     [super viewWillAppear:YES];
     self.navigationController.navigationBar.hidden=NO;
-    self.navigationController.navigationBar.alpha=1;
-    //self.tabBarController.tabBar.hidden=NO;
+    //self.navigationController.navigationBar.alpha=1;
+  //  self.tabBarController.tabBar.hidden=NO;
    // if (self.myConllectionView) {
      //[  self.myConllectionView headerBeginRefreshing];
     //}
@@ -980,7 +980,7 @@ static const CGFloat MJDuration = 0.6;
             break;
         }
     }
-    [self hidesBottomBarWhenPushed];
+    [self.navigationController hidesBottomBarWhenPushed];
       MovieDetailViewController *vc =  [MovieDetailViewController new];
       if (array.count > indexPath.row) {
          NSDictionary *dict = [array  objectAtIndex:(long)indexPath.row];

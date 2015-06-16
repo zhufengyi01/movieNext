@@ -1065,41 +1065,6 @@
     [UMSocialSnsPlatformManager getSocialPlatformWithName:[sharearray  objectAtIndex:button.tag-10000]].snsClickHandler(self,[UMSocialControllerService defaultControllerService],YES);
     
 }
-//跳转到个人页
-/*-(void)StageMovieButtonClick:(UIButton *) button
-{
-
-    MyViewController  *myVC=[[MyViewController alloc]init];
-    weiboInfoModel *model = [self.stageInfo.weibosArray objectAtIndex:0];
-    if (self.weiboInfo) {
-        model=self.weiboInfo;
-    }
-    myVC.author_id =[NSString stringWithFormat:@"%@",model.uerInfo.Id];
-    UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
-    self.navigationItem.backBarButtonItem=item;
-    [self.navigationController pushViewController:myVC animated:YES];
-
-}*/
-//// 分享
-//-(void)ShareButtonClick:(UIButton  *) button
-//{
-//    
-//    if (button==ShareButton) {  //分享有关
-//    UIImage  *image=[Function getImage:ShareView WithSize:CGSizeMake(kStageWidth-10, (kDeviceWidth-20)*(9.0/16.0))];
-//        if (self.weiboInfo) {
-//            self.stageInfo=self.weiboInfo.stageInfo;
-//        }
-//        UMShareView *shareView =[[UMShareView alloc] initwithStageInfo:self.stageInfo ScreenImage:image delgate:self];
-//        [shareView setShareLable];
-//        [shareView show];
-//    }
-//    else if (button==addMarkButton)//添加有关
-//    {
-//        
-//        [self addMarkButtonClick:button];
-//        
-//    }
-//}
 
 #pragma  mark -------AddMarkViewControllerReturn  --Delegete-------------
 -(void)AddMarkViewControllerReturn
@@ -1143,7 +1108,7 @@
             AddMarkVC.stageInfo=self.stageInfo;
             AddMarkVC.weiboInfo=_WeiboInfo;
             AddMarkVC.delegate=self;
-            [self presentViewController:AddMarkVC animated:NO completion:nil];
+            [self.navigationController pushViewController:AddMarkVC animated:YES];
 
             
         }else if (buttonIndex==2)
@@ -1190,7 +1155,7 @@
             AddMarkVC.stageInfo=self.stageInfo;
             AddMarkVC.weiboInfo=_WeiboInfo;
             AddMarkVC.delegate=self;
-            [self presentViewController:AddMarkVC animated:NO completion:nil];
+             [self.navigationController pushViewController:AddMarkVC animated:YES];
             
             
         }else if (buttonIndex==2)

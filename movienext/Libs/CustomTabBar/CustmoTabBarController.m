@@ -44,6 +44,7 @@
     // Do any additional setup after loading the view.
     [self createControllers];
     [self createCustomTabBar];
+    
 }
 - (void)createControllers
 {
@@ -52,6 +53,7 @@
     
     MovieViewController * mvc = [[MovieViewController alloc] init];
     UINavigationController * mvcNav = [[UINavigationController alloc] initWithRootViewController:mvc];
+    mvc.hidesBottomBarWhenPushed=YES;
     
     //添加一个发现页
     /*FindBeforeViewController  *fvc =[[FindBeforeViewController alloc]init];
@@ -70,9 +72,6 @@
     UINavigationController *myNav = [[UINavigationController alloc] initWithRootViewController:myVC];
     
    
-    
-    
-
     NSArray * controllerArr = [NSArray arrayWithObjects:mvcNav, notNav, myNav, nil];
     self.viewControllers = controllerArr;
      // 设置navigationbar的阴影
@@ -107,11 +106,7 @@
     else if(index==1)
     {
         //发现
-//        FinderViewController  *finder =[FinderViewController new];
-//        UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:finder];
-//        AppDelegate  *delegate =(AppDelegate *)[[UIApplication sharedApplication] delegate];
-//        UIWindow  *window=[delegate window];
-//        [window.rootViewController presentViewController:na animated:YES completion:nil];
+ 
     }
     else if (index==2)
     {

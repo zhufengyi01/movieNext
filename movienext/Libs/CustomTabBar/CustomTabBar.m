@@ -13,6 +13,7 @@
 #import "FinderViewController.h"
 //在这里调选中的状态的字体颜色
 #import "AppDelegate.h"
+#import "Constant.h"
 #import "MovieSearchViewController.h"
 #define  TabSelectColor   [UIColor colorWithRed:0.0/255 green:146.0/255 blue:255.0/255 alpha:1]
 //以后在这里调整正常字体的颜色
@@ -44,9 +45,18 @@
         indexSelectDict =[[NSMutableDictionary alloc]initWithObjectsAndKeys:@"1000",@"isSelect", nil];
         [self setMemory];
         [self createButtons];
+        
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addnotifationPress) name:GOTO_USER_CENTER object:nil];
+
     }
     return self;
 }
+-(void)addnotifationPress
+{
+    UIButton * button = (UIButton *)[self viewWithTag:BUTTON_START_TAG+4];
+     [self buttonPressed:button];
+}
+
 
 -(void)setMemory
 {
@@ -116,24 +126,15 @@
     }
     
     else{
-
-        NSString  *select  =[indexSelectDict objectForKey:@"isSelect"];
-
-       // [indexSelectDict setValue:[NSString stringWithFormat:@"%ld",button.tag] forKey:@"isSelect"];
-       if (button.selected==NO) {
-        button.selected=YES;
+         if (button.selected==NO) {
+          button.selected=YES;
          [self resetButtonImagesWithButton:button];
            }
        // 针对代理协议里面有可选的代理时使用的方法可，respondsToSelector 就是判断self.m_delegate指向的对象有没有，这个方法--> buttonPresedInCustomTabBar:
          if(self.m_delegate && [self.m_delegate respondsToSelector:@selector(buttonPresedInCustomTabBar:)]) {
           [self.m_delegate buttonPresedInCustomTabBar:button.tag - BUTTON_START_TAG];
           }
-       else if(button.selected==YES&&[select intValue]==button.tag)  //如果选中并且
-       {
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"RefeshTableview" object:nil];
-      }
-    }
-    
+     }
    
 }
 

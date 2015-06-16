@@ -111,4 +111,9 @@
 #define  KImageWidth_Height  9.0/16
 
 
+///通知的相关定义
+
+
+#define GOTO_USER_CENTER   @"goto_user"
+
 #endif
