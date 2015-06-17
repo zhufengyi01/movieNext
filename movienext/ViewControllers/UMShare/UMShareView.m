@@ -15,12 +15,12 @@
 @implementation UMShareView
 
 /*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
-}
-*/
+ // Only override drawRect: if you perform custom drawing.
+ // An empty implementation adversely affects performance during animation.
+ - (void)drawRect:(CGRect)rect {
+ // Drawing code
+ }
+ */
 -(instancetype)initwithStageInfo:(stageInfoModel *) StageInfo ScreenImage:(UIImage *) screenImage delgate:(id<UMShareViewDelegate>) delegate andShareHeight:(float) Height;
 {
     if ([super init]) {
@@ -32,10 +32,10 @@
         self.backgroundColor =[[UIColor blackColor] colorWithAlphaComponent:0];
         
         float height=(kDeviceWidth/4)+Height+40+30+50;
-         backView =[[UIView alloc]initWithFrame:CGRectMake(0,kDeviceHeight, kDeviceWidth, height)];
+        backView =[[UIView alloc]initWithFrame:CGRectMake(0,kDeviceHeight, kDeviceWidth, height)];
         backView.userInteractionEnabled=YES;
         backView.backgroundColor =[UIColor whiteColor];
-      //用于截取点击self的事件
+        //用于截取点击self的事件
         UITapGestureRecognizer  *t =[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(click)];
         [backView addGestureRecognizer:t];
         
@@ -51,33 +51,33 @@
 }
 -(void)createNavigation
 {
-     self.tipLable=[[M80AttributedLabel alloc]initWithFrame:CGRectZero];
+    self.tipLable=[[M80AttributedLabel alloc]initWithFrame:CGRectZero];
     //NSMutableAttributedString  *attrstr =[[NSMutableAttributedString alloc]initWithString:@"分享"];
     self.tipLable.textColor=VGray_color;
     self.tipLable.font=[UIFont systemFontOfSize:14];
     //[self.tipLable appendText:@"分享"];
     self.tipLable.backgroundColor =[UIColor clearColor];
     self.tipLable.textAlignment=kCTTextAlignmentCenter;
-   // CGSize Tsize =[self.tipLable sizeThatFits:CGSizeMake(kDeviceWidth,CGFLOAT_MAX)];
+    // CGSize Tsize =[self.tipLable sizeThatFits:CGSizeMake(kDeviceWidth,CGFLOAT_MAX)];
     self.tipLable.frame=CGRectMake(0, 10, kDeviceWidth, 30);
     [backView addSubview:self.tipLable];
 }
 -(void)setShareLable;
 {
-     
-     if (self.pageType==UMShareTypeSuccess) {
+    
+    if (self.pageType==UMShareTypeSuccess) {
         UIImageView *sucImage =[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 15, 15)];
-         sucImage.image =[UIImage imageNamed:@"sucseed_add"];
-         [self.tipLable appendView:sucImage margin:UIEdgeInsetsMake(0, 0,0,5)];
-         self.tipLable.font=[UIFont systemFontOfSize:12];
-         [self.tipLable appendText:@"发布成功,卡片将出现在发现页,快去分享吧!"];
+        sucImage.image =[UIImage imageNamed:@"sucseed_add"];
+        [self.tipLable appendView:sucImage margin:UIEdgeInsetsMake(0, 0,0,5)];
+        self.tipLable.font=[UIFont systemFontOfSize:12];
+        [self.tipLable appendText:@"发布成功,卡片将出现在发现页,快去分享吧!"];
     }
-     else {
-         [self.tipLable appendText:@"分享"];
-     }
+    else {
+        [self.tipLable appendText:@"分享"];
+    }
 }
 
- 
+
 //截获点击屏幕的事件
 -(void)click
 {
@@ -115,20 +115,20 @@
     [backView addSubview:shareView];
     
     _ShareimageView=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0,kDeviceWidth-20,shareheight)];
-//    _ShareimageView.backgroundColor=[UIColor redColor];
+    //    _ShareimageView.backgroundColor=[UIColor redColor];
     _ShareimageView.image=_screenImage;
     [shareView addSubview:_ShareimageView];
     
     //放置电影名和标签的view
     logosupView=[[UIView alloc]initWithFrame:CGRectMake(0,_ShareimageView.frame.origin.y+_ShareimageView.frame.size.height-2,kDeviceWidth-20, 22)];
     logosupView.backgroundColor=[UIColor blackColor];
-   // logosupView.hidden=YES;
+    // logosupView.hidden=YES;
     [shareView addSubview:logosupView];
     
     _moviewName= [ZCControl createLabelWithFrame:CGRectMake(0,0,kDeviceWidth-20, 20) Font:12 Text:@""];
     _moviewName.textColor=ShareLogo_color;
     _moviewName.numberOfLines=0;
-   
+    
     if (!_stageInfo.movieInfo|!_stageInfo.movieInfo.name) {
         _stageInfo.movieInfo.name=@"";
     }
@@ -140,23 +140,23 @@
     NSMutableString  *namstr =[[NSMutableString alloc]initWithString:_stageInfo.movieInfo.name];
     NSString  *str=namstr;
     if (namstr.length>20) {
-       str= [namstr substringToIndex:20];
-       str =[str stringByAppendingString:@"..."];
+        str= [namstr substringToIndex:20];
+        str =[str stringByAppendingString:@"..."];
     }
     _moviewName.text=[NSString stringWithFormat:@"《%@》 电影卡片App",str];
     _moviewName.textAlignment=NSTextAlignmentCenter;
     
     
     
-//    CGSize Msize =[_stageInfo.movieInfo.name boundingRectWithSize:CGSizeMake(100, 20) options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes:[NSDictionary dictionaryWithObject:_moviewName.font forKey:NSFontAttributeName] context:nil].size;
-//    _moviewName.frame=CGRectMake(0, 0, Msize.width, 20);
-//    
+    //    CGSize Msize =[_stageInfo.movieInfo.name boundingRectWithSize:CGSizeMake(100, 20) options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes:[NSDictionary dictionaryWithObject:_moviewName.font forKey:NSFontAttributeName] context:nil].size;
+    //    _moviewName.frame=CGRectMake(0, 0, Msize.width, 20);
+    //
     
     logoLable=[ZCControl createLabelWithFrame:CGRectMake(_moviewName.frame.origin.x+_moviewName.frame.size.width,0,50, 20) Font:12 Text:@"电影卡片"];
     logoLable.textAlignment=NSTextAlignmentRight;
     logoLable.textColor=VGray_color;
     //logoLable.backgroundColor =[UIColor whiteColor];
-   // [logosupView addSubview:logoLable];
+    // [logosupView addSubview:logoLable];
     
 }
 -(void)createButtomView
@@ -211,7 +211,7 @@
     }
     if (_delegate &&[_delegate respondsToSelector:@selector(UMShareViewHandClick:ShareImage:StageInfoModel:)]) {
         [_delegate UMShareViewHandClick:button ShareImage:shareImage StageInfoModel:_stageInfo];
-        }
+    }
     
     [self CancleShareClick];
     
@@ -241,7 +241,7 @@
         float height=(kDeviceWidth/4)+shareheight+40+30+50;
         backView.frame=CGRectMake(0, kDeviceHeight-height, kDeviceWidth, height);
         self.backgroundColor =[[UIColor blackColor] colorWithAlphaComponent:0.5];
-
+        
     } completion:^(BOOL finished) {
         self.backgroundColor =[[UIColor blackColor] colorWithAlphaComponent:0.5];
     }];

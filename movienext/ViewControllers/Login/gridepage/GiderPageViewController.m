@@ -62,7 +62,7 @@
     self.pageControl.currentPage=0;
     [self.view addSubview:self.pageControl];
     
-
+    
     NSArray  *imageArr =@[@"page_01.png",@"page_02.png",@"page_03.png"];
     for (int i=0; i<3; i++) {
         double x=i*kDeviceWidth;
@@ -76,16 +76,16 @@
             UIButton  *btn =[UIButton buttonWithType:UIButtonTypeCustom];
             btn.frame=CGRectMake((kDeviceWidth-140)/2, kDeviceHeight-140, 140, 42);
             
-             [btn addTarget:self action:@selector(goLogin) forControlEvents:UIControlEventTouchUpInside];
+            [btn addTarget:self action:@selector(goLogin) forControlEvents:UIControlEventTouchUpInside];
             
             [btn setBackgroundImage:[UIImage imageNamed:@"come_in.png"] forState:UIControlStateNormal];
-             [imageview addSubview:btn];
+            [imageview addSubview:btn];
             
         }
         
     }
     
- 
+    
 }
 -(void)goLogin
 {
@@ -108,13 +108,13 @@
 }
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end

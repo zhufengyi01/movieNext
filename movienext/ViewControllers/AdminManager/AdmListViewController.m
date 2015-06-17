@@ -66,7 +66,7 @@
     UITableViewCell   *cell=(UITableViewCell *)[tableView dequeueReusableCellWithIdentifier:cellID];
     if (!cell) {
         cell=[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
-           cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+        cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
     }
     cell.textLabel.font =[UIFont systemFontOfSize:14];
     //  cell.textColor =VGray_color;
@@ -86,7 +86,7 @@
             [self.navigationController pushViewController:[AdmCustomListViewController new] animated:YES];
         }
             break;
-         case ADM_TYPE_EMOJ:
+        case ADM_TYPE_EMOJ:
         {
             TagModel  *tagmodel =[[TagModel alloc]init];
             TagDetailModel  *tagdetail =[[TagDetailModel alloc]init];
@@ -103,14 +103,14 @@
             break;
         }
             
-         case ADM_TYPE_CLOSE_STAGE:
+        case ADM_TYPE_CLOSE_STAGE:
         {
             MovieDetailViewController *movied =[[MovieDetailViewController alloc]init];
             movied.pageSourceType=NSMovieSourcePageAdminCloseStageViewController;
             UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
             self.navigationItem.backBarButtonItem=item;
             [self.navigationController pushViewController:movied animated:YES];
-
+            
             break;
         }
         case ADM_TYPE_CLOSE_WEIBO:
@@ -129,7 +129,7 @@
             UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
             self.navigationItem.backBarButtonItem=item;
             [self.navigationController pushViewController:new animated:YES];
-
+            
             break;
         }
         case ADM_TYPE_ADM_DESCORVER:
@@ -160,10 +160,10 @@
             break;
         }
         default:
-        break;
+            break;
             
     }
- }
+}
 
 
 - (void)didReceiveMemoryWarning {
@@ -172,13 +172,13 @@
 }
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end

@@ -38,13 +38,13 @@
     NSArray   *array =[NSArray arrayWithContentsOfFile:path];
     NSString *createBy;
     //if ([self.stageInfo.created_by intValue] ==0) {
-        createBy = [array objectAtIndex:([self.stageInfo.Id integerValue]%50)];
-        createBy =[NSString stringWithFormat:@"图片上传者 : %@",createBy];
-        create_namelabel.text=createBy;
+    createBy = [array objectAtIndex:([self.stageInfo.Id integerValue]%50)];
+    createBy =[NSString stringWithFormat:@"图片上传者 : %@",createBy];
+    create_namelabel.text=createBy;
     //}
     
     create_namelabel.textAlignment=NSTextAlignmentCenter;
-       [self.view addSubview:create_namelabel];
+    [self.view addSubview:create_namelabel];
     
     
     UILabel *create_timelabel =[ZCControl createLabelWithFrame:CGRectMake(0,create_namelabel.frame.origin.y+create_namelabel.frame.size.height+10 , kDeviceWidth, 20) Font:14 Text:@"创建时间"];
@@ -56,12 +56,12 @@
     create_timelabel.text=createTime;
     create_timelabel.textAlignment=NSTextAlignmentCenter;
     [self.view addSubview:create_timelabel];
-
+    
     
 }
 -(void)dismissClick:(UIButton *) button
 {
- 
+    
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -71,13 +71,13 @@
 }
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end

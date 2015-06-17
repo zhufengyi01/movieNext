@@ -197,7 +197,7 @@ static const CGFloat MJDuration = 0.1;
     // 默认先隐藏footer
     // self.myConllectionView.footer.hidden = YES;
 }
- -(void)creatLoadView
+-(void)creatLoadView
 {
     loadView =[[LoadingView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight)];
     loadView.delegate=self;
@@ -409,11 +409,11 @@ static const CGFloat MJDuration = 0.1;
 
 // 设置每个item的尺寸
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
-   // return CGSizeMake((kDeviceWidth-5)/2,(kDeviceWidth-10)/3);
+    // return CGSizeMake((kDeviceWidth-5)/2,(kDeviceWidth-10)/3);
     double  w = (kDeviceWidth-5)/2;
     double  h= w*(9.0/16);
     return CGSizeMake(w,h);
-
+    
 }
 
 -(UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section

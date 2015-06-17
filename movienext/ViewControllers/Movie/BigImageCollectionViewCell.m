@@ -31,20 +31,20 @@
     BgView.clipsToBounds=YES;
     BgView.userInteractionEnabled=YES;
     [self.contentView addSubview:BgView];
-
+    
     //[self CreateTopView];
     [self CreateSatageView];
     [self createButtonView];
-
+    
 }
 /*
--(void)CreateTopView
-{
-    BgView0 =[[UIView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth,45)];
-    BgView0.backgroundColor=View_ToolBar;
-    BgView0.userInteractionEnabled=YES;
-    [BgView addSubview:BgView0];
-}*/
+ -(void)CreateTopView
+ {
+ BgView0 =[[UIView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth,45)];
+ BgView0.backgroundColor=View_ToolBar;
+ BgView0.userInteractionEnabled=YES;
+ [BgView addSubview:BgView0];
+ }*/
 
 -(void)CreateSatageView
 {
@@ -66,7 +66,7 @@
     moreButton.tag=4000;
     [BgView2 addSubview:moreButton];
     
-
+    
     ScreenButton =[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth-120,10,45,25) ImageName:@"btn_share_default.png" Target:self Action:@selector(cellButtonClick:) Title:@""];
     ScreenButton.tag=2000;
     [BgView2 addSubview:ScreenButton];
@@ -78,7 +78,7 @@
     UIImageView *lineImage =[[UIImageView alloc]initWithFrame:CGRectMake(0,44, kDeviceWidth, 2)];
     lineImage.image=[UIImage imageNamed:@"cell_buttom_line.png"];
     [BgView2 addSubview:lineImage];
-
+    
     
     
 }
@@ -140,7 +140,7 @@
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-     // BgView2.frame=CGRectMake(0, kDeviceWidth, kDeviceWidth, 45);
+    // BgView2.frame=CGRectMake(0, kDeviceWidth, kDeviceWidth, 45);
     
 }
 
@@ -155,7 +155,7 @@
 }
 -(void)ScreenButtonClick:(UIButton  *) button
 {
-   //分享
+    //分享
 }
 -(void)addMarkButtonClick:(UIButton  *) button
 {

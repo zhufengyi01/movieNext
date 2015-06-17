@@ -37,7 +37,7 @@
 @interface MovieSearchViewController ()<UISearchBarDelegate,UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate, LoadingViewDelegate>
 {
     LoadingView   *loadView;
-     UISearchBar  *search;
+    UISearchBar  *search;
 }
 @property(nonatomic,strong) UITableView  *myTableView;
 @property(nonatomic,strong) NSMutableArray *dataArray;
@@ -49,7 +49,7 @@
 
 @implementation MovieSearchViewController
 
- -(void)viewWillAppear:(BOOL)animated
+-(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:YES];
     [[UINavigationBar appearance] setShadowImage:[UIImage imageWithColor:tabBar_line size:CGSizeMake(kDeviceWidth, 1)]];
@@ -95,7 +95,7 @@
     button.titleLabel.font =[UIFont systemFontOfSize:16];
     [button setTitleColor:VGray_color forState:UIControlStateNormal];
     button.titleEdgeInsets=UIEdgeInsetsMake(0,5, 0, -5);
-        [button addTarget:self action:@selector(CancleClick) forControlEvents:UIControlEventTouchUpInside];
+    [button addTarget:self action:@selector(CancleClick) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem  *barButton=[[UIBarButtonItem alloc]initWithCustomView:button];
     self.navigationItem.rightBarButtonItem=barButton;
     
@@ -110,12 +110,12 @@
     }
     else {
         [self.navigationController popViewControllerAnimated:YES];
-
+        
     }
 }
 -(void)initData
 {
-     _dataArray=[[NSMutableArray alloc]init];
+    _dataArray=[[NSMutableArray alloc]init];
 }
 -(void)initUI
 {
@@ -123,13 +123,13 @@
     _myTableView.delegate=self;
     _myTableView.dataSource=self;
     _myTableView.separatorInset=UIEdgeInsetsMake(0, -110, 0, 0);
-//    _myTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    //    _myTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.view addSubview:_myTableView];
     
     _historyTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, 320, 400) style:UITableViewStylePlain];
     _historyTableView.delegate = self;
     _historyTableView.dataSource = self;
-//    _historyTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    //    _historyTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [_myTableView addSubview:_historyTableView];
     
     _historyMovieNames = [[NSUserDefaults standardUserDefaults] objectForKey:@"history"];
@@ -164,15 +164,15 @@
             vc.movie_id=movie_id;
             vc.movie_name=[detail objectForKey:@"name"];
             UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
-             if (self.pageType==NSSearchSourceTypeAddCard) {
+            if (self.pageType==NSSearchSourceTypeAddCard) {
                 vc.pageType=NSShowSelectViewSoureTypeAddCard;
             }
             self.navigationItem.backBarButtonItem=item;
             [self.navigationController pushViewController:vc  animated:YES];
-   
             
             
-         }
+            
+        }
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
@@ -186,9 +186,9 @@
 
 -(void)requestData
 {
-//    if ([search.text isEqualToString:@"00"]) {
-//        return;
-//    }
+    //    if ([search.text isEqualToString:@"00"]) {
+    //        return;
+    //    }
     
     //存储历史搜索开始
     NSMutableArray *history = [NSMutableArray arrayWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:@"history"]];
@@ -228,7 +228,7 @@
                     [loadView showFailLoadData];
                 } else {
                     responseString = [Function getNoNewLine:responseString];
-                
+                    
                     NSString     * pattern = @"<a class=\"nbg\" href=\"http://movie\\.douban\\.com/subject/(\\d+)/\".*>\n.*<img src=\"(.*)\" alt=\"(.*?)\".*?/>";
                     NSMutableArray *doubanInfos = [[DoubanService shareInstance] getDoubanInfosByResponse:responseString withpattern:pattern type:NServiceTypeSearch];
                     _dataArray = doubanInfos;
@@ -259,7 +259,7 @@
 #pragma  mark --
 //表格的区间数
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-      return 1;
+    return 1;
 }
 //表格的行高度
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -268,7 +268,7 @@
 //表格的行数
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return tableView==_myTableView ? _dataArray.count : _historyMovieNames.count;
- }
+}
 
 //配置Cell
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -281,8 +281,8 @@
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
         if (_dataArray.count > indexPath.row) {
-         [cell setCellValue:[_dataArray  objectAtIndex:(long)indexPath.row]];
-        
+            [cell setCellValue:[_dataArray  objectAtIndex:(long)indexPath.row]];
+            
         }
         return cell;
     } else if (tableView == _historyTableView) {
@@ -303,7 +303,7 @@
         UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0, 43, 320, 1)];
         lineView.backgroundColor  = [UIColor colorWithRed:227.0f/255.0f green:227.0f/255.0f blue:227.0f/255.0f alpha:1];
         [cell.contentView addSubview:lineView];
-         return cell;
+        return cell;
     }
     
     return nil;
@@ -313,33 +313,33 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [search resignFirstResponder];
-     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (tableView==_myTableView) {
-       if (_dataArray.count > indexPath.row) {
-           if (self.pageType==NSSearchSourceTypeMovieList) {
-              MovieDetailViewController  *mvdetail =[[MovieDetailViewController alloc]init];
-              mvdetail.douban_Id=[[_dataArray objectAtIndex:indexPath.row]  objectForKey:@"doubanId"];
-              mvdetail.pageSourceType=NSMovieSourcePageSearchListController; //从电影列表页今日电影详细页面
-              mvdetail.pageSourceType=NSMovieSourcePageSearchListController;
-              mvdetail.movielogo=[[_dataArray objectAtIndex:indexPath.row] objectForKey:@"smallimage"];
-              mvdetail.moviename=[[_dataArray objectAtIndex:indexPath.row] objectForKey:@"title"];
-               
-              UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
-             self.navigationItem.backBarButtonItem=item;
-            [self.navigationController pushViewController:mvdetail animated:YES];
-           }
-           else if(self.pageType==NSSearchSourceTypeAddCard) //从添加电影进入  直接进去添加
-           {
-               NSDictionary  *dict =[_dataArray objectAtIndex:indexPath.row];
-               //根据豆瓣id 请求电影信息
-               [self requestMovieIdWithdoubanId:[dict objectForKey:@"doubanId"]];
-           }
+        if (_dataArray.count > indexPath.row) {
+            if (self.pageType==NSSearchSourceTypeMovieList) {
+                MovieDetailViewController  *mvdetail =[[MovieDetailViewController alloc]init];
+                mvdetail.douban_Id=[[_dataArray objectAtIndex:indexPath.row]  objectForKey:@"doubanId"];
+                mvdetail.pageSourceType=NSMovieSourcePageSearchListController; //从电影列表页今日电影详细页面
+                mvdetail.pageSourceType=NSMovieSourcePageSearchListController;
+                mvdetail.movielogo=[[_dataArray objectAtIndex:indexPath.row] objectForKey:@"smallimage"];
+                mvdetail.moviename=[[_dataArray objectAtIndex:indexPath.row] objectForKey:@"title"];
+                
+                UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+                self.navigationItem.backBarButtonItem=item;
+                [self.navigationController pushViewController:mvdetail animated:YES];
+            }
+            else if(self.pageType==NSSearchSourceTypeAddCard) //从添加电影进入  直接进去添加
+            {
+                NSDictionary  *dict =[_dataArray objectAtIndex:indexPath.row];
+                //根据豆瓣id 请求电影信息
+                [self requestMovieIdWithdoubanId:[dict objectForKey:@"doubanId"]];
+            }
         }
     } else if (tableView == _historyTableView) {
         search.text = [_historyMovieNames objectAtIndex:indexPath.row];
         [self requestData];
     }
-
+    
 }
 
 #pragma  mark ----
@@ -347,8 +347,8 @@
 #pragma  mark  ----
 -(void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
 {
-//    [self requestData];
- }
+    //    [self requestData];
+}
 -(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
     [self requestData];
@@ -365,7 +365,7 @@
 {
     if (search.text.length>0) {
         [search resignFirstResponder];
-
+        
     }
 }
 - (void)didReceiveMemoryWarning {
@@ -374,13 +374,13 @@
 }
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end

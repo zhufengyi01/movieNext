@@ -38,7 +38,7 @@
     [self.contentView addSubview:titleLable];
     
     titleButon =[ZCControl createButtonWithFrame:CGRectMake(0, 0, kDeviceWidth-100-110, 30) ImageName:nil Target:self Action:@selector(dealCellClick:) Title:nil];
-   // titleButon.backgroundColor =[[UIColor blackColor]colorWithAlphaComponent:0.5];
+    // titleButon.backgroundColor =[[UIColor blackColor]colorWithAlphaComponent:0.5];
     titleButon.tag=101;
     [self.contentView addSubview:titleButon];
     
@@ -52,11 +52,11 @@
     dateLable.textAlignment=NSTextAlignmentLeft;
     [self.contentView addSubview:dateLable];
     
-   stageImage =[ZCControl createImageViewWithFrame:CGRectMake(kDeviceWidth-50, 10, 40, 40) ImageName:nil];
+    stageImage =[ZCControl createImageViewWithFrame:CGRectMake(kDeviceWidth-50, 10, 40, 40) ImageName:nil];
     stageImage.layer.cornerRadius=4;
     stageImage.clipsToBounds=YES;
     [self.contentView addSubview:stageImage];
-
+    
 }
 
 - (void)layoutSubviews {
@@ -68,11 +68,11 @@
     
     
     _index=index;
-         NSString *logoString=[NSString stringWithFormat:@"%@%@", kUrlAvatar,model.userInfo.logo];
+    NSString *logoString=[NSString stringWithFormat:@"%@%@", kUrlAvatar,model.userInfo.logo];
     
     [logoButton sd_setBackgroundImageWithURL:[NSURL URLWithString:logoString ] forState:UIControlStateNormal placeholderImage:HeadImagePlaceholder];
-         NSString *urlString =[NSString stringWithFormat:@"%@%@!w340h340",kUrlStage,model.weiboInfo.stageInfo.photo];
-        
+    NSString *urlString =[NSString stringWithFormat:@"%@%@!w340h340",kUrlStage,model.weiboInfo.stageInfo.photo];
+    
     [stageImage sd_setImageWithURL:[NSURL URLWithString:urlString] placeholderImage:[UIImage imageNamed:@"loading_image_all.png"] options:SDWebImageRetryFailed];
     //}
     NSString  *nameStr=model.userInfo.username;
@@ -84,9 +84,9 @@
     titleButon.frame=titleLable.frame;
     Zanlable.frame=CGRectMake(titleLable.frame.origin.x+Namesize.width+0, titleLable.frame.origin.y, 60,titleLable.frame.size.height);
     
-         NSDate  *comfromTimesp =[NSDate dateWithTimeIntervalSince1970:[model.updated_at intValue]];
-        NSString  *da = [NSDate timeInfoWithDate:comfromTimesp];
-        dateLable.text=da;
+    NSDate  *comfromTimesp =[NSDate dateWithTimeIntervalSince1970:[model.updated_at intValue]];
+    NSString  *da = [NSDate timeInfoWithDate:comfromTimesp];
+    dateLable.text=da;
     
 }
 -(void)dealCellClick:(UIButton *) button
@@ -103,7 +103,7 @@
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
-
+    
     // Configure the view for the selected state
 }
 

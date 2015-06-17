@@ -33,7 +33,7 @@ static const CGFloat MJDuration = 0.6;
     UIButton * upLoadimageBtn;
     
     UserDataCenter  *userCenter;
-
+    
     
 }
 @property(nonatomic,strong) NSMutableArray  *dataArray1;
@@ -54,7 +54,7 @@ static const CGFloat MJDuration = 0.6;
     [self creatLoadView];
     //判断是否是审核版
     
-  
+    
 }
 #pragma  mark  -------CreatUI;
 -(void)creatNavigation
@@ -71,12 +71,12 @@ static const CGFloat MJDuration = 0.6;
     [button setTitleColor:VGray_color forState:UIControlStateNormal];
     //button.titleLabel.font =[UIFont boldSystemFontOfSize:18];
     button.titleLabel.font =[UIFont systemFontOfSize:16];
-   // [button addTarget:self action:@selector(navigationbtnClick:) forControlEvents:UIControlEventTouchUpInside];
+    // [button addTarget:self action:@selector(navigationbtnClick:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem  *barButton=[[UIBarButtonItem alloc]initWithCustomView:button];
     button.tag=99;
     
     self.navigationItem.leftBarButtonItem=barButton;
-
+    
     [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color.png"] forBarMetrics:UIBarMetricsDefault];
     NSArray *segmentedArray = [[NSArray alloc] initWithObjects:@"剧照",@"截图", nil];
     segment = [[UISegmentedControl alloc] initWithItems:segmentedArray];
@@ -106,24 +106,24 @@ static const CGFloat MJDuration = 0.6;
         //设置选择后的图片可被编辑
         picker.allowsEditing = YES;
         [WeakSelf presentViewController:picker animated:YES completion:nil];
-
+        
     }];
     upLoadimageBtn.tag=100;
     upLoadimageBtn.titleEdgeInsets=UIEdgeInsetsMake(0, 10, 0, -10);
     [upLoadimageBtn setTitle:@"上传" forState:UIControlStateNormal];
     [upLoadimageBtn setTitleColor:VGray_color forState:UIControlStateNormal];
     upLoadimageBtn.titleLabel.font =[UIFont systemFontOfSize:16];
-   // [upLoadimageBtn setImage:[UIImage imageNamed:@"up_picture_blue.png"] forState:UIControlStateNormal];
+    // [upLoadimageBtn setImage:[UIImage imageNamed:@"up_picture_blue.png"] forState:UIControlStateNormal];
     UIBarButtonItem  *rigthbar =[[UIBarButtonItem alloc]initWithCustomView:upLoadimageBtn];
     self.navigationItem.rightBarButtonItem=rigthbar;
-
+    
 }
 //-(void)navigationbtnClick:(UIButton *) btn
 //{
 //    if (btn.tag==99) {
 //        [self dismissViewControllerAnimated:YES completion:nil];
-//       
-//        
+//
+//
 //    }
 //    else if (btn.tag==100)
 //    {
@@ -170,7 +170,7 @@ static const CGFloat MJDuration = 0.6;
 }
 
 
- -(void)segmentClick:(UISegmentedControl *)seg
+-(void)segmentClick:(UISegmentedControl *)seg
 {
     if(seg.selectedSegmentIndex==0)
     {
@@ -180,7 +180,7 @@ static const CGFloat MJDuration = 0.6;
         else
         {
             [self.myConllectionView reloadData];
-
+            
         }
     }
     else if(seg.selectedSegmentIndex==1)
@@ -190,7 +190,7 @@ static const CGFloat MJDuration = 0.6;
         }
         else {
             
-        [self.myConllectionView reloadData];
+            [self.myConllectionView reloadData];
         }
     }
     
@@ -212,18 +212,18 @@ static const CGFloat MJDuration = 0.6;
     layout.minimumInteritemSpacing=0; //cell之间左右的
     layout.minimumLineSpacing=0;      //cell上下间隔
     
-      //   layout.sectionInset=UIEdgeInsetsMake(0,0,64, 0); //整个偏移量 上左下右
+    //   layout.sectionInset=UIEdgeInsetsMake(0,0,64, 0); //整个偏移量 上左下右
     _myConllectionView =[[UICollectionView alloc]initWithFrame:CGRectMake(0,0,kDeviceWidth+0, kDeviceHeight-kHeightNavigation) collectionViewLayout:layout];
     _myConllectionView.backgroundColor=View_BackGround;
-         //注册小图模式
+    //注册小图模式
     [_myConllectionView registerClass:[SmallImageCollectionViewCell class] forCellWithReuseIdentifier:@"smallcell"];
-
+    
     _myConllectionView.delegate=self;
     _myConllectionView.dataSource=self;
     [self.view addSubview:_myConllectionView];
     [self setUprefresh];
-//    [self setupHeadView];
-//    [self setupFootView];
+    //    [self setupHeadView];
+    //    [self setupFootView];
 }
 -(void)creatLoadView
 {
@@ -243,7 +243,7 @@ static const CGFloat MJDuration = 0.6;
         /*for (int i = 0; i<10; i++) {
          [weakSelf.colors insertObject:MJRandomColor atIndex:0];
          }*/
-         // 进入刷新状态就会回调这个Block
+        // 进入刷新状态就会回调这个Block
         [weakSelf requestData];
         // 设置文字
         [weakSelf.myConllectionView.header setTitle:@"下拉刷新..." forState:MJRefreshHeaderStateIdle];
@@ -268,7 +268,7 @@ static const CGFloat MJDuration = 0.6;
         }
         // 进入刷新状态就会回调这个Block
         [weakSelf requestData];
-
+        
         // 设置字体
         //weakSelf.myConllectionView.header.font = [UIFont systemFontOfSize:12];
         
@@ -299,8 +299,8 @@ static const CGFloat MJDuration = 0.6;
             page2=page2+1;
         }
         [weakSelf requestData];
-
-         // 设置文字
+        
+        // 设置文字
         [weakSelf.myConllectionView.footer setTitle:@"点击加载更多..." forState:MJRefreshFooterStateIdle];
         [weakSelf.myConllectionView.footer setTitle:@"加载更多..." forState:MJRefreshFooterStateRefreshing];
         [weakSelf.myConllectionView.footer setTitle:@"THE END" forState:MJRefreshFooterStateNoMoreData];
@@ -334,7 +334,7 @@ static const CGFloat MJDuration = 0.6;
         return;
     }
     [loadView removeFromSuperview];
-     //   UserDataCenter *userCenter =[UserDataCenter shareInstance];
+    //   UserDataCenter *userCenter =[UserDataCenter shareInstance];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
     NSString *urlstr;
     if (segment.selectedSegmentIndex==0) {
@@ -342,14 +342,14 @@ static const CGFloat MJDuration = 0.6;
     }
     else if (segment.selectedSegmentIndex==1)
     {
-      urlstr = [NSString stringWithFormat:@"http://movie.douban.com/subject/%@/photos?type=S&start=%ld&sortby=vote&size=a&subtype=c", self.douban_id,self.dataArray2.count];
+        urlstr = [NSString stringWithFormat:@"http://movie.douban.com/subject/%@/photos?type=S&start=%ld&sortby=vote&size=a&subtype=c", self.douban_id,self.dataArray2.count];
     }
     
     [request setURL:[NSURL URLWithString:urlstr]];
     [request setHTTPMethod:@"GET"];
     NSOperationQueue * queue = [[NSOperationQueue alloc] init];
     [NSURLConnection sendAsynchronousRequest:request queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
-         if (connectionError) {
+        if (connectionError) {
             //NSLog(@"httpresponse code error %@", connectionError);
             [loadView showFailLoadData];
             
@@ -357,7 +357,7 @@ static const CGFloat MJDuration = 0.6;
             [loadView stopAnimation];
             [loadView removeFromSuperview];
             
-
+            
             NSInteger responseCode = [(NSHTTPURLResponse *)response statusCode];
             NSString *responseString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
             if (responseCode == 200) {
@@ -366,7 +366,7 @@ static const CGFloat MJDuration = 0.6;
                 
                 NSString * pattern = @"http:\\/\\/img\\d\\.douban\\.com\\/view\\/photo\\/thumb\\/public\\/p\\d+\\.(jpg|jpeg|png)";
                 //NSLog(@"responseString = %@", responseString);
-                 NSMutableArray *doubanInfos = [[DoubanService shareInstance] getDoubanInfosByResponse:responseString withpattern:pattern type:NServiceTypePhoto];
+                NSMutableArray *doubanInfos = [[DoubanService shareInstance] getDoubanInfosByResponse:responseString withpattern:pattern type:NServiceTypePhoto];
                 if (segment.selectedSegmentIndex==0 ) {
                     if(self.dataArray1==nil)
                     {
@@ -374,34 +374,34 @@ static const CGFloat MJDuration = 0.6;
                     }
                     if (doubanInfos.count>0) {
                         [self.dataArray1 addObjectsFromArray:doubanInfos];
-                     //   NSLog(@"====doubanInfo ===%@",doubanInfos);
+                        //   NSLog(@"====doubanInfo ===%@",doubanInfos);
                         if (doubanInfos.count<40) {
                             //[self.myConllectionView.footer noticeNoMoreData];
                         }
                     }
-                 }
-               else if (segment.selectedSegmentIndex==1)
-               {
-                   if (self.dataArray2==nil) {
-                       self.dataArray2=[[NSMutableArray alloc]init];
-                   }
-                   if (doubanInfos.count>0) {
-                   [self.dataArray2 addObjectsFromArray:doubanInfos];
-                       if (doubanInfos.count<40) {
-                           [self.myConllectionView.footer noticeNoMoreData];
-                       }
-                   }
-               }
-        [self.myConllectionView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
+                }
+                else if (segment.selectedSegmentIndex==1)
+                {
+                    if (self.dataArray2==nil) {
+                        self.dataArray2=[[NSMutableArray alloc]init];
+                    }
+                    if (doubanInfos.count>0) {
+                        [self.dataArray2 addObjectsFromArray:doubanInfos];
+                        if (doubanInfos.count<40) {
+                            [self.myConllectionView.footer noticeNoMoreData];
+                        }
+                    }
+                }
+                [self.myConllectionView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
             } else {
                 NSLog(@"error");
                 
                 [loadView showFailLoadData];
-
+                
             }
         }
     }];
-
+    
 }
 -(void)reloadDataClick
 {
@@ -413,12 +413,12 @@ static const CGFloat MJDuration = 0.6;
         picker.allowsEditing = YES;
         // UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:picker];
         [self.navigationController presentViewController:picker animated:YES completion:nil];
-
-     }
+        
+    }
     else {
         [self requestData];
         [loadView hidenFailLoadAndShowAnimation];
-
+        
     }
 }
 #pragma  mark
@@ -426,7 +426,7 @@ static const CGFloat MJDuration = 0.6;
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
-        return 1;
+    return 1;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
@@ -446,49 +446,49 @@ static const CGFloat MJDuration = 0.6;
     SmallImageCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"smallcell" forIndexPath:indexPath];
     //在这里先将内容给清除一下, 然后再加载新的, 添加完内容之后先动画, 在cell消失的时候做清理工作
     
-       cell.imageView.backgroundColor=VStageView_color;
-        NSURL  *urlString ;
-         if (segment.selectedSegmentIndex==0) {
-             
-             if (self.dataArray1.count>indexPath.row) {
-             urlString =[NSURL URLWithString:[self.dataArray1 objectAtIndex:indexPath.row]];
-       //          [cell.imageView sd_setImageWithURL:urlString placeholderImage:nil];
-            [cell.imageView sd_setImageWithURL:urlString placeholderImage:nil options:(SDWebImageRetryFailed|SDWebImageLowPriority)];
-
-             }
-         }
-        else if(segment.selectedSegmentIndex==1)
-        {
-            if (self.dataArray2.count>indexPath.row) {
-            urlString =[NSURL URLWithString:[self.dataArray2 objectAtIndex:indexPath.row]];
-               // [cell.imageView sd_setImageWithURL:urlString placeholderImage:nil];
-                [cell.imageView sd_setImageWithURL:urlString placeholderImage:nil options:(SDWebImageRetryFailed|SDWebImageLowPriority)];
-            }
-
-        }
-      //   cell.titleLab.hidden = YES;
-        return cell;
-    
-  
-}
-//点击小图模式的时候，跳转到大图模式
--(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
-{
-        DoubanUpImageViewController *vc = [[DoubanUpImageViewController alloc] init];
-    SmallImageCollectionViewCell  *cell =(SmallImageCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
-    NSString  *urlString;
+    cell.imageView.backgroundColor=VStageView_color;
+    NSURL  *urlString ;
     if (segment.selectedSegmentIndex==0) {
+        
         if (self.dataArray1.count>indexPath.row) {
-        urlString =[self.dataArray1 objectAtIndex:indexPath.row];
-         urlString=   [urlString stringByReplacingOccurrencesOfString:@"albumicon" withString:@"photo"];
+            urlString =[NSURL URLWithString:[self.dataArray1 objectAtIndex:indexPath.row]];
+            //          [cell.imageView sd_setImageWithURL:urlString placeholderImage:nil];
+            [cell.imageView sd_setImageWithURL:urlString placeholderImage:nil options:(SDWebImageRetryFailed|SDWebImageLowPriority)];
+            
         }
     }
     else if(segment.selectedSegmentIndex==1)
     {
         if (self.dataArray2.count>indexPath.row) {
-        urlString =[self.dataArray2 objectAtIndex:indexPath.row];
+            urlString =[NSURL URLWithString:[self.dataArray2 objectAtIndex:indexPath.row]];
+            // [cell.imageView sd_setImageWithURL:urlString placeholderImage:nil];
+            [cell.imageView sd_setImageWithURL:urlString placeholderImage:nil options:(SDWebImageRetryFailed|SDWebImageLowPriority)];
+        }
+        
+    }
+    //   cell.titleLab.hidden = YES;
+    return cell;
+    
+    
+}
+//点击小图模式的时候，跳转到大图模式
+-(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    DoubanUpImageViewController *vc = [[DoubanUpImageViewController alloc] init];
+    SmallImageCollectionViewCell  *cell =(SmallImageCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
+    NSString  *urlString;
+    if (segment.selectedSegmentIndex==0) {
+        if (self.dataArray1.count>indexPath.row) {
+            urlString =[self.dataArray1 objectAtIndex:indexPath.row];
             urlString=   [urlString stringByReplacingOccurrencesOfString:@"albumicon" withString:@"photo"];
-
+        }
+    }
+    else if(segment.selectedSegmentIndex==1)
+    {
+        if (self.dataArray2.count>indexPath.row) {
+            urlString =[self.dataArray2 objectAtIndex:indexPath.row];
+            urlString=   [urlString stringByReplacingOccurrencesOfString:@"albumicon" withString:@"photo"];
+            
         }
     }
     
@@ -499,7 +499,7 @@ static const CGFloat MJDuration = 0.6;
     vc.movie_name=self.movie_name;
     vc.movie_id=self.movie_id;
     if (urlString) {
-    vc.photourl=urlString;
+        vc.photourl=urlString;
     }
     [self.navigationController pushViewController:vc animated:YES];
 }
@@ -529,13 +529,13 @@ static const CGFloat MJDuration = 0.6;
 }
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end

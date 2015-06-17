@@ -12,12 +12,12 @@
 @implementation TagView
 
 /*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
-}
-*/
+ // Only override drawRect: if you perform custom drawing.
+ // An empty implementation adversely affects performance during animation.
+ - (void)drawRect:(CGRect)rect {
+ // Drawing code
+ }
+ */
 //重写tagview的方法
 -(instancetype)initWithWeiboInfo:(weiboInfoModel *) weiboInfo AndTagInfo :(TagModel *) tagInfo delegate:(id<TagViewDelegate>) delegate isCanClick:(BOOL) click  backgoundImage:(UIImage *) image isLongTag:(BOOL) longtag;
 {
@@ -47,7 +47,7 @@
     self.tagBgImageview.backgroundColor = VBlue_color;
     self.tagBgImageview.image =[_backgroundImage stretchableImageWithLeftCapWidth:10 topCapHeight:20];
     [self addSubview:self.tagBgImageview];
-     //添加文字
+    //添加文字
     self.titleLable=[ZCControl createLabelWithFrame:CGRectMake(0,0, 60, 30) Font:TagTextFont16 Text:@"标签"];
     self.titleLable.textColor=[UIColor whiteColor];
     
@@ -89,7 +89,7 @@
 {
     //设置是否圆角
     self.layer.cornerRadius=corner;
-
+    
 }
 
 

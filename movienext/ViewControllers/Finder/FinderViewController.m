@@ -35,7 +35,7 @@
     //当前的detailcontroller
     FindDatailViewController *CenterViewController;
     
-   // int  pageIndex;
+    // int  pageIndex;
     
     //StageView  *stageView;
     
@@ -85,7 +85,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor =View_BackGround;
-     // Do any additional setup after loading the view.
+    // Do any additional setup after loading the view.
     [self createNavigation];
     [self initData];
     [self requestData];// 初始化所有数据
@@ -120,18 +120,18 @@
     [button addActionHandler:^(NSInteger tag) {
         [weakSealf dismissViewControllerAnimated:YES completion:^{
         }];
- 
+        
     }];
-     button.frame=CGRectMake(0, 0, 40, 40);
+    button.frame=CGRectMake(0, 0, 40, 40);
     button.tag=1000;
     button.titleLabel.font =[UIFont systemFontOfSize:16];
     [button setTitleColor:VGray_color forState:UIControlStateNormal];
     //[button addTarget:self action:@selector(naviagetionItemClick:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem  *barButton=[[UIBarButtonItem alloc]initWithCustomView:button];
     self.navigationItem.leftBarButtonItem=barButton;
-//    
+    //
     sharebtn=[UIButton buttonWithType:UIButtonTypeCustom];
- 
+    
     sharebtn.frame=CGRectMake(0, 0, 40, 25);
     sharebtn.tag=1001;
     [sharebtn addActionHandler:^(NSInteger tag) {
@@ -142,16 +142,16 @@
         UMShareView *ShareView =[[UMShareView alloc] initwithStageInfo:weiboInfo.stageInfo ScreenImage:image delgate:weakSealf andShareHeight:weakSealf.ShareView.frame.size.height];
         [ShareView setShareLable];
         [ShareView show];
-
+        
     }];
     [sharebtn setTitle:@"分享" forState:UIControlStateNormal];
     [sharebtn setTitleEdgeInsets:UIEdgeInsetsMake(0, 10, 0, -10)];
     sharebtn.titleLabel.font =[UIFont systemFontOfSize:16];
     [sharebtn setTitleColor:VGray_color forState:UIControlStateNormal];
-     UIBarButtonItem  *rigthbarButton=[[UIBarButtonItem alloc]initWithCustomView:sharebtn];
+    UIBarButtonItem  *rigthbarButton=[[UIBarButtonItem alloc]initWithCustomView:sharebtn];
     self.navigationItem.rightBarButtonItem=rigthbarButton;
-
-
+    
+    
 }
 
 #pragma mark  -------UMShareViewHandDelegate
@@ -170,7 +170,7 @@
     self.pageIndex=0;
     self.pageContent =[[NSMutableArray alloc]init];
     self.indexArray =[[NSMutableArray alloc]init];
- }
+}
 #pragma  mark   ------------requestData -------
 //微博点赞请求
 -(void)LikeRequstData:(weiboInfoModel  *) weiboInfo withOperation:(NSNumber *) operation
@@ -192,7 +192,7 @@
             if (self.pageContent.count>self.pageIndex) {
                 [self performSelector:@selector(changeStageViewImageAndmarkLable) withObject:nil afterDelay:1];
             }
-     
+            
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
@@ -232,10 +232,10 @@
     self.naviTitlLable.text=weiboInfo.stageInfo.movieInfo.name;
     
     CGRect  frame = [Function getImageFrameWithwidth:[weiboInfo.stageInfo.width intValue] height:[weiboInfo.stageInfo.height intValue] inset:20];
-
+    
     self.stageImageView.frame=frame;
     
-   self.layerView.frame= CGRectMake(0, self.stageImageView.frame.size.height-60, kDeviceWidth-10, 60);
+    self.layerView.frame= CGRectMake(0, self.stageImageView.frame.size.height-60, kDeviceWidth-10, 60);
     
     markLable.text=weiboInfo.content;
     CGSize  Msize = [markLable.text boundingRectWithSize:CGSizeMake(kDeviceWidth-40, MAXFLOAT) options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes:[NSDictionary dictionaryWithObject:markLable.font forKey:NSFontAttributeName] context:nil].size;
@@ -257,10 +257,10 @@
     //用户名
     CGSize  Nsize =[nameStr boundingRectWithSize:CGSizeMake(100, 27) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:[NSDictionary dictionaryWithObject:userNameLable.font forKey:NSFontAttributeName] context:nil].size;
     userNameLable.frame=CGRectMake(35,0, Nsize.width+4, 30);
-     leftButtomButton.frame=CGRectMake(10,5, 30+5+userNameLable.frame.size.width, 27);
+    leftButtomButton.frame=CGRectMake(10,5, 30+5+userNameLable.frame.size.width, 27);
     userNameLable.text=[NSString stringWithFormat:@"%@",nameStr];
     Like_lable.text=[NSString stringWithFormat:@"%@",weiboInfo.like_count];
-
+    
 }
 
 // 初始化所有数据
@@ -275,8 +275,8 @@
     [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
         if ([[responseObject objectForKey:@"code"] intValue]==0) {
-        
-           // NSMutableArray  *Array =[[NSMutableArray alloc]initWithArray:[responseObject objectForKey:@"models"]];
+            
+            // NSMutableArray  *Array =[[NSMutableArray alloc]initWithArray:[responseObject objectForKey:@"models"]];
             self.pageContent= [[NSMutableArray alloc] initWithArray:[weiboInfoModel objectArrayWithKeyValuesArray:[responseObject objectForKey:@"models"]]];
             
             if (self.pageContent.count==0) {
@@ -287,24 +287,24 @@
             {
                 [loadView stopAnimation];
                 [loadView removeFromSuperview];
-                 [self createUI];
+                [self createUI];
             }
-          
-//            //存储页面的索引
-//            for (int i=0; i<self.pageContent.count;i++) {
-//                NSString  *index =[NSString stringWithFormat:@"%d",i];
-//                [self.indexArray  addObject:index];
-//            }
-         
+            
+            //            //存储页面的索引
+            //            for (int i=0; i<self.pageContent.count;i++) {
+            //                NSString  *index =[NSString stringWithFormat:@"%d",i];
+            //                [self.indexArray  addObject:index];
+            //            }
+            
         }
         
-     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-         sharebtn.hidden=YES;
-         [loadView showFailLoadData];
-         
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        sharebtn.hidden=YES;
+        [loadView showFailLoadData];
+        
         NSLog(@"Error: %@", error);
     }];
- }
+}
 
 -(void)reloadDataClick
 {
@@ -315,47 +315,47 @@
 {
     // 设置UIPageViewController的配置项
     /*NSDictionary *options =[NSDictionary dictionaryWithObject:[NSNumber numberWithInteger:UIPageViewControllerSpineLocationMax]
-                                                       forKey: UIPageViewControllerOptionSpineLocationKey];
+     forKey: UIPageViewControllerOptionSpineLocationKey];
+     
+     // 实例化UIPageViewController对象，根据给定的属性
+     self.pageController = [[UIPageViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStyleScroll
+     navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal
+     options: options];
+     // 设置UIPageViewController对象的代理
+     _pageController.dataSource = self;
+     _pageController.delegate=self;
+     // 定义“这本书”的尺寸
+     [[_pageController view] setFrame:[[self view] bounds]];
+     
+     // 让UIPageViewController对象，显示相应的页数据。
+     // UIPageViewController对象要显示的页数据封装成为一个NSArray。
+     // 因为我们定义UIPageViewController对象显示样式为显示一页（options参数指定）。
+     // 如果要显示2页，NSArray中，应该有2个相应页数据。
+     FindDatailViewController *initialViewController =[self viewControllerAtIndex:0];// 得到第一页
+     
+     //初始化的时候记录了当前的第一个viewcontroller  以后每次都在代理里面获取当前的viewcontroller
+     CenterViewController=initialViewController;
+     
+     NSArray *viewControllers =[NSArray arrayWithObject:initialViewController];
+     [_pageController setViewControllers:viewControllers
+     direction:UIPageViewControllerNavigationDirectionForward
+     animated:NO
+     completion:nil];
+     // 在页面上，显示UIPageViewController对象的View
+     [self addChildViewController:_pageController];
+     [[self view] addSubview:[_pageController view]];
+     
+     */
     
-    // 实例化UIPageViewController对象，根据给定的属性
-    self.pageController = [[UIPageViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStyleScroll
-                                                          navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal
-                                                                        options: options];
-    // 设置UIPageViewController对象的代理
-    _pageController.dataSource = self;
-    _pageController.delegate=self;
-    // 定义“这本书”的尺寸
-    [[_pageController view] setFrame:[[self view] bounds]];
     
-    // 让UIPageViewController对象，显示相应的页数据。
-    // UIPageViewController对象要显示的页数据封装成为一个NSArray。
-    // 因为我们定义UIPageViewController对象显示样式为显示一页（options参数指定）。
-    // 如果要显示2页，NSArray中，应该有2个相应页数据。
-    FindDatailViewController *initialViewController =[self viewControllerAtIndex:0];// 得到第一页
+    self.myScrollerView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight-LIKE_BAR_HEIGHT)];
+    self.myScrollerView.backgroundColor =View_BackGround;
+    self.myScrollerView.contentSize = CGSizeMake(kDeviceWidth, kDeviceHeight);
+    [self.view addSubview:self.myScrollerView];
     
-    //初始化的时候记录了当前的第一个viewcontroller  以后每次都在代理里面获取当前的viewcontroller
-    CenterViewController=initialViewController;
-    
-    NSArray *viewControllers =[NSArray arrayWithObject:initialViewController];
-    [_pageController setViewControllers:viewControllers
-                              direction:UIPageViewControllerNavigationDirectionForward
-                               animated:NO
-                             completion:nil];
-    // 在页面上，显示UIPageViewController对象的View
-    [self addChildViewController:_pageController];
-    [[self view] addSubview:[_pageController view]];
-    
-    */
-    
-    
-        self.myScrollerView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight-LIKE_BAR_HEIGHT)];
-        self.myScrollerView.backgroundColor =View_BackGround;
-        self.myScrollerView.contentSize = CGSizeMake(kDeviceWidth, kDeviceHeight);
-        [self.view addSubview:self.myScrollerView];
-
-      self.bgView= [[UIView alloc]initWithFrame:CGRectMake(0, 0,kDeviceWidth,(kDeviceWidth-10)*(9.0/16)+15+35)];
-      self.bgView.backgroundColor=[UIColor whiteColor];
-      [self.myScrollerView addSubview:self.bgView];
+    self.bgView= [[UIView alloc]initWithFrame:CGRectMake(0, 0,kDeviceWidth,(kDeviceWidth-10)*(9.0/16)+15+35)];
+    self.bgView.backgroundColor=[UIColor whiteColor];
+    [self.myScrollerView addSubview:self.bgView];
     
     
     
@@ -366,50 +366,50 @@
     self.ShareView.backgroundColor=[UIColor blackColor];
     [self.bgView addSubview:self.ShareView];
     
-      weiboInfoModel   *weiboInfo =[self.pageContent objectAtIndex:0];
+    weiboInfoModel   *weiboInfo =[self.pageContent objectAtIndex:0];
     
     self.naviTitlLable.text=weiboInfo.stageInfo.movieInfo.name;
     
     
     CGRect  frame = [Function getImageFrameWithwidth:[weiboInfo.stageInfo.width intValue] height:[weiboInfo.stageInfo.height intValue] inset:20];
     
-
     
-//    //计算图片的宽高比
-//    float width = [weiboInfo.stageInfo.width intValue];
-//    float heigth =[weiboInfo.stageInfo.height intValue];
-//    float x;
-//    float y=0;
-//    float w;
-//    float h;
-//    if (heigth/width>KImageWidth_Height&&(heigth/width<1)) { //
-//        x=0;
-//        y=0;
-//        w=kDeviceWidth-20;
-//        h=(kDeviceWidth-20)*(heigth/width);
-//    }
-//    else if (heigth/width<KImageWidth_Height)
-//    {
-//        x=0;
-//        y=0;
-//        w=kDeviceWidth-20;
-//        h=(kDeviceWidth-20)*KImageWidth_Height;
-//    }
-//    else if (heigth/width>1) //高大于宽度的时候  成正方形
-//    {
-//        y =0;
-//        h= kDeviceWidth-20;
-//        w=(kDeviceWidth-20)*(width/heigth);
-//        x=((kDeviceWidth-20)-w)/2;
-//    }
-//    else
-//    {
-//        x=0;
-//        y=0;
-//        w=kDeviceWidth-20;
-//        h=w*(9.0/16);
-//    }
-//
+    
+    //    //计算图片的宽高比
+    //    float width = [weiboInfo.stageInfo.width intValue];
+    //    float heigth =[weiboInfo.stageInfo.height intValue];
+    //    float x;
+    //    float y=0;
+    //    float w;
+    //    float h;
+    //    if (heigth/width>KImageWidth_Height&&(heigth/width<1)) { //
+    //        x=0;
+    //        y=0;
+    //        w=kDeviceWidth-20;
+    //        h=(kDeviceWidth-20)*(heigth/width);
+    //    }
+    //    else if (heigth/width<KImageWidth_Height)
+    //    {
+    //        x=0;
+    //        y=0;
+    //        w=kDeviceWidth-20;
+    //        h=(kDeviceWidth-20)*KImageWidth_Height;
+    //    }
+    //    else if (heigth/width>1) //高大于宽度的时候  成正方形
+    //    {
+    //        y =0;
+    //        h= kDeviceWidth-20;
+    //        w=(kDeviceWidth-20)*(width/heigth);
+    //        x=((kDeviceWidth-20)-w)/2;
+    //    }
+    //    else
+    //    {
+    //        x=0;
+    //        y=0;
+    //        w=kDeviceWidth-20;
+    //        h=w*(9.0/16);
+    //    }
+    //
     self.stageImageView =[[UIImageView alloc]initWithFrame:frame];
     weiboInfoModel *Weibo =[self.pageContent objectAtIndex:0];
     self.stageImageView.contentMode=UIViewContentModeScaleAspectFill;
@@ -419,17 +419,17 @@
     [self.ShareView addSubview:self.stageImageView];
     
     
-   // self.stageImageView.image
+    // self.stageImageView.image
     
-  /*  stageView = [[StageView alloc] initWithFrame:CGRectMake(5,5,kDeviceWidth-10, (kDeviceWidth-10)*(9.0/16))];
-    stageView.isAnimation = YES;
-    stageView.backgroundColor=[UIColor redColor];
-    //stageView.delegate=self;
-   // stageView.stageInfo=self.weiboInfo.stageInfo;
-    // stageView.weibosArray = self.stageInfo.weibosArray;
-    [stageView configStageViewforStageInfoDict];
-    
-    [bgView addSubview:stageView];*/
+    /*  stageView = [[StageView alloc] initWithFrame:CGRectMake(5,5,kDeviceWidth-10, (kDeviceWidth-10)*(9.0/16))];
+     stageView.isAnimation = YES;
+     stageView.backgroundColor=[UIColor redColor];
+     //stageView.delegate=self;
+     // stageView.stageInfo=self.weiboInfo.stageInfo;
+     // stageView.weibosArray = self.stageInfo.weibosArray;
+     [stageView configStageViewforStageInfoDict];
+     
+     [bgView addSubview:stageView];*/
     
     
     
@@ -460,7 +460,7 @@
         markLable.frame=CGRectMake(20, 20,_layerView.frame.size.width-40, 70);
         markLable.font=[UIFont boldSystemFontOfSize:28];
     }
-
+    
     markLable.textColor=[UIColor whiteColor];
     markLable.text=Weibo.content;
     markLable.lineBreakMode=NSLineBreakByCharWrapping;
@@ -478,11 +478,11 @@
     [self createUserView];
     
     [self createLikeBar];
-
     
-
     
-  }
+    
+    
+}
 //创建中间的用户视图
 -(void)createUserView
 {
@@ -493,56 +493,56 @@
     
     self.bgView.frame=CGRectMake(0, 0,kDeviceWidth, self.UserView.frame.origin.y+self.UserView.frame.size.height+0);
     
-     //创建头像按钮
-     leftButtomButton=[UIButton buttonWithType:UIButtonTypeCustom];
-     leftButtomButton.frame=CGRectMake(10, 5,5, 35);
-     //[leftButtomButton addTarget:self action:@selector(userHeadClick:) forControlEvents:UIControlEventTouchUpInside];
-     //leftButtomButton.backgroundColor =[UIColor redColor];
+    //创建头像按钮
+    leftButtomButton=[UIButton buttonWithType:UIButtonTypeCustom];
+    leftButtomButton.frame=CGRectMake(10, 5,5, 35);
+    //[leftButtomButton addTarget:self action:@selector(userHeadClick:) forControlEvents:UIControlEventTouchUpInside];
+    //leftButtomButton.backgroundColor =[UIColor redColor];
     [self.UserView addSubview:leftButtomButton];
     
-     weiboInfoModel   *weiboInfo =[self.pageContent objectAtIndex:self.pageIndex];
-     headLogoImageView=[[UIImageView alloc]initWithFrame:CGRectMake(0,0,30, 30)];
-     headLogoImageView.layer.cornerRadius=15;
-     NSString  *uselogoString =[NSString stringWithFormat:@"%@%@!thumb",kUrlAvatar,weiboInfo.uerInfo.logo];
-     [headLogoImageView sd_setImageWithURL:[NSURL URLWithString:uselogoString] placeholderImage:[UIImage imageNamed:@"user_normal.png"]];
-     headLogoImageView.layer.masksToBounds = YES;
-     [leftButtomButton addSubview:headLogoImageView];
+    weiboInfoModel   *weiboInfo =[self.pageContent objectAtIndex:self.pageIndex];
+    headLogoImageView=[[UIImageView alloc]initWithFrame:CGRectMake(0,0,30, 30)];
+    headLogoImageView.layer.cornerRadius=15;
+    NSString  *uselogoString =[NSString stringWithFormat:@"%@%@!thumb",kUrlAvatar,weiboInfo.uerInfo.logo];
+    [headLogoImageView sd_setImageWithURL:[NSURL URLWithString:uselogoString] placeholderImage:[UIImage imageNamed:@"user_normal.png"]];
+    headLogoImageView.layer.masksToBounds = YES;
+    [leftButtomButton addSubview:headLogoImageView];
     
-     userNameLable =[[UILabel alloc]initWithFrame:CGRectMake(35,12,5, 30)];
-     userNameLable.font=[UIFont systemFontOfSize:16];
-     userNameLable.textColor=VGray_color;
-     //movieNameLable.text=self.stageInfo.movieInfo.name;
-     // movieNameLable.numberOfLines=1;
-     userNameLable.lineBreakMode=NSLineBreakByTruncatingTail;
-     [leftButtomButton addSubview:userNameLable];
-     
-     
-     NSString  *nameStr=weiboInfo.uerInfo.username;
-     CGSize  Nsize =[nameStr boundingRectWithSize:CGSizeMake(100, 27) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:[NSDictionary dictionaryWithObject:userNameLable.font forKey:NSFontAttributeName] context:nil].size;
-     userNameLable.frame=CGRectMake(35,0, Nsize.width+4, 30);
-      leftButtomButton.frame=CGRectMake(10,5, 30+5+userNameLable.frame.size.width, 27);
-     userNameLable.text=[NSString stringWithFormat:@"%@",nameStr];
-     
-     //喜欢的按钮
-     UIButton * like_btn =[ZCControl createButtonWithFrame:CGRectMake(kStageWidth-70,5,70,25) ImageName:nil Target:self Action:nil Title:@""];
-     like_btn.backgroundColor=View_BackGround;
-     [self.UserView addSubview:like_btn];
-     
-     starImageView=[[UIImageView alloc]initWithFrame:CGRectMake(10, 8, 14,12)];
-     starImageView.image =[UIImage imageNamed:@"like_nomoal.png"];
-     [like_btn addSubview:starImageView];
-     
-     Like_lable =[ZCControl createLabelWithFrame:CGRectMake(20,0,40, 25) Font:14 Text:@""];
-     Like_lable.textColor=VGray_color;
-     Like_lable.textAlignment=NSTextAlignmentCenter;
-     if ([weiboInfo.like_count intValue]==0) {
-     Like_lable.text=[NSString stringWithFormat:@"喜欢"];
-     }
-     else
-     {
-     Like_lable.text=[NSString stringWithFormat:@"%@",weiboInfo.like_count];
-     }
-     [like_btn addSubview:Like_lable];
+    userNameLable =[[UILabel alloc]initWithFrame:CGRectMake(35,12,5, 30)];
+    userNameLable.font=[UIFont systemFontOfSize:16];
+    userNameLable.textColor=VGray_color;
+    //movieNameLable.text=self.stageInfo.movieInfo.name;
+    // movieNameLable.numberOfLines=1;
+    userNameLable.lineBreakMode=NSLineBreakByTruncatingTail;
+    [leftButtomButton addSubview:userNameLable];
+    
+    
+    NSString  *nameStr=weiboInfo.uerInfo.username;
+    CGSize  Nsize =[nameStr boundingRectWithSize:CGSizeMake(100, 27) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:[NSDictionary dictionaryWithObject:userNameLable.font forKey:NSFontAttributeName] context:nil].size;
+    userNameLable.frame=CGRectMake(35,0, Nsize.width+4, 30);
+    leftButtomButton.frame=CGRectMake(10,5, 30+5+userNameLable.frame.size.width, 27);
+    userNameLable.text=[NSString stringWithFormat:@"%@",nameStr];
+    
+    //喜欢的按钮
+    UIButton * like_btn =[ZCControl createButtonWithFrame:CGRectMake(kStageWidth-70,5,70,25) ImageName:nil Target:self Action:nil Title:@""];
+    like_btn.backgroundColor=View_BackGround;
+    [self.UserView addSubview:like_btn];
+    
+    starImageView=[[UIImageView alloc]initWithFrame:CGRectMake(10, 8, 14,12)];
+    starImageView.image =[UIImage imageNamed:@"like_nomoal.png"];
+    [like_btn addSubview:starImageView];
+    
+    Like_lable =[ZCControl createLabelWithFrame:CGRectMake(20,0,40, 25) Font:14 Text:@""];
+    Like_lable.textColor=VGray_color;
+    Like_lable.textAlignment=NSTextAlignmentCenter;
+    if ([weiboInfo.like_count intValue]==0) {
+        Like_lable.text=[NSString stringWithFormat:@"喜欢"];
+    }
+    else
+    {
+        Like_lable.text=[NSString stringWithFormat:@"%@",weiboInfo.like_count];
+    }
+    [like_btn addSubview:Like_lable];
     
 }
 #pragma  mark 创建底部的点击喜欢和不喜欢的按钮----
@@ -560,25 +560,25 @@
     [btn1 setTitleColor:VGray_color forState:UIControlStateNormal];
     btn1.tag=99;
     [btn1 addActionHandler:^(NSInteger tag) {
-       
+        
         if (self.pageContent.count>self.pageIndex) {
             weiboInfoModel   *weiboInfo =[self.pageContent objectAtIndex:self.pageIndex];
-             [self LikeRequstData:weiboInfo withOperation:@1];
-          }
+            [self LikeRequstData:weiboInfo withOperation:@1];
+        }
         else
         {
             [self.view addSubview:loadView];
             sharebtn.hidden=YES;
             [loadView showNullView:@"已经开完了..."];
         }
- 
+        
     }];
     [btn1 setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color.png"] forState:UIControlStateNormal];
     btn1.backgroundColor=[UIColor whiteColor];
     [_toolView addSubview:btn1];
     
     
-   // UIButton  *btn2=[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth/2, 0, kDeviceWidth/2, 50) ImageName:nil Target:self Action:@selector(likeBtnClick:) Title:@"没感觉"];
+    // UIButton  *btn2=[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth/2, 0, kDeviceWidth/2, 50) ImageName:nil Target:self Action:@selector(likeBtnClick:) Title:@"没感觉"];
     UIButton  *btn2 =[UIButton buttonWithType:UIButtonTypeCustom];
     btn2.frame=CGRectMake(kDeviceWidth/2, 0, kDeviceWidth/2, LIKE_BAR_HEIGHT);
     [btn2 setTitle:@"没感觉" forState:UIControlStateNormal];
@@ -587,8 +587,8 @@
         
         if (self.pageContent.count>self.pageIndex) {
             weiboInfoModel   *weiboInfo =[self.pageContent objectAtIndex:self.pageIndex];
-                 //没感觉
-                [self disLikeRequstData:weiboInfo];
+            //没感觉
+            [self disLikeRequstData:weiboInfo];
         }
         else
         {
@@ -596,7 +596,7 @@
             sharebtn.hidden=YES;
             [loadView showNullView:@"已经开完了..."];
         }
-
+        
     }];
     [btn2 setTitleColor:VGray_color forState:UIControlStateNormal];
     btn2.backgroundColor=[UIColor whiteColor];
@@ -610,106 +610,106 @@
     
 }
 /*
--(void)likeBtnClick:(UIButton *) btn
-{
-    
-    if (self.pageContent.count>self.pageIndex) {
-       weiboInfoModel   *weiboInfo =[self.pageContent objectAtIndex:self.pageIndex];
-        
-      if (btn.tag==99) {
-        //喜欢
-        [self LikeRequstData:weiboInfo withOperation:@1];
-       
-       }
-       else if (btn.tag==100)
-       {
-        //没感觉
-          [self disLikeRequstData:weiboInfo];
-        }
-    }
-    else
-    {
-        [self.view addSubview:loadView];
-        sharebtn.hidden=YES;
-        [loadView showNullView:@"已经开完了..."];
-    }
+ -(void)likeBtnClick:(UIButton *) btn
+ {
  
-
-}*/
+ if (self.pageContent.count>self.pageIndex) {
+ weiboInfoModel   *weiboInfo =[self.pageContent objectAtIndex:self.pageIndex];
+ 
+ if (btn.tag==99) {
+ //喜欢
+ [self LikeRequstData:weiboInfo withOperation:@1];
+ 
+ }
+ else if (btn.tag==100)
+ {
+ //没感觉
+ [self disLikeRequstData:weiboInfo];
+ }
+ }
+ else
+ {
+ [self.view addSubview:loadView];
+ sharebtn.hidden=YES;
+ [loadView showNullView:@"已经开完了..."];
+ }
+ 
+ 
+ }*/
 
 
 //根据下标值获取上一个控制器或者下一个控制器  得到相应的VC对象
 /*- (FindDatailViewController *)viewControllerAtIndex:(NSUInteger)index {
-    if (([self.pageContent count] == 0) || (index >= [self.pageContent count])) {
-        return nil;
-    }
-    // 创建一个新的控制器类，并且分配给相应的数据
-   FindDatailViewController * dataViewController =[[FindDatailViewController alloc] init];
-    dataViewController.weiboInfo=[self.pageContent objectAtIndex:index];
-    dataViewController.index=[self.indexArray objectAtIndex:index];
-      return dataViewController;
-}
- // 根据数组元素值，得到下标值
-- (NSUInteger)indexOfViewController:(FindDatailViewController *)viewController {
-    FindDatailViewController *dataViewController=(FindDatailViewController *)viewController;
-    
-    
-    return [self.indexArray indexOfObject:dataViewController.index];
+ if (([self.pageContent count] == 0) || (index >= [self.pageContent count])) {
+ return nil;
  }
-*/
+ // 创建一个新的控制器类，并且分配给相应的数据
+ FindDatailViewController * dataViewController =[[FindDatailViewController alloc] init];
+ dataViewController.weiboInfo=[self.pageContent objectAtIndex:index];
+ dataViewController.index=[self.indexArray objectAtIndex:index];
+ return dataViewController;
+ }
+ // 根据数组元素值，得到下标值
+ - (NSUInteger)indexOfViewController:(FindDatailViewController *)viewController {
+ FindDatailViewController *dataViewController=(FindDatailViewController *)viewController;
+ 
+ 
+ return [self.indexArray indexOfObject:dataViewController.index];
+ }
+ */
 
 // 返回上一个ViewController对象
 /*- (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(UIViewController *)viewController{
-    //获取当前控制器
-    
-    CenterViewController =(FindDatailViewController *)viewController;
-    
-    NSUInteger index = [self indexOfViewController:(FindDatailViewController *)viewController];
-    if ((index == 0) || (index == NSNotFound)) {
-        return nil;
-    }
-    index--;
-    // 返回的ViewController，将被添加到相应的UIPageViewController对象上。
-    // UIPageViewController对象会根据UIPageViewControllerDataSource协议方法，自动来维护次序。
-    // 不用我们去操心每个ViewController的顺序问题。
-    
-    return [self viewControllerAtIndex:index];
-    
-}
-
-
-
-// 返回下一个ViewController对象
-- (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController{
-    
-    CenterViewController =(FindDatailViewController *)viewController;
-    NSUInteger index = [self indexOfViewController:(FindDatailViewController *)viewController];
-    
-    if (index == NSNotFound) {
-        return nil;
-    }
-    index++;
-    if (index == [self.pageContent count]) {
-        return nil;
-    }
-    return [self viewControllerAtIndex:index];
-    
-    
-}
-*/
+ //获取当前控制器
+ 
+ CenterViewController =(FindDatailViewController *)viewController;
+ 
+ NSUInteger index = [self indexOfViewController:(FindDatailViewController *)viewController];
+ if ((index == 0) || (index == NSNotFound)) {
+ return nil;
+ }
+ index--;
+ // 返回的ViewController，将被添加到相应的UIPageViewController对象上。
+ // UIPageViewController对象会根据UIPageViewControllerDataSource协议方法，自动来维护次序。
+ // 不用我们去操心每个ViewController的顺序问题。
+ 
+ return [self viewControllerAtIndex:index];
+ 
+ }
+ 
+ 
+ 
+ // 返回下一个ViewController对象
+ - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController{
+ 
+ CenterViewController =(FindDatailViewController *)viewController;
+ NSUInteger index = [self indexOfViewController:(FindDatailViewController *)viewController];
+ 
+ if (index == NSNotFound) {
+ return nil;
+ }
+ index++;
+ if (index == [self.pageContent count]) {
+ return nil;
+ }
+ return [self viewControllerAtIndex:index];
+ 
+ 
+ }
+ */
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end

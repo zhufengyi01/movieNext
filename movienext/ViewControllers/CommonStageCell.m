@@ -25,9 +25,9 @@
 -(void)CreateUI
 {
     self.backgroundColor=View_BackGround;
-     BgView =[[UIImageView alloc]initWithFrame:CGRectMake(5, 5, kDeviceWidth-10, kStageWidth+45)];
+    BgView =[[UIImageView alloc]initWithFrame:CGRectMake(5, 5, kDeviceWidth-10, kStageWidth+45)];
     
-     BgView.clipsToBounds=YES;
+    BgView.clipsToBounds=YES;
     BgView.layer.cornerRadius=4;
     BgView.clipsToBounds=YES;
     BgView.userInteractionEnabled=YES;
@@ -37,9 +37,9 @@
     //[self CreateTopView];
     //中间的stageview 视图
     [self CreateSatageView];
-      //底部视图
+    //底部视图
     [self createButtomView];
-  
+    
 }
 -(void)CreateTopView
 {
@@ -55,12 +55,12 @@
 {
     _stageView=[[StageView alloc]initWithFrame:CGRectMake(0,0, kStageWidth, kStageWidth)];
     _stageView.backgroundColor=VStageView_color;
-   // _stageView.layer.cornerRadius=4;
+    // _stageView.layer.cornerRadius=4;
     //_stageView.clipsToBounds=YES;
     _stageView.delegate=self;
     _stageView.userInteractionEnabled=YES;
     [BgView addSubview:_stageView];
-  
+    
 }
 
 -(void)createButtomView
@@ -69,7 +69,7 @@
     //改变toolar 的颜色
     BgView2.backgroundColor=View_ToolBar;
     [BgView addSubview:BgView2];
- 
+    
     leftButtomButton=[UIButton buttonWithType:UIButtonTypeCustom];
     leftButtomButton.frame=CGRectMake(10, 9, 140, 27);
     [leftButtomButton addTarget:self action:@selector(cellButtonClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -89,35 +89,35 @@
     movieNameLable.lineBreakMode=NSLineBreakByTruncatingTail;
     [leftButtomButton addSubview:movieNameLable];
     
-   
+    
     
     //更多
     moreButton=[ZCControl createButtonWithFrame:CGRectMake(kStageWidth-135, 9, 30, 25) ImageName:@"more_icon_default.png" Target:self Action:@selector(cellButtonClick:) Title:@""];
     //moreButton.backgroundColor=VBlue_color;
     moreButton.layer.cornerRadius=2;
-     moreButton.hidden=NO;
+    moreButton.hidden=NO;
     [BgView2 addSubview:moreButton];
     
     
     //分享
     ScreenButton =[ZCControl createButtonWithFrame:CGRectMake(kStageWidth-95,9,30,25) ImageName:@"btn_share_default.png" Target:self Action:@selector(cellButtonClick:) Title:@""];
-   // [ScreenButton setBackgroundImage:[UIImage imageNamed:@"btn_share_select.png"] forState:UIControlStateHighlighted];
+    // [ScreenButton setBackgroundImage:[UIImage imageNamed:@"btn_share_select.png"] forState:UIControlStateHighlighted];
     [ScreenButton setBackgroundImage:[UIImage imageNamed:@"btn_share_select.png"] forState:UIControlStateNormal];
     [BgView2 addSubview:ScreenButton];
-
-     _tanlogoButton =[UIButton buttonWithType:UIButtonTypeCustom];
+    
+    _tanlogoButton =[UIButton buttonWithType:UIButtonTypeCustom];
     _tanlogoButton.frame=CGRectMake(kStageWidth-100, 9, 45, 25);
     [_tanlogoButton setImage:[UIImage imageNamed:@"closed_icon_default.png"] forState:UIControlStateNormal];
     [_tanlogoButton setImage:[UIImage imageNamed:@"open_danmu.png.png"] forState:UIControlStateSelected];
     [_tanlogoButton addTarget:self action:@selector(hidenAndShowMarkView:) forControlEvents:UIControlEventTouchUpInside];
-   // [BgView2 addSubview:_tanlogoButton];
-
+    // [BgView2 addSubview:_tanlogoButton];
+    
     //添加弹幕
     addMarkButton =[ZCControl createButtonWithFrame:CGRectMake(kStageWidth-55,9,45,25) ImageName:@"btn_add_default.png" Target:self Action:@selector(cellButtonClick:) Title:@""];
     [addMarkButton setBackgroundImage:[UIImage imageNamed:@"btn_add_select.png"] forState:UIControlStateHighlighted];
     [BgView2 addSubview:addMarkButton];
     
-
+    
     //底部2像素的投影
     UIImageView *lineImage =[[UIImageView alloc]initWithFrame:CGRectMake(0,44, kDeviceWidth, 2)];
     lineImage.image=[UIImage imageNamed:@"cell_buttom_line.png"];
@@ -136,17 +136,17 @@
     moreButton.tag=6000;
     
 #pragma mark  configDatawithSatgeView------------------------------
-   //单个标签的时候用这个
-     if (self.weiboInfo) {
-         _stageView.weiboinfo = self.weiboInfo;
-     }
+    //单个标签的时候用这个
+    if (self.weiboInfo) {
+        _stageView.weiboinfo = self.weiboInfo;
+    }
     // 多个标签用这个
-     if (self.weibosArray.count>0) {
-         _stageView.weibosArray = self.weibosArray;
-     }
+    if (self.weibosArray.count>0) {
+        _stageView.weibosArray = self.weibosArray;
+    }
     _stageView.stageInfo=self.stageInfo;
     [_stageView configStageViewforStageInfoDict];
-
+    
 #pragma  mark 通用的cell底部数据的设置
     //设置底部
     if (self.stageInfo.movieInfo.name) {  //电影名字，s这里设置title 偏移
@@ -156,7 +156,7 @@
         CGSize  Nsize =[nameStr boundingRectWithSize:CGSizeMake(nameW, 27) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:[NSDictionary dictionaryWithObject:movieNameLable.font forKey:NSFontAttributeName] context:nil].size;
         movieNameLable.frame=CGRectMake(35, 0, Nsize.width+4, 27);
         leftButtomButton.frame=CGRectMake(10, 9, 30+5+movieNameLable.frame.size.width, 27);
-         movieNameLable.text=[NSString stringWithFormat:@"%@",nameStr];
+        movieNameLable.text=[NSString stringWithFormat:@"%@",nameStr];
     }
     
     if (self.stageInfo.movieInfo.logo) {
@@ -164,13 +164,13 @@
         [MovieLogoImageView sd_setImageWithURL:[NSURL URLWithString:logoString] placeholderImage:[UIImage imageNamed:@"loading_image_all.png"]];
     }
     
-   // leftButtomButton.frame=
+    // leftButtomButton.frame=
     
     
 #pragma  mark  根据不同cell 配置cell 的样式------------------------------
 #pragma  mark  热门cell
     if (_pageType==NSPageSourceTypeMainHotController||_pageType==NSPageSourceTypeMainNewController) {  //热门
-         _stageView.isAnimation = YES;
+        _stageView.isAnimation = YES;
         
     }
 #pragma mark 首页最新,我的添加，赞 cell
@@ -179,7 +179,7 @@
         if (_pageType==NSPageSourceTypeMainNewController) {
             
         }
-         _stageView.isAnimation=NO;
+        _stageView.isAnimation=NO;
         if (_pageType==NSPageSourceTypeMyupedViewController) {
             moreButton.hidden=YES;
         }
@@ -225,7 +225,7 @@
     
     if (isShow==NO) {
         NSLog(@"执行了隐藏 view ");
-          for (id view  in self.stageView.subviews) {
+        for (id view  in self.stageView.subviews) {
             if  ([view isKindOfClass:[MarkView class]]) {
                 MarkView  *mv =(MarkView *)view;
                 mv.hidden=YES;
@@ -235,7 +235,7 @@
     else if (isShow==YES)
     {
         NSLog(@"执行了显示view ");
-         for (id   view  in self.stageView.subviews) {
+        for (id   view  in self.stageView.subviews) {
             if  ([view isKindOfClass:[MarkView class]]) {
                 MarkView  *mv =(MarkView *)view;
                 mv.hidden=NO;
@@ -267,14 +267,14 @@
 //        if (self.delegate&&[self.delegate respondsToSelector:@selector(commonStageCellLoogPressClickindex:)]) {
 //            [self.delegate commonStageCellLoogPressClickindex:pressview.tag];
 //        }
-//        
+//
 //    }
-//    
+//
 //}
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
-
+    
     // Configure the view for the selected state
 }
 

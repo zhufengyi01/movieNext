@@ -12,15 +12,15 @@
 @implementation Like_HUB
 
 /*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
-}
-*/
+ // Only override drawRect: if you perform custom drawing.
+ // An empty implementation adversely affects performance during animation.
+ - (void)drawRect:(CGRect)rect {
+ // Drawing code
+ }
+ */
 -(instancetype)initWithTitle:(NSString *)message WithImage:(UIImage *) image
 {
- 
+    
     if (self=[super init]) {
         self.frame=CGRectMake(0, 0, kDeviceWidth, kDeviceHeight);
         self.backgroundColor =[[UIColor blackColor] colorWithAlphaComponent:0.01];
@@ -40,11 +40,11 @@
 }
 -(void)show
 {
-     [AppView addSubview:self];
+    [AppView addSubview:self];
     
-     [UIView animateWithDuration:0.2 animations:^{
+    [UIView animateWithDuration:0.2 animations:^{
         self.hubimageView.alpha=1;
-
+        
     } completion:^(BOOL finished) {
         [self performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.6];
     }];

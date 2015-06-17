@@ -39,7 +39,7 @@
     //默认是审核版
     [[UILabel appearance] setFont:[UIFont fontWithName:@"FZLTHK—GBK1-0" size:20]];
     [UIButton appearance].titleLabel.font =[UIFont fontWithName:@"FZLTHK—GBK1-0" size:20];
-
+    
     self.IS_CHECK=@"1";
     //初始化友盟组件
     [self initUmeng];
@@ -48,7 +48,7 @@
     // NSString  *is_App_Check = [MobClick getConfigParams:@"First_Start_Image"];
     //判断是否是审核
     [self requestisReview];
-     self.window.backgroundColor=[UIColor whiteColor];
+    self.window.backgroundColor=[UIColor whiteColor];
     //自动显示和隐藏请求时的状态提示
     [[AFNetworkActivityIndicatorManager sharedManager] setEnabled:YES];
     return YES;
@@ -56,8 +56,8 @@
 
 -(void)createRootViewController:(NSString *) is_App_Check
 {
-
- 
+    
+    
 #pragma mark  判断是否是审核版
     if ([is_App_Check intValue] ==1) {//是否是审核版 yes表示是非审核版，走正常的路线，审核版的话直接走非启动页
         // 不需要启动图
@@ -67,7 +67,7 @@
     else {
         NSDictionary  *userInfo=[[NSUserDefaults  standardUserDefaults] objectForKey:kUserKey];
         NSString      *firstlogin =[[NSUserDefaults standardUserDefaults] objectForKey:IS_FIRST_LOGIN];
-
+        
         //firstlogin = @"NO";
         if (![firstlogin isEqualToString:@"YES"]) {//是第一次进入应用
             [[NSUserDefaults standardUserDefaults] setObject:@"YES" forKey:IS_FIRST_LOGIN];
@@ -106,7 +106,7 @@
     // 您可以设置在应用切入后台时，是否进入background模式。
     //对于支持backgound模式的APP，SDK可以确保在进入后台时，完成对日志的持久化工作，保证数据的完整性。您可以通过以下方法对后台模式进行设置：
     [MobClick setBackgroundTaskEnabled:YES];
-
+    
     [UMSocialData setAppKey:kUmengKey];
     //    BOOL isOauth = [UMSocialAccountManager isOauthWithPlatform:UMShareToSina];
     //    LOG(@"isoauth = %d", isOauth);
@@ -127,12 +127,12 @@
 -(void)requestisReview
 {
 #warning 提交审核的时候需要开启
-   
-     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     NSString *urlString =[NSString stringWithFormat:@"%@/user/review-mode", kApiBaseUrl];
     [manager POST:urlString parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
-         if ([responseObject objectForKey:@"code"]) {
+        if ([responseObject objectForKey:@"code"]) {
             self.IS_CHECK=[responseObject objectForKey:@"code"];
         }
         UserDataCenter  *user =[UserDataCenter shareInstance];

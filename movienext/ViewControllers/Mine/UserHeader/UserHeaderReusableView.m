@@ -18,10 +18,10 @@
         userCenter =[UserDataCenter shareInstance];
         buttonStateDict=[[NSMutableDictionary alloc]init];
         [buttonStateDict setObject:@"100" forKey:@"YES"];
-
+        
         self.backgroundColor =[UIColor clearColor];
-
-
+        
+        
         [self createUI];
     }
     return self;
@@ -32,7 +32,7 @@
     //创建基本ui
     UIView *viewHeader = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, 130)];
     viewHeader.backgroundColor =[UIColor whiteColor];
-    [self addSubview:viewHeader];    
+    [self addSubview:viewHeader];
     //头像
     int ivAvatarWidth = 50;
     ivAvatar = [[UIImageView alloc] initWithFrame:CGRectMake(20, 20, ivAvatarWidth, ivAvatarWidth)];
@@ -90,11 +90,11 @@
     lblBrief.numberOfLines=0;
     lblBrief.font = [UIFont systemFontOfSize:14];
     
-   /// CGSize  Msize= [signature boundingRectWithSize:CGSizeMake(kDeviceWidth-80, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:lblBrief.font forKey:NSFontAttributeName] context:nil].size;
+    /// CGSize  Msize= [signature boundingRectWithSize:CGSizeMake(kDeviceWidth-80, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:lblBrief.font forKey:NSFontAttributeName] context:nil].size;
     lblBrief.textColor = VGray_color;
     // lblBrief.backgroundColor = [UIColor orangeColor];
     //lblBrief.text=signature;
-  //  lblBrief.frame=CGRectMake(ivAvatar.frame.origin.x+ivAvatar.frame.size.width+10,lblCount.frame.origin.y+lblCount.frame.size.height+10, kDeviceWidth-ivAvatar.frame.origin.x-ivAvatar.frame.size.width-20, Msize.height);
+    //  lblBrief.frame=CGRectMake(ivAvatar.frame.origin.x+ivAvatar.frame.size.width+10,lblCount.frame.origin.y+lblCount.frame.size.height+10, kDeviceWidth-ivAvatar.frame.origin.x-ivAvatar.frame.size.width-20, Msize.height);
     [viewHeader addSubview:lblBrief];
     
     
@@ -108,7 +108,7 @@
         [addButton setSelected:NO];
     }
     addButton.titleLabel.font=[UIFont systemFontOfSize:16];
-     addButton.tag=100;
+    addButton.tag=100;
     [viewHeader addSubview:addButton];
     
     
@@ -129,7 +129,7 @@
     zanButton.titleLabel.font=[UIFont systemFontOfSize:16];
     zanButton.tag=101;
     [viewHeader addSubview:zanButton];
-     //修改了loadview的frame
+    //修改了loadview的frame
     float  y=zanButton.frame.origin.y+zanButton.frame.size.height;
     viewHeader.frame=CGRectMake(0, 0, kDeviceWidth,addButton.frame.origin.y+addButton.frame.size.height);
 }
@@ -144,18 +144,18 @@
     imageURL =[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kUrlAvatar,userInfo.logo]];
     [ivAvatar sd_setImageWithURL:imageURL placeholderImage:[UIImage imageNamed:@"user_normal.png"]];
     //用户名
-         lblUsername.text=[NSString stringWithFormat:@"%@",userInfo.username];
+    lblUsername.text=[NSString stringWithFormat:@"%@",userInfo.username];
     //添加的数量
-         lblCount.text=[NSString stringWithFormat:@"%@",userInfo.weibo_count];
+    lblCount.text=[NSString stringWithFormat:@"%@",userInfo.weibo_count];
     lblZanCout.text =[NSString stringWithFormat:@"%@",userInfo.liked_count];
-     lblBrief.text=userInfo.brief;
+    lblBrief.text=userInfo.brief;
     
     
 }
 
 -(void)dealSegmentClick:(UIButton *) button
 {
-      [buttonStateDict setObject:[NSString stringWithFormat:@"%d",button.tag] forKey:@"YES"];
+    [buttonStateDict setObject:[NSString stringWithFormat:@"%d",button.tag] forKey:@"YES"];
     if ([[buttonStateDict objectForKey:@"YES"] isEqualToString:@"100"]) {
         
         [addButton  setSelected:YES];
@@ -166,18 +166,18 @@
         [zanButton setSelected:YES];
     }
     
-  
-     if (self.delegate &&[self.delegate respondsToSelector:@selector(changeCollectionHandClick:)]) {
+    
+    if (self.delegate &&[self.delegate respondsToSelector:@selector(changeCollectionHandClick:)]) {
         [self.delegate changeCollectionHandClick:button];
     }
 }
 -(void)longPressHead:(UITapGestureRecognizer *) tap
 {
     if (tap.state==UIGestureRecognizerStateBegan) {
-    //长按变身
-      if (self.delegate && [self.delegate respondsToSelector:@selector(changeUserHandClick)]) {
-        [self.delegate changeUserHandClick];
-     }
+        //长按变身
+        if (self.delegate && [self.delegate respondsToSelector:@selector(changeUserHandClick)]) {
+            [self.delegate changeUserHandClick];
+        }
     }
 }
 

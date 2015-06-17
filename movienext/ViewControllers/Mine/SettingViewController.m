@@ -45,18 +45,18 @@
     titleLable.font=[UIFont boldSystemFontOfSize:16];
     titleLable.textAlignment=NSTextAlignmentCenter;
     self.navigationItem.titleView=titleLable;
-
+    
     UserDataCenter  *userCenter =[UserDataCenter shareInstance];
-   if ([userCenter.is_admin intValue ]>0) {
-    UIButton  *button=[UIButton buttonWithType:UIButtonTypeCustom];
-    [button setTitle:@"管理员" forState:UIControlStateNormal];
-    [button setTitleEdgeInsets:UIEdgeInsetsMake(0, 10, 0, -10)];
-   // [button setBackgroundImage:[UIImage imageNamed:@"setting.png"] forState:UIControlStateNormal];
-    [button setTitleColor:VBlue_color forState:UIControlStateNormal];
-    button.frame=CGRectMake(0, 0, 60, 40);
-    [button addTarget:self action:@selector(adminClick:) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem  *barButton=[[UIBarButtonItem alloc]initWithCustomView:button];
-   // self.navigationItem.rightBarButtonItem=barButton;
+    if ([userCenter.is_admin intValue ]>0) {
+        UIButton  *button=[UIButton buttonWithType:UIButtonTypeCustom];
+        [button setTitle:@"管理员" forState:UIControlStateNormal];
+        [button setTitleEdgeInsets:UIEdgeInsetsMake(0, 10, 0, -10)];
+        // [button setBackgroundImage:[UIImage imageNamed:@"setting.png"] forState:UIControlStateNormal];
+        [button setTitleColor:VBlue_color forState:UIControlStateNormal];
+        button.frame=CGRectMake(0, 0, 60, 40);
+        [button addTarget:self action:@selector(adminClick:) forControlEvents:UIControlEventTouchUpInside];
+        UIBarButtonItem  *barButton=[[UIBarButtonItem alloc]initWithCustomView:button];
+        // self.navigationItem.rightBarButtonItem=barButton;
     }
     self.view.backgroundColor=View_BackGround;
     appdelegate = [[UIApplication sharedApplication]delegate ];
@@ -84,9 +84,9 @@
 }
 -(void)createOutLogin
 {
- 
+    
     UIButton  *button=[UIButton buttonWithType:UIButtonTypeCustom];
-  //  [button setTitle:@"退出此账号" forState:UIControlStateNormal];
+    //  [button setTitle:@"退出此账号" forState:UIControlStateNormal];
     [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     button.titleLabel.font=[UIFont systemFontOfSize:14];
     [button setBackgroundImage:[UIImage imageNamed:@"login out.png"] forState:UIControlStateNormal];
@@ -95,7 +95,7 @@
     button.layer.cornerRadius=3;
     button.clipsToBounds=YES;
     [self.view addSubview:button];
-
+    
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -115,7 +115,7 @@
         cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
     }
     cell.textLabel.font =[UIFont systemFontOfSize:14];
-  //  cell.textColor =VGray_color;
+    //  cell.textColor =VGray_color;
     cell.textLabel.textColor=VGray_color;
     cell.textLabel.text=[_dataArray  objectAtIndex:indexPath.row];
     return cell;
@@ -131,13 +131,13 @@
         [self.navigationController pushViewController:vc animated:YES];
         
     }
-     else if (indexPath.row==1) {
-          [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeApp;
-          [UMSocialSnsService presentSnsIconSheetView:self
+    else if (indexPath.row==1) {
+        [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeApp;
+        [UMSocialSnsService presentSnsIconSheetView:self
                                              appKey:kUmengKey
                                           shareText:@"电影卡片"
                                          shareImage:[UIImage imageNamed:@"movieCard_icon.png"]
- 
+         
                                     shareToSnsNames:[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQzone, UMShareToSina, nil]
                                            delegate:self];
     } else if (indexPath.row==2) {
@@ -166,14 +166,14 @@
     userCenter.username=nil;
     userCenter.logo =nil;
     userCenter.signature=nil;
-     NSUserDefaults  *userDefualt=[NSUserDefaults standardUserDefaults];
+    NSUserDefaults  *userDefualt=[NSUserDefaults standardUserDefaults];
     [userDefualt removeObjectForKey:kUserKey];
     [userDefualt synchronize];
     
     //window.rootViewController=[LoginViewController new];
     UINavigationController  *loginNa=[[UINavigationController alloc]initWithRootViewController:[LoginViewController new]];
     window.rootViewController=loginNa;
-
+    
     
 }
 - (void)didReceiveMemoryWarning {

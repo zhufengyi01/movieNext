@@ -23,7 +23,7 @@ typedef  NS_ENUM(NSInteger,NSStagePapeType)
     NSStagePapeTypeStageList,  //电影列表页
     
     //首页热门
-    NSStagePapeTypeHotStageList, //首页热门列表 
+    NSStagePapeTypeHotStageList, //首页热门列表
     
     //管理管功能列表页
     NSStagePapeTypeAdmin_New_Add,  //最新添加
