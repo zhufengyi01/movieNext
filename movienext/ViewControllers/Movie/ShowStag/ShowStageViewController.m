@@ -134,30 +134,13 @@
     ///[admOper setTitle:@"管" forState:UIControlStateNormal];
     [admOper setImage:[UIImage imageNamed:@"guanliyuan_detail"] forState:UIControlStateNormal];
     [admOper setTitleColor:VBlue_color forState:UIControlStateNormal];
+    
+    
     [admOper  addActionHandler:^(NSInteger tag) {
         //管理员
-        if (weakSelf.pageType==NSStagePapeTypeAdmin_New_Add
-            || weakSelf.pageType==NSStagePapeTypeAdmin_Close_Weibo
-            || weakSelf.pageType==NSStagePapeTypeAdmin_Dscorver
-            || weakSelf.pageType==NSStagePapeTypeAdmin_Recommed
-            || weakSelf.pageType==NSStagePapeTypeAdmin_Timing
-            || weakSelf.pageType==NSStagePapeTypeAdmin_Not_Review) {
-            UIActionSheet  *al =[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"确定" destructiveButtonTitle:nil otherButtonTitles:@"[发送到 “发现”]",@"[发送到 “屏蔽”]",@"[发送到 “热门”]",@"[发送到 “最新”]",@"[定时到热门]",nil];
-            al.tag=ADM_NEW_ADD;
-            [al showInView:weakSelf.view];
-        }
-        else if (weakSelf.pageType==NSStagePapeTypeHotStageList)
-        {
-            //热门页进入
-            UIActionSheet  *Act=[[UIActionSheet alloc]initWithTitle:nil delegate:weakSelf cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"[切换剧照到审核/正式版]",@"[编辑弹幕]",@"[屏蔽弹幕]",@"[点赞]",@"[点踩]",nil];
-            Act.tag=ADM_HOT_LIST;
-            [Act showInView:weakSelf.view];
-        }
-        else {
-            UIActionSheet  *Act=[[UIActionSheet alloc]initWithTitle:nil delegate:weakSelf cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"[切换剧照到审核/正式版]",@"[编辑弹幕]",@"[屏蔽弹幕]",@"[点赞]",@"[点踩]",@"发送到  [ “热门” ]",nil];
+            UIActionSheet  *Act=[[UIActionSheet alloc]initWithTitle:nil delegate:weakSelf cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"[切换剧照到审核/正式版]",@"[编辑弹幕]",@"[点赞]",@"[点踩]",@"[发送到 “屏蔽”]",@"[发送到 “最新”]",@"[发送到 “正常”]",@"[发送到 “发现”]",@"[定时到 “热门”]",nil];
             Act.tag=ADM_ACTION_TAG;
             [Act showInView:weakSelf.view];
-        }
     }];
     UIBarButtonItem  *aditme =[[UIBarButtonItem alloc]initWithCustomView:admOper];
     //更多
@@ -184,6 +167,16 @@
     if ([usecenter.is_admin intValue] >0) {
         admOper.hidden=NO;
     }
+    
+    if (weakSelf.pageType==NSStagePapeTypeAdmin_New_Add
+        || weakSelf.pageType==NSStagePapeTypeAdmin_Close_Weibo
+        || weakSelf.pageType==NSStagePapeTypeAdmin_Dscorver
+        || weakSelf.pageType==NSStagePapeTypeAdmin_Recommed
+        || weakSelf.pageType==NSStagePapeTypeAdmin_Timing
+        || weakSelf.pageType==NSStagePapeTypeAdmin_Not_Review) {
+        admOper.hidden = YES;
+    }
+    
     //隐藏该隐藏的地方
     if (self.pageType==NSStagePapeTypeAdmin_Close_Weibo||self.pageType==NSStagePapeTypeAdmin_Dscorver||self.pageType==NSStagePapeTypeAdmin_New_Add||self.pageType==NSStagePapeTypeAdmin_Recommed) {
         moreButton.hidden=YES;
@@ -1181,76 +1174,49 @@
             AddMarkVC.weiboInfo=_WeiboInfo;
             AddMarkVC.delegate=self;
             [self.navigationController pushViewController:AddMarkVC animated:NO];
-            
-            
-        }else if (buttonIndex==2)
-        {
-            // 屏蔽弹幕
-            NSString *weibo_id =[NSString stringWithFormat:@"%@",_WeiboInfo.Id];
-            
-            [self requestChangeStageStatusWithweiboId:weibo_id StatusType:@"0"];
         }
-        else if (buttonIndex==3)
+        else if (buttonIndex==2)
         {
             //点赞
             [self requestUpAndDownWithDeretion:@"up"];
             
         }
-        else if (buttonIndex==4)
+        else if (buttonIndex==3)
         {
             // 踩
             [self requestUpAndDownWithDeretion:@"down"];
-            
+        }
+        else if (buttonIndex==4)
+        {
+            // 屏蔽
+            NSString *weibo_id =[NSString stringWithFormat:@"%@",_WeiboInfo.Id];
+            [self requestChangeStageStatusWithweiboId:weibo_id StatusType:@"0"];
         }
         else if (buttonIndex==5)
         {
-            //移动到热门
-            [self requestChangeStageStatusWithweiboId:[NSString stringWithFormat:@"%@",_WeiboInfo.Id] StatusType:@"3"];
-        }
-    }
-    else if(actionSheet.tag==ADM_HOT_LIST)  //管理员从热门进入
-    {
-        //管理员的
-        if (buttonIndex==0) {
-            //切换剧照到审核版
-            NSString  *stageId;
-            // stageInfoModel *model=[_dataArray objectAtIndex:Rowindex];
-            stageId=[NSString stringWithFormat:@"%@",self.stageInfo.Id];
-            //移动到审核版或者正常
-            [self requestmoveReviewToNormal:stageId];
-            
-        }
-        else if (buttonIndex==1)
-        {
-            // 编辑弹幕
-            AddMarkViewController  *AddMarkVC=[[AddMarkViewController alloc]init];
-            AddMarkVC.stageInfo=self.stageInfo;
-            AddMarkVC.weiboInfo=_WeiboInfo;
-            AddMarkVC.delegate=self;
-            [self.navigationController pushViewController:AddMarkVC animated:YES];
-            
-            
-        }else if (buttonIndex==2)
-        {
-            // 屏蔽弹幕
+            //最新
             NSString *weibo_id =[NSString stringWithFormat:@"%@",_WeiboInfo.Id];
-            
-            [self requestChangeStageStatusWithweiboId:weibo_id StatusType:@"0"];
+            [self requestChangeStageStatusWithweiboId:weibo_id StatusType:@"5"];
         }
-        else if (buttonIndex==3)
+        else if (buttonIndex==6)
         {
-            //点赞
-            [self requestUpAndDownWithDeretion:@"up"];
-            
+            //正常
+            NSString *weibo_id =[NSString stringWithFormat:@"%@",_WeiboInfo.Id];
+            [self requestChangeStageStatusWithweiboId:weibo_id StatusType:@"1"];
         }
-        else if (buttonIndex==4)
+        else if (buttonIndex==7)
         {
-            // 踩
-            [self requestUpAndDownWithDeretion:@"down"];
-            
+            //发现
+            NSString *weibo_id =[NSString stringWithFormat:@"%@",_WeiboInfo.Id];
+            [self requestChangeStageStatusWithweiboId:weibo_id StatusType:@"2"];
         }
-        
-        
+        else if (buttonIndex==8)
+        {
+            //定时到热门
+            SelectTimeView  *datepicker =[[SelectTimeView alloc]init];
+            datepicker.delegate=self;
+            [datepicker show];
+        }
     }
     else if (actionSheet.tag==CUS_ACTION_TAG)
     {
@@ -1280,38 +1246,6 @@
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"确认删除吗?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
             alert.tag = 3001;
             [alert show];
-        }
-    }
-    
-    
-    else if (actionSheet.tag==ADM_NEW_ADD)
-    {
-        //发送到发现
-        if (buttonIndex==0) {
-            [self requestChangeStageStatusWithweiboId:[NSString stringWithFormat:@"%@",_WeiboInfo.Id] StatusType:@"2"];
-        }
-        else if (buttonIndex==1)
-        {
-            //屏蔽
-            [self requestChangeStageStatusWithweiboId:[NSString stringWithFormat:@"%@",_WeiboInfo.Id]  StatusType:@"0"];
-            
-        }
-        else if (buttonIndex==2)
-        {
-            //发送到热门
-            [self requestChangeStageStatusWithweiboId:[NSString stringWithFormat:@"%@",_WeiboInfo.Id] StatusType:@"3"];
-            
-        } else if (buttonIndex==3) {
-            //发送到最新
-            [self requestChangeStageStatusWithweiboId:[NSString stringWithFormat:@"%@",_WeiboInfo.Id] StatusType:@"1"];
-        }
-        //定时
-        else if(buttonIndex==4)
-        {
-            //时间
-            SelectTimeView  *datepicker =[[SelectTimeView alloc]init];
-            datepicker.delegate=self;
-            [datepicker show];
         }
     }
 }
