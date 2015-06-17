@@ -83,7 +83,7 @@
     [leftButtomButton addSubview:MovieLogoImageView];
     
     movieNameLable =[[UILabel alloc]initWithFrame:CGRectMake(35, 0, 120, 27)];
-    movieNameLable.font=[UIFont systemFontOfSize:16];
+    movieNameLable.font=[UIFont fontWithName:kFontRegular size:16];
     movieNameLable.textColor=VGray_color;
     // movieNameLable.numberOfLines=1;
     movieNameLable.lineBreakMode=NSLineBreakByTruncatingTail;

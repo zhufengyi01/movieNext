@@ -152,7 +152,7 @@
         {
             cell.textLabel.text=[[_dataArray objectAtIndex:indexPath.row] objectForKey:@"title"];
         }
-        cell.textLabel.font =[UIFont systemFontOfSize:14];
+        cell.textLabel.font =[UIFont fontWithName:kFontRegular size:14];
         
     }
     return cell;

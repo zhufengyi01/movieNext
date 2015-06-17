@@ -121,7 +121,7 @@
     NSString  *titleString =[Function htmlString: self.stageInfo.movieInfo.name ];
     UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 30) Font:30 Text:titleString];
     titleLable.textColor=VBlue_color;
-    titleLable.font=[UIFont boldSystemFontOfSize:16];
+    titleLable.font=[UIFont fontWithName:kFontDouble size:16];
     titleLable.textColor=VGray_color;
     titleLable.textAlignment=NSTextAlignmentCenter;
     self.navigationItem.titleView=titleLable;
@@ -248,15 +248,15 @@
     
     
     markLable=[ZCControl createLabelWithFrame:CGRectMake(10,40,_layerView.frame.size.width-20, 60) Font:20 Text:@"弹幕文字"];
-    markLable.font =[UIFont boldSystemFontOfSize:23];
+    markLable.font =[UIFont fontWithName:kFontDouble size:23];
     //markLable.backgroundColor=[[UIColor blackColor] colorWithAlphaComponent:0.4];
     if (IsIphone6) {
         markLable.frame=CGRectMake(20, 30, _layerView.frame.size.width-40, 65);
-        markLable.font =[UIFont boldSystemFontOfSize:25];
+        markLable.font =[UIFont fontWithName:kFontDouble size:25];
     }
     if (IsIphone6plus) {
         markLable.frame=CGRectMake(20, 20,_layerView.frame.size.width-40, 70);
-        markLable.font=[UIFont boldSystemFontOfSize:28];
+        markLable.font=[UIFont fontWithName:kFontDouble size:28];
     }
     markLable.textColor=[UIColor whiteColor];
     weiboInfoModel *weibomodel;
@@ -347,7 +347,7 @@
     [leftButtomButton addSubview:MovieLogoImageView];
     
     movieNameLable =[[UILabel alloc]initWithFrame:CGRectMake(35,12, 120, 30)];
-    movieNameLable.font=[UIFont systemFontOfSize:16];
+    movieNameLable.font=[UIFont fontWithName:kFontRegular size:16];
     movieNameLable.textColor=VGray_color;
     //movieNameLable.text=self.stageInfo.movieInfo.name;
     // movieNameLable.numberOfLines=1;
@@ -618,7 +618,7 @@
             [weakSelf.navigationController pushViewController:AddMarkVC animated:NO];
             
         }];
-        addMarkButton.titleLabel.font =[UIFont boldSystemFontOfSize:16];
+        addMarkButton.titleLabel.font =[UIFont fontWithName:kFontDouble size:16];
         [addMarkButton setTitleColor:VBlue_color forState:UIControlStateNormal];
         //ShareButton.backgroundColor =[UIColor redColor];
         [addMarkButton setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color"] forState:UIControlStateNormal];
@@ -638,7 +638,7 @@
             [shareView show];
             
         }];
-        ShareButton.titleLabel.font =[UIFont boldSystemFontOfSize:16];
+        ShareButton.titleLabel.font =[UIFont fontWithName:kFontDouble size:16];
         [ShareButton setTitleColor:VBlue_color forState:UIControlStateNormal];
         [ShareButton setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color"] forState:UIControlStateNormal];
         [shareView addSubview:ShareButton];

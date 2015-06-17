@@ -54,7 +54,7 @@
     self.tipLable=[[M80AttributedLabel alloc]initWithFrame:CGRectZero];
     //NSMutableAttributedString  *attrstr =[[NSMutableAttributedString alloc]initWithString:@"分享"];
     self.tipLable.textColor=VGray_color;
-    self.tipLable.font=[UIFont systemFontOfSize:14];
+    self.tipLable.font=[UIFont fontWithName:kFontRegular size:14];
     //[self.tipLable appendText:@"分享"];
     self.tipLable.backgroundColor =[UIColor clearColor];
     self.tipLable.textAlignment=kCTTextAlignmentCenter;
@@ -69,7 +69,7 @@
         UIImageView *sucImage =[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 15, 15)];
         sucImage.image =[UIImage imageNamed:@"sucseed_add"];
         [self.tipLable appendView:sucImage margin:UIEdgeInsetsMake(0, 0,0,5)];
-        self.tipLable.font=[UIFont systemFontOfSize:12];
+        self.tipLable.font=[UIFont fontWithName:kFontRegular size:12];
         [self.tipLable appendText:@"发布成功,卡片将出现在发现页,快去分享吧!"];
     }
     else {
@@ -189,7 +189,7 @@
     [button setTitle:@"取消" forState:UIControlStateNormal];
     [button setTitleColor:VGray_color forState:UIControlStateNormal];
     button.frame=CGRectMake(20, backView.frame.size.height-50, kDeviceWidth-40, 40);
-    button.titleLabel.font =[UIFont systemFontOfSize:14];
+    button.titleLabel.font =[UIFont fontWithName:kFontRegular size:14];
     button.backgroundColor = VLight_GrayColor_apla;
     button.layer.cornerRadius = 3;
     [button addTarget:self action:@selector(cancleshareClick) forControlEvents:UIControlEventTouchUpInside];

@@ -54,7 +54,7 @@ static const CGFloat MJDuration = 0.2;
     UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:self.tagInfo.tagDetailInfo.title];
     titleLable.textColor=VGray_color;
     
-    titleLable.font=[UIFont boldSystemFontOfSize:16];
+    titleLable.font=[UIFont fontWithName:kFontDouble size:16];
     titleLable.textAlignment=NSTextAlignmentCenter;
     self.navigationItem.titleView=titleLable;
     
@@ -109,7 +109,7 @@ static const CGFloat MJDuration = 0.2;
         weakSelf.myConllectionView.header.updatedTimeHidden=YES;
         
         // 设置字体
-        //weakSelf.myConllectionView.header.font = [UIFont systemFontOfSize:12];
+        //weakSelf.myConllectionView.header.font = [UIFont fontWithName:kFontRegular size:12];
         
         // 设置颜色
         // weakSelf.myConllectionView.header.textColor = VGray_color;
@@ -143,7 +143,7 @@ static const CGFloat MJDuration = 0.2;
         [weakSelf.myConllectionView.footer setTitle:@"THE END" forState:MJRefreshFooterStateNoMoreData];
         
         // 设置字体
-        // weakSelf.myConllectionView.footer.font = [UIFont systemFontOfSize:12];
+        // weakSelf.myConllectionView.footer.font = [UIFont fontWithName:kFontRegular size:12];
         
         // 设置颜色
         //weakSelf.myConllectionView.footer.textColor = VGray_color;

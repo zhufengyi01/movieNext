@@ -158,7 +158,7 @@ static const CGFloat MJDuration = 0.2;
     [titleView addSubview:MovieLogoImageView];
     //电影名
     UILabel  *movieNameLable =[[UILabel alloc]initWithFrame:CGRectMake(35,0, 120, 30)];
-    movieNameLable.font=[UIFont boldSystemFontOfSize:16];
+    movieNameLable.font=[UIFont fontWithName:kFontDouble size:16];
     movieNameLable.textColor=VGray_color;
     // movieNameLable.numberOfLines=1;
     movieNameLable.lineBreakMode=NSLineBreakByTruncatingTail;
@@ -195,7 +195,7 @@ static const CGFloat MJDuration = 0.2;
     
     upLoadimageBtn=[ZCControl createButtonWithFrame:CGRectMake(0,0,50,25) ImageName:nil Target:self Action:@selector(uploadImageFromAbumdAndDouban) Title:@"添加"];
     upLoadimageBtn.tag=201;
-    [upLoadimageBtn.titleLabel setFont:[UIFont systemFontOfSize:16]];
+    [upLoadimageBtn.titleLabel setFont:[UIFont fontWithName:kFontRegular size:16]];
     //upLoadimageBtn.backgroundColor = [UIColor redColor];
     [upLoadimageBtn setTitleColor:VGray_color forState:UIControlStateNormal];
     upLoadimageBtn.titleEdgeInsets =UIEdgeInsetsMake(0, 15, 0, -15);
@@ -356,7 +356,7 @@ static const CGFloat MJDuration = 0.2;
         weakSelf.myConllectionView.header.updatedTimeHidden=YES;
         
         // 设置字体
-        //weakSelf.myConllectionView.header.font = [UIFont systemFontOfSize:12];
+        //weakSelf.myConllectionView.header.font = [UIFont fontWithName:kFontRegular size:12];
         
         // 设置颜色
         // weakSelf.myConllectionView.header.textColor = VGray_color;
@@ -389,7 +389,7 @@ static const CGFloat MJDuration = 0.2;
         [weakSelf.myConllectionView.footer setTitle:@"THE END" forState:MJRefreshFooterStateNoMoreData];
         
         // 设置字体
-        // weakSelf.myConllectionView.footer.font = [UIFont systemFontOfSize:12];
+        // weakSelf.myConllectionView.footer.font = [UIFont fontWithName:kFontRegular size:12];
         
         // 设置颜色
         //weakSelf.myConllectionView.footer.textColor = VGray_color;

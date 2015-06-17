@@ -51,9 +51,9 @@
     self.titleLable=[ZCControl createLabelWithFrame:CGRectMake(0,0, 60, 30) Font:TagTextFont16 Text:@"标签"];
     self.titleLable.textColor=[UIColor whiteColor];
     
-    self.titleLable.font =[UIFont systemFontOfSize:TagTextFont14];
+    self.titleLable.font =[UIFont fontWithName:kFontRegular size:TagTextFont14];
     if (IsIphone6plus) {
-        self.titleLable.font=[UIFont systemFontOfSize:TagTextFont16];
+        self.titleLable.font=[UIFont fontWithName:kFontRegular size:TagTextFont16];
     }
     self.titleLable.lineBreakMode=NSLineBreakByTruncatingTail;
     self.titleLable.adjustsFontSizeToFitWidth=NO;

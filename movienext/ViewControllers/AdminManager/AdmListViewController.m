@@ -35,7 +35,7 @@
 {
     UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:@"管理员"];
     titleLable.textColor=VGray_color;
-    titleLable.font=[UIFont boldSystemFontOfSize:18];
+    titleLable.font=[UIFont fontWithName:kFontDouble size:18];
     titleLable.textAlignment=NSTextAlignmentCenter;
     self.navigationItem.titleView=titleLable;
 }
@@ -68,7 +68,7 @@
         cell=[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
         cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
     }
-    cell.textLabel.font =[UIFont systemFontOfSize:14];
+    cell.textLabel.font =[UIFont fontWithName:kFontRegular size:14];
     //  cell.textColor =VGray_color;
     cell.textLabel.textColor=VGray_color;
     cell.textLabel.text=[_dataArray  objectAtIndex:indexPath.row];

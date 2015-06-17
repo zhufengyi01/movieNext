@@ -23,7 +23,7 @@
 #define MJRefreshLabelTextColor MJColor(100, 100, 100)
 
 // 字体大小
-#define MJRefreshLabelFont [UIFont boldSystemFontOfSize:13]
+#define MJRefreshLabelFont [UIFont fontWithName:kFontDouble size:13]
 
 // 图片路径
 #define MJRefreshSrcName(file) [@"MJRefresh.bundle" stringByAppendingPathComponent:file]

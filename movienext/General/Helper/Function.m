@@ -217,7 +217,7 @@
      int logoWidth   = height;
      BOOL isLong;
      
-     UIFont *font = [UIFont systemFontOfSize:12];
+     UIFont *font = [UIFont fontWithName:kFontRegular size:12];
      NSString *aString = weibo.topic.length > wordLimit ? [weibo.topic substringToIndex:wordLimit] : weibo.topic;
      aString = [aString length]>0 ? [NSString stringWithFormat:@"    %@  ", aString] : @"";
      
@@ -345,14 +345,14 @@
 -(CGFloat)heightWithString:(NSString *)string width:(CGFloat)width  fontsize:(CGFloat)fontsize
 {
     
-    CGRect Rect=[string boundingRectWithSize:CGSizeMake(width, 0) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:fontsize]} context:nil];
+    CGRect Rect=[string boundingRectWithSize:CGSizeMake(width, 0) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont fontWithName:kFontRegular size:fontsize]} context:nil];
     
     //float imageSmallHight=0;
     return Rect.size.height;
 }
 +(CGFloat)widthWithString:(NSString *)string hight:(CGFloat)hight  fontsize:(CGFloat)fontsize;
 {
-    CGRect Rect=[string boundingRectWithSize:CGSizeMake(hight, 0) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:fontsize]} context:nil];
+    CGRect Rect=[string boundingRectWithSize:CGSizeMake(hight, 0) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont fontWithName:kFontRegular size:fontsize]} context:nil];
     
     //float imageSmallHight=0;
     return Rect.size.width;

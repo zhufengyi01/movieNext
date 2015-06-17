@@ -122,4 +122,18 @@
 
 #define Refresh_USER_LIST  @"refresh_user_list"  //刷新个人页列表
 
+//字体相关
+//FZLTXHK--GBK1-0 Lantinghei_0
+//FZLTHK--GBK1-0 FZLTHJW.TTF
+//FZLTHJW--GB1-0 FZLanTingHeiS-R-GB
+//FZZZHONGJW--GB1-0 FZZhengHeiS-DB-GB
+//FZLTHK--GBK1-0
+//NotoSansHans-Regular NotoSansHans-Regular
+
+//#define kFontRegular @"FZLTHJW--GB1-0"
+//#define kFontDouble @"FZZZHONGJW--GB1-0"
+
+#define kFontRegular @"NotoSansHans-Regular"
+#define kFontDouble @"NotoSansHans-Medium"
+
 #endif

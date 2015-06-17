@@ -109,7 +109,7 @@
     
     self.naviTitlLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:@""];
     self.naviTitlLable.textColor=VGray_color;
-    self.naviTitlLable.font=[UIFont boldSystemFontOfSize:16];
+    self.naviTitlLable.font=[UIFont fontWithName:kFontDouble size:16];
     self.naviTitlLable.textAlignment=NSTextAlignmentCenter;
     self.navigationItem.titleView=self.naviTitlLable;
     
@@ -124,7 +124,7 @@
     }];
     button.frame=CGRectMake(0, 0, 40, 40);
     button.tag=1000;
-    button.titleLabel.font =[UIFont systemFontOfSize:16];
+    button.titleLabel.font =[UIFont fontWithName:kFontRegular size:16];
     [button setTitleColor:VGray_color forState:UIControlStateNormal];
     //[button addTarget:self action:@selector(naviagetionItemClick:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem  *barButton=[[UIBarButtonItem alloc]initWithCustomView:button];
@@ -146,7 +146,7 @@
     }];
     [sharebtn setTitle:@"分享" forState:UIControlStateNormal];
     [sharebtn setTitleEdgeInsets:UIEdgeInsetsMake(0, 10, 0, -10)];
-    sharebtn.titleLabel.font =[UIFont systemFontOfSize:16];
+    sharebtn.titleLabel.font =[UIFont fontWithName:kFontRegular size:16];
     [sharebtn setTitleColor:VGray_color forState:UIControlStateNormal];
     UIBarButtonItem  *rigthbarButton=[[UIBarButtonItem alloc]initWithCustomView:sharebtn];
     self.navigationItem.rightBarButtonItem=rigthbarButton;
@@ -450,15 +450,15 @@
     
     
     markLable=[ZCControl createLabelWithFrame:CGRectMake(20,40,_layerView.frame.size.width-40, 60) Font:20 Text:@"弹幕文字"];
-    markLable.font =[UIFont boldSystemFontOfSize:20];
+    markLable.font =[UIFont fontWithName:kFontDouble size:20];
     //markLable.backgroundColor=[[UIColor blackColor] colorWithAlphaComponent:0.4];
     if (IsIphone6) {
         markLable.frame=CGRectMake(20, 30, _layerView.frame.size.width-40, 65);
-        markLable.font =[UIFont boldSystemFontOfSize:25];
+        markLable.font =[UIFont fontWithName:kFontDouble size:25];
     }
     if (IsIphone6plus) {
         markLable.frame=CGRectMake(20, 20,_layerView.frame.size.width-40, 70);
-        markLable.font=[UIFont boldSystemFontOfSize:28];
+        markLable.font=[UIFont fontWithName:kFontDouble size:28];
     }
     
     markLable.textColor=[UIColor whiteColor];
@@ -509,7 +509,7 @@
     [leftButtomButton addSubview:headLogoImageView];
     
     userNameLable =[[UILabel alloc]initWithFrame:CGRectMake(35,12,5, 30)];
-    userNameLable.font=[UIFont systemFontOfSize:16];
+    userNameLable.font=[UIFont fontWithName:kFontRegular size:16];
     userNameLable.textColor=VGray_color;
     //movieNameLable.text=self.stageInfo.movieInfo.name;
     // movieNameLable.numberOfLines=1;

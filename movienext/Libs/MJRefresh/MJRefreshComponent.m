@@ -10,6 +10,7 @@
 #import "MJRefreshComponent.h"
 #import "MJRefreshConst.h"
 #import "UIView+MJExtension.h"
+#import "Constant.h"
 
 @interface MJRefreshComponent()
 /** 记录scrollView刚开始的inset */

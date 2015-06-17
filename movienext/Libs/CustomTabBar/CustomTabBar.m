@@ -77,7 +77,7 @@
         button.tag = BUTTON_START_TAG + i;
         
         UILabel  *lable=[[UILabel alloc]initWithFrame:CGRectMake(button.frame.origin.x, m_frame.size.height-15, button.frame.size.width, 15)];
-        lable.font=[UIFont systemFontOfSize:11];
+        lable.font=[UIFont fontWithName:kFontRegular size:11];
         lable.textColor=TabNorColor;
        
         lable.textAlignment=NSTextAlignmentCenter;

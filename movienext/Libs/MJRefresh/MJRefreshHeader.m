@@ -330,8 +330,8 @@
     
     self.updatedTimeLabel.font = font;
     self.stateLabel.font = font;
-    self.stateLabel.font=[UIFont systemFontOfSize:12];
-    self.updatedTimeLabel.font=[UIFont systemFontOfSize:12];
+    self.stateLabel.font=[UIFont fontWithName:kFontRegular size:12];
+    self.updatedTimeLabel.font=[UIFont fontWithName:kFontRegular size:12];
 }
 
 - (void)setStateHidden:(BOOL)stateHidden

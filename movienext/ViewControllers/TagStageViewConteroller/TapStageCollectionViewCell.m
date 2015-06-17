@@ -43,9 +43,9 @@
     //_titleLab.backgroundColor = [UIColor colorWithRed:0.0f/255.0f green:0.0f/255.0f blue:0.0f/255.0f alpha:0.5];
     _titleLab.textAlignment = NSTextAlignmentCenter;
     _titleLab.textColor = [UIColor whiteColor];
-    _titleLab.font = [UIFont systemFontOfSize:14];
+    _titleLab.font = [UIFont fontWithName:kFontRegular size:14];
     if (IsIphone6plus) {
-        _titleLab.font=[UIFont systemFontOfSize:17];
+        _titleLab.font=[UIFont fontWithName:kFontRegular size:17];
     }
     [titlebg addSubview:_titleLab];
 }

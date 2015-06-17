@@ -62,7 +62,7 @@
     
     UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake((kDeviceWidth-100)/2, 30, 100, 20) Font:16 Text:@"分享"];
     titleLable.textColor=VBlue_color;
-    titleLable.font=[UIFont boldSystemFontOfSize:18];
+    titleLable.font=[UIFont fontWithName:kFontDouble size:18];
     titleLable.textAlignment=NSTextAlignmentCenter;
     //self.navigationItem.titleView=titleLable;
     [view addSubview:titleLable];
@@ -71,7 +71,7 @@
     [button setTitle:@"取消" forState:UIControlStateNormal];
     [button setTitleColor:VBlue_color forState:UIControlStateNormal];
     button.frame=CGRectMake(0, 20, 60, 40);
-    button.titleLabel.font=[UIFont boldSystemFontOfSize:18];
+    button.titleLabel.font=[UIFont fontWithName:kFontDouble size:18];
     [button addTarget:self action:@selector(CancleShareClick:) forControlEvents:UIControlEventTouchUpInside];
     [view addSubview:button];
     //    UIBarButtonItem  *barButton=[[UIBarButtonItem alloc]initWithCustomView:button];
@@ -165,7 +165,7 @@
     self.contentLable=[ZCControl createLabelWithFrame:CGRectMake(_moviewName.frame.origin.x,_moviewName.frame.origin.y+_moviewName.frame.size.height+10, kDeviceWidth-30, 40) Font:MarkTextFont14 Text:self.weiboInfo.content];
     self.contentLable.adjustsFontSizeToFitWidth=NO;
     if (IsIphone6plus) {
-        self.contentLable.font=[UIFont systemFontOfSize:MarkTextFont16];
+        self.contentLable.font=[UIFont fontWithName:kFontRegular size:MarkTextFont16];
     }
     self.contentLable.numberOfLines=0;
     if (self.weiboInfo.tagArray.count>0) {

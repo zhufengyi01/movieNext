@@ -140,7 +140,7 @@ static const CGFloat MJDuration = 0.6;
     if ([userCenter.Is_Check intValue]==1) {
         UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 30) Font:30 Text:@"热门"];
         titleLable.textColor=VBlue_color;
-        titleLable.font=[UIFont boldSystemFontOfSize:18];
+        titleLable.font=[UIFont fontWithName:kFontDouble size:18];
         titleLable.textColor=VGray_color;
         titleLable.textAlignment=NSTextAlignmentCenter;
         self.navigationItem.titleView=titleLable;
@@ -149,7 +149,7 @@ static const CGFloat MJDuration = 0.6;
         self.recommentBtn =[UIButton buttonWithType:UIButtonTypeCustom];
         self.recommentBtn.frame=CGRectMake(0, 0, NaviTitle_Width/2, NaviTitle_Height);
         [self.recommentBtn setTitle:@"热门" forState:UIControlStateNormal];
-        [self.recommentBtn.titleLabel setFont:[UIFont boldSystemFontOfSize:16]];
+        [self.recommentBtn.titleLabel setFont:[UIFont fontWithName:kFontDouble size:16]];
         [self.recommentBtn setTitleColor:VLight_GrayColor forState:UIControlStateNormal];
         [self.recommentBtn setTitleColor:VBlue_color forState:UIControlStateSelected];
         self.recommentBtn.selected=YES;
@@ -165,7 +165,7 @@ static const CGFloat MJDuration = 0.6;
         self.feedBtn =[UIButton buttonWithType:UIButtonTypeCustom];
         self.feedBtn.frame=CGRectMake(NaviTitle_Width/2, 0, NaviTitle_Width/2, NaviTitle_Height);
         [self.feedBtn setTitle:@"电影" forState:UIControlStateNormal];
-        [self.feedBtn.titleLabel setFont:[UIFont boldSystemFontOfSize:16]];
+        [self.feedBtn.titleLabel setFont:[UIFont fontWithName:kFontDouble size:16]];
         self.feedBtn.selected=NO;
         //self.feedBtn.backgroundColor =[UIColor blueColor];
         [self.feedBtn setTitleColor:VLight_GrayColor forState:UIControlStateNormal];
@@ -245,7 +245,7 @@ static const CGFloat MJDuration = 0.6;
         //=View_BackGround;
         [btn setTitleColor:VLight_GrayColor forState:UIControlStateNormal];
         [btn setTitleColor:VBlue_color forState:UIControlStateSelected];
-        btn.titleLabel.font=[UIFont systemFontOfSize:15];
+        btn.titleLabel.font=[UIFont fontWithName:kFontRegular size:15];
         // [btn setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color.png"] forState:UIControlStateNormal];
         btn.backgroundColor=  [UIColor colorWithPatternImage:[UIImage imageNamed:@"tabbar_backgroud_color.png"]];
         btn.tag=100+i;
@@ -416,7 +416,7 @@ static const CGFloat MJDuration = 0.6;
         //隐藏时间
         weakSelf.RecommendCollectionView.header.updatedTimeHidden=YES;
         // 设置字体
-        //weakSelf.myConllectionView.header.font = [UIFont systemFontOfSize:12];
+        //weakSelf.myConllectionView.header.font = [UIFont fontWithName:kFontRegular size:12];
         
         // 设置颜色
         // weakSelf.myConllectionView.header.textColor = VGray_color;
@@ -450,7 +450,7 @@ static const CGFloat MJDuration = 0.6;
         [weakSelf.RecommendCollectionView.footer setTitle:@"加载更多..." forState:MJRefreshFooterStateRefreshing];
         [weakSelf.RecommendCollectionView.footer setTitle:@"THE END" forState:MJRefreshFooterStateNoMoreData];
         // 设置字体
-        // weakSelf.myConllectionView.footer.font = [UIFont systemFontOfSize:12];
+        // weakSelf.myConllectionView.footer.font = [UIFont fontWithName:kFontRegular size:12];
         // 设置颜色
         //weakSelf.myConllectionView.footer.textColor = VGray_color;
         // 模拟延迟加载数据，因此2秒后才调用（真实开发中，可以移除这段gcd代码）
@@ -509,7 +509,7 @@ static const CGFloat MJDuration = 0.6;
         weakSelf.myConllectionView.header.updatedTimeHidden=YES;
         
         // 设置字体
-        //weakSelf.myConllectionView.header.font = [UIFont systemFontOfSize:12];
+        //weakSelf.myConllectionView.header.font = [UIFont fontWithName:kFontRegular size:12];
         
         // 设置颜色
         // weakSelf.myConllectionView.header.textColor = VGray_color;
@@ -535,7 +535,7 @@ static const CGFloat MJDuration = 0.6;
         [weakSelf.myConllectionView.footer setTitle:@"THE END" forState:MJRefreshFooterStateNoMoreData];
         
         // 设置字体
-        // weakSelf.myConllectionView.footer.font = [UIFont systemFontOfSize:12];
+        // weakSelf.myConllectionView.footer.font = [UIFont fontWithName:kFontRegular size:12];
         
         // 设置颜色
         //weakSelf.myConllectionView.footer.textColor = VGray_color;

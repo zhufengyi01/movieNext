@@ -42,7 +42,7 @@
     titleLable.textColor=[UIColor whiteColor];
     titleLable.lineBreakMode=NSLineBreakByTruncatingTail;
     titleLable.numberOfLines=1;
-    titleLable.font=[UIFont boldSystemFontOfSize:18];
+    titleLable.font=[UIFont fontWithName:kFontDouble size:18];
     [bgImageView addSubview:titleLable];
     
     //    //导演

@@ -114,7 +114,7 @@
     
     UIButton  *forgetButton =[ZCControl createButtonWithFrame:CGRectMake((kDeviceWidth-100)/2, loginButton.frame.origin.y+loginButton.frame.size.height+20, 100, 40) ImageName:nil Target:self Action:@selector(loginClick:) Title:@"忘记密码"];
     forgetButton.tag=101;
-    forgetButton.titleLabel.font =[UIFont boldSystemFontOfSize:16];
+    forgetButton.titleLabel.font =[UIFont fontWithName:kFontDouble size:16];
     [self.view addSubview:forgetButton];
     
 }

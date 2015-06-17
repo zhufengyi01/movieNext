@@ -513,6 +513,8 @@
 		404F664B1B2AD8A400F4A17A /* tiny_like_red@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 404F66471B2AD8A400F4A17A /* tiny_like_red@3x.png */; };
 		404F664C1B2AD8A400F4A17A /* tiny_like@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 404F66481B2AD8A400F4A17A /* tiny_like@2x.png */; };
 		404F664D1B2AD8A400F4A17A /* tiny_like@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 404F66491B2AD8A400F4A17A /* tiny_like@3x.png */; };
+		405525B91B31719D00B6488A /* NotoSansHans-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 405525B81B31719D00B6488A /* NotoSansHans-Regular.otf */; };
+		405525BB1B31732B00B6488A /* NotoSansHans-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 405525BA1B31732B00B6488A /* NotoSansHans-Medium.otf */; };
 		4076AF011AA9B0D2006DC466 /* StageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4076AF001AA9B0D2006DC466 /* StageView.m */; };
 /* End PBXBuildFile section */
 
@@ -1260,6 +1262,8 @@
 		404F66471B2AD8A400F4A17A /* tiny_like_red@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tiny_like_red@3x.png"; sourceTree = "<group>"; };
 		404F66481B2AD8A400F4A17A /* tiny_like@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tiny_like@2x.png"; sourceTree = "<group>"; };
 		404F66491B2AD8A400F4A17A /* tiny_like@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tiny_like@3x.png"; sourceTree = "<group>"; };
+		405525B81B31719D00B6488A /* NotoSansHans-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSansHans-Regular.otf"; sourceTree = "<group>"; };
+		405525BA1B31732B00B6488A /* NotoSansHans-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSansHans-Medium.otf"; sourceTree = "<group>"; };
 		4076AEFF1AA9B0D2006DC466 /* StageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StageView.h; path = General/Helper/StageView.h; sourceTree = SOURCE_ROOT; };
 		4076AF001AA9B0D2006DC466 /* StageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = StageView.m; path = General/Helper/StageView.m; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
@@ -2252,6 +2256,8 @@
 		00AA52FA1AA2C3F4004096F8 = {
 			isa = PBXGroup;
 			children = (
+				405525BA1B31732B00B6488A /* NotoSansHans-Medium.otf */,
+				405525B81B31719D00B6488A /* NotoSansHans-Regular.otf */,
 				000B08FB1AA2EB8C00B8D13A /* Images */,
 				00AA546B1AA2C630004096F8 /* Frameworks */,
 				00AA532C1AA2C525004096F8 /* Core */,
@@ -2988,6 +2994,7 @@
 				007A32C01AC4FDFE00D491D0 /* update_picture_whaite@2x.png in Resources */,
 				00AA544F1AA2C526004096F8 /* TencentOpenApi_IOS_Bundle.bundle in Resources */,
 				0043E9681AB2DAF500209C3A /* login_button_wechat@2x.png in Resources */,
+				405525B91B31719D00B6488A /* NotoSansHans-Regular.otf in Resources */,
 				009A27BA1AA6DBDA0001690C /* movie_icon_backgroud_color@2x.png in Resources */,
 				00851EA21B1D7BA9009FDA34 /* page_02@3x.png in Resources */,
 				38B205BE1B317928004FA315 /* back_gray_Icon@2x.png in Resources */,
@@ -3047,6 +3054,7 @@
 				000C030B1AEF310600AB52D2 /* ＃@2x.png in Resources */,
 				00431FF91ADD1FB300416E1F /* user_normal@3x.png in Resources */,
 				0090447A1AD3F3D0009CF318 /* unselect_icon@3x.png in Resources */,
+				405525BB1B31732B00B6488A /* NotoSansHans-Medium.otf in Resources */,
 				007B5C9C1AB8276A001D2D25 /* tan@3x.png in Resources */,
 				004DD1E51AAFDD0F00394A9D /* Back__Icon.png in Resources */,
 				000C03101AEF31F900AB52D2 /* add_tag_icon@3x.png in Resources */,

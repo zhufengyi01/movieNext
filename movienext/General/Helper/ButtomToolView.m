@@ -104,7 +104,7 @@
     
     shareButton =[ZCControl createButtonWithFrame:CGRectMake(0,0,_alertView.frame.size.width/2,45) ImageName:nil Target:self Action:@selector(dealButtomClick:) Title:@""];
     [shareButton setTitleColor:VBlue_color forState:UIControlStateNormal];
-    shareButton.titleLabel.font=[UIFont systemFontOfSize:14];
+    shareButton.titleLabel.font=[UIFont fontWithName:kFontRegular size:14];
     [shareButton setTitleEdgeInsets:UIEdgeInsetsMake(10, 25, 10, 10)];
     
     [shareButton setImage:[UIImage imageNamed:@"btn_share_default.png"] forState:UIControlStateNormal];
@@ -118,7 +118,7 @@
     zanbutton.tag=10002;
     zanbutton.backgroundColor=View_ToolBar;
     [zanbutton setTitleEdgeInsets:UIEdgeInsetsMake(10, 25, 10, 10)];
-    zanbutton.titleLabel.font=[UIFont systemFontOfSize:14];
+    zanbutton.titleLabel.font=[UIFont fontWithName:kFontRegular size:14];
     
     // 在赞上面添加一个大拇指
     likeimageview=[[UIImageView alloc]initWithFrame:CGRectMake((zanbutton.frame.size.width)/2-15,zanbutton.frame.size.height/2-10, 25, 25)];
