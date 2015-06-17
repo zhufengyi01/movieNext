@@ -183,6 +183,8 @@ static const CGFloat MJDuration = 1.0;
     if (pageCount>page) {
         page++;
         [self  requestData];
+    }else {
+        [self.myTableView.footer noticeNoMoreData];
     }
     
     // 2.模拟2秒后刷新表格UI（真实开发中，可以移除这段gcd代码）
