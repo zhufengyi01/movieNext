@@ -218,7 +218,7 @@
     
  
     
-    _myTextView=[[UITextView alloc]initWithFrame:CGRectMake(10,self.ShareView.frame.size.height-35, kDeviceWidth-20, 40)];
+    _myTextView=[[UITextView alloc]initWithFrame:CGRectMake(10,self.ShareView.frame.size.height-40, kDeviceWidth-20, 40)];
     _myTextView.delegate=self;
     // [_myTextView addPlaceHolder:@"输入弹幕"];
     _myTextView.textColor=[UIColor whiteColor];
