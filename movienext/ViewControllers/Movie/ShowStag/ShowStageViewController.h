@@ -45,6 +45,9 @@ typedef  NS_ENUM(NSInteger,NSStagePapeType)
 
 @interface ShowStageViewController : RootViewController <TagViewDelegate,AddMarkViewControllerDelegate>
 
+
+@property(nonatomic,assign) id<ShowStageviewControllerDelegate> delegate ;
+
 @property (nonatomic, strong) stageInfoModel *stageInfo;
 @property(nonatomic,strong) NSMutableArray   *upweiboArray;
 @property(nonatomic,assign) NSStagePapeType  pageType;

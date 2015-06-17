@@ -495,6 +495,7 @@
 		00ECAE1B1B0999DF0039597E /* NSDate+TimeAgo.m in Sources */ = {isa = PBXBuildFile; fileRef = 00ECAE151B0999DF0039597E /* NSDate+TimeAgo.m */; };
 		00ECAE1C1B0999DF0039597E /* NSDate+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 00ECAE171B0999DF0039597E /* NSDate+Utilities.m */; };
 		00ECAE1D1B0999DF0039597E /* NSDateTimeAgo.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 00ECAE181B0999DF0039597E /* NSDateTimeAgo.bundle */; };
+		38B205BB1B300B64004FA315 /* SelectTimeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 38B205BA1B300B64004FA315 /* SelectTimeView.m */; };
 		400930EA1B2963860099E1D9 /* AvatarBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 400930E91B2963860099E1D9 /* AvatarBrowser.m */; };
 		401860B61B283ADD0050A1AD /* make_searchbar_history@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 401860B51B283ADD0050A1AD /* make_searchbar_history@2x.png */; };
 		402DE3711B1EA3260018CBC6 /* download@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 402DE3691B1EA3260018CBC6 /* download@2x.png */; };
@@ -1236,6 +1237,8 @@
 		00ECAE161B0999DF0039597E /* NSDate+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Utilities.h"; sourceTree = "<group>"; };
 		00ECAE171B0999DF0039597E /* NSDate+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+Utilities.m"; sourceTree = "<group>"; };
 		00ECAE181B0999DF0039597E /* NSDateTimeAgo.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = NSDateTimeAgo.bundle; sourceTree = "<group>"; };
+		38B205B91B300B64004FA315 /* SelectTimeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectTimeView.h; sourceTree = "<group>"; };
+		38B205BA1B300B64004FA315 /* SelectTimeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectTimeView.m; sourceTree = "<group>"; };
 		400930E81B2963860099E1D9 /* AvatarBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AvatarBrowser.h; sourceTree = "<group>"; };
 		400930E91B2963860099E1D9 /* AvatarBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AvatarBrowser.m; sourceTree = "<group>"; };
 		401860B51B283ADD0050A1AD /* make_searchbar_history@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "make_searchbar_history@2x.png"; sourceTree = "<group>"; };
@@ -2715,6 +2718,7 @@
 		00DF5E5D1AE5E3BE0063CCBC /* View */ = {
 			isa = PBXGroup;
 			children = (
+				38B205B81B300B45004FA315 /* SelectTime */,
 				402DE37B1B1EAFB00018CBC6 /* MyButton */,
 				0086C0F41B1584050013F540 /* my_Hub */,
 				0067CFEC1AD4183700148561 /* UMShareView */,
@@ -2760,6 +2764,15 @@
 				00ECAE181B0999DF0039597E /* NSDateTimeAgo.bundle */,
 			);
 			path = NSDate;
+			sourceTree = "<group>";
+		};
+		38B205B81B300B45004FA315 /* SelectTime */ = {
+			isa = PBXGroup;
+			children = (
+				38B205B91B300B64004FA315 /* SelectTimeView.h */,
+				38B205BA1B300B64004FA315 /* SelectTimeView.m */,
+			);
+			path = SelectTime;
 			sourceTree = "<group>";
 		};
 		402DE37B1B1EAFB00018CBC6 /* MyButton */ = {
@@ -3218,6 +3231,7 @@
 				0059EDAD1B05D4FB00C2ACA1 /* ModelsModel.m in Sources */,
 				00354C5E1ABF030C00F650AA /* AFURLResponseSerialization.m in Sources */,
 				00A52F891AEE4EEC00760275 /* TapStageCollectionViewCell.m in Sources */,
+				38B205BB1B300B64004FA315 /* SelectTimeView.m in Sources */,
 				00AA542A1AA2C525004096F8 /* SDImageCache.m in Sources */,
 				000851071B09CD4800E6009C /* UIImage+Capture.m in Sources */,
 				00431FF11ADD1CD800416E1F /* Register_2ViewController.m in Sources */,
@@ -3510,7 +3524,7 @@
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "ca993ee7-8f71-4e27-bc13-4e2338226631";
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -3544,7 +3558,7 @@
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "ca993ee7-8f71-4e27-bc13-4e2338226631";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
 				VALID_ARCHS = "armv7 armv7s arm64";

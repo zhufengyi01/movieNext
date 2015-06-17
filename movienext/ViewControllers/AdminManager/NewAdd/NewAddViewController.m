@@ -324,10 +324,24 @@ static const CGFloat MJDuration = 0.1;
         
         weiboInfoModel  *model=[_dataArray objectAtIndex:indexPath.row];
         cell.imageView.backgroundColor=VStageView_color;
-        NSURL  *url =[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w340h340",kUrlStage,model.stageInfo.photo]];
+        NSURL  *url =[NSURL URLWithString:[NSString stringWithFormat:@"%@%@%@",kUrlStage,model.stageInfo.photo,KIMAGE_SMALL]];
         
         [cell.imageView sd_setImageWithURL:url placeholderImage:nil options:(SDWebImageRetryFailed|SDWebImageLowPriority)];
         cell.titleLab.text=[NSString stringWithFormat:@"%@",model.content];
+        if (self.pageType==NSNewAddPageSoureTypeTiming) {
+            //定时出来的,显示具体的时间
+            NSDate *confromTimesp = [NSDate dateWithTimeIntervalSince1970:[model.updated_at intValue]];
+            NSLog(@"1296035591  = %@",confromTimesp);
+            NSDateFormatter *formatter = [[NSDateFormatter alloc] init] ;
+            [formatter setDateStyle:NSDateFormatterMediumStyle];
+            [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
+            [formatter setTimeStyle:NSDateFormatterShortStyle];
+            [formatter setDateFormat:@"YYYY-MM-dd HH:mm"];
+            NSString *confromTimespStr = [formatter stringFromDate:confromTimesp];
+            cell.lblTime.frame=CGRectMake(10, 10, 160, 20);
+            cell.lblTime.font =[UIFont systemFontOfSize:10];
+            cell.lblTime.text = [NSString stringWithFormat:@"定时时间：%@",confromTimespStr];
+        }
         return cell;
         
     }
@@ -361,7 +375,9 @@ static const CGFloat MJDuration = 0.1;
     else if (self.pageType==NSNewAddPageSoureTypeTiming)
     {
         vc.pageType=NSStagePapeTypeAdmin_Timing;
+        
     }
+    
     vc.stageInfo = model.stageInfo;
     vc.weiboInfo=model;
     UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];

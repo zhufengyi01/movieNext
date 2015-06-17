@@ -78,8 +78,8 @@ static const CGFloat MJDuration = 0.6;
 {
     [super viewWillAppear:YES];
     self.navigationController.navigationBar.hidden=NO;
-    self.navigationController.navigationBar.alpha=1;
-    //self.tabBarController.tabBar.hidden=NO;
+    //self.navigationController.navigationBar.alpha=1;
+  //  self.tabBarController.tabBar.hidden=NO;
    // if (self.myConllectionView) {
      //[  self.myConllectionView headerBeginRefreshing];
     //}
@@ -923,11 +923,9 @@ static const CGFloat MJDuration = 0.6;
         if (self.dataArray0.count>indexPath.row) {
             weiboInfoModel  *model=[self.dataArray0 objectAtIndex:indexPath.row];
             cell.imageView.backgroundColor=VStageView_color;
-            NSURL  *url =[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!w340h340",kUrlStage,model.stageInfo.photo]];
+            NSURL  *url =[NSURL URLWithString:[NSString stringWithFormat:@"%@%@%@",kUrlStage,model.stageInfo.photo ,KIMAGE_SMALL]];
             [cell.imageView sd_setImageWithURL:url placeholderImage:nil options:(SDWebImageRetryFailed|SDWebImageLowPriority)];
-            
-            cell.titleLab.text=[NSString stringWithFormat:@"%@",model.content];
-             // cell.lblTime.text = [Function friendlyTime:model.stageInfo.updated_at];
+             cell.titleLab.text=[NSString stringWithFormat:@"%@",model.content];
             NSDate  *comfromTimesp =[NSDate dateWithTimeIntervalSince1970:[model.updated_at intValue]];
             NSString  *da = [NSDate timeInfoWithDate:comfromTimesp];
             //dateLable.text=da;
@@ -980,7 +978,7 @@ static const CGFloat MJDuration = 0.6;
             break;
         }
     }
-    [self hidesBottomBarWhenPushed];
+    [self.navigationController hidesBottomBarWhenPushed];
       MovieDetailViewController *vc =  [MovieDetailViewController new];
       if (array.count > indexPath.row) {
          NSDictionary *dict = [array  objectAtIndex:(long)indexPath.row];

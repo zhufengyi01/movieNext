@@ -32,6 +32,7 @@
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
 #import "M80AttributedLabel.h"
+#import "SelectTimeView.h"
 #define ADM_ACTION_TAG    1000   //统一管理管弹出框
 
 #define ADM_NEW_ADD       1003  //最新添加
@@ -43,7 +44,7 @@
 #define CUSSEFT_ACTION_TAG   1002  //普通用户自己的页弹出框
 #define  TOOLBAR_HEIGHT  160
 
-@interface ShowStageViewController() <ButtomToolViewDelegate,StageViewDelegate,AddMarkViewControllerDelegate,UMShareViewControllerDelegate,UMSocialDataDelegate,UMSocialUIDelegate,UIActionSheetDelegate,UMShareViewController2Delegate,UMShareViewDelegate,TagViewDelegate,UIAlertViewDelegate>
+@interface ShowStageViewController() <ButtomToolViewDelegate,StageViewDelegate,AddMarkViewControllerDelegate,UMShareViewControllerDelegate,UMSocialDataDelegate,UMSocialUIDelegate,UIActionSheetDelegate,UMShareViewController2Delegate,UMShareViewDelegate,TagViewDelegate,UIAlertViewDelegate,SelectTimeViewDelegate>
 {
     ButtomToolView *_toolBar;
     UIButton  *moreButton;
@@ -112,7 +113,6 @@
 -(void)createNav
 {
     __weak typeof(self) weakSelf = self;
-
     NSString  *titleString =[Function htmlString: self.stageInfo.movieInfo.name ];
     UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 30) Font:30 Text:titleString];
     titleLable.textColor=VBlue_color;
@@ -137,7 +137,7 @@
                 || weakSelf.pageType==NSStagePapeTypeAdmin_Recommed
                 || weakSelf.pageType==NSStagePapeTypeAdmin_Timing) {
                 //最新添加
-                UIActionSheet  *al =[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"确定" destructiveButtonTitle:nil otherButtonTitles:@"[发送到 “发现”]",@"[发送到 “屏蔽”]",@"[发送到 “热门”]",@"[发送到 “最新”]", nil];
+                UIActionSheet  *al =[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"确定" destructiveButtonTitle:nil otherButtonTitles:@"[发送到 “发现”]",@"[发送到 “屏蔽”]",@"[发送到 “热门”]",@"[发送到 “最新”]",@"[定时到热门]",nil];
                 al.tag=ADM_NEW_ADD;
                 [al showInView:weakSelf.view];
             }
@@ -752,6 +752,27 @@
         NSLog(@"Error: %@", error);
     }];
 }
+//定时发送到热门,发送时间戳
+-(void)requesttiming:(NSString *)weiboId AndTimeSp:(NSString *)timeSp
+{
+    UserDataCenter  *userCenter=[UserDataCenter shareInstance];
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    NSDictionary *parameters=@{@"user_id":userCenter.user_id,@"weibo_id":weiboId,@"status":@"3",@"updated_at":timeSp};
+    [manager POST:[NSString stringWithFormat:@"%@/weibo/change-status", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
+            
+            UIAlertView  * al =[[UIAlertView alloc]initWithTitle:nil message:@"定时到热门成功" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            [al show];
+            //请求点赞
+            
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+        
+    }];
+}
+
+
 
 
 //管理员用户的点赞和点踩
@@ -1065,41 +1086,6 @@
     [UMSocialSnsPlatformManager getSocialPlatformWithName:[sharearray  objectAtIndex:button.tag-10000]].snsClickHandler(self,[UMSocialControllerService defaultControllerService],YES);
     
 }
-//跳转到个人页
-/*-(void)StageMovieButtonClick:(UIButton *) button
-{
-
-    MyViewController  *myVC=[[MyViewController alloc]init];
-    weiboInfoModel *model = [self.stageInfo.weibosArray objectAtIndex:0];
-    if (self.weiboInfo) {
-        model=self.weiboInfo;
-    }
-    myVC.author_id =[NSString stringWithFormat:@"%@",model.uerInfo.Id];
-    UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
-    self.navigationItem.backBarButtonItem=item;
-    [self.navigationController pushViewController:myVC animated:YES];
-
-}*/
-//// 分享
-//-(void)ShareButtonClick:(UIButton  *) button
-//{
-//    
-//    if (button==ShareButton) {  //分享有关
-//    UIImage  *image=[Function getImage:ShareView WithSize:CGSizeMake(kStageWidth-10, (kDeviceWidth-20)*(9.0/16.0))];
-//        if (self.weiboInfo) {
-//            self.stageInfo=self.weiboInfo.stageInfo;
-//        }
-//        UMShareView *shareView =[[UMShareView alloc] initwithStageInfo:self.stageInfo ScreenImage:image delgate:self];
-//        [shareView setShareLable];
-//        [shareView show];
-//    }
-//    else if (button==addMarkButton)//添加有关
-//    {
-//        
-//        [self addMarkButtonClick:button];
-//        
-//    }
-//}
 
 #pragma  mark -------AddMarkViewControllerReturn  --Delegete-------------
 -(void)AddMarkViewControllerReturn
@@ -1143,7 +1129,7 @@
             AddMarkVC.stageInfo=self.stageInfo;
             AddMarkVC.weiboInfo=_WeiboInfo;
             AddMarkVC.delegate=self;
-            [self presentViewController:AddMarkVC animated:NO completion:nil];
+            [self.navigationController pushViewController:AddMarkVC animated:YES];
 
             
         }else if (buttonIndex==2)
@@ -1190,7 +1176,7 @@
             AddMarkVC.stageInfo=self.stageInfo;
             AddMarkVC.weiboInfo=_WeiboInfo;
             AddMarkVC.delegate=self;
-            [self presentViewController:AddMarkVC animated:NO completion:nil];
+             [self.navigationController pushViewController:AddMarkVC animated:YES];
             
             
         }else if (buttonIndex==2)
@@ -1245,6 +1231,8 @@
             [alert show];
         }
     }
+    
+    
     else if (actionSheet.tag==ADM_NEW_ADD)
     {
         //发送到发现
@@ -1253,27 +1241,45 @@
         }
         else if (buttonIndex==1)
         {
-            
          //屏蔽
- 
             [self requestChangeStageStatusWithweiboId:[NSString stringWithFormat:@"%@",_WeiboInfo.Id]  StatusType:@"0"];
             
         }
         else if (buttonIndex==2)
         {
+            //发送到热门
           [self requestChangeStageStatusWithweiboId:[NSString stringWithFormat:@"%@",_WeiboInfo.Id] StatusType:@"3"];
+            
         } else if (buttonIndex==3) {
             //发送到最新
             [self requestChangeStageStatusWithweiboId:[NSString stringWithFormat:@"%@",_WeiboInfo.Id] StatusType:@"1"];
         }
+        //定时
+        else if(buttonIndex==4)
+        {
+            //时间
+            SelectTimeView  *datepicker =[[SelectTimeView alloc]init];
+            datepicker.delegate=self;
+            [datepicker show];
+        }
     }
 }
-
+#pragma mark  selected date time 
+-(void)DatePickerSelectedTime:(NSString *)dateString
+{
+    //定时到热门，伴随时间戳
+    [self requesttiming:[NSString stringWithFormat:@"%@",_WeiboInfo.Id] AndTimeSp:dateString];
+    
+    
+}
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (alertView.tag==3000) {
         if (self.pageType==NSStagePapeTypeMyAdd) {
             //返回
+            if (self.delegate && [self.delegate respondsToSelector:@selector(reloadMyAddCollectionView)]) {
+                [self.delegate reloadMyAddCollectionView];
+            }
             [self.navigationController popViewControllerAnimated:YES];
         }
     } else if (alertView.tag==3001) {

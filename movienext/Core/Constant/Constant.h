@@ -18,12 +18,17 @@
 #define kUrlFeed @"http://next-feed.b0.upaiyun.com/"
 #define kUrlStage @"http://next-stage.b0.upaiyun.com/"
 #define kUrlMoviePoster @"http://next-movieposter.b0.upaiyun.com/"
+#define KIMAGE_BIG    @""
+#define KIMAGE_SMALL  @"!thumbwide2"
 
 #define kBucketWeibo @"next-weibo"
 #define kBucketStage @"next-stage"
 #define kBucketFeed @"next-feed"
 #define kBucketAvatar @"next-avatar"
 #define kPassCodeWeibo @"QdthYmI7sp/5CsaqdTpYU5t0UrI="
+
+
+
 
 #pragma  mark    宽高设置
 #define kDeviceWidth        [UIScreen mainScreen].bounds.size.width
@@ -110,5 +115,11 @@
 
 #define  KImageWidth_Height  9.0/16
 
+
+///通知的相关定义
+
+#define GOTO_USER_CENTER   @"goto_user"  //跳转到个人页
+
+#define Refresh_USER_LIST  @"refresh_user_list"  //刷新个人页列表
 
 #endif
