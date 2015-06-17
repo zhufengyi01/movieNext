@@ -52,7 +52,7 @@
     datePicker = [[UIDatePicker alloc] initWithFrame:CGRectMake(0, 0, 320, 216)];
     datePicker.backgroundColor =[UIColor whiteColor];
     // 设置时区
-    [datePicker setTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
+    [datePicker setTimeZone:[NSTimeZone timeZoneWithName:@"GMT+0800"]];
     // 设置当前显示时间
     //[datePicker setDate:tempDate animated:YES];
     // 设置显示最大时间（此处为当前时间）

@@ -342,7 +342,7 @@ static const CGFloat MJDuration = 0.1;
             NSLog(@"1296035591  = %@",confromTimesp);
             NSDateFormatter *formatter = [[NSDateFormatter alloc] init] ;
             [formatter setDateStyle:NSDateFormatterMediumStyle];
-            [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
+            [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"GMT+0800"]];
             [formatter setTimeStyle:NSDateFormatterShortStyle];
             [formatter setDateFormat:@"YYYY-MM-dd HH:mm"];
             NSString *confromTimespStr = [formatter stringFromDate:confromTimesp];
