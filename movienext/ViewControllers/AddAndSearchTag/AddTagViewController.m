@@ -165,7 +165,7 @@
     if (self.delegate&&[self.delegate respondsToSelector:@selector(AddTagViewHandClickWithTag:)]) {
         [self.delegate AddTagViewHandClickWithTag:[dict objectForKey:@"title"]];
     }
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)didReceiveMemoryWarning {

@@ -37,8 +37,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch
     //默认是审核版
-    [[UILabel appearance] setFont:[UIFont fontWithName:@"FZLTHK—GBK1-0" size:20]];
-    [UIButton appearance].titleLabel.font =[UIFont fontWithName:@"FZLTHK—GBK1-0" size:20];
+    [self setupAppAppearance];
     
     self.IS_CHECK=@"1";
     //初始化友盟组件
@@ -63,6 +62,21 @@
     
     return YES;
 }
+
+-(void)setupAppAppearance
+{
+    [[UILabel appearance] setFont:[UIFont fontWithName:@"FZLTHK—GBK1-0" size:20]];
+    [UIButton appearance].titleLabel.font =[UIFont fontWithName:@"FZLTHK—GBK1-0" size:20];
+    
+    [[UINavigationBar appearance] setBarTintColor:[UIColor grayColor]];
+    [[UINavigationBar appearance] setTintColor:[UIColor grayColor]];
+//    [UINavigationBar appearance].titleTextAttributes = [NSDictionary dictionaryWithObject:[UIColor grayColor] forKey:@"NSForegroundColorAttributeName"];
+    
+//    [UITabBar appearance].barTintColor = [UIColor blueColor];
+//    [UITabBar appearance].tintColor = [UIColor grayColor];
+//    [UITabBar appearance].selectionIndicatorImage = [UIImage imageNamed:@"icon"];
+}
+
 
 -(void)createRootViewController:(NSString *) is_App_Check
 {
