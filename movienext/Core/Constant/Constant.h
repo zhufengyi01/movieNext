@@ -110,6 +110,7 @@
 //标签相关定义
 #define  TagTextFont14 14
 #define  TagTextFont16 16
+#define  TagTextFont18 18
 #define  TagViewConrnerRed 4
 #define  TagHeight   20
 

@@ -83,9 +83,8 @@ static const CGFloat MJDuration = 0.6;
     // if (self.myConllectionView) {
     //[  self.myConllectionView headerBeginRefreshing];
     //}
-    // [[UINavigationBar appearance] setShadowImage:[UIImage imageWithColor:[UIColor clearColor] size:CGSizeMake(kDeviceWidth, 1)]];
+     // [[UINavigationBar appearance] setShadowImage:[UIImage imageWithColor:[UIColor clearColor] size:CGSizeMake(kDeviceWidth, 1)]];
     
-    //[self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color.png"] forBarMetrics:UIBarMetricsDefault];
     [self.navigationController.navigationBar  setBackgroundImage:[UIImage imageWithColor:[UIColor colorWithRed:243.0/255 green:243.0/255 blue:243.0/255 alpha:1]] forBarMetrics:UIBarMetricsDefault];
     
     
@@ -1014,8 +1013,8 @@ static const CGFloat MJDuration = 0.6;
         vc.stageInfo = model.stageInfo;
         vc.upweiboArray=_upWeiboArray;
         vc.weiboInfo=model;
-        UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
-        self.navigationItem.backBarButtonItem=item;
+      //  UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+        //self.navigationItem.backBarButtonItem=item;
         [self.navigationController pushViewController:vc animated:YES];
         
     }

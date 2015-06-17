@@ -223,7 +223,7 @@
         _myTextView.font =[UIFont fontWithName:kFontDouble size:24];
     }
     _myTextView.backgroundColor=[UIColor clearColor];
-    [_myTextView addPlaceHolder:@"请输入内容"];
+    ///[_myTextView addPlaceHolder:@"请输入内容"];
     //_myTextView.layer.cornerRadius=4;
     //_myTextView.layer.borderWidth=0.5;
     _myTextView.layer.allowsEdgeAntialiasing=YES;
@@ -232,6 +232,7 @@
     _myTextView.returnKeyType=UIReturnKeyDone;
     _myTextView.layoutManager.allowsNonContiguousLayout=NO;
     _myTextView.scrollEnabled=YES;
+    _myTextView.delegate=self;
     _myTextView.textAlignment=NSTextAlignmentCenter;
     // _myTextView.autoresizingMask=UIViewAutoresizingFlexibleHeight;
     _myTextView.selectedRange = NSMakeRange(0,0);  //默认光标从第一个开始
@@ -514,7 +515,6 @@
         //   [self PushlicInScreen];
         [_myTextView resignFirstResponder];
         return NO;
-        
     }
     return YES;
     

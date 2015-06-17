@@ -51,9 +51,9 @@
     self.titleLable=[ZCControl createLabelWithFrame:CGRectMake(0,0, 60, 30) Font:TagTextFont16 Text:@"标签"];
     self.titleLable.textColor=[UIColor whiteColor];
     
-    self.titleLable.font =[UIFont fontWithName:kFontRegular size:TagTextFont14];
+    self.titleLable.font =[UIFont fontWithName:kFontRegular size:TagTextFont16];
     if (IsIphone6plus) {
-        self.titleLable.font=[UIFont fontWithName:kFontRegular size:TagTextFont16];
+        self.titleLable.font=[UIFont fontWithName:kFontRegular size:TagTextFont18];
     }
     self.titleLable.lineBreakMode=NSLineBreakByTruncatingTail;
     self.titleLable.adjustsFontSizeToFitWidth=NO;
@@ -65,6 +65,13 @@
     {
         self.titleLable.text=_weiboInfo.content;
     }
+    //设置字体间距的属性
+    NSMutableAttributedString * attributedString1 = [[NSMutableAttributedString alloc] initWithString:self.titleLable.text];
+    NSMutableParagraphStyle * paragraphStyle1 = [[NSMutableParagraphStyle alloc] init];
+    [paragraphStyle1 setLineSpacing:15];
+    [attributedString1 addAttribute:NSParagraphStyleAttributeName value:paragraphStyle1 range:NSMakeRange(0, [self.titleLable.text length])];
+    [self.titleLable setAttributedText:attributedString1];
+    
     [self.tagBgImageview addSubview:self.titleLable];
     //计算自身的大小
     //NSString  *titleString =_tagInfo.tagDetailInfo.title;
@@ -105,7 +112,7 @@
 {
     [super layoutSubviews];
     self.tagBgImageview.frame=CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
-    self.titleLable.frame=CGRectMake(3,0, self.frame.size.width-6,self.frame.size.height);
+    self.titleLable.frame=CGRectMake(6,0, self.frame.size.width-6,self.frame.size.height);
     
 }
 

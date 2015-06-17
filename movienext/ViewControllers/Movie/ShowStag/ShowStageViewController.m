@@ -88,6 +88,8 @@
 @property(nonatomic,strong) UIView  *ShareView;
 
 @property(nonatomic,strong) weiboInfoModel  *WeiboInfo;
+
+
 @end
 
 @implementation ShowStageViewController
@@ -263,10 +265,14 @@
     if (self.stageInfo.weibosArray.count>0) {
         weibomodel =[self.stageInfo.weibosArray objectAtIndex:0];
     }
-    markLable.text=weibomodel.content;
+    if (self.weiboInfo) {
+        weibomodel=self.WeiboInfo;
+    }
+     markLable.text=weibomodel.content;
+    
     if (self.weiboInfo) {
         markLable.text=self.weiboInfo.content;
-    }
+   }
     markLable.lineBreakMode=NSLineBreakByCharWrapping;
     markLable.contentMode=UIViewContentModeBottom;
     markLable.textAlignment=NSTextAlignmentCenter;
@@ -435,7 +441,7 @@
         for (int i=0; i<_WeiboInfo.tagArray.count; i++) {
             TagView  *tagView= [[TagView alloc]initWithWeiboInfo:_WeiboInfo AndTagInfo:_WeiboInfo.tagArray[i] delegate:self isCanClick:YES backgoundImage:nil isLongTag:NO];
             [tagView setcornerRadius:4];
-            [tagView setbigTagWithSize:CGSizeMake(8,4)];
+            [tagView setbigTagWithSize:CGSizeMake(6,6)];
             tagView.tag=5000+i;
             //            tagView.backgroundColor =[UIColor redColor];
             [self.WeiboTagLable appendView:tagView margin:UIEdgeInsetsMake(5, 10, 0, 0)];

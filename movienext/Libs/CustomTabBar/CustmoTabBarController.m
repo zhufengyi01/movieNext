@@ -19,7 +19,7 @@
 #import "Constant.h"
 #import "FindBeforeViewController.h"
 #import "FinderViewController.h"
-
+#import "MainNavigationViewController.h"
 #import "AppDelegate.h"
 
 @interface CustmoTabBarController ()<CustomTabBarDelegate>
@@ -52,7 +52,7 @@
     //UINavigationController * fristNav = [[UINavigationController alloc] initWithRootViewController:newVC];
     
     MovieViewController * mvc = [[MovieViewController alloc] init];
-    UINavigationController * mvcNav = [[UINavigationController alloc] initWithRootViewController:mvc];
+    MainNavigationViewController * mvcNav = [[MainNavigationViewController alloc] initWithRootViewController:mvc];
     mvc.hidesBottomBarWhenPushed=YES;
     
     //添加一个发现页
