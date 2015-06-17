@@ -69,11 +69,15 @@ static const CGFloat MJDuration = 0.1;
     }
     else if (self.pageType==NSNewAddPageSoureTypeRecommed)
     {
-        titleString=@"微博推荐";
+        titleString=@"微博热门";
     }
     else if (self.pageType==NSNewAddPageSoureTypeTiming)
     {
         titleString=@"微博已定时";
+    }
+    else if (self.pageType==NSNewAddPageSoureTypeNotReview)
+    {
+        titleString=@"微博未审核";
     }
     UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:titleString];
     titleLable.textColor=VGray_color;
@@ -229,6 +233,10 @@ static const CGFloat MJDuration = 0.1;
     {
         parameters = @{@"user_id":userCenter.user_id, @"status":@"4"};
     }
+    else if (self.pageType==NSNewAddPageSoureTypeNotReview)
+    {
+        parameters = @{@"user_id":userCenter.user_id, @"status":@"5"};
+    }
     
     [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
@@ -375,7 +383,10 @@ static const CGFloat MJDuration = 0.1;
     else if (self.pageType==NSNewAddPageSoureTypeTiming)
     {
         vc.pageType=NSStagePapeTypeAdmin_Timing;
-        
+    }
+    else if (self.pageType==NSNewAddPageSoureTypeNotReview)
+    {
+        vc.pageType=NSStagePapeTypeAdmin_Not_Review;
     }
     
     vc.stageInfo = model.stageInfo;

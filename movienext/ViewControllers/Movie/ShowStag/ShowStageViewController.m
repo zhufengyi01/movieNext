@@ -135,8 +135,8 @@
             || weakSelf.pageType==NSStagePapeTypeAdmin_Close_Weibo
             || weakSelf.pageType==NSStagePapeTypeAdmin_Dscorver
             || weakSelf.pageType==NSStagePapeTypeAdmin_Recommed
-            || weakSelf.pageType==NSStagePapeTypeAdmin_Timing) {
-            //最新添加
+            || weakSelf.pageType==NSStagePapeTypeAdmin_Timing
+            || weakSelf.pageType==NSStagePapeTypeAdmin_Not_Review) {
             UIActionSheet  *al =[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"确定" destructiveButtonTitle:nil otherButtonTitles:@"[发送到 “发现”]",@"[发送到 “屏蔽”]",@"[发送到 “热门”]",@"[发送到 “最新”]",@"[定时到热门]",nil];
             al.tag=ADM_NEW_ADD;
             [al showInView:weakSelf.view];

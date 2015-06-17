@@ -464,7 +464,7 @@
 }
 
 
-//移除微博推荐接口
+//移除微博热门接口
 -(void)requestrecommendDeleteDataWithHotId:(NSString *) hot_id
 {
     

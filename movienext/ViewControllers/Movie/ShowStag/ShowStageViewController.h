@@ -31,6 +31,7 @@ typedef  NS_ENUM(NSInteger,NSStagePapeType)
     NSStagePapeTypeAdmin_Close_Weibo,  //屏蔽列表
     NSStagePapeTypeAdmin_Recommed,  //推荐列表
     NSStagePapeTypeAdmin_Timing,    //发送到定时页面
+    NSStagePapeTypeAdmin_Not_Review,//未审核
     
     
     
