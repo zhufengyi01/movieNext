@@ -43,7 +43,7 @@
     search=[[UISearchBar alloc]initWithFrame:CGRectMake(10, 30, kDeviceWidth-20, 28)];
     search.placeholder=@"请输入标签";
     search.delegate=self;
-    search.showsCancelButton=YES;
+    search.showsCancelButton=NO;
     search.searchBarStyle = UISearchBarStyleMinimal;
     [search becomeFirstResponder];
     search.backgroundColor=[UIColor clearColor];
@@ -165,7 +165,7 @@
     if (self.delegate&&[self.delegate respondsToSelector:@selector(AddTagViewHandClickWithTag:)]) {
         [self.delegate AddTagViewHandClickWithTag:[dict objectForKey:@"title"]];
     }
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self.navigationController popViewControllerAnimated:NO];
 }
 
 - (void)didReceiveMemoryWarning {

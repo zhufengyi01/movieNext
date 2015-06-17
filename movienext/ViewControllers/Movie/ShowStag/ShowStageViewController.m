@@ -260,6 +260,10 @@
         markLable.frame=CGRectMake(20, 20,_layerView.frame.size.width-40, 70);
         markLable.font=[UIFont fontWithName:kFontDouble size:28];
     }
+
+    
+    
+    
     markLable.textColor=[UIColor whiteColor];
     weiboInfoModel *weibomodel;
     if (self.stageInfo.weibosArray.count>0) {
@@ -277,7 +281,15 @@
     markLable.contentMode=UIViewContentModeBottom;
     markLable.textAlignment=NSTextAlignmentCenter;
     [self.ShareView addSubview:markLable];
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    paragraphStyle.lineSpacing = 5;
+    NSDictionary *attributes = @{
+                                 NSFontAttributeName:markLable.font,
+                                 NSParagraphStyleAttributeName:paragraphStyle
+                                 };
+    markLable.attributedText = [[NSAttributedString alloc] initWithString:markLable.text attributes:attributes];
     
+
     
     //计算文字的高度从而确定整个shareview的高度
     

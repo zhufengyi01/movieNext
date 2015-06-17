@@ -214,7 +214,6 @@
     [_layerView.layer insertSublayer:_gradientLayer atIndex:0];
     
     _myTextView=[[UITextView alloc]initWithFrame:CGRectMake(10,self.ShareView.frame.size.height-40, kDeviceWidth-40, 40)];
-    _myTextView.delegate=self;
     // [_myTextView addPlaceHolder:@"输入弹幕"];
     _myTextView.textColor=[UIColor whiteColor];
     _myTextView.font= [UIFont fontWithName:kFontDouble size:22];
@@ -223,8 +222,7 @@
         _myTextView.font =[UIFont fontWithName:kFontDouble size:24];
     }
     _myTextView.backgroundColor=[UIColor clearColor];
-    ///[_myTextView addPlaceHolder:@"请输入内容"];
-    //_myTextView.layer.cornerRadius=4;
+     //_myTextView.layer.cornerRadius=4;
     //_myTextView.layer.borderWidth=0.5;
     _myTextView.layer.allowsEdgeAntialiasing=YES;
     //_myTextView.layer.borderColor=VLight_GrayColor.CGColor;
@@ -234,6 +232,7 @@
     _myTextView.scrollEnabled=YES;
     _myTextView.delegate=self;
     _myTextView.textAlignment=NSTextAlignmentCenter;
+    _myTextView.delegate=self;
     // _myTextView.autoresizingMask=UIViewAutoresizingFlexibleHeight;
     _myTextView.selectedRange = NSMakeRange(0,0);  //默认光标从第一个开始
     [_myTextView becomeFirstResponder];
@@ -661,8 +660,8 @@
         addtag.modalTransitionStyle=UIModalTransitionStyleCrossDissolve;
         UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:addtag];
         //[self presentViewController:addtag animated:NO completion:nil];
-        [self presentViewController:na animated:YES completion:nil];
-        
+        //[self presentViewController:na animated:YES completion:nil];
+        [self.navigationController pushViewController:addtag animated:NO];
     }
     
     else
