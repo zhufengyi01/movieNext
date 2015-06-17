@@ -76,6 +76,11 @@
 
 -(void)createNavigation
 {
+    
+    
+    UIView  *v =[[UIView alloc]init];
+    self.navigationItem.leftBarButtonItem =[[UIBarButtonItem alloc]initWithCustomView:v];
+    
     [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color.png"] forBarMetrics:UIBarMetricsDefault];
     search=[[UISearchBar alloc]initWithFrame:CGRectMake(30, 10, 0, 28)];
     search.placeholder=@"搜索电影";
@@ -119,7 +124,7 @@
 }
 -(void)initUI
 {
-    _myTableView =[[UITableView alloc]initWithFrame:CGRectMake(0, 0,kDeviceWidth, kDeviceHeight)];
+    _myTableView =[[UITableView alloc]initWithFrame:CGRectMake(0, 0,kDeviceWidth, kDeviceHeight-kHeightNavigation)];
     _myTableView.delegate=self;
     _myTableView.dataSource=self;
     _myTableView.separatorInset=UIEdgeInsetsMake(0, -110, 0, 0);
@@ -130,21 +135,35 @@
     _historyTableView.delegate = self;
     _historyTableView.dataSource = self;
     //    _historyTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    [_myTableView addSubview:_historyTableView];
+    //[_myTableView addSubview:_historyTableView];
     
     _historyMovieNames = [[NSUserDefaults standardUserDefaults] objectForKey:@"history"];
     for (NSString *name in _historyMovieNames) {
         NSLog(@"name = %@", name);
     }
     [_historyTableView reloadData];
+    [self createFooterView];
     
 }
-
+-(void)createFooterView
+{
+ 
+    UIView  *foot =[[UIView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth,40)];
+    foot.backgroundColor=[UIColor whiteColor];
+    
+    UIView  *line =[[UIView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, 0.5)];
+    line.backgroundColor =VGray_color;
+    [foot addSubview:line];
+    UILabel  *labefoot =[[UILabel alloc]initWithFrame:CGRectMake(0, 1, kDeviceWidth, 39)];
+    labefoot.textColor=VGray_color;
+    labefoot.font=[UIFont systemFontOfSize:12];
+    labefoot.textAlignment=NSTextAlignmentCenter;
+    labefoot.text=@"THE END";
+    [foot addSubview:labefoot];
+    [self.myTableView setTableFooterView:foot];
+}
 
 #pragma  mark   -------------------数据请求
-
-
-
 //根据豆瓣id  请求movieid
 -(void)requestMovieIdWithdoubanId:(NSString *) douban_Id
 {

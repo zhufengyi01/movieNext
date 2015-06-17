@@ -314,14 +314,14 @@
                             }
                             [Function saveUser:userCenter];
                             //登陆成功后把根
-                            if ([[responseObject objectForKey:@"first_login"] intValue]==0) {
+                            //if ([[responseObject objectForKey:@"first_login"] intValue]==0) {
                                 window.rootViewController=[CustmoTabBarController new];
-                            }
-                            else {
-                                UserHeadChangeViewController *vc=[UserHeadChangeViewController new];
-                                vc.pageType=NSHeadChangePageTypeFirstLogin;
-                                [self.navigationController pushViewController:vc animated:YES];
-                            }
+                            //}
+//                            else {
+//                                UserHeadChangeViewController *vc=[UserHeadChangeViewController new];
+//                                vc.pageType=NSHeadChangePageTypeFirstLogin;
+//                                [self.navigationController pushViewController:vc animated:YES];
+//                            }
                         }
                     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                         NSLog(@"Error: %@", error);
