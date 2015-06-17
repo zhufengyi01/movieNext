@@ -152,7 +152,7 @@
     foot.backgroundColor=[UIColor whiteColor];
     
     UIView  *line =[[UIView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, 0.5)];
-    line.backgroundColor =VGray_color;
+    line.backgroundColor =VLight_GrayColor;
     [foot addSubview:line];
     UILabel  *labefoot =[[UILabel alloc]initWithFrame:CGRectMake(0, 1, kDeviceWidth, 39)];
     labefoot.textColor=VGray_color;
