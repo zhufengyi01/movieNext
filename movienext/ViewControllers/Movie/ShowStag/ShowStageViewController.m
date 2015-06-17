@@ -43,6 +43,11 @@
 #define CUS_ACTION_TAG   1001   //普通用户弹出框
 #define CUSSEFT_ACTION_TAG   1002  //普通用户自己的页弹出框
 #define  TOOLBAR_HEIGHT  160
+#define ADM_BTN_BLOCK   2000  //屏蔽
+#define ADM_BTN_NEW     2001  //最新
+#define ADM_BTN_NORMAL  2002  //正常
+#define ADM_BTN_DISCOVER 2003 //发现
+#define ADM_BTN_TIMING   2004 //定时
 
 @interface ShowStageViewController() <ButtomToolViewDelegate,StageViewDelegate,AddMarkViewControllerDelegate,UMShareViewControllerDelegate,UMSocialDataDelegate,UMSocialUIDelegate,UIActionSheetDelegate,UMShareViewController2Delegate,UMShareViewDelegate,TagViewDelegate,UIAlertViewDelegate,SelectTimeViewDelegate>
 {
@@ -587,46 +592,46 @@
     [tagScrollView addSubview:self.tagLable];
     tagScrollView.contentSize=CGSizeMake(kDeviceWidth-20, Tagsize.height+20);
     
-    addMarkButton =[UIButton buttonWithType:UIButtonTypeCustom];
-    addMarkButton.frame=CGRectMake(0, TOOLBAR_HEIGHT-45, kDeviceWidth/2, 45);
-    [addMarkButton setTitle:@"我要添加" forState:UIControlStateNormal];
-    if (self.pageType==NSStagePapeTypeAdmin_New_Add) {
-        //zui 心添加
-        [addMarkButton setTitle:@"移到发现" forState:UIControlStateNormal];
-    }
-    
-    [addMarkButton addActionHandler:^(NSInteger tag) {
-        if (self.pageType==NSStagePapeTypeAdmin_New_Add) {
-            //移到发现
-            [weakSelf requestChangeStageStatusWithweiboId:[NSString stringWithFormat:@"%@",weakSelf.WeiboInfo.Id] StatusType:@"2"];
+    if (weakSelf.pageType==NSStagePapeTypeAdmin_New_Add
+        || weakSelf.pageType==NSStagePapeTypeAdmin_Close_Weibo
+        || weakSelf.pageType==NSStagePapeTypeAdmin_Dscorver
+        || weakSelf.pageType==NSStagePapeTypeAdmin_Recommed
+        || weakSelf.pageType==NSStagePapeTypeAdmin_Timing
+        || weakSelf.pageType==NSStagePapeTypeAdmin_Not_Review) {
+        NSArray *titleArray = [NSArray arrayWithObjects:@"屏蔽", @"最新", @"正常", @"发现", @"定时", nil];
+        for (int i=0; i<5; i++) {
+            UIButton *btnBlock =[UIButton buttonWithType:UIButtonTypeCustom];
+            btnBlock.tag = 2000 + i;
+            btnBlock.frame=CGRectMake(kDeviceWidth/5*i, TOOLBAR_HEIGHT-45, kDeviceWidth/5, 45);
+            [btnBlock setTitle:titleArray[i] forState:UIControlStateNormal];
+            [btnBlock setTitleColor:VBlue_color forState:UIControlStateNormal];
+            [btnBlock setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color"] forState:UIControlStateNormal];
+            [btnBlock addTarget:self action:@selector(changeWeiboStatus:) forControlEvents:UIControlEventTouchUpInside];
+            [shareView addSubview:btnBlock];
         }
-        else{
+    } else {
+        addMarkButton =[UIButton buttonWithType:UIButtonTypeCustom];
+        addMarkButton.frame=CGRectMake(0, TOOLBAR_HEIGHT-45, kDeviceWidth/2, 45);
+        [addMarkButton setTitle:@"我要添加" forState:UIControlStateNormal];
+        
+        [addMarkButton addActionHandler:^(NSInteger tag) {
             AddMarkViewController  *AddMarkVC=[[AddMarkViewController alloc]init];
             AddMarkVC.delegate=weakSelf;
             // AddMarkVC.model=self.stageInfo;
             AddMarkVC.stageInfo=weakSelf.stageInfo;
             [weakSelf.navigationController pushViewController:AddMarkVC animated:NO];
-        }
-        
-    }];
-    addMarkButton.titleLabel.font =[UIFont boldSystemFontOfSize:16];
-    [addMarkButton setTitleColor:VBlue_color forState:UIControlStateNormal];
-    //ShareButton.backgroundColor =[UIColor redColor];
-    [addMarkButton setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color"] forState:UIControlStateNormal];
-    [shareView addSubview:addMarkButton];
-    
-    ShareButton =[UIButton buttonWithType:UIButtonTypeCustom];
-    ShareButton.frame=CGRectMake(kDeviceWidth/2, TOOLBAR_HEIGHT-45, kDeviceWidth/2, 45);
-    [ShareButton setTitle:@"我要分享" forState:UIControlStateNormal];
-    if (self.pageType==NSStagePapeTypeAdmin_New_Add) {
-        [ShareButton setTitle:@"移到屏蔽" forState:UIControlStateNormal];
-    }
-    [ShareButton addActionHandler:^(NSInteger tag) {
-        if (self.pageType==NSStagePapeTypeAdmin_New_Add) {
-            //移到屏蔽
-            [weakSelf requestChangeStageStatusWithweiboId:[NSString stringWithFormat:@"%@",weakSelf.WeiboInfo.Id]  StatusType:@"0"];
-        }else{
             
+        }];
+        addMarkButton.titleLabel.font =[UIFont boldSystemFontOfSize:16];
+        [addMarkButton setTitleColor:VBlue_color forState:UIControlStateNormal];
+        //ShareButton.backgroundColor =[UIColor redColor];
+        [addMarkButton setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color"] forState:UIControlStateNormal];
+        [shareView addSubview:addMarkButton];
+        
+        ShareButton =[UIButton buttonWithType:UIButtonTypeCustom];
+        ShareButton.frame=CGRectMake(kDeviceWidth/2, TOOLBAR_HEIGHT-45, kDeviceWidth/2, 45);
+        [ShareButton setTitle:@"我要分享" forState:UIControlStateNormal];
+        [ShareButton addActionHandler:^(NSInteger tag) {
             float  height = weakSelf.ShareView.frame.size.height;
             UIImage  *image=[Function getImage:weakSelf.ShareView WithSize:CGSizeMake(kDeviceWidth-20,height)];
             if (weakSelf.weiboInfo) {
@@ -635,18 +640,18 @@
             UMShareView *shareView =[[UMShareView alloc] initwithStageInfo:weakSelf.stageInfo ScreenImage:image delgate:weakSelf andShareHeight:height];
             [shareView setShareLable];
             [shareView show];
-        }
+            
+        }];
+        ShareButton.titleLabel.font =[UIFont boldSystemFontOfSize:16];
+        [ShareButton setTitleColor:VBlue_color forState:UIControlStateNormal];
+        [ShareButton setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color"] forState:UIControlStateNormal];
+        [shareView addSubview:ShareButton];
         
-    }];
-    ShareButton.titleLabel.font =[UIFont boldSystemFontOfSize:16];
-    [ShareButton setTitleColor:VBlue_color forState:UIControlStateNormal];
-    [ShareButton setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color"] forState:UIControlStateNormal];
-    [shareView addSubview:ShareButton];
-    
-    //添加一个线
-    UIView  *verline =[[UIView alloc]initWithFrame:CGRectMake(kDeviceWidth/2,TOOLBAR_HEIGHT-36, 0.5, 26)];
-    verline.backgroundColor =VLight_GrayColor;
-    [shareView addSubview:verline];
+        //添加一个线
+        UIView  *verline =[[UIView alloc]initWithFrame:CGRectMake(kDeviceWidth/2,TOOLBAR_HEIGHT-36, 0.5, 26)];
+        verline.backgroundColor =VLight_GrayColor;
+        [shareView addSubview:verline];
+    }
     
 }
 
@@ -728,6 +733,45 @@
         UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
         self.navigationItem.backBarButtonItem=item;
         [self.navigationController pushViewController:vc animated:YES];
+    }
+}
+
+#pragma mark --- User Action
+#pragma mark ---
+
+- (void)changeWeiboStatus:(UIButton *)sender{
+    switch (sender.tag) {
+        case ADM_BTN_BLOCK:
+        {
+            [self requestChangeStageStatusWithweiboId:[NSString stringWithFormat:@"%@",_WeiboInfo.Id] StatusType:@"0"];
+        }
+            break;
+        case ADM_BTN_NEW:
+        {
+            [self requestChangeStageStatusWithweiboId:[NSString stringWithFormat:@"%@",_WeiboInfo.Id] StatusType:@"5"];
+        }
+            break;
+        case ADM_BTN_NORMAL:
+        {
+            [self requestChangeStageStatusWithweiboId:[NSString stringWithFormat:@"%@",_WeiboInfo.Id] StatusType:@"1"];
+        }
+            break;
+        case ADM_BTN_DISCOVER:
+        {
+            [self requestChangeStageStatusWithweiboId:[NSString stringWithFormat:@"%@",_WeiboInfo.Id] StatusType:@"2"];
+        }
+            break;
+        case ADM_BTN_TIMING:
+        {
+            //时间
+            SelectTimeView  *datepicker =[[SelectTimeView alloc]init];
+            datepicker.delegate=self;
+            [datepicker show];
+        }
+            break;
+            
+        default:
+            break;
     }
 }
 
