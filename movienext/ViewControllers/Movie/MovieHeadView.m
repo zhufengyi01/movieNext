@@ -24,7 +24,7 @@
 -(void)createUI
 {
     //放置所有控件的view
-
+    
     bgImageView=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth,(kDeviceHeight/3+64)+110)];
     bgImageView.backgroundColor=VLight_GrayColor;
     bgImageView.userInteractionEnabled=YES;
@@ -34,27 +34,27 @@
     movieLogoImageView.userInteractionEnabled=YES;
     movieLogoImageView.layer.cornerRadius=4;
     movieLogoImageView.clipsToBounds=YES;
-
+    
     [bgImageView addSubview:movieLogoImageView];
     
     titleLable=[ZCControl createLabelWithFrame:CGRectMake(movieLogoImageView.frame.origin.x+movieLogoImageView.frame.size.width+10, movieLogoImageView.frame.origin.y,kDeviceWidth-20-50-20 ,50) Font:16 Text:@""];
     titleLable.adjustsFontSizeToFitWidth=NO;
-     titleLable.textColor=[UIColor whiteColor];
+    titleLable.textColor=[UIColor whiteColor];
     titleLable.lineBreakMode=NSLineBreakByTruncatingTail;
     titleLable.numberOfLines=1;
     titleLable.font=[UIFont boldSystemFontOfSize:18];
     [bgImageView addSubview:titleLable];
     
-//    //导演
-//    derectorLable=[ZCControl createLabelWithFrame:CGRectMake(movieLogoImageView.frame.origin.x+movieLogoImageView.frame.size.width+10,titleLable.frame.origin.y+titleLable.frame.size.height,kDeviceWidth-30-10-30,15) Font:14 Text:@""];
-//    derectorLable.textColor=[UIColor whiteColor];
-//    derectorLable.numberOfLines=2;
-   // [bgImageView addSubview:derectorLable];
+    //    //导演
+    //    derectorLable=[ZCControl createLabelWithFrame:CGRectMake(movieLogoImageView.frame.origin.x+movieLogoImageView.frame.size.width+10,titleLable.frame.origin.y+titleLable.frame.size.height,kDeviceWidth-30-10-30,15) Font:14 Text:@""];
+    //    derectorLable.textColor=[UIColor whiteColor];
+    //    derectorLable.numberOfLines=2;
+    // [bgImageView addSubview:derectorLable];
     //演员
-//    performerLable=[ZCControl createLabelWithFrame:CGRectMake(movieLogoImageView.frame.origin.x+10+movieLogoImageView.frame.size.width, derectorLable.frame.origin.y+derectorLable.frame.size.height, kDeviceWidth-movieLogoImageView.frame.origin.x-movieLogoImageView.frame.size.width-10-10, 50) Font:12 Text:@""];
-//    performerLable.numberOfLines=3;
-//    performerLable.lineBreakMode=NSLineBreakByCharWrapping;
-//    performerLable.textColor=[UIColor whiteColor];
+    //    performerLable=[ZCControl createLabelWithFrame:CGRectMake(movieLogoImageView.frame.origin.x+10+movieLogoImageView.frame.size.width, derectorLable.frame.origin.y+derectorLable.frame.size.height, kDeviceWidth-movieLogoImageView.frame.origin.x-movieLogoImageView.frame.size.width-10-10, 50) Font:12 Text:@""];
+    //    performerLable.numberOfLines=3;
+    //    performerLable.lineBreakMode=NSLineBreakByCharWrapping;
+    //    performerLable.textColor=[UIColor whiteColor];
     //[bgImageView addSubview:performerLable];
     
     //下面的点击
@@ -82,7 +82,7 @@
     [btn2 setImage:[UIImage imageNamed:@"three switch.png"] forState:UIControlStateSelected];
     btn2.tag=1001;
     [btnBg addSubview:btn2];
-
+    
     
 }
 -(void)setCollectionHeaderValue
@@ -100,14 +100,14 @@
         UIImage *blurredImage=[[UIImage imageWithData:imageData] blurredImage:blurred];
         bgImageView.image = blurredImage;
     }];
-  
+    
     if (self.movieInfo.name ) {
         titleLable.text=[NSString stringWithFormat:@"%@",self.movieInfo.name];
     }
     if (self.movieInfo.director.length) {
         derectorLable.text=[NSString stringWithFormat:@"导演 :%@",self.movieInfo.director];
     }
-     if (self.movieInfo.actors.length) {
+    if (self.movieInfo.actors.length) {
         performerLable.text=[NSString stringWithFormat:@"演员:%@",self.movieInfo.actors];
     }
     
@@ -118,7 +118,7 @@
     if (self.delegate&& [self.delegate respondsToSelector:@selector(ChangeCollectionModel:)]) {
         [self.delegate ChangeCollectionModel:button];
     }
-
+    
 }
 
 

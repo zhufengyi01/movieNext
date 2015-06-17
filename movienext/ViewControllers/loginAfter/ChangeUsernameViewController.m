@@ -40,14 +40,14 @@
     self.navigationItem.rightBarButtonItem=barButton;
     
     [self createTextField];
-
+    
 }
 
 #pragma mark  ------requestData   --------
 -(void)requestChangeUserName
 {
     
-     UserDataCenter  *userCenter =[UserDataCenter shareInstance];
+    UserDataCenter  *userCenter =[UserDataCenter shareInstance];
     NSString * user_id = userCenter.user_id;
     NSDictionary *parameters = @{@"username":[nanmeText text],@"user_id":user_id};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
@@ -70,7 +70,7 @@
         UIAlertView  *Al=[[UIAlertView alloc]initWithTitle:nil message:@"昵称不能为空" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
         [Al show];
         return;
-     
+        
     }
     if (self.delegate&&[self.delegate respondsToSelector:@selector(changeUserName:)]) {
         
@@ -97,13 +97,13 @@
 }
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end

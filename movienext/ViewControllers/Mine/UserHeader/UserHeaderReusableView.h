@@ -27,7 +27,7 @@
     UILabel *lblZanCout;
     UILabel *lblBrief;   //简介
     NSMutableDictionary  *buttonStateDict;
-    UIButton  *addButton;  
+    UIButton  *addButton;
     UIButton  *zanButton;
     
 }

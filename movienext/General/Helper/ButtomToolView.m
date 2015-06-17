@@ -17,15 +17,15 @@
 #import "NSDate+Extension.h"
 #import "UIButton+WebCache.h"
 
-@implementation ButtomToolView 
+@implementation ButtomToolView
 
 /*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
-}
-*/
+ // Only override drawRect: if you perform custom drawing.
+ // An empty implementation adversely affects performance during animation.
+ - (void)drawRect:(CGRect)rect {
+ // Drawing code
+ }
+ */
 -(instancetype)initWithFrame:(CGRect)frame
 {
     if (self =[super initWithFrame:frame]) {
@@ -61,7 +61,7 @@
     //在alertview上添加手势用来截获点击屏幕事件
     UITapGestureRecognizer  *tapalert =[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(alertViewTap:)];
     [_alertView addGestureRecognizer:tapalert];
-
+    
     
     //头像
     headButton=[UIButton buttonWithType:UIButtonTypeCustom];
@@ -72,7 +72,7 @@
     headButton.tag=10000;
     [_alertView addSubview:headButton];
     
-     userNamelabel =[ZCControl createLabelWithFrame:CGRectMake(headButton.frame.origin.x+headButton.frame.size.width+10,headButton.frame.origin.y, 200, 20) Font:14 Text:@"名字"];
+    userNamelabel =[ZCControl createLabelWithFrame:CGRectMake(headButton.frame.origin.x+headButton.frame.size.width+10,headButton.frame.origin.y, 200, 20) Font:14 Text:@"名字"];
     userNamelabel.textColor=VBlue_color;
     userNamelabel.adjustsFontSizeToFitWidth=NO;
     userNamelabel.lineBreakMode=NSLineBreakByTruncatingTail;
@@ -89,8 +89,8 @@
     
     contentLable =[ZCControl createLabelWithFrame:CGRectMake(headButton.frame.origin.x,headButton.frame.origin.y+headButton.frame.size.height+0,_alertView.frame.size.width-20, 0) Font:16 Text:@"内容"];
     //contentLable.numberOfLines=0;
-   contentLable.adjustsFontSizeToFitWidth=NO;
-   // contentLable.lineBreakMode=NSLineBreakByTruncatingTail;
+    contentLable.adjustsFontSizeToFitWidth=NO;
+    // contentLable.lineBreakMode=NSLineBreakByTruncatingTail;
     contentLable.textColor=VGray_color;
     [_alertView addSubview:contentLable];
     
@@ -106,7 +106,7 @@
     [shareButton setTitleColor:VBlue_color forState:UIControlStateNormal];
     shareButton.titleLabel.font=[UIFont systemFontOfSize:14];
     [shareButton setTitleEdgeInsets:UIEdgeInsetsMake(10, 25, 10, 10)];
-
+    
     [shareButton setImage:[UIImage imageNamed:@"btn_share_default.png"] forState:UIControlStateNormal];
     shareButton.backgroundColor=View_ToolBar;
     //[shareButton setBackgroundImage:[UIImage imageNamed:@"login_alpa_backgroundcolor.png"] forState:UIControlStateNormal];
@@ -124,27 +124,27 @@
     likeimageview=[[UIImageView alloc]initWithFrame:CGRectMake((zanbutton.frame.size.width)/2-15,zanbutton.frame.size.height/2-10, 25, 25)];
     likeimageview.image=[UIImage imageNamed:@"opened_like_icon.png"];
     [zanbutton addSubview:likeimageview];
-
+    
     //高亮显示
     [buttomShareView addSubview:zanbutton];
     
-//    UIView  *lineView1=[[UIView alloc]initWithFrame:CGRectMake(alertView.frame.size.width/2, 0,1,buttomShareView.frame.size.height)];
-//    lineView1.backgroundColor=VLight_GrayColor;
-//    [buttomShareView addSubview:lineView1];
-//    
+    //    UIView  *lineView1=[[UIView alloc]initWithFrame:CGRectMake(alertView.frame.size.width/2, 0,1,buttomShareView.frame.size.height)];
+    //    lineView1.backgroundColor=VLight_GrayColor;
+    //    [buttomShareView addSubview:lineView1];
+    //
     
     morebuton=[ZCControl createButtonWithFrame:CGRectMake(0,0,30,45) ImageName:nil Target:self Action:@selector(dealButtomClick:) Title:@""];
     [morebuton setImage:[UIImage imageNamed:@"alert_more"] forState:UIControlStateNormal];
     morebuton.tag=10003;
     [buttomShareView addSubview:morebuton];
-
-
+    
+    
 }
 // 设置toolbar 的值
 -(void)configToolBar
 {
     //获取了当前微博对象，如果当前的微博对象在数组中有的话，那就需要显示为已赞
-
+    
     //头像
     NSURL  *headURL =[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!thumb",kUrlAvatar,self.weiboInfo.uerInfo.logo]];
     [headButton sd_setBackgroundImageWithURL:headURL forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"user_normal.png"]];
@@ -154,15 +154,15 @@
     //时间
     //NSString *timeStr =[Function getTimeIntervalfromInerterval:self.weiboInfo.created_at];
     
-   //根据时间戳转化成时间
+    //根据时间戳转化成时间
     NSDate  *comfromTimesp =[NSDate dateWithTimeIntervalSince1970:[self.weiboInfo.created_at intValue]];
     NSString  *da = [NSDate timeInfoWithDate:comfromTimesp];
     timelabel.text=da;
     
-   // //内容
+    // //内容
     contentLable.text =self.weiboInfo.content;
     
-   ////标签
+    ////标签
     [self removeTagViewFromSuperView];
     leadWidth=0;
     
@@ -174,10 +174,10 @@
             [tagLable appendView:tagview margin:UIEdgeInsetsMake(0, 0, 0, 10)];
             tagLable.lineSpacing=5;
             tagLable.numberOfLines=0;
-         }
-      
+        }
+        
         [_alertView addSubview:tagLable];
-     }
+    }
     
     for (int i=0; i<self.upweiboArray.count; i++) {
         UpweiboModel *upmodel=self.upweiboArray[i];
@@ -199,7 +199,7 @@
     
     TagView *tagview =[[TagView alloc]initWithWeiboInfo:self.weiboInfo AndTagInfo:tagmodel delegate:self isCanClick:YES backgoundImage:nil isLongTag:YES];
     //[tagview setbigTag:YES];
-     return tagview;
+    return tagview;
 }
 
 
@@ -218,26 +218,26 @@
     
     
     if (button.tag==10002) {
-      if (zanbutton.selected==YES) {
-        zanbutton.selected=NO;
-        likeimageview.image=[UIImage imageNamed:@"opened_like_icon.png"];
-      }
-      else if (zanbutton.selected==NO)
-      {
-        zanbutton.selected=YES;
-        //如果按钮点击的是赞的话
-        if (button==zanbutton) {
-        //执行放大动画又缩小回去
-           likeimageview.image=[UIImage imageNamed:@"opened_liked_icon.png"];
-            [Function BasicAnimationwithkey:@"transform.scale" Duration:0.25 repeatcont:1 autoresverses:YES fromValue:1.0 toValue:1.5 View:likeimageview];
+        if (zanbutton.selected==YES) {
+            zanbutton.selected=NO;
+            likeimageview.image=[UIImage imageNamed:@"opened_like_icon.png"];
         }
-        
-    }
+        else if (zanbutton.selected==NO)
+        {
+            zanbutton.selected=YES;
+            //如果按钮点击的是赞的话
+            if (button==zanbutton) {
+                //执行放大动画又缩小回去
+                likeimageview.image=[UIImage imageNamed:@"opened_liked_icon.png"];
+                [Function BasicAnimationwithkey:@"transform.scale" Duration:0.25 repeatcont:1 autoresverses:YES fromValue:1.0 toValue:1.5 View:likeimageview];
+            }
+            
+        }
     }
     if (self.delegete &&[self.delegete respondsToSelector:@selector(ToolViewHandClick::weiboDict:StageInfo:)]) {
         [self.delegete ToolViewHandClick:button :_markView weiboDict:self.weiboInfo StageInfo:self.stageInfo];
     }
-   // [self removeFromSuperview];
+    // [self removeFromSuperview];
 }
 
 
@@ -245,13 +245,13 @@
 -(void)ShowButtomView;
 {
     
-     [AppView addSubview:self];
-   /* [UIView animateWithDuration:0.1 animations:^{
-        _alertView.alpha=1;
-        
-    } completion:^(BOOL finished) {
-        [Function BasicAnimationwithkey:@"transform.scale" Duration:0.20 repeatcont:1 autoresverses:YES fromValue:1.0 toValue:1.02 View:self.alertView];
-    }];*/
+    [AppView addSubview:self];
+    /* [UIView animateWithDuration:0.1 animations:^{
+     _alertView.alpha=1;
+     
+     } completion:^(BOOL finished) {
+     [Function BasicAnimationwithkey:@"transform.scale" Duration:0.20 repeatcont:1 autoresverses:YES fromValue:1.0 toValue:1.02 View:self.alertView];
+     }];*/
     //[self.alertView.layer addAnimation:[self getKeyframeAni] forKey:@"popView"];
     [self.alertView.layer addAnimation:[Function getKeyframeAni] forKey:@"popAnimition"];
     
@@ -322,21 +322,21 @@
     float  tagHeight=0;
     if (self.weiboInfo.tagArray.count>0) {
         //计算tag的高度
-         Tsize =[tagLable sizeThatFits:CGSizeMake(kDeviceWidth-(2*x)-35-20, CGFLOAT_MAX)];
-         tagHeight=Tsize.height+0;
+        Tsize =[tagLable sizeThatFits:CGSizeMake(kDeviceWidth-(2*x)-35-20, CGFLOAT_MAX)];
+        tagHeight=Tsize.height+0;
     }
-
-
+    
+    
     float  alertHeight = 10+headButton.frame.size.height+10+Wsize.height+tagHeight+buttomShareView.frame.size.height+15;
     float  y=(self.frame.size.height-alertHeight)/2;
     _alertView.frame=CGRectMake(x,y,kDeviceWidth-(2*x), alertHeight+0);
     
-
+    
     
     
     //关闭按钮
     closealertView.frame=CGRectMake(_alertView.frame.size.width-36,0, 36, 36);
-     //文字的高度
+    //文字的高度
     contentLable.frame=CGRectMake(userNamelabel.frame.origin.x, headButton.frame.origin.y+headButton.frame.size.height+10, _alertView.frame.size.width-userNamelabel.frame.origin.x-10, Wsize.height);
     
     tagLable.frame=CGRectMake(userNamelabel.frame.origin.x, contentLable.frame.origin.y+contentLable.frame.size.height+5,contentLable.frame.size.width, Tsize.height+0);

@@ -36,9 +36,9 @@
 -(void)createNavigation
 {
     //[self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color.png"] forBarMetrics:UIBarMetricsDefault];
-//    UIView  *navView=[[UIView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, 64)];
-//    navView.userInteractionEnabled=YES;
-//    [self.view addSubview:navView];
+    //    UIView  *navView=[[UIView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, 64)];
+    //    navView.userInteractionEnabled=YES;
+    //    [self.view addSubview:navView];
     
     search=[[UISearchBar alloc]initWithFrame:CGRectMake(10, 30, kDeviceWidth-20, 28)];
     search.placeholder=@"请输入标签";
@@ -60,7 +60,7 @@
     self.myTableView.delegate=self;
     self.myTableView.dataSource=self;
     [self.view addSubview:self.myTableView];
-
+    
 }
 #pragma  mark -----
 #pragma  mark ------  DataRequest －－－－－－－－－－－－－－－－－－－－－－－－－－
@@ -73,7 +73,7 @@
     NSString *urlString =[NSString stringWithFormat:@"%@/tag/search", kApiBaseUrl];
     [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
-           // NSLog(@"sdsd=======%@",responseObject);
+            // NSLog(@"sdsd=======%@",responseObject);
             if (_dataArray==nil) {
                 _dataArray= [[NSMutableArray alloc]init];
             }
@@ -83,9 +83,9 @@
             _dataArray =[[NSMutableArray alloc]initWithArray: [responseObject objectForKey:@"models"]];
             NSString *title0 =[NSString stringWithFormat:@"%@",search.text];
             NSMutableDictionary   *array0 =[NSMutableDictionary  dictionaryWithObject:title0 forKey:@"title"];
-           [_dataArray insertObject:array0 atIndex:0];
+            [_dataArray insertObject:array0 atIndex:0];
             [self.myTableView reloadData];
-
+            
             
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -112,7 +112,7 @@
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     if (search.text.length>0) {
-     [search resignFirstResponder];
+        [search resignFirstResponder];
     }
 }
 -(void)searchBarTextDidEndEditing:(UISearchBar *)searchBar
@@ -121,7 +121,7 @@
 }
 -(void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
 {
- 
+    
     [_dataArray removeAllObjects];
     [self RequestsearchData];
 }
@@ -143,14 +143,14 @@
     UITableViewCell *cell =[tableView dequeueReusableCellWithIdentifier:cellID];
     if (!cell) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
-     }
+    }
     if (_dataArray.count>indexPath.row) {
         if (indexPath.row==0) {
             cell.textLabel.text=[NSString stringWithFormat:@"添加 “%@” ",[[_dataArray objectAtIndex:indexPath.row] objectForKey:@"title"]];
         }
         else
         {
-        cell.textLabel.text=[[_dataArray objectAtIndex:indexPath.row] objectForKey:@"title"];
+            cell.textLabel.text=[[_dataArray objectAtIndex:indexPath.row] objectForKey:@"title"];
         }
         cell.textLabel.font =[UIFont systemFontOfSize:14];
         
@@ -174,13 +174,13 @@
 }
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end

@@ -75,6 +75,10 @@ static const CGFloat MJDuration = 0.1;
     {
         titleString=@"微博已定时";
     }
+    else if (self.pageType==NSNewAddPageSoureTypeNotReview)
+    {
+        titleString=@"微博未审核";
+    }
     UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:titleString];
     titleLable.textColor=VGray_color;
     
@@ -197,7 +201,7 @@ static const CGFloat MJDuration = 0.1;
     // 默认先隐藏footer
     // self.myConllectionView.footer.hidden = YES;
 }
- -(void)creatLoadView
+-(void)creatLoadView
 {
     loadView =[[LoadingView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight)];
     loadView.delegate=self;
@@ -228,6 +232,10 @@ static const CGFloat MJDuration = 0.1;
     else if (self.pageType==NSNewAddPageSoureTypeTiming)
     {
         parameters = @{@"user_id":userCenter.user_id, @"status":@"4"};
+    }
+    else if (self.pageType==NSNewAddPageSoureTypeNotReview)
+    {
+        parameters = @{@"user_id":userCenter.user_id, @"status":@"5"};
     }
     
     [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -334,7 +342,7 @@ static const CGFloat MJDuration = 0.1;
             NSLog(@"1296035591  = %@",confromTimesp);
             NSDateFormatter *formatter = [[NSDateFormatter alloc] init] ;
             [formatter setDateStyle:NSDateFormatterMediumStyle];
-            [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
+            [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"GMT+0800"]];
             [formatter setTimeStyle:NSDateFormatterShortStyle];
             [formatter setDateFormat:@"YYYY-MM-dd HH:mm"];
             NSString *confromTimespStr = [formatter stringFromDate:confromTimesp];
@@ -375,7 +383,10 @@ static const CGFloat MJDuration = 0.1;
     else if (self.pageType==NSNewAddPageSoureTypeTiming)
     {
         vc.pageType=NSStagePapeTypeAdmin_Timing;
-        
+    }
+    else if (self.pageType==NSNewAddPageSoureTypeNotReview)
+    {
+        vc.pageType=NSStagePapeTypeAdmin_Not_Review;
     }
     
     vc.stageInfo = model.stageInfo;
@@ -409,11 +420,11 @@ static const CGFloat MJDuration = 0.1;
 
 // 设置每个item的尺寸
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
-   // return CGSizeMake((kDeviceWidth-5)/2,(kDeviceWidth-10)/3);
+    // return CGSizeMake((kDeviceWidth-5)/2,(kDeviceWidth-10)/3);
     double  w = (kDeviceWidth-5)/2;
     double  h= w*(9.0/16);
     return CGSizeMake(w,h);
-
+    
 }
 
 -(UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section

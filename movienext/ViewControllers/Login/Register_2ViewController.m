@@ -18,13 +18,13 @@
 {
     AppDelegate  *appdelegate;
     UIWindow     *window;
-
+    
     UIButton  *headImag;
     UITextField  *nameTextfield;
     NSMutableDictionary   *upyunDict;
     UIImage  *_upImage;
     UIImageView  *bgView;
-
+    
 }
 @end
 
@@ -43,7 +43,7 @@
     //键盘将要隐藏
     [[NSNotificationCenter defaultCenter ]addObserver:self selector:@selector(keyboardWillHiden:) name:UIKeyboardWillHideNotification object:nil];
     
-
+    
 }
 
 -(void)createNavigition
@@ -55,16 +55,16 @@
     self.navigationItem.titleView=titleLable;
     
     
-//    UIButton  *button=[UIButton buttonWithType:UIButtonTypeCustom];
-//    [button setTitle:@"取消" forState:UIControlStateNormal];
-//    button.titleLabel.font =[UIFont boldSystemFontOfSize:16];
-//    [button setTitleColor:VBlue_color forState:UIControlStateNormal];
-//    //[button setBackgroundImage:[UIImage imageNamed:@"setting.png"] forState:UIControlStateNormal];
-//    button.frame=CGRectMake(10, 5, 40, 40);
-//    [button addTarget:self action:@selector(dealregiterClick:) forControlEvents:UIControlEventTouchUpInside];
-//    button.tag=99;
-//    UIBarButtonItem  *barButton=[[UIBarButtonItem alloc]initWithCustomView:button];
-//    self.navigationItem.leftBarButtonItem=barButton;
+    //    UIButton  *button=[UIButton buttonWithType:UIButtonTypeCustom];
+    //    [button setTitle:@"取消" forState:UIControlStateNormal];
+    //    button.titleLabel.font =[UIFont boldSystemFontOfSize:16];
+    //    [button setTitleColor:VBlue_color forState:UIControlStateNormal];
+    //    //[button setBackgroundImage:[UIImage imageNamed:@"setting.png"] forState:UIControlStateNormal];
+    //    button.frame=CGRectMake(10, 5, 40, 40);
+    //    [button addTarget:self action:@selector(dealregiterClick:) forControlEvents:UIControlEventTouchUpInside];
+    //    button.tag=99;
+    //    UIBarButtonItem  *barButton=[[UIBarButtonItem alloc]initWithCustomView:button];
+    //    self.navigationItem.leftBarButtonItem=barButton;
     
 }
 
@@ -106,13 +106,13 @@
     headImag.clipsToBounds=YES;
     headImag.tag=100;
     [headImag addTarget:self action:@selector(dealregiterClick:) forControlEvents:UIControlEventTouchUpInside];
-//    headImag.backgroundColor=[UIColor redColor];
+    //    headImag.backgroundColor=[UIColor redColor];
     [bgView addSubview:headImag];
     
     
     
     UIView  *left1=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 10, 20)];
-
+    
     nameTextfield=[ZCControl createTextFieldWithFrame:CGRectMake((kDeviceWidth-240)/2,headImag.frame.origin.y+headImag.frame.size.height+20, 240,40) placeholder:@"请输入昵称" passWord:NO leftImageView:nil rightImageView:nil Font:15];
     nameTextfield.backgroundColor=[UIColor whiteColor];
     nameTextfield.layer.cornerRadius=4;
@@ -136,10 +136,10 @@
     NSString  *logo=@"";
     if ([upyunDict  objectForKey:@"url"]) {
         logo =[upyunDict objectForKey:@"url"];
-  
-    // 如果用户没有使用相机，直接使用默认的头像,也是要用
+        
+        // 如果用户没有使用相机，直接使用默认的头像,也是要用
     }
-     //NSString *username=[[nameTextfield text] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    //NSString *username=[[nameTextfield text] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     NSString  *username=[nameTextfield text];
     NSString  *passstr=[NSString stringWithFormat:@"%@movienext%@",self.email,self.password];
     NSString  *pass_hash=[Function  md5:passstr];
@@ -148,7 +148,7 @@
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:[NSString stringWithFormat:@"%@/user/register-with-email", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
-           //注册成功
+            //注册成功
             NSDictionary *detail    = [responseObject objectForKey:@"model"];
             if (![detail isEqual:@""]) {
                 UserDataCenter  *userCenter=[UserDataCenter shareInstance];
@@ -165,7 +165,7 @@
                 
                 [Function saveUser:userCenter];
                 //登陆成功后把根
-                     window.rootViewController=[CustmoTabBarController new];
+                window.rootViewController=[CustmoTabBarController new];
             }
         }
         else
@@ -188,7 +188,7 @@
         //头像
         UIActionSheet  *sheet =[[UIActionSheet alloc]initWithTitle:@"更换头像" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"相册",@"相机", nil];
         [sheet showInView:self.view];
-
+        
     }
     else if(button.tag==101)
     {
@@ -228,12 +228,12 @@
     if ([type isEqualToString:@"public.image"])
     {
         //先把图片转成NSData
-         _upImage = [info objectForKey:UIImagePickerControllerEditedImage];
-       // NSData   *dataImage =UIImageJPEGRepresentation(image, 0.7);
-
-         [self dismissViewControllerAnimated:YES completion:^{
-             [headImag setBackgroundImage:_upImage forState:UIControlStateNormal];
-             [self uploadImageToyun];
+        _upImage = [info objectForKey:UIImagePickerControllerEditedImage];
+        // NSData   *dataImage =UIImageJPEGRepresentation(image, 0.7);
+        
+        [self dismissViewControllerAnimated:YES completion:^{
+            [headImag setBackgroundImage:_upImage forState:UIControlStateNormal];
+            [self uploadImageToyun];
             
         }];
         
@@ -243,7 +243,7 @@
 }
 -(void)uploadImageToyun
 {
-   
+    
     //执行上传的方法
     UpYun *uy = [[UpYun alloc] init];
     uy.bucket=@"next-avatar";
@@ -292,7 +292,7 @@
     NSData *photo = UIImageJPEGRepresentation(_upImage, kCompressionQuality);
     //  NSData * fileData = [NSData dataWithContentsOfFile:filePath];
     [uy uploadFile:photo saveKey:[self getSaveKey]];
-
+    
     
 }
 -(NSString * )getSaveKey {
@@ -356,13 +356,13 @@
 }
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end

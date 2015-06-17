@@ -11,7 +11,7 @@
 
 @interface MyButton ()
 {
-        CGRect boundingRect;
+    CGRect boundingRect;
 }
 @end
 
@@ -25,7 +25,7 @@
     [self setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
     [self addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
     [self.titleLabel setFont:[UIFont systemFontOfSize:font]];
-     boundingRect=[self.titleLabel.text boundingRectWithSize:CGSizeMake(frame.size.width, font) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:font]} context:nil];
+    boundingRect=[self.titleLabel.text boundingRectWithSize:CGSizeMake(frame.size.width, font) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:font]} context:nil];
 }
 
 - (CGRect)imageRectForContentRect:(CGRect)contentRect {
@@ -45,11 +45,11 @@
 }
 
 /*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
-}
-*/
+ // Only override drawRect: if you perform custom drawing.
+ // An empty implementation adversely affects performance during animation.
+ - (void)drawRect:(CGRect)rect {
+ // Drawing code
+ }
+ */
 
 @end

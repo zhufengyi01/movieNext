@@ -27,7 +27,7 @@
     
     titleLable=[ZCControl createLabelWithFrame:CGRectMake(leftImage.frame.origin.x+leftImage.frame.size.width+10,0, kDeviceWidth, 90) Font:16 Text:@"电影描述"];
     [self.contentView addSubview:titleLable];
-
+    
 }
 -(void)setCellValue:(NSDictionary *) dict;
 {
@@ -45,7 +45,7 @@
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
-
+    
     // Configure the view for the selected state
 }
 

@@ -50,7 +50,7 @@
     [button addTarget:self action:@selector(CancleShareClick:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem  *barButton=[[UIBarButtonItem alloc]initWithCustomView:button];
     self.navigationItem.leftBarButtonItem=barButton;
-
+    
 }
 -(void)CancleShareClick:(UIButton *) button
 {
@@ -76,7 +76,7 @@
         [buttomView addSubview:btn];
         
     }
-
+    
     
 }
 -(void)createStageView
@@ -121,7 +121,7 @@
         if (self.delegate &&[self.delegate respondsToSelector:@selector(UMShareViewControllerHandClick:ShareImage:StageInfoModel:)]) {
             [self.delegate UMShareViewControllerHandClick:button ShareImage:shareImage StageInfoModel:self.StageInfo];
         }
-
+        
     }];
     
 }
@@ -131,13 +131,13 @@
 }
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end

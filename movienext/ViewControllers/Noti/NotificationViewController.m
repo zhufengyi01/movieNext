@@ -48,31 +48,31 @@ static const CGFloat MJDuration = 1.0;
     self.navigationController.navigationBar.alpha=1;
     self.tabBarController.tabBar.hidden=NO;
     
-//    [[NSNotificationCenter defaultCenter]  addObserver:self selector:@selector(changeUser) name:@"initUser" object:nil];
- 
-
+    //    [[NSNotificationCenter defaultCenter]  addObserver:self selector:@selector(changeUser) name:@"initUser" object:nil];
+    
+    
 }
 /*-(void)changeUser
-{
-    if (_myTableView) {
-        [self headerRereshing];
-    }
-}*/
+ {
+ if (_myTableView) {
+ [self headerRereshing];
+ }
+ }*/
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color.png"] forBarMetrics:UIBarMetricsDefault];
-
+    
     UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:@"消息"];
     titleLable.textColor=VGray_color;
     titleLable.font=[UIFont boldSystemFontOfSize:16];
     titleLable.textAlignment=NSTextAlignmentCenter;
     self.navigationItem.titleView=titleLable;
-   
+    
     [self initData];
     [self initUI];
-     [self creatLoadView];
+    [self creatLoadView];
     [self requestData];
     
 }
@@ -98,9 +98,9 @@ static const CGFloat MJDuration = 1.0;
     _myTableView.backgroundColor=[UIColor whiteColor];
     //_myTableView.separatorInset=UIEdgeInsetsMake(0, -110, 0, 0);
     [self.view addSubview:_myTableView];
-     [self tablefootView];
+    [self tablefootView];
     
-     //集成mjrefresh
+    //集成mjrefresh
     [self steupRefresh];
     /**
      *  集成刷新控件
@@ -132,11 +132,11 @@ static const CGFloat MJDuration = 1.0;
     self.myTableView.header.textColor = VGray_color;
     
     // 马上进入刷新状态
-   // [self.myTableView.header beginRefreshing];
+    // [self.myTableView.header beginRefreshing];
     
     // 此时self.tableView.header == self.tableView.legendHeader
-
-
+    
+    
 #pragma mark UITableView + 上拉刷新 自定义文字
     // 添加传统的上拉刷新
     // 设置回调（一旦进入刷新状态，就调用target的action，也就是调用self的loadMoreData方法）
@@ -166,7 +166,7 @@ static const CGFloat MJDuration = 1.0;
     }
     
     [self requestData];
-
+    
     // 2.模拟2秒后刷新表格UI（真实开发中，可以移除这段gcd代码）
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(MJDuration * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         // 刷新表格
@@ -184,7 +184,7 @@ static const CGFloat MJDuration = 1.0;
         page++;
         [self  requestData];
     }
-
+    
     // 2.模拟2秒后刷新表格UI（真实开发中，可以移除这段gcd代码）
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(MJDuration * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         // 刷新表格
@@ -200,7 +200,7 @@ static const CGFloat MJDuration = 1.0;
     UserDataCenter *userCenter=[UserDataCenter shareInstance];
     NSDictionary *parameters = @{@"user_id":userCenter.user_id};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-     NSString  *urlString=[NSString stringWithFormat:@"%@/noti-up/list?per-page=%d&page=%d", kApiBaseUrl,pageSize,page];
+    NSString  *urlString=[NSString stringWithFormat:@"%@/noti-up/list?per-page=%d&page=%d", kApiBaseUrl,pageSize,page];
     [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject objectForKey:@"code"] intValue]==0) {
             NSLog(@"消息通知返回的数据====%@",responseObject);
@@ -226,17 +226,17 @@ static const CGFloat MJDuration = 1.0;
                     weiboInfoModel *weibomodel =[[weiboInfoModel alloc]init];
                     if (weibomodel) {
                         if (![[noDcit objectForKey:@"weibo"] isKindOfClass:[NSNull class]]) {
-                        [weibomodel setValuesForKeysWithDictionary:[noDcit objectForKey:@"weibo"]];
+                            [weibomodel setValuesForKeysWithDictionary:[noDcit objectForKey:@"weibo"]];
                             
-                        weiboUserInfoModel *user =[[weiboUserInfoModel alloc]init];
-                        [user setValuesForKeysWithDictionary:[[noDcit objectForKey:@"weibo"] objectForKey:@"user"]];
-                        weibomodel.uerInfo=user;
-                        
-                        stageInfoModel *stagemodel =[[stageInfoModel alloc]init];
-                        [stagemodel setValuesForKeysWithDictionary:[[noDcit objectForKey:@"weibo"] objectForKey:@"stage"]];
-                        weibomodel.stageInfo=stagemodel;
-                        model.weiboInfo=weibomodel;
-                     }
+                            weiboUserInfoModel *user =[[weiboUserInfoModel alloc]init];
+                            [user setValuesForKeysWithDictionary:[[noDcit objectForKey:@"weibo"] objectForKey:@"user"]];
+                            weibomodel.uerInfo=user;
+                            
+                            stageInfoModel *stagemodel =[[stageInfoModel alloc]init];
+                            [stagemodel setValuesForKeysWithDictionary:[[noDcit objectForKey:@"weibo"] objectForKey:@"stage"]];
+                            weibomodel.stageInfo=stagemodel;
+                            model.weiboInfo=weibomodel;
+                        }
                     }
                     weiboUserInfoModel  *user =[[weiboUserInfoModel alloc]init];
                     if (user) {
@@ -246,23 +246,23 @@ static const CGFloat MJDuration = 1.0;
                     [_dataArray addObject:model];
                 }
             }
-         
+            
             if ([_dataArray count]==0) {
                 [loadView showNullView:@"还没有消息"];
                 return ;
             }
             else
             {
-              [loadView stopAnimation];
-              [loadView removeFromSuperview];
-              [_myTableView reloadData];
-          }
+                [loadView stopAnimation];
+                [loadView removeFromSuperview];
+                [_myTableView reloadData];
+            }
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
         [loadView showFailLoadData];
     }];
-
+    
     
 }
 //数据下载失败的时候执行这个方法
@@ -313,7 +313,7 @@ static const CGFloat MJDuration = 1.0;
     userAddmodel  *model =[_dataArray objectAtIndex:indexPath.row];
     vc.stageInfo=model.weiboInfo.stageInfo;
     vc.weiboInfo=model.weiboInfo;
-     UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+    UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
     self.navigationItem.backBarButtonItem=item;
     [self.navigationController pushViewController:vc animated:YES];
     
@@ -328,14 +328,14 @@ static const CGFloat MJDuration = 1.0;
 //    NSLog(@"dict = %@", dict);
 //    NSLog(@"dict.user_id = %@", [dict valueForKey:@"user_id"]);
 //    [self.navigationController pushViewController:myVC animated:YES];
-//    
+//
 //}
 //
 #pragma  mark NotificationTableViewCellDelegate ----------------------------
 -(void)NotificationClick:(UIButton *)button indexPath:(NSInteger)index
 {
     if (button.tag==100||button.tag==101) {
-      //  NSLog(@"button.tag = %ld", button.tag);
+        //  NSLog(@"button.tag = %ld", button.tag);
         
         MyViewController  *myVC=[[MyViewController alloc]init];
         userAddmodel *model =[_dataArray objectAtIndex:index];
@@ -343,7 +343,7 @@ static const CGFloat MJDuration = 1.0;
         UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
         myVC.pageType=NSMyPageTypeOthersController;
         self.navigationItem.backBarButtonItem=item;
-         [self.navigationController pushViewController:myVC animated:YES];
+        [self.navigationController pushViewController:myVC animated:YES];
     }
 }
 -(void)dealloc
@@ -358,13 +358,13 @@ static const CGFloat MJDuration = 1.0;
 }
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end

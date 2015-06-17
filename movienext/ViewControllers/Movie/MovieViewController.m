@@ -79,22 +79,22 @@ static const CGFloat MJDuration = 0.6;
     [super viewWillAppear:YES];
     self.navigationController.navigationBar.hidden=NO;
     //self.navigationController.navigationBar.alpha=1;
-  //  self.tabBarController.tabBar.hidden=NO;
-   // if (self.myConllectionView) {
-     //[  self.myConllectionView headerBeginRefreshing];
+    //  self.tabBarController.tabBar.hidden=NO;
+    // if (self.myConllectionView) {
+    //[  self.myConllectionView headerBeginRefreshing];
     //}
-   // [[UINavigationBar appearance] setShadowImage:[UIImage imageWithColor:[UIColor clearColor] size:CGSizeMake(kDeviceWidth, 1)]];
+    // [[UINavigationBar appearance] setShadowImage:[UIImage imageWithColor:[UIColor clearColor] size:CGSizeMake(kDeviceWidth, 1)]];
     
     //[self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color.png"] forBarMetrics:UIBarMetricsDefault];
     [self.navigationController.navigationBar  setBackgroundImage:[UIImage imageWithColor:[UIColor colorWithRed:243.0/255 green:243.0/255 blue:243.0/255 alpha:1]] forBarMetrics:UIBarMetricsDefault];
-
- 
+    
+    
 }
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:YES];
     self.tabBarController.tabBar.hidden=NO;
-
+    
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -104,22 +104,22 @@ static const CGFloat MJDuration = 0.6;
     //创建导航
     //self.view.backgroundColor=[UIColor whiteColor];
     //判断是否是审核版
-     [self createNavigation];
-      [self initData];
+    [self createNavigation];
+    [self initData];
     [self createMyScrollerView];
     [self createSegmentView];
     [self initUI];
     [self creatLoadView];
-
+    
 }
 -(void)createNavigation
 {
-     UserDataCenter  *userCenter =[UserDataCenter shareInstance];
+    UserDataCenter  *userCenter =[UserDataCenter shareInstance];
     if ([userCenter.is_admin intValue ]>0) {
         UIButton  *button=[UIButton buttonWithType:UIButtonTypeCustom];
         //[button setTitle:@"管理员" forState:UIControlStateNormal];
         [button setTitleEdgeInsets:UIEdgeInsetsMake(0, -10, 0, 10)];
-         [button setImage:[UIImage imageNamed:@"guanliyuan.png"] forState:UIControlStateNormal];
+        [button setImage:[UIImage imageNamed:@"guanliyuan.png"] forState:UIControlStateNormal];
         [button setTitleColor:VBlue_color forState:UIControlStateNormal];
         button.frame=CGRectMake(0, 0, 40, 30);
         button.imageEdgeInsets =UIEdgeInsetsMake(0, -10, 0, 10);
@@ -145,7 +145,7 @@ static const CGFloat MJDuration = 0.6;
         titleLable.textAlignment=NSTextAlignmentCenter;
         self.navigationItem.titleView=titleLable;
     } else {
-       //创建两个按钮  //推荐和电影
+        //创建两个按钮  //推荐和电影
         self.recommentBtn =[UIButton buttonWithType:UIButtonTypeCustom];
         self.recommentBtn.frame=CGRectMake(0, 0, NaviTitle_Width/2, NaviTitle_Height);
         [self.recommentBtn setTitle:@"热门" forState:UIControlStateNormal];
@@ -160,8 +160,8 @@ static const CGFloat MJDuration = 0.6;
             [weakSelf.myScorollerView setContentOffset:CGPointMake(0, 0) animated:YES];
         }];
         [naviTitleView addSubview:self.recommentBtn];
-    
-
+        
+        
         self.feedBtn =[UIButton buttonWithType:UIButtonTypeCustom];
         self.feedBtn.frame=CGRectMake(NaviTitle_Width/2, 0, NaviTitle_Width/2, NaviTitle_Height);
         [self.feedBtn setTitle:@"电影" forState:UIControlStateNormal];
@@ -174,16 +174,16 @@ static const CGFloat MJDuration = 0.6;
             [weakSelf.myScorollerView setContentOffset:CGPointMake(kDeviceWidth, 0) animated:YES];
         }];
         [naviTitleView addSubview:self.feedBtn];
-  
+        
         self.nav_line_lable =[[UILabel alloc]initWithFrame:CGRectMake(0,NaviTitle_Height-Lable_Line_Height, NaviTitle_Width/2,Lable_Line_Height )];
         self.nav_line_lable.backgroundColor =VBlue_color;
         [naviTitleView addSubview:self.nav_line_lable];
     }
     UIButton  *searchbutton=[UIButton buttonWithType:UIButtonTypeCustom];
-      [searchbutton setImage:[UIImage imageNamed:@"search_icon.png"] forState:UIControlStateNormal];
+    [searchbutton setImage:[UIImage imageNamed:@"search_icon.png"] forState:UIControlStateNormal];
     searchbutton.frame=CGRectMake(0, 0, 40, 30);
     searchbutton.imageEdgeInsets=UIEdgeInsetsMake(0, 10, 0, -10);
-     UIBarButtonItem  *barButton=[[UIBarButtonItem alloc]initWithCustomView:searchbutton];
+    UIBarButtonItem  *barButton=[[UIBarButtonItem alloc]initWithCustomView:searchbutton];
     self.navigationItem.rightBarButtonItem=barButton;
     [searchbutton addActionHandler:^(NSInteger tag) {
         UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
@@ -191,7 +191,7 @@ static const CGFloat MJDuration = 0.6;
         MovieSearchViewController *vc= [MovieSearchViewController new];
         vc.pageType=NSSearchSourceTypeMovieList;
         //UINavigationController  *search=[[UINavigationController alloc]initWithRootViewController:vc];
-       // search.modalTransitionStyle=UIModalTransitionStyleCrossDissolve;
+        // search.modalTransitionStyle=UIModalTransitionStyleCrossDissolve;
         //[self presentViewController:search animated:YES completion:nil];
         [self.navigationController pushViewController:vc animated:YES];
     }];
@@ -203,7 +203,7 @@ static const CGFloat MJDuration = 0.6;
 
 -(void)createMyScrollerView
 {
-     UserDataCenter  *userCenter =[UserDataCenter shareInstance];
+    UserDataCenter  *userCenter =[UserDataCenter shareInstance];
     self.myScorollerView =[[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight-kHeigthTabBar)];
     self.myScorollerView.contentSize=CGSizeMake(kDeviceWidth*2, kDeviceHeight-kHeigthTabBar-kHeightNavigation);
     if ([userCenter.Is_Check  intValue]==1) {
@@ -223,13 +223,13 @@ static const CGFloat MJDuration = 0.6;
     //self.feedView.backgroundColor =[UIColor yellowColor];
     self.feedView.userInteractionEnabled=YES;
     [self.myScorollerView addSubview:self.feedView];
-
+    
 }
 
 -(void)createSegmentView
 {
     UIImageView   *TopImageView=[[UIImageView alloc]initWithFrame:CGRectMake(0,0, kDeviceWidth, 30)];
-   // TopImageView.backgroundColor=VGray_color;
+    // TopImageView.backgroundColor=VGray_color;
     ///TopImageView.image=[UIImage imageNamed:@"tab_switch.png"];
     TopImageView.backgroundColor=[UIColor whiteColor];
     TopImageView.userInteractionEnabled=YES;
@@ -246,7 +246,7 @@ static const CGFloat MJDuration = 0.6;
         [btn setTitleColor:VLight_GrayColor forState:UIControlStateNormal];
         [btn setTitleColor:VBlue_color forState:UIControlStateSelected];
         btn.titleLabel.font=[UIFont systemFontOfSize:15];
-       // [btn setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color.png"] forState:UIControlStateNormal];
+        // [btn setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color.png"] forState:UIControlStateNormal];
         btn.backgroundColor=  [UIColor colorWithPatternImage:[UIImage imageNamed:@"tabbar_backgroud_color.png"]];
         btn.tag=100+i;
         if (i==0) {
@@ -258,13 +258,13 @@ static const CGFloat MJDuration = 0.6;
 }
 -(void)dealSegmentClick:(UIButton *) btn
 {
- 
+    
     if (btn.tag==100) {
         if(btn.selected==NO)
         {
-           for ( int i=0; i<3; i++) {
-             UIButton  *button=(UIButton *)[self.feedView viewWithTag:i+100];
-             button.selected=NO;
+            for ( int i=0; i<3; i++) {
+                UIButton  *button=(UIButton *)[self.feedView viewWithTag:i+100];
+                button.selected=NO;
             }
             btn.selected=YES;
         }
@@ -308,7 +308,7 @@ static const CGFloat MJDuration = 0.6;
         }
         
     }
-   [self.myConllectionView reloadData];
+    [self.myConllectionView reloadData];
     
 }
 -(void)creatLoadView
@@ -320,15 +320,15 @@ static const CGFloat MJDuration = 0.6;
 }
 -(void)initData
 {
-     page0=1;
-     page1=1;
-     page2=1;
-     page3=1;
-     pageCount0=1;
-     pageCount1=1;
-     pageCount2=1;
-     pageCount3=1;
-     pageSize=12;
+    page0=1;
+    page1=1;
+    page2=1;
+    page3=1;
+    pageCount0=1;
+    pageCount1=1;
+    pageCount2=1;
+    pageCount3=1;
+    pageSize=12;
     _dataArray0=[[NSMutableArray alloc]init];
     _dataArray1=[[NSMutableArray alloc]init];
     _dataArray2=[[NSMutableArray alloc]init];
@@ -338,13 +338,13 @@ static const CGFloat MJDuration = 0.6;
                                              selector: @selector(refreshRecommend)
                                                  name: @"requestRecommendData"
                                                object: nil];
- 
+    
 }
 //已经选中了tabbar的时候刷新
 -(void)refreshRecommend
 {
     if (self.recommentBtn.selected==YES) {
-     [self.RecommendCollectionView.header beginRefreshing];
+        [self.RecommendCollectionView.header beginRefreshing];
     }
     else if (self.feedBtn.selected==YES)
     {
@@ -356,7 +356,7 @@ static const CGFloat MJDuration = 0.6;
 -(void)initUI
 {
     ///创建推荐的collectionview
-   UICollectionViewFlowLayout  *   Relayout=[[UICollectionViewFlowLayout alloc]init];
+    UICollectionViewFlowLayout  *   Relayout=[[UICollectionViewFlowLayout alloc]init];
     Relayout.minimumInteritemSpacing=0; //cell之间左右的
     Relayout.minimumLineSpacing=5;      //cell上下间隔
     Relayout.sectionInset=UIEdgeInsetsMake(5,0,0, 0); //整个偏移量 上左下右
@@ -364,14 +364,14 @@ static const CGFloat MJDuration = 0.6;
     //[layout setHeaderReferenceSize:CGSizeMake(_myConllectionView.frame.size.width, kDeviceHeight/3+64+110)];
     
     self.RecommendCollectionView.backgroundColor=[UIColor whiteColor];
-     //注册小图模式
+    //注册小图模式
     [self.RecommendCollectionView registerClass:[SmallImageCollectionViewCell class] forCellWithReuseIdentifier:@"smallcell"];
- 
+    
     self.RecommendCollectionView.delegate=self;
     self.RecommendCollectionView.dataSource=self;
     [self.RecommentView addSubview:self.RecommendCollectionView];
     [self setRecommtUprefresh];
-
+    
     
     
     //创建电影的collectionview
@@ -389,7 +389,7 @@ static const CGFloat MJDuration = 0.6;
     [self.feedView addSubview:_myConllectionView];
     
     [self setUprefresh];
-     /**
+    /**
      *  集成刷新控件
      */
 }
@@ -462,7 +462,7 @@ static const CGFloat MJDuration = 0.6;
     }];
     // 默认先隐藏footer
     // self.myConllectionView.footer.hidden = YES;
-
+    
 }
 - (void)setUprefresh
 {
@@ -472,8 +472,8 @@ static const CGFloat MJDuration = 0.6;
     [self.myConllectionView addLegendHeaderWithRefreshingBlock:^{
         // 增加5条假数据
         /*for (int i = 0; i<10; i++) {
-            [weakSelf.colors insertObject:MJRandomColor atIndex:0];
-        }*/
+         [weakSelf.colors insertObject:MJRandomColor atIndex:0];
+         }*/
         for (int i=0;i<3;i++) {
             UIButton  *btn=(UIButton *) [weakSelf.view viewWithTag:100+i];
             if (i==0&&btn.selected==YES) {
@@ -512,7 +512,7 @@ static const CGFloat MJDuration = 0.6;
         //weakSelf.myConllectionView.header.font = [UIFont systemFontOfSize:12];
         
         // 设置颜色
-       // weakSelf.myConllectionView.header.textColor = VGray_color;
+        // weakSelf.myConllectionView.header.textColor = VGray_color;
         // 模拟延迟加载数据，因此2秒后才调用（真实开发中，可以移除这段gcd代码）
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(MJDuration * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [weakSelf.myConllectionView reloadData];
@@ -527,15 +527,15 @@ static const CGFloat MJDuration = 0.6;
     [self.myConllectionView addLegendFooterWithRefreshingBlock:^{
         // 增加5条假数据
         /*for (int i = 0; i<5; i++) {
-            [weakSelf.colors addObject:MJRandomColor];
-        }*/
+         [weakSelf.colors addObject:MJRandomColor];
+         }*/
         // 设置文字
         [weakSelf.myConllectionView.footer setTitle:@"点击加载更多..." forState:MJRefreshFooterStateIdle];
         [weakSelf.myConllectionView.footer setTitle:@"加载更多..." forState:MJRefreshFooterStateRefreshing];
         [weakSelf.myConllectionView.footer setTitle:@"THE END" forState:MJRefreshFooterStateNoMoreData];
         
         // 设置字体
-       // weakSelf.myConllectionView.footer.font = [UIFont systemFontOfSize:12];
+        // weakSelf.myConllectionView.footer.font = [UIFont systemFontOfSize:12];
         
         // 设置颜色
         //weakSelf.myConllectionView.footer.textColor = VGray_color;
@@ -575,11 +575,11 @@ static const CGFloat MJDuration = 0.6;
         });
     }];
     // 默认先隐藏footer
-   // self.myConllectionView.footer.hidden = YES;
+    // self.myConllectionView.footer.hidden = YES;
 }
 
 
- //为了保证内部不泄露，在dealloc中释放占用的内存
+//为了保证内部不泄露，在dealloc中释放占用的内存
 // */
 - (void)dealloc
 {
@@ -702,7 +702,7 @@ static const CGFloat MJDuration = 0.6;
                     }
                     [_upWeiboArray addObject:upmodel];
                 }}
-
+            
             
             [self.RecommendCollectionView reloadData];
             
@@ -729,7 +729,7 @@ static const CGFloat MJDuration = 0.6;
         {
             type=@"2";
             PAGE=page2;
-         }
+        }
         else if (i==2&&btn.selected==YES)
         {
             type=@"3";
@@ -742,8 +742,8 @@ static const CGFloat MJDuration = 0.6;
     [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
         if ([[responseObject objectForKey:@"return_code"] intValue]==0) {
-
-        //NSLog(@"  电影首页数据JSON: %@", responseObject);
+            
+            //NSLog(@"  电影首页数据JSON: %@", responseObject);
             [loadView stopAnimation];
             [loadView removeFromSuperview];
             
@@ -755,7 +755,7 @@ static const CGFloat MJDuration = 0.6;
                     }
                     NSArray  *detailarray=[responseObject objectForKey:@"models"];
                     pageCount1 =[[responseObject objectForKey:@"pageCount"] intValue];
-                   
+                    
                     if (detailarray.count>0) {
                         [_dataArray1 addObjectsFromArray:detailarray];
                     }
@@ -811,7 +811,7 @@ static const CGFloat MJDuration = 0.6;
 
 -(void)requestUpdate
 {
-  //  https://fir.im/mov
+    //  https://fir.im/mov
     //删除电影
     [NSURLConnection sendAsynchronousRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://fir.im/api/v2/app/version/557a8f0b9bb7dc3e6c00285b?token=260fc3700aaf11e597435eaa6f4fb53848e89872"]] queue:[NSOperationQueue currentQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
         if (data) {
@@ -858,63 +858,63 @@ static const CGFloat MJDuration = 0.6;
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
     if (collectionView==self.myConllectionView) {
-    for (int i=0;i<3;i++) {
-        UIButton  *btn=(UIButton *) [self.feedView viewWithTag:100+i];
-        if (i==0&&btn.selected==YES) {
-            return _dataArray1.count;
-            break;
-            
+        for (int i=0;i<3;i++) {
+            UIButton  *btn=(UIButton *) [self.feedView viewWithTag:100+i];
+            if (i==0&&btn.selected==YES) {
+                return _dataArray1.count;
+                break;
+                
+            }
+            else if(i==1&&btn.selected==YES)
+            {
+                return _dataArray2.count;
+                break;
+            }
+            else if (i==2&&btn.selected==YES)
+            {
+                return _dataArray3.count;
+                break;
+            }
         }
-        else if(i==1&&btn.selected==YES)
-        {
-            return _dataArray2.count;
-            break;
-        }
-        else if (i==2&&btn.selected==YES)
-        {
-            return _dataArray3.count;
-            break;
-        }
-      }
     }
     else if(collectionView==self.RecommendCollectionView)
     {
         return self.dataArray0.count;
     }
     return 0;
-
+    
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if (collectionView==self.myConllectionView) {
-    NSMutableArray  *array=[[NSMutableArray alloc]init];;
-    for (int i=0;i<3;i++) {
-        UIButton  *btn=(UIButton *) [self.feedView viewWithTag:100+i];
-        if (i==0&&btn.selected==YES) {
-            array=_dataArray1;
-            break;
+        NSMutableArray  *array=[[NSMutableArray alloc]init];;
+        for (int i=0;i<3;i++) {
+            UIButton  *btn=(UIButton *) [self.feedView viewWithTag:100+i];
+            if (i==0&&btn.selected==YES) {
+                array=_dataArray1;
+                break;
+            }
+            else if(i==1&&btn.selected==YES)
+            {
+                array=_dataArray2;
+                break;
+            }
+            else if (i==2&&btn.selected==YES)
+            {
+                array=_dataArray3;
+                break;
+                
+            }
         }
-        else if(i==1&&btn.selected==YES)
-        {
-            array=_dataArray2;
-            break;
-         }
-        else if (i==2&&btn.selected==YES)
-        {
-            array=_dataArray3;
-            break;
-            
+        MovieCollectionViewCell    *cell=(MovieCollectionViewCell*)[collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
+        if (array.count > indexPath.row) {
+            [cell setValueforCell:[array  objectAtIndex:(long)indexPath.row] inRow:indexPath.row];
+            cell.delegate=self;
+            cell.Cellindex=indexPath.row;
+            cell.backgroundColor=[UIColor whiteColor];
         }
-      }
-       MovieCollectionViewCell    *cell=(MovieCollectionViewCell*)[collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
-       if (array.count > indexPath.row) {
-        [cell setValueforCell:[array  objectAtIndex:(long)indexPath.row] inRow:indexPath.row];
-        cell.delegate=self;
-        cell.Cellindex=indexPath.row;
-        cell.backgroundColor=[UIColor whiteColor];
-        }
-       return cell;
+        return cell;
     }
     else if (collectionView==self.RecommendCollectionView)
     {
@@ -925,7 +925,7 @@ static const CGFloat MJDuration = 0.6;
             cell.imageView.backgroundColor=VStageView_color;
             NSURL  *url =[NSURL URLWithString:[NSString stringWithFormat:@"%@%@%@",kUrlStage,model.stageInfo.photo ,KIMAGE_SMALL]];
             [cell.imageView sd_setImageWithURL:url placeholderImage:nil options:(SDWebImageRetryFailed|SDWebImageLowPriority)];
-             cell.titleLab.text=[NSString stringWithFormat:@"%@",model.content];
+            cell.titleLab.text=[NSString stringWithFormat:@"%@",model.content];
             NSDate  *comfromTimesp =[NSDate dateWithTimeIntervalSince1970:[model.updated_at intValue]];
             NSString  *da = [NSDate timeInfoWithDate:comfromTimesp];
             //dateLable.text=da;
@@ -944,52 +944,52 @@ static const CGFloat MJDuration = 0.6;
 
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
     if (collectionView==self.myConllectionView) {
-    int width = ((kDeviceWidth-6*16)/3);
-    int movieNameMarginTop = 10;
-    int movieNameHeight = 10;
-    return CGSizeMake( width, width*1.5 + movieNameMarginTop + movieNameHeight);
+        int width = ((kDeviceWidth-6*16)/3);
+        int movieNameMarginTop = 10;
+        int movieNameHeight = 10;
+        return CGSizeMake( width, width*1.5 + movieNameMarginTop + movieNameHeight);
     }
     else
     {
         double  w = (kDeviceWidth-5)/2;
         double  h= w*(9.0/16);
-       return CGSizeMake(w,h);
+        return CGSizeMake(w,h);
     }
     return CGSizeMake(0, 0);
 }
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if (collectionView==self.myConllectionView) {
-    NSMutableArray  *array=[[NSMutableArray alloc]init];;
-    for (int i=0;i<3;i++) {
-        UIButton  *btn=(UIButton *) [self.feedView viewWithTag:100+i];
-        if (i==0&&btn.selected==YES) {
-            array=_dataArray1;
-            break;
+        NSMutableArray  *array=[[NSMutableArray alloc]init];;
+        for (int i=0;i<3;i++) {
+            UIButton  *btn=(UIButton *) [self.feedView viewWithTag:100+i];
+            if (i==0&&btn.selected==YES) {
+                array=_dataArray1;
+                break;
+            }
+            else if(i==1&&btn.selected==YES)
+            {
+                array=_dataArray2;
+                break;
+            }
+            else if (i==2&&btn.selected==YES)
+            {
+                array=_dataArray3;
+                break;
+            }
         }
-        else if(i==1&&btn.selected==YES)
-        {
-            array=_dataArray2;
-            break;
+        [self.navigationController hidesBottomBarWhenPushed];
+        MovieDetailViewController *vc =  [MovieDetailViewController new];
+        if (array.count > indexPath.row) {
+            NSDictionary *dict = [array  objectAtIndex:(long)indexPath.row];
+            vc.movieId = [dict objectForKey:@"movie_id"];
+            vc.moviename=[dict objectForKey:@"title"];
+            vc.pageSourceType=NSMovieSourcePageMovieListController;
+            vc.movielogo =[dict objectForKey:@"photo"];
+            UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+            self.navigationItem.backBarButtonItem=item;
         }
-        else if (i==2&&btn.selected==YES)
-        {
-            array=_dataArray3;
-            break;
-        }
-    }
-    [self.navigationController hidesBottomBarWhenPushed];
-      MovieDetailViewController *vc =  [MovieDetailViewController new];
-      if (array.count > indexPath.row) {
-         NSDictionary *dict = [array  objectAtIndex:(long)indexPath.row];
-        vc.movieId = [dict objectForKey:@"movie_id"];
-        vc.moviename=[dict objectForKey:@"title"];
-        vc.pageSourceType=NSMovieSourcePageMovieListController;
-        vc.movielogo =[dict objectForKey:@"photo"];
-         UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
-       self.navigationItem.backBarButtonItem=item;
-      }
-     [self.navigationController pushViewController:vc animated:YES];
+        [self.navigationController pushViewController:vc animated:YES];
     }
     else if (collectionView==self.RecommendCollectionView)
     {
@@ -997,8 +997,8 @@ static const CGFloat MJDuration = 0.6;
         vc.pageType=NSStagePapeTypeHotStageList;//热门页进入
         weiboInfoModel *model=[self.dataArray0 objectAtIndex:indexPath.row];
         
-    //    movieInfoModel  *moviemodel =[[movieInfoModel alloc]init];
-    
+        //    movieInfoModel  *moviemodel =[[movieInfoModel alloc]init];
+        
         vc.stageInfo = model.stageInfo;
         vc.upweiboArray=_upWeiboArray;
         vc.weiboInfo=model;
@@ -1029,147 +1029,147 @@ static const CGFloat MJDuration = 0.6;
                     movie_id =[[_dataArray1 objectAtIndex:Rowindex]  objectForKey:@"id"];
                     [_dataArray1 removeObjectAtIndex:Rowindex];
                     break;
-                
-                 }
+                    
+                }
                 else if(i==1&&btn.selected==YES)
                 {
                     movie_id =[[_dataArray2 objectAtIndex:Rowindex]  objectForKey:@"id"];
                     [_dataArray2 removeObjectAtIndex:Rowindex];
                     break;
-                 }
+                }
                 else if (i==2&&btn.selected==YES)
                 {
                     movie_id =[[_dataArray3 objectAtIndex:Rowindex]  objectForKey:@"id"];
                     [_dataArray3 removeObjectAtIndex:Rowindex];
                     break;
-                 }
+                }
             }
             
             [self requestDeletMovieWithMovieId:movie_id];
-        
-       }
-    else if (buttonIndex==1)
-    {
-        //向前移动
-        NSString *forward_Id;
-        NSString *behaind_Id;
-        for (int i=0;i<3;i++) {
-            UIButton  *btn=(UIButton *) [self.feedView viewWithTag:100+i];
-            if (i==0&&btn.selected==YES) {
-                if (Rowindex==0) {
-                    UIAlertView  *Al =[[UIAlertView alloc]initWithTitle:nil message:@"不能前移了" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-                    [Al show];
-                    return;
-                }
-                forward_Id =[[_dataArray1 objectAtIndex:Rowindex-1]  objectForKey:@"id"];
-                behaind_Id =[[_dataArray1 objectAtIndex:Rowindex]  objectForKey:@"id"];
-                [_dataArray1 exchangeObjectAtIndex:Rowindex-1 withObjectAtIndex:Rowindex];
-                [self.myConllectionView reloadData];
-                 break;
-                
-            }
-            else if(i==1&&btn.selected==YES)
-            {
-                
-                if (Rowindex==0) {
-                    UIAlertView  *Al =[[UIAlertView alloc]initWithTitle:nil message:@"不能前移了" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-                    [Al show];
-                    return;
-                }
-                forward_Id =[[_dataArray2 objectAtIndex:Rowindex-1]  objectForKey:@"id"];
-                behaind_Id =[[_dataArray2 objectAtIndex:Rowindex]  objectForKey:@"id"];
-                [_dataArray2 exchangeObjectAtIndex:Rowindex-1 withObjectAtIndex:Rowindex];
-                [self.myConllectionView reloadData];
-   
-                 break;
-            }
-            else if (i==2&&btn.selected==YES)
-            {
-                if (Rowindex==0) {
-                    UIAlertView  *Al =[[UIAlertView alloc]initWithTitle:nil message:@"不能前移了" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-                    [Al show];
-                    return;
-                }
-                forward_Id =[[_dataArray3 objectAtIndex:Rowindex-1]  objectForKey:@"id"];
-                behaind_Id =[[_dataArray3 objectAtIndex:Rowindex]  objectForKey:@"id"];
-                [_dataArray3 exchangeObjectAtIndex:Rowindex-1 withObjectAtIndex:Rowindex];
-                [self.myConllectionView reloadData];
-                 break;
-            }
+            
         }
-        [self requestOrderMovieWithforwardId:forward_Id AndbehindId:behaind_Id];
-        
-    }
-    else if (buttonIndex==2)
-    {
-        //向后移动
-        //向前移动
-        NSString *forward_Id;
-        NSString *behaind_Id;
-        for (int i=0;i<3;i++) {
-            UIButton  *btn=(UIButton *) [self.feedView viewWithTag:100+i];
-            if (i==0&&btn.selected==YES) {
-                if (Rowindex==self.dataArray1.count-1) {
-                    UIAlertView  *Al =[[UIAlertView alloc]initWithTitle:nil message:@"不能后移了" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-                    [Al show];
-                    return;
+        else if (buttonIndex==1)
+        {
+            //向前移动
+            NSString *forward_Id;
+            NSString *behaind_Id;
+            for (int i=0;i<3;i++) {
+                UIButton  *btn=(UIButton *) [self.feedView viewWithTag:100+i];
+                if (i==0&&btn.selected==YES) {
+                    if (Rowindex==0) {
+                        UIAlertView  *Al =[[UIAlertView alloc]initWithTitle:nil message:@"不能前移了" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                        [Al show];
+                        return;
+                    }
+                    forward_Id =[[_dataArray1 objectAtIndex:Rowindex-1]  objectForKey:@"id"];
+                    behaind_Id =[[_dataArray1 objectAtIndex:Rowindex]  objectForKey:@"id"];
+                    [_dataArray1 exchangeObjectAtIndex:Rowindex-1 withObjectAtIndex:Rowindex];
+                    [self.myConllectionView reloadData];
+                    break;
+                    
                 }
-                forward_Id =[[_dataArray1 objectAtIndex:Rowindex]  objectForKey:@"id"];
-                behaind_Id =[[_dataArray1 objectAtIndex:Rowindex+1]  objectForKey:@"id"];
-                [_dataArray1 exchangeObjectAtIndex:Rowindex withObjectAtIndex:Rowindex+1];
-                [self.myConllectionView reloadData];
-                break;
-                
-            }
-            else if(i==1&&btn.selected==YES)
-            {
-                if (Rowindex==self.dataArray2.count-1) {
-                    UIAlertView  *Al =[[UIAlertView alloc]initWithTitle:nil message:@"不能后移了" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-                    [Al show];
-                    return;
+                else if(i==1&&btn.selected==YES)
+                {
+                    
+                    if (Rowindex==0) {
+                        UIAlertView  *Al =[[UIAlertView alloc]initWithTitle:nil message:@"不能前移了" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                        [Al show];
+                        return;
+                    }
+                    forward_Id =[[_dataArray2 objectAtIndex:Rowindex-1]  objectForKey:@"id"];
+                    behaind_Id =[[_dataArray2 objectAtIndex:Rowindex]  objectForKey:@"id"];
+                    [_dataArray2 exchangeObjectAtIndex:Rowindex-1 withObjectAtIndex:Rowindex];
+                    [self.myConllectionView reloadData];
+                    
+                    break;
                 }
-                forward_Id =[[_dataArray2 objectAtIndex:Rowindex]  objectForKey:@"id"];
-                behaind_Id =[[_dataArray2 objectAtIndex:Rowindex+1]  objectForKey:@"id"];
-                [_dataArray2 exchangeObjectAtIndex:Rowindex withObjectAtIndex:Rowindex+1];
-                [self.myConllectionView reloadData];
-                
-                break;
-            }
-            else if (i==2&&btn.selected==YES)
-            {
-                if (Rowindex==self.dataArray3.count-1) {
-                    UIAlertView  *Al =[[UIAlertView alloc]initWithTitle:nil message:@"不能后移了" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-                    [Al show];
-                    return;
+                else if (i==2&&btn.selected==YES)
+                {
+                    if (Rowindex==0) {
+                        UIAlertView  *Al =[[UIAlertView alloc]initWithTitle:nil message:@"不能前移了" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                        [Al show];
+                        return;
+                    }
+                    forward_Id =[[_dataArray3 objectAtIndex:Rowindex-1]  objectForKey:@"id"];
+                    behaind_Id =[[_dataArray3 objectAtIndex:Rowindex]  objectForKey:@"id"];
+                    [_dataArray3 exchangeObjectAtIndex:Rowindex-1 withObjectAtIndex:Rowindex];
+                    [self.myConllectionView reloadData];
+                    break;
                 }
-                forward_Id =[[_dataArray3 objectAtIndex:Rowindex]  objectForKey:@"id"];
-                behaind_Id =[[_dataArray3 objectAtIndex:Rowindex+1]  objectForKey:@"id"];
-                [_dataArray3 exchangeObjectAtIndex:Rowindex withObjectAtIndex:Rowindex+1];
-                [self.myConllectionView reloadData];
-                break;
             }
+            [self requestOrderMovieWithforwardId:forward_Id AndbehindId:behaind_Id];
+            
         }
-        [self requestOrderMovieWithforwardId:forward_Id AndbehindId:behaind_Id];
-      }
+        else if (buttonIndex==2)
+        {
+            //向后移动
+            //向前移动
+            NSString *forward_Id;
+            NSString *behaind_Id;
+            for (int i=0;i<3;i++) {
+                UIButton  *btn=(UIButton *) [self.feedView viewWithTag:100+i];
+                if (i==0&&btn.selected==YES) {
+                    if (Rowindex==self.dataArray1.count-1) {
+                        UIAlertView  *Al =[[UIAlertView alloc]initWithTitle:nil message:@"不能后移了" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                        [Al show];
+                        return;
+                    }
+                    forward_Id =[[_dataArray1 objectAtIndex:Rowindex]  objectForKey:@"id"];
+                    behaind_Id =[[_dataArray1 objectAtIndex:Rowindex+1]  objectForKey:@"id"];
+                    [_dataArray1 exchangeObjectAtIndex:Rowindex withObjectAtIndex:Rowindex+1];
+                    [self.myConllectionView reloadData];
+                    break;
+                    
+                }
+                else if(i==1&&btn.selected==YES)
+                {
+                    if (Rowindex==self.dataArray2.count-1) {
+                        UIAlertView  *Al =[[UIAlertView alloc]initWithTitle:nil message:@"不能后移了" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                        [Al show];
+                        return;
+                    }
+                    forward_Id =[[_dataArray2 objectAtIndex:Rowindex]  objectForKey:@"id"];
+                    behaind_Id =[[_dataArray2 objectAtIndex:Rowindex+1]  objectForKey:@"id"];
+                    [_dataArray2 exchangeObjectAtIndex:Rowindex withObjectAtIndex:Rowindex+1];
+                    [self.myConllectionView reloadData];
+                    
+                    break;
+                }
+                else if (i==2&&btn.selected==YES)
+                {
+                    if (Rowindex==self.dataArray3.count-1) {
+                        UIAlertView  *Al =[[UIAlertView alloc]initWithTitle:nil message:@"不能后移了" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                        [Al show];
+                        return;
+                    }
+                    forward_Id =[[_dataArray3 objectAtIndex:Rowindex]  objectForKey:@"id"];
+                    behaind_Id =[[_dataArray3 objectAtIndex:Rowindex+1]  objectForKey:@"id"];
+                    [_dataArray3 exchangeObjectAtIndex:Rowindex withObjectAtIndex:Rowindex+1];
+                    [self.myConllectionView reloadData];
+                    break;
+                }
+            }
+            [self requestOrderMovieWithforwardId:forward_Id AndbehindId:behaind_Id];
+        }
     }
 }
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     if (scrollView==self.myScorollerView) {
-    int index=scrollView.contentOffset.x/kDeviceWidth;
-    if (index==0) {
-        self.recommentBtn.selected=YES;
-        self.feedBtn.selected=NO;
-    }
-    else{
-        self.feedBtn.selected=YES;
-        self.recommentBtn.selected=NO;
-    }
-    float x=self.nav_line_lable.frame.origin.x;
-    x=((NaviTitle_Width/2)/kDeviceWidth)*scrollView.contentOffset.x;
-    self.nav_line_lable.frame=CGRectMake(x, self.nav_line_lable.frame.origin.y, self.nav_line_lable.frame.size.width, self.nav_line_lable.frame.size.height);
-    NSLog(@"~~~~~~%f",scrollView.contentOffset.x);
+        int index=scrollView.contentOffset.x/kDeviceWidth;
+        if (index==0) {
+            self.recommentBtn.selected=YES;
+            self.feedBtn.selected=NO;
+        }
+        else{
+            self.feedBtn.selected=YES;
+            self.recommentBtn.selected=NO;
+        }
+        float x=self.nav_line_lable.frame.origin.x;
+        x=((NaviTitle_Width/2)/kDeviceWidth)*scrollView.contentOffset.x;
+        self.nav_line_lable.frame=CGRectMake(x, self.nav_line_lable.frame.origin.y, self.nav_line_lable.frame.size.width, self.nav_line_lable.frame.size.height);
+        NSLog(@"~~~~~~%f",scrollView.contentOffset.x);
     }
 }
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
@@ -1183,18 +1183,18 @@ static const CGFloat MJDuration = 0.6;
         }
     }
 }
- - (void)didReceiveMemoryWarning {
+- (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end

@@ -27,7 +27,7 @@
     UIView        *BgView2;        //放分享的白色背景
     UIView        *BgView0;
     UIButton      *_tanlogoButton;
-
+    
 }
 @property(assign,nonatomic)id <BigImageCollectionViewCellDelegate> delegate;
 @property(assign,nonatomic)NSInteger Cellindex;

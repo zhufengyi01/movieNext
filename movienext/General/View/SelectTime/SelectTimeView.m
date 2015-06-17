@@ -52,7 +52,7 @@
     datePicker = [[UIDatePicker alloc] initWithFrame:CGRectMake(0, 0, 320, 216)];
     datePicker.backgroundColor =[UIColor whiteColor];
     // 设置时区
-    [datePicker setTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
+    [datePicker setTimeZone:[NSTimeZone timeZoneWithName:@"GMT+0800"]];
     // 设置当前显示时间
     //[datePicker setDate:tempDate animated:YES];
     // 设置显示最大时间（此处为当前时间）
@@ -60,7 +60,7 @@
     // 设置UIDatePicker的显示模式
     [datePicker setDatePickerMode:UIDatePickerModeDateAndTime];
     // 当值发生改变的时候调用的方法
-   // [datePicker addTarget:self action:@selector(datePickerValueChanged:) forControlEvents:UIControlEventValueChanged];
+    // [datePicker addTarget:self action:@selector(datePickerValueChanged:) forControlEvents:UIControlEventValueChanged];
     [bgview addSubview:datePicker];
     
     UIButton  *btn =[UIButton buttonWithType:UIButtonTypeCustom];
@@ -79,11 +79,11 @@
 }
 
 /*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
-}
-*/
+ // Only override drawRect: if you perform custom drawing.
+ // An empty implementation adversely affects performance during animation.
+ - (void)drawRect:(CGRect)rect {
+ // Drawing code
+ }
+ */
 
 @end

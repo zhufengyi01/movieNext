@@ -16,7 +16,7 @@
 #import "UserDataCenter.h"
 @interface UploadImageViewController ()
 {
-  //  UIScrollView   *_myScrollView;
+    //  UIScrollView   *_myScrollView;
     UploadProgressView  *_myprogress;
     NSMutableDictionary   *upyunDict;
     NSMutableDictionary *_myDict;
@@ -47,17 +47,17 @@
     titleLable.font=[UIFont systemFontOfSize:18];
     titleLable.textAlignment=NSTextAlignmentCenter;
     self.navigationItem.titleView=titleLable;
- 
-     //确定发布
+    
+    //确定发布
     UIButton * RighttBtn= [UIButton buttonWithType:UIButtonTypeSystem];
     RighttBtn.frame=CGRectMake(0, 0, 40, 30);
     [RighttBtn addTarget:self action:@selector(dealRightNavClick:) forControlEvents:UIControlEventTouchUpInside];
     RighttBtn.tag=101;
-     [RighttBtn setTitleColor:VGray_color forState:UIControlStateNormal];
+    [RighttBtn setTitleColor:VGray_color forState:UIControlStateNormal];
     RighttBtn.titleEdgeInsets=UIEdgeInsetsMake(0, 10, 0, -10);
     RighttBtn.titleLabel.font =[UIFont systemFontOfSize:16];
     [RighttBtn setTitle:@"确定" forState:UIControlStateNormal];
-     self.navigationItem.rightBarButtonItem=[[UIBarButtonItem alloc]initWithCustomView:RighttBtn];
+    self.navigationItem.rightBarButtonItem=[[UIBarButtonItem alloc]initWithCustomView:RighttBtn];
 }
 -(void)initData
 {
@@ -67,49 +67,49 @@
 //确定上传
 -(void)dealRightNavClick:(UIButton *) button
 {
- 
+    
     if (button.tag==100) {
         [self dismissViewControllerAnimated:YES completion:nil];
-      }
+    }
     else if (button.tag==101)
     {
         
         //点击上传的时候
         [self.view addSubview:_myprogress];
         //执行上传的方法
-         UpYun *uy = [[UpYun alloc] init];
-          uy.successBlocker = ^(id data)
-         {
-             
-         NSLog(@"图片上传成功%@",data);
-             if (upyunDict==nil) {
-                 upyunDict=[[NSMutableDictionary alloc]init];
-             }
-             upyunDict=data;
-             //发布图片和跳转页面
-                [self requstepublicImage];
+        UpYun *uy = [[UpYun alloc] init];
+        uy.successBlocker = ^(id data)
+        {
             
-         };
-         uy.failBlocker = ^(NSError * error)
-         {
-         NSString *message = [error.userInfo objectForKey:@"message"];
-         UIAlertView * alert = [[UIAlertView alloc]initWithTitle:@"error" message:message delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
-         [alert show];
-         NSLog(@"图片上传失败%@",error);
-         };
-         uy.progressBlocker = ^(CGFloat percent, long long requestDidSendBytes)
-         {
-         //进度
-         ////[_pv setProgress:percent];
-             [_myprogress setProgress:percent];
-             
-         };
+            NSLog(@"图片上传成功%@",data);
+            if (upyunDict==nil) {
+                upyunDict=[[NSMutableDictionary alloc]init];
+            }
+            upyunDict=data;
+            //发布图片和跳转页面
+            [self requstepublicImage];
+            
+        };
+        uy.failBlocker = ^(NSError * error)
+        {
+            NSString *message = [error.userInfo objectForKey:@"message"];
+            UIAlertView * alert = [[UIAlertView alloc]initWithTitle:@"error" message:message delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+            [alert show];
+            NSLog(@"图片上传失败%@",error);
+        };
+        uy.progressBlocker = ^(CGFloat percent, long long requestDidSendBytes)
+        {
+            //进度
+            ////[_pv setProgress:percent];
+            [_myprogress setProgress:percent];
+            
+        };
         
         /**
          *	@brief	根据 UIImage 上传
          */
         // UIImage * image = [UIImage imageNamed:@"image.jpg"];
-         //[uy uploadFile:self.upimage saveKey:[self getSaveKey]];
+        //[uy uploadFile:self.upimage saveKey:[self getSaveKey]];
         /**
          *	@brief	根据 文件路径 上传
          */
@@ -122,7 +122,7 @@
          */
         float kCompressionQuality = 0.7;
         NSData *photo = UIImageJPEGRepresentation(self.upimage, kCompressionQuality);
-          //  NSData * fileData = [NSData dataWithContentsOfFile:filePath];
+        //  NSData * fileData = [NSData dataWithContentsOfFile:filePath];
         [uy uploadFile:photo saveKey:[self getSaveKey]];
     }
     
@@ -170,8 +170,8 @@
 -(void)requstepublicImage
 {
     UserDataCenter *usreCenter=[UserDataCenter shareInstance];
-   // NSString  *w=[NSString stringWithFormat:@"%f",self.upimage.size.width];
-   // NSString  *h=[NSString stringWithFormat:@"%f",self.upimage.size.height];
+    // NSString  *w=[NSString stringWithFormat:@"%f",self.upimage.size.width];
+    // NSString  *h=[NSString stringWithFormat:@"%f",self.upimage.size.height];
     int width=self.upimage.size.width;
     int heigth=self.upimage.size.height;
     
@@ -183,30 +183,30 @@
     [manager POST:[NSString stringWithFormat:@"%@/stage/create", kApiBaseUrl] parameters:parameter success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"  发布图片的请求    JSON: %@", responseObject);
         if ([[responseObject objectForKey:@"code"] intValue]==0) {
-        [_myprogress setProgressTitle:@"上传成功"];
-        [_myprogress removeFromSuperview];
-        _myprogress=nil;
-        if (_myDict ==nil) {
-            _myDict =[[NSMutableDictionary alloc]init];
-        }
-        _myDict=[responseObject objectForKey:@"model"];
-        //上传成功后跳转到添加弹幕页面
-        stageInfoModel   *stageInfo =[[stageInfoModel alloc]init];
-        if (stageInfo) {
-            [stageInfo setValuesForKeysWithDictionary:_myDict];
-            stageInfo.photo=[parameter objectForKey:@"photo"];
-            movieInfoModel  *moviemodel =[[movieInfoModel alloc]init];
-            moviemodel.name = self.movie_name;
-             stageInfo.movieInfo=moviemodel;
-        }
-        
-        AddMarkViewController  *Addmark =[[AddMarkViewController alloc]init];
-        Addmark.stageInfo=stageInfo;
-        //Addmark.pageSoureType=NSAddMarkPageSourceUploadImage;
+            [_myprogress setProgressTitle:@"上传成功"];
+            [_myprogress removeFromSuperview];
+            _myprogress=nil;
+            if (_myDict ==nil) {
+                _myDict =[[NSMutableDictionary alloc]init];
+            }
+            _myDict=[responseObject objectForKey:@"model"];
+            //上传成功后跳转到添加弹幕页面
+            stageInfoModel   *stageInfo =[[stageInfoModel alloc]init];
+            if (stageInfo) {
+                [stageInfo setValuesForKeysWithDictionary:_myDict];
+                stageInfo.photo=[parameter objectForKey:@"photo"];
+                movieInfoModel  *moviemodel =[[movieInfoModel alloc]init];
+                moviemodel.name = self.movie_name;
+                stageInfo.movieInfo=moviemodel;
+            }
+            
+            AddMarkViewController  *Addmark =[[AddMarkViewController alloc]init];
+            Addmark.stageInfo=stageInfo;
+            //Addmark.pageSoureType=NSAddMarkPageSourceUploadImage;
             if (self.pageTpye==NSUploadImageSourceTypeAddCard) {
                 Addmark.pageSoureType=NSAddMarkPageSourceAddCard;
             }
-        [self.navigationController pushViewController:Addmark animated:YES];
+            [self.navigationController pushViewController:Addmark animated:NO];
         }
         else
         {
@@ -217,9 +217,9 @@
             
             UIAlertView  *al =[[UIAlertView alloc]initWithTitle:@"发布失败，请重新发布" message:nil delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
             [al show];
-
-         }
-  
+            
+        }
+        
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
@@ -237,7 +237,7 @@
     imageView.contentMode=UIViewContentModeScaleAspectFill;
     [bgView addSubview:imageView];
     
-     CGSize  Isize=self.upimage.size;
+    CGSize  Isize=self.upimage.size;
     float width = Isize.width;
     float heigth =Isize.height;
     float x;
@@ -272,7 +272,7 @@
         w=(kDeviceWidth-0);
     }
     imageView.frame=CGRectMake((kDeviceWidth-w)/2,(kDeviceHeight-kHeightNavigation-h)/2,w,h);
-
+    
 }
 -(void)createProgress
 {
@@ -287,13 +287,13 @@
 }
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end

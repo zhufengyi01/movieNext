@@ -21,9 +21,9 @@
     self.tabBarController.tabBar.hidden=YES;
     // test
     //下面透明度的设置，效果是设置了导航条的高度的多少倍，不是透明度多少
-//    self.navigationController.navigationBar.alpha=1;
+    //    self.navigationController.navigationBar.alpha=1;
     //设置半透明。
-//    self.navigationController.navigationBar.translucent=NO;
+    //    self.navigationController.navigationBar.translucent=NO;
     [[UINavigationBar appearance] setShadowImage:[UIImage imageWithColor:tabBar_line size:CGSizeMake(kDeviceWidth, 1)]];
     NSLog(@"beginlogpageview = %@", self.class);
     [MobClick beginLogPageView:[NSString stringWithFormat:@"%@",self.class]];
@@ -33,14 +33,14 @@
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-        NSLog(@"endlogpageview = %@", self.class);
+    NSLog(@"endlogpageview = %@", self.class);
     [MobClick endLogPageView:[NSString stringWithFormat:@"%@",self.class]];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-      self.view.backgroundColor=View_BackGround;
+    self.view.backgroundColor=View_BackGround;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -49,13 +49,13 @@
 }
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end

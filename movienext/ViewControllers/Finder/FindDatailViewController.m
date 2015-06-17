@@ -43,14 +43,14 @@
 //-(void)createNavigation
 //{
 //    [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color.png"] forBarMetrics:UIBarMetricsDefault];
-//    
+//
 //    UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:@"发现"];
 //    titleLable.textColor=VBlue_color;
-//    
+//
 //    titleLable.font=[UIFont boldSystemFontOfSize:18];
 //    titleLable.textAlignment=NSTextAlignmentCenter;
 //    self.navigationItem.titleView=titleLable;
-//    
+//
 //    UIButton  *button=[UIButton buttonWithType:UIButtonTypeCustom];
 //    [button setTitle:@"设置" forState:UIControlStateNormal];
 //    //[button setBackgroundImage:[UIImage imageNamed:@"setting.png"] forState:UIControlStateNormal];
@@ -59,13 +59,13 @@
 //    [button addTarget:self action:@selector(GotoSettingClick) forControlEvents:UIControlEventTouchUpInside];
 //    UIBarButtonItem  *barButton=[[UIBarButtonItem alloc]initWithCustomView:button];
 //    self.navigationItem.rightBarButtonItem=barButton;
-//    
-//    
+//
+//
 //}
 //-(void)GotoSettingClick
 //{
 //    self.tabBarController.tabBar.hidden=NO;
-//    
+//
 //}
 
 //点击了
@@ -119,7 +119,7 @@
     UserDataCenter  *userCenter=[UserDataCenter shareInstance];
     NSNumber  *weiboId=weiboInfo.Id;
     NSString  *userId=userCenter.user_id;
-  
+    
     NSDictionary *parameters=@{@"weibo_id":weiboId,@"user_id":userId};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     //manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
@@ -130,7 +130,7 @@
             
             Like_HUB *like =[[Like_HUB alloc]initWithTitle:nil WithImage:[UIImage imageNamed:@"Dislike_hub"]];
             [like show];
-
+            
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
@@ -147,7 +147,7 @@
     
     stageView = [[StageView alloc] initWithFrame:CGRectMake(5,5,kDeviceWidth-10, (kDeviceWidth-10)*(9.0/16))];
     stageView.isAnimation = YES;
-//    stageView.backgroundColor=[UIColor redColor];
+    //    stageView.backgroundColor=[UIColor redColor];
     stageView.delegate=self;
     stageView.stageInfo=self.weiboInfo.stageInfo;
     // stageView.weibosArray = self.stageInfo.weibosArray;
@@ -182,12 +182,12 @@
     markLable.contentMode=UIViewContentModeBottom;
     markLable.textAlignment=NSTextAlignmentCenter;
     [_layerView addSubview:markLable];
-
     
     
     
     
-   [self createLikeBar];
+    
+    [self createLikeBar];
     
     
     
@@ -203,7 +203,7 @@
     [btn1 setTitleColor:VGray_color forState:UIControlStateNormal];
     btn1.tag=99;
     [btn1 setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color.png"] forState:UIControlStateNormal];
-     btn1.backgroundColor=[UIColor whiteColor];
+    btn1.backgroundColor=[UIColor whiteColor];
     [_toolView addSubview:btn1];
     
     
@@ -212,13 +212,13 @@
     [btn2 setTitleColor:VGray_color forState:UIControlStateNormal];
     btn2.backgroundColor=[UIColor whiteColor];
     [btn2 setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color.png"] forState:UIControlStateNormal];
-     [_toolView addSubview:btn2];
+    [_toolView addSubview:btn2];
     
     //添加一个线
     UIView  *verline =[[UIView alloc]initWithFrame:CGRectMake(kDeviceWidth/2,12, 0.5, 26)];
     verline.backgroundColor =VLight_GrayColor;
     [_toolView addSubview:verline];
-
+    
     
 }
 -(void)likeBtnClick:(UIButton *) btn
@@ -241,13 +241,13 @@
 }
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end

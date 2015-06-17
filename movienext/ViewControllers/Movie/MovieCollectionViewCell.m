@@ -22,12 +22,12 @@
 }
 -(void)createUI
 {
- 
-//    self.backgroundColor=[UIColor redColor];
+    
+    //    self.backgroundColor=[UIColor redColor];
     LogoImage =[[UIImageView alloc]initWithFrame:CGRectMake(0, 0,m_frame.size.width, m_frame.size.height-30)];
     [self.contentView addSubview:LogoImage];
     
- 
+    
     TitleLable =[[UILabel alloc]initWithFrame:CGRectMake(0, LogoImage.frame.origin.y+LogoImage.frame.size.height+5, LogoImage.frame.size.width, 20)];
     TitleLable.textAlignment=NSTextAlignmentCenter;
     TitleLable.textColor=VGray_color;
@@ -39,8 +39,8 @@
     UserDataCenter  *userCenter =[UserDataCenter shareInstance];
     if ([userCenter.is_admin intValue]>0) {
         //添加手势
-    UILongPressGestureRecognizer  *longPress =[[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(longPress:)];
-    [self addGestureRecognizer:longPress];
+        UILongPressGestureRecognizer  *longPress =[[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(longPress:)];
+        [self addGestureRecognizer:longPress];
     }
 }
 -(void)setValueforCell:(NSDictionary *)dict inRow:(NSInteger)inrow

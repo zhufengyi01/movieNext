@@ -64,7 +64,7 @@
 {
     self.m_arrNormal = [NSArray arrayWithObjects:@"feed_tab_butten_normal.png", @"find_tab_butten_normalcopy4@2x.png",@"add_tab_butten.png", @"notice_tab_butten_normal.png", @"me_tab_butten_normal.png", nil];
     self.m_arrSelected = [NSArray arrayWithObjects:@"feed_tab_butten_press.png", @"find_tab_butten_normalcopy4@2x.png",@"add_tab_butten.png", @"notice_tab_butten_press.png", @"me_tab_butten_press.png", nil];
-    titleArray=@[@"电影",@"发现",@"添加",@"消息",@"我的"];
+    titleArray=@[@"首页",@"发现",@"添加",@"消息",@"我的"];
     
 }
 
