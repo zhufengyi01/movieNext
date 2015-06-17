@@ -356,8 +356,6 @@ static const CGFloat MJDuration = 0.6;
         } else {
             [loadView stopAnimation];
             [loadView removeFromSuperview];
-            
-            
             NSInteger responseCode = [(NSHTTPURLResponse *)response statusCode];
             NSString *responseString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
             if (responseCode == 200) {
@@ -376,7 +374,7 @@ static const CGFloat MJDuration = 0.6;
                         [self.dataArray1 addObjectsFromArray:doubanInfos];
                         //   NSLog(@"====doubanInfo ===%@",doubanInfos);
                         if (doubanInfos.count<40) {
-                            //[self.myConllectionView.footer noticeNoMoreData];
+                            [self.myConllectionView.footer noticeNoMoreData];
                         }
                     }
                 }

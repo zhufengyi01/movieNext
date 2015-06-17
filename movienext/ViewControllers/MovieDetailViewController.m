@@ -311,7 +311,7 @@ static const CGFloat MJDuration = 0.2;
         
         layout.sectionInset=UIEdgeInsetsMake(0,0,64, 0); //整个偏移量 上左下右
     }
-    _myConllectionView =[[UICollectionView alloc]initWithFrame:CGRectMake(0,0,kDeviceWidth, kDeviceHeight-20-0) collectionViewLayout:layout];
+    _myConllectionView =[[UICollectionView alloc]initWithFrame:CGRectMake(0,0,kDeviceWidth, kDeviceHeight-0-0-kHeightNavigation) collectionViewLayout:layout];
     //[layout setHeaderReferenceSize:CGSizeMake(_myConllectionView.frame.size.width, kDeviceHeight/3+64+110)];
     
     _myConllectionView.backgroundColor=View_BackGround;
@@ -380,6 +380,8 @@ static const CGFloat MJDuration = 0.2;
         if (pageCount>page) {
             page=page+1;
             [weakSelf requestData];
+        }else{
+            [weakSelf.myConllectionView.footer noticeNoMoreData];
         }
         // 设置文字
         [weakSelf.myConllectionView.footer setTitle:@"点击加载更多..." forState:MJRefreshFooterStateIdle];
@@ -393,10 +395,10 @@ static const CGFloat MJDuration = 0.2;
         //weakSelf.myConllectionView.footer.textColor = VGray_color;
         // 模拟延迟加载数据，因此2秒后才调用（真实开发中，可以移除这段gcd代码）
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(MJDuration * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [weakSelf.myConllectionView reloadData];
+            //[weakSelf.myConllectionView reloadData];
             
             // 结束刷新
-            [weakSelf.myConllectionView.footer endRefreshing];
+            ///[weakSelf.myConllectionView.footer endRefreshing];
         });
     }];
     // 默认先隐藏footer
@@ -832,6 +834,7 @@ static const CGFloat MJDuration = 0.2;
                     }}
                 
                 [_myConllectionView reloadData];
+                [self.myConllectionView.footer endRefreshing];
             }
             else if(detailArray.count==0)
             {

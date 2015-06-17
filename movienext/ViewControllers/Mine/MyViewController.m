@@ -291,10 +291,10 @@ static const CGFloat MJDuration = 0.2;
         
         // 模拟延迟加载数据，因此2秒后才调用（真实开发中，可以移除这段gcd代码）
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(MJDuration * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [weakSelf.myConllectionView reloadData];
+            //  [weakSelf.myConllectionView reloadData];
             
             // 结束刷新
-            [weakSelf.myConllectionView.footer endRefreshing];
+            //[weakSelf.myConllectionView.footer endRefreshing];
         });
     }];
     // 默认先隐藏footer
@@ -740,7 +740,8 @@ static const CGFloat MJDuration = 0.2;
                 }
                 [self.myConllectionView reloadData];
             }
-            
+            [self.myConllectionView reloadData];
+            [self.myConllectionView.footer endRefreshing];
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"下载失败 Error: %@", error);

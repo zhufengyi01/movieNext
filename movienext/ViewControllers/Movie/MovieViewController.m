@@ -455,9 +455,9 @@ static const CGFloat MJDuration = 0.6;
         //weakSelf.myConllectionView.footer.textColor = VGray_color;
         // 模拟延迟加载数据，因此2秒后才调用（真实开发中，可以移除这段gcd代码）
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(MJDuration * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [weakSelf.RecommendCollectionView reloadData];
+            // [weakSelf.RecommendCollectionView reloadData];
             // 结束刷新
-            [weakSelf.RecommendCollectionView.footer endRefreshing];
+            // [weakSelf.RecommendCollectionView.footer endRefreshing];
         });
     }];
     // 默认先隐藏footer
@@ -546,9 +546,8 @@ static const CGFloat MJDuration = 0.6;
                     page1=page1+1;
                     [weakSelf requestData];
                 }
-                else
-                {
-                    [weakSelf.myConllectionView.footer noticeNoMoreData];
+                else{
+                    [self.myConllectionView.footer noticeNoMoreData];
                 }
             }
             else if(i==1&&btn.selected==YES)
@@ -557,21 +556,27 @@ static const CGFloat MJDuration = 0.6;
                     page2=page2+1;
                     [weakSelf requestData];
                 }
+                else {
+                    [weakSelf.myConllectionView.footer noticeNoMoreData];
+                    
+                }
             }
             else if (i==2&&btn.selected==YES)
             {
                 if (pageCount3>page3) {
                     page3=page3+1;
                     [weakSelf requestData];
+                }else{
+                    [weakSelf.myConllectionView.footer noticeNoMoreData];
                 }
             }
         }
         // 模拟延迟加载数据，因此2秒后才调用（真实开发中，可以移除这段gcd代码）
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(MJDuration * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [weakSelf.myConllectionView reloadData];
+            //[weakSelf.myConllectionView reloadData];
             
             // 结束刷新
-            [weakSelf.myConllectionView.footer endRefreshing];
+            //[weakSelf.myConllectionView.footer endRefreshing];
         });
     }];
     // 默认先隐藏footer
@@ -705,6 +710,7 @@ static const CGFloat MJDuration = 0.6;
             
             
             [self.RecommendCollectionView reloadData];
+            [self.RecommendCollectionView.footer endRefreshing];
             
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -743,22 +749,25 @@ static const CGFloat MJDuration = 0.6;
         
         if ([[responseObject objectForKey:@"return_code"] intValue]==0) {
             
-            //NSLog(@"  电影首页数据JSON: %@", responseObject);
             [loadView stopAnimation];
             [loadView removeFromSuperview];
-            
             for (int i=0;i<3;i++) {
                 UIButton  *btn=(UIButton *) [self.view viewWithTag:100+i];
                 if (i==0&&btn.selected==YES) {
                     if (_dataArray1==nil) {
                         _dataArray1=[[NSMutableArray alloc]init];
                     }
+                    
                     NSArray  *detailarray=[responseObject objectForKey:@"models"];
                     pageCount1 =[[responseObject objectForKey:@"pageCount"] intValue];
-                    
+                    //                    if (page1==pageCount1) {
+                    //                        [self.myConllectionView.footer noticeNoMoreData];
+                    //                    }
                     if (detailarray.count>0) {
                         [_dataArray1 addObjectsFromArray:detailarray];
                     }
+                    
+                    break;
                 }
                 else if (i==1&&btn.selected==YES)
                 {
@@ -768,12 +777,14 @@ static const CGFloat MJDuration = 0.6;
                     }
                     NSArray  *detailarray=[responseObject objectForKey:@"models"];
                     pageCount2 =[[responseObject objectForKey:@"pageCount"] intValue];
-                    if (page2==pageCount2) {
-                        [self.myConllectionView.footer noticeNoMoreData];
-                    }
+                    //                    if (page2==pageCount2) {
+                    //                        [self.myConllectionView.footer noticeNoMoreData];
+                    //                    }
                     if (detailarray.count>0) {
                         [_dataArray2 addObjectsFromArray:detailarray];
                     }
+                    break;
+                    
                 }
                 else if (i==2&&btn.selected==YES)
                 {
@@ -783,16 +794,17 @@ static const CGFloat MJDuration = 0.6;
                     }
                     NSArray  *detailarray=[responseObject objectForKey:@"models"];
                     pageCount3 =[[responseObject objectForKey:@"pageCount"] intValue];
-                    if (page3==pageCount3) {
-                        [self.myConllectionView.footer noticeNoMoreData];
-                    }
+                    //                    if (page3==pageCount3) {
+                    //                        [self.myConllectionView.footer noticeNoMoreData];
+                    //                    }
                     if (detailarray.count>0) {
                         [_dataArray3 addObjectsFromArray:detailarray];
                     }
+                    break;
                 }
             }
-            
-            [_myConllectionView reloadData];
+            [self.myConllectionView reloadData];
+            [self.myConllectionView.footer endRefreshing];
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);

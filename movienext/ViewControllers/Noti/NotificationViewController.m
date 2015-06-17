@@ -155,18 +155,21 @@ static const CGFloat MJDuration = 1.0;
     
     // 此时self.tableView.footer == self.tableView.legendFooter
 }
+- (void)example14
+{
+    // 设置回调（一旦进入刷新状态，就调用target的action，也就是调用self的loadLastData方法）
+  //  self.myTableView.footer = [footerWithRefreshingTarget:self refreshingAction:@selector(loadLastData)];
+    
+    
+}
 //下拉刷新
 -(void)loadNewData
-{
-    
-    [self.myTableView.footer resetNoMoreData];
+{   //[self.myTableView.footer resetNoMoreData];
     page=1;
     if (_dataArray.count>0) {
         [_dataArray removeAllObjects];
     }
-    
     [self requestData];
-    
     // 2.模拟2秒后刷新表格UI（真实开发中，可以移除这段gcd代码）
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(MJDuration * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         // 刷新表格
@@ -183,17 +186,19 @@ static const CGFloat MJDuration = 1.0;
     if (pageCount>page) {
         page++;
         [self  requestData];
-    }else {
-        [self.myTableView.footer noticeNoMoreData];
     }
-    
+    else
+    {
+        [self.myTableView.footer noticeNoMoreData];
+        [self.myTableView.footer setTextColor:VLight_GrayColor];
+    }
     // 2.模拟2秒后刷新表格UI（真实开发中，可以移除这段gcd代码）
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(MJDuration * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         // 刷新表格
-        [self.myTableView reloadData];
+        //[self.myTableView reloadData];
         
         // 拿到当前的上拉刷新控件，结束刷新状态
-        [self.myTableView.footer endRefreshing];
+       // [self.myTableView.footer endRefreshing];
     });
 }
 
@@ -210,11 +215,11 @@ static const CGFloat MJDuration = 1.0;
                 _dataArray=[[NSMutableArray alloc]init];
             }
             pageCount=[[responseObject objectForKey:@"pageCount"] intValue];
-            if (page==pageCount) {
-                [self.myTableView.footer noticeNoMoreData];
-                [self.myTableView.footer setTextColor:VLight_GrayColor];
-            }
-            
+//            if (page==pageCount-1) {
+//                [self.myTableView.footer noticeNoMoreData];
+//                [self.myTableView.footer setTextColor:VLight_GrayColor];
+//            }
+//            
             //解析数据[_dataArray addObjectsFromArray:[responseObject objectForKey:@"models"]];
             NSMutableArray  *array =[[NSMutableArray alloc]initWithArray:[responseObject objectForKey:@"models"]];
             
@@ -248,6 +253,7 @@ static const CGFloat MJDuration = 1.0;
                     [_dataArray addObject:model];
                 }
             }
+            // 拿到当前的上拉刷新控件，结束刷新状态
             
             if ([_dataArray count]==0) {
                 [loadView showNullView:@"还没有消息"];
@@ -258,6 +264,8 @@ static const CGFloat MJDuration = 1.0;
                 [loadView stopAnimation];
                 [loadView removeFromSuperview];
                 [_myTableView reloadData];
+                [self.myTableView.footer endRefreshing];
+
             }
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
