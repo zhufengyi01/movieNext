@@ -19,7 +19,7 @@ typedef NS_ENUM(NSInteger,NSMovieSourcePage)
 };
 @interface MovieDetailViewController : RootViewController <ButtomToolViewDelegate>
 {
-        
+    
 }
 @property(nonatomic,strong)UICollectionView  *myConllectionView;
 

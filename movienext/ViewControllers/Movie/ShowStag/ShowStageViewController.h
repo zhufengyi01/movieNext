@@ -23,7 +23,7 @@ typedef  NS_ENUM(NSInteger,NSStagePapeType)
     NSStagePapeTypeStageList,  //电影列表页
     
     //首页热门
-    NSStagePapeTypeHotStageList, //首页热门列表 
+    NSStagePapeTypeHotStageList, //首页热门列表
     
     //管理管功能列表页
     NSStagePapeTypeAdmin_New_Add,  //最新添加
@@ -31,6 +31,7 @@ typedef  NS_ENUM(NSInteger,NSStagePapeType)
     NSStagePapeTypeAdmin_Close_Weibo,  //屏蔽列表
     NSStagePapeTypeAdmin_Recommed,  //推荐列表
     NSStagePapeTypeAdmin_Timing,    //发送到定时页面
+    NSStagePapeTypeAdmin_Not_Review,//未审核
     
     
     

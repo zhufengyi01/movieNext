@@ -45,7 +45,7 @@
     RighttBtn.frame=CGRectMake(0, 0, 40, 40);
     [RighttBtn addTarget:self action:@selector(dealRightNavClick:) forControlEvents:UIControlEventTouchUpInside];
     RighttBtn.tag=101;
-     RighttBtn.titleEdgeInsets=UIEdgeInsetsMake(0, 10, 0, -10);
+    RighttBtn.titleEdgeInsets=UIEdgeInsetsMake(0, 10, 0, -10);
     [RighttBtn setTitleColor:VGray_color forState:UIControlStateNormal];
     [RighttBtn setTitle:@"确定" forState:UIControlStateNormal];
     RighttBtn.titleLabel.font=[UIFont systemFontOfSize:16];
@@ -64,8 +64,8 @@
     //imageView.image=self.upimage;
     imageView.contentMode=UIViewContentModeScaleAspectFill;
     imageView.clipsToBounds=YES;
-  
-
+    
+    
     [imageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",self.photourl]] placeholderImage:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         CGSize  Isize=image.size;
         //计算图片的宽高比
@@ -127,14 +127,14 @@
             stageInfoModel  *model =[[stageInfoModel alloc]init];
             movieInfoModel  *movieInfo =[[movieInfoModel alloc]init];
             movieInfo.name =self.movie_name;
-             if (self.pageType==NSDoubanSourceTypeAddCard) {
+            if (self.pageType==NSDoubanSourceTypeAddCard) {
                 vc.pageSoureType=NSAddMarkPageSourceAddCard;
             }
             movieInfo.Id=self.movie_id;
             model.movieInfo=movieInfo;
-             [model setValuesForKeysWithDictionary:[responseObject objectForKey:@"model"]];
+            [model setValuesForKeysWithDictionary:[responseObject objectForKey:@"model"]];
             vc.stageInfo=model;
-             [self.navigationController pushViewController:vc animated:YES];
+            [self.navigationController pushViewController:vc animated:NO];
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
@@ -150,13 +150,13 @@
 }
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end

@@ -22,7 +22,7 @@
     UIButton    *loginButton;
     UITextField  *emailTextfield;
     UITextField  *PassworfTextfield;
-
+    
 }
 @end
 
@@ -47,8 +47,8 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     //键盘将要隐藏
     [[NSNotificationCenter defaultCenter ]addObserver:self selector:@selector(keyboardWillHiden:) name:UIKeyboardWillHideNotification object:nil];
-
- }
+    
+}
 #pragma mark 键盘的通知事件
 -(void)keyboardWillShow:(NSNotification * )  notification
 {
@@ -56,7 +56,7 @@
         inputView.frame =CGRectMake(inputView.frame.origin.x, 120, inputView.frame.size.width, inputView.frame.size.height);
         loginButton.frame=CGRectMake(loginButton.frame.origin.x,120+79+20, loginButton.frame.size.width, loginButton.frame.size.height);
     }];
-   
+    
 }
 -(void)keyboardWillHiden:(NSNotification *) notification
 {
@@ -74,7 +74,7 @@
     dismissButton.tag=98;
     [dismissButton setImage:[UIImage imageNamed:@"close_icon.png"] forState:UIControlStateNormal];
     [self.view addSubview:dismissButton];
-
+    
     
 }
 -(void)createUI
@@ -97,9 +97,9 @@
     //[rightButton setBackgroundImage:[UIImage imageNamed:@"login_password_close.png"] forState:UIControlStateSelected];
     [rightButton setImage:[UIImage imageNamed:@"login_password_open.png"] forState:UIControlStateNormal];
     [rightButton setImage:[UIImage imageNamed:@"login_password_close.png"] forState:UIControlStateSelected];
-
+    
     rightButton.tag=99;
- 
+    
     
     PassworfTextfield=[ZCControl createTextFieldWithFrame:CGRectMake(10, 39, 230,39) placeholder:@"请输入密码" passWord:YES leftImageView:nil rightImageView:nil Font:15];
     PassworfTextfield.rightView=rightButton;
@@ -116,7 +116,7 @@
     forgetButton.tag=101;
     forgetButton.titleLabel.font =[UIFont boldSystemFontOfSize:16];
     [self.view addSubview:forgetButton];
-
+    
 }
 
 
@@ -126,9 +126,9 @@
     NSString  *email=[[emailTextfield text]stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     NSString *password =[[PassworfTextfield text] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     NSString  *passstr=[NSString stringWithFormat:@"%@movienext%@",email,password];
-      NSString  *pass_hash=[Function  md5:passstr];
+    NSString  *pass_hash=[Function  md5:passstr];
     //NSString  *abc=[Function md5:@"abc@qq.commovienext123456"];
- 
+    
     NSDictionary *parameters = @{@"email":email,@"password_hash":pass_hash};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:[NSString stringWithFormat:@"%@/user/login-with-email", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -137,19 +137,19 @@
             //登陆成功
             window.rootViewController=[CustmoTabBarController new];
             NSDictionary *detail    = [responseObject objectForKey:@"model"];
-        
-                UserDataCenter  *userCenter=[UserDataCenter shareInstance];
-                userCenter.user_id=[detail objectForKey:@"id"];
-                userCenter.username=[detail objectForKey:@"username"];
-                userCenter.logo =[detail objectForKey:@"logo"];
-                userCenter.is_admin =[detail objectForKey:@"role_id"];
-                userCenter.verified=[detail objectForKey:@"verified"];
-                userCenter.sex=[detail objectForKey:@"sex"];
-                userCenter.signature=[detail objectForKey:@"brief"];
-                userCenter.email=[detail objectForKey:@"email"];
-                userCenter.fake=[detail objectForKey:@"fake"];
-                [Function saveUser:userCenter];
-                
+            
+            UserDataCenter  *userCenter=[UserDataCenter shareInstance];
+            userCenter.user_id=[detail objectForKey:@"id"];
+            userCenter.username=[detail objectForKey:@"username"];
+            userCenter.logo =[detail objectForKey:@"logo"];
+            userCenter.is_admin =[detail objectForKey:@"role_id"];
+            userCenter.verified=[detail objectForKey:@"verified"];
+            userCenter.sex=[detail objectForKey:@"sex"];
+            userCenter.signature=[detail objectForKey:@"brief"];
+            userCenter.email=[detail objectForKey:@"email"];
+            userCenter.fake=[detail objectForKey:@"fake"];
+            [Function saveUser:userCenter];
+            
         }
         else
         {
@@ -173,7 +173,7 @@
         if (button.selected==YES) {
             button.selected=NO;
             PassworfTextfield.secureTextEntry=YES;
-           
+            
         }
         else
         {
@@ -196,7 +196,7 @@
             [self requesteLogin];
             
         }
-
+        
         
         
     }
@@ -205,7 +205,7 @@
         //忘记密码
         
         
-    
+        
     }
     
 }
@@ -230,13 +230,13 @@
 }
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end

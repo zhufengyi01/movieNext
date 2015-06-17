@@ -24,7 +24,7 @@
 - (void)createUI {
     //定义CELL单元格内容
     _imageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0,self.frame.size.width,self.frame.size.height)];
-     _imageView.backgroundColor = [UIColor clearColor];
+    _imageView.backgroundColor = [UIColor clearColor];
     _imageView.contentMode=UIViewContentModeScaleAspectFill;
     _imageView.clipsToBounds=YES;
     [self.contentView addSubview:_imageView];
@@ -47,7 +47,7 @@
     _ivLike = [[UIImageView alloc]initWithFrame:CGRectMake(m_frame.size.width-33, 12, 9, 8)];
     _ivLike.backgroundColor = [UIColor clearColor];
     [self.contentView addSubview:_ivLike];
-
+    
     _lblTime = [[UILabel alloc]initWithFrame:CGRectMake(30, 5, 80, 20)];
     _lblTime.text=@"";
     _lblTime.textAlignment = NSTextAlignmentLeft;

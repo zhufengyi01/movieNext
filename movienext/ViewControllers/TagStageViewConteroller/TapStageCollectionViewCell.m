@@ -17,7 +17,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         m_frame=frame;
-         [self createUI];
+        [self createUI];
         
     }
     return self;
@@ -28,7 +28,7 @@
     _imageView.image=[UIImage imageNamed:@"loading_image_all"];
     _imageView.contentMode=UIViewContentModeScaleAspectFill;
     _imageView.clipsToBounds=YES;
-     [self.contentView addSubview:_imageView];
+    [self.contentView addSubview:_imageView];
     
     float  height=30;
     if (IsIphone6plus) {

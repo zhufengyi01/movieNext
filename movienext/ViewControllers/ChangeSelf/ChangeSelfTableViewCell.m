@@ -35,7 +35,7 @@
 {
     [headImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@!thumb",kUrlAvatar,[dict objectForKey:@"logo"]]] placeholderImage:HeadImagePlaceholder];
     nameLable.text=[dict objectForKey:@"username"];
-
+    
 }
 - (void)awakeFromNib {
     // Initialization code
@@ -43,7 +43,7 @@
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
-
+    
     // Configure the view for the selected state
 }
 

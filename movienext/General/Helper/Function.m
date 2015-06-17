@@ -33,7 +33,7 @@
                            @"verified":user.verified,
                            @"logo":user.logo,
                            @"brief":user.signature,
-};
+                           };
     
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:kUserKey];
     [[NSUserDefaults standardUserDefaults] setObject:dict forKey:kUserKey];
@@ -145,15 +145,15 @@
     
     long  int inter =[timeSp intValue] -[timeInerval intValue];
     if (inter<=10) {
-         return @"刚刚";
+        return @"刚刚";
     }
     else if (inter <=60)
     {
-         return @"1分钟内";
+        return @"1分钟内";
     }
     else if(inter <=60*60)
     {
-         return @"1小时内";
+        return @"1小时内";
     }
     else if(inter<=60*60*2)
     {
@@ -161,18 +161,18 @@
     }
     else if (inter<=60*60*24)
     {
-      // return   [self getHourMinuteTime:timeInerval];
+        // return   [self getHourMinuteTime:timeInerval];
         NSDateFormatter  *formatter =[[NSDateFormatter alloc]init];
         [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
         formatter.timeZone=[NSTimeZone defaultTimeZone];
         NSDate *olddate =[NSDate dateWithTimeIntervalSince1970:[timeInerval intValue]];
         NSString  *dateString =[formatter stringFromDate:olddate];
         return dateString;
-
+        
     }
     else if (inter<=60*60*24*2)
     {
-         return @"昨天";
+        return @"昨天";
     }
     else if (inter<66*60*24*3)
     {
@@ -186,7 +186,7 @@
     {
         return   [self getTimewithInterval:timeInerval];
     }
- 
+    
     return 0;
 }
 //时间时分秒方法
@@ -209,78 +209,78 @@
  *  @return 带有背影图片的标签内容
  */
 + (UIImageView *)getBgvMarkInfo:(Weibo *)weibo x:(CGFloat)x y:(CGFloat)y{
-   /* int wordLimit   = 10;
-    int widthLimit  = wordLimit*19;
-    int margin      = 8;
-    int marginHead  = 12;
-    int height      = 20;
-    int logoWidth   = height;
-    BOOL isLong;
-    
-    UIFont *font = [UIFont systemFontOfSize:12];
-    NSString *aString = weibo.topic.length > wordLimit ? [weibo.topic substringToIndex:wordLimit] : weibo.topic;
-    aString = [aString length]>0 ? [NSString stringWithFormat:@"    %@  ", aString] : @"";
-    
-    if ( aString.length>0 ) {
-        CGSize titleSize = [aString sizeWithFont:font constrainedToSize:CGSizeMake(MAXFLOAT, height)];
-        int width = titleSize.width;
-        if ( width>=widthLimit ) {
-            width = widthLimit;
-            isLong = YES;
-        } else {
-            isLong = NO;
-        }
-        int imgWidth = width + margin + marginHead + logoWidth;
-        
-        CGRect bgvFrame;
-        CGRect lblFrame;
-        UIViewContentMode mode;
-        //判断点的位置
-        if ( x<(width+margin+marginHead) ) {//显示在右边的
-            //x -= 5;
-            bgvFrame = CGRectMake(x+imgWidth, y, imgWidth, height);
-            lblFrame = CGRectMake(logoWidth-10, 0, width, height);
-            mode = UIViewContentModeLeft;
-        } else {//显示在左边的
-            //x += 5;
-            bgvFrame = CGRectMake(x - width - margin - marginHead, y, imgWidth, height);
-            lblFrame = CGRectMake(logoWidth-10, 0, width, height);
-            mode = UIViewContentModeRight;
-        }
-        
-        UIImageView *bgv = [[UIImageView alloc] init];
-        bgv.frame = bgvFrame;
-        bgv.contentMode = mode;
-        bgv.layer.masksToBounds = YES;
-        bgv.layer.cornerRadius = 5;
-        
-        UILabel *lbl = [[UILabel alloc] initWithFrame:lblFrame];
-        lbl.lineBreakMode = isLong ? NSLineBreakByTruncatingTail : NSLineBreakByCharWrapping;
-        lbl.backgroundColor = [UIColor colorWithRed:0.0f/255.0f green:0.0f/255.0f blue:0.0f/255.0f alpha:0.5];
-        lbl.layer.masksToBounds = YES;
-        lbl.layer.cornerRadius = height*0.5;
-        [lbl setFont:font];
-        [lbl setText:aString];
-        [lbl setTextColor:[UIColor whiteColor]];
-        [bgv addSubview:lbl];
-        
-        UIImageView *ivLogo = [[UIImageView alloc] init];
-        ivLogo.frame = CGRectMake(0, 0, logoWidth, logoWidth);
-        ivLogo.layer.masksToBounds = YES;
-        ivLogo.layer.cornerRadius = logoWidth*0.5;
-        ivLogo.alpha = 0.8;
-        [ivLogo sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", kUrlAvatar, weibo.avatar]]];
-        [bgv addSubview:ivLogo];
-        
-        int ivVerifiedHeight = 8;
-        UIImageView *ivVerified = [[UIImageView alloc] initWithFrame:CGRectMake(logoWidth-ivVerifiedHeight, logoWidth-ivVerifiedHeight, ivVerifiedHeight, ivVerifiedHeight)];
-        ivVerified.image = [UIImage imageNamed:@"verified"];
-        //ivVerified.hidden = [weibo.verified intValue]==0;
-        ivVerified.alpha = 0.8;
-        [bgv addSubview:ivVerified];
-        
-        return bgv;
-    }*/
+    /* int wordLimit   = 10;
+     int widthLimit  = wordLimit*19;
+     int margin      = 8;
+     int marginHead  = 12;
+     int height      = 20;
+     int logoWidth   = height;
+     BOOL isLong;
+     
+     UIFont *font = [UIFont systemFontOfSize:12];
+     NSString *aString = weibo.topic.length > wordLimit ? [weibo.topic substringToIndex:wordLimit] : weibo.topic;
+     aString = [aString length]>0 ? [NSString stringWithFormat:@"    %@  ", aString] : @"";
+     
+     if ( aString.length>0 ) {
+     CGSize titleSize = [aString sizeWithFont:font constrainedToSize:CGSizeMake(MAXFLOAT, height)];
+     int width = titleSize.width;
+     if ( width>=widthLimit ) {
+     width = widthLimit;
+     isLong = YES;
+     } else {
+     isLong = NO;
+     }
+     int imgWidth = width + margin + marginHead + logoWidth;
+     
+     CGRect bgvFrame;
+     CGRect lblFrame;
+     UIViewContentMode mode;
+     //判断点的位置
+     if ( x<(width+margin+marginHead) ) {//显示在右边的
+     //x -= 5;
+     bgvFrame = CGRectMake(x+imgWidth, y, imgWidth, height);
+     lblFrame = CGRectMake(logoWidth-10, 0, width, height);
+     mode = UIViewContentModeLeft;
+     } else {//显示在左边的
+     //x += 5;
+     bgvFrame = CGRectMake(x - width - margin - marginHead, y, imgWidth, height);
+     lblFrame = CGRectMake(logoWidth-10, 0, width, height);
+     mode = UIViewContentModeRight;
+     }
+     
+     UIImageView *bgv = [[UIImageView alloc] init];
+     bgv.frame = bgvFrame;
+     bgv.contentMode = mode;
+     bgv.layer.masksToBounds = YES;
+     bgv.layer.cornerRadius = 5;
+     
+     UILabel *lbl = [[UILabel alloc] initWithFrame:lblFrame];
+     lbl.lineBreakMode = isLong ? NSLineBreakByTruncatingTail : NSLineBreakByCharWrapping;
+     lbl.backgroundColor = [UIColor colorWithRed:0.0f/255.0f green:0.0f/255.0f blue:0.0f/255.0f alpha:0.5];
+     lbl.layer.masksToBounds = YES;
+     lbl.layer.cornerRadius = height*0.5;
+     [lbl setFont:font];
+     [lbl setText:aString];
+     [lbl setTextColor:[UIColor whiteColor]];
+     [bgv addSubview:lbl];
+     
+     UIImageView *ivLogo = [[UIImageView alloc] init];
+     ivLogo.frame = CGRectMake(0, 0, logoWidth, logoWidth);
+     ivLogo.layer.masksToBounds = YES;
+     ivLogo.layer.cornerRadius = logoWidth*0.5;
+     ivLogo.alpha = 0.8;
+     [ivLogo sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", kUrlAvatar, weibo.avatar]]];
+     [bgv addSubview:ivLogo];
+     
+     int ivVerifiedHeight = 8;
+     UIImageView *ivVerified = [[UIImageView alloc] initWithFrame:CGRectMake(logoWidth-ivVerifiedHeight, logoWidth-ivVerifiedHeight, ivVerifiedHeight, ivVerifiedHeight)];
+     ivVerified.image = [UIImage imageNamed:@"verified"];
+     //ivVerified.hidden = [weibo.verified intValue]==0;
+     ivVerified.alpha = 0.8;
+     [bgv addSubview:ivVerified];
+     
+     return bgv;
+     }*/
     return nil;
 }
 
@@ -322,12 +322,12 @@
                                                      error:nil];
     string = [regular stringByReplacingMatchesInString:string options:NSRegularExpressionCaseInsensitive  range:NSMakeRange(0, [string length]) withTemplate:@" / "];
     string = [string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet ]];
-        return string;
+    return string;
 }
 + (NSString *)getNoSpace:(NSString *)string{
     NSRegularExpression * regular = [[NSRegularExpression alloc] initWithPattern:@"[ 　]{1,}"
-                                                   options:NSRegularExpressionCaseInsensitive
-                                                     error:nil];
+                                                                         options:NSRegularExpressionCaseInsensitive
+                                                                           error:nil];
     string = [regular stringByReplacingMatchesInString:string options:NSRegularExpressionCaseInsensitive  range:NSMakeRange(0, [string length]) withTemplate:@""];
     string = [string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet ]];
     return string;
@@ -395,7 +395,7 @@
 {
     
     UserDataCenter  *userCenter=[UserDataCenter shareInstance];
-
+    
     if (userInfo) {  //用户已经登陆
         if ([userInfo objectForKey:@"id"]) {
             userCenter.user_id=[userInfo objectForKey:@"id"];
@@ -423,7 +423,7 @@
         }
         
     }
-
+    
     
 }
 
@@ -462,7 +462,7 @@
     animation.delegate=self;
     animation.fillMode=kCAFillModeForwards;
     animation.timingFunction=[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
-     [view.layer addAnimation:animation forKey:@"scale-layer"];
+    [view.layer addAnimation:animation forKey:@"scale-layer"];
 }
 
 +(CAKeyframeAnimation *)getKeyframeAni{
@@ -492,7 +492,7 @@
     //[dateFormatter setDateStyle:kCFDateFormatterFullStyle];
     [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     NSString *dateString = [dateFormatter stringFromDate:date];
-     return dateString;
+    return dateString;
 }
 
 +(NSString *)md5:(NSString *)str
@@ -506,7 +506,7 @@
             result[4], result[5], result[6], result[7],
             result[8], result[9], result[10], result[11],
             result[12], result[13], result[14], result[15]
-            ]; 
+            ];
 }
 //得到中英文混合字符串长度 方法2
 +(int)getToInt:(NSString*)strtemp
@@ -519,7 +519,7 @@
 
 +(CGRect) getImageFrameWithwidth:(float)width height :(float) height inset:(float)  inset
 {
-     float x;
+    float x;
     float y=0;
     float w;
     float h;

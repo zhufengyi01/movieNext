@@ -68,7 +68,7 @@
     
     
     checkBtn=[ZCControl createButtonWithFrame:CGRectMake((kDeviceWidth-140)/2,kDeviceHeight-40, 140, 30) ImageName:nil Target:self Action:@selector(checkClick:) Title:@""];
-  //   checkBtn.backgroundColor=[UIColor redColor];
+    //   checkBtn.backgroundColor=[UIColor redColor];
     [checkBtn setImage:[UIImage imageNamed:@"unselect_icon.png"] forState:UIControlStateNormal];
     [checkBtn setImage:[UIImage imageNamed:@"selected_icon.png"] forState:UIControlStateSelected];
     //默认勾选状态
@@ -77,7 +77,7 @@
     [checkBtn setTitleColor:[UIColor colorWithRed:216.0/255 green:216.0/255 blue:216.0/255 alpha:216.0/255] forState:UIControlStateNormal];
     [checkBtn setTitle:@"登录注册成功，即接受" forState:UIControlStateNormal];
     [checkBtn setTitleEdgeInsets:UIEdgeInsetsMake(5, 5, 0, 0)];
-   // checkBtn.backgroundColor=[UIColor redColor];
+    // checkBtn.backgroundColor=[UIColor redColor];
     [checkBtn setImageEdgeInsets:UIEdgeInsetsMake(5, 0, 0, 0)];
     checkBtn.titleLabel.font=[UIFont systemFontOfSize:12];
     [self.view addSubview:checkBtn];
@@ -85,7 +85,7 @@
     
     checkBtn2=[ZCControl createButtonWithFrame:CGRectMake(checkBtn.frame.origin.x+checkBtn.frame.size.width,checkBtn.frame.origin.y, 120, 30) ImageName:nil Target:self Action:@selector(checkClick:) Title:@""];
     [checkBtn2 setTitleEdgeInsets:UIEdgeInsetsMake(5, 0, 0, 0)];
-     //checkBtn2.backgroundColor=[UIColor blackColor];
+    //checkBtn2.backgroundColor=[UIColor blackColor];
     [checkBtn2 setTitle:@"《电影卡片服务使用条款》" forState:UIControlStateNormal];
     [checkBtn2 setTitleColor:[UIColor colorWithRed:216.0/255 green:216.0/255 blue:216.0/255 alpha:216.0/255] forState:UIControlStateNormal];
     checkBtn2.tag=101;
@@ -95,27 +95,27 @@
     checkBtn.frame=CGRectMake((kDeviceWidth-checkBtn.frame.size.width-checkBtn2.frame.size.width)/2, checkBtn.frame.origin.y, checkBtn.frame.size.width, checkBtn.frame.size.height);
     checkBtn2.frame=CGRectMake(checkBtn.frame.origin.x+checkBtn.frame.size.width, checkBtn.frame.origin.y, checkBtn2.frame.size.width, checkBtn2.frame.size.height);
     
-
-
-//    
-//    UIButton  *qqButton=[UIButton buttonWithType:UIButtonTypeCustom];
-//    qqButton.frame=CGRectMake(50, kDeviceHeight-220, kDeviceWidth-100, 40);
-//    [qqButton setBackgroundImage:[UIImage imageNamed:@"login_button_qq －in.png"] forState:UIControlStateNormal];
-//    [qqButton setBackgroundImage:[UIImage imageNamed:@"login_button_qq.png"] forState:UIControlStateHighlighted];
-// 
-//    [qqButton addTarget:self action:@selector(dealloginClick:) forControlEvents:UIControlEventTouchUpInside];
-//    qqButton.tag=1000;
-//    //[self.view addSubview:qqButton];
-//    
+    
+    
+    //
+    //    UIButton  *qqButton=[UIButton buttonWithType:UIButtonTypeCustom];
+    //    qqButton.frame=CGRectMake(50, kDeviceHeight-220, kDeviceWidth-100, 40);
+    //    [qqButton setBackgroundImage:[UIImage imageNamed:@"login_button_qq －in.png"] forState:UIControlStateNormal];
+    //    [qqButton setBackgroundImage:[UIImage imageNamed:@"login_button_qq.png"] forState:UIControlStateHighlighted];
+    //
+    //    [qqButton addTarget:self action:@selector(dealloginClick:) forControlEvents:UIControlEventTouchUpInside];
+    //    qqButton.tag=1000;
+    //    //[self.view addSubview:qqButton];
+    //
     weiboButton=[UIButton buttonWithType:UIButtonTypeCustom];
     weiboButton.frame=CGRectMake((kDeviceWidth-231)/2, kDeviceHeight-170, 231, 40);
     [weiboButton setBackgroundImage:[UIImage imageNamed:@"login_button_sina.png"] forState:UIControlStateNormal];
     [weiboButton setBackgroundImage:[UIImage imageNamed:@"login_button_sina_press@2x.png"] forState:UIControlStateHighlighted];
     [weiboButton addTarget:self action:@selector(dealloginClick:) forControlEvents:UIControlEventTouchUpInside];
     weiboButton.tag=1001;
-   // weiboButton.userInteractionEnabled=NO;
-   // if (checkBtn.selected==YES) {
-        weiboButton.userInteractionEnabled=YES;
+    // weiboButton.userInteractionEnabled=NO;
+    // if (checkBtn.selected==YES) {
+    weiboButton.userInteractionEnabled=YES;
     //}
     [self.view addSubview:weiboButton];
     
@@ -125,9 +125,9 @@
     weiChateButton.frame=CGRectMake((kDeviceWidth-231)/2, kDeviceHeight-120, 231, 40);
     [weiChateButton setBackgroundImage:[UIImage imageNamed:@"login_button_wechat.png"] forState:UIControlStateNormal];
     [weiChateButton setBackgroundImage:[UIImage imageNamed:@"login_button_wechat_press.png"] forState:UIControlStateHighlighted];
-   // weiChateButton.userInteractionEnabled=NO;
+    // weiChateButton.userInteractionEnabled=NO;
     //if (checkBtn.selected==YES) {
-        weiChateButton.userInteractionEnabled=YES;
+    weiChateButton.userInteractionEnabled=YES;
     //}
     //[weiChateButton setTitle:@"登陆" forState:UIControlStateNormal];
     [weiChateButton addTarget:self action:@selector(dealloginClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -142,7 +142,7 @@
     emaillogin.hidden=YES;
     [emaillogin setTitleColor:VBlue_color forState:UIControlStateNormal];
     emaillogin.titleLabel.font=[UIFont boldSystemFontOfSize:16];
-
+    
     [self.view addSubview:emaillogin];
     
     UIButton  *emailregister =[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth/2, kDeviceHeight-50, kDeviceWidth/2, 50) ImageName:@"login_alpa_backgroundcolor.png" Target:self Action:@selector(dealloginClick:) Title:@"邮箱注册"];
@@ -153,26 +153,26 @@
     [self.view addSubview:emailregister];
     
 #warning   上线前一定要注视掉
-//    if (IsInstallWechat==1) {
-//        //已经安装了微信
-//            weiboButton.hidden=NO;
-//            weiChateButton.hidden=NO;
-//             checkBtn.hidden=NO;
-//             checkBtn2.hidden=NO;
-//            emaillogin.hidden=YES;
-//            emailregister.hidden=YES;
-//        
-//    }
-//    else if (IsInstallWechat==0)
-//    {
-//       weiboButton.hidden=YES;
-//      weiChateButton.hidden=YES;
-//        checkBtn.hidden=YES;
-//        checkBtn2.hidden=YES;
-//      emaillogin.hidden=NO;
-//      emailregister.hidden=NO;
-//    }
-//    //判断是否安装了微信
+    //    if (IsInstallWechat==1) {
+    //        //已经安装了微信
+    //            weiboButton.hidden=NO;
+    //            weiChateButton.hidden=NO;
+    //             checkBtn.hidden=NO;
+    //             checkBtn2.hidden=NO;
+    //            emaillogin.hidden=YES;
+    //            emailregister.hidden=YES;
+    //
+    //    }
+    //    else if (IsInstallWechat==0)
+    //    {
+    //       weiboButton.hidden=YES;
+    //      weiChateButton.hidden=YES;
+    //        checkBtn.hidden=YES;
+    //        checkBtn2.hidden=YES;
+    //      emaillogin.hidden=NO;
+    //      emailregister.hidden=NO;
+    //    }
+    //    //判断是否安装了微信
     if ([WXApi  isWXAppInstalled]==NO) {
         weiboButton.hidden=YES;
         weiChateButton.hidden=YES;
@@ -181,7 +181,7 @@
         emaillogin.hidden=NO;
         emailregister.hidden=NO;
     }
-
+    
     
 }
 //服务条款按钮
@@ -203,30 +203,30 @@
     else if(button==checkBtn2)
     {
         
-       [self.navigationController pushViewController:[SerViceViewController new] animated:YES];
-     }
+        [self.navigationController pushViewController:[SerViceViewController new] animated:YES];
+    }
     
 }
 //登陆按钮
 -(void)dealloginClick:(UIButton *) btn
 {
-//    weiboButton.hidden=YES;
-//    weiChateButton.hidden=YES;
-//    checkBtn.hidden=YES;
-//    checkBtn2.hidden=YES;
+    //    weiboButton.hidden=YES;
+    //    weiChateButton.hidden=YES;
+    //    checkBtn.hidden=YES;
+    //    checkBtn2.hidden=YES;
     if (btn.tag==1000) {
         //qq  登陆
         //window.rootViewController=[CustmoTabBarController new];
         ssoName =UMShareToQzone;
         NSLog(@"  点击了登陆qq");
         [self loginSocialPlatformWithName];
-        }
+    }
     else if (btn.tag==1001)
     {
         //微博登陆
         ssoName = UMShareToSina;
         NSLog(@"  点击了登陆sina");
-
+        
         [self loginSocialPlatformWithName];
     }
     else if (btn.tag==1002)
@@ -236,7 +236,7 @@
     }
     else if(btn.tag==1003)
     {
-//      邮箱登陆
+        //      邮箱登陆
         UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:[Login2_1ViewController new]];
         [self presentViewController:na animated:YES completion:nil];
     }
@@ -245,7 +245,7 @@
         //邮箱注册
         UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:[Register_1ViewController new]];
         [self presentViewController:na animated:YES completion:nil];
-
+        
         
     }
 }
@@ -260,25 +260,25 @@
         if (response.responseCode == UMSResponseCodeSuccess) {
             [[UMSocialDataService defaultDataService] requestSnsInformation:ssoName completion:^(UMSocialResponseEntity *response) {
                 if (response.responseCode == UMSResponseCodeSuccess) {
-                   // NSLog(@"====  login sucess  =response ======%@",[response valueForKey:@"data"]);
+                    // NSLog(@"====  login sucess  =response ======%@",[response valueForKey:@"data"]);
                     weiboButton.hidden=YES;
                     weiChateButton.hidden=YES;
                     checkBtn.hidden=YES;
                     checkBtn2.hidden=YES;
                     NSDictionary *data = [response valueForKey:@"data"];
-                   //openid
+                    //openid
                     NSString  *openid;
                     if ([ssoName isEqualToString:UMShareToSina]) {
-                         openid   = [data valueForKey:@"uid"];
+                        openid   = [data valueForKey:@"uid"];
                     }
                     else{
                         openid =[data valueForKey:@"openid"];
                     }
                     //token
                     NSString *access_token   = [data valueForKey:@"access_token"];
-                   //username
+                    //username
                     NSString *screen_name    = [data valueForKey:@"screen_name"];
-                  //brief
+                    //brief
                     NSString *brief=@" ";
                     if ([ssoName isEqualToString:UMShareToSina]) {
                         brief= [data valueForKey:@"description"];
@@ -314,13 +314,13 @@
                             }
                             [Function saveUser:userCenter];
                             //登陆成功后把根
-                             if ([[responseObject objectForKey:@"first_login"] intValue]==0) {
+                            if ([[responseObject objectForKey:@"first_login"] intValue]==0) {
                                 window.rootViewController=[CustmoTabBarController new];
-                             }
-                              else {
+                            }
+                            else {
                                 UserHeadChangeViewController *vc=[UserHeadChangeViewController new];
                                 vc.pageType=NSHeadChangePageTypeFirstLogin;
-                            [self.navigationController pushViewController:vc animated:YES];
+                                [self.navigationController pushViewController:vc animated:YES];
                             }
                         }
                     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -331,7 +331,7 @@
                 } else {
                     //                    [self dealErrorCase];
                     //强行登陆
-                
+                    
                 }
             }];
         } else {
@@ -345,13 +345,13 @@
 }
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end

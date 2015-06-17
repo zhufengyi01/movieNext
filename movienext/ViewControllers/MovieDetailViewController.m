@@ -184,10 +184,10 @@ static const CGFloat MJDuration = 0.2;
         MovieLogoImageView.frame=CGRectZero;
     }
     nameStr =[Function htmlString:nameStr];
-     float nameW=kDeviceWidth*0.6;
+    float nameW=kDeviceWidth*0.6;
     
     CGSize   Nsize =[nameStr boundingRectWithSize:CGSizeMake(nameW, 25) options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes:[NSDictionary dictionaryWithObject:movieNameLable.font forKey:NSFontAttributeName] context:nil].size;
-     movieNameLable.text=[NSString stringWithFormat:@"%@",nameStr];
+    movieNameLable.text=[NSString stringWithFormat:@"%@",nameStr];
     movieNameLable.frame=CGRectMake(35,8,Nsize.width+5, 25);
     titleView.frame=CGRectMake(0, 0, 30+5+movieNameLable.frame.size.width, 40);
     self.navigationItem.titleView=titleView;
@@ -721,7 +721,7 @@ static const CGFloat MJDuration = 0.2;
             
             UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
             self.navigationItem.backBarButtonItem=item;
-           // UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:vc];
+            // UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:vc];
             ///[self presentViewController:na animated:YES completion:nil];
             [self.navigationController pushViewController:vc animated:YES];
             
@@ -986,11 +986,11 @@ static const CGFloat MJDuration = 0.2;
     }
     else
     {
-     //   return CGSizeMake((kDeviceWidth-5)/2,(kDeviceWidth-10)/3);
+        //   return CGSizeMake((kDeviceWidth-5)/2,(kDeviceWidth-10)/3);
         double  w = (kDeviceWidth-5)/2;
         double  h= w*(9.0/16);
         return CGSizeMake(w,h);
-
+        
         
     }
     return CGSizeMake(0, 0);

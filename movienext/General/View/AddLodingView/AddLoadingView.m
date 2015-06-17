@@ -13,12 +13,12 @@
 @implementation AddLoadingView
 
 /*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
-}
-*/
+ // Only override drawRect: if you perform custom drawing.
+ // An empty implementation adversely affects performance during animation.
+ - (void)drawRect:(CGRect)rect {
+ // Drawing code
+ }
+ */
 -(instancetype)initWithtitle:(NSString *) title;
 {
     if (self =[super init]) {
@@ -26,7 +26,7 @@
         _title=title;
         self.backgroundColor =[[UIColor blackColor] colorWithAlphaComponent:0.2];
         [self createUI];
-      
+        
     }
     return self;
 }
@@ -49,7 +49,7 @@
     self.titleLable.textAlignment=NSTextAlignmentCenter;
     self.titleLable.backgroundColor =[UIColor clearColor];
     [bgView addSubview:self.titleLable];
-        
+    
 }
 -(void)show;
 {

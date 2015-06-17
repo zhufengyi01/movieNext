@@ -37,7 +37,7 @@
     [self createNavigation];
     [self initData];
     [self createUI];
-
+    
     [self requestData];
     
 }
@@ -76,7 +76,7 @@
 -(void)requestData
 {
     UserDataCenter *userCenter=[UserDataCenter shareInstance];
-     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     NSDictionary  *parameters=@{@"user_id":userCenter.user_id};
     NSString  *urlString =[NSString stringWithFormat:@"%@/user/fakelist", kApiBaseUrl];
     [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -87,13 +87,13 @@
             }
             _detailArray =[responseObject objectForKey:@"models"];
             _DataArray=[NSMutableArray arrayWithArray:_detailArray];
-             [_myTableView reloadData];
+            [_myTableView reloadData];
             
         }
         else
         {
             NSLog(@"Error: ");
-
+            
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
@@ -102,7 +102,7 @@
 }
 -(void)createUI
 {
- 
+    
     _searchBar =[[UISearchBar alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, 40)];
     _searchBar.delegate=self;
     _searchBar.placeholder=@"请输入用户";
@@ -139,7 +139,7 @@
     ChangeSelfTableViewCell   *cell;
     if (tableView==_myTableView) {
         if (_DataArray.count>indexPath.row) {
-             cell=[tableView dequeueReusableCellWithIdentifier:cellID];
+            cell=[tableView dequeueReusableCellWithIdentifier:cellID];
             if (!cell) {
                 cell=[[ChangeSelfTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
             }
@@ -153,7 +153,7 @@
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-
+    
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (tableView==_myTableView) {
         
@@ -174,16 +174,16 @@
     }
     else
     {
-    for (int i=0;i<_detailArray.count;i++) {
-        NSMutableString  *nameStr =[[_detailArray  objectAtIndex:i] objectForKey:@"username"];
-        if ([nameStr rangeOfString:[searchBar text]].location!=NSNotFound) {
-            if (_DataArray==nil) {
-                _DataArray =[NSMutableArray array];
+        for (int i=0;i<_detailArray.count;i++) {
+            NSMutableString  *nameStr =[[_detailArray  objectAtIndex:i] objectForKey:@"username"];
+            if ([nameStr rangeOfString:[searchBar text]].location!=NSNotFound) {
+                if (_DataArray==nil) {
+                    _DataArray =[NSMutableArray array];
+                }
+                [_DataArray addObject:[_detailArray objectAtIndex:i]];
+                
             }
-            [_DataArray addObject:[_detailArray objectAtIndex:i]];
-            
         }
-     }
     }
     [_myTableView reloadData];
 }
@@ -213,7 +213,7 @@
         UserDataCenter *userCenter=[UserDataCenter shareInstance];
         userCenter.user_id=[dict objectForKey:@"id"];
         userCenter.logo=[dict objectForKey:@"logo"];
-      //  userCenter.is_admin=[dict objectForKey:@"level"];
+        //  userCenter.is_admin=[dict objectForKey:@"level"];
         userCenter.verified=[dict objectForKey:@"verified"];
         userCenter.fake=[dict objectForKey:@"fake"];
         userCenter.sex=[dict objectForKey:@"sex"];
@@ -222,17 +222,17 @@
         [[NSNotificationCenter defaultCenter]  postNotificationName:@"initUser" object:nil];
         [Function saveUser:userCenter];
         [self.navigationController popViewControllerAnimated:YES];
-
+        
     }
 }
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end

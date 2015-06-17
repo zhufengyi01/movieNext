@@ -54,19 +54,19 @@ typedef NS_ENUM(NSInteger,NSUserPageType)
     UILabel   *TimeLable;
     UIButton   *deletButton;
     UIButton   *moreButton;
-   // UIButton  *ZanButton;
-   // NSMutableArray   *_MarkMuatableArray;
+    // UIButton  *ZanButton;
+    // NSMutableArray   *_MarkMuatableArray;
     
-     //下面工具的子视图
+    //下面工具的子视图
     UIView        *BgView2;   //放分享的白色背景
     UIButton      *leftButtomButton;   //左下边按钮
     UILabel       *movieNameLable;
     UIImageView   *MovieLogoImageView;  // 电影的小图片
     UIButton      *ScreenButton;
     UIButton      *addMarkButton;
-//    UIView  *pressview;
-
- }
+    //    UIView  *pressview;
+    
+}
 @property (assign,nonatomic)id <CommonStageCellDelegate>  delegate;
 @property(assign,nonatomic) NSInteger   Cellindex;
 @property(nonatomic,strong)StageView    *stageView;

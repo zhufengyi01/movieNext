@@ -41,7 +41,7 @@
 }
 -(void)createUI
 {
-    _dataArray =[[NSMutableArray alloc]initWithObjects:@"用户列表",@"标签，表情包",@"已屏蔽剧照列表",@"［-1级］微博屏蔽",@"［0级］微博最新",@"［1级］微博发现",@"［2级］微博热门", @"［3级］已定时",nil];
+    _dataArray =[[NSMutableArray alloc]initWithObjects:@"用户列表",@"标签，表情包",@"已屏蔽剧照列表",@"［-1级］微博屏蔽",@"［0级］未审核",@"［1级］微博正常",@"［2级］微博发现",@"［3级］微博热门", @"［4级］已定时", nil];
     _myTableView =[[UITableView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth,55*_dataArray.count) style:UITableViewStylePlain];
     _myTableView.delegate=self;
     _myTableView.dataSource=self;
@@ -66,7 +66,7 @@
     UITableViewCell   *cell=(UITableViewCell *)[tableView dequeueReusableCellWithIdentifier:cellID];
     if (!cell) {
         cell=[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
-           cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+        cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
     }
     cell.textLabel.font =[UIFont systemFontOfSize:14];
     //  cell.textColor =VGray_color;
@@ -86,7 +86,7 @@
             [self.navigationController pushViewController:[AdmCustomListViewController new] animated:YES];
         }
             break;
-         case ADM_TYPE_EMOJ:
+        case ADM_TYPE_EMOJ:
         {
             TagModel  *tagmodel =[[TagModel alloc]init];
             TagDetailModel  *tagdetail =[[TagDetailModel alloc]init];
@@ -103,20 +103,29 @@
             break;
         }
             
-         case ADM_TYPE_CLOSE_STAGE:
+        case ADM_TYPE_CLOSE_STAGE:
         {
             MovieDetailViewController *movied =[[MovieDetailViewController alloc]init];
             movied.pageSourceType=NSMovieSourcePageAdminCloseStageViewController;
             UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
             self.navigationItem.backBarButtonItem=item;
             [self.navigationController pushViewController:movied animated:YES];
-
+            
             break;
         }
         case ADM_TYPE_CLOSE_WEIBO:
         {
             NewAddViewController *new  =[NewAddViewController new];
             new.pageType=NSNewAddPageSoureTypeCloseWeiboList;
+            UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+            self.navigationItem.backBarButtonItem=item;
+            [self.navigationController pushViewController:new animated:YES];
+            break;
+        }
+        case ADM_TYPE_NOT_REVIEW:
+        {
+            NewAddViewController *new  =[NewAddViewController new];
+            new.pageType=NSNewAddPageSoureTypeNotReview;
             UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
             self.navigationItem.backBarButtonItem=item;
             [self.navigationController pushViewController:new animated:YES];
@@ -129,7 +138,7 @@
             UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
             self.navigationItem.backBarButtonItem=item;
             [self.navigationController pushViewController:new animated:YES];
-
+            
             break;
         }
         case ADM_TYPE_ADM_DESCORVER:
@@ -160,10 +169,10 @@
             break;
         }
         default:
-        break;
+            break;
             
     }
- }
+}
 
 
 - (void)didReceiveMemoryWarning {
@@ -172,13 +181,13 @@
 }
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end

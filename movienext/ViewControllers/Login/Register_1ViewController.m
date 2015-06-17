@@ -17,7 +17,7 @@
     UITextField  *emailTextfield;
     UITextField  *PassworfTextfield;
     UIImageView  *bgView;
-
+    
 }
 @end
 
@@ -26,7 +26,7 @@
 {
     [super viewWillAppear:YES];
     self.navigationController.navigationBar.hidden=NO;
-
+    
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -39,7 +39,7 @@
     //键盘将要隐藏
     [[NSNotificationCenter defaultCenter ]addObserver:self selector:@selector(keyboardWillHiden:) name:UIKeyboardWillHideNotification object:nil];
     
-
+    
     
 }
 
@@ -50,14 +50,14 @@
     
     [UIView animateWithDuration:0.2 animations:^{
         bgView.frame =CGRectMake(0, -40,kDeviceWidth, kDeviceHeight);
-     }];
+    }];
     
 }
 -(void)keyboardWillHiden:(NSNotification *) notification
 {
     [UIView animateWithDuration:0.2 animations:^{
         bgView.frame =CGRectMake(0, 0,kDeviceWidth,kDeviceHeight);
-     }];
+    }];
     
 }
 
@@ -80,7 +80,7 @@
     button.tag=99;
     UIBarButtonItem  *barButton=[[UIBarButtonItem alloc]initWithCustomView:button];
     self.navigationItem.leftBarButtonItem=barButton;
-
+    
 }
 -(void)createUI
 {
@@ -92,12 +92,12 @@
     
     UIView  *left1=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 10, 20)];
     UIView  *left2=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 10, 20)];
-
+    
     emailTextfield=[ZCControl createTextFieldWithFrame:CGRectMake((kDeviceWidth-240)/2, 125, 240,40) placeholder:@"请输入邮箱" passWord:NO leftImageView:nil rightImageView:nil Font:15];
     emailTextfield.backgroundColor=[UIColor whiteColor];
     emailTextfield.layer.cornerRadius=4;
     emailTextfield.clipsToBounds=YES;
-   // emailTextfield.text=@"673229963@qq.com";
+    // emailTextfield.text=@"673229963@qq.com";
     emailTextfield.delegate=self;
     emailTextfield.leftView=left1;
     [bgView addSubview:emailTextfield];
@@ -117,7 +117,7 @@
     PassworfTextfield.layer.cornerRadius=4;
     PassworfTextfield.clipsToBounds=YES;
     PassworfTextfield.delegate=self;
-   // PassworfTextfield.text=@"123";
+    // PassworfTextfield.text=@"123";
     PassworfTextfield.backgroundColor=[UIColor whiteColor];
     PassworfTextfield.rightViewMode=UITextFieldViewModeAlways;
     PassworfTextfield.leftView=left2;
@@ -126,7 +126,7 @@
     UIButton  *loginButton =[ZCControl createButtonWithFrame:CGRectMake((kDeviceWidth-200)/2,PassworfTextfield.frame.origin.y+PassworfTextfield.frame.size.height+20, 200, 40) ImageName:@"signup_sure_press.png" Target:self Action:@selector(dealregiterClick:) Title:nil];
     loginButton.tag=101;
     [bgView addSubview:loginButton];
-
+    
     
 }
 #pragma mark  ---------------requestData
@@ -144,13 +144,13 @@
             reg.email=[emailTextfield text];
             reg.password=[PassworfTextfield text];
             [self.navigationController pushViewController:reg animated:YES];
-
+            
         }
         else
         {
             UIAlertView  *Al=[[UIAlertView alloc]initWithTitle:nil message:@"对不起，该邮箱已注册" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
             [Al show];
-
+            
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
@@ -177,7 +177,7 @@
             button.selected=YES;
             PassworfTextfield.secureTextEntry=NO;
         }
-
+        
     }
     else if(button.tag==101)
     {
@@ -187,14 +187,14 @@
             UIAlertView  *Al=[[UIAlertView alloc]initWithTitle:nil message:@"对不起，邮箱或密码不能为空" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
             [Al show];
             return;
-
+            
         }
         if (PassworfTextfield.text.length<6||PassworfTextfield.text.length>18) {
             
             UIAlertView  *Al=[[UIAlertView alloc]initWithTitle:nil message:@"密码长度为8～16位字符" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
             [Al show];
             return;
-
+            
         }
         if ([Function validateEmail:emailTextfield.text]==NO) {
             
@@ -203,7 +203,7 @@
             return;
             
         }
-         else
+        else
         {
             [self requestemailvalidateData];
         }
@@ -217,8 +217,8 @@
 -(BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     //if (textField==emailTextfield) {
-        [emailTextfield resignFirstResponder];
-       [PassworfTextfield resignFirstResponder];
+    [emailTextfield resignFirstResponder];
+    [PassworfTextfield resignFirstResponder];
     //}
     return YES;
 }
@@ -233,13 +233,13 @@
 }
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end

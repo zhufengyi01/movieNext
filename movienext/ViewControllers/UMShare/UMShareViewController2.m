@@ -43,7 +43,7 @@
     
     [self createStageView];
     [self createButtomView];
-
+    
 }
 
 -(void)createNavigation
@@ -64,7 +64,7 @@
     titleLable.textColor=VBlue_color;
     titleLable.font=[UIFont boldSystemFontOfSize:18];
     titleLable.textAlignment=NSTextAlignmentCenter;
-//self.navigationItem.titleView=titleLable;
+    //self.navigationItem.titleView=titleLable;
     [view addSubview:titleLable];
     
     UIButton  *button=[UIButton buttonWithType:UIButtonTypeCustom];
@@ -74,15 +74,15 @@
     button.titleLabel.font=[UIFont boldSystemFontOfSize:18];
     [button addTarget:self action:@selector(CancleShareClick:) forControlEvents:UIControlEventTouchUpInside];
     [view addSubview:button];
-//    UIBarButtonItem  *barButton=[[UIBarButtonItem alloc]initWithCustomView:button];
-//    self.navigationItem.leftBarButtonItem=barButton;
+    //    UIBarButtonItem  *barButton=[[UIBarButtonItem alloc]initWithCustomView:button];
+    //    self.navigationItem.leftBarButtonItem=barButton;
     
 }
 -(void)CancleShareClick:(UIButton *) button
 {
-     [self dismissViewControllerAnimated:YES completion:^{
+    [self dismissViewControllerAnimated:YES completion:^{
         
-     }];
+    }];
 }
 
 -(void)createButtomView
@@ -133,11 +133,11 @@
     float  height =(ImgeHight/ImageWith)*kDeviceWidth;
     _ShareimageView=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth,height)];
     _ShareimageView.backgroundColor=[UIColor whiteColor];
-   // _ShareimageView.image=self.screenImage;
-     NSString *photostring=[NSString stringWithFormat:@"%@%@!w640",kUrlStage,self.StageInfo.photo];
+    // _ShareimageView.image=self.screenImage;
+    NSString *photostring=[NSString stringWithFormat:@"%@%@!w640",kUrlStage,self.StageInfo.photo];
     [_ShareimageView sd_setImageWithURL:[NSURL URLWithString:photostring] placeholderImage:nil];
     [shareView addSubview:_ShareimageView];
- 
+    
     // 电影名
     _moviewName= [ZCControl createLabelWithFrame:CGRectMake(15,_ShareimageView.frame.origin.y+_ShareimageView.frame.size.height+10, kDeviceWidth-40, 20) Font:14 Text:@""];
     _moviewName.textColor=VLight_GrayColor;
@@ -177,16 +177,16 @@
     self.contentLable.textAlignment=NSTextAlignmentLeft;
     self.contentLable.textColor=VGray_color;
     [shareView addSubview:self.contentLable];
-
- 
+    
+    
     //用户头像
     self.headImage=[[UIImageView alloc]initWithFrame:CGRectMake(_moviewName.frame.origin.x,self.contentLable.frame.origin.y+self.contentLable.frame.size.height+80,30, 30)];
-   NSString  *headString =  [NSString stringWithFormat:@"%@%@!thumb",kUrlAvatar,self.weiboInfo.uerInfo.logo];
+    NSString  *headString =  [NSString stringWithFormat:@"%@%@!thumb",kUrlAvatar,self.weiboInfo.uerInfo.logo];
     [self.headImage  sd_setImageWithURL:[NSURL URLWithString:headString] placeholderImage:HeadImagePlaceholder];
     self.headImage.layer.cornerRadius=4;
     self.headImage.layer.masksToBounds = YES;
     [shareView addSubview:self.headImage];
-
+    
     
     //用户名
     self.userName=[ZCControl createLabelWithFrame:CGRectMake(_moviewName.frame.origin.x+self.headImage.frame.size.width+10,self.headImage.frame.origin.y, kDeviceWidth-20,30) Font:14 Text:self.weiboInfo.uerInfo.username];
@@ -211,22 +211,22 @@
     self.logoName.textAlignment=NSTextAlignmentLeft;
     self.logoName.textColor=ShareLogo_color;
     [logoView addSubview:self.logoName];
-
+    
 }
 
 //创建标签的方法
 -(TagView *)createTagViewWithtagInfo:(TagModel *) tagmodel andIndex:(NSInteger ) index
 {
-//    TagView *tagview =[[TagView alloc]initWithFrame:CGRectZero];
-//    tagview.clipsToBounds=YES;
-//    tagview.tag=1000+index;
-//    tagview.tagBgImageview.backgroundColor =[UIColor colorWithRed:155.0/255 green:155.0/255 blue:155.0/255 alpha:1];
-//    tagview.weiboInfo=self.weiboInfo;
-//    NSString *titleStr = tagmodel.tagDetailInfo.title;
-//    tagview.titleLable.text=titleStr;
-//    CGSize  Tsize =[titleStr boundingRectWithSize:CGSizeMake(MAXFLOAT, TagHeight) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:[NSDictionary dictionaryWithObject:tagview.titleLable.font forKey:NSFontAttributeName] context:nil].size;
-//    //纪录前面一个标签的宽度
-//    tagview.frame=CGRectMake(0,0, Tsize.width+10, TagHeight);
+    //    TagView *tagview =[[TagView alloc]initWithFrame:CGRectZero];
+    //    tagview.clipsToBounds=YES;
+    //    tagview.tag=1000+index;
+    //    tagview.tagBgImageview.backgroundColor =[UIColor colorWithRed:155.0/255 green:155.0/255 blue:155.0/255 alpha:1];
+    //    tagview.weiboInfo=self.weiboInfo;
+    //    NSString *titleStr = tagmodel.tagDetailInfo.title;
+    //    tagview.titleLable.text=titleStr;
+    //    CGSize  Tsize =[titleStr boundingRectWithSize:CGSizeMake(MAXFLOAT, TagHeight) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:[NSDictionary dictionaryWithObject:tagview.titleLable.font forKey:NSFontAttributeName] context:nil].size;
+    //    //纪录前面一个标签的宽度
+    //    tagview.frame=CGRectMake(0,0, Tsize.width+10, TagHeight);
     TagView  *tagView =[[TagView alloc]initWithWeiboInfo:self.weiboInfo AndTagInfo:tagmodel delegate:nil isCanClick:NO backgoundImage:nil isLongTag:YES];
     tagView.backgroundColor =Tag_View_Color;
     return tagView;
@@ -235,7 +235,7 @@
 //点击分享
 -(void)handShareButtonClick:(UIButton *) button
 {
-  
+    
     logoView.hidden=NO;
     [self dismissViewControllerAnimated:YES completion:^{
         shareImage=[Function getImage:shareView WithSize:CGSizeMake(kDeviceWidth,shareView.frame.size.height)];
@@ -253,13 +253,13 @@
 }
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end

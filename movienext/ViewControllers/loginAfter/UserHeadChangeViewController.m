@@ -19,11 +19,11 @@
 #import "UpYun.h"
 @interface UserHeadChangeViewController ()<UIImagePickerControllerDelegate,UIActionSheetDelegate,UINavigationControllerDelegate,changeUserNameDelegate>
 {
-      AppDelegate *appdelegate;
-      UIWindow     *window;
-      UIButton *headImag;
-      UIButton  *nickButton;
-       NSMutableDictionary   *upyunDict;
+    AppDelegate *appdelegate;
+    UIWindow     *window;
+    UIButton *headImag;
+    UIButton  *nickButton;
+    NSMutableDictionary   *upyunDict;
 }
 @end
 
@@ -48,7 +48,7 @@
     headImag.layer.borderColor=VBlue_color.CGColor;
     headImag.layer.borderWidth=4;
     headImag.clipsToBounds=YES;
-//    headImag.backgroundColor=[UIColor redColor];
+    //    headImag.backgroundColor=[UIColor redColor];
     NSURL   *imageURL;
     if (userCenter.logo) {
         imageURL =[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kUrlAvatar,userCenter.logo]];
@@ -58,7 +58,7 @@
     [self.view addSubview:headImag];
     
     nickButton=[ZCControl createButtonWithFrame:CGRectMake((kDeviceWidth-200)/2, headImag.frame.origin.y+headImag.frame.size.height+40, 200, 30) ImageName:nil Target:self Action:@selector(changeNickClick) Title:userCenter.username];
-     [nickButton setTitleColor:VGray_color forState:UIControlStateNormal];
+    [nickButton setTitleColor:VGray_color forState:UIControlStateNormal];
     //nickButton.backgroundColor=[UIColor redColor];
     [self.view addSubview:nickButton];
     
@@ -101,10 +101,10 @@
     NSString  *logo=@"";
     if ([upyunDict  objectForKey:@"url"]) {
         logo =[upyunDict objectForKey:@"url"];
-     }
+    }
     UserDataCenter  *userCenter =[UserDataCenter shareInstance];
     NSString * user_id = userCenter.user_id;
-   
+    
     NSDictionary *parameters = @{@"user_id":user_id,@"logo":logo};
     
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
@@ -112,7 +112,7 @@
         NSLog(@" succuss");
         userCenter.logo=[upyunDict objectForKey:@"url"];
         
-     
+        
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
@@ -146,11 +146,11 @@
 -(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (buttonIndex<2) {
-    UIImagePickerController  *pick = [[UIImagePickerController alloc]init];
-    pick.sourceType=buttonIndex;
-    pick.allowsEditing=YES;
-    pick.delegate=self;
-    [self presentViewController:pick animated:YES completion:nil];
+        UIImagePickerController  *pick = [[UIImagePickerController alloc]init];
+        pick.sourceType=buttonIndex;
+        pick.allowsEditing=YES;
+        pick.delegate=self;
+        [self presentViewController:pick animated:YES completion:nil];
     }
 }
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
@@ -163,16 +163,16 @@
         //先把图片转成NSData
         UIImage* image = [info objectForKey:UIImagePickerControllerEditedImage];
         
-       // NSData   *dataImage =UIImageJPEGRepresentation(image, 0.4);
+        // NSData   *dataImage =UIImageJPEGRepresentation(image, 0.4);
         
 #warning   发送服务器请求
         [self dismissViewControllerAnimated:YES completion:^{
             
             [headImag setBackgroundImage:image forState:UIControlStateNormal];
             
-
+            
             [self uploadImageToyunWithImage:image];
-
+            
         }];
         
     }
@@ -286,13 +286,13 @@
 }
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end
