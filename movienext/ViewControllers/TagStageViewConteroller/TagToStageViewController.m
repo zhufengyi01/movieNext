@@ -308,8 +308,6 @@ static const CGFloat MJDuration = 0.2;
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
      return self.dataArray.count;
-    //return 12;
-    
 }
 
 
