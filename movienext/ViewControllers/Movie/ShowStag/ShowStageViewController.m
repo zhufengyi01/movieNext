@@ -1129,7 +1129,7 @@
             AddMarkVC.stageInfo=self.stageInfo;
             AddMarkVC.weiboInfo=_WeiboInfo;
             AddMarkVC.delegate=self;
-            [self.navigationController pushViewController:AddMarkVC animated:YES];
+            [self.navigationController pushViewController:AddMarkVC animated:NO];
             
             
         }else if (buttonIndex==2)

@@ -114,9 +114,11 @@
     shareView.backgroundColor=View_BackGround;
     [backView addSubview:shareView];
     
-    _ShareimageView=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0,kDeviceWidth-20,shareheight)];
+    _ShareimageView=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0,shareView.frame.size.width,shareheight)];
     //    _ShareimageView.backgroundColor=[UIColor redColor];
     _ShareimageView.image=_screenImage;
+    _ShareimageView.contentMode=UIViewContentModeScaleAspectFit;
+    
     [shareView addSubview:_ShareimageView];
     
     //放置电影名和标签的view

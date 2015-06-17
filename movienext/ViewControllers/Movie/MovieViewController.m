@@ -193,7 +193,7 @@ static const CGFloat MJDuration = 0.6;
         //UINavigationController  *search=[[UINavigationController alloc]initWithRootViewController:vc];
         // search.modalTransitionStyle=UIModalTransitionStyleCrossDissolve;
         //[self presentViewController:search animated:YES completion:nil];
-        [self.navigationController pushViewController:vc animated:YES];
+        [self.navigationController pushViewController:vc animated:NO];
     }];
     
     if ([userCenter.Is_Check intValue]==1) {

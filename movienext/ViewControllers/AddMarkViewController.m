@@ -169,7 +169,6 @@
 -(void)createMyScrollerView
 {
     //计算stagview 的高度
-    
     _myScorllerView =[[UIScrollView alloc]initWithFrame:CGRectMake(0, 64, kDeviceWidth,kDeviceHeight-kHeightNavigation-PULISH_TOOLBAR_HEIGHT)];
     _myScorllerView.contentSize=CGSizeMake(kDeviceWidth,kDeviceHeight);
     _myScorllerView.delegate=self;
@@ -181,12 +180,12 @@
 -(void)createStageView
 {
     //最后要分享出去的图
-    self.ShareView =[[UIView alloc]initWithFrame:CGRectMake(0,0, kDeviceWidth-0, (kDeviceWidth-0)*(9.0/16))];
+    self.ShareView =[[UIView alloc]initWithFrame:CGRectMake(10,0, kDeviceWidth-20, (kDeviceWidth-20)*(9.0/16))];
     self.ShareView.userInteractionEnabled=YES;
     self.ShareView.backgroundColor=[UIColor blackColor];
     [_myScorllerView addSubview:self.ShareView];
     
-    CGRect  frame  = [Function getImageFrameWithwidth:[self.stageInfo.width intValue] height:[self.stageInfo.height intValue] inset:0];
+    CGRect  frame  = [Function getImageFrameWithwidth:[self.stageInfo.width intValue] height:[self.stageInfo.height intValue] inset:20];
     
     self.stageImageView =[[UIImageView alloc]initWithFrame:frame];
     self.stageImageView.contentMode=UIViewContentModeScaleAspectFill;
@@ -194,7 +193,7 @@
     self.stageImageView.userInteractionEnabled=YES;
     [self.ShareView addSubview:self.stageImageView];
     
-    self.ShareView.frame=CGRectMake(0, 0, kDeviceWidth, self.stageImageView.frame.size.height);
+    self.ShareView.frame=CGRectMake(10, 0, kDeviceWidth-20, self.stageImageView.frame.size.height);
     NSString *photostring=[NSString stringWithFormat:@"%@%@!w640",kUrlStage,self.stageInfo.photo];
     [self.stageImageView   sd_setImageWithURL:[NSURL URLWithString:photostring] placeholderImage:nil options:(SDWebImageLowPriority|SDWebImageRetryFailed)];
     
@@ -213,7 +212,7 @@
     _gradientLayer.endPoint = CGPointMake(0.5, 1.0);
     [_layerView.layer insertSublayer:_gradientLayer atIndex:0];
     
-    _myTextView=[[UITextView alloc]initWithFrame:CGRectMake(10,self.ShareView.frame.size.height-40, kDeviceWidth-20, 40)];
+    _myTextView=[[UITextView alloc]initWithFrame:CGRectMake(10,self.ShareView.frame.size.height-40, kDeviceWidth-40, 40)];
     _myTextView.delegate=self;
     // [_myTextView addPlaceHolder:@"输入弹幕"];
     _myTextView.textColor=[UIColor whiteColor];
@@ -350,9 +349,7 @@
         parameter = @{@"user_id": userid,@"content":InputStr,@"stage_id":stageId,@"x_percent":X,@"y_percent":Y,@"tags[0]":tag1};
         if (self.weiboInfo) {
             parameter = @{@"user_id": userid,@"content":InputStr,@"stage_id":stageId,@"weibo_id":self.weiboInfo.Id,@"x_percent":X,@"y_percent":Y,@"tags[0]":tag1};
-            
         }
-        
     }
     else if(TAGArray.count==2)
     {
@@ -361,7 +358,6 @@
         parameter = @{@"user_id": userid,@"content":InputStr,@"stage_id":stageId,@"x_percent":X,@"y_percent":Y,@"tags[0]":tag1,@"tags[1]":tag2};
         if (self.weiboInfo) {
             parameter = @{@"user_id": userid,@"content":InputStr,@"stage_id":stageId,@"weibo_id":self.weiboInfo.Id,@"x_percent":X,@"y_percent":Y,@"tags[0]":tag1,@"tags[1]":tag2};
-            
         }
     }
     else if (TAGArray.count==3)
@@ -423,44 +419,13 @@
             //通知回到个人页
             [[NSNotificationCenter defaultCenter] postNotificationName:GOTO_USER_CENTER object:nil];
             
-            
-            
             UIImage  *image=[Function getImage:self.ShareView WithSize:CGSizeMake(kDeviceWidth-20,self.ShareView.frame.size.height)];
-            UMShareView *ShareView =[[UMShareView alloc] initwithStageInfo:self.stageInfo ScreenImage:image delgate:self andShareHeight:self.stageImageView.frame.size.height];
+            
+            UMShareView *ShareView =[[UMShareView alloc] initwithStageInfo:self.stageInfo ScreenImage:image delgate:self andShareHeight:self.ShareView.frame.size.height];
             ShareView.pageType=UMShareTypeSuccess;
             [ShareView setShareLable];
             [ShareView show];
-            
-            
-            
-            //            weibo =[[weiboInfoModel alloc]init];
-            //            if (weibo) {
-            //                [weibo setValuesForKeysWithDictionary:[responseObject objectForKey:@"model"]];
-            //                weiboUserInfoModel  *weibouser=[[weiboUserInfoModel alloc]init];
-            //                if (weibouser) {
-            //                  weibouser.logo=userCenter.logo;
-            //                  weibouser.username=userCenter.username;
-            //                  weibo.uerInfo=weibouser;
-            //                }
-            //                NSMutableArray  *tagarray =[[NSMutableArray alloc]init];
-            //                for (NSDictionary  *tagDict in [[responseObject objectForKey:@"model"] objectForKey:@"tags"]) {
-            //                    TagModel  *tagmodel =[[TagModel alloc]init];
-            //                    if (tagmodel) {
-            //                        [tagmodel  setValuesForKeysWithDictionary:tagDict];
-            //
-            //                        TagDetailModel  *tagdeltail =[[TagDetailModel alloc]init];
-            //                        if (tagdeltail) {
-            //                            [tagdeltail setValuesForKeysWithDictionary:[tagDict objectForKey:@"tag"]];
-            //                            tagmodel.tagDetailInfo=tagdeltail;
-            //                        }
-            //                        [tagarray addObject:tagmodel];
-            //                    }
-            //                }
-            //                weibo.tagArray=tagarray;
-            //            }
-            //            [self.stageInfo.weibosArray addObject:weibo];
-            //发布成功后，进入分享
-            
+        
         }
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -565,7 +530,7 @@
     frame.size.height=_myTextView.contentSize.height+0;
     _myTextView.frame=frame;
     
-    self.ShareView.frame=CGRectMake(0,0, kDeviceWidth, _myTextView.frame.size.height-40+self.stageImageView.frame.size.height);
+    self.ShareView.frame=CGRectMake(10,0, kDeviceWidth-20, _myTextView.frame.size.height-40+self.stageImageView.frame.size.height);
     self.TagContentView.frame=CGRectMake(0, self.ShareView.frame.origin.y+self.ShareView.frame.size.height, kDeviceWidth, 100);
     
 }
