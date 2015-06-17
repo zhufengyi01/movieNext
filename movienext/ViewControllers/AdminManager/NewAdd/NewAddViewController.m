@@ -69,7 +69,7 @@ static const CGFloat MJDuration = 0.1;
     }
     else if (self.pageType==NSNewAddPageSoureTypeRecommed)
     {
-        titleString=@"微博推荐";
+        titleString=@"微博热门";
     }
     else if (self.pageType==NSNewAddPageSoureTypeTiming)
     {
