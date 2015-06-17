@@ -565,6 +565,9 @@
         [self.tagLable appendView:tagview margin:UIEdgeInsetsMake(0, 0, 0, 5)];
         self.tagLable.lineSpacing=5;
         self.tagLable.numberOfLines=0;
+        if (self.weiboInfo.content.length==0) {
+            tagview.frame=CGRectZero;
+        }
         tagview.tagBgImageview.backgroundColor =VLight_GrayColor;
         tagview.titleLable.textColor=[UIColor whiteColor];
     }
@@ -654,6 +657,10 @@
 {
     TagView *tagview =[[TagView alloc]initWithWeiboInfo:weiboInfo AndTagInfo:nil delegate:self isCanClick:YES backgoundImage:nil isLongTag:NO];
     [tagview setcornerRadius:2];
+    if (weiboInfo.content.length==0) {
+        tagview.frame=CGRectZero;
+    }
+    
     tagview.tagBgImageview.backgroundColor =VLight_GrayColor_apla;
     tagview.titleLable.textColor=VGray_color;
     tagview.tag=2000+index;

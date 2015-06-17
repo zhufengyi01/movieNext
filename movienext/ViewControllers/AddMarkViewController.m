@@ -27,6 +27,7 @@
 #import "UploadProgressView.h"
 #import "AddLoadingView.h"
 #import  "MyViewController.h"
+#import "UITextView+PlaceHolder.h"
 
 #define  PULISH_TOOLBAR_HEIGHT 80
 
@@ -222,6 +223,7 @@
         _myTextView.font =[UIFont boldSystemFontOfSize:24];
     }
     _myTextView.backgroundColor=[UIColor clearColor];
+    [_myTextView addPlaceHolder:@"请输入内容"];
     //_myTextView.layer.cornerRadius=4;
     //_myTextView.layer.borderWidth=0.5;
     _myTextView.layer.allowsEdgeAntialiasing=YES;
