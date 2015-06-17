@@ -156,63 +156,6 @@ static const CGFloat MJDuration = 0.2;
     // self.myConllectionView.footer.hidden = YES;
 }
 
-
-/*- (void)setupHeadView
- {
- 
- __unsafe_unretained typeof(self) vc = self;
- // 添加下拉刷新头部控件
- [_myConllectionView addHeaderWithCallback:^{
- page=1;
- if (self.dataArray.count>0) {
- [vc.dataArray removeAllObjects];
- }
- // 进入刷新状态就会回调这个Block
- [vc requestData];
- 
- // 模拟延迟加载数据，因此2秒后才调用）
- dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
- //[vc.myConllectionView reloadData];
- // 结束刷新
- [vc.myConllectionView headerEndRefreshing];
- });
- }];
- 
- #warning 自动刷新(一进入程序就下拉刷新)
- // [vc.myConllectionView headerBeginRefreshing];
- }
- 
- - (void)setupFootView
- {
- 
- 
- __unsafe_unretained typeof(self) vc = self;
- // 添加上拉刷新尾部控件
- [vc.myConllectionView addFooterWithCallback:^{
- if (pageCount>page) {
- page ++;
- [vc requestData];
- 
- }
- 
- // 进入刷新状态就会回调这个Block
- //page++;
- 
- // 增加5条假数据
- ///  for (int i = 0; i<5; i++) {
- //   [vc.fakeColors addObject:MJRandomColor];
- //}
- 
- // 模拟延迟加载数据，因此2秒后才调用）
- dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
- ///[vc.myConllectionView reloadData];
- // 结束刷新
- [vc.myConllectionView footerEndRefreshing];
- });
- 
- }];
- }
- */
 -(void)requestData
 {
     UserDataCenter *usercenter=[UserDataCenter shareInstance];
@@ -304,12 +247,10 @@ static const CGFloat MJDuration = 0.2;
 {
     return 1;
 }
-
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
+
     return self.dataArray.count;
-    //return 12;
-    
 }
 
 

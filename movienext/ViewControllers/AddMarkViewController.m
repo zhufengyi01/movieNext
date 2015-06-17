@@ -118,7 +118,7 @@
     [leftBtn setTitle:@"取消" forState:UIControlStateNormal];
     leftBtn.titleLabel.adjustsFontSizeToFitWidth=NO;
     [leftBtn addActionHandler:^(NSInteger tag) {
-        [weakSelf.navigationController popViewControllerAnimated:YES];
+        [weakSelf.navigationController popViewControllerAnimated:NO];
     }];
     [leftBtn setTitleEdgeInsets:UIEdgeInsetsMake(0, -0, 0,10)];
     //[leftBtn addTarget:self action:@selector(dealNavClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -195,8 +195,6 @@
     [self.ShareView addSubview:self.stageImageView];
     
     self.ShareView.frame=CGRectMake(0, 0, kDeviceWidth, self.stageImageView.frame.size.height);
-    
-    
     NSString *photostring=[NSString stringWithFormat:@"%@%@!w640",kUrlStage,self.stageInfo.photo];
     [self.stageImageView   sd_setImageWithURL:[NSURL URLWithString:photostring] placeholderImage:nil options:(SDWebImageLowPriority|SDWebImageRetryFailed)];
     
@@ -214,9 +212,6 @@
     _gradientLayer.startPoint = CGPointMake(0.5, 0.5);
     _gradientLayer.endPoint = CGPointMake(0.5, 1.0);
     [_layerView.layer insertSublayer:_gradientLayer atIndex:0];
-    
-    
-    
     
     _myTextView=[[UITextView alloc]initWithFrame:CGRectMake(10,self.ShareView.frame.size.height-40, kDeviceWidth-20, 40)];
     _myTextView.delegate=self;

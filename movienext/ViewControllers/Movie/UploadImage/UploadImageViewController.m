@@ -206,7 +206,7 @@
             if (self.pageTpye==NSUploadImageSourceTypeAddCard) {
                 Addmark.pageSoureType=NSAddMarkPageSourceAddCard;
             }
-            [self.navigationController pushViewController:Addmark animated:YES];
+            [self.navigationController pushViewController:Addmark animated:NO];
         }
         else
         {

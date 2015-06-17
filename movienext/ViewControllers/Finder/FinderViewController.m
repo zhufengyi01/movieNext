@@ -569,7 +569,7 @@
         {
             [self.view addSubview:loadView];
             sharebtn.hidden=YES;
-            [loadView showNullView:@"已经开完了..."];
+            [loadView showNullView:@"已经看完了..."];
         }
         
     }];

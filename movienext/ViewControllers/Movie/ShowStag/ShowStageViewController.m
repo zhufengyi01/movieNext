@@ -605,7 +605,7 @@
             AddMarkVC.delegate=weakSelf;
             // AddMarkVC.model=self.stageInfo;
             AddMarkVC.stageInfo=weakSelf.stageInfo;
-            [weakSelf.navigationController pushViewController:AddMarkVC animated:YES];
+            [weakSelf.navigationController pushViewController:AddMarkVC animated:NO];
         }
         
     }];
