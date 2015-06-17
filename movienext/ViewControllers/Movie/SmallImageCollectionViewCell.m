@@ -7,6 +7,7 @@
 //
 
 #import "SmallImageCollectionViewCell.h"
+#import "Constant.h"
 
 @implementation SmallImageCollectionViewCell
 
@@ -34,7 +35,7 @@
     _titleLab.text=@"";
     _titleLab.textAlignment = NSTextAlignmentCenter;
     _titleLab.textColor = [UIColor whiteColor];
-    _titleLab.font = [UIFont boldSystemFontOfSize:16];
+    _titleLab.font = [UIFont fontWithName:kFontDouble size:16];
     [self.contentView addSubview:_titleLab];
     
     _ivAvatar = [[UIImageView alloc]initWithFrame:CGRectMake(5, 5, 20, 20)];
@@ -52,14 +53,14 @@
     _lblTime.text=@"";
     _lblTime.textAlignment = NSTextAlignmentLeft;
     _lblTime.textColor = [UIColor whiteColor];
-    _lblTime.font = [UIFont systemFontOfSize:12];
+    _lblTime.font = [UIFont fontWithName:kFontRegular size:12];
     [self.contentView addSubview:_lblTime];
     
     _lblLikeCount = [[UILabel alloc]initWithFrame:CGRectMake(m_frame.size.width-20,5, 20, 20)];
     _lblLikeCount.text=@"";
     _lblLikeCount.textAlignment = NSTextAlignmentLeft;
     _lblLikeCount.textColor = [UIColor whiteColor];
-    _lblLikeCount.font = [UIFont systemFontOfSize:12];
+    _lblLikeCount.font = [UIFont fontWithName:kFontRegular size:12];
     [self.contentView addSubview:_lblLikeCount];
 }
 

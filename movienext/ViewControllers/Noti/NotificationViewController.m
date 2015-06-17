@@ -66,7 +66,7 @@ static const CGFloat MJDuration = 1.0;
     
     UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:@"消息"];
     titleLable.textColor=VGray_color;
-    titleLable.font=[UIFont boldSystemFontOfSize:16];
+    titleLable.font=[UIFont fontWithName:kFontDouble size:16];
     titleLable.textAlignment=NSTextAlignmentCenter;
     self.navigationItem.titleView=titleLable;
     
@@ -126,7 +126,7 @@ static const CGFloat MJDuration = 1.0;
     self.myTableView.header.updatedTimeHidden=YES;
     
     // 设置字体
-    self.myTableView.header.font = [UIFont systemFontOfSize:12];
+    self.myTableView.header.font = [UIFont fontWithName:kFontRegular size:12];
     
     // 设置颜色
     self.myTableView.header.textColor = VGray_color;
@@ -148,7 +148,7 @@ static const CGFloat MJDuration = 1.0;
     [self.myTableView.footer setTitle:@"THE END" forState:MJRefreshFooterStateNoMoreData];
     
     // 设置字体
-    self.myTableView.footer.font = [UIFont systemFontOfSize:12];
+    self.myTableView.footer.font = [UIFont fontWithName:kFontRegular size:12];
     
     // 设置颜色
     self.myTableView.footer.textColor = VGray_color;

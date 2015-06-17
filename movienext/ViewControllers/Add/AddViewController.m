@@ -31,7 +31,7 @@
     UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:@"添加"];
     titleLable.textColor=VBlue_color;
     
-    titleLable.font=[UIFont boldSystemFontOfSize:18];
+    titleLable.font=[UIFont fontWithName:kFontDouble size:18];
     titleLable.textAlignment=NSTextAlignmentCenter;
     self.navigationItem.titleView=titleLable;
     

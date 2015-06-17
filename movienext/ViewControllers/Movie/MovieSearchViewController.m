@@ -92,7 +92,7 @@
     [button setTitle:@"取消" forState:UIControlStateNormal];
     [button setTitleColor:VBlue_color forState:UIControlStateNormal];
     button.frame=CGRectMake(0, 0, 40, 30);
-    button.titleLabel.font =[UIFont systemFontOfSize:16];
+    button.titleLabel.font =[UIFont fontWithName:kFontRegular size:16];
     [button setTitleColor:VGray_color forState:UIControlStateNormal];
     button.titleEdgeInsets=UIEdgeInsetsMake(0,5, 0, -5);
     [button addTarget:self action:@selector(CancleClick) forControlEvents:UIControlEventTouchUpInside];

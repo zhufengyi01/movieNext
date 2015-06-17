@@ -82,7 +82,7 @@ static const CGFloat MJDuration = 0.1;
     UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:titleString];
     titleLable.textColor=VGray_color;
     
-    titleLable.font=[UIFont boldSystemFontOfSize:18];
+    titleLable.font=[UIFont fontWithName:kFontDouble size:18];
     titleLable.textAlignment=NSTextAlignmentCenter;
     self.navigationItem.titleView=titleLable;
     
@@ -155,7 +155,7 @@ static const CGFloat MJDuration = 0.1;
         weakSelf.myConllectionView.header.updatedTimeHidden=YES;
         
         // 设置字体
-        //weakSelf.myConllectionView.header.font = [UIFont systemFontOfSize:12];
+        //weakSelf.myConllectionView.header.font = [UIFont fontWithName:kFontRegular size:12];
         
         // 设置颜色
         // weakSelf.myConllectionView.header.textColor = VGray_color;
@@ -186,7 +186,7 @@ static const CGFloat MJDuration = 0.1;
         [weakSelf.myConllectionView.footer setTitle:@"THE END" forState:MJRefreshFooterStateNoMoreData];
         
         // 设置字体
-        // weakSelf.myConllectionView.footer.font = [UIFont systemFontOfSize:12];
+        // weakSelf.myConllectionView.footer.font = [UIFont fontWithName:kFontRegular size:12];
         
         // 设置颜色
         //weakSelf.myConllectionView.footer.textColor = VGray_color;
@@ -347,7 +347,7 @@ static const CGFloat MJDuration = 0.1;
             [formatter setDateFormat:@"YYYY-MM-dd HH:mm"];
             NSString *confromTimespStr = [formatter stringFromDate:confromTimesp];
             cell.lblTime.frame=CGRectMake(10, 10, 160, 20);
-            cell.lblTime.font =[UIFont systemFontOfSize:10];
+            cell.lblTime.font =[UIFont fontWithName:kFontRegular size:10];
             cell.lblTime.text = [NSString stringWithFormat:@"定时时间：%@",confromTimespStr];
         }
         return cell;

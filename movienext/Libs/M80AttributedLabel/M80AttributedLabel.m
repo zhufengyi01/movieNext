@@ -9,6 +9,7 @@
 #import "M80AttributedLabel.h"
 #import "M80AttributedLabelAttachment.h"
 #import "M80AttributedLabelURL.h"
+#import "Constant.h"
 
 static NSString* const kEllipsesCharacter = @"\u2026";
 
@@ -75,7 +76,7 @@ static dispatch_queue_t get_m80_attributed_label_parse_queue() \
     _linkLocations          = [[NSMutableArray alloc]init];
     _textFrame              = nil;
     _linkColor              = [UIColor blueColor];
-    _font                   = [UIFont systemFontOfSize:15];
+    _font                   = [UIFont fontWithName:kFontRegular size:15];
     _textColor              = [UIColor blackColor];
     _highlightColor         = [UIColor colorWithRed:0xd7/255.0
                                               green:0xf2/255.0

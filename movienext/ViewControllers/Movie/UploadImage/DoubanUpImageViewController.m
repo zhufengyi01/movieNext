@@ -34,7 +34,7 @@
     
     UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 120, 30) Font:16 Text:@"预览"];
     titleLable.textColor=VGray_color;
-    titleLable.font=[UIFont boldSystemFontOfSize:16];
+    titleLable.font=[UIFont fontWithName:kFontDouble size:16];
     titleLable.adjustsFontSizeToFitWidth=NO;
     titleLable.textAlignment=NSTextAlignmentCenter;
     self.navigationItem.titleView=titleLable;
@@ -48,7 +48,7 @@
     RighttBtn.titleEdgeInsets=UIEdgeInsetsMake(0, 10, 0, -10);
     [RighttBtn setTitleColor:VGray_color forState:UIControlStateNormal];
     [RighttBtn setTitle:@"确定" forState:UIControlStateNormal];
-    RighttBtn.titleLabel.font=[UIFont systemFontOfSize:16];
+    RighttBtn.titleLabel.font=[UIFont fontWithName:kFontRegular size:16];
     RighttBtn.titleLabel.adjustsFontSizeToFitWidth=NO;
     self.navigationItem.rightBarButtonItem=[[UIBarButtonItem alloc]initWithCustomView:RighttBtn];
     

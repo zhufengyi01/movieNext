@@ -42,7 +42,7 @@
     UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:@"设置"];
     titleLable.textColor=VGray_color;
     
-    titleLable.font=[UIFont boldSystemFontOfSize:16];
+    titleLable.font=[UIFont fontWithName:kFontDouble size:16];
     titleLable.textAlignment=NSTextAlignmentCenter;
     self.navigationItem.titleView=titleLable;
     
@@ -88,7 +88,7 @@
     UIButton  *button=[UIButton buttonWithType:UIButtonTypeCustom];
     //  [button setTitle:@"退出此账号" forState:UIControlStateNormal];
     [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    button.titleLabel.font=[UIFont systemFontOfSize:14];
+    button.titleLabel.font=[UIFont fontWithName:kFontRegular size:14];
     [button setBackgroundImage:[UIImage imageNamed:@"login out.png"] forState:UIControlStateNormal];
     button.frame=CGRectMake((kDeviceWidth-233)/2, 280, 233, 43);
     [button addTarget:self action:@selector(OutLoginClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -114,7 +114,7 @@
         cell=[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
         cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
     }
-    cell.textLabel.font =[UIFont systemFontOfSize:14];
+    cell.textLabel.font =[UIFont fontWithName:kFontRegular size:14];
     //  cell.textColor =VGray_color;
     cell.textLabel.textColor=VGray_color;
     cell.textLabel.text=[_dataArray  objectAtIndex:indexPath.row];

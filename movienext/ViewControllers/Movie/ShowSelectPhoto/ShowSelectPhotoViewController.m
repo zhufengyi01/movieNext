@@ -69,8 +69,8 @@ static const CGFloat MJDuration = 0.6;
     }];
     button.titleEdgeInsets=UIEdgeInsetsMake(0, -10,0, 10);
     [button setTitleColor:VGray_color forState:UIControlStateNormal];
-    //button.titleLabel.font =[UIFont boldSystemFontOfSize:18];
-    button.titleLabel.font =[UIFont systemFontOfSize:16];
+    //button.titleLabel.font =[UIFont fontWithName:kFontDouble size:18];
+    button.titleLabel.font =[UIFont fontWithName:kFontRegular size:16];
     // [button addTarget:self action:@selector(navigationbtnClick:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem  *barButton=[[UIBarButtonItem alloc]initWithCustomView:button];
     button.tag=99;
@@ -85,10 +85,10 @@ static const CGFloat MJDuration = 0.6;
     segment.backgroundColor = [UIColor clearColor];
     segment.tintColor = kAppTintColor;
     
-    NSDictionary* selectedTextAttributes = @{NSFontAttributeName:[UIFont boldSystemFontOfSize:14]
+    NSDictionary* selectedTextAttributes = @{NSFontAttributeName:[UIFont fontWithName:kFontDouble size:14]
                                              };
     [segment setTitleTextAttributes:selectedTextAttributes forState:UIControlStateSelected];
-    NSDictionary* unselectedTextAttributes = @{NSFontAttributeName:[UIFont boldSystemFontOfSize:14]
+    NSDictionary* unselectedTextAttributes = @{NSFontAttributeName:[UIFont fontWithName:kFontDouble size:14]
                                                };
     [segment setTitleTextAttributes:unselectedTextAttributes forState:UIControlStateNormal];
     
@@ -112,7 +112,7 @@ static const CGFloat MJDuration = 0.6;
     upLoadimageBtn.titleEdgeInsets=UIEdgeInsetsMake(0, 10, 0, -10);
     [upLoadimageBtn setTitle:@"上传" forState:UIControlStateNormal];
     [upLoadimageBtn setTitleColor:VGray_color forState:UIControlStateNormal];
-    upLoadimageBtn.titleLabel.font =[UIFont systemFontOfSize:16];
+    upLoadimageBtn.titleLabel.font =[UIFont fontWithName:kFontRegular size:16];
     // [upLoadimageBtn setImage:[UIImage imageNamed:@"up_picture_blue.png"] forState:UIControlStateNormal];
     UIBarButtonItem  *rigthbar =[[UIBarButtonItem alloc]initWithCustomView:upLoadimageBtn];
     self.navigationItem.rightBarButtonItem=rigthbar;
@@ -270,7 +270,7 @@ static const CGFloat MJDuration = 0.6;
         [weakSelf requestData];
         
         // 设置字体
-        //weakSelf.myConllectionView.header.font = [UIFont systemFontOfSize:12];
+        //weakSelf.myConllectionView.header.font = [UIFont fontWithName:kFontRegular size:12];
         
         // 设置颜色
         // weakSelf.myConllectionView.header.textColor = VGray_color;
@@ -306,7 +306,7 @@ static const CGFloat MJDuration = 0.6;
         [weakSelf.myConllectionView.footer setTitle:@"THE END" forState:MJRefreshFooterStateNoMoreData];
         
         // 设置字体
-        // weakSelf.myConllectionView.footer.font = [UIFont systemFontOfSize:12];
+        // weakSelf.myConllectionView.footer.font = [UIFont fontWithName:kFontRegular size:12];
         
         // 设置颜色
         //weakSelf.myConllectionView.footer.textColor = VGray_color;

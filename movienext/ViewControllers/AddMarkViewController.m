@@ -113,7 +113,7 @@
     
     UIButton  *leftBtn= [UIButton buttonWithType:UIButtonTypeSystem];
     leftBtn.frame=CGRectMake(0, 20, 60, 40);
-    leftBtn.titleLabel.font =[UIFont systemFontOfSize:16];
+    leftBtn.titleLabel.font =[UIFont fontWithName:kFontRegular size:16];
     [leftBtn setTitleColor:VGray_color forState:UIControlStateNormal];
     [leftBtn setTitle:@"取消" forState:UIControlStateNormal];
     leftBtn.titleLabel.adjustsFontSizeToFitWidth=NO;
@@ -129,7 +129,7 @@
     
     UILabel  *lable =[ZCControl createLabelWithFrame:CGRectMake((kDeviceWidth-100)/2, 25, 100, 30) Font:15 Text:@"添加文字"];
     lable.adjustsFontSizeToFitWidth=NO;
-    lable.font=[UIFont boldSystemFontOfSize:16];
+    lable.font=[UIFont fontWithName:kFontDouble size:16];
     lable.textAlignment=NSTextAlignmentCenter;
     lable.textColor=VGray_color;
     [naview addSubview:lable];
@@ -147,7 +147,7 @@
     }];
     RighttBtn.titleLabel.adjustsFontSizeToFitWidth=NO;
     [RighttBtn setTitleEdgeInsets:UIEdgeInsetsMake(0, 0, 0, -10)];
-    RighttBtn.titleLabel.font=[UIFont systemFontOfSize:16];
+    RighttBtn.titleLabel.font=[UIFont fontWithName:kFontRegular size:16];
     RighttBtn.hidden=YES;
     //[naview addSubview:RighttBtn];
     //self.navigationItem.rightBarButtonItem=[[UIBarButtonItem alloc]initWithCustomView:RighttBtn];
@@ -216,10 +216,10 @@
     _myTextView.delegate=self;
     // [_myTextView addPlaceHolder:@"输入弹幕"];
     _myTextView.textColor=[UIColor whiteColor];
-    _myTextView.font= [UIFont boldSystemFontOfSize:22];
+    _myTextView.font= [UIFont fontWithName:kFontDouble size:22];
     
     if (IsIphone6plus) {
-        _myTextView.font =[UIFont boldSystemFontOfSize:24];
+        _myTextView.font =[UIFont fontWithName:kFontDouble size:24];
     }
     _myTextView.backgroundColor=[UIColor clearColor];
     //_myTextView.layer.cornerRadius=4;
@@ -259,9 +259,9 @@
     taglable =[[M80AttributedLabel alloc]initWithFrame:CGRectZero];
     taglable.backgroundColor =[UIColor clearColor];
     taglable.lineSpacing=5.0;
-    taglable.font=[UIFont systemFontOfSize:MarkTextFont14];
+    taglable.font=[UIFont fontWithName:kFontRegular size:MarkTextFont14];
     if (IsIphone6plus) {
-        taglable.font =[UIFont systemFontOfSize:MarkTextFont16];
+        taglable.font =[UIFont fontWithName:kFontRegular size:MarkTextFont16];
     }
     //从编辑进来的
     if (self.weiboInfo) {
@@ -303,7 +303,7 @@
         
     }];
     publishbtn.tag=100;
-    publishbtn.titleLabel.font =[UIFont boldSystemFontOfSize:16];
+    publishbtn.titleLabel.font =[UIFont fontWithName:kFontDouble size:16];
     publishbtn.backgroundColor = VBlue_color;
     [toolview addSubview:publishbtn];
     
@@ -606,9 +606,9 @@
     taglable =[[M80AttributedLabel alloc]initWithFrame:CGRectZero];
     taglable.backgroundColor =[UIColor clearColor];
     taglable.lineSpacing=5.0;
-    taglable.font=[UIFont systemFontOfSize:MarkTextFont14];
+    taglable.font=[UIFont fontWithName:kFontRegular size:MarkTextFont14];
     if (IsIphone6plus) {
-        taglable.font =[UIFont systemFontOfSize:MarkTextFont16];
+        taglable.font =[UIFont fontWithName:kFontRegular size:MarkTextFont16];
     }
     for (int i=0; i<TAGArray.count; i++) {
         NSDictionary  *dict =[TAGArray objectAtIndex:i];
@@ -683,9 +683,9 @@
         taglable =[[M80AttributedLabel alloc]initWithFrame:CGRectZero];
         taglable.backgroundColor =[UIColor clearColor];
         taglable.lineSpacing=5;
-        taglable.font=[UIFont systemFontOfSize:MarkTextFont14];
+        taglable.font=[UIFont fontWithName:kFontRegular size:MarkTextFont14];
         if(IsIphone6plus) {
-            taglable.font =[UIFont systemFontOfSize:MarkTextFont16];
+            taglable.font =[UIFont fontWithName:kFontRegular size:MarkTextFont16];
         }
         
         for (int i=0; i<TAGArray.count; i++) {

@@ -28,7 +28,7 @@
     // Do any additional setup after loading the view.
     //
     UILabel  *label= [ZCControl createLabelWithFrame:CGRectMake((kDeviceWidth-200)/2, 30, 200, 30) Font:16 Text:@"《电影卡片服务使用条款》"];
-    label.font=[UIFont boldSystemFontOfSize:16];
+    label.font=[UIFont fontWithName:kFontDouble size:16];
     label.textAlignment=NSTextAlignmentCenter;
     label.textColor=VBlue_color;
     self.navigationItem.titleView=label;

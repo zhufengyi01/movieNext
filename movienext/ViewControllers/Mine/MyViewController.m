@@ -152,7 +152,7 @@ static const CGFloat MJDuration = 0.2;
     }
     UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:titleString];
     titleLable.textColor=VGray_color;
-    titleLable.font=[UIFont boldSystemFontOfSize:16];
+    titleLable.font=[UIFont fontWithName:kFontDouble size:16];
     titleLable.textAlignment=NSTextAlignmentCenter;
     self.navigationItem.titleView=titleLable;
     
@@ -160,7 +160,7 @@ static const CGFloat MJDuration = 0.2;
     [button setTitle:@"设置" forState:UIControlStateNormal];
     ///[button setBackgroundImage:[UIImage imageNamed:@"setting.png"] forState:UIControlStateNormal];
     button.frame=CGRectMake(0, 0, 40, 30);
-    button.titleLabel.font =[UIFont systemFontOfSize:16];
+    button.titleLabel.font =[UIFont fontWithName:kFontRegular size:16];
     button.titleEdgeInsets=UIEdgeInsetsMake(0, 10, 0, -10);
     [button setTitleColor:VGray_color forState:UIControlStateNormal];
     // [button addTarget:self action:@selector(GotoSettingClick:) forControlEvents:UIControlEventTouchUpInside];

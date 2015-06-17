@@ -162,10 +162,10 @@
     segment.backgroundColor = [UIColor clearColor];
     segment.tintColor = kAppTintColor;
     
-    NSDictionary* selectedTextAttributes = @{NSFontAttributeName:[UIFont boldSystemFontOfSize:14]
+    NSDictionary* selectedTextAttributes = @{NSFontAttributeName:[UIFont fontWithName:kFontDouble size:14]
                                              };
     [segment setTitleTextAttributes:selectedTextAttributes forState:UIControlStateSelected];
-    NSDictionary* unselectedTextAttributes = @{NSFontAttributeName:[UIFont boldSystemFontOfSize:14]
+    NSDictionary* unselectedTextAttributes = @{NSFontAttributeName:[UIFont fontWithName:kFontDouble size:14]
                                                };
     [segment setTitleTextAttributes:unselectedTextAttributes forState:UIControlStateNormal];
     

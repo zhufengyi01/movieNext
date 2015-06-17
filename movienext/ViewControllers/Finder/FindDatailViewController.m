@@ -47,7 +47,7 @@
 //    UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:@"发现"];
 //    titleLable.textColor=VBlue_color;
 //
-//    titleLable.font=[UIFont boldSystemFontOfSize:18];
+//    titleLable.font=[UIFont fontWithName:kFontDouble size:18];
 //    titleLable.textAlignment=NSTextAlignmentCenter;
 //    self.navigationItem.titleView=titleLable;
 //
@@ -171,10 +171,10 @@
     
     
     markLable=[ZCControl createLabelWithFrame:CGRectMake(20,40,_layerView.frame.size.width-40, 60) Font:20 Text:@"弹幕文字"];
-    markLable.font =[UIFont boldSystemFontOfSize:20];
+    markLable.font =[UIFont fontWithName:kFontDouble size:20];
     //markLable.backgroundColor=[[UIColor blackColor] colorWithAlphaComponent:0.4];
     if (IsIphone6plus) {
-        markLable.font=[UIFont boldSystemFontOfSize:24];
+        markLable.font=[UIFont fontWithName:kFontDouble size:24];
     }
     markLable.textColor=[UIColor whiteColor];
     markLable.text=self.weiboInfo.content;

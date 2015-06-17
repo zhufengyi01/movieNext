@@ -7,6 +7,7 @@
 //
 
 #import "ZCControl.h"
+#import "Constant.h"
 #define IOS7   [[UIDevice currentDevice]systemVersion].floatValue>=7.0
 
 @implementation ZCControl
@@ -20,7 +21,7 @@
     //对齐方式
     label.textAlignment=NSTextAlignmentLeft;
     label.backgroundColor=[UIColor clearColor];
-    label.font=[UIFont systemFontOfSize:font];
+    label.font=[UIFont fontWithName:kFontRegular size:font];
     //单词折行
     label.lineBreakMode=NSLineBreakByWordWrapping;
     //默认字体颜色是白色
@@ -85,7 +86,7 @@
     //自定义键盘
     //textField.inputView
     //字体
-    textField.font=[UIFont systemFontOfSize:font];
+    textField.font=[UIFont fontWithName:kFontRegular size:font];
     //字体颜色
     textField.textColor=[UIColor blackColor];
     return textField ;
@@ -220,7 +221,7 @@
 
 + (CGFloat)textHeightWithString:(NSString *)text width:(CGFloat)width fontSize:(NSInteger)fontSize
 {
-    NSDictionary *dict = @{NSFontAttributeName: [UIFont systemFontOfSize:fontSize]};
+    NSDictionary *dict = @{NSFontAttributeName: [UIFont fontWithName:kFontRegular size:fontSize]};
     // 根据第一个参数的文本内容，使用280*float最大值的大小，使用系统14号字，返回一个真实的frame size : (280*xxx)!!
     CGRect frame = [text boundingRectWithSize:CGSizeMake(width, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:dict context:nil];
     return frame.size.height + 5;

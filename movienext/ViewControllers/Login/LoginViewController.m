@@ -79,7 +79,7 @@
     [checkBtn setTitleEdgeInsets:UIEdgeInsetsMake(5, 5, 0, 0)];
     // checkBtn.backgroundColor=[UIColor redColor];
     [checkBtn setImageEdgeInsets:UIEdgeInsetsMake(5, 0, 0, 0)];
-    checkBtn.titleLabel.font=[UIFont systemFontOfSize:12];
+    checkBtn.titleLabel.font=[UIFont fontWithName:kFontRegular size:12];
     [self.view addSubview:checkBtn];
     
     
@@ -90,7 +90,7 @@
     [checkBtn2 setTitleColor:[UIColor colorWithRed:216.0/255 green:216.0/255 blue:216.0/255 alpha:216.0/255] forState:UIControlStateNormal];
     checkBtn2.tag=101;
     
-    checkBtn2.titleLabel.font=[UIFont systemFontOfSize:12];
+    checkBtn2.titleLabel.font=[UIFont fontWithName:kFontRegular size:12];
     [self.view addSubview:checkBtn2];
     checkBtn.frame=CGRectMake((kDeviceWidth-checkBtn.frame.size.width-checkBtn2.frame.size.width)/2, checkBtn.frame.origin.y, checkBtn.frame.size.width, checkBtn.frame.size.height);
     checkBtn2.frame=CGRectMake(checkBtn.frame.origin.x+checkBtn.frame.size.width, checkBtn.frame.origin.y, checkBtn2.frame.size.width, checkBtn2.frame.size.height);
@@ -141,14 +141,14 @@
     emaillogin.tag=1003;
     emaillogin.hidden=YES;
     [emaillogin setTitleColor:VBlue_color forState:UIControlStateNormal];
-    emaillogin.titleLabel.font=[UIFont boldSystemFontOfSize:16];
+    emaillogin.titleLabel.font=[UIFont fontWithName:kFontDouble size:16];
     
     [self.view addSubview:emaillogin];
     
     UIButton  *emailregister =[ZCControl createButtonWithFrame:CGRectMake(kDeviceWidth/2, kDeviceHeight-50, kDeviceWidth/2, 50) ImageName:@"login_alpa_backgroundcolor.png" Target:self Action:@selector(dealloginClick:) Title:@"邮箱注册"];
     emailregister.tag=1004;
     [emailregister setTitleColor:VBlue_color forState:UIControlStateNormal];
-    emailregister.titleLabel.font=[UIFont boldSystemFontOfSize:16];
+    emailregister.titleLabel.font=[UIFont fontWithName:kFontDouble size:16];
     emailregister.hidden=YES;
     [self.view addSubview:emailregister];
     

@@ -55,7 +55,7 @@
     }
     
     lblUsername = [[UILabel alloc] initWithFrame:CGRectMake(ivAvatar.frame.origin.x+ivAvatar.frame.size.width+10, ivAvatar.frame.origin.y, 200, 20)];
-    lblUsername.font = [UIFont boldSystemFontOfSize:15];
+    lblUsername.font = [UIFont fontWithName:kFontDouble size:15];
     lblUsername.textColor = VGray_color;
     [viewHeader addSubview:lblUsername];
     
@@ -68,7 +68,7 @@
     //内容的数量
     lblCount = [[UILabel alloc] initWithFrame:CGRectMake(lbl1.frame.origin.x+lbl1.frame.size.width, lblUsername.frame.origin.y+lblUsername.frame.size.height+5, 25, 20)];
     //  lblCount.backgroundColor=[UIColor yellowColor];
-    lblCount.font = [UIFont systemFontOfSize:14];
+    lblCount.font = [UIFont fontWithName:kFontRegular size:14];
     lblCount.textColor = VGray_color;
     //lblCount.backgroundColor = [UIColor purpleColor];
     [viewHeader addSubview:lblCount];
@@ -80,7 +80,7 @@
     
     //赞的数量
     lblZanCout = [[UILabel alloc] initWithFrame:CGRectMake(lbl2.frame.origin.x+lbl2.frame.size.width,lblCount.frame.origin.y , 50, 20)];
-    lblZanCout.font = [UIFont systemFontOfSize:14];
+    lblZanCout.font = [UIFont fontWithName:kFontRegular size:14];
     //  lblZanCout.backgroundColor=[UIColor blueColor];
     lblZanCout.textColor = VGray_color;
     [viewHeader addSubview:lblZanCout];
@@ -88,7 +88,7 @@
     //简介
     lblBrief = [[UILabel alloc] initWithFrame:CGRectMake(ivAvatar.frame.origin.x+ivAvatar.frame.size.width+10,lblCount.frame.origin.y+lblCount.frame.size.height+10, kDeviceWidth - (ivAvatar.frame.origin.x+ivAvatar.frame.size.width+10), 20)];
     lblBrief.numberOfLines=0;
-    lblBrief.font = [UIFont systemFontOfSize:14];
+    lblBrief.font = [UIFont fontWithName:kFontRegular size:14];
     
     /// CGSize  Msize= [signature boundingRectWithSize:CGSizeMake(kDeviceWidth-80, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObject:lblBrief.font forKey:NSFontAttributeName] context:nil].size;
     lblBrief.textColor = VGray_color;
@@ -107,7 +107,7 @@
     else{
         [addButton setSelected:NO];
     }
-    addButton.titleLabel.font=[UIFont systemFontOfSize:16];
+    addButton.titleLabel.font=[UIFont fontWithName:kFontRegular size:16];
     addButton.tag=100;
     [viewHeader addSubview:addButton];
     
@@ -126,7 +126,7 @@
     else{
         [zanButton setSelected:NO];
     }
-    zanButton.titleLabel.font=[UIFont systemFontOfSize:16];
+    zanButton.titleLabel.font=[UIFont fontWithName:kFontRegular size:16];
     zanButton.tag=101;
     [viewHeader addSubview:zanButton];
     //修改了loadview的frame

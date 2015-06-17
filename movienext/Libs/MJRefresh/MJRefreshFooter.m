@@ -325,9 +325,9 @@
     self.noMoreLabel.font = font;
     self.stateLabel.font = font;
     
-    self.loadMoreButton.titleLabel.font=[UIFont systemFontOfSize:12];
-    self.noMoreLabel.font=[UIFont systemFontOfSize:12];
-    self.stateLabel.font =[UIFont systemFontOfSize:12];
+    self.loadMoreButton.titleLabel.font=[UIFont fontWithName:kFontRegular size:12];
+    self.noMoreLabel.font=[UIFont fontWithName:kFontRegular size:12];
+    self.stateLabel.font =[UIFont fontWithName:kFontRegular size:12];
 }
 
 - (void)setStateHidden:(BOOL)stateHidden

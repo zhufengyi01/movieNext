@@ -24,8 +24,8 @@
     //设置背景图片，可以使文字与图片共存
     [self setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
     [self addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
-    [self.titleLabel setFont:[UIFont systemFontOfSize:font]];
-    boundingRect=[self.titleLabel.text boundingRectWithSize:CGSizeMake(frame.size.width, font) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:font]} context:nil];
+    [self.titleLabel setFont:[UIFont fontWithName:kFontRegular size:font]];
+    boundingRect=[self.titleLabel.text boundingRectWithSize:CGSizeMake(frame.size.width, font) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont fontWithName:kFontRegular size:font]} context:nil];
 }
 
 - (CGRect)imageRectForContentRect:(CGRect)contentRect {

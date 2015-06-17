@@ -50,14 +50,14 @@
 {
     UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:@"完善资料"];
     titleLable.textColor=VBlue_color;
-    titleLable.font=[UIFont boldSystemFontOfSize:18];
+    titleLable.font=[UIFont fontWithName:kFontDouble size:18];
     titleLable.textAlignment=NSTextAlignmentCenter;
     self.navigationItem.titleView=titleLable;
     
     
     //    UIButton  *button=[UIButton buttonWithType:UIButtonTypeCustom];
     //    [button setTitle:@"取消" forState:UIControlStateNormal];
-    //    button.titleLabel.font =[UIFont boldSystemFontOfSize:16];
+    //    button.titleLabel.font =[UIFont fontWithName:kFontDouble size:16];
     //    [button setTitleColor:VBlue_color forState:UIControlStateNormal];
     //    //[button setBackgroundImage:[UIImage imageNamed:@"setting.png"] forState:UIControlStateNormal];
     //    button.frame=CGRectMake(10, 5, 40, 40);
