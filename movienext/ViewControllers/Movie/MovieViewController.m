@@ -34,6 +34,7 @@
 #import "NSDate+Extension.h"
 #import "UpweiboModel.h"
 //#import "SearchMovieViewController.h"
+#import "StageViewController.h"
 #define  BUTTON_COUNT  3
 #define  NaviTitle_Width  160
 #define  NaviTitle_Height 46
@@ -403,9 +404,7 @@ static const CGFloat MJDuration = 0.6;
          [weakSelf.colors insertObject:MJRandomColor atIndex:0];
          }*/
         page0=1;
-        if (weakSelf.dataArray0.count>0) {
-            [weakSelf.dataArray0 removeAllObjects];
-        }
+      
         // 进入刷新状态就会回调这个Block
         [weakSelf requestRecommendData];
         // 设置文字
@@ -466,7 +465,6 @@ static const CGFloat MJDuration = 0.6;
 - (void)setUprefresh
 {
     __weak typeof(self) weakSelf = self;
-    
     // 下拉刷新
     [self.myConllectionView addLegendHeaderWithRefreshingBlock:^{
         // 增加5条假数据
@@ -476,7 +474,6 @@ static const CGFloat MJDuration = 0.6;
         for (int i=0;i<3;i++) {
             UIButton  *btn=(UIButton *) [weakSelf.view viewWithTag:100+i];
             if (i==0&&btn.selected==YES) {
-                
                 if (_dataArray1.count>0) {
                     [weakSelf.dataArray1 removeAllObjects];
                 }
@@ -532,10 +529,8 @@ static const CGFloat MJDuration = 0.6;
         [weakSelf.myConllectionView.footer setTitle:@"点击加载更多..." forState:MJRefreshFooterStateIdle];
         [weakSelf.myConllectionView.footer setTitle:@"加载更多..." forState:MJRefreshFooterStateRefreshing];
         [weakSelf.myConllectionView.footer setTitle:@"THE END" forState:MJRefreshFooterStateNoMoreData];
-        
         // 设置字体
         // weakSelf.myConllectionView.footer.font = [UIFont fontWithName:kFontRegular size:12];
-        
         // 设置颜色
         //weakSelf.myConllectionView.footer.textColor = VGray_color;
         for (int i=0;i<3;i++) {
@@ -647,6 +642,11 @@ static const CGFloat MJDuration = 0.6;
             pageCount0=[[responseObject objectForKey:@"pageCount"] intValue];
             if (page0==pageCount0) {
                 [self.RecommendCollectionView.footer noticeNoMoreData];
+            }
+            if (page0==1) {   // 表示刷新操作，这个时候不要在刷新里面去移除，防止网络失败刷新错误导致没有数据
+                if (self.dataArray0.count>0) {
+                    [self.dataArray0 removeAllObjects];
+                }
             }
             NSMutableArray   *array  = [[NSMutableArray alloc]initWithArray:[responseObject objectForKey:@"models"]];
             for ( int i=0 ; i<array.count; i++) {
@@ -765,7 +765,6 @@ static const CGFloat MJDuration = 0.6;
                     if (detailarray.count>0) {
                         [_dataArray1 addObjectsFromArray:detailarray];
                     }
-                    
                     break;
                 }
                 else if (i==1&&btn.selected==YES)
@@ -1004,18 +1003,23 @@ static const CGFloat MJDuration = 0.6;
     }
     else if (collectionView==self.RecommendCollectionView)
     {
-        ShowStageViewController *vc = [[ShowStageViewController alloc] init];
-        vc.pageType=NSStagePapeTypeHotStageList;//热门页进入
-        weiboInfoModel *model=[self.dataArray0 objectAtIndex:indexPath.row];
+//        ShowStageViewController *vc = [[ShowStageViewController alloc] init];
+//        vc.pageType=NSStagePapeTypeHotStageList;//热门页进入
+//        weiboInfoModel *model=[self.dataArray0 objectAtIndex:indexPath.row];
+//        vc.stageInfo = model.stageInfo;
+//        vc.upweiboArray=_upWeiboArray;
+//        vc.weiboInfo=model;
+//        UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+//        self.navigationItem.backBarButtonItem=item;
+//        [self.navigationController pushViewController:vc animated:YES];
+
+        StageViewController  *stageVC =[[StageViewController alloc]init];
+        stageVC.WeiboDataArray = self.dataArray0;
+        stageVC.indexOfItem=indexPath.row;
+        UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+        self.navigationItem.backBarButtonItem=item;        
+        [self.navigationController pushViewController:stageVC animated:YES];
         
-        //    movieInfoModel  *moviemodel =[[movieInfoModel alloc]init];
-        
-        vc.stageInfo = model.stageInfo;
-        vc.upweiboArray=_upWeiboArray;
-        vc.weiboInfo=model;
-      //  UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
-        //self.navigationItem.backBarButtonItem=item;
-        [self.navigationController pushViewController:vc animated:YES];
         
     }
 }

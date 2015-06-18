@@ -39,8 +39,8 @@
 #define ADM_CLOSE_STAGE   1004   //已屏蔽的弹幕
 #define ADM_DSCORVER      1005  // 发现
 #define ADM_RECOMMEND     1006    //管理员热门
-#define ADM_HOT_LIST       1007   //管理员热门进入
-#define CUS_ACTION_TAG   1001   //普通用户弹出框
+#define ADM_HOT_LIST      1007   //管理员热门进入
+#define CUS_ACTION_TAG    1001   //普通用户弹出框
 #define CUSSEFT_ACTION_TAG   1002  //普通用户自己的页弹出框
 #define  TOOLBAR_HEIGHT  160
 #define ADM_BTN_BLOCK   2000  //屏蔽
@@ -291,7 +291,7 @@
                                  };
     markLable.attributedText = [[NSAttributedString alloc] initWithString:markLable.text attributes:attributes];
     
-
+    markLable.textAlignment=NSTextAlignmentCenter;
     
     //计算文字的高度从而确定整个shareview的高度
     

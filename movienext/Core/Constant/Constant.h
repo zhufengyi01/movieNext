@@ -18,7 +18,7 @@
 #define kUrlFeed @"http://next-feed.b0.upaiyun.com/"
 #define kUrlStage @"http://next-stage.b0.upaiyun.com/"
 #define kUrlMoviePoster @"http://next-movieposter.b0.upaiyun.com/"
-#define KIMAGE_BIG    @""
+#define KIMAGE_BIG    @"!w640"
 #define KIMAGE_SMALL  @"!thumbwide2"
 
 #define kBucketWeibo @"next-weibo"

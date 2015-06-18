@@ -370,46 +370,8 @@
     
     self.naviTitlLable.text=weiboInfo.stageInfo.movieInfo.name;
     
-    
     CGRect  frame = [Function getImageFrameWithwidth:[weiboInfo.stageInfo.width intValue] height:[weiboInfo.stageInfo.height intValue] inset:20];
     
-    
-    
-    //    //计算图片的宽高比
-    //    float width = [weiboInfo.stageInfo.width intValue];
-    //    float heigth =[weiboInfo.stageInfo.height intValue];
-    //    float x;
-    //    float y=0;
-    //    float w;
-    //    float h;
-    //    if (heigth/width>KImageWidth_Height&&(heigth/width<1)) { //
-    //        x=0;
-    //        y=0;
-    //        w=kDeviceWidth-20;
-    //        h=(kDeviceWidth-20)*(heigth/width);
-    //    }
-    //    else if (heigth/width<KImageWidth_Height)
-    //    {
-    //        x=0;
-    //        y=0;
-    //        w=kDeviceWidth-20;
-    //        h=(kDeviceWidth-20)*KImageWidth_Height;
-    //    }
-    //    else if (heigth/width>1) //高大于宽度的时候  成正方形
-    //    {
-    //        y =0;
-    //        h= kDeviceWidth-20;
-    //        w=(kDeviceWidth-20)*(width/heigth);
-    //        x=((kDeviceWidth-20)-w)/2;
-    //    }
-    //    else
-    //    {
-    //        x=0;
-    //        y=0;
-    //        w=kDeviceWidth-20;
-    //        h=w*(9.0/16);
-    //    }
-    //
     self.stageImageView =[[UIImageView alloc]initWithFrame:frame];
     weiboInfoModel *Weibo =[self.pageContent objectAtIndex:0];
     self.stageImageView.contentMode=UIViewContentModeScaleAspectFill;

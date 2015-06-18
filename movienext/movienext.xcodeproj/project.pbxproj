@@ -495,6 +495,8 @@
 		00ECAE1B1B0999DF0039597E /* NSDate+TimeAgo.m in Sources */ = {isa = PBXBuildFile; fileRef = 00ECAE151B0999DF0039597E /* NSDate+TimeAgo.m */; };
 		00ECAE1C1B0999DF0039597E /* NSDate+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 00ECAE171B0999DF0039597E /* NSDate+Utilities.m */; };
 		00ECAE1D1B0999DF0039597E /* NSDateTimeAgo.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 00ECAE181B0999DF0039597E /* NSDateTimeAgo.bundle */; };
+		381E964F1B327AA7006CBF95 /* StageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 381E964E1B327AA7006CBF95 /* StageViewController.m */; };
+		381E96521B327AC7006CBF95 /* StageDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 381E96511B327AC7006CBF95 /* StageDetailViewController.m */; };
 		38B205BB1B300B64004FA315 /* SelectTimeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 38B205BA1B300B64004FA315 /* SelectTimeView.m */; };
 		38B205BE1B317928004FA315 /* back_gray_Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 38B205BC1B317928004FA315 /* back_gray_Icon@2x.png */; };
 		38B205BF1B317928004FA315 /* back_gray_Icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 38B205BD1B317928004FA315 /* back_gray_Icon@3x.png */; };
@@ -1242,6 +1244,10 @@
 		00ECAE161B0999DF0039597E /* NSDate+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Utilities.h"; sourceTree = "<group>"; };
 		00ECAE171B0999DF0039597E /* NSDate+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+Utilities.m"; sourceTree = "<group>"; };
 		00ECAE181B0999DF0039597E /* NSDateTimeAgo.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = NSDateTimeAgo.bundle; sourceTree = "<group>"; };
+		381E964D1B327AA7006CBF95 /* StageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StageViewController.h; sourceTree = "<group>"; };
+		381E964E1B327AA7006CBF95 /* StageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StageViewController.m; sourceTree = "<group>"; };
+		381E96501B327AC7006CBF95 /* StageDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StageDetailViewController.h; sourceTree = "<group>"; };
+		381E96511B327AC7006CBF95 /* StageDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StageDetailViewController.m; sourceTree = "<group>"; };
 		38B205B91B300B64004FA315 /* SelectTimeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectTimeView.h; sourceTree = "<group>"; };
 		38B205BA1B300B64004FA315 /* SelectTimeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectTimeView.m; sourceTree = "<group>"; };
 		38B205BC1B317928004FA315 /* back_gray_Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "back_gray_Icon@2x.png"; sourceTree = "<group>"; };
@@ -1464,6 +1470,7 @@
 		000B08F71AA2EA1800B8D13A /* Movie */ = {
 			isa = PBXGroup;
 			children = (
+				381E964C1B327A83006CBF95 /* StageDetail */,
 				0031D4881AFB440800827023 /* ShowSelectPhoto */,
 				000613AA1ABE67E200E8C719 /* UploadImage */,
 				00562B4E1ABBD8E0001D4FE0 /* Showstage */,
@@ -2781,6 +2788,17 @@
 			path = NSDate;
 			sourceTree = "<group>";
 		};
+		381E964C1B327A83006CBF95 /* StageDetail */ = {
+			isa = PBXGroup;
+			children = (
+				381E964D1B327AA7006CBF95 /* StageViewController.h */,
+				381E964E1B327AA7006CBF95 /* StageViewController.m */,
+				381E96501B327AC7006CBF95 /* StageDetailViewController.h */,
+				381E96511B327AC7006CBF95 /* StageDetailViewController.m */,
+			);
+			path = StageDetail;
+			sourceTree = "<group>";
+		};
 		38B205B81B300B45004FA315 /* SelectTime */ = {
 			isa = PBXGroup;
 			children = (
@@ -3272,6 +3290,7 @@
 				00AA542A1AA2C525004096F8 /* SDImageCache.m in Sources */,
 				000851071B09CD4800E6009C /* UIImage+Capture.m in Sources */,
 				00431FF11ADD1CD800416E1F /* Register_2ViewController.m in Sources */,
+				381E96521B327AC7006CBF95 /* StageDetailViewController.m in Sources */,
 				0032657B1ABFB8A800641EE0 /* UploadProgressView.m in Sources */,
 				000851131B09CDC000E6009C /* UIDevice+Hardware.m in Sources */,
 				0059EDC21B05D50900C2ACA1 /* TagModel.m in Sources */,
@@ -3314,6 +3333,7 @@
 				00963BBE1B0323E10069CBD9 /* View+MASAdditions.m in Sources */,
 				007427321AAD3F3B0034047D /* AddMarkViewController.m in Sources */,
 				00AA54601AA2C526004096F8 /* NotificationViewController.m in Sources */,
+				381E964F1B327AA7006CBF95 /* StageViewController.m in Sources */,
 				00218C701AE0A230006B79B4 /* ScanMovieInfoViewController.m in Sources */,
 				00354C2C1ABF004100F650AA /* UpYun.m in Sources */,
 				00AA542E1AA2C525004096F8 /* SDWebImageDownloaderOperation.m in Sources */,
@@ -3542,8 +3562,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-2";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Beijing Zuijiao Technology Company";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Beijing Zuijiao Technology Company";
 				ENABLE_STRICT_OBJC_MSGSEND = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3562,7 +3582,7 @@
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "afc7f507-89f5-4902-819f-0bdb2d0a86e3";
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -3576,8 +3596,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-2";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Beijing Zuijiao Technology Company";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Beijing Zuijiao Technology Company";
 				ENABLE_STRICT_OBJC_MSGSEND = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3596,7 +3616,7 @@
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "afc7f507-89f5-4902-819f-0bdb2d0a86e3";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
 				VALID_ARCHS = "armv7 armv7s arm64";
