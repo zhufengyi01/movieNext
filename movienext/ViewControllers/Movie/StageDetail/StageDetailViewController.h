@@ -13,7 +13,11 @@
 
 @property(nonatomic,strong) weiboInfoModel     *weiboInfo;  // 初始化的时候，需要把weiboinfo设置成数组的第几个
 
-@property(nonatomic,strong) NSString *index;                //页的下标
+//@property(nonatomic,strong) NSString              *index;                //页的下标
+
+@property(nonatomic,strong)     NSMutableArray  *upWeiboArray;           //点赞的数组
+
+@property(nonatomic,strong) UIView             *ShareView;   // 最终分享出去的图
 
 
 @end

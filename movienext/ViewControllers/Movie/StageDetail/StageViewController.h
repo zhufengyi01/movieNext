@@ -27,6 +27,7 @@ typedef NS_ENUM(NSInteger, NSStageSourceType)
 //微博数组
 @property(nonatomic,strong) NSMutableArray     *WeiboDataArray;
 
+@property(nonatomic,strong) NSMutableArray    *upWeiboArray;
 //从个人页进入
 //@property(nonatomic,strong) NSMutableArray     *UserAddDataArray;
 

@@ -24,6 +24,7 @@
 #import "AFNetworkActivityIndicatorManager.h"
 #import "Constant.h"
 #import "Function.h"
+#import "UIImage+Color.h"
 #import "GiderPageViewController.h"
 @interface AppDelegate ()
 //是否为测试版
@@ -38,7 +39,6 @@
     // Override point for customization after application launch
     //默认是审核版
     [self setupAppAppearance];
-    
     self.IS_CHECK=@"1";
     //初始化友盟组件
     [self initUmeng];
@@ -70,6 +70,12 @@
     
     [[UINavigationBar appearance] setBarTintColor:[UIColor grayColor]];
     [[UINavigationBar appearance] setTintColor:[UIColor grayColor]];
+    
+    [[UINavigationBar appearance] setBackgroundImage:[UIImage imageWithColor:[UIColor whiteColor]] forBarMetrics:UIBarMetricsDefault];
+    [[UINavigationBar appearance] setShadowImage:[UIImage imageWithColor:[UIColor clearColor]]];
+ 
+//    [[UINavigationBar appearance] setShadowImage:[UIImage imageWithColor:[UIColor clearColor] size:CGSizeMake(kDeviceWidth, 1)]];
+
 //    [UINavigationBar appearance].titleTextAttributes = [NSDictionary dictionaryWithObject:[UIColor grayColor] forKey:@"NSForegroundColorAttributeName"];
     
 //    [UITabBar appearance].barTintColor = [UIColor blueColor];

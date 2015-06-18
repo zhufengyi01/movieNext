@@ -38,8 +38,8 @@
     ivAvatar = [[UIImageView alloc] initWithFrame:CGRectMake(20, 20, ivAvatarWidth, ivAvatarWidth)];
     ivAvatar.layer.cornerRadius = ivAvatarWidth * 0.5;
     ivAvatar.layer.masksToBounds = YES;
-    ivAvatar.layer.borderColor=VBlue_color.CGColor;
-    ivAvatar.layer.borderWidth=3;
+    //ivAvatar.layer.borderColor=VBlue_color.CGColor;
+    //ivAvatar.layer.borderWidth=3;
     ivAvatar.userInteractionEnabled = YES;
     
     // 用户点击头像显示大图
@@ -61,7 +61,7 @@
     
     
     UILabel  *lbl1=[ZCControl createLabelWithFrame:CGRectMake(lblUsername.frame.origin.x,lblUsername.frame.origin.y+lblUsername.frame.size.height+5, 35, 20) Font:14 Text:@"内容"];
-    lbl1.textColor=VBlue_color;
+    lbl1.textColor=VGray_color;
     // lbl1.backgroundColor =[UIColor redColor];
     [viewHeader addSubview:lbl1];
     
@@ -74,7 +74,7 @@
     [viewHeader addSubview:lblCount];
     
     UILabel  *lbl2=[ZCControl createLabelWithFrame:CGRectMake(lblCount.frame.origin.x+lblCount.frame.size.width,lblUsername.frame.origin.y+lblUsername.frame.size.height+5, 35, 20) Font:14 Text:@"被赞"];
-    lbl2.textColor=VBlue_color;
+    lbl2.textColor=VGray_color;
     //lbl2.backgroundColor=[UIColor grayColor];
     [viewHeader addSubview:lbl2];
     

@@ -261,9 +261,6 @@
         markLable.font=[UIFont fontWithName:kFontDouble size:28];
     }
 
-    
-    
-    
     markLable.textColor=[UIColor whiteColor];
     weiboInfoModel *weibomodel;
     if (self.stageInfo.weibosArray.count>0) {
@@ -273,10 +270,16 @@
         weibomodel=self.WeiboInfo;
     }
      markLable.text=weibomodel.content;
-    
     if (self.weiboInfo) {
         markLable.text=self.weiboInfo.content;
+        if (!self.weiboInfo.content) {
+            self.weiboInfo.content=@"";
+        }
    }
+    if (markLable.text == nil) {
+        markLable.text=@"";
+    }
+    
     markLable.lineBreakMode=NSLineBreakByCharWrapping;
     markLable.contentMode=UIViewContentModeBottom;
     markLable.textAlignment=NSTextAlignmentCenter;
@@ -301,9 +304,10 @@
     BgView.frame=CGRectMake(0, 0, kDeviceWidth, self.ShareView.frame.size.height+20);
     
     markLable.frame=CGRectMake(10, self.ShareView.frame.size.height-Msize.height-5 ,self.ShareView.frame.size.width-20,Msize.height);
-    
-    
-    //创建中间的工具栏
+    if (Msize.height+self.stageImageView.frame.size.height>kDeviceHeight) {
+        scrollView.contentSize=CGSizeMake(kDeviceWidth, Msize.height+self.stageImageView.frame.size.height+100);
+    }
+     //创建中间的工具栏
     [self createCenterContentView];
     
 }
@@ -428,9 +432,7 @@
         }
     }
     [self createWeiboTagView];
-    
 }
-
 -(void)createWeiboTagView
 {
     if (TagContentView) {
@@ -975,7 +977,6 @@
     if (!weiboInfo) {
         return;
     }
-    
     NSDictionary *parameters=@{@"weibo_id":weiboId,@"user_id":user_id,@"author_id":author_id,@"operation":operation};
     
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];

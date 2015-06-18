@@ -52,7 +52,7 @@
     //UINavigationController * fristNav = [[UINavigationController alloc] initWithRootViewController:newVC];
     
     MovieViewController * mvc = [[MovieViewController alloc] init];
-    MainNavigationViewController * mvcNav = [[MainNavigationViewController alloc] initWithRootViewController:mvc];
+    UINavigationController * mvcNav = [[UINavigationController alloc] initWithRootViewController:mvc];
     mvc.hidesBottomBarWhenPushed=YES;
     
     //添加一个发现页

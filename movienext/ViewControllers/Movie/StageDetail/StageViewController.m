@@ -24,24 +24,30 @@
 #import "Function.h"
 #import "UMShareView.h"
 #import "StageDetailViewController.h"
-#define  TOOLBAR_HEIGHT  160
+#import "AddMarkViewController.h"
+#import "UIButton+Block.h"
+#define  TOOLBAR_HEIGHT  45
 
 @interface StageViewController ()<UMShareViewDelegate,UIPageViewControllerDelegate,UIPageViewControllerDataSource,LoadingViewDelegate>
 {
     //当前的detailcontroller
     StageDetailViewController *CenterViewController;
+    
+    UIButton  *addMarkButton;
+    UIButton  *ShareButton;
 }
 @property (strong, nonatomic) UIPageViewController *pageController;
 
 //导航条的标题
 @property(nonatomic,strong) UILabel             *naviTitlLable;
 
+/*
+ 当前页weibo 对象
+ */
+@property(nonatomic,strong) weiboInfoModel     *weiboInfo;
 
-//@property(nonatomic,strong) weiboInfoModel     *weiboInfo;  // 初始化的时候，需要把weiboinfo设置成数组的第几个
 
-
-@property(strong,nonatomic) NSMutableArray   *indexArray; //存储每个页面的索引
-
+//@property(strong,nonatomic) NSMutableArray   *indexArray; //存储每个页面的索引
 
 @end
 
@@ -53,6 +59,7 @@
     [self initData];
     [self createNavigation];
     [self createUI];
+    [self createToolBar];
     
 }
 -(instancetype)init
@@ -64,13 +71,14 @@
 }
 -(void)initData
 {
-   // self.weiboInfo = [self.WeiboDataArray objectAtIndex:self.indexOfItem];
+    // self.weiboInfo = [self.WeiboDataArray objectAtIndex:self.indexOfItem];
     //存储页面的索引
-    self.indexArray =[[NSMutableArray alloc]init];
-    for (int i=0; i<self.WeiboDataArray.count;i++) {
-        NSString  *index =[NSString stringWithFormat:@"%d",i];
-        [self.indexArray  addObject:index];
-    }
+    self.weiboInfo = [[weiboInfoModel alloc]init];
+   // self.indexArray =[[NSMutableArray alloc]init];
+//    for (int i=0; i<self.WeiboDataArray.count;i++) {
+//        NSString  *index =[NSString stringWithFormat:@"%d",i];
+//        [self.indexArray  addObject:index];
+//    }
 }
 -(void)createNavigation
 {
@@ -79,14 +87,12 @@
     self.naviTitlLable.font=[UIFont fontWithName:kFontDouble size:16];
     self.naviTitlLable.textAlignment=NSTextAlignmentCenter;
     self.navigationItem.titleView=self.naviTitlLable;
-    
 }
 -(void)createUI
 {
     // 设置UIPageViewController的配置项
     NSDictionary *options =[NSDictionary dictionaryWithObject:[NSNumber numberWithInteger:UIPageViewControllerSpineLocationMax]
                                                        forKey: UIPageViewControllerOptionSpineLocationKey];
-    
     // 实例化UIPageViewController对象，根据给定的属性
     self.pageController = [[UIPageViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStyleScroll
                                                           navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal
@@ -102,7 +108,8 @@
     // 因为我们定义UIPageViewController对象显示样式为显示一页（options参数指定）。
     // 如果要显示2页，NSArray中，应该有2个相应页数据。
     StageDetailViewController *initialViewController =[self viewControllerAtIndex:self.indexOfItem];// 得到第一页
-    
+    self.weiboInfo = [self.WeiboDataArray objectAtIndex:self.indexOfItem];
+    self.naviTitlLable.text=self.weiboInfo.stageInfo.movieInfo.name;
     //初始化的时候记录了当前的第一个viewcontroller  以后每次都在代理里面获取当前的viewcontroller
     CenterViewController=initialViewController;
     NSArray *viewControllers =[NSArray arrayWithObject:initialViewController];
@@ -114,7 +121,61 @@
     [self addChildViewController:_pageController];
     [[self view] addSubview:[_pageController view]];
 }
+-(void)createToolBar
+{
+    UIView   *ToolView = [[UIView alloc]initWithFrame:CGRectMake(0,kDeviceHeight-TOOLBAR_HEIGHT-kHeightNavigation, kDeviceWidth, TOOLBAR_HEIGHT)];
+    ToolView.userInteractionEnabled=YES;
+    [self.view addSubview:ToolView];
+    __weak typeof(self)weakSelf = self;
+    //__weak typeof(CenterViewController) centerVc = CenterViewController;
+    addMarkButton =[UIButton buttonWithType:UIButtonTypeCustom];
+    addMarkButton.frame=CGRectMake(0, 0, kDeviceWidth/2,TOOLBAR_HEIGHT);
+    [addMarkButton setTitle:@"我要添加" forState:UIControlStateNormal];
+    [addMarkButton addActionHandler:^(NSInteger tag) {
+        AddMarkViewController  *AddMarkVC=[[AddMarkViewController alloc]init];
+         AddMarkVC.stageInfo =weakSelf.weiboInfo.stageInfo;
+        [weakSelf.navigationController pushViewController:AddMarkVC animated:NO];
+        
+    }];
+    addMarkButton.titleLabel.font =[UIFont fontWithName:kFontDouble size:16];
+    [addMarkButton setTitleColor:VBlue_color forState:UIControlStateNormal];
+    //ShareButton.backgroundColor =[UIColor redColor];
+    [addMarkButton setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color"] forState:UIControlStateNormal];
+    [ToolView addSubview:addMarkButton];
+    
+    ShareButton =[UIButton buttonWithType:UIButtonTypeCustom];
+    ShareButton.frame=CGRectMake(kDeviceWidth/2, 0, kDeviceWidth/2, TOOLBAR_HEIGHT);
+    [ShareButton setTitle:@"我要分享" forState:UIControlStateNormal];
+    /*[ShareButton addActionHandler:^(NSInteger tag) {
+        float  height = CenterViewController.ShareView.frame.size.height;
+        
+        UIImage  *image=[Function getImage:CenterViewController.ShareView WithSize:CGSizeMake(kDeviceWidth-20,height)];
+        UMShareView *shareView =[[UMShareView alloc] initwithStageInfo:weakSelf.weiboInfo.stageInfo ScreenImage:image delgate:weakSelf andShareHeight:height];
+        [shareView setShareLable];
+        [shareView show];
+    }];*/
+    [ShareButton addTarget:self action:@selector(shareButtonClick) forControlEvents:UIControlEventTouchUpInside];
+    ShareButton.titleLabel.font =[UIFont fontWithName:kFontDouble size:16];
+    [ShareButton setTitleColor:VBlue_color forState:UIControlStateNormal];
+    [ShareButton setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color"] forState:UIControlStateNormal];
+    [ToolView addSubview:ShareButton];
+    
+    //添加一个线
+    UIView  *verline =[[UIView alloc]initWithFrame:CGRectMake(kDeviceWidth/2,(TOOLBAR_HEIGHT-26)/2, 0.5, 26)];
+    verline.backgroundColor =VLight_GrayColor;
+    [ToolView addSubview:verline];
+}
 
+-(void)shareButtonClick
+{
+    float  height = CenterViewController.ShareView.frame.size.height;
+    
+    UIImage  *image=[Function getImage:CenterViewController.ShareView WithSize:CGSizeMake(kDeviceWidth-20,height)];
+    UMShareView *shareView =[[UMShareView alloc] initwithStageInfo:self.weiboInfo.stageInfo ScreenImage:image delgate:self andShareHeight:height];
+    [shareView setShareLable];
+    [shareView show];
+
+}
 //根据下标值获取上一个控制器或者下一个控制器  得到相应的VC对象
 - (StageDetailViewController *)viewControllerAtIndex:(NSUInteger)index {
     if (([self.WeiboDataArray count] == 0) || (index >= [self.WeiboDataArray count])) {
@@ -123,13 +184,13 @@
     // 创建一个新的控制器类，并且分配给相应的数据
     StageDetailViewController * dataViewController =[[StageDetailViewController alloc] init];
     dataViewController.weiboInfo=[self.WeiboDataArray objectAtIndex:index];
-    dataViewController.index=[self.indexArray objectAtIndex:index];
+    dataViewController.upWeiboArray=self.upWeiboArray;
     return dataViewController;
 }
 // 根据数组元素值，得到下标值
 - (NSUInteger)indexOfViewController:(StageDetailViewController *)viewController {
     StageDetailViewController *dataViewController=(StageDetailViewController *)viewController;
-    return [self.indexArray indexOfObject:dataViewController.index];
+    return [self.WeiboDataArray indexOfObject:dataViewController.weiboInfo];
 }
 
 // 返回上一个ViewController对象
@@ -137,6 +198,10 @@
     //获取当前控制器
     CenterViewController =(StageDetailViewController *)viewController;
     NSUInteger index = [self indexOfViewController:(StageDetailViewController *)viewController];
+    self.weiboInfo =[self.WeiboDataArray objectAtIndex:index];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.naviTitlLable.text= self.weiboInfo.stageInfo.movieInfo.name;
+    });
     if ((index == 0) || (index == NSNotFound)) {
         return nil;
     }
@@ -150,9 +215,13 @@
 
 // 返回下一个ViewController对象
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController{
-    
-    CenterViewController =(StageDetailViewController *)viewController;
+    CenterViewController =(StageDetailViewController *) viewController;
     NSUInteger index = [self indexOfViewController:(StageDetailViewController *)viewController];
+    self.weiboInfo =[self.WeiboDataArray objectAtIndex:index];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.naviTitlLable.text= self.weiboInfo.stageInfo.movieInfo.name;
+    });
+    
     if (index == NSNotFound) {
         return nil;
     }

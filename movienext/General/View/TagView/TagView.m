@@ -112,7 +112,7 @@
 {
     [super layoutSubviews];
     self.tagBgImageview.frame=CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
-    self.titleLable.frame=CGRectMake(6,0, self.frame.size.width-6,self.frame.size.height);
+    self.titleLable.frame=CGRectMake(6,0, self.frame.size.width,self.frame.size.height);
     
 }
 
