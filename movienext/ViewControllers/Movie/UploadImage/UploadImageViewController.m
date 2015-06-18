@@ -43,7 +43,7 @@
 {
     
     UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 120, 20) Font:16 Text:@"预览"];
-    titleLable.textColor=VBlue_color;
+    titleLable.textColor=VGray_color;
     titleLable.font=[UIFont fontWithName:kFontRegular size:18];
     titleLable.textAlignment=NSTextAlignmentCenter;
     self.navigationItem.titleView=titleLable;
@@ -175,7 +175,6 @@
     int width=self.upimage.size.width;
     int heigth=self.upimage.size.height;
     
-    
     NSDictionary *parameter = @{@"photo":[upyunDict objectForKey:@"url"],@"movie_id":self.movie_Id,@"user_id":usreCenter.user_id,@"width":[NSString stringWithFormat:@"%d",width],@"height":[NSString stringWithFormat:@"%d",heigth]};
     
     NSLog(@"==parameter====%@",parameter);
@@ -238,40 +237,45 @@
     [bgView addSubview:imageView];
     
     CGSize  Isize=self.upimage.size;
+    
+    
     float width = Isize.width;
     float heigth =Isize.height;
-    float x;
+    float x=0;
     float y=0;
-    float w;
-    float h;
-    if (heigth/width>KImageWidth_Height&&(heigth/width<1)) { //
-        x=0;
-        y=0;
-        w=kDeviceWidth-0;
-        h=(kDeviceWidth-0)*(heigth/width);
-    }
-    else if (heigth/width<KImageWidth_Height)
-    {
-        x=0;
-        y=0;
-        w=kDeviceWidth-0;
-        h=(kDeviceWidth-0)*KImageWidth_Height;
-    }
-    else if (heigth/width>1) //高大于宽度的时候  成正方形
-    {
-        y =0;
-        h= kDeviceWidth-0;
-        w=(kDeviceWidth-0)*(width/heigth);
-        x=((kDeviceWidth-0)-w)/2;
-    }
-    else
-    {
-        x=0;
-        y=0;
-        h=(kDeviceWidth-0)*(9.0/16);
-        w=(kDeviceWidth-0);
-    }
-    imageView.frame=CGRectMake((kDeviceWidth-w)/2,(kDeviceHeight-kHeightNavigation-h)/2,w,h);
+    float w=kDeviceWidth;
+    float h=(heigth/width)*kDeviceWidth;
+    y=(kDeviceHeight-kHeightNavigation-h)/2;
+    
+//    if (heigth/width>KImageWidth_Height&&(heigth/width<1)) { //
+//        x=0;
+//        y=0;
+//        w=kDeviceWidth-0;
+//        h=(kDeviceWidth-0)*(heigth/width);
+//    }
+//    else if (heigth/width<KImageWidth_Height)
+//    {
+//        x=0;
+//        y=0;
+//        w=kDeviceWidth-0;
+//        h=(kDeviceWidth-0)*KImageWidth_Height;
+//    }
+//    else if (heigth/width>1) //高大于宽度的时候  成正方形
+//    {
+//        y =0;
+//        h= kDeviceWidth-0;
+//        w=(kDeviceWidth-0)*(width/heigth);
+//        x=((kDeviceWidth-0)-w)/2;
+//    }
+//    else
+//    {
+//        x=0;
+//        y=0;
+//        h=(kDeviceWidth-0)*(9.0/16);
+//        w=(kDeviceWidth-0);
+//    }
+    imageView.frame=CGRectMake(x, y,w, h);
+   // imageView.frame=CGRectMake((kDeviceWidth-w)/2,(kDeviceHeight-kHeightNavigation-h)/2,w,h);
     
 }
 -(void)createProgress

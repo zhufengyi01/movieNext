@@ -183,13 +183,7 @@
     markLable.textAlignment=NSTextAlignmentCenter;
     [_layerView addSubview:markLable];
     
-    
-    
-    
-    
     [self createLikeBar];
-    
-    
     
 }
 -(void)createLikeBar

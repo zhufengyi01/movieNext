@@ -281,6 +281,8 @@
     markLable.contentMode=UIViewContentModeBottom;
     markLable.textAlignment=NSTextAlignmentCenter;
     [self.ShareView addSubview:markLable];
+    
+    
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
     paragraphStyle.lineSpacing = 5;
     NSDictionary *attributes = @{

@@ -104,7 +104,7 @@ static const CGFloat MJDuration = 0.6;
         picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
         picker.delegate =WeakSelf;
         //设置选择后的图片可被编辑
-        picker.allowsEditing = YES;
+        picker.allowsEditing =NO;
         [WeakSelf presentViewController:picker animated:YES completion:nil];
         
     }];

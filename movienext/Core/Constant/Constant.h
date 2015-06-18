@@ -134,7 +134,7 @@
 //#define kFontRegular @"FZLTHJW--GB1-0"
 //#define kFontDouble @"FZZZHONGJW--GB1-0"
 
-#define kFontRegular @"NotoSansHans-Regular"
+#define kFontRegular @"NotoSansHans-Medium"
 #define kFontDouble @"NotoSansHans-Medium"
 
 #endif

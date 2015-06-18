@@ -463,6 +463,16 @@
     
     markLable.textColor=[UIColor whiteColor];
     markLable.text=Weibo.content;
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    paragraphStyle.lineSpacing = 5;
+    NSDictionary *attributes = @{
+                                 NSFontAttributeName:markLable.font,
+                                 NSParagraphStyleAttributeName:paragraphStyle
+                                 };
+    markLable.attributedText = [[NSAttributedString alloc] initWithString:markLable.text attributes:attributes];
+    
+    
+
     markLable.lineBreakMode=NSLineBreakByCharWrapping;
     markLable.contentMode=UIViewContentModeBottom;
     markLable.textAlignment=NSTextAlignmentCenter;
@@ -594,7 +604,7 @@
         {
             [self.view addSubview:loadView];
             sharebtn.hidden=YES;
-            [loadView showNullView:@"已经开完了..."];
+            [loadView showNullView:@"已经看完了..."];
         }
         
     }];
