@@ -7,7 +7,6 @@
 //
 
 #import "NewAddViewController.h"
-//typedef NS_ENUM(<#_type#>, <#_name#>) <#name#>
 #import "Function.h"
 #import "UserDataCenter.h"
 
@@ -29,6 +28,13 @@
 
 #import "UIImageView+WebCache.h"
 
+#import "UpweiboModel.h"
+
+#import "StageViewController.h"
+
+#import "NSDate+Extension.h"
+#import "ShareModel.h"
+
 static const CGFloat MJDuration = 0.1;
 
 
@@ -41,9 +47,12 @@ static const CGFloat MJDuration = 0.1;
     int pageCount;
     LoadingView         *loadView;
     UserDataCenter     *userCenter;
+    // NSMutableArray     *weiboUpArray;
     
     
 }
+
+@property(nonatomic,strong) NSMutableArray   *upWeiboArray;
 @end
 
 @implementation NewAddViewController
@@ -79,14 +88,16 @@ static const CGFloat MJDuration = 0.1;
     {
         titleString=@"微博未审核";
     }
+    else if(self.pageType ==NSNewAddPageSoureTypeShare)
+    {
+        titleString = @"微博分享";
+    }
     UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:titleString];
     titleLable.textColor=VGray_color;
     
     titleLable.font=[UIFont fontWithName:kFontDouble size:18];
     titleLable.textAlignment=NSTextAlignmentCenter;
     self.navigationItem.titleView=titleLable;
-    
-    
 }
 -(void)initData
 {
@@ -95,6 +106,7 @@ static const CGFloat MJDuration = 0.1;
     pageCount=1;
     userCenter=[UserDataCenter shareInstance];
     _dataArray =[[NSMutableArray alloc]init];
+    self.upWeiboArray  =[[NSMutableArray alloc]init];
 }
 
 
@@ -145,8 +157,6 @@ static const CGFloat MJDuration = 0.1;
         // 进入刷新状态就会回调这个Block
         [weakSelf requestData];
         
-        
-        
         // 设置文字
         [weakSelf.myConllectionView.header setTitle:@"下拉刷新..." forState:MJRefreshHeaderStateIdle];
         [weakSelf.myConllectionView.header setTitle:@"释放刷新..." forState:MJRefreshHeaderStatePulling];
@@ -180,7 +190,7 @@ static const CGFloat MJDuration = 0.1;
             page=page+1;
             [weakSelf requestData];
         }else {
-            [self.myConllectionView.footer noticeNoMoreData];
+            [weakSelf.myConllectionView.footer noticeNoMoreData];
         }
         // 设置文字
         [weakSelf.myConllectionView.footer setTitle:@"点击加载更多..." forState:MJRefreshFooterStateIdle];
@@ -194,8 +204,7 @@ static const CGFloat MJDuration = 0.1;
         //weakSelf.myConllectionView.footer.textColor = VGray_color;
         // 模拟延迟加载数据，因此2秒后才调用（真实开发中，可以移除这段gcd代码）
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(MJDuration * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-          //  [weakSelf.myConllectionView reloadData];
-            
+            //  [weakSelf.myConllectionView reloadData];
             // 结束刷新
             //[weakSelf.myConllectionView.footer endRefreshing];
         });
@@ -239,64 +248,135 @@ static const CGFloat MJDuration = 0.1;
     {
         parameters = @{@"user_id":userCenter.user_id, @"status":@"5"};
     }
+    else if (self.pageType==NSNewAddPageSoureTypeShare)
+    {
+        urlString =[NSString stringWithFormat:@"%@/share/list?per-page=%d&page=%d", kApiBaseUrl,pageSize,page];
+        parameters=@{@"user_id":userCenter.user_id};
+    }
     
     [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
             pageCount=[[responseObject objectForKey:@"pageCount"] intValue];
             NSMutableArray   *array  = [[NSMutableArray alloc]initWithArray:[responseObject objectForKey:@"models"]];
-            for ( int i=0 ; i<array.count; i++) {
-                NSDictionary  *newdict  =[array objectAtIndex:i];
-                weiboInfoModel *weibomodel =[[weiboInfoModel alloc]init];
-                if (weibomodel) {
-                    [weibomodel setValuesForKeysWithDictionary:newdict];
-                    //用户的信息
-                    weiboUserInfoModel  *usermodel =[[weiboUserInfoModel alloc]init];
-                    if (usermodel) {
-                        if (![[newdict objectForKey:@"user"] isKindOfClass:[NSNull class]]) {
-                            [usermodel setValuesForKeysWithDictionary:[newdict objectForKey:@"user"]];
-                            weibomodel.uerInfo=usermodel;
+            if (self.pageType==NSNewAddPageSoureTypeShare) {
+                //分享列表
+                for (int i=0; i<array.count; i++) {
+                    NSDictionary  *sharedict =[NSDictionary dictionaryWithDictionary:[array objectAtIndex:i]];
+                    ShareModel  *sharemodel =[[ShareModel alloc]init];
+                    if (sharemodel){
+                        [sharemodel setValuesForKeysWithDictionary:sharedict];
+                        weiboUserInfoModel *user =[[weiboUserInfoModel alloc]init];
+                        if (user) {
+                            [user setValuesForKeysWithDictionary:[sharedict objectForKey:@"user"]];
+                            sharemodel.userInfo=user;
                         }
-                        
-                    }
-                    // 剧情信息
-                    stageInfoModel  *stagemodel =[[stageInfoModel alloc]init];
-                    if (stagemodel) {
-                        if (![[newdict objectForKey:@"stage"]  isKindOfClass:[NSNull class]]) {
-                            [stagemodel setValuesForKeysWithDictionary:[newdict objectForKey:@"stage"]];
-                            weibomodel.stageInfo=stagemodel;
-                            movieInfoModel *moviemodel =[[movieInfoModel alloc]init];
-                            if (moviemodel) {
-                                [moviemodel  setValuesForKeysWithDictionary:[[newdict objectForKey:@"stage"] objectForKey:@"movie"]];
-                                stagemodel.movieInfo=moviemodel;
+                        weiboInfoModel  *weibomodel =[[weiboInfoModel alloc]init];
+                        if (weibomodel) {
+                            [weibomodel setValuesForKeysWithDictionary:[sharedict objectForKey:@"weibo"]];
+                            weiboUserInfoModel  *weibouser =[[weiboUserInfoModel alloc]init];
+                            if (weibouser) {
+                                [weibouser setValuesForKeysWithDictionary:[[sharedict objectForKey:@"weibo"] objectForKey:@"user"]];
+                                weibomodel.uerInfo =weibouser;
                             }
-                            
-                        }
-                        
-                        
-                    }
-                    NSMutableArray  *tagArray =[[NSMutableArray alloc]init];
-                    //标签数组
-                    for ( NSDictionary  *tagdict in [newdict objectForKey:@"tags"]) {
-                        TagModel *tagmodel=[[TagModel alloc]init];
-                        if (tagmodel) {
-                            [tagmodel setValuesForKeysWithDictionary:tagdict];
-                            
-                            TagDetailModel *tagdetail =[[TagDetailModel alloc]init];
-                            if (tagdetail) {
-                                [tagdetail setValuesForKeysWithDictionary:[tagdict objectForKey:@"tag"]];
-                                tagmodel.tagDetailInfo=tagdetail;
+                            stageInfoModel  *stagmodel =[[stageInfoModel alloc]init];
+                            if (stagmodel) {
+                                [stagmodel setValuesForKeysWithDictionary:[[sharedict objectForKey:@"weibo"] objectForKey:@"stage"]];
+                                
+                                movieInfoModel *moviemoel =[[movieInfoModel alloc]init];
+                                if (moviemoel) {
+                                    [moviemoel setValuesForKeysWithDictionary:[[[sharedict objectForKey:@"weibo"] objectForKey:@"stage"] objectForKey:@"movie"]];
+                                    stagmodel.movieInfo =moviemoel;
+                                }
+                                weibomodel.stageInfo =stagmodel;
                             }
-                            [tagArray addObject:tagmodel];
+                
+                            //标签数组
+                            NSMutableArray  *tagArray =[[NSMutableArray alloc]init];
+                            //标签数组
+                            for ( NSDictionary  *tagdict in [[sharedict objectForKey:@"weibo"] objectForKey:@"tags"]) {
+                                TagModel *tagmodel=[[TagModel alloc]init];
+                                if (tagmodel) {
+                                    [tagmodel setValuesForKeysWithDictionary:tagdict];
+                                    
+                                    TagDetailModel *tagdetail =[[TagDetailModel alloc]init];
+                                    if (tagdetail) {
+                                        [tagdetail setValuesForKeysWithDictionary:[tagdict objectForKey:@"tag"]];
+                                        tagmodel.tagDetailInfo=tagdetail;
+                                    }
+                                    [tagArray addObject:tagmodel];
+                                }
+                            }
+                            weibomodel.tagArray=tagArray;
+                            sharemodel.weiboInfo =weibomodel;
                         }
+                        if (self.dataArray==nil) {
+                            self.dataArray =[[NSMutableArray alloc]init];
+                        }
+                        [self.dataArray addObject:sharemodel];
                     }
-                    
-                    weibomodel.tagArray=tagArray;
-                    [self.dataArray addObject:weibomodel];
                 }
                 
             }
-            
+            else {
+                for ( int i=0 ; i<array.count; i++) {
+                    NSDictionary  *newdict  =[array objectAtIndex:i];
+                    weiboInfoModel *weibomodel =[[weiboInfoModel alloc]init];
+                    if (weibomodel) {
+                        [weibomodel setValuesForKeysWithDictionary:newdict];
+                        //用户的信息
+                        weiboUserInfoModel  *usermodel =[[weiboUserInfoModel alloc]init];
+                        if (usermodel) {
+                            if (![[newdict objectForKey:@"user"] isKindOfClass:[NSNull class]]) {
+                                [usermodel setValuesForKeysWithDictionary:[newdict objectForKey:@"user"]];
+                                weibomodel.uerInfo=usermodel;
+                            }
+                            
+                        }
+                        // 剧情信息
+                        stageInfoModel  *stagemodel =[[stageInfoModel alloc]init];
+                        if (stagemodel) {
+                            if (![[newdict objectForKey:@"stage"]  isKindOfClass:[NSNull class]]) {
+                                [stagemodel setValuesForKeysWithDictionary:[newdict objectForKey:@"stage"]];
+                                weibomodel.stageInfo=stagemodel;
+                                movieInfoModel *moviemodel =[[movieInfoModel alloc]init];
+                                if (moviemodel) {
+                                    [moviemodel  setValuesForKeysWithDictionary:[[newdict objectForKey:@"stage"] objectForKey:@"movie"]];
+                                    stagemodel.movieInfo=moviemodel;
+                                }
+                            }
+                        }
+                        NSMutableArray  *tagArray =[[NSMutableArray alloc]init];
+                        //标签数组
+                        for ( NSDictionary  *tagdict in [newdict objectForKey:@"tags"]) {
+                            TagModel *tagmodel=[[TagModel alloc]init];
+                            if (tagmodel) {
+                                [tagmodel setValuesForKeysWithDictionary:tagdict];
+                                
+                                TagDetailModel *tagdetail =[[TagDetailModel alloc]init];
+                                if (tagdetail) {
+                                    [tagdetail setValuesForKeysWithDictionary:[tagdict objectForKey:@"tag"]];
+                                    tagmodel.tagDetailInfo=tagdetail;
+                                }
+                                [tagArray addObject:tagmodel];
+                            }
+                        }
+                        weibomodel.tagArray=tagArray;
+                        [self.dataArray addObject:weibomodel];
+                    }
+                }
+                //点赞的数组
+                for (NSDictionary  *updict in [responseObject objectForKey:@"upweibos"]) {
+                    UpweiboModel *upmodel =[[UpweiboModel alloc]init];
+                    if (upmodel) {
+                        [upmodel setValuesForKeysWithDictionary:updict];
+                        
+                        if (_upWeiboArray==nil) {
+                            _upWeiboArray =[[NSMutableArray alloc]init];
+                        }
+                        [_upWeiboArray addObject:upmodel];
+                    }
+                }
+            }
             [self.myConllectionView reloadData];
             [self.myConllectionView.footer endRefreshing];
             
@@ -332,26 +412,41 @@ static const CGFloat MJDuration = 0.1;
     SmallImageCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"smallcell" forIndexPath:indexPath];
     //在这里先将内容给清除一下, 然后再加载新的, 添加完内容之后先动画, 在cell消失的时候做清理工作
     if (_dataArray.count>indexPath.row) {
-        
-        weiboInfoModel  *model=[_dataArray objectAtIndex:indexPath.row];
-        cell.imageView.backgroundColor=VStageView_color;
-        NSURL  *url =[NSURL URLWithString:[NSString stringWithFormat:@"%@%@%@",kUrlStage,model.stageInfo.photo,KIMAGE_SMALL]];
-        
-        [cell.imageView sd_setImageWithURL:url placeholderImage:nil options:(SDWebImageRetryFailed|SDWebImageLowPriority)];
-        cell.titleLab.text=[NSString stringWithFormat:@"%@",model.content];
-        if (self.pageType==NSNewAddPageSoureTypeTiming) {
-            //定时出来的,显示具体的时间
-            NSDate *confromTimesp = [NSDate dateWithTimeIntervalSince1970:[model.updated_at intValue]];
-            NSLog(@"1296035591  = %@",confromTimesp);
-            NSDateFormatter *formatter = [[NSDateFormatter alloc] init] ;
-            [formatter setDateStyle:NSDateFormatterMediumStyle];
-            [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"GMT+0800"]];
-            [formatter setTimeStyle:NSDateFormatterShortStyle];
-            [formatter setDateFormat:@"YYYY-MM-dd HH:mm"];
-            NSString *confromTimespStr = [formatter stringFromDate:confromTimesp];
-            cell.lblTime.frame=CGRectMake(10, 10, 160, 20);
-            cell.lblTime.font =[UIFont fontWithName:kFontRegular size:10];
-            cell.lblTime.text = [NSString stringWithFormat:@"定时时间：%@",confromTimespStr];
+        if (self.pageType==NSNewAddPageSoureTypeShare) {
+            ShareModel *model =[self.dataArray objectAtIndex:indexPath.row];
+            NSURL  *url =[NSURL URLWithString:[NSString stringWithFormat:@"%@%@%@",kUrlStage,model.weiboInfo.stageInfo.photo,KIMAGE_SMALL]];
+            [cell.imageView sd_setImageWithURL:url placeholderImage:nil options:(SDWebImageRetryFailed|SDWebImageLowPriority)];
+            NSDate  *comfromTimesp =[NSDate dateWithTimeIntervalSince1970:[model.created_at intValue]];
+            NSString  *da = [NSDate timeInfoWithDate:comfromTimesp];
+            cell.lblTime.text =model.userInfo.username;
+            NSURL  *logourl = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", kUrlAvatar, model.userInfo.logo]];
+            [cell.ivAvatar sd_setImageWithURL:logourl placeholderImage:[UIImage imageNamed:@"user_normal.png"]];
+            cell.titleLab.font = [UIFont fontWithName:kFontDouble size:12];
+            cell.titleLab.backgroundColor =[[UIColor blackColor] colorWithAlphaComponent:0.5];
+            cell.titleLab.text=[NSString stringWithFormat:@"%@%@",da,[Function getSharePlatformwithSting:model.method]];
+        }
+        else {
+            
+            weiboInfoModel  *model=[_dataArray objectAtIndex:indexPath.row];
+            cell.imageView.backgroundColor=VStageView_color;
+            NSURL  *url =[NSURL URLWithString:[NSString stringWithFormat:@"%@%@%@",kUrlStage,model.stageInfo.photo,KIMAGE_SMALL]];
+            
+            [cell.imageView sd_setImageWithURL:url placeholderImage:nil options:(SDWebImageRetryFailed|SDWebImageLowPriority)];
+            cell.titleLab.text=[NSString stringWithFormat:@"%@",model.content];
+            if (self.pageType==NSNewAddPageSoureTypeTiming) {
+                //定时出来的,显示具体的时间
+                NSDate *confromTimesp = [NSDate dateWithTimeIntervalSince1970:[model.updated_at intValue]];
+                NSLog(@"1296035591  = %@",confromTimesp);
+                NSDateFormatter *formatter = [[NSDateFormatter alloc] init] ;
+                [formatter setDateStyle:NSDateFormatterMediumStyle];
+                [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"GMT+0800"]];
+                [formatter setTimeStyle:NSDateFormatterShortStyle];
+                [formatter setDateFormat:@"YYYY-MM-dd HH:mm"];
+                NSString *confromTimespStr = [formatter stringFromDate:confromTimesp];
+                cell.lblTime.frame=CGRectMake(10, 10, 160, 20);
+                cell.lblTime.font =[UIFont fontWithName:kFontRegular size:10];
+                cell.lblTime.text = [NSString stringWithFormat:@"定时时间：%@",confromTimespStr];
+            }
         }
         return cell;
         
@@ -362,43 +457,59 @@ static const CGFloat MJDuration = 0.1;
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     
-    ShowStageViewController *vc = [[ShowStageViewController alloc] init];
-    weiboInfoModel *model=[_dataArray objectAtIndex:indexPath.row];
-    //vc.upweiboArray=_upWeiboArray;
-    if(self.pageType==NSNewAddPageSoureTypeNewList)
-    {
-        //最新添加
-        vc.pageType=NSStagePapeTypeAdmin_New_Add;
+    //    ShowStageViewController *vc = [[ShowStageViewController alloc] init];
+    //    weiboInfoModel *model=[_dataArray objectAtIndex:indexPath.row];
+    //    //vc.upweiboArray=_upWeiboArray;
+    //    if(self.pageType==NSNewAddPageSoureTypeNewList)
+    //    {
+    //        //最新添加
+    //        vc.pageType=NSStagePapeTypeAdmin_New_Add;
+    //    }
+    //    else if (self.pageType==NSNewAddPageSoureTypeCloseWeiboList)
+    //    {
+    //        //微博屏蔽
+    //        vc.pageType=NSStagePapeTypeAdmin_Close_Weibo;
+    //    }
+    //    else if (self.pageType==NSNewAddPageSoureTypeDecorver)
+    //    {
+    //        vc.pageType=NSStagePapeTypeAdmin_Dscorver;
+    //    }
+    //    else if (self.pageType==NSNewAddPageSoureTypeRecommed)
+    //    {
+    //        vc.pageType=NSStagePapeTypeAdmin_Recommed;
+    //    }
+    //    else if (self.pageType==NSNewAddPageSoureTypeTiming)
+    //    {
+    //        vc.pageType=NSStagePapeTypeAdmin_Timing;
+    //    }
+    //    else if (self.pageType==NSNewAddPageSoureTypeNotReview)
+    //    {
+    //        vc.pageType=NSStagePapeTypeAdmin_Not_Review;
+    //    }
+    //
+    //    vc.stageInfo = model.stageInfo;
+    //    vc.weiboInfo=model;
+    //    UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+    //    self.navigationItem.backBarButtonItem=item;
+    //    [self.navigationController pushViewController:vc animated:YES];
+    if (self.pageType ==NSNewAddPageSoureTypeShare) {
+        ShowStageViewController *vc = [[ShowStageViewController alloc] init];
+        ShareModel *model =[self.dataArray objectAtIndex:indexPath.row];
+        vc.upweiboArray=_upWeiboArray;
+        vc.stageInfo =model.weiboInfo.stageInfo;
+        vc.weiboInfo = model.weiboInfo;
+        UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+        self.navigationItem.backBarButtonItem=item;
+        [self.navigationController pushViewController:vc animated:YES];
     }
-    else if (self.pageType==NSNewAddPageSoureTypeCloseWeiboList)
-    {
-        //微博屏蔽
-        vc.pageType=NSStagePapeTypeAdmin_Close_Weibo;
+    else{
+     StageViewController  *stageVC =[[StageViewController alloc]init];
+    stageVC.upWeiboArray= self.upWeiboArray;
+    stageVC.WeiboDataArray = self.dataArray;
+    stageVC.pageType = NSStagePapeTypeAdminOperation;
+    stageVC.indexOfItem = indexPath.row;
+    [self.navigationController pushViewController:stageVC animated:YES];
     }
-    else if (self.pageType==NSNewAddPageSoureTypeDecorver)
-    {
-        vc.pageType=NSStagePapeTypeAdmin_Dscorver;
-    }
-    else if (self.pageType==NSNewAddPageSoureTypeRecommed)
-    {
-        vc.pageType=NSStagePapeTypeAdmin_Recommed;
-    }
-    else if (self.pageType==NSNewAddPageSoureTypeTiming)
-    {
-        vc.pageType=NSStagePapeTypeAdmin_Timing;
-    }
-    else if (self.pageType==NSNewAddPageSoureTypeNotReview)
-    {
-        vc.pageType=NSStagePapeTypeAdmin_Not_Review;
-    }
-    
-    vc.stageInfo = model.stageInfo;
-    vc.weiboInfo=model;
-    UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
-    self.navigationItem.backBarButtonItem=item;
-    
-    [self.navigationController pushViewController:vc animated:YES];
-    
 }
 
 

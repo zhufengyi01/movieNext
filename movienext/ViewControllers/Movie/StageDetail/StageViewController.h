@@ -9,10 +9,10 @@
 #import "RootViewController.h"
 typedef NS_ENUM(NSInteger, NSStageSourceType)
 {
-    NSStageSourceTypeDefault   //默认页面进入
-    
-    
-};
+    NSStageSourceTypeDefault,   //默认页面进入
+    NSStagePapeTypeAdminOperation,   //管理员操作
+    NSStageSourceTypeCustomSelfAdd   //从个人页的个人增加进入
+ };
 
 @interface StageViewController : RootViewController
 

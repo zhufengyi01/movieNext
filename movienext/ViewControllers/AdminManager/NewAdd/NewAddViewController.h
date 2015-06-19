@@ -16,6 +16,7 @@ typedef NS_ENUM(NSInteger, NSNewAddPageSoureType)
     NSNewAddPageSoureTypeRecommed,   //推荐列表
     NSNewAddPageSoureTypeTiming,    //已定时
     NSNewAddPageSoureTypeNotReview, //未审核
+    NSNewAddPageSoureTypeShare      //分享列表
 };
 
 

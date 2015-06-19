@@ -708,7 +708,6 @@ static const CGFloat MJDuration = 0.6;
                     [_upWeiboArray addObject:upmodel];
                 }}
             
-            
             [self.RecommendCollectionView reloadData];
             [self.RecommendCollectionView.footer endRefreshing];
             
@@ -1018,6 +1017,7 @@ static const CGFloat MJDuration = 0.6;
         stageVC.WeiboDataArray = self.dataArray0;
         stageVC.indexOfItem=indexPath.row;
         stageVC.upWeiboArray=_upWeiboArray;
+        stageVC.pageType = NSStagePapeTypeDefult;
         UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
         self.navigationItem.backBarButtonItem=item;        
         [self.navigationController pushViewController:stageVC animated:YES];

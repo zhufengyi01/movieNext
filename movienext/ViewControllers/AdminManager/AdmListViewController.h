@@ -20,6 +20,7 @@ typedef NS_ENUM(NSInteger, ADM_TYPE)
     ADM_TYPE_ADM_DESCORVER,   // 发现页
     ADM_TYPE_RECOMMEND,       //热门列表
     ADM_TYPE_TIMING,          //已定时
+    ADM_TYPE_SHARE
 };
 @interface AdmListViewController : RootViewController
 

@@ -41,12 +41,12 @@
 }
 -(void)createUI
 {
-    _dataArray =[[NSMutableArray alloc]initWithObjects:@"用户列表",@"标签，表情包",@"已屏蔽剧照列表",@"［-1级］微博屏蔽",@"［0级］微博最新/未审核",@"［1级］微博正常",@"［2级］微博发现",@"［3级］微博热门", @"［4级］微博已定时", nil];
-    _myTableView =[[UITableView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth,55*_dataArray.count) style:UITableViewStylePlain];
+    _dataArray =[[NSMutableArray alloc]initWithObjects:@"用户列表",@"标签，表情包",@"已屏蔽剧照列表",@"［-1级］微博屏蔽",@"［0级］微博最新/未审核",@"［1级］微博正常",@"［2级］微博发现",@"［3级］微博热门", @"［4级］微博已定时",@"微博分享", nil];
+    _myTableView =[[UITableView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth,kDeviceHeight-kHeightNavigation) style:UITableViewStylePlain];
     _myTableView.delegate=self;
     _myTableView.dataSource=self;
-    _myTableView.bounces=NO;
-    _myTableView.scrollEnabled=NO;
+    _myTableView.bounces=YES;
+    _myTableView.scrollEnabled=YES;
     _myTableView.separatorColor = VLight_GrayColor;
     _myTableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     [self.view addSubview:_myTableView];
@@ -167,6 +167,17 @@
             self.navigationItem.backBarButtonItem=item;
             [self.navigationController pushViewController:new animated:YES];
             break;
+        }
+        case ADM_TYPE_SHARE:
+        {
+            NewAddViewController *new  =[NewAddViewController new];
+            new.pageType=NSNewAddPageSoureTypeShare;
+            UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+            self.navigationItem.backBarButtonItem=item;
+            [self.navigationController pushViewController:new animated:YES];
+            break;
+
+            
         }
         default:
             break;

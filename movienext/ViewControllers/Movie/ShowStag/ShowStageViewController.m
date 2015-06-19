@@ -655,7 +655,9 @@
             if (weakSelf.weiboInfo) {
                 weakSelf.stageInfo=weakSelf.weiboInfo.stageInfo;
             }
+            
             UMShareView *shareView =[[UMShareView alloc] initwithStageInfo:weakSelf.stageInfo ScreenImage:image delgate:weakSelf andShareHeight:height];
+            shareView.weiboInfo = _WeiboInfo;
             [shareView setShareLable];
             [shareView show];
             
@@ -879,8 +881,6 @@
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
-    
-    
 }
 
 

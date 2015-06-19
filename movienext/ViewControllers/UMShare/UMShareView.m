@@ -12,6 +12,7 @@
 #import "Constant.h"
 #import "Function.h"
 #import "MobClick.h"
+#import "AFNetworking.h"
 @implementation UMShareView
 
 /*
@@ -95,7 +96,6 @@
 //点击取消需要返回
 -(void)cancleshareClick
 {
-    
     if (_delegate&&[_delegate respondsToSelector:@selector(UMCancleShareClick)]) {
         [_delegate UMCancleShareClick];
     }
@@ -148,8 +148,6 @@
     _moviewName.text=[NSString stringWithFormat:@"《%@》 电影卡片App",str];
     _moviewName.textAlignment=NSTextAlignmentCenter;
     
-    
-    
     //    CGSize Msize =[_stageInfo.movieInfo.name boundingRectWithSize:CGSizeMake(100, 20) options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes:[NSDictionary dictionaryWithObject:_moviewName.font forKey:NSFontAttributeName] context:nil].size;
     //    _moviewName.frame=CGRectMake(0, 0, Msize.width, 20);
     //
@@ -199,6 +197,7 @@
 //点击分享
 -(void)handShareButtonClick:(UIButton *) button
 {
+    [self requestShareWithMethod: [NSString stringWithFormat:@"%ld",button.tag-10000]];
     logosupView.hidden=NO;
     shareImage=[Function getImage:shareView WithSize:CGSizeMake(kDeviceWidth-20, shareheight+20)];
     
@@ -237,7 +236,6 @@
 -(void)show
 {
     //添加分享视图到window
-    
     [AppView addSubview:self];
     [UIView animateWithDuration:KShow_ShareView_Time animations:^{
         float height=(kDeviceWidth/4)+shareheight+40+30+50;
@@ -247,8 +245,22 @@
     } completion:^(BOOL finished) {
         self.backgroundColor =[[UIColor blackColor] colorWithAlphaComponent:0.5];
     }];
-    
-    
 }
+
+//微博分享上传到服务器
+-(void)requestShareWithMethod:(NSString *) method;
+{
+    UserDataCenter  *userCenter=[UserDataCenter shareInstance];
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    NSDictionary *parameters=@{@"user_id":userCenter.user_id,@"weibo_id":self.weiboInfo.Id,@"platform":@"1",@"method":method};
+    [manager POST:[NSString stringWithFormat:@"%@/share/create", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
+            NSLog(@"分享发送成功=======%@",responseObject);
+         }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+}
+
 
 @end

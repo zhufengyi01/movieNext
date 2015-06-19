@@ -413,16 +413,13 @@
                 
             }
             if (self.pageSoureType==NSAddMarkPageSourceAddCard) {
-                [self.navigationController dismissViewControllerAnimated:NO completion:nil];
-            }
+                [self.navigationController dismissViewControllerAnimated:NO completion:nil];}
             else {
                 [self.navigationController popToRootViewControllerAnimated:YES];
             }
             //通知回到个人页
             [[NSNotificationCenter defaultCenter] postNotificationName:GOTO_USER_CENTER object:nil];
-            
             UIImage  *image=[Function getImage:self.ShareView WithSize:CGSizeMake(kDeviceWidth-20,self.ShareView.frame.size.height)];
-            
             UMShareView *ShareView =[[UMShareView alloc] initwithStageInfo:self.stageInfo ScreenImage:image delgate:self andShareHeight:self.ShareView.frame.size.height];
             ShareView.pageType=UMShareTypeSuccess;
             [ShareView setShareLable];

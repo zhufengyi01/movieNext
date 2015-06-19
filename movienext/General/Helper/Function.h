@@ -142,6 +142,7 @@ float getHeightByWidthAndHeight(float width, float height){
 +(NSString *)md5:(NSString *)str;
 //得到中英文字符混合长度
 +(int)getToInt:(NSString*)strtemp;
++(NSString *)getSharePlatformwithSting:(NSString *) Platform;
 
 
 @end

@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "stageInfoModel.h"
 #import "M80AttributedLabel.h"
+#import "weiboInfoModel.h"
 #define KShow_ShareView_Time 0.3
 typedef NS_ENUM(NSInteger, UMShareType)
 {
@@ -48,8 +49,11 @@ typedef NS_ENUM(NSInteger, UMShareType)
     float shareheight;
 }
 -(instancetype)initwithStageInfo:(stageInfoModel *) StageInfo ScreenImage:(UIImage *) screenImage delgate:(id<UMShareViewDelegate>) delegate andShareHeight:(float) Height;
+//微博id
+@property(nonatomic,strong) weiboInfoModel  *weiboInfo;
 
 @property(nonatomic,assign) UMShareType  pageType;
+
 @property(nonatomic,strong) M80AttributedLabel  *tipLable;
 
 //分享头部视图
