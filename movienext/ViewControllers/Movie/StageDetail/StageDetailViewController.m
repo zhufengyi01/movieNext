@@ -80,9 +80,14 @@
     //分享出来的不是这个view
     BgView =[[UIImageView alloc]initWithFrame:CGRectMake(0,0,kDeviceWidth, (kDeviceWidth-0)*(9.0/16))];
     BgView.clipsToBounds=YES;
-    [BgView.layer setShadowOffset:CGSizeMake(kDeviceWidth, 20)];
-    BgView.backgroundColor=View_ToolBar;
-    BgView.userInteractionEnabled=YES;
+//    [BgView.layer setShadowOffset:CGSizeMake(kDeviceWidth, 20)];
+      BgView.backgroundColor=View_ToolBar;
+      BgView.userInteractionEnabled=YES;
+//    BgView.layer.shadowColor=VGray_color.CGColor;
+//    BgView.layer.shadowRadius=4;
+//    BgView.layer.shadowOpacity=0.8;
+//    BgView.layer.shadowOffset=CGSizeMake(4, 0);
+//
     [self.stageScrollerView addSubview:BgView];
     
     //最后要分享出去的图
@@ -290,7 +295,8 @@
         self.WeiboTagLable=nil;
     }
     TagContentView  = [[UIView alloc]initWithFrame:CGRectMake(0, BgView2.frame.origin.y+BgView2.frame.size.height, kDeviceWidth, 40)];
-    TagContentView.backgroundColor =[UIColor clearColor];
+  
+   // TagContentView.backgroundColor =[UIColor clearColor];
     [BgView addSubview:TagContentView];
     
     self.WeiboTagLable=[[M80AttributedLabel alloc]initWithFrame:CGRectZero];

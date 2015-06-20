@@ -330,7 +330,6 @@ static const CGFloat MJDuration = 0.1;
                                 [usermodel setValuesForKeysWithDictionary:[newdict objectForKey:@"user"]];
                                 weibomodel.uerInfo=usermodel;
                             }
-                            
                         }
                         // 剧情信息
                         stageInfoModel  *stagemodel =[[stageInfoModel alloc]init];
@@ -340,8 +339,10 @@ static const CGFloat MJDuration = 0.1;
                                 weibomodel.stageInfo=stagemodel;
                                 movieInfoModel *moviemodel =[[movieInfoModel alloc]init];
                                 if (moviemodel) {
+                                    if (![[[newdict objectForKey:@"stage"] objectForKey:@"movie"]isKindOfClass:[NSNull class]]) {
                                     [moviemodel  setValuesForKeysWithDictionary:[[newdict objectForKey:@"stage"] objectForKey:@"movie"]];
                                     stagemodel.movieInfo=moviemodel;
+                                    }
                                 }
                             }
                         }
@@ -422,8 +423,7 @@ static const CGFloat MJDuration = 0.1;
             NSURL  *logourl = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", kUrlAvatar, model.userInfo.logo]];
             [cell.ivAvatar sd_setImageWithURL:logourl placeholderImage:[UIImage imageNamed:@"user_normal.png"]];
             cell.titleLab.font = [UIFont fontWithName:kFontDouble size:12];
-            cell.titleLab.backgroundColor =[[UIColor blackColor] colorWithAlphaComponent:0.5];
-            cell.titleLab.text=[NSString stringWithFormat:@"%@%@",da,[Function getSharePlatformwithSting:model.method]];
+             cell.titleLab.text=[NSString stringWithFormat:@"%@%@",da,[Function getSharePlatformwithSting:model.method]];
         }
         else {
             

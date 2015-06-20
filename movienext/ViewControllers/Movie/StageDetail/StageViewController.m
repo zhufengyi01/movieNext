@@ -89,7 +89,7 @@
 {
     // self.weiboInfo = [self.WeiboDataArray objectAtIndex:self.indexOfItem];
     //存储页面的索引
-    self.weiboInfo = [[weiboInfoModel alloc]init];
+   // self.weiboInfo = [[weiboInfoModel alloc]init];
    // self.indexArray =[[NSMutableArray alloc]init];
 //    for (int i=0; i<self.WeiboDataArray.count;i++) {
 //        NSString  *index =[NSString stringWithFormat:@"%d",i];
@@ -146,7 +146,7 @@
     if ([usecenter.is_admin intValue] >0) {
         admOper.hidden=NO;
         if (self.pageType==NSStagePapeTypeAdminOperation) {
-            admOper.hidden=YES;
+            //admOper.hidden=YES;
         }
         moreButton.hidden=YES;
     }
@@ -155,7 +155,6 @@
         admOper.hidden=YES;
         moreButton.hidden=NO;
     }
-    
 //    //隐藏该隐藏的地方
 //    if (self.pageType==NSStagePapeTypeAdmin_Close_Weibo||self.pageType==NSStagePapeTypeAdmin_Dscorver||self.pageType==NSStagePapeTypeAdmin_New_Add||self.pageType==NSStagePapeTypeAdmin_Recommed) {
 //        moreButton.hidden=YES;
@@ -252,10 +251,12 @@
         for (int i=0; i<5; i++) {
             UIButton *btnBlock =[UIButton buttonWithType:UIButtonTypeCustom];
             btnBlock.tag = 2000 + i;
+            
             btnBlock.frame=CGRectMake(kDeviceWidth/5*i,0, kDeviceWidth/5, 45);
             [btnBlock setTitle:titleArray[i] forState:UIControlStateNormal];
             [btnBlock setTitleColor:VBlue_color forState:UIControlStateNormal];
             [btnBlock setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color"] forState:UIControlStateNormal];
+            //[btnBlock setBackgroundImage:[UIImage imageNamed:@"dischoice_icon@3x.png"] forState:UIControlStateHighlighted];
             [btnBlock addTarget:self action:@selector(changeWeiboStatus:) forControlEvents:UIControlEventTouchUpInside];
             [ToolView addSubview:btnBlock];
         }
@@ -389,8 +390,7 @@
 }
 #pragma  mark  ----RequestData
 #pragma  mark  ---
-// status 0 屏蔽 1 最新/初始 2 发现/电影页 3 热门
-//status为2是移到发现/电影页, status为3是移到推荐页
+//status 0 屏蔽 1 正常 2 发现/电影页 3 热门 只有到热门页的时候需要传updated_at 5 未审核
 -(void)requestChangeStageStatusWithweiboId:(NSString *)weiboId StatusType:(NSString *) status
 {
     UserDataCenter  *userCenter=[UserDataCenter shareInstance];
@@ -399,13 +399,32 @@
     
     [manager POST:[NSString stringWithFormat:@"%@/weibo/change-status", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
-            UIAlertView  * al =[[UIAlertView alloc]initWithTitle:nil message:@"操作成功" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            NSString  *titleString ;
+             if ([status intValue]==0) {
+                titleString =[NSString stringWithFormat:@"%@屏蔽成功",self.weiboInfo.content];
+            }else if ([status intValue]==1)
+            {
+                titleString=[NSString stringWithFormat:@"%@移到正常成功",self.weiboInfo.content];
+            }else if ([status intValue]==2)
+            {
+                titleString= [NSString stringWithFormat:@"%@移到发现成功",self.weiboInfo.content];
+            }else if ([status  intValue]==3)
+            {
+                titleString  = [NSString stringWithFormat:@"%@移到热门成功",self.weiboInfo.content];
+            }
+            else if([status intValue]==5)
+            {
+                titleString =[NSString stringWithFormat:@"%@发布到最新成功",self.weiboInfo.content];
+            }
+            UIAlertView  * al =[[UIAlertView alloc]initWithTitle:nil message:titleString delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
             [al show];
             //请求点赞
             
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
+        UIAlertView  * al =[[UIAlertView alloc]initWithTitle:nil message:@"操作失败！！！！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+        [al show];
     }];
 }
 //定时发送到热门,发送时间戳
@@ -416,8 +435,8 @@
     NSDictionary *parameters=@{@"user_id":userCenter.user_id,@"weibo_id":weiboId,@"status":@"3",@"updated_at":timeSp};
     [manager POST:[NSString stringWithFormat:@"%@/weibo/change-status", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
-            
-            UIAlertView  * al =[[UIAlertView alloc]initWithTitle:nil message:@"定时到热门成功" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            NSString *titSting  =[NSString stringWithFormat:@"%@定时到热门成功",self.weiboInfo.content];
+            UIAlertView  * al =[[UIAlertView alloc]initWithTitle:nil message:titSting delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
             [al show];
             //请求点赞
         }

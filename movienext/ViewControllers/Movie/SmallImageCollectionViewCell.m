@@ -8,7 +8,7 @@
 
 #import "SmallImageCollectionViewCell.h"
 #import "Constant.h"
-
+#import "UIView+Shadow.h"
 @implementation SmallImageCollectionViewCell
 
 
@@ -29,6 +29,12 @@
     _imageView.contentMode=UIViewContentModeScaleAspectFill;
     _imageView.clipsToBounds=YES;
     [self.contentView addSubview:_imageView];
+    
+    
+    
+    UIView  *view =[[UIView alloc]initWithFrame:CGRectMake(0, m_frame.size.height-40, m_frame.size.width, 40)];
+    [view setShadow];
+    [self.contentView addSubview:view];
     
     _titleLab = [[UILabel alloc]initWithFrame:CGRectMake(10, m_frame.size.height-30, m_frame.size.width-20, 30)];
     //_titleLab.backgroundColor = [UIColor colorWithRed:0.0f/255.0f green:0.0f/255.0f blue:0.0f/255.0f alpha:0.5];

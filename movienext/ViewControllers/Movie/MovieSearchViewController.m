@@ -366,7 +366,7 @@
 #pragma  mark  ----
 -(void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
 {
-    //    [self requestData];
+       [self requestData];
 }
 -(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {

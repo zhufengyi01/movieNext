@@ -21,9 +21,7 @@
 @property(nonatomic,strong)NSMutableArray  *dataArray;
 
 @end
-
 @implementation AdmListViewController
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -41,7 +39,7 @@
 }
 -(void)createUI
 {
-    _dataArray =[[NSMutableArray alloc]initWithObjects:@"用户列表",@"标签，表情包",@"已屏蔽剧照列表",@"［-1级］微博屏蔽",@"［0级］微博最新/未审核",@"［1级］微博正常",@"［2级］微博发现",@"［3级］微博热门", @"［4级］微博已定时",@"微博分享", nil];
+    _dataArray =[[NSMutableArray alloc]initWithObjects:@"用户列表",@"标签，表情包",@"已屏蔽剧照列表",@"［-1级］微博屏蔽",@"［0级］微博最新/未审核",@"［1级］微博正常",@"［2级］微博发现",@"［3级］微博热门", @"［4级］微博已定时",@"分享列表", nil];
     _myTableView =[[UITableView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth,kDeviceHeight-kHeightNavigation) style:UITableViewStylePlain];
     _myTableView.delegate=self;
     _myTableView.dataSource=self;
@@ -77,7 +75,6 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
     switch (indexPath.row) {
         case ADM_TYPE_USER:
         {

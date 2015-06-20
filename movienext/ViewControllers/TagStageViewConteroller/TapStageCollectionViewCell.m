@@ -8,6 +8,8 @@
 
 #import "TapStageCollectionViewCell.h"
 
+#import "UIView+Shadow.h"
+
 #import "Constant.h"
 
 @implementation TapStageCollectionViewCell
@@ -17,7 +19,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         m_frame=frame;
-        [self createUI];
+         [self createUI];
         
     }
     return self;
@@ -30,16 +32,16 @@
     _imageView.clipsToBounds=YES;
     [self.contentView addSubview:_imageView];
     
-    float  height=30;
+    float  height=40;
     if (IsIphone6plus) {
-        height=40;
+        height=50;
     }
     UIView  *titlebg =[[UIView alloc]initWithFrame:CGRectMake(0, m_frame.size.height-height,m_frame.size.width,height)];
-    titlebg.backgroundColor = [UIColor colorWithRed:0.0f/255.0f green:0.0f/255.0f blue:0.0f/255.0f alpha:0.5];
+    [titlebg setShadow];
     [self.contentView addSubview:titlebg];
     
     
-    _titleLab = [[UILabel alloc]initWithFrame:CGRectMake(5,0,m_frame.size.width-10, height)];
+    _titleLab = [[UILabel alloc]initWithFrame:CGRectMake(5,5,m_frame.size.width-10, height)];
     //_titleLab.backgroundColor = [UIColor colorWithRed:0.0f/255.0f green:0.0f/255.0f blue:0.0f/255.0f alpha:0.5];
     _titleLab.textAlignment = NSTextAlignmentCenter;
     _titleLab.textColor = [UIColor whiteColor];

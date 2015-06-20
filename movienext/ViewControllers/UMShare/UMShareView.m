@@ -25,6 +25,7 @@
 -(instancetype)initwithStageInfo:(stageInfoModel *) StageInfo ScreenImage:(UIImage *) screenImage delgate:(id<UMShareViewDelegate>) delegate andShareHeight:(float) Height;
 {
     if ([super init]) {
+        
         _delegate=delegate;
         _screenImage=screenImage;
         _stageInfo=StageInfo;
@@ -35,7 +36,7 @@
         float height=(kDeviceWidth/4)+Height+40+30+50;
         backView =[[UIView alloc]initWithFrame:CGRectMake(0,kDeviceHeight, kDeviceWidth, height)];
         backView.userInteractionEnabled=YES;
-        backView.backgroundColor =[UIColor whiteColor];
+        backView.backgroundColor =[UIColor redColor];
         //用于截取点击self的事件
         UITapGestureRecognizer  *t =[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(click)];
         [backView addGestureRecognizer:t];

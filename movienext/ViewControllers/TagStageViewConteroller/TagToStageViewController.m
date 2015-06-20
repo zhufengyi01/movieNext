@@ -163,7 +163,6 @@ static const CGFloat MJDuration = 0.2;
 {
     UserDataCenter *usercenter=[UserDataCenter shareInstance];
     NSDictionary *parameters = @{@"tag_id":self.tagInfo.tagDetailInfo.Id,@"user_id":usercenter.user_id};
-    
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     NSString *urlString =[NSString stringWithFormat:@"%@/tag-stage/list?per-page=%d&page=%d", kApiBaseUrl,pageSize,page];
     [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {

@@ -737,9 +737,10 @@ static const CGFloat MJDuration = 0.2;
 
 -(void)requestData
 {
-    /*if (!_movieId || _movieId<=0) {
-     return;
-     }*/
+    if (!_movieId || _movieId<=0) {
+        [loadView showFailLoadData];
+        return;
+     }
     
     UserDataCenter  *userCenter =[UserDataCenter shareInstance];
     NSDictionary *parameter;
