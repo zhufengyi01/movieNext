@@ -424,7 +424,7 @@
             ShareView.pageType=UMShareTypeSuccess;
             [ShareView setShareLable];
             [ShareView show];
-        
+            
         }
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -513,10 +513,7 @@
         return NO;
     }
     return YES;
-    
 }
-
-
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
     [_myTextView resignFirstResponder];

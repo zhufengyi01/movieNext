@@ -914,7 +914,6 @@ static const CGFloat MJDuration = 0.6;
             {
                 array=_dataArray3;
                 break;
-                
             }
         }
         MovieCollectionViewCell    *cell=(MovieCollectionViewCell*)[collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
@@ -944,10 +943,8 @@ static const CGFloat MJDuration = 0.6;
             [cell.ivAvatar sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", kUrlAvatar, model.uerInfo.logo]]];
             cell.ivLike.image = [UIImage imageNamed:@"tiny_like"];
             return cell;
-            
         }
         return cell;
-        
     }
     return nil;
 }

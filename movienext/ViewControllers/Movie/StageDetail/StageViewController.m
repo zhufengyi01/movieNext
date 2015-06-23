@@ -119,9 +119,19 @@
     __weak typeof(self) weakSelf = self;
     [admOper  addActionHandler:^(NSInteger tag) {
         //管理员
-        UIActionSheet  *Act=[[UIActionSheet alloc]initWithTitle:nil delegate:weakSelf cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"[切换剧照到审核/正式版]",@"[编辑弹幕]",@"[点赞]",@"[点踩]",@"[发送到 “屏蔽”]",@"[发送到 “最新”]",@"[发送到 “正常”]",@"[发送到 “发现”]",@"[定时到 “热门”]",nil];
-        Act.tag=ADM_ACTION_TAG;
-        [Act showInView:weakSelf.view];
+//        UIActionSheet  *Act=[[UIActionSheet alloc]initWithTitle:nil delegate:weakSelf cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"[切换剧照到审核/正式版]",@"[编辑弹幕]",@"[点赞]",@"[点踩]",@"[发送到 “屏蔽”]",@"[发送到 “最新”]",@"[发送到 “正常”]",@"[发送到 “发现”]",@"[定时到 “热门”]",nil];
+//        Act.tag=ADM_ACTION_TAG;
+//        [Act showInView:weakSelf.view];
+        
+        StageDetailViewController *initialViewController =[self viewControllerAtIndex:self.indexOfItem+4];// 得到第一页
+        self.weiboInfo = [self.WeiboDataArray objectAtIndex:self.indexOfItem];
+         CenterViewController=initialViewController;
+        NSArray *viewControllers =[NSArray arrayWithObject:initialViewController];
+        [_pageController setViewControllers:viewControllers
+                                  direction:UIPageViewControllerNavigationDirectionForward
+                                   animated:NO
+                                 completion:nil];
+        
     }];
     UIBarButtonItem  *aditme =[[UIBarButtonItem alloc]initWithCustomView:admOper];
     //更多
