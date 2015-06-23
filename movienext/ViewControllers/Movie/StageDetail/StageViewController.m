@@ -352,7 +352,6 @@
     // 返回的ViewController，将被添加到相应的UIPageViewController对象上。
     // UIPageViewController对象会根据UIPageViewControllerDataSource协议方法，自动来维护次序。
     // 不用我们去操心每个ViewController的顺序问题。
-    
     return [self viewControllerAtIndex:index];
 }
 

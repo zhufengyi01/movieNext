@@ -382,6 +382,9 @@
     NSString  *nameStr=_WeiboInfo.uerInfo.username;
     if (!nameStr) {
         nameStr =self.weiboInfo.uerInfo.username;
+        if (!nameStr) {
+            nameStr = @"";
+        }
     }
     CGSize  Nsize =[nameStr boundingRectWithSize:CGSizeMake(kDeviceWidth-35-70, 27) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:[NSDictionary dictionaryWithObject:movieNameLable.font forKey:NSFontAttributeName] context:nil].size;
     movieNameLable.frame=CGRectMake(35,0, Nsize.width+4, 30);
@@ -433,6 +436,15 @@
             starImageView.image=[UIImage imageNamed:@"like_nomoal.png"];
         }
     }
+    
+    if (!_WeiboInfo && !self.weiboInfo) {
+        leftButtomButton.hidden = YES;
+        BgView2.hidden = YES;
+    } else {
+        leftButtomButton.hidden = NO;
+        BgView2.hidden = NO;
+    }
+    
     [self createWeiboTagView];
 }
 -(void)createWeiboTagView

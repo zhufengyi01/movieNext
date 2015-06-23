@@ -34,6 +34,7 @@
 
 #import "NSDate+Extension.h"
 #import "ShareModel.h"
+#import "Constant.h"
 
 static const CGFloat MJDuration = 0.1;
 
@@ -87,6 +88,15 @@ static const CGFloat MJDuration = 0.1;
     else if (self.pageType==NSNewAddPageSoureTypeNotReview)
     {
         titleString=@"微博未审核";
+        
+        UIButton  *batchButton=[UIButton buttonWithType:UIButtonTypeCustom];
+        [batchButton setTitle:@"批量屏蔽" forState:UIControlStateNormal];
+        [batchButton setTitleColor:VGray_color forState:UIControlStateNormal];
+        [batchButton.titleLabel setFont:[UIFont fontWithName:kFontRegular size:14]];
+        batchButton.frame=CGRectMake(0, 0, 60, 30);
+        [batchButton addTarget:self action:@selector(requestMoveToBlock:) forControlEvents:UIControlEventTouchUpInside];
+        UIBarButtonItem  *barButton=[[UIBarButtonItem alloc]initWithCustomView:batchButton];
+        self.navigationItem.rightBarButtonItem=barButton;
     }
     else if(self.pageType ==NSNewAddPageSoureTypeShare)
     {
@@ -98,6 +108,23 @@ static const CGFloat MJDuration = 0.1;
     titleLable.font=[UIFont fontWithName:kFontDouble size:18];
     titleLable.textAlignment=NSTextAlignmentCenter;
     self.navigationItem.titleView=titleLable;
+}
+
+- (void)requestMoveToBlock:(UIButton *)sender{
+    UserDataCenter  *uc=[UserDataCenter shareInstance];
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    NSDictionary *parameters=@{@"user_id":uc.user_id,@"limit":@"10"};
+    
+    [manager POST:[NSString stringWithFormat:@"%@/weibo/move-to-block", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
+            UIAlertView  * al =[[UIAlertView alloc]initWithTitle:nil message:@"操作成功" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            [al show];
+            //请求点赞
+            
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
 }
 -(void)initData
 {
@@ -289,7 +316,7 @@ static const CGFloat MJDuration = 0.1;
                                 }
                                 weibomodel.stageInfo =stagmodel;
                             }
-                
+                            
                             //标签数组
                             NSMutableArray  *tagArray =[[NSMutableArray alloc]init];
                             //标签数组
@@ -340,8 +367,8 @@ static const CGFloat MJDuration = 0.1;
                                 movieInfoModel *moviemodel =[[movieInfoModel alloc]init];
                                 if (moviemodel) {
                                     if (![[[newdict objectForKey:@"stage"] objectForKey:@"movie"]isKindOfClass:[NSNull class]]) {
-                                    [moviemodel  setValuesForKeysWithDictionary:[[newdict objectForKey:@"stage"] objectForKey:@"movie"]];
-                                    stagemodel.movieInfo=moviemodel;
+                                        [moviemodel  setValuesForKeysWithDictionary:[[newdict objectForKey:@"stage"] objectForKey:@"movie"]];
+                                        stagemodel.movieInfo=moviemodel;
                                     }
                                 }
                             }
@@ -423,7 +450,7 @@ static const CGFloat MJDuration = 0.1;
             NSURL  *logourl = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", kUrlAvatar, model.userInfo.logo]];
             [cell.ivAvatar sd_setImageWithURL:logourl placeholderImage:[UIImage imageNamed:@"user_normal.png"]];
             cell.titleLab.font = [UIFont fontWithName:kFontDouble size:12];
-             cell.titleLab.text=[NSString stringWithFormat:@"%@%@",da,[Function getSharePlatformwithSting:model.method]];
+            cell.titleLab.text=[NSString stringWithFormat:@"%@%@",da,[Function getSharePlatformwithSting:model.method]];
         }
         else {
             
@@ -503,12 +530,12 @@ static const CGFloat MJDuration = 0.1;
         [self.navigationController pushViewController:vc animated:YES];
     }
     else{
-     StageViewController  *stageVC =[[StageViewController alloc]init];
-    stageVC.upWeiboArray= self.upWeiboArray;
-    stageVC.WeiboDataArray = self.dataArray;
-    stageVC.pageType = NSStagePapeTypeAdminOperation;
-    stageVC.indexOfItem = indexPath.row;
-    [self.navigationController pushViewController:stageVC animated:YES];
+        StageViewController  *stageVC =[[StageViewController alloc]init];
+        stageVC.upWeiboArray= self.upWeiboArray;
+        stageVC.WeiboDataArray = self.dataArray;
+        stageVC.pageType = NSStagePapeTypeAdminOperation;
+        stageVC.indexOfItem = indexPath.row;
+        [self.navigationController pushViewController:stageVC animated:YES];
     }
 }
 
