@@ -36,7 +36,7 @@
         float height=(kDeviceWidth/4)+Height+40+30+50;
         backView =[[UIView alloc]initWithFrame:CGRectMake(0,kDeviceHeight, kDeviceWidth, height)];
         backView.userInteractionEnabled=YES;
-        backView.backgroundColor =[UIColor redColor];
+        backView.backgroundColor =[UIColor whiteColor];
         //用于截取点击self的事件
         UITapGestureRecognizer  *t =[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(click)];
         [backView addGestureRecognizer:t];

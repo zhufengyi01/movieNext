@@ -140,13 +140,14 @@
         // 如果用户没有使用相机，直接使用默认的头像,也是要用
     }
     //NSString *username=[[nameTextfield text] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSString *urlString =[NSString stringWithFormat:@"%@/user/register-with-email", kApiBaseUrl];
+    NSString *tokenString =[Function getURLtokenWithURLString:urlString];
     NSString  *username=[nameTextfield text];
     NSString  *passstr=[NSString stringWithFormat:@"%@movienext%@",self.email,self.password];
     NSString  *pass_hash=[Function  md5:passstr];
-    NSDictionary *parameters = @{@"email":self.email,@"password_hash":pass_hash,@"username":username,@"logo":logo};
-    
+    NSDictionary *parameters = @{@"email":self.email,@"password_hash":pass_hash,@"username":username,@"logo":logo,KURLTOKEN:tokenString};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager POST:[NSString stringWithFormat:@"%@/user/register-with-email", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
             //注册成功
             NSDictionary *detail    = [responseObject objectForKey:@"model"];

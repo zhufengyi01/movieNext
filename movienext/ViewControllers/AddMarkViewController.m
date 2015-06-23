@@ -174,7 +174,7 @@
     _myScorllerView.contentSize=CGSizeMake(kDeviceWidth,kDeviceHeight);
     _myScorllerView.delegate=self;
     _myScorllerView.bounces=YES;
-    _myScorllerView.backgroundColor =[UIColor whiteColor];
+    _myScorllerView.backgroundColor =View_ToolBar;
     _myScorllerView.userInteractionEnabled=YES;
     [self.view addSubview:_myScorllerView];
 }
@@ -194,7 +194,7 @@
     self.stageImageView.userInteractionEnabled=YES;
     [self.ShareView addSubview:self.stageImageView];
     
-    self.ShareView.frame=CGRectMake(10, 0, kDeviceWidth-20, self.stageImageView.frame.size.height);
+    self.ShareView.frame=CGRectMake(10, 10, kDeviceWidth-20, self.stageImageView.frame.size.height);
     NSString *photostring=[NSString stringWithFormat:@"%@%@!w640",kUrlStage,self.stageInfo.photo];
     [self.stageImageView   sd_setImageWithURL:[NSURL URLWithString:photostring] placeholderImage:nil options:(SDWebImageLowPriority|SDWebImageRetryFailed)];
     
@@ -528,7 +528,7 @@
     frame.size.height=_myTextView.contentSize.height+0;
     _myTextView.frame=frame;
     
-    self.ShareView.frame=CGRectMake(10,0, kDeviceWidth-20, _myTextView.frame.size.height-40+self.stageImageView.frame.size.height);
+    self.ShareView.frame=CGRectMake(10,10, kDeviceWidth-20, _myTextView.frame.size.height-40+self.stageImageView.frame.size.height);
     self.TagContentView.frame=CGRectMake(0, self.ShareView.frame.origin.y+self.ShareView.frame.size.height, kDeviceWidth, 100);
     
 }

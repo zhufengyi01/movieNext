@@ -15,6 +15,7 @@
 #import "stageInfoModel.h"
 #import  "UIImageView+WebCache.h"
 #import "AddLoadingView.h"
+#import "Function.h"
 @interface DoubanUpImageViewController ()
 
 @end
@@ -118,8 +119,10 @@
     [loading show];
     UserDataCenter  *userCenter=[UserDataCenter shareInstance];
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    NSDictionary *parameters=@{@"movie_id":self.movie_id,@"photo":self.photourl,@"user_id":userCenter.user_id};
-    [manager POST:[NSString stringWithFormat:@"%@/stage/create-from-douban",kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    NSString *urlString = [NSString stringWithFormat:@"%@/stage/create-from-douban",kApiBaseUrl];
+    NSString *tokenString =[Function getURLtokenWithURLString:urlString];
+    NSDictionary *parameters=@{@"movie_id":self.movie_id,@"photo":self.photourl,@"user_id":userCenter.user_id,KURLTOKEN:tokenString};
+    [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
             NSLog(@"创建成功=======%@",responseObject);
             [loading remove];

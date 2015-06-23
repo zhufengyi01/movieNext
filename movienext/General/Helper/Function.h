@@ -144,5 +144,8 @@ float getHeightByWidthAndHeight(float width, float height){
 +(int)getToInt:(NSString*)strtemp;
 +(NSString *)getSharePlatformwithSting:(NSString *) Platform;
 
+//根据传入的API,返回随机数字和字符串组成的36字符串
++(NSString *)getURLtokenWithURLString:(NSString *) URLString;
+
 
 @end

@@ -157,18 +157,17 @@
 -(void)requestisReview
 {
 #warning 提交审核的时候需要开启
-    
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     NSString *urlString =[NSString stringWithFormat:@"%@/user/review-mode", kApiBaseUrl];
-    [manager POST:urlString parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        
+    NSString  *token =  [Function getURLtokenWithURLString:urlString];
+    NSDictionary  *parameters = @{KURLTOKEN:token};
+    
+    [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([responseObject objectForKey:@"code"]) {
             self.IS_CHECK=[responseObject objectForKey:@"code"];
         }
         UserDataCenter  *user =[UserDataCenter shareInstance];
         user.Is_Check=self.IS_CHECK;
-        
-        
         [self createRootViewController:self.IS_CHECK];
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {

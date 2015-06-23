@@ -10,6 +10,7 @@
 #import "ZCControl.h"
 #import "Constant.h"
 #import "AFNetworking.h"
+#import "Function.h"
 #import "UserDataCenter.h"
 @interface AddTagViewController ()<UISearchBarDelegate,UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate>
 {
@@ -68,9 +69,10 @@
 //屏幕剧照
 -(void)RequestsearchData
 {
-    NSDictionary *parameters = @{@"title":search.text};
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     NSString *urlString =[NSString stringWithFormat:@"%@/tag/search", kApiBaseUrl];
+    NSString *tokenSting = [Function getURLtokenWithURLString:urlString];
+    NSDictionary *parameters = @{@"title":search.text,KURLTOKEN:tokenSting};
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
             // NSLog(@"sdsd=======%@",responseObject);

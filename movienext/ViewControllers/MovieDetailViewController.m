@@ -754,13 +754,15 @@ static const CGFloat MJDuration = 0.2;
     if (self.pageSourceType==NSMovieSourcePageMovieListController|self.pageSourceType==  NSMovieSourcePageSearchListController)
     {
         urlString =[NSString stringWithFormat:@"%@/stage/list?per-page=%d&page=%d",kApiBaseUrl,pageSize,page];
-        parameter = @{@"movie_id": _movieId, @"user_id": userCenter.user_id,@"Version":Version};
+        NSString *tokenString =  [Function getURLtokenWithURLString:urlString];
+        parameter = @{@"movie_id": _movieId, @"user_id": userCenter.user_id,@"Version":Version,KURLTOKEN:tokenString};
     }
     
     //}
     else   if (self.pageSourceType==NSMovieSourcePageAdminCloseStageViewController) {
         urlString =[NSString stringWithFormat:@"%@/stage/block-list?per-page=%d&page=%d",kApiBaseUrl,pageSize,page];
-        parameter = @{ @"user_id": userCenter.user_id,@"Version":Version};
+        NSString *tokenString =  [Function getURLtokenWithURLString:urlString];
+        parameter = @{ @"user_id": userCenter.user_id,@"Version":Version,KURLTOKEN:tokenString};
     }
     
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
@@ -883,12 +885,10 @@ static const CGFloat MJDuration = 0.2;
     NSNumber  *weiboId=weiboInfo.Id;
     NSString  *userId=userCenter.user_id;
     NSNumber  *author_id=weiboInfo.uerInfo.Id;
-    
-    
-    NSDictionary *parameters=@{@"weibo_id":weiboId,@"user_id":userId,@"author_id":author_id,@"operation":operation};
-    
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     NSString *urlString = [NSString stringWithFormat:@"%@/weibo/up", kApiBaseUrl];
+    NSString *tokenString =[Function getURLtokenWithURLString:urlString];
+    NSDictionary *parameters=@{@"weibo_id":weiboId,@"user_id":userId,@"author_id":author_id,@"operation":operation,KURLTOKEN:tokenString};
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
             NSLog(@"点赞成功========%@",responseObject);

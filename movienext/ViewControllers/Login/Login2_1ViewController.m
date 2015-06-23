@@ -123,15 +123,16 @@
 //用户登录
 -(void)requesteLogin
 {
+    NSString *urlString = [NSString stringWithFormat:@"%@/user/login-with-email", kApiBaseUrl];
+    NSString *tokenString =[Function getURLtokenWithURLString:urlString];
     NSString  *email=[[emailTextfield text]stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     NSString *password =[[PassworfTextfield text] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     NSString  *passstr=[NSString stringWithFormat:@"%@movienext%@",email,password];
     NSString  *pass_hash=[Function  md5:passstr];
     //NSString  *abc=[Function md5:@"abc@qq.commovienext123456"];
-    
-    NSDictionary *parameters = @{@"email":email,@"password_hash":pass_hash};
+    NSDictionary *parameters = @{@"email":email,@"password_hash":pass_hash,KURLTOKEN:tokenString};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager POST:[NSString stringWithFormat:@"%@/user/login-with-email", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"esdksdhhsd=====%@",responseObject);
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
             //登陆成功

@@ -225,39 +225,42 @@ static const CGFloat MJDuration = 0.1;
     NSDictionary *parameters;
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     NSString  *urlString =[NSString stringWithFormat:@"%@/weibo/list-by-status?per-page=%d&page=%d", kApiBaseUrl,pageSize,page];
+    NSString *tokenString =[Function getURLtokenWithURLString:urlString];
     if (self.pageType==NSNewAddPageSoureTypeNewList) {
-        parameters = @{@"user_id":userCenter.user_id, @"status":@"1"};
+        parameters = @{@"user_id":userCenter.user_id, @"status":@"1",KURLTOKEN:tokenString};
     }
     else if(self.pageType==NSNewAddPageSoureTypeCloseWeiboList)
     {
-        parameters = @{@"user_id":userCenter.user_id, @"status":@"0"};
+        parameters = @{@"user_id":userCenter.user_id, @"status":@"0",KURLTOKEN:tokenString};
     }
     else if (self.pageType==NSNewAddPageSoureTypeDecorver)
     {
-        parameters = @{@"user_id":userCenter.user_id, @"status":@"2"};
+        parameters = @{@"user_id":userCenter.user_id, @"status":@"2",KURLTOKEN:tokenString};
     }
     else if (self.pageType==NSNewAddPageSoureTypeRecommed)
     {
-        parameters = @{@"user_id":userCenter.user_id, @"status":@"3"};
+        parameters = @{@"user_id":userCenter.user_id, @"status":@"3",KURLTOKEN:tokenString};
     }
     else if (self.pageType==NSNewAddPageSoureTypeTiming)
     {
-        parameters = @{@"user_id":userCenter.user_id, @"status":@"4"};
+        parameters = @{@"user_id":userCenter.user_id, @"status":@"4",KURLTOKEN:tokenString};
     }
     else if (self.pageType==NSNewAddPageSoureTypeNotReview)
     {
-        parameters = @{@"user_id":userCenter.user_id, @"status":@"5"};
+        parameters = @{@"user_id":userCenter.user_id, @"status":@"5",KURLTOKEN:tokenString};
     }
     else if (self.pageType==NSNewAddPageSoureTypeShare)
     {
         urlString =[NSString stringWithFormat:@"%@/share/list?per-page=%d&page=%d", kApiBaseUrl,pageSize,page];
-        parameters=@{@"user_id":userCenter.user_id};
+        tokenString =[Function getURLtokenWithURLString:urlString];
+        parameters=@{@"user_id":userCenter.user_id,urlString:tokenString};
     }
-    
     [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
             pageCount=[[responseObject objectForKey:@"pageCount"] intValue];
             NSMutableArray   *array  = [[NSMutableArray alloc]initWithArray:[responseObject objectForKey:@"models"]];
+            
+            
             if (self.pageType==NSNewAddPageSoureTypeShare) {
                 //分享列表
                 for (int i=0; i<array.count; i++) {
@@ -272,6 +275,8 @@ static const CGFloat MJDuration = 0.1;
                         }
                         weiboInfoModel  *weibomodel =[[weiboInfoModel alloc]init];
                         if (weibomodel) {
+                            if (![[sharedict objectForKey:@"weibo"] isKindOfClass:[NSNull class]]) {
+                            
                             [weibomodel setValuesForKeysWithDictionary:[sharedict objectForKey:@"weibo"]];
                             weiboUserInfoModel  *weibouser =[[weiboUserInfoModel alloc]init];
                             if (weibouser) {
@@ -289,7 +294,6 @@ static const CGFloat MJDuration = 0.1;
                                 }
                                 weibomodel.stageInfo =stagmodel;
                             }
-                
                             //标签数组
                             NSMutableArray  *tagArray =[[NSMutableArray alloc]init];
                             //标签数组
@@ -308,6 +312,7 @@ static const CGFloat MJDuration = 0.1;
                             }
                             weibomodel.tagArray=tagArray;
                             sharemodel.weiboInfo =weibomodel;
+                        }
                         }
                         if (self.dataArray==nil) {
                             self.dataArray =[[NSMutableArray alloc]init];
@@ -430,9 +435,18 @@ static const CGFloat MJDuration = 0.1;
             weiboInfoModel  *model=[_dataArray objectAtIndex:indexPath.row];
             cell.imageView.backgroundColor=VStageView_color;
             NSURL  *url =[NSURL URLWithString:[NSString stringWithFormat:@"%@%@%@",kUrlStage,model.stageInfo.photo,KIMAGE_SMALL]];
-            
             [cell.imageView sd_setImageWithURL:url placeholderImage:nil options:(SDWebImageRetryFailed|SDWebImageLowPriority)];
             cell.titleLab.text=[NSString stringWithFormat:@"%@",model.content];
+            if (self.pageType==NSNewAddPageSoureTypeNotReview) {
+                cell.lblTime.backgroundColor =View_BackGround;
+                cell.lblTime.frame=CGRectMake(10, 10, 20, 20);
+                cell.lblTime.layer.cornerRadius=10;
+                cell.lblTime.textColor=VGray_color;
+                cell.lblTime.adjustsFontSizeToFitWidth=YES;
+                cell.lblTime.textAlignment= NSTextAlignmentCenter;
+                cell.lblTime.clipsToBounds=YES;
+                cell.lblTime.text=[NSString stringWithFormat:@"%ld",indexPath.row];
+            }
             if (self.pageType==NSNewAddPageSoureTypeTiming) {
                 //定时出来的,显示具体的时间
                 NSDate *confromTimesp = [NSDate dateWithTimeIntervalSince1970:[model.updated_at intValue]];

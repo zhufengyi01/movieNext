@@ -36,7 +36,6 @@
 #define ADM_ACTION_TAG     1000   //统一管理管弹出框
 #define CUSTOM_SELF_TAG    1001
 #define CUSTOM_DEFATLT_TAG 1002
-
 #define ADM_BTN_BLOCK   2000  //屏蔽
 #define ADM_BTN_NEW     2001  //最新
 #define ADM_BTN_NORMAL  2002  //正常
@@ -63,6 +62,8 @@
 @property(nonatomic,strong) weiboInfoModel     *weiboInfo;
 
 
+@property(nonatomic,assign) NSInteger   isImple;  //判断是否执行了代理的方法 1 表示执行了， 0 表示为执行
+
 //@property(strong,nonatomic) NSMutableArray   *indexArray; //存储每个页面的索引
 
 @end
@@ -87,6 +88,7 @@
 }
 -(void)initData
 {
+    self.isImple = 1;
     // self.weiboInfo = [self.WeiboDataArray objectAtIndex:self.indexOfItem];
     //存储页面的索引
    // self.weiboInfo = [[weiboInfoModel alloc]init];
@@ -187,7 +189,10 @@
     // 如果要显示2页，NSArray中，应该有2个相应页数据。
     StageDetailViewController *initialViewController =[self viewControllerAtIndex:self.indexOfItem];// 得到第一页
     self.weiboInfo = [self.WeiboDataArray objectAtIndex:self.indexOfItem];
-    self.naviTitlLable.text=self.weiboInfo.stageInfo.movieInfo.name;
+    
+    self.naviTitlLable.text=[NSString stringWithFormat:@"%@",self.weiboInfo.stageInfo.movieInfo.name];
+    
+    
     //初始化的时候记录了当前的第一个viewcontroller  以后每次都在代理里面获取当前的viewcontroller
     CenterViewController=initialViewController;
     NSArray *viewControllers =[NSArray arrayWithObject:initialViewController];
@@ -246,59 +251,21 @@
     }
     else if(self.pageType ==NSStagePapeTypeAdminOperation)
     {
+        ToolView.hidden=YES;
         //管理员页面进入
-        NSArray *titleArray = [NSArray arrayWithObjects:@"屏蔽", @"最新", @"正常", @"发现", @"定时", nil];
-        for (int i=0; i<5; i++) {
-            UIButton *btnBlock =[UIButton buttonWithType:UIButtonTypeCustom];
-            btnBlock.tag = 2000 + i;
-            
-            btnBlock.frame=CGRectMake(kDeviceWidth/5*i,0, kDeviceWidth/5, 45);
-            [btnBlock setTitle:titleArray[i] forState:UIControlStateNormal];
-            [btnBlock setTitleColor:VBlue_color forState:UIControlStateNormal];
-            [btnBlock setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color"] forState:UIControlStateNormal];
-            //[btnBlock setBackgroundImage:[UIImage imageNamed:@"dischoice_icon@3x.png"] forState:UIControlStateHighlighted];
-            [btnBlock addTarget:self action:@selector(changeWeiboStatus:) forControlEvents:UIControlEventTouchUpInside];
-            [ToolView addSubview:btnBlock];
-        }
-
-        
-    }
-}
-#pragma mark --- User Action
-#pragma mark ---
-- (void)changeWeiboStatus:(UIButton *)sender{
-    switch (sender.tag) {
-        case ADM_BTN_BLOCK:
-        {
-            [self requestChangeStageStatusWithweiboId:[NSString stringWithFormat:@"%@",self.weiboInfo.Id] StatusType:@"0"];
-        }
-            break;
-        case ADM_BTN_NEW:
-        {
-            [self requestChangeStageStatusWithweiboId:[NSString stringWithFormat:@"%@",self.weiboInfo.Id] StatusType:@"5"];
-        }
-            break;
-        case ADM_BTN_NORMAL:
-        {
-            [self requestChangeStageStatusWithweiboId:[NSString stringWithFormat:@"%@",self.weiboInfo.Id] StatusType:@"1"];
-        }
-            break;
-        case ADM_BTN_DISCOVER:
-        {
-            [self requestChangeStageStatusWithweiboId:[NSString stringWithFormat:@"%@",self.weiboInfo.Id] StatusType:@"2"];
-        }
-            break;
-        case ADM_BTN_TIMING:
-        {
-            //时间
-            SelectTimeView  *datepicker =[[SelectTimeView alloc]init];
-            datepicker.delegate=self;
-            [datepicker show];
-        }
-            break;
-            
-        default:
-            break;
+//        NSArray *titleArray = [NSArray arrayWithObjects:@"屏蔽", @"最新", @"正常", @"发现", @"定时", nil];
+//        for (int i=0; i<5; i++) {
+//            UIButton *btnBlock =[UIButton buttonWithType:UIButtonTypeCustom];
+//            btnBlock.tag = 2000 + i;
+//            
+//            btnBlock.frame=CGRectMake(kDeviceWidth/5*i,0, kDeviceWidth/5, 45);
+//            [btnBlock setTitle:titleArray[i] forState:UIControlStateNormal];
+//            [btnBlock setTitleColor:VBlue_color forState:UIControlStateNormal];
+//            [btnBlock setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color"] forState:UIControlStateNormal];
+//            //[btnBlock setBackgroundImage:[UIImage imageNamed:@"dischoice_icon@3x.png"] forState:UIControlStateHighlighted];
+//            [btnBlock addTarget:self action:@selector(changeWeiboStatus:) forControlEvents:UIControlEventTouchUpInside];
+////            [ToolView addSubview:btnBlock];
+//        }
     }
 }
 #pragma mark  selected date time
@@ -306,12 +273,10 @@
 {
     //定时到热门，伴随时间戳
     [self requesttiming:[NSString stringWithFormat:@"%@",self.weiboInfo.Id] AndTimeSp:dateString];
-    
 }
 -(void)shareButtonClick
 {
     float  height = CenterViewController.ShareView.frame.size.height;
-    
     UIImage  *image=[Function getImage:CenterViewController.ShareView WithSize:CGSizeMake(kDeviceWidth-20,height)];
     UMShareView *shareView =[[UMShareView alloc] initwithStageInfo:self.weiboInfo.stageInfo ScreenImage:image delgate:self andShareHeight:height];
     shareView.weiboInfo= self.weiboInfo;
@@ -327,7 +292,10 @@
     // 创建一个新的控制器类，并且分配给相应的数据
     StageDetailViewController * dataViewController =[[StageDetailViewController alloc] init];
     dataViewController.weiboInfo=[self.WeiboDataArray objectAtIndex:index];
-    dataViewController.upWeiboArray=self.upWeiboArray;
+    if (self.pageType==NSStagePapeTypeAdminOperation) {
+        dataViewController.pageType =NSStageDetailSourcePgaeAdminOperation;
+    }
+     dataViewController.upWeiboArray=self.upWeiboArray;
     return dataViewController;
 }
 // 根据数组元素值，得到下标值
@@ -339,11 +307,13 @@
 // 返回上一个ViewController对象
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(UIViewController *)viewController{
     //获取当前控制器
+    self.isImple=1;
     CenterViewController =(StageDetailViewController *)viewController;
     NSUInteger index = [self indexOfViewController:(StageDetailViewController *)viewController];
+    self.weiboInfo =[[weiboInfoModel alloc]init];
     self.weiboInfo =[self.WeiboDataArray objectAtIndex:index];
     dispatch_async(dispatch_get_main_queue(), ^{
-        self.naviTitlLable.text= self.weiboInfo.stageInfo.movieInfo.name;
+        self.naviTitlLable.text= [NSString stringWithFormat:@"%@",self.weiboInfo.stageInfo.movieInfo.name];
     });
     if ((index == 0) || (index == NSNotFound)) {
         return nil;
@@ -352,19 +322,19 @@
     // 返回的ViewController，将被添加到相应的UIPageViewController对象上。
     // UIPageViewController对象会根据UIPageViewControllerDataSource协议方法，自动来维护次序。
     // 不用我们去操心每个ViewController的顺序问题。
-    
     return [self viewControllerAtIndex:index];
 }
 
 // 返回下一个ViewController对象
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController{
+    self.isImple=1;
     CenterViewController =(StageDetailViewController *) viewController;
     NSUInteger index = [self indexOfViewController:(StageDetailViewController *)viewController];
+    self.weiboInfo =[[weiboInfoModel alloc]init];
     self.weiboInfo =[self.WeiboDataArray objectAtIndex:index];
     dispatch_async(dispatch_get_main_queue(), ^{
-        self.naviTitlLable.text= self.weiboInfo.stageInfo.movieInfo.name;
+        self.naviTitlLable.text= [NSString stringWithFormat:@"%@",self.weiboInfo.stageInfo.movieInfo.name];
     });
-    
     if (index == NSNotFound) {
         return nil;
     }
@@ -393,28 +363,35 @@
 //status 0 屏蔽 1 正常 2 发现/电影页 3 热门 只有到热门页的时候需要传updated_at 5 未审核
 -(void)requestChangeStageStatusWithweiboId:(NSString *)weiboId StatusType:(NSString *) status
 {
+    if (self.isImple==0) {
+        UIAlertView  * al =[[UIAlertView alloc]initWithTitle:nil message:@"!!!操作失败😱!!!,滑动后再操作" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+        [al show];
+        return;
+    }
     UserDataCenter  *userCenter=[UserDataCenter shareInstance];
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    NSDictionary *parameters=@{@"user_id":userCenter.user_id,@"weibo_id":weiboId,@"status":status};
-    
-    [manager POST:[NSString stringWithFormat:@"%@/weibo/change-status", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    NSString  *urlString =[NSString stringWithFormat:@"%@/weibo/change-status", kApiBaseUrl] ;
+    NSString  *tokenString =[Function getURLtokenWithURLString:urlString];
+    NSDictionary *parameters=@{@"user_id":userCenter.user_id,@"weibo_id":weiboId,@"status":status,KURLTOKEN:tokenString};
+    [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
+            self.isImple=0;
             NSString  *titleString ;
              if ([status intValue]==0) {
-                titleString =[NSString stringWithFormat:@"%@屏蔽成功",self.weiboInfo.content];
+                titleString =[NSString stringWithFormat:@"[%@]屏蔽成功",self.weiboInfo.content];
             }else if ([status intValue]==1)
             {
-                titleString=[NSString stringWithFormat:@"%@移到正常成功",self.weiboInfo.content];
+                titleString=[NSString stringWithFormat:@"[%@]移到正常成功",self.weiboInfo.content];
             }else if ([status intValue]==2)
             {
-                titleString= [NSString stringWithFormat:@"%@移到发现成功",self.weiboInfo.content];
+                titleString= [NSString stringWithFormat:@"[%@]移到发现成功",self.weiboInfo.content];
             }else if ([status  intValue]==3)
             {
-                titleString  = [NSString stringWithFormat:@"%@移到热门成功",self.weiboInfo.content];
+                titleString  = [NSString stringWithFormat:@"[%@]移到热门成功",self.weiboInfo.content];
             }
             else if([status intValue]==5)
             {
-                titleString =[NSString stringWithFormat:@"%@发布到最新成功",self.weiboInfo.content];
+                titleString =[NSString stringWithFormat:@"[%@]发布到最新成功",self.weiboInfo.content];
             }
             UIAlertView  * al =[[UIAlertView alloc]initWithTitle:nil message:titleString delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
             [al show];
@@ -430,12 +407,20 @@
 //定时发送到热门,发送时间戳
 -(void)requesttiming:(NSString *)weiboId AndTimeSp:(NSString *)timeSp
 {
+    if (self.isImple==0) {
+        UIAlertView  * al =[[UIAlertView alloc]initWithTitle:nil message:@"!!!操作失败!!!,滑动后再操作" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+        [al show];
+        return;
+    }
     UserDataCenter  *userCenter=[UserDataCenter shareInstance];
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    NSDictionary *parameters=@{@"user_id":userCenter.user_id,@"weibo_id":weiboId,@"status":@"3",@"updated_at":timeSp};
-    [manager POST:[NSString stringWithFormat:@"%@/weibo/change-status", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    NSString  *urlString  = [NSString stringWithFormat:@"%@/weibo/change-status", kApiBaseUrl];
+    NSString *tokenString =[Function getURLtokenWithURLString:urlString];
+    NSDictionary *parameters=@{@"user_id":userCenter.user_id,@"weibo_id":weiboId,@"status":@"3",@"updated_at":timeSp,KURLTOKEN:tokenString};
+    [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
-            NSString *titSting  =[NSString stringWithFormat:@"%@定时到热门成功",self.weiboInfo.content];
+            self.isImple=0;
+            NSString *titSting  =[NSString stringWithFormat:@"[%@]定时到热门成功",self.weiboInfo.content];
             UIAlertView  * al =[[UIAlertView alloc]initWithTitle:nil message:titSting delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
             [al show];
             //请求点赞
@@ -457,10 +442,10 @@
         review=@"1";
         
     }
-    NSDictionary *parameters = @{@"stage_id":stageId,@"user_id":usercenter.user_id,@"review":review};
-    
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     NSString *urlString =[NSString stringWithFormat:@"%@/stage/move-to-review", kApiBaseUrl];
+    NSString *tokenString =[Function getURLtokenWithURLString:urlString];
+    NSDictionary *parameters = @{@"stage_id":stageId,@"user_id":usercenter.user_id,@"review":review,KURLTOKEN:tokenString};
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
             NSLog(@"移除剧照成功=======%@",responseObject);
@@ -475,12 +460,12 @@
 //管理员用户的点赞和点踩
 -(void)requestUpAndDownWithDeretion:(NSString *)direction;
 {
-    
     UserDataCenter  *userCenter=[UserDataCenter shareInstance];
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    NSDictionary *parameters=@{@"user_id":userCenter.user_id,@"stage_id":self.weiboInfo.stageInfo.Id,@"weibo_id":self.weiboInfo.Id,@"direction":direction};
-    
-    [manager POST:[NSString stringWithFormat:@"%@/weibo/adjust", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    NSString *urlString =[NSString stringWithFormat:@"%@/weibo/adjust", kApiBaseUrl];
+    NSString *tokenString =[Function getURLtokenWithURLString:urlString];
+    NSDictionary *parameters=@{@"user_id":userCenter.user_id,@"stage_id":self.weiboInfo.stageInfo.Id,@"weibo_id":self.weiboInfo.Id,@"direction":direction,KURLTOKEN:tokenString};
+    [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
             //改变likelable 的状态
             if ([direction isEqualToString:@"up"]) {//点赞
@@ -516,9 +501,11 @@
 {
     // NSString *type=@"1";
     UserDataCenter *userCenter =[UserDataCenter shareInstance];
-    NSDictionary *parameters = @{@"reported_user_id":self.weiboInfo.uerInfo.Id,@"weibo_id":self.weiboInfo.Id,@"reason":@"",@"user_id":userCenter.user_id};
+    NSString *urlString =[NSString stringWithFormat:@"%@/report-weibo/create", kApiBaseUrl];
+    NSString *tokenString =[Function getURLtokenWithURLString:urlString];
+    NSDictionary *parameters = @{@"reported_user_id":self.weiboInfo.uerInfo.Id,@"weibo_id":self.weiboInfo.Id,@"reason":@"",@"user_id":userCenter.user_id,KURLTOKEN:tokenString};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager POST:[NSString stringWithFormat:@"%@/report-weibo/create", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
             NSLog(@"随机数种子请求成功=======%@",responseObject);
             UIAlertView  *Al =[[UIAlertView alloc]initWithTitle:nil message:@"你的举报已成功,我们会在24小时内处理" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];

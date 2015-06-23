@@ -24,7 +24,6 @@ typedef  NS_ENUM(NSInteger,NSStagePapeType)
     
     //首页热门
     NSStagePapeTypeHotStageList, //首页热门列表
-    
     //管理管功能列表页
     NSStagePapeTypeAdmin_New_Add,  //最新添加
     NSStagePapeTypeAdmin_Dscorver,  //发现
@@ -32,11 +31,8 @@ typedef  NS_ENUM(NSInteger,NSStagePapeType)
     NSStagePapeTypeAdmin_Recommed,  //推荐列表
     NSStagePapeTypeAdmin_Timing,    //发送到定时页面
     NSStagePapeTypeAdmin_Not_Review,//未审核
-    
-    
-    
-    
 };
+
 @protocol ShowStageviewControllerDelegate <NSObject>
 
 //删除完成返回刷新
@@ -45,10 +41,10 @@ typedef  NS_ENUM(NSInteger,NSStagePapeType)
 @end
 
 @interface ShowStageViewController : RootViewController <TagViewDelegate,AddMarkViewControllerDelegate>
-
-
+{
+    
+}
 @property(nonatomic,assign) id<ShowStageviewControllerDelegate> delegate ;
-
 @property (nonatomic, strong) stageInfoModel *stageInfo;
 @property(nonatomic,strong) NSMutableArray   *upweiboArray;
 @property(nonatomic,assign) NSStagePapeType  pageType;

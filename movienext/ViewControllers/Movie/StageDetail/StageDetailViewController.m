@@ -26,10 +26,21 @@
 #import "UMShareView.h"
 #import "StageDetailViewController.h"
 #import "MyViewController.h"
+#import "UIView+Shadow.h"
 #import "TagToStageViewController.h"
+#import "SelectTimeView.h"
+
+#define Alert_Interval  1
 #define  TOOLBAR_HEIGHT  45
 
-@interface StageDetailViewController ()<TagViewDelegate>
+#define ADM_BTN_BLOCK   2000  //屏蔽
+#define ADM_BTN_NEW     2001  //最新
+#define ADM_BTN_NORMAL  2002  //正常
+#define ADM_BTN_DISCOVER 2003 //发现
+#define ADM_BTN_TIMING   2004 //定时
+#define  TOOLBAR_HEIGHT  45
+
+@interface StageDetailViewController ()<TagViewDelegate,SelectTimeViewDelegate>
 {
     UIView  *BgView;//顶部放置分享图的view
     
@@ -47,6 +58,7 @@
     
     UILabel  *Like_lable;
     UIView  *TagContentView;
+    UIAlertView  * al;
 }
 
 @property(nonatomic,strong) UIImageView         *stageImageView;  //图片
@@ -66,6 +78,10 @@
     // Do any additional setup after loading the view.
     [self createScrollView];
     self.view.backgroundColor =View_BackGround;
+    if (self.pageType==NSStageDetailSourcePgaeAdminOperation) {
+        //
+        [self createToolBar];
+    }
 }
 -(void)createScrollView
 {
@@ -74,6 +90,7 @@
      self.stageScrollerView.contentSize = CGSizeMake(kDeviceWidth, kDeviceHeight);
     [self.view addSubview:self.stageScrollerView];
     [self createStageView];
+    
 }
 -(void)createStageView
 {
@@ -112,19 +129,20 @@
     
     //创建剧照上的渐变背景文字
     UIView  *_layerView =[[UIView alloc]initWithFrame:CGRectMake(0, self.stageImageView.frame.size.height-60, kDeviceWidth-20, 60)];
+    [_layerView setShadow];
     [self.stageImageView addSubview:_layerView];
-    CAGradientLayer * _gradientLayer = [CAGradientLayer layer];  // 设置渐变效果
-    _gradientLayer.bounds = _layerView.bounds;
-    _gradientLayer.borderWidth = 0;
-    
-    _gradientLayer.frame = _layerView.bounds;
-    _gradientLayer.colors = [NSArray arrayWithObjects:
-                             (id)[[UIColor clearColor] CGColor],
-                             (id)[[UIColor blackColor] CGColor], nil, nil];
-    _gradientLayer.startPoint = CGPointMake(0.5, 0.5);
-    _gradientLayer.endPoint = CGPointMake(0.5, 1.0);
-    [_layerView.layer insertSublayer:_gradientLayer atIndex:0];
-    
+//    CAGradientLayer * _gradientLayer = [CAGradientLayer layer];  // 设置渐变效果
+//    _gradientLayer.bounds = _layerView.bounds;
+//    _gradientLayer.borderWidth = 0;
+//    
+//    _gradientLayer.frame = _layerView.bounds;
+//    _gradientLayer.colors = [NSArray arrayWithObjects:
+//                             (id)[[UIColor clearColor] CGColor],
+//                             (id)[[UIColor blackColor] CGColor], nil, nil];
+//    _gradientLayer.startPoint = CGPointMake(0.5, 0.5);
+//    _gradientLayer.endPoint = CGPointMake(0.5, 1.0);
+//    [_layerView.layer insertSublayer:_gradientLayer atIndex:0];
+//    
     
     self.markLable=[ZCControl createLabelWithFrame:CGRectMake(10,40,_layerView.frame.size.width-20, 60) Font:20 Text:@"弹幕文字"];
     self.markLable.font =[UIFont fontWithName:kFontDouble size:23];
@@ -197,7 +215,6 @@
         
     }];
     [BgView2 addSubview:leftButtomButton];
-    
     
     MovieLogoImageView=[[UIImageView alloc]initWithFrame:CGRectMake(0,0,30, 30)];
     MovieLogoImageView.layer.cornerRadius=15;
@@ -327,6 +344,144 @@
     
     
 }
+-(void)createToolBar
+{
+    UIView   *ToolView = [[UIView alloc]initWithFrame:CGRectMake(0,kDeviceHeight-TOOLBAR_HEIGHT-kHeightNavigation, kDeviceWidth, TOOLBAR_HEIGHT)];
+    ToolView.userInteractionEnabled=YES;
+    [self.view addSubview:ToolView];
+  //  ToolView.hidden=YES;
+    //管理员页面进入
+    NSArray *titleArray = [NSArray arrayWithObjects:@"屏蔽", @"最新", @"正常", @"发现", @"定时", nil];
+    for (int i=0; i<5; i++) {
+        UIButton *btnBlock =[UIButton buttonWithType:UIButtonTypeCustom];
+        btnBlock.tag = 2000 + i;
+        
+        btnBlock.frame=CGRectMake(kDeviceWidth/5*i,0, kDeviceWidth/5, 45);
+        [btnBlock setTitle:titleArray[i] forState:UIControlStateNormal];
+        [btnBlock setTitleColor:VBlue_color forState:UIControlStateNormal];
+        [btnBlock setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color"] forState:UIControlStateNormal];
+        //[btnBlock setBackgroundImage:[UIImage imageNamed:@"dischoice_icon@3x.png"] forState:UIControlStateHighlighted];
+        [btnBlock addTarget:self action:@selector(changeWeiboStatus:) forControlEvents:UIControlEventTouchUpInside];
+        [ToolView addSubview:btnBlock];
+
+    
+   }
+}
+#pragma mark --- User Action
+#pragma mark ---
+- (void)changeWeiboStatus:(UIButton *)sender{
+    
+    switch (sender.tag) {
+        case ADM_BTN_BLOCK:
+        {
+            [self requestChangeStageStatusWithweiboId:[NSString stringWithFormat:@"%@",self.weiboInfo.Id] StatusType:@"0"];
+        }
+            break;
+        case ADM_BTN_NEW:
+        {
+            [self requestChangeStageStatusWithweiboId:[NSString stringWithFormat:@"%@",self.weiboInfo.Id] StatusType:@"5"];
+        }
+            break;
+        case ADM_BTN_NORMAL:
+        {
+            [self requestChangeStageStatusWithweiboId:[NSString stringWithFormat:@"%@",self.weiboInfo.Id] StatusType:@"1"];
+        }
+            break;
+        case ADM_BTN_DISCOVER:
+        {
+            [self requestChangeStageStatusWithweiboId:[NSString stringWithFormat:@"%@",self.weiboInfo.Id] StatusType:@"2"];
+        }
+            break;
+        case ADM_BTN_TIMING:
+        {
+            //时间
+            SelectTimeView  *datepicker =[[SelectTimeView alloc]init];
+            datepicker.delegate=self;
+            [datepicker show];
+        }
+            break;
+        default:
+            break;
+    }
+}
+//status 0 屏蔽 1 正常 2 发现/电影页 3 热门 只有到热门页的时候需要传updated_at 5 未审核
+-(void)requestChangeStageStatusWithweiboId:(NSString *)weiboId StatusType:(NSString *) status
+{
+    
+    UserDataCenter  *userCenter=[UserDataCenter shareInstance];
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    NSString  *urlString =[NSString stringWithFormat:@"%@/weibo/change-status", kApiBaseUrl];
+    NSString *tokenString =[Function getURLtokenWithURLString:urlString];
+    NSDictionary *parameters=@{@"user_id":userCenter.user_id,@"weibo_id":weiboId,@"status":status,KURLTOKEN:tokenString};
+    [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
+             NSString  *titleString ;
+            if ([status intValue]==0) {
+                titleString =[NSString stringWithFormat:@"[%@]\n屏蔽成功",self.weiboInfo.content];
+            }else if ([status intValue]==1)
+            {
+                titleString=[NSString stringWithFormat:@"[%@]\n移到正常成功",self.weiboInfo.content];
+            }else if ([status intValue]==2)
+            {
+                titleString= [NSString stringWithFormat:@"[%@]\n移到发现成功",self.weiboInfo.content];
+            }else if ([status  intValue]==3)
+            {
+                titleString  = [NSString stringWithFormat:@"[%@]\n移到热门成功",self.weiboInfo.content];
+            }
+            else if([status intValue]==5)
+            {
+                titleString =[NSString stringWithFormat:@"[%@]\n发布到最新成功",self.weiboInfo.content];
+            }
+            al =[[UIAlertView alloc]initWithTitle:nil message:titleString delegate:nil cancelButtonTitle:nil otherButtonTitles:nil, nil];
+            [al show];
+            //请求点赞
+            
+            [self performSelector:@selector(dismisAlertView) withObject:nil afterDelay:Alert_Interval];
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+         al =[[UIAlertView alloc]initWithTitle:nil message:@"操作失败！！！！" delegate:nil cancelButtonTitle:nil otherButtonTitles:nil, nil];
+        [al show];
+        [self performSelector:@selector(dismisAlertView) withObject:nil afterDelay:Alert_Interval];
+        
+    }];
+}
+-(void)dismisAlertView
+{
+ 
+    [al dismissWithClickedButtonIndex:0 animated:YES];
+    
+    
+}
+
+//定时发送到热门,发送时间戳
+-(void)requesttiming:(NSString *)weiboId AndTimeSp:(NSString *)timeSp
+{
+    UserDataCenter  *userCenter=[UserDataCenter shareInstance];
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    NSString *urlString =[NSString stringWithFormat:@"%@/weibo/change-status", kApiBaseUrl];
+    NSString *tokenString =[Function getURLtokenWithURLString:urlString];
+    NSDictionary *parameters=@{@"user_id":userCenter.user_id,@"weibo_id":weiboId,@"status":@"3",@"updated_at":timeSp,KURLTOKEN:tokenString};
+    [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
+             NSString *titSting  =[NSString stringWithFormat:@"[%@]\n定时到热门成功",self.weiboInfo.content];
+             al =[[UIAlertView alloc]initWithTitle:nil message:titSting delegate:nil cancelButtonTitle:nil otherButtonTitles:nil, nil];
+            [al show];
+            [self performSelector:@selector(dismisAlertView) withObject:nil afterDelay:Alert_Interval];
+            //请求点赞
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+}
+
+ #pragma mark  selected date time
+-(void)DatePickerSelectedTime:(NSString *)dateString    {
+    //定时到热门，伴随时间戳
+   [self requesttiming:[NSString stringWithFormat:@"%@",self.weiboInfo.Id] AndTimeSp:dateString];
+}
+
+
 
 #pragma mark 星星点赞方法
 //点赞实现的方法
@@ -422,11 +577,11 @@
     if (!weiboInfo) {
         return;
     }
-    NSDictionary *parameters=@{@"weibo_id":weiboId,@"user_id":user_id,@"author_id":author_id,@"operation":operation};
-    
+    NSString *urlString = [NSString stringWithFormat:@"%@/weibo/up", kApiBaseUrl];
+    NSString *tokenString =[Function getURLtokenWithURLString:urlString];
+    NSDictionary *parameters=@{@"weibo_id":weiboId,@"user_id":user_id,@"author_id":author_id,@"operation":operation,KURLTOKEN:tokenString};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     //manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
-    NSString *urlString = [NSString stringWithFormat:@"%@/weibo/up", kApiBaseUrl];
     [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
             NSLog(@"点赞成功========%@",responseObject);

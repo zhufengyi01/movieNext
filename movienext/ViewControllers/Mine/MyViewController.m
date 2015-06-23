@@ -378,9 +378,11 @@ static const CGFloat MJDuration = 0.2;
         UserDataCenter  *user=[UserDataCenter shareInstance];
         userId=user.user_id;
     }
-    NSDictionary *parameters = @{@"user_id":userId};
+    NSString  *urlString = [NSString stringWithFormat:@"%@/user/info", kApiBaseUrl];
+    NSString *tokenString =[Function getURLtokenWithURLString:urlString];
+    NSDictionary *parameters = @{@"user_id":userId,KURLTOKEN:tokenString};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager POST:[NSString stringWithFormat:@"%@/user/info", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
             
             
@@ -407,8 +409,7 @@ static const CGFloat MJDuration = 0.2;
     {
         autorid=user.user_id;
     }
-    //user_id是当前用户的ID
-    NSDictionary *parameters = @{@"user_id":user.user_id,@"author_id":autorid};
+    
     NSString * section;
     int  page;
     if ([[self.buttonStateDict objectForKey:@"YES"] isEqualToString:@"100"]) {
@@ -421,10 +422,11 @@ static const CGFloat MJDuration = 0.2;
         page=page2;
         
     }
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     NSString *urlString =[NSString stringWithFormat:@"%@/%@?per-page=%d&page=%d", kApiBaseUrl, section,pageSize,page];
-    
-    NSLog(@"=======urlstring ==%@",urlString);
+    NSString *tokenString  =[Function getURLtokenWithURLString:urlString];
+    //user_id是当前用户的ID
+    NSDictionary *parameters = @{@"user_id":user.user_id,@"author_id":autorid,KURLTOKEN:tokenString};
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject objectForKey:@"code"] intValue]==0) {
             NSLog(@"个人页面返回的数据====%@",responseObject);
@@ -609,7 +611,7 @@ static const CGFloat MJDuration = 0.2;
         
     }];
 }
-
+/*
 -(void)requestDelectDatawithRowindex:(NSInteger) index
 {
     userAddmodel  *model =[_addedDataArray objectAtIndex:index];
@@ -628,7 +630,7 @@ static const CGFloat MJDuration = 0.2;
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
-}
+}*/
 #pragma  mark
 #pragma mark - UICollectionViewDataSource ----
 

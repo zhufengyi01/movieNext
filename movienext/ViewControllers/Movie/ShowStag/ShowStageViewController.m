@@ -809,9 +809,10 @@
 {
     UserDataCenter  *userCenter=[UserDataCenter shareInstance];
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    NSDictionary *parameters=@{@"user_id":userCenter.user_id,@"weibo_id":weiboId,@"status":status};
-    
-    [manager POST:[NSString stringWithFormat:@"%@/weibo/change-status", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    NSString *urlString =[NSString stringWithFormat:@"%@/weibo/change-status", kApiBaseUrl];
+    NSString *tokenString =[Function getURLtokenWithURLString:urlString];
+    NSDictionary *parameters=@{@"user_id":userCenter.user_id,@"weibo_id":weiboId,@"status":status,KURLTOKEN:tokenString};
+    [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
             UIAlertView  * al =[[UIAlertView alloc]initWithTitle:nil message:@"操作成功" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
             [al show];
@@ -827,8 +828,10 @@
 {
     UserDataCenter  *userCenter=[UserDataCenter shareInstance];
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    NSDictionary *parameters=@{@"user_id":userCenter.user_id,@"weibo_id":weiboId,@"status":@"3",@"updated_at":timeSp};
-    [manager POST:[NSString stringWithFormat:@"%@/weibo/change-status", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    NSString *urlString =[NSString stringWithFormat:@"%@/weibo/change-status", kApiBaseUrl];
+    NSString *tokenString =[Function getURLtokenWithURLString:urlString];
+    NSDictionary *parameters=@{@"user_id":userCenter.user_id,@"weibo_id":weiboId,@"status":@"3",@"updated_at":timeSp,KURLTOKEN:tokenString};
+    [manager POST:tokenString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
             
             UIAlertView  * al =[[UIAlertView alloc]initWithTitle:nil message:@"定时到热门成功" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
@@ -851,9 +854,11 @@
     
     UserDataCenter  *userCenter=[UserDataCenter shareInstance];
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    NSDictionary *parameters=@{@"user_id":userCenter.user_id,@"stage_id":self.stageInfo.Id,@"weibo_id":_WeiboInfo.Id,@"direction":direction};
+    NSString *urlString =[NSString stringWithFormat:@"%@/weibo/adjust", kApiBaseUrl];
+    NSString *tokenString =[Function getURLtokenWithURLString:urlString];
     
-    [manager POST:[NSString stringWithFormat:@"%@/weibo/adjust", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    NSDictionary *parameters=@{@"user_id":userCenter.user_id,@"stage_id":self.stageInfo.Id,@"weibo_id":_WeiboInfo.Id,@"direction":direction,KURLTOKEN:tokenString};
+    [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
             //改变likelable 的状态
             if ([direction isEqualToString:@"up"]) {//点赞
@@ -893,8 +898,10 @@
     
     UserDataCenter  *userCenter=[UserDataCenter shareInstance];
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    NSDictionary *parameters=@{@"user_id":userCenter.user_id};
-    [manager POST:[NSString stringWithFormat:@"%@/user/fakeuserid", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    NSString *urlString =[NSString stringWithFormat:@"%@/user/fakeuserid", kApiBaseUrl];
+    NSString *tokenString  =[Function getURLtokenWithURLString:urlString];
+    NSDictionary *parameters=@{@"user_id":userCenter.user_id,KURLTOKEN:tokenString};
+    [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
             NSLog(@"随机数种子请求成功=======%@",responseObject);
             NSString  *usr_id =[responseObject objectForKey:@"user_id"];
@@ -911,13 +918,15 @@
 {
     UserDataCenter *usercenter=[UserDataCenter shareInstance];
     NSDictionary *parameters;
-    parameters = @{@"stage_id":self.stageInfo.Id,@"user_id":usercenter.user_id};
+    NSString *urlString =[NSString stringWithFormat:@"%@/stage/block", kApiBaseUrl];
+    NSString *tokenString =[Function getURLtokenWithURLString:urlString];
+    parameters = @{@"stage_id":self.stageInfo.Id,@"user_id":usercenter.user_id,KURLTOKEN:tokenString};
     if ([type intValue]==1) {
         //恢复剧照
-        parameters = @{@"stage_id":self.stageInfo.Id,@"user_id":usercenter.user_id,@"block":type};
+        parameters = @{@"stage_id":self.stageInfo.Id,@"user_id":usercenter.user_id,@"block":type,KURLTOKEN:tokenString};
     }
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    NSString *urlString =[NSString stringWithFormat:@"%@/stage/block", kApiBaseUrl];
+    
     [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
             NSLog(@"移除剧照成功=======%@",responseObject);
@@ -948,10 +957,10 @@
         review=@"1";
         
     }
-    NSDictionary *parameters = @{@"stage_id":stageId,@"user_id":usercenter.user_id,@"review":review};
-    
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     NSString *urlString =[NSString stringWithFormat:@"%@/stage/move-to-review", kApiBaseUrl];
+    NSString *tokenString =[Function getURLtokenWithURLString:urlString];
+    NSDictionary *parameters = @{@"stage_id":stageId,@"user_id":usercenter.user_id,@"review":review,KURLTOKEN:tokenString};
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
             NSLog(@"移除剧照成功=======%@",responseObject);
@@ -979,11 +988,11 @@
     if (!weiboInfo) {
         return;
     }
-    NSDictionary *parameters=@{@"weibo_id":weiboId,@"user_id":user_id,@"author_id":author_id,@"operation":operation};
-    
+    NSString *urlString = [NSString stringWithFormat:@"%@/weibo/up", kApiBaseUrl];
+    NSString *tokenString =[Function getURLtokenWithURLString:urlString];
+    NSDictionary *parameters=@{@"weibo_id":weiboId,@"user_id":user_id,@"author_id":author_id,@"operation":operation,KURLTOKEN:tokenString};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     //manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
-    NSString *urlString = [NSString stringWithFormat:@"%@/weibo/up", kApiBaseUrl];
     [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
             NSLog(@"点赞成功========%@",responseObject);
@@ -999,9 +1008,12 @@
 {
     // NSString *type=@"1";
     UserDataCenter *userCenter =[UserDataCenter shareInstance];
-    NSDictionary *parameters = @{@"reported_user_id":_WeiboInfo.uerInfo.Id,@"weibo_id":_WeiboInfo.Id,@"reason":@"",@"user_id":userCenter.user_id};
+    
+    NSString *urlString =[NSString stringWithFormat:@"%@/report-weibo/create", kApiBaseUrl];
+    NSString *tokenString =[Function getURLtokenWithURLString:urlString];
+    NSDictionary *parameters = @{@"reported_user_id":_WeiboInfo.uerInfo.Id,@"weibo_id":_WeiboInfo.Id,@"reason":@"",@"user_id":userCenter.user_id,KURLTOKEN:tokenString};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager POST:[NSString stringWithFormat:@"%@/report-weibo/create", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
             NSLog(@"随机数种子请求成功=======%@",responseObject);
             UIAlertView  *Al =[[UIAlertView alloc]initWithTitle:nil message:@"你的举报已成功,我们会在24小时内处理" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
@@ -1021,10 +1033,11 @@
     NSString  *author_id=self.stageInfo.created_by;
     
     UserDataCenter *userCenter =[UserDataCenter shareInstance];
-    NSDictionary *parameters = @{@"reported_user_id":author_id,@"stage_id":stageId,@"reason":@"",@"user_id":userCenter.user_id};
-    
+    NSString *urlString =[NSString stringWithFormat:@"%@/report-stage/create", kApiBaseUrl];
+    NSString *tokenString =[Function getURLtokenWithURLString:urlString];
+    NSDictionary *parameters = @{@"reported_user_id":author_id,@"stage_id":stageId,@"reason":@"",@"user_id":userCenter.user_id,KURLTOKEN:tokenString};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager POST:[NSString stringWithFormat:@"%@/report-stage/create", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"code"] intValue]==0) {
             UIAlertView  *Al =[[UIAlertView alloc]initWithTitle:nil message:@"你的举报已成功,我们会在24小时内处理" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
             [Al show];
@@ -1040,9 +1053,11 @@
 -(void)requestrecommendDataWithStageId:(NSString *) stageId weiboId:(NSString *) weiboId
 {
     UserDataCenter  *userCenter =[UserDataCenter shareInstance];
-    NSDictionary *parameters = @{@"weibo_id":weiboId,@"stage_id":stageId,@"user_id":userCenter.user_id};
+    NSString *urlString  =[NSString stringWithFormat:@"%@/hot/create", kApiBaseUrl];
+    NSString *tokenString =[Function getURLtokenWithURLString:urlString];
+    NSDictionary *parameters = @{@"weibo_id":weiboId,@"stage_id":stageId,@"user_id":userCenter.user_id,KURLTOKEN:tokenString};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager POST:[NSString stringWithFormat:@"%@/hot/create", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
             NSLog(@"推荐成功=======%@",responseObject);
             UIAlertView  *Al=[[UIAlertView alloc]initWithTitle:nil message:@"推荐成功" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
@@ -1058,9 +1073,11 @@
 -(void)requestDelectDataWithweiboId:(NSString  *) weiboId WithremoveType:(NSString *)type
 {
     UserDataCenter *userCenter=[UserDataCenter shareInstance];
-    NSDictionary *parameters = @{@"weibo_id":weiboId,@"user_id":userCenter.user_id,@"remove_type":type};
+    NSString *urlString =[NSString stringWithFormat:@"%@/weibo/remove", kApiBaseUrl];
+    NSString *tokenString =[Function getURLtokenWithURLString:urlString];
+    NSDictionary *parameters = @{@"weibo_id":weiboId,@"user_id":userCenter.user_id,@"remove_type":type,KURLTOKEN:tokenString};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager POST:[NSString stringWithFormat:@"%@/weibo/remove", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
             NSLog(@"删除数据成功=======%@",responseObject);
             UIAlertView  *Al=[[UIAlertView alloc]initWithTitle:nil message:@"删除成功" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
@@ -1093,9 +1110,10 @@
 -(void)requestChangeUser:( NSString *) author_id
 {
     UserDataCenter  *userCenter =[UserDataCenter shareInstance];
-    NSDictionary *parameters = @{@"weibo_id":_TweiboInfo.Id,@"user_id":userCenter.user_id,@"author_id":author_id};
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     NSString  *urlString =[NSString stringWithFormat:@"%@/weibo/switch", kApiBaseUrl];
+    NSString *tokenString =[Function getURLtokenWithURLString:urlString];
+    NSDictionary *parameters = @{@"weibo_id":_TweiboInfo.Id,@"user_id":userCenter.user_id,@"author_id":author_id,KURLTOKEN:tokenString};
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
             weiboUserInfoModel  *usermodel=[[weiboUserInfoModel alloc]init];

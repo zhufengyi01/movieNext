@@ -135,8 +135,6 @@ static const CGFloat MJDuration = 1.0;
     // [self.myTableView.header beginRefreshing];
     
     // 此时self.tableView.header == self.tableView.legendHeader
-    
-    
 #pragma mark UITableView + 上拉刷新 自定义文字
     // 添加传统的上拉刷新
     // 设置回调（一旦进入刷新状态，就调用target的action，也就是调用self的loadMoreData方法）
@@ -205,9 +203,10 @@ static const CGFloat MJDuration = 1.0;
 -(void)requestData
 {
     UserDataCenter *userCenter=[UserDataCenter shareInstance];
-    NSDictionary *parameters = @{@"user_id":userCenter.user_id};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     NSString  *urlString=[NSString stringWithFormat:@"%@/noti-up/list?per-page=%d&page=%d", kApiBaseUrl,pageSize,page];
+    NSString *tokenString =[Function getURLtokenWithURLString:urlString];
+    NSDictionary *parameters = @{@"user_id":userCenter.user_id,KURLTOKEN:tokenString};
     [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject objectForKey:@"code"] intValue]==0) {
             NSLog(@"消息通知返回的数据====%@",responseObject);
@@ -222,7 +221,6 @@ static const CGFloat MJDuration = 1.0;
 //            
             //解析数据[_dataArray addObjectsFromArray:[responseObject objectForKey:@"models"]];
             NSMutableArray  *array =[[NSMutableArray alloc]initWithArray:[responseObject objectForKey:@"models"]];
-            
             if (_dataArray==nil) {
                 _dataArray =[[NSMutableArray alloc]init];
             }

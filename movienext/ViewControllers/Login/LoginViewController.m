@@ -290,12 +290,15 @@
                     //logo
                     NSString  *logo=[data objectForKey:@"profile_image_url"];
                     
-                    NSDictionary  *parameters=@{@"openid":openid,@"token":access_token,@"username":screen_name,@"brief":brief,@"sex":sex,@"verified":verified,@"bindtype":bingdtype,@"logo":logo};
                     
+                    
+                    NSString  *urlString =[NSString stringWithFormat:@"%@/user/login", kApiBaseUrl];
+                    NSString *tokenString =[Function getURLtokenWithURLString:urlString];
+                    NSDictionary  *parameters=@{@"openid":openid,@"token":access_token,@"username":screen_name,@"brief":brief,@"sex":sex,@"verified":verified,@"bindtype":bingdtype,@"logo":logo,KURLTOKEN:tokenString};
                     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-                    [manager POST:[NSString stringWithFormat:@"%@/user/login", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                        NSLog(@"登陆完成后的     JSON: %@", responseObject);
+                    [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
                         
+                        NSLog(@"登陆完成后的     JSON: %@", responseObject);
                         UserDataCenter  *userCenter=[UserDataCenter shareInstance];
                         userCenter.first_login=[responseObject objectForKey:@"first_login"];
                         NSDictionary *detail    = [responseObject objectForKey:@"model"];

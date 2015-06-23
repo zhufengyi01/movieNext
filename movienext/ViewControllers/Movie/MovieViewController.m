@@ -329,7 +329,7 @@ static const CGFloat MJDuration = 0.6;
     pageCount1=1;
     pageCount2=1;
     pageCount3=1;
-    pageSize=12;
+    pageSize=20;
     _dataArray0=[[NSMutableArray alloc]init];
     _dataArray1=[[NSMutableArray alloc]init];
     _dataArray2=[[NSMutableArray alloc]init];
@@ -351,7 +351,6 @@ static const CGFloat MJDuration = 0.6;
     {
         [self.myConllectionView.header beginRefreshing];
     }
-    
 }
 
 -(void)initUI
@@ -373,15 +372,12 @@ static const CGFloat MJDuration = 0.6;
     [self.RecommentView addSubview:self.RecommendCollectionView];
     [self setRecommtUprefresh];
     
-    
-    
     //创建电影的collectionview
     UICollectionViewFlowLayout    *layout=[[UICollectionViewFlowLayout alloc]init];
     layout.minimumInteritemSpacing=20; //cell之间左右的
     layout.minimumLineSpacing=20;      //cell上下间隔
     //layout.itemSize=CGSizeMake(80,140);  //cell的大小
     layout.sectionInset=UIEdgeInsetsMake(10, 20, 10, 20); //整个偏移量 上左下右
-    
     _myConllectionView =[[UICollectionView alloc]initWithFrame:CGRectMake(0, 40,kDeviceWidth, kDeviceHeight-40-kHeightNavigation-kHeigthTabBar) collectionViewLayout:layout];
     _myConllectionView.backgroundColor=[UIColor whiteColor];
     [_myConllectionView registerClass:[MovieCollectionViewCell class] forCellWithReuseIdentifier:@"cell"];
@@ -596,8 +592,10 @@ static const CGFloat MJDuration = 0.6;
     
     UserDataCenter  *userCenter=[UserDataCenter shareInstance];
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    NSDictionary *parameters=@{@"user_id":userCenter.user_id,@"feed_id":behindId,@"up_feed_id":forward_id};
-    [manager POST:[NSString stringWithFormat:@"%@/feed/change-order", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    NSString *urlString =[NSString stringWithFormat:@"%@/feed/change-order", kApiBaseUrl];
+    NSString *tokenString =[Function getURLtokenWithURLString:urlString];
+    NSDictionary *parameters=@{@"user_id":userCenter.user_id,@"feed_id":behindId,@"up_feed_id":forward_id,KURLTOKEN:tokenString};
+    [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
             NSLog(@"删除成功=======%@",responseObject);
             UIAlertView *al =[[UIAlertView alloc]initWithTitle:nil message:@"移动成功" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
@@ -617,8 +615,10 @@ static const CGFloat MJDuration = 0.6;
     
     UserDataCenter  *userCenter=[UserDataCenter shareInstance];
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    NSDictionary *parameters=@{@"user_id":userCenter.user_id,@"feed_id":movie_id};
-    [manager POST:[NSString stringWithFormat:@"%@/feed/delete", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    NSString *urlString = [NSString stringWithFormat:@"%@/feed/delete", kApiBaseUrl];
+    NSString *tokenString =[Function getURLtokenWithURLString:urlString];
+    NSDictionary *parameters=@{@"user_id":userCenter.user_id,@"feed_id":movie_id,KURLTOKEN:tokenString};
+    [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
             NSLog(@"删除成功=======%@",responseObject);
             UIAlertView *al =[[UIAlertView alloc]initWithTitle:@"删除成功" message:nil delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
@@ -632,10 +632,10 @@ static const CGFloat MJDuration = 0.6;
 -(void)requestRecommendData
 {
     UserDataCenter *userCenter =[UserDataCenter shareInstance];
-    NSDictionary *parameters = @{@"user_id":userCenter.user_id, @"status":@"3", @"Version":Version};
+        NSString  *urlString =[NSString stringWithFormat:@"%@/weibo/list-by-status?per-page=%d&page=%d", kApiBaseUrl,pageSize,page0];
+    NSString *tokenString  = [Function getURLtokenWithURLString:urlString];
+    NSDictionary *parameters = @{@"user_id":userCenter.user_id, @"status":@"3", @"Version":Version,KURLTOKEN:tokenString};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    NSString  *urlString =[NSString stringWithFormat:@"%@/weibo/list-by-status?per-page=%d&page=%d", kApiBaseUrl,pageSize,page0];
-    
     [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         [loadView stopAnimation];
         [loadView removeFromSuperview];
@@ -741,8 +741,9 @@ static const CGFloat MJDuration = 0.6;
             PAGE=page3;
         }
     }
-    NSDictionary  *parameters =@{@"type":type};
     NSString  *urlString=[NSString stringWithFormat:@"%@/feed/list?per-page=%d&page=%d",kApiBaseUrl,pageSize,PAGE];
+    NSString *tokenString =[Function getURLtokenWithURLString:urlString];
+    NSDictionary  *parameters =@{@"type":type,KURLTOKEN:tokenString};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
@@ -827,7 +828,6 @@ static const CGFloat MJDuration = 0.6;
         if (data) {
             @try {
                 NSDictionary *result= [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-                
                 NSLog(@"=====%@",result);
                 //对比版本
                 NSString * version=result[@"version"]; //对应 CFBundleVersion, 对应Xcode项目配置"General"中的 Build

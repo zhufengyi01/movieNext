@@ -17,6 +17,7 @@
 #import "ChangeUsernameViewController.h"
 #import "CustmoTabBarController.h"
 #import "UpYun.h"
+#import "Function.h"
 @interface UserHeadChangeViewController ()<UIImagePickerControllerDelegate,UIActionSheetDelegate,UINavigationControllerDelegate,changeUserNameDelegate>
 {
     AppDelegate *appdelegate;
@@ -105,10 +106,11 @@
     UserDataCenter  *userCenter =[UserDataCenter shareInstance];
     NSString * user_id = userCenter.user_id;
     
-    NSDictionary *parameters = @{@"user_id":user_id,@"logo":logo};
-    
+    NSString *urlString =[NSString stringWithFormat:@"%@/user/change-user-logo", kApiBaseUrl];
+    NSString *tokenString =[Function getURLtokenWithURLString:urlString];
+    NSDictionary *parameters = @{@"user_id":user_id,@"logo":logo,KURLTOKEN:tokenString};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager POST:[NSString stringWithFormat:@"%@/user/change-user-logo", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@" succuss");
         userCenter.logo=[upyunDict objectForKey:@"url"];
         

@@ -10,6 +10,7 @@
 #import "ZCControl.h"
 #import "Constant.h"
 #import "UpYun.h"
+#import "Function.h"
 #import "AddMarkViewController.h"
 #import "UploadProgressView.h"
 #import "AFNetworking.h"
@@ -174,12 +175,12 @@
     // NSString  *h=[NSString stringWithFormat:@"%f",self.upimage.size.height];
     int width=self.upimage.size.width;
     int heigth=self.upimage.size.height;
-    
-    NSDictionary *parameter = @{@"photo":[upyunDict objectForKey:@"url"],@"movie_id":self.movie_Id,@"user_id":usreCenter.user_id,@"width":[NSString stringWithFormat:@"%d",width],@"height":[NSString stringWithFormat:@"%d",heigth]};
-    
+    NSString *urlString =[NSString stringWithFormat:@"%@/stage/create", kApiBaseUrl];
+    NSString *tokenString  =[Function getURLtokenWithURLString:urlString];
+    NSDictionary *parameter = @{@"photo":[upyunDict objectForKey:@"url"],@"movie_id":self.movie_Id,@"user_id":usreCenter.user_id,@"width":[NSString stringWithFormat:@"%d",width],@"height":[NSString stringWithFormat:@"%d",heigth],KURLTOKEN:tokenString};
     NSLog(@"==parameter====%@",parameter);
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager POST:[NSString stringWithFormat:@"%@/stage/create", kApiBaseUrl] parameters:parameter success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [manager POST:urlString parameters:parameter success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"  发布图片的请求    JSON: %@", responseObject);
         if ([[responseObject objectForKey:@"code"] intValue]==0) {
             [_myprogress setProgressTitle:@"上传成功"];

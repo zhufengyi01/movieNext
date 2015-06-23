@@ -77,8 +77,9 @@
 {
     UserDataCenter *userCenter=[UserDataCenter shareInstance];
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    NSDictionary  *parameters=@{@"user_id":userCenter.user_id};
     NSString  *urlString =[NSString stringWithFormat:@"%@/user/fakelist", kApiBaseUrl];
+    NSString *tokenSting =[Function getURLtokenWithURLString:urlString];
+    NSDictionary  *parameters=@{@"user_id":userCenter.user_id,KURLTOKEN:tokenSting};
     [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"return_code"]  intValue]==0) {
             NSLog(@"虚拟用户请求成功=======%@",responseObject);

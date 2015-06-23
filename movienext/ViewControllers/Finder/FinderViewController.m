@@ -179,10 +179,11 @@
     NSNumber  *weiboId=weiboInfo.Id;
     NSString  *userId=userCenter.user_id;
     NSNumber  *author_id=weiboInfo.uerInfo.Id;
-    NSDictionary *parameters=@{@"weibo_id":weiboId,@"user_id":userId,@"author_id":author_id,@"operation":operation};
+    NSString *urlString = [NSString stringWithFormat:@"%@/weibo/up", kApiBaseUrl];
+    NSString *tokenString =[Function getURLtokenWithURLString:urlString];
+    NSDictionary *parameters=@{@"weibo_id":weiboId,@"user_id":userId,@"author_id":author_id,@"operation":operation,KURLTOKEN: tokenString};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     //manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
-    NSString *urlString = [NSString stringWithFormat:@"%@/weibo/up", kApiBaseUrl];
     [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
             NSLog(@"点赞成功========%@",responseObject);
@@ -205,11 +206,11 @@
     UserDataCenter  *userCenter=[UserDataCenter shareInstance];
     NSNumber  *weiboId=weiboInfo.Id;
     NSString  *userId=userCenter.user_id;
-    
-    NSDictionary *parameters=@{@"weibo_id":weiboId,@"user_id":userId};
+    NSString *urlString = [NSString stringWithFormat:@"%@/weibo/down", kApiBaseUrl];
+    NSString *tokenString =[Function getURLtokenWithURLString:urlString];
+    NSDictionary *parameters=@{@"weibo_id":weiboId,@"user_id":userId,KURLTOKEN:tokenString};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     //manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
-    NSString *urlString = [NSString stringWithFormat:@"%@/weibo/down", kApiBaseUrl];
     [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
             NSLog(@"点踩成功========%@",responseObject);
@@ -278,7 +279,6 @@
             
             // NSMutableArray  *Array =[[NSMutableArray alloc]initWithArray:[responseObject objectForKey:@"models"]];
             self.pageContent= [[NSMutableArray alloc] initWithArray:[weiboInfoModel objectArrayWithKeyValuesArray:[responseObject objectForKey:@"models"]]];
-            
             if (self.pageContent.count==0) {
                 sharebtn.hidden=YES;
                 [loadView showNullView:@"没有发现了..."];

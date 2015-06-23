@@ -18,6 +18,7 @@
 #import "TapStageCollectionViewCell.h"
 #import "ModelsModel.h"
 #import "ShowStageViewController.h"
+#import "Function.h"
 static const CGFloat MJDuration = 0.2;
 
 
@@ -135,7 +136,7 @@ static const CGFloat MJDuration = 0.2;
             [weakSelf requestData];
         }
         else{
-            [self.myConllectionView.footer noticeNoMoreData];
+            [weakSelf.myConllectionView.footer noticeNoMoreData];
         }
         // 设置文字
         [weakSelf.myConllectionView.footer setTitle:@"点击加载更多..." forState:MJRefreshFooterStateIdle];
@@ -162,10 +163,11 @@ static const CGFloat MJDuration = 0.2;
 -(void)requestData
 {
     UserDataCenter *usercenter=[UserDataCenter shareInstance];
-    NSDictionary *parameters = @{@"tag_id":self.tagInfo.tagDetailInfo.Id,@"user_id":usercenter.user_id};
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     NSString *urlString =[NSString stringWithFormat:@"%@/tag-stage/list?per-page=%d&page=%d", kApiBaseUrl,pageSize,page];
-    [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    NSString  *tokenString =[Function getURLtokenWithURLString:urlString];
+    NSDictionary *parameters = @{@"tag_id":self.tagInfo.tagDetailInfo.Id,@"user_id":usercenter.user_id,KURLTOKEN:tokenString};
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+        [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
             //NSLog(@"  responseObject  ===%@ ",responseObject)
             NSMutableArray  *detailArray =[responseObject objectForKey:@"models"];

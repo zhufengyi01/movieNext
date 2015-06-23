@@ -568,5 +568,42 @@
     }
     return @"平台未知";
 }
+//根据传入API最后一个字符串单词获取token的值
+//前四位是随机的数字+字符串 后面是32位小写的md5值, md5(action+"IjD2&cc#")   action是请求URL中问号前最后一个单词, 例如这个地址: api.ying233.com/weibo/list   那action就是list
++(NSString *)getURLtokenWithURLString:(NSString *) URLString
+{
+    //获取四位随机数 从1000 到9999
+   //  int  a = (int)(1000 + (arc4random() % (10000 - 1000 + 1)));
+    //从@“0～9 a-z A - Z ” 中取出来
+    NSString  *a_z_09 = @"0.1.2.3.4.5.6.7.8.9.a.b.c.d.e.f.g.h.i.j.k.l.m.n.o.p.q.r.s.t.u.v.w.x.y.z.A.B.C.D.E.F.G.H.I.J.K.L.M.N.O.P.Q.R.S.T.U.V.W.X.Y.Z";
+    NSArray  *arr =[a_z_09 componentsSeparatedByString:@"."];
+    NSMutableString  *suiji=[[NSMutableString alloc]init];
+    for ( int i=0; i<4; i++) {
+        int a =arc4random() %62;
+        NSString *s =[arr objectAtIndex:a];
+        [suiji appendString:s];
+    }
+    
+    
+     //获取md5值
+    NSMutableString   *mutableStri = [[NSMutableString alloc]initWithString:URLString];
+    //找到最后一个"/"的位置
+    NSArray  *Array =[mutableStri componentsSeparatedByString:@"/"];
+    // "/"  后面的字符串
+    NSString  *str = [Array lastObject];
+    //如果包含“？”的话
+    if ([str rangeOfString:@"?"].location!=NSNotFound){
+        //截取掉问号后面的字符串
+        NSRange  range =[str rangeOfString:@"?"];
+      //  str =[str substringFromIndex:range.location];
+        str =[str substringToIndex:range.location];
+    }
+    //拼接
+    str =[NSString stringWithFormat:@"%@IjD2&cc#",str];
+    //转换成md5
+    str =[self md5:str];
+    //再拼接
+    return [NSString stringWithFormat:@"%@%@",suiji,str];
+ }
 
 @end

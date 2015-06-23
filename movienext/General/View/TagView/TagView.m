@@ -44,7 +44,7 @@
 {
     //添加背景图片
     self.tagBgImageview =[[UIImageView alloc]initWithFrame:CGRectMake(0, 0,self.frame.size.width , self.frame.size.height)];
-    self.tagBgImageview.backgroundColor = VBlue_color;
+    self.tagBgImageview.backgroundColor =VLight_GrayColor;
     self.tagBgImageview.image =[_backgroundImage stretchableImageWithLeftCapWidth:10 topCapHeight:20];
     [self addSubview:self.tagBgImageview];
     //添加文字

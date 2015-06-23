@@ -134,12 +134,13 @@
 //验证邮箱是否可用
 -(void)requestemailvalidateData
 {
-    NSDictionary *parameters = @{@"email":emailTextfield.text};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager POST:[NSString stringWithFormat:@"%@/user/checkemailvalid", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    NSString *urlString =[NSString stringWithFormat:@"%@/user/checkemailvalid", kApiBaseUrl];
+    NSString *tokenString =[Function getURLtokenWithURLString:urlString];
+    NSDictionary *parameters = @{@"email":emailTextfield.text,KURLTOKEN:tokenString};
+    [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
 #warning  需要替换成exists
-        
-        if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
+        if ([[responseObject  objectForKey:@"exists"]  intValue]==0) {
             Register_2ViewController  *reg =[[Register_2ViewController alloc]init];
             reg.email=[emailTextfield text];
             reg.password=[PassworfTextfield text];
