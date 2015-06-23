@@ -33,7 +33,7 @@
 #import "UIImage+ImageWithColor.h"
 #import "MovieDetailViewController.h"
 #import "ShowSelectPhotoViewController.h"
-
+#define HISTORYRECORD  @"historyRecord"  //历史版本纪录
 @interface MovieSearchViewController ()<UISearchBarDelegate,UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate, LoadingViewDelegate>
 {
     LoadingView   *loadView;
@@ -121,6 +121,7 @@
 -(void)initData
 {
     _dataArray=[[NSMutableArray alloc]init];
+    self.historyMovieNames =[[NSMutableArray alloc]init];
 }
 -(void)initUI
 {
@@ -133,21 +134,17 @@
     
     _historyTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, 320, 400) style:UITableViewStylePlain];
     _historyTableView.delegate = self;
-    _historyTableView.dataSource = self;
-    //    _historyTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    //[_myTableView addSubview:_historyTableView];
-    
+     _historyTableView.dataSource = self;
+    // _historyTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    [_myTableView addSubview:_historyTableView];
     _historyMovieNames = [[NSUserDefaults standardUserDefaults] objectForKey:@"history"];
     for (NSString *name in _historyMovieNames) {
         NSLog(@"name = %@", name);
     }
     [_historyTableView reloadData];
-    [self createFooterView];
-    
 }
 -(void)createFooterView
 {
- 
     UIView  *foot =[[UIView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth,40)];
     foot.backgroundColor=[UIColor whiteColor];
     
@@ -188,9 +185,6 @@
             }
             self.navigationItem.backBarButtonItem=item;
             [self.navigationController pushViewController:vc  animated:YES];
-            
-            
-            
         }
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -200,15 +194,12 @@
     }];
     
 }
-
-
-
 -(void)requestData
 {
     //    if ([search.text isEqualToString:@"00"]) {
     //        return;
     //    }
-    
+    [self createFooterView];
     //存储历史搜索开始
     NSMutableArray *history = [NSMutableArray arrayWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:@"history"]];
     if ([history containsObject:search.text]) { // 存在则移除
@@ -222,9 +213,7 @@
     [[NSUserDefaults standardUserDefaults] setObject:history forKey:@"history"];
     [[NSUserDefaults standardUserDefaults] synchronize];
     //存储历史搜索结束
-    
     _historyTableView.hidden = YES;
-    
     loadView.hidden=NO;
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
     NSString *urlStr = [NSString stringWithFormat:@"http://movie.douban.com/subject_search?search_text=%@&cat=1002", [search.text URLEncodedString] ];
@@ -366,7 +355,7 @@
 #pragma  mark  ----
 -(void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
 {
-       [self requestData];
+    [self requestData];
 }
 -(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
@@ -384,7 +373,6 @@
 {
     if (search.text.length>0) {
         [search resignFirstResponder];
-        
     }
 }
 - (void)didReceiveMemoryWarning {

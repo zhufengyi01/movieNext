@@ -184,9 +184,8 @@
     self.markLable.frame=CGRectMake(10, self.ShareView.frame.size.height-Msize.height-5 ,self.ShareView.frame.size.width-20,Msize.height);
     
     if (Msize.height+self.stageImageView.frame.size.height>kDeviceHeight) {
-        self.stageScrollerView.contentSize=CGSizeMake(kDeviceWidth, Msize.height+self.stageImageView.frame.size.height+100);
+        self.stageScrollerView.contentSize=CGSizeMake(kDeviceWidth, Msize.height+self.stageImageView.frame.size.height+200);
     }
-
     //创建中间的工具栏
     [self createCenterContentView];
 }

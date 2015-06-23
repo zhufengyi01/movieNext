@@ -34,11 +34,12 @@
 
 #import "NSDate+Extension.h"
 #import "ShareModel.h"
+#import "Constant.h"
 
 static const CGFloat MJDuration = 0.1;
 
 
-@interface NewAddViewController ()<UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UICollectionViewDelegate,LoadingViewDelegate>
+@interface NewAddViewController ()<UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UICollectionViewDelegate,LoadingViewDelegate,UIAlertViewDelegate>
 {
     UICollectionViewFlowLayout    *layout;
     
@@ -48,10 +49,7 @@ static const CGFloat MJDuration = 0.1;
     LoadingView         *loadView;
     UserDataCenter     *userCenter;
     // NSMutableArray     *weiboUpArray;
-    
-    
 }
-
 @property(nonatomic,strong) NSMutableArray   *upWeiboArray;
 @end
 
@@ -87,6 +85,16 @@ static const CGFloat MJDuration = 0.1;
     else if (self.pageType==NSNewAddPageSoureTypeNotReview)
     {
         titleString=@"微博未审核";
+        
+        UIButton  *batchButton=[UIButton buttonWithType:UIButtonTypeCustom];
+        [batchButton setTitle:@"批量屏蔽" forState:UIControlStateNormal];
+        [batchButton setTitleColor:VGray_color forState:UIControlStateNormal];
+        [batchButton.titleLabel setFont:[UIFont fontWithName:kFontRegular size:14]];
+        batchButton.frame=CGRectMake(0, 0, 60, 30);
+        [batchButton setTitleEdgeInsets:UIEdgeInsetsMake(0, 10, 0, -10)];
+        [batchButton addTarget:self action:@selector(requestMoveToBlock:) forControlEvents:UIControlEventTouchUpInside];
+        UIBarButtonItem  *barButton=[[UIBarButtonItem alloc]initWithCustomView:batchButton];
+        self.navigationItem.rightBarButtonItem=barButton;
     }
     else if(self.pageType ==NSNewAddPageSoureTypeShare)
     {
@@ -99,6 +107,29 @@ static const CGFloat MJDuration = 0.1;
     titleLable.textAlignment=NSTextAlignmentCenter;
     self.navigationItem.titleView=titleLable;
 }
+- (void)requestMoveToBlock:(UIButton *)sender{
+    UserDataCenter  *uc=[UserDataCenter shareInstance];
+    NSString *urlString =[NSString stringWithFormat:@"%@/weibo/move-to-block", kApiBaseUrl];
+    NSString  *tokenString =[Function getURLtokenWithURLString:urlString];
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    NSDictionary *parameters=@{@"user_id":uc.user_id,@"limit":@"10",KURLTOKEN:tokenString};
+    [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
+            UIAlertView  * al =[[UIAlertView alloc]initWithTitle:nil message:@"操作成功" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            [al show];
+            //请求点赞
+            
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+}
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex==0) {
+        [self.myConllectionView.header beginRefreshing];
+    }
+}
 -(void)initData
 {
     page=1;
@@ -108,8 +139,6 @@ static const CGFloat MJDuration = 0.1;
     _dataArray =[[NSMutableArray alloc]init];
     self.upWeiboArray  =[[NSMutableArray alloc]init];
 }
-
-
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -156,7 +185,6 @@ static const CGFloat MJDuration = 0.1;
         }
         // 进入刷新状态就会回调这个Block
         [weakSelf requestData];
-        
         // 设置文字
         [weakSelf.myConllectionView.header setTitle:@"下拉刷新..." forState:MJRefreshHeaderStateIdle];
         [weakSelf.myConllectionView.header setTitle:@"释放刷新..." forState:MJRefreshHeaderStatePulling];
@@ -294,7 +322,7 @@ static const CGFloat MJDuration = 0.1;
                                 }
                                 weibomodel.stageInfo =stagmodel;
                             }
-                            //标签数组
+                             //标签数组
                             NSMutableArray  *tagArray =[[NSMutableArray alloc]init];
                             //标签数组
                             for ( NSDictionary  *tagdict in [[sharedict objectForKey:@"weibo"] objectForKey:@"tags"]) {
@@ -345,8 +373,8 @@ static const CGFloat MJDuration = 0.1;
                                 movieInfoModel *moviemodel =[[movieInfoModel alloc]init];
                                 if (moviemodel) {
                                     if (![[[newdict objectForKey:@"stage"] objectForKey:@"movie"]isKindOfClass:[NSNull class]]) {
-                                    [moviemodel  setValuesForKeysWithDictionary:[[newdict objectForKey:@"stage"] objectForKey:@"movie"]];
-                                    stagemodel.movieInfo=moviemodel;
+                                        [moviemodel  setValuesForKeysWithDictionary:[[newdict objectForKey:@"stage"] objectForKey:@"movie"]];
+                                        stagemodel.movieInfo=moviemodel;
                                     }
                                 }
                             }
@@ -428,7 +456,7 @@ static const CGFloat MJDuration = 0.1;
             NSURL  *logourl = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", kUrlAvatar, model.userInfo.logo]];
             [cell.ivAvatar sd_setImageWithURL:logourl placeholderImage:[UIImage imageNamed:@"user_normal.png"]];
             cell.titleLab.font = [UIFont fontWithName:kFontDouble size:12];
-             cell.titleLab.text=[NSString stringWithFormat:@"%@%@",da,[Function getSharePlatformwithSting:model.method]];
+            cell.titleLab.text=[NSString stringWithFormat:@"%@%@",da,[Function getSharePlatformwithSting:model.method]];
         }
         else {
             
@@ -445,7 +473,7 @@ static const CGFloat MJDuration = 0.1;
                 cell.lblTime.adjustsFontSizeToFitWidth=YES;
                 cell.lblTime.textAlignment= NSTextAlignmentCenter;
                 cell.lblTime.clipsToBounds=YES;
-                cell.lblTime.text=[NSString stringWithFormat:@"%ld",indexPath.row];
+                cell.lblTime.text=[NSString stringWithFormat:@"%ld",indexPath.row+1];
             }
             if (self.pageType==NSNewAddPageSoureTypeTiming) {
                 //定时出来的,显示具体的时间
@@ -460,6 +488,13 @@ static const CGFloat MJDuration = 0.1;
                 cell.lblTime.frame=CGRectMake(10, 10, 160, 20);
                 cell.lblTime.font =[UIFont fontWithName:kFontRegular size:10];
                 cell.lblTime.text = [NSString stringWithFormat:@"定时时间：%@",confromTimespStr];
+            }else if(self.pageType==NSNewAddPageSoureTypeDecorver)
+            {
+                //发现页
+                  cell.ivLike.image = [UIImage imageNamed:@"tiny_like"];
+                  cell.lblLikeCount.adjustsFontSizeToFitWidth=YES;
+                  cell.lblLikeCount.text = [NSString stringWithFormat:@"%d", [model.like_count intValue]];
+
             }
         }
         return cell;
@@ -517,12 +552,12 @@ static const CGFloat MJDuration = 0.1;
         [self.navigationController pushViewController:vc animated:YES];
     }
     else{
-     StageViewController  *stageVC =[[StageViewController alloc]init];
-    stageVC.upWeiboArray= self.upWeiboArray;
-    stageVC.WeiboDataArray = self.dataArray;
-    stageVC.pageType = NSStagePapeTypeAdminOperation;
-    stageVC.indexOfItem = indexPath.row;
-    [self.navigationController pushViewController:stageVC animated:YES];
+        StageViewController  *stageVC =[[StageViewController alloc]init];
+        stageVC.upWeiboArray= self.upWeiboArray;
+        stageVC.WeiboDataArray = self.dataArray;
+        stageVC.pageType = NSStagePapeTypeAdminOperation;
+        stageVC.indexOfItem = indexPath.row;
+        [self.navigationController pushViewController:stageVC animated:YES];
     }
 }
 

@@ -307,15 +307,14 @@ static const CGFloat MJDuration = 0.6;
         
         // 设置字体
         // weakSelf.myConllectionView.footer.font = [UIFont fontWithName:kFontRegular size:12];
-        
         // 设置颜色
         //weakSelf.myConllectionView.footer.textColor = VGray_color;
         // 模拟延迟加载数据，因此2秒后才调用（真实开发中，可以移除这段gcd代码）
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(MJDuration * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [weakSelf.myConllectionView reloadData];
+            //[weakSelf.myConllectionView reloadData];
             
             // 结束刷新
-            [weakSelf.myConllectionView.footer endRefreshing];
+            //[weakSelf.myConllectionView.footer endRefreshing];
         });
     }];
     // 默认先隐藏footer
@@ -333,6 +332,7 @@ static const CGFloat MJDuration = 0.6;
         [loadView showFailLoadData];
         return;
     }
+    
     [loadView removeFromSuperview];
     //   UserDataCenter *userCenter =[UserDataCenter shareInstance];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
@@ -344,7 +344,6 @@ static const CGFloat MJDuration = 0.6;
     {
         urlstr = [NSString stringWithFormat:@"http://movie.douban.com/subject/%@/photos?type=S&start=%ld&sortby=vote&size=a&subtype=c", self.douban_id,self.dataArray2.count];
     }
-    
     [request setURL:[NSURL URLWithString:urlstr]];
     [request setHTTPMethod:@"GET"];
     NSOperationQueue * queue = [[NSOperationQueue alloc] init];
@@ -359,9 +358,7 @@ static const CGFloat MJDuration = 0.6;
             NSInteger responseCode = [(NSHTTPURLResponse *)response statusCode];
             NSString *responseString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
             if (responseCode == 200) {
-                
                 responseString = [Function getNoNewLine:responseString];
-                
                 NSString * pattern = @"http:\\/\\/img\\d\\.douban\\.com\\/view\\/photo\\/thumb\\/public\\/p\\d+\\.(jpg|jpeg|png)";
                 //NSLog(@"responseString = %@", responseString);
                 NSMutableArray *doubanInfos = [[DoubanService shareInstance] getDoubanInfosByResponse:responseString withpattern:pattern type:NServiceTypePhoto];
@@ -375,8 +372,7 @@ static const CGFloat MJDuration = 0.6;
                         //   NSLog(@"====doubanInfo ===%@",doubanInfos);
                         if (doubanInfos.count<40) {
                             [self.myConllectionView.footer noticeNoMoreData];
-                        }
-                    }
+                        }  }
                 }
                 else if (segment.selectedSegmentIndex==1)
                 {
@@ -387,8 +383,7 @@ static const CGFloat MJDuration = 0.6;
                         [self.dataArray2 addObjectsFromArray:doubanInfos];
                         if (doubanInfos.count<40) {
                             [self.myConllectionView.footer noticeNoMoreData];
-                        }
-                    }
+                        } }
                 }
                 [self.myConllectionView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
             } else {

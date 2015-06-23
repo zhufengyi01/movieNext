@@ -202,8 +202,6 @@
 
 -(void)createStageView
 {
-    
-    
     //分享出来的不是这个view
     BgView =[[UIImageView alloc]initWithFrame:CGRectMake(0,0,kDeviceWidth, (kDeviceWidth-0)*(9.0/16))];
     BgView.clipsToBounds=YES;
@@ -307,7 +305,7 @@
     
     markLable.frame=CGRectMake(10, self.ShareView.frame.size.height-Msize.height-5 ,self.ShareView.frame.size.width-20,Msize.height);
     if (Msize.height+self.stageImageView.frame.size.height>kDeviceHeight) {
-        scrollView.contentSize=CGSizeMake(kDeviceWidth, Msize.height+self.stageImageView.frame.size.height+100);
+        scrollView.contentSize=CGSizeMake(kDeviceWidth, Msize.height+self.stageImageView.frame.size.height+200);
     }
      //创建中间的工具栏
     [self createCenterContentView];
@@ -382,6 +380,9 @@
     NSString  *nameStr=_WeiboInfo.uerInfo.username;
     if (!nameStr) {
         nameStr =self.weiboInfo.uerInfo.username;
+        if (!nameStr) {
+            nameStr = @"";
+        }
     }
     CGSize  Nsize =[nameStr boundingRectWithSize:CGSizeMake(kDeviceWidth-35-70, 27) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:[NSDictionary dictionaryWithObject:movieNameLable.font forKey:NSFontAttributeName] context:nil].size;
     movieNameLable.frame=CGRectMake(35,0, Nsize.width+4, 30);
@@ -433,6 +434,15 @@
             starImageView.image=[UIImage imageNamed:@"like_nomoal.png"];
         }
     }
+    
+    if (!_WeiboInfo && !self.weiboInfo) {
+        leftButtomButton.hidden = YES;
+        BgView2.hidden = YES;
+    } else {
+        leftButtomButton.hidden = NO;
+        BgView2.hidden = NO;
+    }
+    
     [self createWeiboTagView];
 }
 -(void)createWeiboTagView
@@ -717,8 +727,10 @@
         BgView2.frame=CGRectMake(BgView2.frame.origin.x, self.ShareView.frame.origin.y+self.ShareView.frame.size.height+5, BgView2.frame.size.width, BgView2.frame.size.height);
         BgView.frame=CGRectMake(0, 0, kDeviceWidth, self.ShareView.frame.size.height+45+20);
         markLable.frame=CGRectMake(10, self.ShareView.frame.size.height-Msize.height-5 ,self.ShareView.frame.size.width-20,Msize.height);
-        
-        
+        scrollView.contentSize=CGSizeMake(kDeviceWidth, kDeviceHeight);
+        if (Msize.height+self.stageImageView.frame.size.height>kDeviceHeight) {
+            scrollView.contentSize=CGSizeMake(kDeviceWidth, Msize.height+self.stageImageView.frame.size.height+200);
+        }
         Like_lable.text=[NSString stringWithFormat:@"%@",_WeiboInfo.like_count];
         // 看是否已赞的
         for (int i=0; i<self.upweiboArray.count; i++) {

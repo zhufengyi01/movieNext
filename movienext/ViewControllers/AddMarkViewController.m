@@ -213,7 +213,7 @@
     _gradientLayer.endPoint = CGPointMake(0.5, 1.0);
     [_layerView.layer insertSublayer:_gradientLayer atIndex:0];
     
-    _myTextView=[[UITextView alloc]initWithFrame:CGRectMake(10,self.ShareView.frame.size.height-40, kDeviceWidth-40, 40)];
+    _myTextView=[[UITextView alloc]initWithFrame:CGRectMake(10,self.ShareView.frame.size.height-50, kDeviceWidth-40, 40)];
     // [_myTextView addPlaceHolder:@"输入弹幕"];
     _myTextView.textColor=[UIColor whiteColor];
     _myTextView.font= [UIFont fontWithName:kFontDouble size:22];
@@ -222,7 +222,7 @@
         _myTextView.font =[UIFont fontWithName:kFontDouble size:24];
     }
     _myTextView.backgroundColor=[UIColor clearColor];
-     //_myTextView.layer.cornerRadius=4;
+    // _myTextView.layer.cornerRadius=4;
     //_myTextView.layer.borderWidth=0.5;
     _myTextView.layer.allowsEdgeAntialiasing=YES;
     //_myTextView.layer.borderColor=VLight_GrayColor.CGColor;
@@ -528,7 +528,7 @@
     frame.size.height=_myTextView.contentSize.height+0;
     _myTextView.frame=frame;
     
-    self.ShareView.frame=CGRectMake(10,10, kDeviceWidth-20, _myTextView.frame.size.height-40+self.stageImageView.frame.size.height);
+    self.ShareView.frame=CGRectMake(10,10, kDeviceWidth-20, _myTextView.frame.size.height-50+self.stageImageView.frame.size.height);
     self.TagContentView.frame=CGRectMake(0, self.ShareView.frame.origin.y+self.ShareView.frame.size.height, kDeviceWidth, 100);
     
 }
