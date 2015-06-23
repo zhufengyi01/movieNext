@@ -14,6 +14,7 @@ typedef NS_ENUM(NSInteger,NSMovieSourcePage)
 {
     NSMovieSourcePageMovieListController =100,
     NSMovieSourcePageSearchListController  =101,
+    NSMovieSourcePageStageDetailController =102,
     NSMovieSourcePageAdminCloseStageViewController
     
 };

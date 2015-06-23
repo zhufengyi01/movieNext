@@ -20,7 +20,6 @@ typedef NS_ENUM(NSInteger, NSStageSourceType)
 #pragma mark  必要传递的参数
 //获取页面来源
 @property(nonatomic,assign) NSStageSourceType  pageType;
-
 //剧照数组
 //@property(nonatomic,strong) NSMutableArray    *StageDataArray;
 

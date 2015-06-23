@@ -29,6 +29,7 @@
 #import "UMSocial.h"
 #import "SelectTimeView.h"
 #import "UserDataCenter.h"
+#import "MovieDetailViewController.h"
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
 
@@ -100,12 +101,32 @@
 }
 -(void)createNavigation
 {
-    self.naviTitlLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:@"剧照详细页"];
+    self.naviTitlLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 180, 20) Font:16 Text:@"剧照详细页"];
     self.naviTitlLable.textColor=VGray_color;
     self.naviTitlLable.font=[UIFont fontWithName:kFontDouble size:16];
     self.naviTitlLable.textAlignment=NSTextAlignmentCenter;
+    self.naviTitlLable.userInteractionEnabled=YES;
+    
     self.navigationItem.titleView=self.naviTitlLable;
     
+    
+    
+    UIButton  *moviebtn =[UIButton buttonWithType:UIButtonTypeCustom];
+    moviebtn.frame=CGRectMake(0, 0, self.naviTitlLable.frame.size.width, self.naviTitlLable.frame.size.height);
+    //moviebtn.backgroundColor =[[UIColor redColor] colorWithAlphaComponent:0.4];
+    __weak typeof(self)  weakself  =  self;
+    [moviebtn addActionHandler:^(NSInteger tag) {
+         //跳转到电影页
+        MovieDetailViewController  *md =[[MovieDetailViewController alloc]init];
+        md.movieId=self.weiboInfo.stageInfo.movieInfo.Id;
+        md.moviename=self.weiboInfo.stageInfo.movieInfo.name;
+        md.movielogo=self.weiboInfo.stageInfo.movieInfo.logo;
+        md.pageSourceType=NSMovieSourcePageStageDetailController;
+        [weakself.navigationController pushViewController:md animated:YES];
+        
+    }];
+    [self.naviTitlLable addSubview:moviebtn];
+
     //两种按钮
     UserDataCenter  *usecenter =[UserDataCenter shareInstance];
     UIButton  *admOper =[UIButton buttonWithType:UIButtonTypeCustom];
@@ -119,18 +140,9 @@
     __weak typeof(self) weakSelf = self;
     [admOper  addActionHandler:^(NSInteger tag) {
         //管理员
-//        UIActionSheet  *Act=[[UIActionSheet alloc]initWithTitle:nil delegate:weakSelf cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"[切换剧照到审核/正式版]",@"[编辑弹幕]",@"[点赞]",@"[点踩]",@"[发送到 “屏蔽”]",@"[发送到 “最新”]",@"[发送到 “正常”]",@"[发送到 “发现”]",@"[定时到 “热门”]",nil];
-//        Act.tag=ADM_ACTION_TAG;
-//        [Act showInView:weakSelf.view];
-        
-        StageDetailViewController *initialViewController =[self viewControllerAtIndex:self.indexOfItem+4];// 得到第一页
-        self.weiboInfo = [self.WeiboDataArray objectAtIndex:self.indexOfItem];
-         CenterViewController=initialViewController;
-        NSArray *viewControllers =[NSArray arrayWithObject:initialViewController];
-        [_pageController setViewControllers:viewControllers
-                                  direction:UIPageViewControllerNavigationDirectionForward
-                                   animated:NO
-                                 completion:nil];
+        UIActionSheet  *Act=[[UIActionSheet alloc]initWithTitle:nil delegate:weakSelf cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"[切换剧照到审核/正式版]",@"[编辑弹幕]",@"[点赞]",@"[点踩]",@"[发送到 “屏蔽”]",@"[发送到 “最新”]",@"[发送到 “正常”]",@"[发送到 “发现”]",@"[定时到 “热门”]",nil];
+        Act.tag=ADM_ACTION_TAG;
+        [Act showInView:weakSelf.view];
         
     }];
     UIBarButtonItem  *aditme =[[UIBarButtonItem alloc]initWithCustomView:admOper];

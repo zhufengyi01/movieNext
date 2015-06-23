@@ -583,8 +583,6 @@
         NSString *s =[arr objectAtIndex:a];
         [suiji appendString:s];
     }
-    
-    
      //获取md5值
     NSMutableString   *mutableStri = [[NSMutableString alloc]initWithString:URLString];
     //找到最后一个"/"的位置

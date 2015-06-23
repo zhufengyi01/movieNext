@@ -34,6 +34,7 @@
 #import "M80AttributedLabel.h"
 #import "UIView+Shadow.h"
 #import "SelectTimeView.h"
+#import "UIImage+Color.h"
 #define ADM_ACTION_TAG    1000   //统一管理管弹出框
 
 #define ADM_NEW_ADD       1003  //最新添加
@@ -126,8 +127,43 @@
     titleLable.textColor=VBlue_color;
     titleLable.font=[UIFont fontWithName:kFontDouble size:16];
     titleLable.textColor=VGray_color;
+    titleLable.userInteractionEnabled=YES;
     titleLable.textAlignment=NSTextAlignmentCenter;
     self.navigationItem.titleView=titleLable;
+    
+    UIButton  *moviebtn =[UIButton buttonWithType:UIButtonTypeCustom];
+    moviebtn.frame=CGRectMake(0, 0, 140,30);
+    //moviebtn.backgroundColor =[[UIColor redColor] colorWithAlphaComponent:0.4];
+    __weak typeof(self)  weakself  =  self;
+    [moviebtn addActionHandler:^(NSInteger tag) {
+        //跳转到电影页
+        MovieDetailViewController  *md =[[MovieDetailViewController alloc]init];
+        if (self.weiboInfo) {
+            md.movieId=self.weiboInfo.stageInfo.movieInfo.Id;
+            md.moviename=self.weiboInfo.stageInfo.movieInfo.name;
+            md.movielogo=self.weiboInfo.stageInfo.movieInfo.logo;
+            md.pageSourceType=NSMovieSourcePageStageDetailController;   md.movieId=self.weiboInfo.stageInfo.movieInfo.Id;
+            md.moviename=self.weiboInfo.stageInfo.movieInfo.name;
+            md.movielogo=self.weiboInfo.stageInfo.movieInfo.logo;
+            md.pageSourceType=NSMovieSourcePageStageDetailController;
+            
+        }else
+        {
+            md.movieId=self.stageInfo.movieInfo.Id;
+            md.moviename=self.stageInfo.movieInfo.name;
+            md.movielogo=self.stageInfo.movieInfo.logo;
+            md.pageSourceType=NSMovieSourcePageStageDetailController;
+            md.movieId=self.stageInfo.movieInfo.Id;
+            md.moviename=self.stageInfo.movieInfo.name;
+            md.movielogo=self.stageInfo.movieInfo.logo;
+            md.pageSourceType=NSMovieSourcePageStageDetailController;
+        }
+        [weakself.navigationController pushViewController:md animated:YES];
+    }];
+      [titleLable addSubview:moviebtn];
+
+    
+    
     UserDataCenter  *usecenter =[UserDataCenter shareInstance];
     UIButton  *admOper =[UIButton buttonWithType:UIButtonTypeCustom];
     admOper.frame=CGRectMake(0, 0, 30, 25);
@@ -304,7 +340,7 @@
     BgView.frame=CGRectMake(0, 0, kDeviceWidth, self.ShareView.frame.size.height+20);
     
     markLable.frame=CGRectMake(10, self.ShareView.frame.size.height-Msize.height-5 ,self.ShareView.frame.size.width-20,Msize.height);
-    if (Msize.height+self.stageImageView.frame.size.height>kDeviceHeight) {
+    if (Msize.height+self.stageImageView.frame.size.height>kDeviceHeight-100) {
         scrollView.contentSize=CGSizeMake(kDeviceWidth, Msize.height+self.stageImageView.frame.size.height+200);
     }
      //创建中间的工具栏
@@ -320,8 +356,6 @@
     [self.view bringSubviewToFront:BgView2];
     [BgView addSubview:BgView2];
     BgView.frame=CGRectMake(0, 0, kDeviceWidth, self.ShareView.frame.size.height+45+20);
-    
-    
     leftButtomButton=[UIButton buttonWithType:UIButtonTypeCustom];
     leftButtomButton.frame=CGRectMake(10, 5, 140, 35);
     __weak typeof(self) weakSeaf = self;
@@ -590,7 +624,6 @@
     self.tagLable.backgroundColor =[UIColor clearColor];
     self.tagLable.numberOfLines=1;
     
-    
     if (self.weiboInfo) {//如果 从管理员的最新页进来
         TagView *tagview = [self createTagViewWithweiboInfo:self.weiboInfo andIndex:300];
         [tagview setbigTagWithSize:CGSizeMake(10, 12)];
@@ -643,7 +676,8 @@
         addMarkButton =[UIButton buttonWithType:UIButtonTypeCustom];
         addMarkButton.frame=CGRectMake(0, TOOLBAR_HEIGHT-45, kDeviceWidth/2, 45);
         [addMarkButton setTitle:@"我要添加" forState:UIControlStateNormal];
-        
+        UIImage  *lightimage =[UIImage imageWithColor:VGray_color];
+        [addMarkButton setBackgroundImage:lightimage forState:UIControlStateHighlighted];
         [addMarkButton addActionHandler:^(NSInteger tag) {
             AddMarkViewController  *AddMarkVC=[[AddMarkViewController alloc]init];
             AddMarkVC.delegate=weakSelf;
@@ -661,6 +695,8 @@
         ShareButton =[UIButton buttonWithType:UIButtonTypeCustom];
         ShareButton.frame=CGRectMake(kDeviceWidth/2, TOOLBAR_HEIGHT-45, kDeviceWidth/2, 45);
         [ShareButton setTitle:@"我要分享" forState:UIControlStateNormal];
+        UIImage   *shlightImage =[UIImage imageWithColor:VBlue_color];
+        [ShareButton setBackgroundImage:shlightImage forState:UIControlStateNormal];
         [ShareButton addActionHandler:^(NSInteger tag) {
             float  height = weakSelf.ShareView.frame.size.height;
             UIImage  *image=[Function getImage:weakSelf.ShareView WithSize:CGSizeMake(kDeviceWidth-20,height)];

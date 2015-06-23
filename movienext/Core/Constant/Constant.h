@@ -20,7 +20,7 @@
 #define kUrlMoviePoster @"http://next-movieposter.b0.upaiyun.com/"
 #define KIMAGE_BIG    @"!w640"
 #define KIMAGE_SMALL  @"!thumbwide2"
-#define KURLTOKEN    @"token"
+#define KURLTOKEN    @"apitoken"
 
 #define kBucketWeibo @"next-weibo"
 #define kBucketStage @"next-stage"
@@ -137,7 +137,5 @@
 
 #define kFontRegular @"NotoSansHans-Medium"
 #define kFontDouble @"NotoSansHans-Medium"
-
-
 
 #endif

@@ -362,7 +362,6 @@ static const CGFloat MJDuration = 0.6;
     Relayout.sectionInset=UIEdgeInsetsMake(5,0,0, 0); //整个偏移量 上左下右
     self.RecommendCollectionView =[[UICollectionView alloc]initWithFrame:CGRectMake(0,0,kDeviceWidth, kDeviceHeight-kHeightNavigation-kHeigthTabBar-0) collectionViewLayout:Relayout];
     //[layout setHeaderReferenceSize:CGSizeMake(_myConllectionView.frame.size.width, kDeviceHeight/3+64+110)];
-    
     self.RecommendCollectionView.backgroundColor=[UIColor whiteColor];
     //注册小图模式
     [self.RecommendCollectionView registerClass:[SmallImageCollectionViewCell class] forCellWithReuseIdentifier:@"smallcell"];
@@ -894,7 +893,6 @@ static const CGFloat MJDuration = 0.6;
     return 0;
     
 }
-
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if (collectionView==self.myConllectionView) {
@@ -935,13 +933,13 @@ static const CGFloat MJDuration = 0.6;
             NSURL  *url =[NSURL URLWithString:[NSString stringWithFormat:@"%@%@%@",kUrlStage,model.stageInfo.photo ,KIMAGE_SMALL]];
             [cell.imageView sd_setImageWithURL:url placeholderImage:nil options:(SDWebImageRetryFailed|SDWebImageLowPriority)];
             cell.titleLab.text=[NSString stringWithFormat:@"%@",model.content];
-            NSDate  *comfromTimesp =[NSDate dateWithTimeIntervalSince1970:[model.updated_at intValue]];
-            NSString  *da = [NSDate timeInfoWithDate:comfromTimesp];
+            //NSDate  *comfromTimesp =[NSDate dateWithTimeIntervalSince1970:[model.updated_at intValue]];
+            //NSString  *da = [NSDate timeInfoWithDate:comfromTimesp];
             //dateLable.text=da;
-            cell.lblTime.text = da;
-            cell.lblLikeCount.text = [NSString stringWithFormat:@"%d", [model.like_count intValue]];
-            [cell.ivAvatar sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", kUrlAvatar, model.uerInfo.logo]]];
-            cell.ivLike.image = [UIImage imageNamed:@"tiny_like"];
+//            cell.lblTime.text = da;
+//            cell.lblLikeCount.text = [NSString stringWithFormat:@"%d", [model.like_count intValue]];
+//            [cell.ivAvatar sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", kUrlAvatar, model.uerInfo.logo]]];
+//            cell.ivLike.image = [UIImage imageNamed:@"tiny_like"];
             return cell;
         }
         return cell;

@@ -29,7 +29,7 @@
 #import "UIView+Shadow.h"
 #import "TagToStageViewController.h"
 #import "SelectTimeView.h"
-
+#import "UIImage+Color.h"
 #define Alert_Interval  1
 #define  TOOLBAR_HEIGHT  45
 
@@ -177,13 +177,15 @@
     
     //计算文字的高度从而确定整个shareview的高度
     
-    CGSize  Msize = [self.markLable.text boundingRectWithSize:CGSizeMake(kDeviceWidth-40, MAXFLOAT) options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes:[NSDictionary dictionaryWithObject:self.markLable.font forKey:NSFontAttributeName] context:nil].size;
+    CGSize  Msize = [self.markLable.text boundingRectWithSize:CGSizeMake(kDeviceWidth-20, MAXFLOAT) options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes:[NSDictionary dictionaryWithObject:self.markLable.font forKey:NSFontAttributeName] context:nil].size;
+    NSLog(@" msize height === %f",Msize.height);
     
     self.ShareView.frame=CGRectMake(self.ShareView.frame.origin.x, self.ShareView.frame.origin.y, self.ShareView.frame.size.width, self.ShareView.frame.size.height+Msize.height-27);
     BgView.frame=CGRectMake(0, 0, kDeviceWidth, self.ShareView.frame.size.height+20);
     self.markLable.frame=CGRectMake(10, self.ShareView.frame.size.height-Msize.height-5 ,self.ShareView.frame.size.width-20,Msize.height);
+    NSLog(@"=======self stageview height ==%f ",self.stageImageView.frame.size.height);
     
-    if (Msize.height+self.stageImageView.frame.size.height>kDeviceHeight) {
+    if (Msize.height+self.stageImageView.frame.size.height>kDeviceHeight-100) {
         self.stageScrollerView.contentSize=CGSizeMake(kDeviceWidth, Msize.height+self.stageImageView.frame.size.height+200);
     }
     //创建中间的工具栏
@@ -354,16 +356,14 @@
     for (int i=0; i<5; i++) {
         UIButton *btnBlock =[UIButton buttonWithType:UIButtonTypeCustom];
         btnBlock.tag = 2000 + i;
-        
+        UIImage  *ligImage =[UIImage imageWithColor:VGray_color];
         btnBlock.frame=CGRectMake(kDeviceWidth/5*i,0, kDeviceWidth/5, 45);
         [btnBlock setTitle:titleArray[i] forState:UIControlStateNormal];
         [btnBlock setTitleColor:VBlue_color forState:UIControlStateNormal];
         [btnBlock setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color"] forState:UIControlStateNormal];
-        //[btnBlock setBackgroundImage:[UIImage imageNamed:@"dischoice_icon@3x.png"] forState:UIControlStateHighlighted];
+        [btnBlock setBackgroundImage:ligImage forState:UIControlStateHighlighted];
         [btnBlock addTarget:self action:@selector(changeWeiboStatus:) forControlEvents:UIControlEventTouchUpInside];
         [ToolView addSubview:btnBlock];
-
-    
    }
 }
 #pragma mark --- User Action

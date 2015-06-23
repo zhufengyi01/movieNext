@@ -130,7 +130,7 @@ static const CGFloat MJDuration = 0.2;
     else if(self.pageSourceType==NSMovieSourcePageMovieListController)
     {
         // 从电影列表页进来的
-        page=1;
+         page=1;
         //[self requestData];
     }
     else if (self.pageSourceType ==NSMovieSourcePageAdminCloseStageViewController)
@@ -163,11 +163,11 @@ static const CGFloat MJDuration = 0.2;
     // movieNameLable.numberOfLines=1;
     movieNameLable.lineBreakMode=NSLineBreakByTruncatingTail;
     [titleView addSubview:movieNameLable];
-    
     NSString  *logoString;
     if (self.pageSourceType==NSMovieSourcePageMovieListController) {
         logoString =[NSString stringWithFormat:@"%@%@!poster",kUrlFeed,self.movielogo];
     }
+    
     else if(self.pageSourceType==NSMovieSourcePageSearchListController)
     {
         logoString =self.movielogo;
@@ -517,11 +517,7 @@ static const CGFloat MJDuration = 0.2;
     tagView.titleLable.textColor=[UIColor whiteColor];
     tagId =tagInfo.tagDetailInfo.Id;
     [self requestData];
-    
-    
-    
 }
-
 
 //审核版到正式版的切换
 -(void)requestmoveReviewToNormal:(NSString *) stageId
@@ -751,7 +747,7 @@ static const CGFloat MJDuration = 0.2;
     //    }
     //    else{
     //在电影列表或者是搜索页进来的
-    if (self.pageSourceType==NSMovieSourcePageMovieListController|self.pageSourceType==  NSMovieSourcePageSearchListController)
+    if (self.pageSourceType==NSMovieSourcePageMovieListController|self.pageSourceType==  NSMovieSourcePageSearchListController||self.pageSourceType==NSMovieSourcePageStageDetailController)
     {
         urlString =[NSString stringWithFormat:@"%@/stage/list?per-page=%d&page=%d",kApiBaseUrl,pageSize,page];
         NSString *tokenString =  [Function getURLtokenWithURLString:urlString];
@@ -778,7 +774,7 @@ static const CGFloat MJDuration = 0.2;
                     stageInfoModel  *stagemodel =[[stageInfoModel alloc]init];
                     if (stagemodel) {
                         [stagemodel setValuesForKeysWithDictionary:stageDict];
-                        
+                    
                         NSMutableArray  *weibos=[[NSMutableArray alloc]init];
                         for (NSDictionary *weiboDict in [stageDict objectForKey:@"weibos"]) {
                             weiboInfoModel  *weibomodel=[[weiboInfoModel alloc]init];
