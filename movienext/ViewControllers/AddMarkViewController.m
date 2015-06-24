@@ -28,7 +28,7 @@
 #import "AddLoadingView.h"
 #import  "MyViewController.h"
 #import "UITextView+PlaceHolder.h"
-
+#import "UIView+Shadow.h"
 #define  PULISH_TOOLBAR_HEIGHT 80
 
 #define  BOOKMARK_WORD_LIMIT 1000
@@ -199,25 +199,14 @@
     [self.stageImageView   sd_setImageWithURL:[NSURL URLWithString:photostring] placeholderImage:nil options:(SDWebImageLowPriority|SDWebImageRetryFailed)];
     
     UIView  *_layerView =[[UIView alloc]initWithFrame:CGRectMake(0, self.stageImageView.frame.size.height-60, kDeviceWidth-0, 60)];
+    [_layerView setShadow];
     [self.stageImageView addSubview:_layerView];
-    
-    CAGradientLayer * _gradientLayer = [CAGradientLayer layer];  // 设置渐变效果
-    _gradientLayer.bounds = _layerView.bounds;
-    _gradientLayer.borderWidth = 0;
-    
-    _gradientLayer.frame = _layerView.bounds;
-    _gradientLayer.colors = [NSArray arrayWithObjects:
-                             (id)[[UIColor clearColor] CGColor],
-                             (id)[[UIColor blackColor] CGColor], nil, nil];
-    _gradientLayer.startPoint = CGPointMake(0.5, 0.5);
-    _gradientLayer.endPoint = CGPointMake(0.5, 1.0);
-    [_layerView.layer insertSublayer:_gradientLayer atIndex:0];
     
     _myTextView=[[UITextView alloc]initWithFrame:CGRectMake(10,self.ShareView.frame.size.height-50, kDeviceWidth-40, 40)];
     // [_myTextView addPlaceHolder:@"输入弹幕"];
     _myTextView.textColor=[UIColor whiteColor];
     _myTextView.font= [UIFont fontWithName:kFontDouble size:22];
-    
+    _myTextView.tintColor=[UIColor whiteColor];
     if (IsIphone6plus) {
         _myTextView.font =[UIFont fontWithName:kFontDouble size:24];
     }

@@ -200,8 +200,7 @@ static const CGFloat MJDuration = 0.2;
     }
     [layout setHeaderReferenceSize:CGSizeMake(_myConllectionView.frame.size.width,160)];
     _myConllectionView.backgroundColor=[UIColor whiteColor];
-    //注册大图模式
-    //注册小图模式
+     //注册小图模式
     [_myConllectionView registerClass:[SmallImageCollectionViewCell class] forCellWithReuseIdentifier:@"smallcell"];
     // 注册头部视图
     [_myConllectionView registerClass:[UserHeaderReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"headerView"];

@@ -97,8 +97,6 @@ static const CGFloat MJDuration = 0.2;
     self.navigationController.navigationBar.hidden=NO;
     self.tabBarController.tabBar.hidden=YES;
     //  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(requestMovieData) name:@"RefreshMovieDeatail" object:nil];
-    
-    
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -122,7 +120,6 @@ static const CGFloat MJDuration = 0.2;
     [self initData];
     [self initUI];
     [self createNavigation];
-    
     if (self.pageSourceType==NSMovieSourcePageSearchListController) { //电影搜索页面进来的
         page=1;
         [self requestMovieIdWithdoubanId];

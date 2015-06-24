@@ -35,6 +35,7 @@
 #import "UpweiboModel.h"
 //#import "SearchMovieViewController.h"
 #import "StageViewController.h"
+#import "RecomendHeadView.h"
 #define  BUTTON_COUNT  3
 #define  NaviTitle_Width  160
 #define  NaviTitle_Height 46
@@ -84,13 +85,13 @@ static const CGFloat MJDuration = 0.6;
     // if (self.myConllectionView) {
     //[  self.myConllectionView headerBeginRefreshing];
     //}
-     // [[UINavigationBar appearance] setShadowImage:[UIImage imageWithColor:[UIColor clearColor] size:CGSizeMake(kDeviceWidth, 1)]];
+    // [[UINavigationBar appearance] setShadowImage:[UIImage imageWithColor:[UIColor clearColor] size:CGSizeMake(kDeviceWidth, 1)]];
     
-//    [self.navigationController.navigationBar  setBackgroundImage:[UIImage imageWithColor:[UIColor colorWithRed:255.0/255 green:255.0/255 blue:255.0/255 alpha:1]] forBarMetrics:UIBarMetricsDefault];
-//    
+    //    [self.navigationController.navigationBar  setBackgroundImage:[UIImage imageWithColor:[UIColor colorWithRed:255.0/255 green:255.0/255 blue:255.0/255 alpha:1]] forBarMetrics:UIBarMetricsDefault];
+    //
     [self.navigationController.navigationBar setShadowImage:[UIImage imageWithColor:[UIColor clearColor
                                                                                      ] size:CGSizeMake(kDeviceWidth, 1)]];
- }
+}
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:YES];
@@ -162,7 +163,6 @@ static const CGFloat MJDuration = 0.6;
         }];
         [naviTitleView addSubview:self.recommentBtn];
         
-        
         self.feedBtn =[UIButton buttonWithType:UIButtonTypeCustom];
         self.feedBtn.frame=CGRectMake(NaviTitle_Width/2, 0, NaviTitle_Width/2, NaviTitle_Height);
         [self.feedBtn setTitle:@"电影" forState:UIControlStateNormal];
@@ -214,12 +214,10 @@ static const CGFloat MJDuration = 0.6;
     self.myScorollerView.bounces=NO;
     self.myScorollerView.pagingEnabled=YES;
     [self.view addSubview:self.myScorollerView];
-    
     self.RecommentView=[[UIView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight-kHeigthTabBar)];
     //self.RecommentView.backgroundColor =[UIColor redColor];
     self.RecommentView.userInteractionEnabled=YES;
     [self.myScorollerView addSubview:self.RecommentView];
-    
     self.feedView=[[UIView alloc] initWithFrame:CGRectMake(kDeviceWidth, 0, kDeviceWidth, kDeviceHeight-kHeigthTabBar)];
     //self.feedView.backgroundColor =[UIColor yellowColor];
     self.feedView.userInteractionEnabled=YES;
@@ -255,11 +253,9 @@ static const CGFloat MJDuration = 0.6;
         }
         [TopImageView addSubview:btn];
     }
-    
 }
 -(void)dealSegmentClick:(UIButton *) btn
 {
-    
     if (btn.tag==100) {
         if(btn.selected==NO)
         {
@@ -269,10 +265,7 @@ static const CGFloat MJDuration = 0.6;
             }
             btn.selected=YES;
         }
-        else if (btn.selected==YES)
-        {
-        }
-    }
+     }
     else if (btn.tag==101)
     {
         if(btn.selected==NO)
@@ -286,10 +279,7 @@ static const CGFloat MJDuration = 0.6;
                 [self requestData];
             }
         }
-        else if (btn.selected==YES)
-        {
-        }
-    }
+     }
     else if(btn.tag==102)
     {
         if(btn.selected==NO)
@@ -303,14 +293,8 @@ static const CGFloat MJDuration = 0.6;
                 [self requestData];
             }
         }
-        else if (btn.selected==YES)
-        {
-            
-        }
-        
-    }
+     }
     [self.myConllectionView reloadData];
-    
 }
 -(void)creatLoadView
 {
@@ -362,8 +346,10 @@ static const CGFloat MJDuration = 0.6;
     Relayout.sectionInset=UIEdgeInsetsMake(5,0,0, 0); //整个偏移量 上左下右
     self.RecommendCollectionView =[[UICollectionView alloc]initWithFrame:CGRectMake(0,0,kDeviceWidth, kDeviceHeight-kHeightNavigation-kHeigthTabBar-0) collectionViewLayout:Relayout];
     //[layout setHeaderReferenceSize:CGSizeMake(_myConllectionView.frame.size.width, kDeviceHeight/3+64+110)];
+    Relayout.headerReferenceSize =CGSizeMake(kDeviceWidth, 30);
     self.RecommendCollectionView.backgroundColor=[UIColor whiteColor];
-    //注册小图模式
+    //注册头部视图
+    [self.RecommendCollectionView registerClass:[RecomendHeadView class]forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"RecomendheaderView"];
     [self.RecommendCollectionView registerClass:[SmallImageCollectionViewCell class] forCellWithReuseIdentifier:@"smallcell"];
     
     self.RecommendCollectionView.delegate=self;
@@ -383,11 +369,7 @@ static const CGFloat MJDuration = 0.6;
     _myConllectionView.delegate=self;
     _myConllectionView.dataSource=self;
     [self.feedView addSubview:_myConllectionView];
-    
     [self setUprefresh];
-    /**
-     *  集成刷新控件
-     */
 }
 
 -(void)setRecommtUprefresh
@@ -400,7 +382,7 @@ static const CGFloat MJDuration = 0.6;
          [weakSelf.colors insertObject:MJRandomColor atIndex:0];
          }*/
         page0=1;
-      
+        
         // 进入刷新状态就会回调这个Block
         [weakSelf requestRecommendData];
         // 设置文字
@@ -631,7 +613,7 @@ static const CGFloat MJDuration = 0.6;
 -(void)requestRecommendData
 {
     UserDataCenter *userCenter =[UserDataCenter shareInstance];
-        NSString  *urlString =[NSString stringWithFormat:@"%@/weibo/list-by-status?per-page=%d&page=%d", kApiBaseUrl,pageSize,page0];
+    NSString  *urlString =[NSString stringWithFormat:@"%@/weibo/list-by-status?per-page=%d&page=%d", kApiBaseUrl,pageSize,page0];
     NSString *tokenString  = [Function getURLtokenWithURLString:urlString];
     NSDictionary *parameters = @{@"user_id":userCenter.user_id, @"status":@"3", @"Version":Version,KURLTOKEN:tokenString};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
@@ -694,7 +676,6 @@ static const CGFloat MJDuration = 0.6;
                     [self.dataArray0 addObject:weibomodel];
                 }
             }
-            
             //点赞的数组
             for (NSDictionary  *updict in [responseObject objectForKey:@"upweibos"]) {
                 UpweiboModel *upmodel =[[UpweiboModel alloc]init];
@@ -705,7 +686,9 @@ static const CGFloat MJDuration = 0.6;
                         _upWeiboArray =[[NSMutableArray alloc]init];
                     }
                     [_upWeiboArray addObject:upmodel];
-                }}
+                }
+            }
+            
             
             [self.RecommendCollectionView reloadData];
             [self.RecommendCollectionView.footer endRefreshing];
@@ -856,12 +839,37 @@ static const CGFloat MJDuration = 0.6;
         
     }];
 }
-
-#pragma mark - UICollectionViewDataSource
-
-- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
+//根据热门请求的数组返回一系列的数组，
+-(void)computeRecomendSectionView:(NSMutableArray *) dataArray
 {
     
+    
+}
+
+//设置头尾部内容
+-(UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
+ {
+     UICollectionReusableView *reusableView = nil;
+     if (collectionView==self.RecommendCollectionView) {
+         if (kind == UICollectionElementKindSectionHeader) {
+             //定制头部视图的内容
+             RecomendHeadView *headerV = (RecomendHeadView *)[collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"RecomendheaderView" forIndexPath:indexPath];
+              reusableView = headerV;
+         }
+         return reusableView;
+     }
+     else
+     {
+         return nil;
+     }
+     return nil;
+ }
+#pragma mark - UICollectionViewDataSource
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
+{
+    if (collectionView==self.RecommendCollectionView) {
+        return 4;
+    }
     return 1;
 }
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
@@ -888,6 +896,8 @@ static const CGFloat MJDuration = 0.6;
     }
     else if(collectionView==self.RecommendCollectionView)
     {
+        
+        
         return self.dataArray0.count;
     }
     return 0;
@@ -936,10 +946,10 @@ static const CGFloat MJDuration = 0.6;
             //NSDate  *comfromTimesp =[NSDate dateWithTimeIntervalSince1970:[model.updated_at intValue]];
             //NSString  *da = [NSDate timeInfoWithDate:comfromTimesp];
             //dateLable.text=da;
-//            cell.lblTime.text = da;
-//            cell.lblLikeCount.text = [NSString stringWithFormat:@"%d", [model.like_count intValue]];
-//            [cell.ivAvatar sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", kUrlAvatar, model.uerInfo.logo]]];
-//            cell.ivLike.image = [UIImage imageNamed:@"tiny_like"];
+            //            cell.lblTime.text = da;
+            //            cell.lblLikeCount.text = [NSString stringWithFormat:@"%d", [model.like_count intValue]];
+            //            [cell.ivAvatar sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", kUrlAvatar, model.uerInfo.logo]]];
+            //            cell.ivLike.image = [UIImage imageNamed:@"tiny_like"];
             return cell;
         }
         return cell;
@@ -998,23 +1008,23 @@ static const CGFloat MJDuration = 0.6;
     }
     else if (collectionView==self.RecommendCollectionView)
     {
-//        ShowStageViewController *vc = [[ShowStageViewController alloc] init];
-//        vc.pageType=NSStagePapeTypeHotStageList;//热门页进入
-//        weiboInfoModel *model=[self.dataArray0 objectAtIndex:indexPath.row];
-//        vc.stageInfo = model.stageInfo;
-//        vc.upweiboArray=_upWeiboArray;
-//        vc.weiboInfo=model;
-//        UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
-//        self.navigationItem.backBarButtonItem=item;
-//        [self.navigationController pushViewController:vc animated:YES];
-
+        //        ShowStageViewController *vc = [[ShowStageViewController alloc] init];
+        //        vc.pageType=NSStagePapeTypeHotStageList;//热门页进入
+        //        weiboInfoModel *model=[self.dataArray0 objectAtIndex:indexPath.row];
+        //        vc.stageInfo = model.stageInfo;
+        //        vc.upweiboArray=_upWeiboArray;
+        //        vc.weiboInfo=model;
+        //        UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+        //        self.navigationItem.backBarButtonItem=item;
+        //        [self.navigationController pushViewController:vc animated:YES];
+        
         StageViewController  *stageVC =[[StageViewController alloc]init];
         stageVC.WeiboDataArray = self.dataArray0;
         stageVC.indexOfItem=indexPath.row;
         stageVC.upWeiboArray=_upWeiboArray;
         stageVC.pageType = NSStagePapeTypeDefult;
         UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
-        self.navigationItem.backBarButtonItem=item;        
+        self.navigationItem.backBarButtonItem=item;
         [self.navigationController pushViewController:stageVC animated:YES];
         
         

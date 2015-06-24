@@ -505,6 +505,7 @@
 		38D46C9B1B325ADF00C482EC /* NotoSansHans-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 38D46C991B325ADF00C482EC /* NotoSansHans-Regular.otf */; };
 		38D694C61B33CC7000B42A00 /* ShareModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 38D694C51B33CC7000B42A00 /* ShareModel.m */; };
 		38D694CB1B3409AD00B42A00 /* UIView+Shadow.m in Sources */ = {isa = PBXBuildFile; fileRef = 38D694CA1B3409AD00B42A00 /* UIView+Shadow.m */; };
+		38F103991B39B0AD004C1592 /* RecomendHeadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 38F103981B39B0AD004C1592 /* RecomendHeadView.m */; };
 		400930EA1B2963860099E1D9 /* AvatarBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 400930E91B2963860099E1D9 /* AvatarBrowser.m */; };
 		401860B61B283ADD0050A1AD /* make_searchbar_history@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 401860B51B283ADD0050A1AD /* make_searchbar_history@2x.png */; };
 		402DE3711B1EA3260018CBC6 /* download@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 402DE3691B1EA3260018CBC6 /* download@2x.png */; };
@@ -1262,6 +1263,8 @@
 		38D694C51B33CC7000B42A00 /* ShareModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShareModel.m; sourceTree = "<group>"; };
 		38D694C91B3409AD00B42A00 /* UIView+Shadow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Shadow.h"; sourceTree = "<group>"; };
 		38D694CA1B3409AD00B42A00 /* UIView+Shadow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Shadow.m"; sourceTree = "<group>"; };
+		38F103971B39B0AD004C1592 /* RecomendHeadView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecomendHeadView.h; sourceTree = "<group>"; };
+		38F103981B39B0AD004C1592 /* RecomendHeadView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecomendHeadView.m; sourceTree = "<group>"; };
 		400930E81B2963860099E1D9 /* AvatarBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AvatarBrowser.h; sourceTree = "<group>"; };
 		400930E91B2963860099E1D9 /* AvatarBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AvatarBrowser.m; sourceTree = "<group>"; };
 		401860B51B283ADD0050A1AD /* make_searchbar_history@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "make_searchbar_history@2x.png"; sourceTree = "<group>"; };
@@ -1482,6 +1485,7 @@
 				00562B4E1ABBD8E0001D4FE0 /* Showstage */,
 				00ABFC6E1AAAA78100980824 /* MovieDetail */,
 				0067395B1AA49F260087C240 /* Searchmovie */,
+				38F103961B39AFC5004C1592 /* movieheader */,
 				000B08F81AA2EA1800B8D13A /* MovieViewController.h */,
 				000B08F91AA2EA1800B8D13A /* MovieViewController.m */,
 				00572CC01AA44FBE0041D451 /* MovieCollectionViewCell.h */,
@@ -2844,6 +2848,15 @@
 			path = ShadowView;
 			sourceTree = "<group>";
 		};
+		38F103961B39AFC5004C1592 /* movieheader */ = {
+			isa = PBXGroup;
+			children = (
+				38F103971B39B0AD004C1592 /* RecomendHeadView.h */,
+				38F103981B39B0AD004C1592 /* RecomendHeadView.m */,
+			);
+			path = movieheader;
+			sourceTree = "<group>";
+		};
 		402DE37B1B1EAFB00018CBC6 /* MyButton */ = {
 			isa = PBXGroup;
 			children = (
@@ -3356,6 +3369,7 @@
 				381E964F1B327AA7006CBF95 /* StageViewController.m in Sources */,
 				00218C701AE0A230006B79B4 /* ScanMovieInfoViewController.m in Sources */,
 				00354C2C1ABF004100F650AA /* UpYun.m in Sources */,
+				38F103991B39B0AD004C1592 /* RecomendHeadView.m in Sources */,
 				00AA542E1AA2C525004096F8 /* SDWebImageDownloaderOperation.m in Sources */,
 				00ECAE1A1B0999DF0039597E /* NSDate+Extension.m in Sources */,
 				00354C5B1ABF030C00F650AA /* AFSecurityPolicy.m in Sources */,
