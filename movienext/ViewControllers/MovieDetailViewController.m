@@ -698,9 +698,11 @@ static const CGFloat MJDuration = 0.2;
     if (!_movieId || _movieId<=0) {
         return;
     }
-    NSDictionary *parameter = @{@"movie_id": self.movieId};
+    NSString *urlString =[NSString stringWithFormat:@"%@/movie/info", kApiBaseUrl];
+    NSString *tokenString =[Function getURLtokenWithURLString:urlString];
+    NSDictionary *parameter = @{@"movie_id": self.movieId,KURLTOKEN:tokenString};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager POST:[NSString stringWithFormat:@"%@/movie/info", kApiBaseUrl] parameters:parameter success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [manager POST:urlString parameters:parameter success:^(AFHTTPRequestOperation *operation, id responseObject) {
         //  NSLog(@"  电影详情页面的电影信息数据JSON: %@", responseObject);
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
             NSDictionary  *dict =[responseObject objectForKey:@"model"];
@@ -917,8 +919,6 @@ static const CGFloat MJDuration = 0.2;
         NSURL  *url =[NSURL URLWithString:[NSString stringWithFormat:@"%@%@%@",kUrlStage,model.photo,KIMAGE_SMALL]];
         
         [cell.imageView sd_setImageWithURL:url placeholderImage:nil options:(SDWebImageRetryFailed|SDWebImageLowPriority)];
-        
-        
         
         if ( model.weibosArray.count>0) {
             //cell.titleLab.hidden = NO;

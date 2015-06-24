@@ -20,6 +20,7 @@
 #import "StageView.h"
 #import "Like_HUB.h"
 #import "UIImageView+WebCache.h"
+#import "UIImage+Color.h"
 #import "UMSocial.h"
 #import "Function.h"
 #import "UMShareView.h"
@@ -32,7 +33,6 @@
 #import "MovieDetailViewController.h"
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
-
 #import "ScanMovieInfoViewController.h"
 #define ADM_ACTION_TAG     1000   //统一管理管弹出框
 #define CUSTOM_SELF_TAG    1001
@@ -78,7 +78,6 @@
     [self createNavigation];
     [self createUI];
     [self createToolBar];
-    
 }
 -(instancetype)init
 {
@@ -246,7 +245,6 @@
     //ShareButton.backgroundColor =[UIColor redColor];
     [addMarkButton setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color"] forState:UIControlStateNormal];
     [ToolView addSubview:addMarkButton];
-    
     ShareButton =[UIButton buttonWithType:UIButtonTypeCustom];
     ShareButton.frame=CGRectMake(kDeviceWidth/2, 0, kDeviceWidth/2, TOOLBAR_HEIGHT);
     [ShareButton setTitle:@"我要分享" forState:UIControlStateNormal];

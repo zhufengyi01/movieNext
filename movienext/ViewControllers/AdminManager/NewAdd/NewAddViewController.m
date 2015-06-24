@@ -42,7 +42,6 @@ static const CGFloat MJDuration = 0.1;
 @interface NewAddViewController ()<UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UICollectionViewDelegate,LoadingViewDelegate,UIAlertViewDelegate>
 {
     UICollectionViewFlowLayout    *layout;
-    
     int pageSize;
     int page;
     int pageCount;
@@ -154,9 +153,6 @@ static const CGFloat MJDuration = 0.1;
     //[layout setHeaderReferenceSize:CGSizeMake(_myConllectionView.frame.size.width, kDeviceHeight/3+64+110)];
     
     _myConllectionView.backgroundColor=View_BackGround;
-    //注册大图模式
-    //[_myConllectionView registerClass:[BigImageCollectionViewCell class] forCellWithReuseIdentifier:@"bigcell"];
-    
     //注册小图模式
     [_myConllectionView registerClass:[SmallImageCollectionViewCell class] forCellWithReuseIdentifier:@"smallcell"];
     // 注册头部视图
@@ -166,8 +162,6 @@ static const CGFloat MJDuration = 0.1;
     
     [self.view addSubview:_myConllectionView];
     [self setUprefresh];
-    //    [self setupHeadView];
-    //    [self setupFootView];
 }
 - (void)setUprefresh
 {

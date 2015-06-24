@@ -36,6 +36,7 @@
 //#import "SearchMovieViewController.h"
 #import "StageViewController.h"
 #import "RecomendHeadView.h"
+#import "StageListViewController.h"
 #import "NSDateFormatter+Make.h"
 #define  BUTTON_COUNT  3
 #define  NaviTitle_Width  160
@@ -400,7 +401,7 @@ static const CGFloat MJDuration = 0.6;
         // weakSelf.myConllectionView.header.textColor = VGray_color;
         // 模拟延迟加载数据，因此2秒后才调用（真实开发中，可以移除这段gcd代码）
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(MJDuration * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [weakSelf.RecommendCollectionView reloadData];
+            //[weakSelf.RecommendCollectionView reloadData];
             
             // 结束刷新
             [weakSelf.RecommendCollectionView.header endRefreshing];
@@ -521,7 +522,7 @@ static const CGFloat MJDuration = 0.6;
                     [weakSelf requestData];
                 }
                 else{
-                    [self.myConllectionView.footer noticeNoMoreData];
+                    [weakSelf.myConllectionView.footer noticeNoMoreData];
                 }
             }
             else if(i==1&&btn.selected==YES)
@@ -855,18 +856,15 @@ static const CGFloat MJDuration = 0.6;
     NSDateFormatter *formatter =[NSDateFormatter  dateFormatterWithFormat:@"YYYY-MM-dd"];
     [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"GMT+8000"]];
     NSString  *datestr0 = [formatter stringFromDate:comfromTimesp];
-    
-    
     //目的，根据时间，对dataarray进行分组，最后把这个分组存放在self.dataArray0 中
     for (int i = 1; i<dataArray.count; i++) {
-        
         weiboInfoModel *weibomodel =[dataArray objectAtIndex:i];
         //取出时间
         NSDate  *comfromTimesp =[NSDate dateWithTimeIntervalSince1970:[weibomodel.updated_at intValue]];
         NSDateFormatter *formatter =[NSDateFormatter  dateFormatterWithFormat:@"YYYY-MM-dd"];
         [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"GMT+8000"]];
         NSString  *datestr = [formatter stringFromDate:comfromTimesp];
-        NSLog(@"!!!!!!!!%@",datestr);
+       // NSLog(@"!!!!!!!!%@",datestr);
         if ([datestr0 isEqualToString:datestr]) {//如果上一项等于下一项的话，把第二项加入到上面的数组
             [array0 addObject:weibomodel];
         }
@@ -878,9 +876,6 @@ static const CGFloat MJDuration = 0.6;
         }
         datestr0=datestr;
     }
-    
-    NSLog(@"dataArray =========%@",self.recomendDataArray);
-    
 }
 
 //设置头尾部内容
@@ -987,9 +982,7 @@ static const CGFloat MJDuration = 0.6;
             NSURL  *url =[NSURL URLWithString:[NSString stringWithFormat:@"%@%@%@",kUrlStage,model.stageInfo.photo ,KIMAGE_SMALL]];
             [cell.imageView sd_setImageWithURL:url placeholderImage:nil options:(SDWebImageRetryFailed|SDWebImageLowPriority)];
             cell.titleLab.text=[NSString stringWithFormat:@"%@",model.content];
-            
 //            NSDate  *comfromTimesp =[NSDate dateWithTimeIntervalSince1970:[model.updated_at intValue]];
-            
             //NSString  *da = [NSDate timeInfoWithDate:comfromTimesp];
             //dateLable.text=da;
             //            cell.lblTime.text = da;
@@ -1040,30 +1033,33 @@ static const CGFloat MJDuration = 0.6;
             }
         }
         [self.navigationController hidesBottomBarWhenPushed];
-        MovieDetailViewController *vc =  [MovieDetailViewController new];
-        if (array.count > indexPath.row) {
+//        MovieDetailViewController *vc =  [MovieDetailViewController new];
+//        if (array.count > indexPath.row) {
+//            NSDictionary *dict = [array  objectAtIndex:(long)indexPath.row];
+//            vc.movieId = [dict objectForKey:@"movie_id"];
+//            vc.moviename=[dict objectForKey:@"title"];
+//            vc.pageSourceType=NSMovieSourcePageMovieListController;
+//            vc.movielogo =[dict objectForKey:@"photo"];
+//            UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+//            self.navigationItem.backBarButtonItem=item;
+//        }
+//        [self.navigationController pushViewController:vc animated:YES];
+        
+        StageListViewController *list =[StageListViewController new];
+        if (array.count>indexPath.row) {
             NSDictionary *dict = [array  objectAtIndex:(long)indexPath.row];
-            vc.movieId = [dict objectForKey:@"movie_id"];
-            vc.moviename=[dict objectForKey:@"title"];
-            vc.pageSourceType=NSMovieSourcePageMovieListController;
-            vc.movielogo =[dict objectForKey:@"photo"];
-            UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
-            self.navigationItem.backBarButtonItem=item;
+                        list.movie_id = [dict objectForKey:@"movie_id"];
+                        list.moviename=[dict objectForKey:@"title"];
+                        //list.pageSourceType=NSMovieSourcePageMovieListController;
+                        list.movielogo =[dict objectForKey:@"photo"];
+                        UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+                        self.navigationItem.backBarButtonItem=item;
         }
-        [self.navigationController pushViewController:vc animated:YES];
+        [self.navigationController pushViewController:list animated:YES];
+        
     }
     else if (collectionView==self.RecommendCollectionView)
     {
-        //        ShowStageViewController *vc = [[ShowStageViewController alloc] init];
-        //        vc.pageType=NSStagePapeTypeHotStageList;//热门页进入
-        //        weiboInfoModel *model=[self.dataArray0 objectAtIndex:indexPath.row];
-        //        vc.stageInfo = model.stageInfo;
-        //        vc.upweiboArray=_upWeiboArray;
-        //        vc.weiboInfo=model;
-        //        UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
-        //        self.navigationItem.backBarButtonItem=item;
-        //        [self.navigationController pushViewController:vc animated:YES];
-        
         StageViewController  *stageVC =[[StageViewController alloc]init];
         stageVC.WeiboDataArray = self.dataArray0;
         stageVC.indexOfItem=indexPath.row;

@@ -503,6 +503,7 @@
 		38B205C31B317E5D004FA315 /* MainNavigationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 38B205C21B317E5D004FA315 /* MainNavigationViewController.m */; };
 		38D2C19F1B3A921A0083CA58 /* movie_head@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 38D2C19D1B3A921A0083CA58 /* movie_head@2x.png */; };
 		38D2C1A01B3A921A0083CA58 /* movie_head@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 38D2C19E1B3A921A0083CA58 /* movie_head@3x.png */; };
+		38D2C1A41B3AAB000083CA58 /* StageListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 38D2C1A31B3AAB000083CA58 /* StageListViewController.m */; };
 		38D46C9A1B325ADF00C482EC /* NotoSansHans-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 38D46C981B325ADF00C482EC /* NotoSansHans-Medium.otf */; };
 		38D46C9B1B325ADF00C482EC /* NotoSansHans-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 38D46C991B325ADF00C482EC /* NotoSansHans-Regular.otf */; };
 		38D694C61B33CC7000B42A00 /* ShareModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 38D694C51B33CC7000B42A00 /* ShareModel.m */; };
@@ -1261,6 +1262,8 @@
 		38B205C21B317E5D004FA315 /* MainNavigationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainNavigationViewController.m; sourceTree = "<group>"; };
 		38D2C19D1B3A921A0083CA58 /* movie_head@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "movie_head@2x.png"; sourceTree = "<group>"; };
 		38D2C19E1B3A921A0083CA58 /* movie_head@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "movie_head@3x.png"; sourceTree = "<group>"; };
+		38D2C1A21B3AAB000083CA58 /* StageListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StageListViewController.h; sourceTree = "<group>"; };
+		38D2C1A31B3AAB000083CA58 /* StageListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StageListViewController.m; sourceTree = "<group>"; };
 		38D46C981B325ADF00C482EC /* NotoSansHans-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSansHans-Medium.otf"; sourceTree = "<group>"; };
 		38D46C991B325ADF00C482EC /* NotoSansHans-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSansHans-Regular.otf"; sourceTree = "<group>"; };
 		38D694C41B33CC7000B42A00 /* ShareModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShareModel.h; sourceTree = "<group>"; };
@@ -1483,6 +1486,7 @@
 		000B08F71AA2EA1800B8D13A /* Movie */ = {
 			isa = PBXGroup;
 			children = (
+				38D2C1A11B3AAAEA0083CA58 /* StageList */,
 				381E964C1B327A83006CBF95 /* StageDetail */,
 				0031D4881AFB440800827023 /* ShowSelectPhoto */,
 				000613AA1ABE67E200E8C719 /* UploadImage */,
@@ -2836,6 +2840,15 @@
 			path = BaseNavigation;
 			sourceTree = "<group>";
 		};
+		38D2C1A11B3AAAEA0083CA58 /* StageList */ = {
+			isa = PBXGroup;
+			children = (
+				38D2C1A21B3AAB000083CA58 /* StageListViewController.h */,
+				38D2C1A31B3AAB000083CA58 /* StageListViewController.m */,
+			);
+			path = StageList;
+			sourceTree = "<group>";
+		};
 		38D46C971B325A9200C482EC /* fontStyle */ = {
 			isa = PBXGroup;
 			children = (
@@ -3440,6 +3453,7 @@
 				00354C2F1ABF004100F650AA /* NSData+MD5Digest.m in Sources */,
 				00ABFC7A1AAACDF800980824 /* MovieHeadView.m in Sources */,
 				00354C2D1ABF004100F650AA /* MF_Base64Additions.m in Sources */,
+				38D2C1A41B3AAB000083CA58 /* StageListViewController.m in Sources */,
 				00B93F5D1B0ED20700AF6BDE /* AddViewController.m in Sources */,
 				0059EDAA1B05D2A800C2ACA1 /* NSObject+MJProperty.m in Sources */,
 				0059EDA81B05D2A800C2ACA1 /* NSObject+MJCoding.m in Sources */,
