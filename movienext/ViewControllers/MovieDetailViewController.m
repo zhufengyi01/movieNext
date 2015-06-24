@@ -546,10 +546,6 @@ static const CGFloat MJDuration = 0.2;
     }];
     
 }
-
-
-
-
 -(void)requestReportSatge
 {
     NSNumber  *stageId;
@@ -922,11 +918,15 @@ static const CGFloat MJDuration = 0.2;
         
         [cell.imageView sd_setImageWithURL:url placeholderImage:nil options:(SDWebImageRetryFailed|SDWebImageLowPriority)];
         
+        
+        
         if ( model.weibosArray.count>0) {
             //cell.titleLab.hidden = NO;
             // 显示第一条微博
             weiboInfoModel *weibo = [model.weibosArray objectAtIndex:0];
             cell.titleLab.text=[NSString stringWithFormat:@"%@",weibo.content];
+            cell.lblLikeCount.text = [NSString stringWithFormat:@"%d", [weibo.like_count intValue]];
+            cell.ivLike.image = [UIImage imageNamed:@"tiny_like"];
         } else {
             cell.titleLab.hidden = YES;
         }

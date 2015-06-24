@@ -521,9 +521,9 @@
         TagContentView.frame=CGRectMake(0, BgView2.frame.origin.y+BgView2.frame.size.height, kDeviceWidth, 10);
     }
     BgView.frame=CGRectMake(0,0,kDeviceWidth,TagContentView.frame.origin.y+TagContentView.frame.size.height+0);
-    
-    
 }
+
+
 #pragma mark 星星点赞方法
 //点赞实现的方法
 -(void)clickLike:(UIButton *) btn

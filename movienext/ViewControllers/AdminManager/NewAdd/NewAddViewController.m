@@ -287,7 +287,6 @@ static const CGFloat MJDuration = 0.1;
             pageCount=[[responseObject objectForKey:@"pageCount"] intValue];
             NSMutableArray   *array  = [[NSMutableArray alloc]initWithArray:[responseObject objectForKey:@"models"]];
             
-            
             if (self.pageType==NSNewAddPageSoureTypeShare) {
                 //分享列表
                 for (int i=0; i<array.count; i++) {

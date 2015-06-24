@@ -22,9 +22,11 @@
 #import "Like_HUB.h"
 #import "UIImageView+WebCache.h"
 #import "UMSocial.h"
+#import "M80AttributedLabel.h"
 #import "Function.h"
 #import "UIView+Shadow.h"
 #import "UMShareView.h"
+#import "UpweiboModel.h"
 
 #define  USER_TOOL_HEIGHT  45
 
@@ -35,12 +37,12 @@
     LoadingView         *loadView;
     //当前的detailcontroller
     FindDatailViewController *CenterViewController;
-    
     // int  pageIndex;
-    
     //StageView  *stageView;
-    
     UILabel  *markLable;
+    
+    //放置标签的view
+    UIView  *TagContentView;
     
     UIButton  *sharebtn;
     
@@ -61,6 +63,9 @@
 @property(nonatomic,assign) int pageIndex;
 
 
+@property(nonatomic,strong) NSMutableArray *upWeiboArray;
+
+
 @property(nonatomic,strong) UIView  *bgView;
 
 @property(nonatomic,strong) UIView  *ShareView;
@@ -69,6 +74,8 @@
 @property(nonatomic,strong) UIView  *UserView;
 
 @property(nonatomic,strong) UIScrollView  *myScrollerView;
+
+@property(nonatomic,strong) M80AttributedLabel  *WeiboTagLable;  //中间的标签
 
 
 @property(nonatomic,strong) UILabel  *naviTitlLable ;
@@ -152,7 +159,6 @@
     UIBarButtonItem  *rigthbarButton=[[UIBarButtonItem alloc]initWithCustomView:sharebtn];
     self.navigationItem.rightBarButtonItem=rigthbarButton;
     
-    
 }
 
 #pragma mark  -------UMShareViewHandDelegate
@@ -199,7 +205,6 @@
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
-    
 }
 
 -(void)disLikeRequstData:(weiboInfoModel  *) weiboInfo
@@ -230,28 +235,20 @@
 //在主线程中更新UI
 -(void)changeStageViewImageAndmarkLable
 {
+    
     weiboInfoModel   *weiboInfo =[self.pageContent objectAtIndex:self.pageIndex];
     self.naviTitlLable.text=weiboInfo.stageInfo.movieInfo.name;
-    
     CGRect  frame = [Function getImageFrameWithwidth:[weiboInfo.stageInfo.width intValue] height:[weiboInfo.stageInfo.height intValue] inset:20];
-    
     self.stageImageView.frame=frame;
-    
     self.layerView.frame= CGRectMake(0, self.stageImageView.frame.size.height-60, kDeviceWidth-10, 60);
-    
     markLable.text=weiboInfo.content;
     CGSize  Msize = [markLable.text boundingRectWithSize:CGSizeMake(kDeviceWidth-40, MAXFLOAT) options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes:[NSDictionary dictionaryWithObject:markLable.font forKey:NSFontAttributeName] context:nil].size;
     self.ShareView.frame=CGRectMake(self.ShareView.frame.origin.x, self.ShareView.frame.origin.y, self.ShareView.frame.size.width, self.stageImageView.frame.size.height+Msize.height-27);
     self.bgView.frame=CGRectMake(0, 0, kDeviceWidth, self.ShareView.frame.size.height+20);
     markLable.frame=CGRectMake(10, self.ShareView.frame.size.height-Msize.height-5 ,self.ShareView.frame.size.width-20,Msize.height);
     self.UserView.frame=CGRectMake(0, self.ShareView.frame.origin.y+self.ShareView.frame.size.height+10, kDeviceWidth, USER_TOOL_HEIGHT);
-    
-    
-    
     NSString *photostring=[NSString stringWithFormat:@"%@%@!w640",kUrlStage,weiboInfo.stageInfo.photo];
     [self.stageImageView   sd_setImageWithURL:[NSURL URLWithString:photostring] placeholderImage:nil options:(SDWebImageLowPriority|SDWebImageRetryFailed)];
-    
-    
     NSString  *uselogoString =[NSString stringWithFormat:@"%@%@!thumb",kUrlAvatar,weiboInfo.uerInfo.logo];
     [headLogoImageView sd_setImageWithURL:[NSURL URLWithString:uselogoString] placeholderImage:[UIImage imageNamed:@"user_normal.png"]];
     
@@ -262,6 +259,9 @@
     leftButtomButton.frame=CGRectMake(10,5, 30+5+userNameLable.frame.size.width, 27);
     userNameLable.text=[NSString stringWithFormat:@"%@",nameStr];
     Like_lable.text=[NSString stringWithFormat:@"%@",weiboInfo.like_count];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self createWeiboTagView];
+    });
     
 }
 
@@ -273,13 +273,68 @@
     
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     NSString *urlString=[NSString stringWithFormat:@"%@/weibo/discover", kApiBaseUrl];
-    
     [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        
         if ([[responseObject objectForKey:@"code"] intValue]==0) {
-            
-            // NSMutableArray  *Array =[[NSMutableArray alloc]initWithArray:[responseObject objectForKey:@"models"]];
-            self.pageContent= [[NSMutableArray alloc] initWithArray:[weiboInfoModel objectArrayWithKeyValuesArray:[responseObject objectForKey:@"models"]]];
+            /// self.pageContent= [[NSMutableArray alloc] initWithArray:[weiboInfoModel objectArrayWithKeyValuesArray:[responseObject objectForKey:@"models"]]];
+            NSMutableArray   *array  = [[NSMutableArray alloc]initWithArray:[responseObject objectForKey:@"models"]];
+            for ( int i=0 ; i<array.count; i++) {
+                NSDictionary  *newdict  =[array objectAtIndex:i];
+                weiboInfoModel *weibomodel =[[weiboInfoModel alloc]init];
+                if (weibomodel) {
+                    [weibomodel setValuesForKeysWithDictionary:newdict];
+                    //用户的信息
+                    weiboUserInfoModel  *usermodel =[[weiboUserInfoModel alloc]init];
+                    if (usermodel) {
+                        if (![[newdict objectForKey:@"user"] isKindOfClass:[NSNull class]]) {
+                            [usermodel setValuesForKeysWithDictionary:[newdict objectForKey:@"user"]];
+                            weibomodel.uerInfo=usermodel;
+                        }
+                    }
+                    // 剧情信息
+                    stageInfoModel  *stagemodel =[[stageInfoModel alloc]init];
+                    if (stagemodel) {
+                        if (![[newdict objectForKey:@"stage"]  isKindOfClass:[NSNull class]]) {
+                            [stagemodel setValuesForKeysWithDictionary:[newdict objectForKey:@"stage"]];
+                            weibomodel.stageInfo=stagemodel;
+                            movieInfoModel *moviemodel =[[movieInfoModel alloc]init];
+                            if (moviemodel) {
+                                if (![[[newdict objectForKey:@"stage"] objectForKey:@"movie"]isKindOfClass:[NSNull class]]) {
+                                    [moviemodel  setValuesForKeysWithDictionary:[[newdict objectForKey:@"stage"] objectForKey:@"movie"]];
+                                    stagemodel.movieInfo=moviemodel;
+                                }
+                            }
+                        }
+                    }
+                    NSMutableArray  *tagArray =[[NSMutableArray alloc]init];
+                    //标签数组
+                    for ( NSDictionary  *tagdict in [newdict objectForKey:@"tags"]) {
+                        TagModel *tagmodel=[[TagModel alloc]init];
+                        if (tagmodel) {
+                            [tagmodel setValuesForKeysWithDictionary:tagdict];
+                            
+                            TagDetailModel *tagdetail =[[TagDetailModel alloc]init];
+                            if (tagdetail) {
+                                [tagdetail setValuesForKeysWithDictionary:[tagdict objectForKey:@"tag"]];
+                                tagmodel.tagDetailInfo=tagdetail;
+                            }
+                            [tagArray addObject:tagmodel];
+                        }
+                    }
+                    weibomodel.tagArray=tagArray;
+                    [self.pageContent addObject:weibomodel];
+                }
+            }
+            //点赞的数组
+            for (NSDictionary  *updict in [responseObject objectForKey:@"upweibos"]) {
+                UpweiboModel *upmodel =[[UpweiboModel alloc]init];
+                if (upmodel) {
+                    [upmodel setValuesForKeysWithDictionary:updict];
+                    if (_upWeiboArray==nil) {
+                        _upWeiboArray =[[NSMutableArray alloc]init];
+                    }
+                    [_upWeiboArray addObject:upmodel];
+                }
+            }
             if (self.pageContent.count==0) {
                 sharebtn.hidden=YES;
                 [loadView showNullView:@"没有发现了..."];
@@ -290,13 +345,6 @@
                 [loadView removeFromSuperview];
                 [self createUI];
             }
-            
-            //            //存储页面的索引
-            //            for (int i=0; i<self.pageContent.count;i++) {
-            //                NSString  *index =[NSString stringWithFormat:@"%d",i];
-            //                [self.indexArray  addObject:index];
-            //            }
-            
         }
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -357,9 +405,6 @@
     self.bgView= [[UIView alloc]initWithFrame:CGRectMake(0, 0,kDeviceWidth,(kDeviceWidth-10)*(9.0/16)+15+35)];
     self.bgView.backgroundColor=[UIColor whiteColor];
     [self.myScrollerView addSubview:self.bgView];
-    
-    
-    
     //创建分享的视图
     //最后要分享出去的图
     self.ShareView =[[UIView alloc]initWithFrame:CGRectMake(10,10, kDeviceWidth-20, (kDeviceWidth-20)*(9.0/16))];
@@ -377,21 +422,6 @@
     NSString *photostring=[NSString stringWithFormat:@"%@%@!w640",kUrlStage,Weibo.stageInfo.photo];
     [self.stageImageView   sd_setImageWithURL:[NSURL URLWithString:photostring] placeholderImage:nil options:(SDWebImageLowPriority|SDWebImageRetryFailed)];
     [self.ShareView addSubview:self.stageImageView];
-    
-    
-    // self.stageImageView.image
-    
-    /*  stageView = [[StageView alloc] initWithFrame:CGRectMake(5,5,kDeviceWidth-10, (kDeviceWidth-10)*(9.0/16))];
-     stageView.isAnimation = YES;
-     stageView.backgroundColor=[UIColor redColor];
-     //stageView.delegate=self;
-     // stageView.stageInfo=self.weiboInfo.stageInfo;
-     // stageView.weibosArray = self.stageInfo.weibosArray;
-     [stageView configStageViewforStageInfoDict];
-     
-     [bgView addSubview:stageView];*/
-    
-    
     
     _layerView =[[UIView alloc]initWithFrame:CGRectMake(0, self.stageImageView.frame.size.height-60, kDeviceWidth-20, 60)];
     [_layerView setShadow];
@@ -428,10 +458,10 @@
     if (Msize.height+self.stageImageView.frame.size.height>kDeviceHeight-100) {
         self.myScrollerView.contentSize=CGSizeMake(kDeviceWidth, Msize.height+self.stageImageView.frame.size.height+200);
     }
-
+    
     // 中间的视图
     [self createUserView];
-
+    [self createWeiboTagView];
     [self createLikeBar];
 }
 //创建中间的用户视图
@@ -495,7 +525,52 @@
     }
     [like_btn addSubview:Like_lable];
     
+    
 }
+
+-(void)createWeiboTagView
+{
+    if (TagContentView) {
+        [TagContentView removeFromSuperview];
+        TagContentView = nil;
+    }
+    if (self.WeiboTagLable) {
+        [self.WeiboTagLable removeFromSuperview];
+        self.WeiboTagLable=nil;
+    }
+    TagContentView  = [[UIView alloc]initWithFrame:CGRectMake(0, self.UserView.frame.origin.y+self.UserView.frame.size.height, kDeviceWidth, 40)];
+    TagContentView.backgroundColor =[UIColor clearColor];
+    [self.bgView addSubview:TagContentView];
+    self.WeiboTagLable=[[M80AttributedLabel alloc]initWithFrame:CGRectZero];
+    self.WeiboTagLable.backgroundColor =[UIColor clearColor];
+    self.WeiboTagLable.lineSpacing=5;
+    [TagContentView addSubview:self.WeiboTagLable];
+    
+    weiboInfoModel   *weiboInfo =[self.pageContent objectAtIndex:self.pageIndex];
+    //初始化的时候获取第一个标签
+    if (weiboInfo.tagArray.count>0) {
+        for (int i=0; i<weiboInfo.tagArray.count; i++) {
+            TagView  *tagView= [[TagView alloc]initWithWeiboInfo:weiboInfo AndTagInfo:weiboInfo.tagArray[i] delegate:nil isCanClick:YES backgoundImage:nil isLongTag:NO];
+            [tagView setcornerRadius:4];
+            [tagView setbigTagWithSize:CGSizeMake(6,6)];
+            tagView.tag=5000+i;
+            //            tagView.backgroundColor =[UIColor redColor];
+            [self.WeiboTagLable appendView:tagView margin:UIEdgeInsetsMake(5, 10, 0, 0)];
+        }
+    }
+    CGSize  Tsize =[self.WeiboTagLable sizeThatFits:CGSizeMake(kDeviceWidth-20,CGFLOAT_MAX)];
+    self.WeiboTagLable.frame=CGRectMake(0, 0, kDeviceWidth-20, Tsize.height+0);
+    if (Tsize.height>10) {
+        TagContentView.frame=CGRectMake(0, self.UserView.frame.origin.y+self.UserView.frame.size.height, kDeviceWidth,Tsize.height+5);
+    }
+    else
+    {
+        TagContentView.frame=CGRectMake(0, self.UserView.frame.origin.y+self.UserView.frame.size.height, kDeviceWidth,0);
+    }
+    self.bgView.frame=CGRectMake(0,0,kDeviceWidth,TagContentView.frame.origin.y+TagContentView.frame.size.height+0);
+}
+
+
 #pragma  mark 创建底部的点击喜欢和不喜欢的按钮----
 -(void)createLikeBar
 {

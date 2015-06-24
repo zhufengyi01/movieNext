@@ -20,8 +20,8 @@
 -(void)createUI
 {
   
-    self.timeLable =[ZCControl createLabelWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height) Font:14 Text:@"2015-06-24"];
-    self.timeLable.textColor=VBlue_color;
+    self.timeLable =[ZCControl createLabelWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height) Font:12 Text:@"2015-06-24"];
+    self.timeLable.textColor=VGray_color;
     self.timeLable.textAlignment=NSTextAlignmentCenter;
     [self addSubview:self.timeLable];
 }
