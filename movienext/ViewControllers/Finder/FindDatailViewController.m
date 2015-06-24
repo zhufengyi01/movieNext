@@ -71,12 +71,11 @@
 //点击了
 -(void)shareButtonClick
 {
+    //[self performSelector:@selector(share) withObject:nil afterDelay:0.3];
     UIImage  *image=[Function getImage:stageView WithSize:CGSizeMake(kStageWidth, (kDeviceWidth-10)*(9.0/16))];
-    
     UMShareView *ShareView =[[UMShareView alloc] initwithStageInfo:self.weiboInfo.stageInfo ScreenImage:image delgate:self andShareHeight:stageView.frame.size.height];
     [ShareView setShareLable];
     [ShareView show];
-    
 }
 #pragma mark  -------UMShareViewHandDelegate
 -(void)UMShareViewHandClick:(UIButton *)button ShareImage:(UIImage *)shareImage StageInfoModel:(stageInfoModel *)StageInfo

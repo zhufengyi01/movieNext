@@ -131,20 +131,7 @@
     UIView  *_layerView =[[UIView alloc]initWithFrame:CGRectMake(0, self.stageImageView.frame.size.height-60, kDeviceWidth-20, 60)];
     [_layerView setShadow];
     [self.stageImageView addSubview:_layerView];
-//    CAGradientLayer * _gradientLayer = [CAGradientLayer layer];  // 设置渐变效果
-//    _gradientLayer.bounds = _layerView.bounds;
-//    _gradientLayer.borderWidth = 0;
-//    
-//    _gradientLayer.frame = _layerView.bounds;
-//    _gradientLayer.colors = [NSArray arrayWithObjects:
-//                             (id)[[UIColor clearColor] CGColor],
-//                             (id)[[UIColor blackColor] CGColor], nil, nil];
-//    _gradientLayer.startPoint = CGPointMake(0.5, 0.5);
-//    _gradientLayer.endPoint = CGPointMake(0.5, 1.0);
-//    [_layerView.layer insertSublayer:_gradientLayer atIndex:0];
-//    
-    
-    self.markLable=[ZCControl createLabelWithFrame:CGRectMake(10,40,_layerView.frame.size.width-20, 60) Font:20 Text:@"弹幕文字"];
+     self.markLable=[ZCControl createLabelWithFrame:CGRectMake(10,40,_layerView.frame.size.width-20, 60) Font:20 Text:@"弹幕文字"];
     self.markLable.font =[UIFont fontWithName:kFontDouble size:23];
     //markLable.backgroundColor=[[UIColor blackColor] colorWithAlphaComponent:0.4];
     if (IsIphone6) {
@@ -155,16 +142,12 @@
         self.markLable.frame=CGRectMake(20, 20,_layerView.frame.size.width-40, 70);
         self.markLable.font=[UIFont fontWithName:kFontDouble size:28];
     }
-    
-    
     self.markLable.textColor=[UIColor whiteColor];
     self.markLable.lineBreakMode=NSLineBreakByCharWrapping;
     self.markLable.contentMode=UIViewContentModeBottom;
     self.markLable.textAlignment=NSTextAlignmentCenter;
     self.markLable.text = self.weiboInfo.content;
     [self.ShareView addSubview:self.markLable];
-    
-    
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
     paragraphStyle.lineSpacing = 5;
     NSDictionary *attributes = @{
@@ -172,7 +155,6 @@
                                  NSParagraphStyleAttributeName:paragraphStyle
                                  };
     self.markLable.attributedText = [[NSAttributedString alloc] initWithString:self.markLable.text attributes:attributes];
-    
     self.markLable.textAlignment=NSTextAlignmentCenter;
     
     //计算文字的高度从而确定整个shareview的高度
@@ -184,7 +166,6 @@
     BgView.frame=CGRectMake(0, 0, kDeviceWidth, self.ShareView.frame.size.height+20);
     self.markLable.frame=CGRectMake(10, self.ShareView.frame.size.height-Msize.height-5 ,self.ShareView.frame.size.width-20,Msize.height);
     NSLog(@"=======self stageview height ==%f ",self.stageImageView.frame.size.height);
-    
     if (Msize.height+self.stageImageView.frame.size.height>kDeviceHeight-100) {
         self.stageScrollerView.contentSize=CGSizeMake(kDeviceWidth, Msize.height+self.stageImageView.frame.size.height+200);
     }

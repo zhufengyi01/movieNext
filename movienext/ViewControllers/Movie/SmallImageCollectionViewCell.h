@@ -27,4 +27,6 @@
 @property(strong,nonatomic)UILabel *lblTime;
 @property(strong,nonatomic)UILabel *lblLikeCount;
 
+@property(strong,nonatomic)UILabel  *platformlbl;
+
 @end

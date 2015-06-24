@@ -133,6 +133,8 @@
     
     UIButton  *moviebtn =[UIButton buttonWithType:UIButtonTypeCustom];
     moviebtn.frame=CGRectMake(0, 0, 140,30);
+    //[moviebtn setImage:[UIImage imageNamed:@"movie_head.png"] forState:UIControlStateNormal];
+    //moviebtn.imageEdgeInsets=UIEdgeInsetsMake(0, 110, 0,-110);
     //moviebtn.backgroundColor =[[UIColor redColor] colorWithAlphaComponent:0.4];
     __weak typeof(self)  weakself  =  self;
     [moviebtn addActionHandler:^(NSInteger tag) {
@@ -730,7 +732,6 @@
     if (weiboInfo.content.length==0) {
         tagview.frame=CGRectZero;
     }
-    
     tagview.tagBgImageview.backgroundColor =VLight_GrayColor_apla;
     tagview.titleLable.textColor=VGray_color;
     tagview.tag=2000+index;

@@ -36,8 +36,14 @@
     [view setShadow];
     [self.contentView addSubview:view];
     
+    self.platformlbl = [[UILabel alloc]initWithFrame:CGRectMake(10, m_frame.size.height-50, m_frame.size.width-20, 30)];
+    self.platformlbl.text=@"";
+    self.platformlbl.textAlignment = NSTextAlignmentCenter;
+    self.platformlbl.textColor = [UIColor whiteColor];
+    self.platformlbl.font = [UIFont fontWithName:kFontDouble size:14];
+    [self.contentView addSubview:self.platformlbl];
+
     _titleLab = [[UILabel alloc]initWithFrame:CGRectMake(10, m_frame.size.height-30, m_frame.size.width-20, 30)];
-    //_titleLab.backgroundColor = [UIColor colorWithRed:0.0f/255.0f green:0.0f/255.0f blue:0.0f/255.0f alpha:0.5];
     _titleLab.text=@"";
     _titleLab.textAlignment = NSTextAlignmentCenter;
     _titleLab.textColor = [UIColor whiteColor];

@@ -191,7 +191,6 @@ static const CGFloat MJDuration = 0.1;
         [weakSelf.myConllectionView.header setTitle:@"正在刷新..." forState:MJRefreshHeaderStateRefreshing];
         //隐藏时间
         weakSelf.myConllectionView.header.updatedTimeHidden=YES;
-        
         // 设置字体
         //weakSelf.myConllectionView.header.font = [UIFont fontWithName:kFontRegular size:12];
         
@@ -199,7 +198,7 @@ static const CGFloat MJDuration = 0.1;
         // weakSelf.myConllectionView.header.textColor = VGray_color;
         // 模拟延迟加载数据，因此2秒后才调用（真实开发中，可以移除这段gcd代码）
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(MJDuration * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [weakSelf.myConllectionView reloadData];
+            //[weakSelf.myConllectionView reloadData];
             
             // 结束刷新
             [weakSelf.myConllectionView.header endRefreshing];
@@ -451,12 +450,20 @@ static const CGFloat MJDuration = 0.1;
             NSURL  *url =[NSURL URLWithString:[NSString stringWithFormat:@"%@%@%@",kUrlStage,model.weiboInfo.stageInfo.photo,KIMAGE_SMALL]];
             [cell.imageView sd_setImageWithURL:url placeholderImage:nil options:(SDWebImageRetryFailed|SDWebImageLowPriority)];
             NSDate  *comfromTimesp =[NSDate dateWithTimeIntervalSince1970:[model.created_at intValue]];
-            NSString  *da = [NSDate timeInfoWithDate:comfromTimesp];
+            //NSString  *da = [NSDate timeInfoWithDate:comfromTimesp];
+            NSDateFormatter *formatter = [[NSDateFormatter alloc] init] ;
+            [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"GMT+0800"]];
+            [formatter setTimeStyle:NSDateFormatterShortStyle];
+            [formatter setDateFormat:@"MM-dd/hh:mm"];
+            NSString *confromTimespStr = [formatter stringFromDate:comfromTimesp];
+            
             cell.lblTime.text =model.userInfo.username;
             NSURL  *logourl = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", kUrlAvatar, model.userInfo.logo]];
             [cell.ivAvatar sd_setImageWithURL:logourl placeholderImage:[UIImage imageNamed:@"user_normal.png"]];
-            cell.titleLab.font = [UIFont fontWithName:kFontDouble size:12];
-            cell.titleLab.text=[NSString stringWithFormat:@"%@%@",da,[Function getSharePlatformwithSting:model.method]];
+            cell.titleLab.font = [UIFont fontWithName:kFontDouble size:10];
+            cell.platformlbl.text =model.weiboInfo.content;
+            cell.titleLab.text=[NSString stringWithFormat:@"%@/%@",confromTimespStr,[Function getSharePlatformwithSting:model.method]];
+            
         }
         else {
             

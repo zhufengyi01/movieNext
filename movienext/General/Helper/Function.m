@@ -555,16 +555,16 @@
 +(NSString *)getSharePlatformwithSting:(NSString *) Platform;
 {
     if ([Platform intValue]==0) {
-        return @"分享自“朋友圈”";
+        return @"朋友圈";
     }else if([Platform intValue]==1)
     {
-        return @"分享自“微信”";
+        return @"微信";
     }else if([Platform intValue]==2)
     {
-        return @"分享自“微博”";
+        return @"微博";
     }else if([Platform intValue]==3)
     {
-        return @"本地“保存”";
+        return @"保存";
     }
     return @"平台未知";
 }

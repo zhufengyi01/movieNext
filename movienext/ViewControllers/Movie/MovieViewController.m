@@ -36,6 +36,7 @@
 //#import "SearchMovieViewController.h"
 #import "StageViewController.h"
 #import "RecomendHeadView.h"
+#import "NSDateFormatter+Make.h"
 #define  BUTTON_COUNT  3
 #define  NaviTitle_Width  160
 #define  NaviTitle_Height 46
@@ -265,7 +266,7 @@ static const CGFloat MJDuration = 0.6;
             }
             btn.selected=YES;
         }
-     }
+    }
     else if (btn.tag==101)
     {
         if(btn.selected==NO)
@@ -279,7 +280,7 @@ static const CGFloat MJDuration = 0.6;
                 [self requestData];
             }
         }
-     }
+    }
     else if(btn.tag==102)
     {
         if(btn.selected==NO)
@@ -293,7 +294,7 @@ static const CGFloat MJDuration = 0.6;
                 [self requestData];
             }
         }
-     }
+    }
     [self.myConllectionView reloadData];
 }
 -(void)creatLoadView
@@ -315,6 +316,7 @@ static const CGFloat MJDuration = 0.6;
     pageCount3=1;
     pageSize=20;
     _dataArray0=[[NSMutableArray alloc]init];
+    self.recomendDataArray= [[NSMutableArray alloc]init];
     _dataArray1=[[NSMutableArray alloc]init];
     _dataArray2=[[NSMutableArray alloc]init];
     _dataArray3=[[NSMutableArray alloc]init];
@@ -489,7 +491,7 @@ static const CGFloat MJDuration = 0.6;
         // weakSelf.myConllectionView.header.textColor = VGray_color;
         // 模拟延迟加载数据，因此2秒后才调用（真实开发中，可以移除这段gcd代码）
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(MJDuration * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [weakSelf.myConllectionView reloadData];
+            //[weakSelf.myConllectionView reloadData];
             
             // 结束刷新
             [weakSelf.myConllectionView.header endRefreshing];
@@ -625,12 +627,7 @@ static const CGFloat MJDuration = 0.6;
             if (page0==pageCount0) {
                 [self.RecommendCollectionView.footer noticeNoMoreData];
             }
-            if (page0==1) {   // 表示刷新操作，这个时候不要在刷新里面去移除，防止网络失败刷新错误导致没有数据
-                if (self.dataArray0.count>0) {
-                    [self.dataArray0 removeAllObjects];
-                }
-            }
-            NSMutableArray   *array  = [[NSMutableArray alloc]initWithArray:[responseObject objectForKey:@"models"]];
+             NSMutableArray   *array  = [[NSMutableArray alloc]initWithArray:[responseObject objectForKey:@"models"]];
             for ( int i=0 ; i<array.count; i++) {
                 NSDictionary  *newdict  =[array objectAtIndex:i];
                 weiboInfoModel *weibomodel =[[weiboInfoModel alloc]init];
@@ -688,8 +685,10 @@ static const CGFloat MJDuration = 0.6;
                     [_upWeiboArray addObject:upmodel];
                 }
             }
-            
-            
+            //把self.dataArray 复制给self.RecomendArray;
+            //self.recomendDataArray =[[NSMutableArray alloc]initWithArray:self.dataArray0];
+            //[self computeRecomendSectionView:self.recomendDataArray];
+            [self computeRecomendSectionView:self.dataArray0];
             [self.RecommendCollectionView reloadData];
             [self.RecommendCollectionView.footer endRefreshing];
             
@@ -842,33 +841,78 @@ static const CGFloat MJDuration = 0.6;
 //根据热门请求的数组返回一系列的数组，
 -(void)computeRecomendSectionView:(NSMutableArray *) dataArray
 {
+    if (self.recomendDataArray.count>0) {
+        [self.recomendDataArray removeAllObjects];
+    }
+    NSMutableArray  *array0 =[[NSMutableArray alloc]init];
+    weiboInfoModel  *weiboobj0 = [dataArray objectAtIndex:0];
+    //把第一个对象加入到数组中
+    [array0 addObject:weiboobj0];
+    [self.recomendDataArray addObject:array0];
     
+    //取出时间
+    NSDate  *comfromTimesp =[NSDate dateWithTimeIntervalSince1970:[weiboobj0.updated_at intValue]];
+    NSDateFormatter *formatter =[NSDateFormatter  dateFormatterWithFormat:@"YYYY-MM-dd"];
+    [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"GMT+8000"]];
+    NSString  *datestr0 = [formatter stringFromDate:comfromTimesp];
+    
+    
+    //目的，根据时间，对dataarray进行分组，最后把这个分组存放在self.dataArray0 中
+    for (int i = 1; i<dataArray.count; i++) {
+        
+        weiboInfoModel *weibomodel =[dataArray objectAtIndex:i];
+        //取出时间
+        NSDate  *comfromTimesp =[NSDate dateWithTimeIntervalSince1970:[weibomodel.updated_at intValue]];
+        NSDateFormatter *formatter =[NSDateFormatter  dateFormatterWithFormat:@"YYYY-MM-dd"];
+        [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"GMT+8000"]];
+        NSString  *datestr = [formatter stringFromDate:comfromTimesp];
+        NSLog(@"!!!!!!!!%@",datestr);
+        if ([datestr0 isEqualToString:datestr]) {//如果上一项等于下一项的话，把第二项加入到上面的数组
+            [array0 addObject:weibomodel];
+        }
+        else
+        {
+            array0 =[[NSMutableArray alloc]init];
+            [array0 addObject:weibomodel];
+            [self.recomendDataArray addObject:array0];
+        }
+        datestr0=datestr;
+    }
+    
+    NSLog(@"dataArray =========%@",self.recomendDataArray);
     
 }
 
 //设置头尾部内容
 -(UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
- {
-     UICollectionReusableView *reusableView = nil;
-     if (collectionView==self.RecommendCollectionView) {
-         if (kind == UICollectionElementKindSectionHeader) {
-             //定制头部视图的内容
-             RecomendHeadView *headerV = (RecomendHeadView *)[collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"RecomendheaderView" forIndexPath:indexPath];
-              reusableView = headerV;
-         }
-         return reusableView;
-     }
-     else
-     {
-         return nil;
-     }
-     return nil;
- }
+{
+    UICollectionReusableView *reusableView = nil;
+    if (collectionView==self.RecommendCollectionView) {
+        if (kind == UICollectionElementKindSectionHeader) {
+            //定制头部视图的内容
+            RecomendHeadView *headerV = (RecomendHeadView *)[collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"RecomendheaderView" forIndexPath:indexPath];
+            reusableView = headerV;
+            weiboInfoModel *weibomodel =[[self.recomendDataArray objectAtIndex:indexPath.section] objectAtIndex:0];
+            //取出时间
+            NSDate  *comfromTimesp =[NSDate dateWithTimeIntervalSince1970:[weibomodel.updated_at intValue]];
+            NSDateFormatter *formatter =[NSDateFormatter  dateFormatterWithFormat:@"YYYY-MM-dd"];
+            [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"GMT+8000"]];
+            NSString  *datestr0 = [formatter stringFromDate:comfromTimesp];
+            headerV.timeLable.text= [NSString stringWithFormat:@"%@  %@",datestr0,[comfromTimesp dayFromWeekday]];
+        }
+        return reusableView;
+    }
+    else
+    {
+        return nil;
+    }
+    return nil;
+}
 #pragma mark - UICollectionViewDataSource
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
     if (collectionView==self.RecommendCollectionView) {
-        return 4;
+        return self.recomendDataArray.count;
     }
     return 1;
 }
@@ -896,9 +940,8 @@ static const CGFloat MJDuration = 0.6;
     }
     else if(collectionView==self.RecommendCollectionView)
     {
-        
-        
-        return self.dataArray0.count;
+        return [[self.recomendDataArray objectAtIndex:section] count];
+        //return self.dataArray0.count;
     }
     return 0;
     
@@ -938,18 +981,21 @@ static const CGFloat MJDuration = 0.6;
         SmallImageCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"smallcell" forIndexPath:indexPath];
         //在这里先将内容给清除一下, 然后再加载新的, 添加完内容之后先动画, 在cell消失的时候做清理工作
         if (self.dataArray0.count>indexPath.row) {
-            weiboInfoModel  *model=[self.dataArray0 objectAtIndex:indexPath.row];
+            weiboInfoModel  *model =[[self.recomendDataArray objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+            //weiboInfoModel  *model=[self.dataArray0 objectAtIndex:indexPath.row];
             cell.imageView.backgroundColor=VStageView_color;
             NSURL  *url =[NSURL URLWithString:[NSString stringWithFormat:@"%@%@%@",kUrlStage,model.stageInfo.photo ,KIMAGE_SMALL]];
             [cell.imageView sd_setImageWithURL:url placeholderImage:nil options:(SDWebImageRetryFailed|SDWebImageLowPriority)];
             cell.titleLab.text=[NSString stringWithFormat:@"%@",model.content];
-            //NSDate  *comfromTimesp =[NSDate dateWithTimeIntervalSince1970:[model.updated_at intValue]];
+            
+//            NSDate  *comfromTimesp =[NSDate dateWithTimeIntervalSince1970:[model.updated_at intValue]];
+            
             //NSString  *da = [NSDate timeInfoWithDate:comfromTimesp];
             //dateLable.text=da;
             //            cell.lblTime.text = da;
-            //            cell.lblLikeCount.text = [NSString stringWithFormat:@"%d", [model.like_count intValue]];
-            //            [cell.ivAvatar sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", kUrlAvatar, model.uerInfo.logo]]];
-            //            cell.ivLike.image = [UIImage imageNamed:@"tiny_like"];
+            cell.lblLikeCount.text = [NSString stringWithFormat:@"%d", [model.like_count intValue]];
+            [cell.ivAvatar sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", kUrlAvatar, model.uerInfo.logo]]];
+            cell.ivLike.image = [UIImage imageNamed:@"tiny_like"];
             return cell;
         }
         return cell;

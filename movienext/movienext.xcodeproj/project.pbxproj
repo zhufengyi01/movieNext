@@ -501,6 +501,8 @@
 		38B205BE1B317928004FA315 /* back_gray_Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 38B205BC1B317928004FA315 /* back_gray_Icon@2x.png */; };
 		38B205BF1B317928004FA315 /* back_gray_Icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 38B205BD1B317928004FA315 /* back_gray_Icon@3x.png */; };
 		38B205C31B317E5D004FA315 /* MainNavigationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 38B205C21B317E5D004FA315 /* MainNavigationViewController.m */; };
+		38D2C19F1B3A921A0083CA58 /* movie_head@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 38D2C19D1B3A921A0083CA58 /* movie_head@2x.png */; };
+		38D2C1A01B3A921A0083CA58 /* movie_head@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 38D2C19E1B3A921A0083CA58 /* movie_head@3x.png */; };
 		38D46C9A1B325ADF00C482EC /* NotoSansHans-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 38D46C981B325ADF00C482EC /* NotoSansHans-Medium.otf */; };
 		38D46C9B1B325ADF00C482EC /* NotoSansHans-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 38D46C991B325ADF00C482EC /* NotoSansHans-Regular.otf */; };
 		38D694C61B33CC7000B42A00 /* ShareModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 38D694C51B33CC7000B42A00 /* ShareModel.m */; };
@@ -1257,6 +1259,8 @@
 		38B205BD1B317928004FA315 /* back_gray_Icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "back_gray_Icon@3x.png"; sourceTree = "<group>"; };
 		38B205C11B317E5D004FA315 /* MainNavigationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainNavigationViewController.h; sourceTree = "<group>"; };
 		38B205C21B317E5D004FA315 /* MainNavigationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainNavigationViewController.m; sourceTree = "<group>"; };
+		38D2C19D1B3A921A0083CA58 /* movie_head@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "movie_head@2x.png"; sourceTree = "<group>"; };
+		38D2C19E1B3A921A0083CA58 /* movie_head@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "movie_head@3x.png"; sourceTree = "<group>"; };
 		38D46C981B325ADF00C482EC /* NotoSansHans-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSansHans-Medium.otf"; sourceTree = "<group>"; };
 		38D46C991B325ADF00C482EC /* NotoSansHans-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSansHans-Regular.otf"; sourceTree = "<group>"; };
 		38D694C41B33CC7000B42A00 /* ShareModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShareModel.h; sourceTree = "<group>"; };
@@ -1497,6 +1501,8 @@
 		000B08FB1AA2EB8C00B8D13A /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				38D2C19D1B3A921A0083CA58 /* movie_head@2x.png */,
+				38D2C19E1B3A921A0083CA58 /* movie_head@3x.png */,
 				38B205BC1B317928004FA315 /* back_gray_Icon@2x.png */,
 				38B205BD1B317928004FA315 /* back_gray_Icon@3x.png */,
 				00BDC03B1B2E6F7A00CD61A5 /* movieCard_icon.png */,
@@ -3063,6 +3069,7 @@
 				00AA54481AA2C525004096F8 /* UMSLoginViewController.xib in Resources */,
 				004AA6611B04A60000018F21 /* dischoice_icon@2x.png in Resources */,
 				000B09D21AA3029800B8D13A /* single_switch@3x.png in Resources */,
+				38D2C19F1B3A921A0083CA58 /* movie_head@2x.png in Resources */,
 				00431FDA1ADD0FAA00416E1F /* login_password_open@2x.png in Resources */,
 				00431FCB1ADD088900416E1F /* login_email_password.png in Resources */,
 				0087940C1AF0E1BE007313CB /* alert_more@2x.png in Resources */,
@@ -3116,6 +3123,7 @@
 				000C030B1AEF310600AB52D2 /* ＃@2x.png in Resources */,
 				00431FF91ADD1FB300416E1F /* user_normal@3x.png in Resources */,
 				0090447A1AD3F3D0009CF318 /* unselect_icon@3x.png in Resources */,
+				38D2C1A01B3A921A0083CA58 /* movie_head@3x.png in Resources */,
 				007B5C9C1AB8276A001D2D25 /* tan@3x.png in Resources */,
 				004DD1E51AAFDD0F00394A9D /* Back__Icon.png in Resources */,
 				000C03101AEF31F900AB52D2 /* add_tag_icon@3x.png in Resources */,

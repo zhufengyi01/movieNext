@@ -106,14 +106,12 @@
     self.naviTitlLable.font=[UIFont fontWithName:kFontDouble size:16];
     self.naviTitlLable.textAlignment=NSTextAlignmentCenter;
     self.naviTitlLable.userInteractionEnabled=YES;
-    
     self.navigationItem.titleView=self.naviTitlLable;
-    
-    
-    
     UIButton  *moviebtn =[UIButton buttonWithType:UIButtonTypeCustom];
     moviebtn.frame=CGRectMake(0, 0, self.naviTitlLable.frame.size.width, self.naviTitlLable.frame.size.height);
-    //moviebtn.backgroundColor =[[UIColor redColor] colorWithAlphaComponent:0.4];
+   [moviebtn setImage:[UIImage imageNamed:@"movie_head.png"] forState:UIControlStateNormal];
+    moviebtn.imageEdgeInsets=UIEdgeInsetsMake(0, 70, 0,-70);
+   // moviebtn.backgroundColor =[[UIColor redColor] colorWithAlphaComponent:0.4];
     __weak typeof(self)  weakself  =  self;
     [moviebtn addActionHandler:^(NSInteger tag) {
          //跳转到电影页
