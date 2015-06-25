@@ -122,7 +122,7 @@
 -(void)createNav
 {
     __weak typeof(self) weakSelf = self;
-    NSString  *titleString =[Function htmlString: self.stageInfo.movieInfo.name ];
+    NSString  *titleString =[Function htmlString:[NSString stringWithFormat:@"%@  ▸",self.stageInfo.movieInfo.name ]];
     UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 30) Font:30 Text:titleString];
     titleLable.textColor=VBlue_color;
     titleLable.font=[UIFont fontWithName:kFontDouble size:16];

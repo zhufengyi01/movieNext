@@ -107,11 +107,7 @@
     self.naviTitlLable.userInteractionEnabled=YES;
     self.navigationItem.titleView=self.naviTitlLable;
     UIButton  *moviebtn =[UIButton buttonWithType:UIButtonTypeCustom];
-    moviebtn.frame=CGRectMake(0, 0, self.naviTitlLable.frame.size.width, self.naviTitlLable.frame.size.height);
-   [moviebtn setImage:[UIImage imageNamed:@"movie_head.png"] forState:UIControlStateNormal];
-    moviebtn.imageEdgeInsets=UIEdgeInsetsMake(0, 70, 0,-70);
-   // moviebtn.backgroundColor =[[UIColor redColor] colorWithAlphaComponent:0.4];
-    __weak typeof(self)  weakself  =  self;
+    moviebtn.frame=CGRectMake(0, 0, self.naviTitlLable.frame.size.width, self.naviTitlLable.frame.size.height);    __weak typeof(self)  weakself  =  self;
     [moviebtn addActionHandler:^(NSInteger tag) {
          //跳转到电影页
         MovieDetailViewController  *md =[[MovieDetailViewController alloc]init];
@@ -208,8 +204,7 @@
     // 如果要显示2页，NSArray中，应该有2个相应页数据。
     StageDetailViewController *initialViewController =[self viewControllerAtIndex:self.indexOfItem];// 得到第一页
     self.weiboInfo = [self.WeiboDataArray objectAtIndex:self.indexOfItem];
-    
-    self.naviTitlLable.text=[NSString stringWithFormat:@"%@",self.weiboInfo.stageInfo.movieInfo.name];
+    self.naviTitlLable.text=[NSString stringWithFormat:@"%@  ▸",self.weiboInfo.stageInfo.movieInfo.name];
     
     
     //初始化的时候记录了当前的第一个viewcontroller  以后每次都在代理里面获取当前的viewcontroller
@@ -250,7 +245,6 @@
     [ShareButton setTitle:@"我要分享" forState:UIControlStateNormal];
     /*[ShareButton addActionHandler:^(NSInteger tag) {
         float  height = CenterViewController.ShareView.frame.size.height;
-        
         UIImage  *image=[Function getImage:CenterViewController.ShareView WithSize:CGSizeMake(kDeviceWidth-20,height)];
         UMShareView *shareView =[[UMShareView alloc] initwithStageInfo:weakSelf.weiboInfo.stageInfo ScreenImage:image delgate:weakSelf andShareHeight:height];
         [shareView setShareLable];
@@ -270,20 +264,8 @@
     else if(self.pageType ==NSStagePapeTypeAdminOperation)
     {
         ToolView.hidden=YES;
-        //管理员页面进入
-//        NSArray *titleArray = [NSArray arrayWithObjects:@"屏蔽", @"最新", @"正常", @"发现", @"定时", nil];
-//        for (int i=0; i<5; i++) {
-//            UIButton *btnBlock =[UIButton buttonWithType:UIButtonTypeCustom];
-//            btnBlock.tag = 2000 + i;
-//            
-//            btnBlock.frame=CGRectMake(kDeviceWidth/5*i,0, kDeviceWidth/5, 45);
-//            [btnBlock setTitle:titleArray[i] forState:UIControlStateNormal];
-//            [btnBlock setTitleColor:VBlue_color forState:UIControlStateNormal];
-//            [btnBlock setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color"] forState:UIControlStateNormal];
-//            //[btnBlock setBackgroundImage:[UIImage imageNamed:@"dischoice_icon@3x.png"] forState:UIControlStateHighlighted];
-//            [btnBlock addTarget:self action:@selector(changeWeiboStatus:) forControlEvents:UIControlEventTouchUpInside];
-////            [ToolView addSubview:btnBlock];
-//        }
+    
+      
     }
 }
 #pragma mark  selected date time
@@ -331,7 +313,7 @@
     self.weiboInfo =[[weiboInfoModel alloc]init];
     self.weiboInfo =[self.WeiboDataArray objectAtIndex:index];
     dispatch_async(dispatch_get_main_queue(), ^{
-        self.naviTitlLable.text= [NSString stringWithFormat:@"%@",self.weiboInfo.stageInfo.movieInfo.name];
+        self.naviTitlLable.text= [NSString stringWithFormat:@"%@  ▸",self.weiboInfo.stageInfo.movieInfo.name];
     });
     if ((index == 0) || (index == NSNotFound)) {
         return nil;
@@ -351,7 +333,7 @@
     self.weiboInfo =[[weiboInfoModel alloc]init];
     self.weiboInfo =[self.WeiboDataArray objectAtIndex:index];
     dispatch_async(dispatch_get_main_queue(), ^{
-        self.naviTitlLable.text= [NSString stringWithFormat:@"%@",self.weiboInfo.stageInfo.movieInfo.name];
+        self.naviTitlLable.text= [NSString stringWithFormat:@"%@  ▸",self.weiboInfo.stageInfo.movieInfo.name];
     });
     if (index == NSNotFound) {
         return nil;

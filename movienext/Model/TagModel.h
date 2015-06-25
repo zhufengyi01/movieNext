@@ -29,6 +29,9 @@
 
 @property(nonatomic,strong) NSString  *updated_at;
 
+@property(nonatomic,strong) NSString *count;
+
+@property(nonatomic,strong) NSString *movie_id;
 
 @property (nonatomic,strong) TagDetailModel  *tagDetailInfo;
 

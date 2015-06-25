@@ -17,6 +17,7 @@
 #import "AppDelegate.h"
 #import "NotificationTableViewCell.h"
 //导入功能类
+#import "MJExtension.h"
 #import "Function.h"
 #import "LoadingView.h"
 #import "UserDataCenter.h"
@@ -35,8 +36,10 @@
 #import "UpweiboModel.h"
 #import "ShowSelectPhotoViewController.h"
 #import "StageViewController.h"
+#import "TagModel.h"
+#import "TagView.h"
 #import "TapStageCollectionViewCell.h"
-@interface StageListViewController ()<UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UICollectionViewDelegate,LoadingViewDelegate,UIAlertViewDelegate>
+@interface StageListViewController ()<UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UICollectionViewDelegate,LoadingViewDelegate,UIAlertViewDelegate,TagViewDelegate>
 {
     UICollectionViewFlowLayout    *layout;
     int pageSize;
@@ -47,6 +50,17 @@
     UIButton  *upLoadimageBtn;
 }
 @property(nonatomic,strong)NSMutableArray *upWeiboArray;
+
+@property(nonatomic,strong) NSMutableArray *tagListArray;
+
+@property(nonatomic,strong) NSString *TagId;
+
+
+@property(nonatomic,strong) M80AttributedLabel  *tagLable;//头部标签
+
+
+@property(nonatomic,strong) UIScrollView  *collectionHeadScrollerView;
+
 @end
 
 @implementation StageListViewController
@@ -57,6 +71,9 @@
     [self createNavigation];
     [self initData];
     [self initUI];
+    if (self.pageType == NSStageListpageSoureTypeDefault) {
+        [self requestTagList];
+    }
 }
 -(void)createNavigation
 {
@@ -70,9 +87,10 @@
     MovieLogoImageView.layer.masksToBounds = YES;
     [titleView addSubview:MovieLogoImageView];
     //电影名
-    UILabel  *movieNameLable =[[UILabel alloc]initWithFrame:CGRectMake(35,0, 120, 30)];
+    UILabel  *movieNameLable =[[UILabel alloc]initWithFrame:CGRectMake(35,10, 120, 30)];
     movieNameLable.font=[UIFont fontWithName:kFontDouble size:16];
     movieNameLable.textColor=VGray_color;
+   // movieNameLable.backgroundColor =[UIColor redColor];
     // movieNameLable.numberOfLines=1;
     movieNameLable.lineBreakMode=NSLineBreakByTruncatingTail;
     [titleView addSubview:movieNameLable];
@@ -104,8 +122,11 @@
     }
     else if(self.pageType==NSStageListpageSoureTypeTagToStage)
     {
-        movieNameLable.frame=CGRectMake(0, 0, 120, 30);
         movieNameLable.text = self.tagInfo.tagDetailInfo.title;
+        movieNameLable.textAlignment=NSTextAlignmentLeft;
+        CGSize   Nsize =[movieNameLable.text boundingRectWithSize:CGSizeMake(nameW, 25) options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes:[NSDictionary dictionaryWithObject:movieNameLable.font forKey:NSFontAttributeName] context:nil].size;
+        movieNameLable.frame=CGRectMake(0,8,Nsize.width+5, 25);
+        titleView.frame=CGRectMake(0, 0, movieNameLable.frame.size.width, 40);
         upLoadimageBtn.hidden=YES;
     }
 }
@@ -114,14 +135,15 @@
     [self requestMovieInfoData];
     
 }
-
 -(void)initData
 {
     page=1;
     pageSize=20;
     pageCount=1;
+    self.TagId=@"0";
     userCenter=[UserDataCenter shareInstance];
     _dataArray =[[NSMutableArray alloc]init];
+    self.tagListArray =[[NSMutableArray alloc]init];
     self.upWeiboArray  =[[NSMutableArray alloc]init];
 }
 
@@ -134,7 +156,7 @@
     layout.sectionInset=UIEdgeInsetsMake(0,0,64, 0); //整个偏移量 上左下右
     _myConllectionView =[[UICollectionView alloc]initWithFrame:CGRectMake(0,0,kDeviceWidth, kDeviceHeight-kHeightNavigation-0) collectionViewLayout:layout];
     //[layout setHeaderReferenceSize:CGSizeMake(_myConllectionView.frame.size.width, kDeviceHeight/3+64+110)];
-    _myConllectionView.backgroundColor=View_BackGround;
+    _myConllectionView.backgroundColor=[UIColor whiteColor];
     //注册小图模式
     [_myConllectionView registerClass:[SmallImageCollectionViewCell class] forCellWithReuseIdentifier:@"smallcell"];
     [self.myConllectionView registerClass:[TapStageCollectionViewCell class] forCellWithReuseIdentifier:@"tagStageCell"];
@@ -142,9 +164,59 @@
     //[_myConllectionView registerClass:[MovieHeadView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"headerView"];
     _myConllectionView.delegate=self;
     _myConllectionView.dataSource=self;
-    
+    if (self.pageType==NSStageListpageSoureTypeDefault) {
+        self.myConllectionView.frame=CGRectMake(0, 120, kDeviceWidth,kDeviceHeight-kHeightNavigation-120);
+    }
     [self.view addSubview:_myConllectionView];
     [self setUprefresh];
+}
+-(void)createCollectionHeaderView:(NSMutableArray *) array
+{
+    self.collectionHeadScrollerView= [[UIScrollView alloc]initWithFrame:CGRectMake(0,0, kDeviceWidth, 120)];
+    self.collectionHeadScrollerView.backgroundColor =[UIColor whiteColor];
+    self.collectionHeadScrollerView.contentSize=CGSizeMake(kDeviceWidth, 150);
+    [self.view addSubview:self.collectionHeadScrollerView];
+    self.tagLable =[[M80AttributedLabel alloc]initWithFrame:CGRectMake(10,10,kDeviceWidth-20, 100)];
+    self.tagLable.backgroundColor=[[UIColor blackColor] colorWithAlphaComponent:0];
+    self.tagLable.lineSpacing=5;
+    for (int i=0; i<array.count; i++) {
+        TagView *tagview = [self createTagViewWithtagInfo:array[i] andIndex:i];
+        [self.tagLable appendView:tagview margin:UIEdgeInsetsMake(0, 0, 0, 5)];
+    }
+    [self.collectionHeadScrollerView addSubview:self.tagLable];
+    //计算tagview的高度
+    CGSize Tagsize =[self.tagLable sizeThatFits:CGSizeMake(kDeviceWidth-20, CGFLOAT_MAX)];
+    self.tagLable.frame=CGRectMake(10,10,Tagsize.width, Tagsize.height+0);
+    //重新渲染下头部视图的高度
+    if (self.tagLable.frame.size.height<80) {
+        self.collectionHeadScrollerView.frame =CGRectMake(0, 0, kDeviceWidth,self.tagLable.frame.size.height+10);
+        self.myConllectionView.frame=CGRectMake(0, self.tagLable.frame.size.height+10, kDeviceWidth,kDeviceHeight-kHeightNavigation-self.tagLable.frame.size.height-10);
+        self.collectionHeadScrollerView.contentSize=CGSizeMake(kDeviceWidth, self.tagLable.frame.size.height+30);
+    }
+    else
+    {
+        self.collectionHeadScrollerView.frame=CGRectMake(0, 0, kDeviceWidth, 100);
+        self.myConllectionView.frame=CGRectMake(0, 100, kDeviceWidth, kDeviceHeight-kHeightNavigation-100);
+        self.collectionHeadScrollerView.contentSize=CGSizeMake(kDeviceWidth,self.tagLable.frame.size.height+20);
+    }
+}
+
+//创建标签的方法
+-(TagView *)createTagViewWithtagInfo:(TagModel *) tagmodel andIndex:(NSInteger ) index
+{
+    if([tagmodel.count intValue]>1)
+    { tagmodel.tagDetailInfo.title =[NSString stringWithFormat:@"%@(%@)",tagmodel.tagDetailInfo.title,tagmodel.count];
+    }
+    TagView *tagview =[[TagView alloc]initWithWeiboInfo:nil AndTagInfo:tagmodel delegate:self isCanClick:YES backgoundImage:nil isLongTag:YES];
+    tagview.tagBgImageview.backgroundColor=VLight_GrayColor_apla;
+    [tagview setbigTagWithSize:CGSizeMake(8, 4)];
+     tagview.tag=2000+index;
+    tagview.titleLable.textColor=VGray_color;
+    if (index==0) {
+        tagview.tagBgImageview.backgroundColor =VGray_color;
+        tagview.titleLable.textColor=[UIColor whiteColor];
+    }
+    return tagview;
 }
 - (void)setUprefresh
 {
@@ -216,6 +288,8 @@
     // 默认先隐藏footer
     // self.myConllectionView.footer.hidden = YES;
 }
+
+//
 -(void)requestMovieInfoData
 {
     if (!_movie_id || _movie_id<=0) {
@@ -245,16 +319,50 @@
         NSLog(@"Error: %@", error);
     }];
 }
-
+//根据电影id 请求这个电影下面所有的标签
+-(void)requestTagList
+{
+    //UserDataCenter *userCenter =[UserDataCenter shareInstance];
+    NSString  *urlString =[NSString stringWithFormat:@"%@/tag-stage/tag-list", kApiBaseUrl];
+    NSString *tokenString =[Function getURLtokenWithURLString:urlString];
+    NSDictionary *parameters = @{@"movie_id":self.movie_id,KURLTOKEN:tokenString};
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
+            NSLog(@"标签列表=======%@",responseObject);
+            NSMutableArray  *array =[[NSMutableArray alloc]initWithArray:[TagModel objectArrayWithKeyValuesArray:[responseObject objectForKey:@"models"]]];
+            //自己创建一个文字问全部的标签
+            TagDetailModel  *detailmodel =[[TagDetailModel alloc]init];
+            detailmodel.title=@"全部";
+            TagModel *tagmodel =[[TagModel alloc]init];
+            tagmodel.tagDetailInfo=detailmodel;
+            [array insertObject:tagmodel atIndex:0];
+            self.tagListArray = array;
+            [self createCollectionHeaderView:array];
+            
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+}
 -(void)requestData
 {
     
     NSDictionary *parameters;
     NSString  *urlString;
     if (self.pageType==NSStageListpageSoureTypeDefault) {
+        if ([self.TagId intValue]==0) {
         urlString =[NSString stringWithFormat:@"%@/weibo/list?per-page=%d&page=%d", kApiBaseUrl,pageSize,page];
         NSString *tokenString =[Function getURLtokenWithURLString:urlString];
         parameters =@{@"movie_id":self.movie_id,@"user_id":userCenter.user_id,KURLTOKEN:tokenString};
+        }
+        else
+        {
+            urlString =[NSString stringWithFormat:@"%@/tag-weibo/weibo-list-by-tag-id?per-page=%d&page=%d", kApiBaseUrl,pageSize,page];
+            NSString *tokenString =[Function getURLtokenWithURLString:urlString];
+            parameters =@{@"movie_id":self.movie_id,@"user_id":userCenter.user_id,KURLTOKEN:tokenString,@"tag_id":self.TagId};
+        }
+        
     }else if(self.pageType==NSStageListpageSoureTypeTagToStage)
     {
         urlString =[NSString stringWithFormat:@"%@/tag-weibo/list?per-page=%d&page=%d", kApiBaseUrl,pageSize,page];
@@ -430,6 +538,27 @@
     // Dispose of any resources that can be recreated.
 }
 
+
+# pragma mark -TagViewDeleagte
+
+-(void)TapViewClick:(TagView *)tagView Withweibo:(weiboInfoModel *)weiboInfo withTagInfo:(TagModel *)tagInfo
+{
+    page=1;
+    if (self.dataArray.count>0) {
+        [self.dataArray removeAllObjects];
+        
+    }
+    for (int i=0; i<self.tagListArray.count; i++) {
+        //直接
+        TagView  *tagView=(TagView *)[self.tagLable viewWithTag:2000+i];
+        tagView.tagBgImageview.backgroundColor =VLight_GrayColor_apla;
+        tagView.titleLable.textColor=VGray_color;
+    }
+    tagView.tagBgImageview.backgroundColor =VGray_color;
+    tagView.titleLable.textColor=[UIColor whiteColor];
+    self.TagId =tagInfo.tagDetailInfo.Id;
+    [self requestData];
+}
 /*
 #pragma mark - Navigation
 

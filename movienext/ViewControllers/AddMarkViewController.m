@@ -506,7 +506,6 @@
     [_myTextView resignFirstResponder];
 }
 //有时候我们要控件自适应输入的文本的内容的高度，只要在textViewDidChange的代理方法中加入调整控件大小的代理即可
-
 -(void)textViewDidChange:(UITextView *)textView{
     CGRect  frame = _myTextView.frame;
     frame.size.height=_myTextView.contentSize.height+0;

@@ -930,8 +930,8 @@ static const CGFloat MJDuration = 0.6;
     }
     else if(collectionView==self.RecommendCollectionView)
     {
-        return [[self.recomendDataArray objectAtIndex:section] count];
-        //return self.dataArray0.count;
+        NSArray  *Arr =[self.recomendDataArray objectAtIndex:section];
+        return [Arr count];
     }
     return 0;
     
@@ -1074,8 +1074,11 @@ static const CGFloat MJDuration = 0.6;
 {
     int num=0;
     for (int i=0; i<section; i++) {
-     int  a = (int) [[self.recomendDataArray objectAtIndex:i] count];
-        num =num+a;
+        NSArray *arr =[self.recomendDataArray objectAtIndex:i];
+        int a= [arr count];
+     ///int  a = (int) [[self.recomendDataArray objectAtIndex:i] count];
+    num =num+a;
+        
     }
     return num+row;
     
