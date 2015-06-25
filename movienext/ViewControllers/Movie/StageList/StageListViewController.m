@@ -35,6 +35,7 @@
 #import "UpweiboModel.h"
 #import "ShowSelectPhotoViewController.h"
 #import "StageViewController.h"
+#import "TapStageCollectionViewCell.h"
 @interface StageListViewController ()<UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UICollectionViewDelegate,LoadingViewDelegate,UIAlertViewDelegate>
 {
     UICollectionViewFlowLayout    *layout;
@@ -77,12 +78,11 @@
     [titleView addSubview:movieNameLable];
     NSString  *logoString;
     logoString =[NSString stringWithFormat:@"%@%@!poster",kUrlFeed,self.movielogo];
-    [MovieLogoImageView sd_setImageWithURL:[NSURL URLWithString:logoString] placeholderImage:[UIImage imageNamed:@"Moments.png"]];
+  
     NSString  *nameStr=self.moviename;
      nameStr =[Function htmlString:nameStr];
     float nameW=kDeviceWidth*0.6;
     CGSize   Nsize =[nameStr boundingRectWithSize:CGSizeMake(nameW, 25) options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes:[NSDictionary dictionaryWithObject:movieNameLable.font forKey:NSFontAttributeName] context:nil].size;
-    movieNameLable.text=[NSString stringWithFormat:@"%@",nameStr];
     movieNameLable.frame=CGRectMake(35,8,Nsize.width+5, 25);
     titleView.frame=CGRectMake(0, 0, 30+5+movieNameLable.frame.size.width, 40);
     self.navigationItem.titleView=titleView;
@@ -98,6 +98,16 @@
     //    [upLoadimageBtn setImage:[UIImage imageNamed:@"up_picture_blue.png"] forState:UIControlStateNormal];
     UIBarButtonItem  *rigthbar =[[UIBarButtonItem alloc]initWithCustomView:upLoadimageBtn];
     self.navigationItem.rightBarButtonItem=rigthbar;
+    if (self.pageType==NSStageListpageSoureTypeDefault ) {
+         movieNameLable.text=[NSString stringWithFormat:@"%@",nameStr];
+          [MovieLogoImageView sd_setImageWithURL:[NSURL URLWithString:logoString] placeholderImage:[UIImage imageNamed:@"Moments.png"]];
+    }
+    else if(self.pageType==NSStageListpageSoureTypeTagToStage)
+    {
+        movieNameLable.frame=CGRectMake(0, 0, 120, 30);
+        movieNameLable.text = self.tagInfo.tagDetailInfo.title;
+        upLoadimageBtn.hidden=YES;
+    }
 }
 -(void)uploadImageFromAbumdAndDouban
 {
@@ -124,10 +134,10 @@
     layout.sectionInset=UIEdgeInsetsMake(0,0,64, 0); //整个偏移量 上左下右
     _myConllectionView =[[UICollectionView alloc]initWithFrame:CGRectMake(0,0,kDeviceWidth, kDeviceHeight-kHeightNavigation-0) collectionViewLayout:layout];
     //[layout setHeaderReferenceSize:CGSizeMake(_myConllectionView.frame.size.width, kDeviceHeight/3+64+110)];
-    
     _myConllectionView.backgroundColor=View_BackGround;
     //注册小图模式
     [_myConllectionView registerClass:[SmallImageCollectionViewCell class] forCellWithReuseIdentifier:@"smallcell"];
+    [self.myConllectionView registerClass:[TapStageCollectionViewCell class] forCellWithReuseIdentifier:@"tagStageCell"];
     // 注册头部视图
     //[_myConllectionView registerClass:[MovieHeadView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"headerView"];
     _myConllectionView.delegate=self;
@@ -240,9 +250,17 @@
 {
     
     NSDictionary *parameters;
-    NSString  *urlString =[NSString stringWithFormat:@"%@/weibo/list?per-page=%d&page=%d", kApiBaseUrl,pageSize,page];
-    NSString *tokenString =[Function getURLtokenWithURLString:urlString];
-    parameters =@{@"movie_id":self.movie_id,@"user_id":userCenter.user_id,KURLTOKEN:tokenString};
+    NSString  *urlString;
+    if (self.pageType==NSStageListpageSoureTypeDefault) {
+        urlString =[NSString stringWithFormat:@"%@/weibo/list?per-page=%d&page=%d", kApiBaseUrl,pageSize,page];
+        NSString *tokenString =[Function getURLtokenWithURLString:urlString];
+        parameters =@{@"movie_id":self.movie_id,@"user_id":userCenter.user_id,KURLTOKEN:tokenString};
+    }else if(self.pageType==NSStageListpageSoureTypeTagToStage)
+    {
+        urlString =[NSString stringWithFormat:@"%@/tag-weibo/list?per-page=%d&page=%d", kApiBaseUrl,pageSize,page];
+        NSString *tokenString =[Function getURLtokenWithURLString:urlString];
+        parameters =@{@"tag_id":self.tagInfo.tagDetailInfo.Id,@"user_id":userCenter.user_id,KURLTOKEN:tokenString};
+    }
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
@@ -292,6 +310,9 @@
                             }
                         }
                         weibomodel.tagArray=tagArray;
+                        if (self.dataArray==nil) {
+                            self.dataArray =[NSMutableArray array];
+                        }
                         [self.dataArray addObject:weibomodel];
                     }
                 }
@@ -300,7 +321,6 @@
                     UpweiboModel *upmodel =[[UpweiboModel alloc]init];
                     if (upmodel) {
                         [upmodel setValuesForKeysWithDictionary:updict];
-                        
                         if (_upWeiboArray==nil) {
                             _upWeiboArray =[[NSMutableArray alloc]init];
                         }
@@ -309,7 +329,6 @@
                 }
             [self.myConllectionView reloadData];
             [self.myConllectionView.footer endRefreshing];
-
             }
      
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -323,7 +342,6 @@
     }
     return 0;
 }
-
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
     if (collectionView==_myConllectionView) {
@@ -334,20 +352,35 @@
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    SmallImageCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"smallcell" forIndexPath:indexPath];
-    //在这里先将内容给清除一下, 然后再加载新的, 添加完内容之后先动画, 在cell消失的时候做清理工作
-    weiboInfoModel *model =[self.dataArray objectAtIndex:indexPath.row];
-    if (_dataArray.count>indexPath.row) {
-        cell.backgroundColor =[UIColor redColor];
-        NSURL  *url =[NSURL URLWithString:[NSString stringWithFormat:@"%@%@%@",kUrlStage,model.stageInfo.photo,KIMAGE_SMALL]];
-        [cell.imageView sd_setImageWithURL:url placeholderImage:nil options:(SDWebImageRetryFailed|SDWebImageLowPriority)];
-        cell.ivLike.image = [UIImage imageNamed:@"tiny_like"];
-        cell.lblLikeCount.adjustsFontSizeToFitWidth=YES;
-        cell.lblLikeCount.text = [NSString stringWithFormat:@"%d", [model.like_count intValue]];
-        cell.titleLab.text=[NSString stringWithFormat:@"%@",model.content];
+    if (self.pageType==NSStageListpageSoureTypeDefault) {
+        SmallImageCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"smallcell" forIndexPath:indexPath];
+        //在这里先将内容给清除一下, 然后再加载新的, 添加完内容之后先动画, 在cell消失的时候做清理工作
+        if (_dataArray.count>indexPath.row) {
+            weiboInfoModel *model =[self.dataArray objectAtIndex:indexPath.row];
+             NSURL  *url =[NSURL URLWithString:[NSString stringWithFormat:@"%@%@%@",kUrlStage,model.stageInfo.photo,KIMAGE_SMALL]];
+            [cell.imageView sd_setImageWithURL:url placeholderImage:nil options:(SDWebImageRetryFailed|SDWebImageLowPriority)];
+            cell.ivLike.image = [UIImage imageNamed:@"tiny_like"];
+            cell.lblLikeCount.adjustsFontSizeToFitWidth=YES;
+            cell.lblLikeCount.text = [NSString stringWithFormat:@"%d", [model.like_count intValue]];
+            cell.titleLab.text=[NSString stringWithFormat:@"%@",model.content];
+            
+        }
+        return cell;
         
+    }else if(self.pageType==NSStageListpageSoureTypeTagToStage)
+    {
+        TapStageCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"tagStageCell" forIndexPath:indexPath];
+        //在这里先将内容给清除一下, 然后再加载新的, 添加完内容之后先动画, 在cell消失的时候做清理工作
+        if (_dataArray.count>indexPath.row) {
+            weiboInfoModel *model =[self.dataArray objectAtIndex:indexPath.row];
+            NSURL  *url =[NSURL URLWithString:[NSString stringWithFormat:@"%@%@%@",kUrlStage,model.stageInfo.photo,KIMAGE_SMALL]];
+            [cell.imageView sd_setImageWithURL:url placeholderImage:nil options:(SDWebImageRetryFailed|SDWebImageLowPriority)];
+            cell.titleLab.text=[NSString stringWithFormat:@"%@",model.content];
+            cell.buttomLable.text = [NSString stringWithFormat:@"《%@》",model.stageInfo.movieInfo.name];
+        }
+        return cell;
     }
-    return cell;
+    return nil;
 }
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -365,11 +398,17 @@
 
 // 设置每个item的尺寸
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
-    // return CGSizeMake((kDeviceWidth-5)/2,(kDeviceWidth-10)/3);
+    if (self.pageType==NSStageListpageSoureTypeDefault) {
     double  w = (kDeviceWidth-5)/2;
     double  h= w*(9.0/16);
     return CGSizeMake(w,h);
-    
+    }else if(self.pageType==NSStageListpageSoureTypeTagToStage)
+    {
+        double  w = (kDeviceWidth-5)/2;
+        double  h= w*(9.0/16);
+        return CGSizeMake(w,h+20);
+    }
+    return CGSizeZero;
 }
 
 -(UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section

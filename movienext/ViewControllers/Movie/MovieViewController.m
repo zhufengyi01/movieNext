@@ -114,7 +114,10 @@ static const CGFloat MJDuration = 0.6;
     [self createSegmentView];
     [self initUI];
     [self creatLoadView];
-    
+}
+-(void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"requestRecommendData" object:nil];
 }
 -(void)createNavigation
 {
@@ -385,7 +388,9 @@ static const CGFloat MJDuration = 0.6;
          [weakSelf.colors insertObject:MJRandomColor atIndex:0];
          }*/
         page0=1;
-        
+        if (self.dataArray0.count>0) {
+            [weakSelf.dataArray0 removeAllObjects];
+        }
         // 进入刷新状态就会回调这个Block
         [weakSelf requestRecommendData];
         // 设置文字
@@ -558,14 +563,6 @@ static const CGFloat MJDuration = 0.6;
     // self.myConllectionView.footer.hidden = YES;
 }
 
-
-//为了保证内部不泄露，在dealloc中释放占用的内存
-// */
-- (void)dealloc
-{
-    NSLog(@"MJCollectionViewController--dealloc---");
-}
-
 #pragma  mark  ---
 #pragma  mark  ----RequestData
 #pragma  mark  ---
@@ -687,8 +684,6 @@ static const CGFloat MJDuration = 0.6;
                 }
             }
             //把self.dataArray 复制给self.RecomendArray;
-            //self.recomendDataArray =[[NSMutableArray alloc]initWithArray:self.dataArray0];
-            //[self computeRecomendSectionView:self.recomendDataArray];
             [self computeRecomendSectionView:self.dataArray0];
             [self.RecommendCollectionView reloadData];
             [self.RecommendCollectionView.footer endRefreshing];
@@ -987,7 +982,7 @@ static const CGFloat MJDuration = 0.6;
             //dateLable.text=da;
             //            cell.lblTime.text = da;
             cell.lblLikeCount.text = [NSString stringWithFormat:@"%d", [model.like_count intValue]];
-            [cell.ivAvatar sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", kUrlAvatar, model.uerInfo.logo]]];
+            //[cell.ivAvatar sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", kUrlAvatar, model.uerInfo.logo]]];
             cell.ivLike.image = [UIImage imageNamed:@"tiny_like"];
             return cell;
         }
@@ -1050,7 +1045,6 @@ static const CGFloat MJDuration = 0.6;
             NSDictionary *dict = [array  objectAtIndex:(long)indexPath.row];
                         list.movie_id = [dict objectForKey:@"movie_id"];
                         list.moviename=[dict objectForKey:@"title"];
-                        //list.pageSourceType=NSMovieSourcePageMovieListController;
                         list.movielogo =[dict objectForKey:@"photo"];
                         UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
                         self.navigationItem.backBarButtonItem=item;
@@ -1062,15 +1056,29 @@ static const CGFloat MJDuration = 0.6;
     {
         StageViewController  *stageVC =[[StageViewController alloc]init];
         stageVC.WeiboDataArray = self.dataArray0;
+        //计算属于第几个卡片
         stageVC.indexOfItem=indexPath.row;
+       //int a =   [[self.recomendDataArray objectAtIndex:1] count];
+        int  index =  [self getRecommedClickIndexWithSection:(int)indexPath.section Row:(int)indexPath.row];
+        NSLog(@"index.section ==%ld index.row===%ld",(long)indexPath.section,(long)indexPath.row);
+        stageVC.indexOfItem=index;
         stageVC.upWeiboArray=_upWeiboArray;
         stageVC.pageType = NSStagePapeTypeDefult;
         UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
         self.navigationItem.backBarButtonItem=item;
         [self.navigationController pushViewController:stageVC animated:YES];
-        
-        
     }
+}
+//获取点击的下标
+-(int)getRecommedClickIndexWithSection:(int) section Row:(int) row
+{
+    int num=0;
+    for (int i=0; i<section; i++) {
+     int  a = (int) [[self.recomendDataArray objectAtIndex:i] count];
+        num =num+a;
+    }
+    return num+row;
+    
 }
 -(void)MovieCollectionViewlongPress:(NSInteger)cellRowIndex
 {

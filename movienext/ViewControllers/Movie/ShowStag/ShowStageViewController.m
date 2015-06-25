@@ -264,8 +264,6 @@
     [self.ShareView addSubview:self.stageImageView];
     
     
-    
-    
     self.ShareView.frame=CGRectMake(10, 10, kDeviceWidth-20, self.stageImageView.frame.size.height+0);
     BgView.frame=CGRectMake(0, 0, kDeviceWidth, self.ShareView.frame.size.height+20);
     
@@ -274,29 +272,16 @@
     UIView  *_layerView =[[UIView alloc]initWithFrame:CGRectMake(0, self.stageImageView.frame.size.height-60, kDeviceWidth-20, 60)];
     [_layerView setShadow];
     [self.stageImageView addSubview:_layerView];
-//    CAGradientLayer * _gradientLayer = [CAGradientLayer layer];  // 设置渐变效果
-//    _gradientLayer.bounds = _layerView.bounds;
-//    _gradientLayer.borderWidth = 0;
-//    
-//    _gradientLayer.frame = _layerView.bounds;
-//    _gradientLayer.colors = [NSArray arrayWithObjects:
-//                             (id)[[UIColor clearColor] CGColor],
-//                             (id)[[UIColor blackColor] CGColor], nil, nil];
-//    _gradientLayer.startPoint = CGPointMake(0.5, 0.5);
-//    _gradientLayer.endPoint = CGPointMake(0.5, 1.0);
-//    [_layerView.layer insertSublayer:_gradientLayer atIndex:0];
-    
-    
     markLable=[ZCControl createLabelWithFrame:CGRectMake(10,40,_layerView.frame.size.width-20, 60) Font:20 Text:@"弹幕文字"];
     markLable.font =[UIFont fontWithName:kFontDouble size:23];
     //markLable.backgroundColor=[[UIColor blackColor] colorWithAlphaComponent:0.4];
     if (IsIphone6) {
         markLable.frame=CGRectMake(20, 30, _layerView.frame.size.width-40, 65);
-        markLable.font =[UIFont fontWithName:kFontDouble size:25];
+        markLable.font =[UIFont fontWithName:kFontDouble size:26];
     }
     if (IsIphone6plus) {
         markLable.frame=CGRectMake(20, 20,_layerView.frame.size.width-40, 70);
-        markLable.font=[UIFont fontWithName:kFontDouble size:28];
+        markLable.font=[UIFont fontWithName:kFontDouble size:29];
     }
 
     markLable.textColor=[UIColor whiteColor];
@@ -337,8 +322,15 @@
     //计算文字的高度从而确定整个shareview的高度
     
     CGSize  Msize = [markLable.text boundingRectWithSize:CGSizeMake(kDeviceWidth-40, MAXFLOAT) options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes:[NSDictionary dictionaryWithObject:markLable.font forKey:NSFontAttributeName] context:nil].size;
-    
-    self.ShareView.frame=CGRectMake(self.ShareView.frame.origin.x, self.ShareView.frame.origin.y, self.ShareView.frame.size.width, self.ShareView.frame.size.height+Msize.height-27);
+    //单行字高
+    float x=34;
+    if (IsIphone6) {
+        x=39;
+    }else if(IsIphone6plus)
+    {
+        x=43;
+    }
+    self.ShareView.frame=CGRectMake(self.ShareView.frame.origin.x, self.ShareView.frame.origin.y, self.ShareView.frame.size.width, self.ShareView.frame.size.height+Msize.height-x);
     BgView.frame=CGRectMake(0, 0, kDeviceWidth, self.ShareView.frame.size.height+20);
     
     markLable.frame=CGRectMake(10, self.ShareView.frame.size.height-Msize.height-5 ,self.ShareView.frame.size.width-20,Msize.height);

@@ -29,10 +29,9 @@
 #import  "MyViewController.h"
 #import "UITextView+PlaceHolder.h"
 #import "UIView+Shadow.h"
+#import "UIImage+Color.h"
 #define  PULISH_TOOLBAR_HEIGHT 80
-
 #define  BOOKMARK_WORD_LIMIT 1000
-
 
 @interface AddMarkViewController ()<UIAlertViewDelegate,UIScrollViewDelegate,UITextViewDelegate,TagViewDelegate,UIAlertViewDelegate,UMShareViewController2Delegate,UMSocialUIDelegate,UMSocialDataDelegate,UMShareViewDelegate>
 {
@@ -386,7 +385,6 @@
     }
     
     NSString *urlString =[NSString stringWithFormat:@"%@/weibo/create", kApiBaseUrl];
-    
     if (self.weiboInfo) {
         //更新
         urlString =[NSString stringWithFormat:@"%@/weibo/update",kApiBaseUrl];
@@ -513,7 +511,6 @@
     CGRect  frame = _myTextView.frame;
     frame.size.height=_myTextView.contentSize.height+0;
     _myTextView.frame=frame;
-    
     self.ShareView.frame=CGRectMake(10,10, kDeviceWidth-20, _myTextView.frame.size.height-50+self.stageImageView.frame.size.height);
     self.TagContentView.frame=CGRectMake(0, self.ShareView.frame.origin.y+self.ShareView.frame.size.height, kDeviceWidth, 100);
     
@@ -641,7 +638,7 @@
         AddTagViewController  *addtag =[[AddTagViewController alloc]init];
         addtag.delegate=self;
         addtag.modalTransitionStyle=UIModalTransitionStyleCrossDissolve;
-        UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:addtag];
+        //UINavigationController  *na =[[UINavigationController alloc]initWithRootViewController:addtag];
         //[self presentViewController:addtag animated:NO completion:nil];
         //[self presentViewController:na animated:YES completion:nil];
         [self.navigationController pushViewController:addtag animated:NO];
@@ -675,6 +672,8 @@
         for (int i=0; i<TAGArray.count; i++) {
             NSDictionary  *dict =[TAGArray objectAtIndex:i];
             TagView   *tagview =[self createTagViewWithtagText:[dict objectForKey:@"TAG"] withIndex:i withBgImage:[UIImage imageNamed:@"tag_backgroud_color.png"]];
+            UIImage *image =[UIImage imageWithColor:VBlue_color];
+            tagView.tagBgImageview.image =image;
             [taglable appendView:tagview margin:UIEdgeInsetsMake(0, 0, 0, 10)];
         }
         

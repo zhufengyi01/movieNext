@@ -30,8 +30,6 @@
     _imageView.clipsToBounds=YES;
     [self.contentView addSubview:_imageView];
     
-    
-    
     UIView  *view =[[UIView alloc]initWithFrame:CGRectMake(0, m_frame.size.height-40, m_frame.size.width, 40)];
     [view setShadow];
     [self.contentView addSubview:view];

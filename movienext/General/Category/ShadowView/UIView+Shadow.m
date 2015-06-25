@@ -16,7 +16,6 @@
     CAGradientLayer * _gradientLayer = [CAGradientLayer layer];  // 设置渐变效果
     _gradientLayer.bounds = _layerView.bounds;
     _gradientLayer.borderWidth = 0;
-    
     _gradientLayer.frame = _layerView.bounds;
     _gradientLayer.colors = [NSArray arrayWithObjects:
                              (id)[[UIColor clearColor] CGColor],

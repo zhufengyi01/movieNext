@@ -17,4 +17,5 @@
 @property(strong,nonatomic)UIImageView *imageView;
 @property(strong,nonatomic)UILabel *titleLab;
 
+@property(strong,nonatomic)UILabel  *buttomLable; 
 @end

@@ -431,11 +431,11 @@
     //markLable.backgroundColor=[[UIColor blackColor] colorWithAlphaComponent:0.4];
     if (IsIphone6) {
         markLable.frame=CGRectMake(20, 30, _layerView.frame.size.width-40, 65);
-        markLable.font =[UIFont fontWithName:kFontDouble size:25];
+        markLable.font =[UIFont fontWithName:kFontDouble size:26];
     }
     if (IsIphone6plus) {
         markLable.frame=CGRectMake(20, 20,_layerView.frame.size.width-40, 70);
-        markLable.font=[UIFont fontWithName:kFontDouble size:28];
+        markLable.font=[UIFont fontWithName:kFontDouble size:29];
     }
     markLable.textColor=[UIColor whiteColor];
     markLable.text=Weibo.content;
@@ -451,8 +451,15 @@
     markLable.textAlignment=NSTextAlignmentCenter;
     [self.ShareView addSubview:markLable];
     
-    CGSize  Msize = [markLable.text boundingRectWithSize:CGSizeMake(kDeviceWidth-20, MAXFLOAT) options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes:[NSDictionary dictionaryWithObject:markLable.font forKey:NSFontAttributeName] context:nil].size;
-    self.ShareView.frame=CGRectMake(self.ShareView.frame.origin.x, self.ShareView.frame.origin.y, self.ShareView.frame.size.width, self.stageImageView.frame.size.height+Msize.height-27);
+    CGSize  Msize = [markLable.text boundingRectWithSize:CGSizeMake(kDeviceWidth-40, MAXFLOAT) options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes:[NSDictionary dictionaryWithObject:markLable.font forKey:NSFontAttributeName] context:nil].size;
+    float x=34;
+    if (IsIphone6) {
+        x=39;
+    }else if(IsIphone6plus)
+    {
+        x=43;
+    }
+    self.ShareView.frame=CGRectMake(self.ShareView.frame.origin.x, self.ShareView.frame.origin.y, self.ShareView.frame.size.width, self.stageImageView.frame.size.height+Msize.height-x);
     self.bgView.frame=CGRectMake(0, 0, kDeviceWidth, self.ShareView.frame.size.height+10);
     markLable.frame=CGRectMake(10, self.ShareView.frame.size.height-Msize.height-5 ,self.ShareView.frame.size.width-20,Msize.height);
     if (Msize.height+self.stageImageView.frame.size.height>kDeviceHeight-100) {

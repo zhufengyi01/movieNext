@@ -30,6 +30,7 @@
 #import "TagToStageViewController.h"
 #import "SelectTimeView.h"
 #import "UIImage+Color.h"
+#import "StageListViewController.h"
 #define Alert_Interval  1
 #define  TOOLBAR_HEIGHT  45
 
@@ -122,25 +123,26 @@
     [self.stageImageView   sd_setImageWithURL:[NSURL URLWithString:photostring] placeholderImage:nil options:(SDWebImageLowPriority|SDWebImageRetryFailed)];
     [self.ShareView addSubview:self.stageImageView];
     
-    
     self.ShareView.frame=CGRectMake(10, 10, kDeviceWidth-20, self.stageImageView.frame.size.height+0);
     BgView.frame=CGRectMake(0, 0, kDeviceWidth, self.ShareView.frame.size.height+20);
     
     
     //创建剧照上的渐变背景文字
     UIView  *_layerView =[[UIView alloc]initWithFrame:CGRectMake(0, self.stageImageView.frame.size.height-60, kDeviceWidth-20, 60)];
-    [_layerView setShadow];
+    if (self.weiboInfo.content.length>0) {
+        [_layerView setShadow];
+    }
     [self.stageImageView addSubview:_layerView];
      self.markLable=[ZCControl createLabelWithFrame:CGRectMake(10,40,_layerView.frame.size.width-20, 60) Font:20 Text:@"弹幕文字"];
     self.markLable.font =[UIFont fontWithName:kFontDouble size:23];
     //markLable.backgroundColor=[[UIColor blackColor] colorWithAlphaComponent:0.4];
     if (IsIphone6) {
         self.markLable.frame=CGRectMake(20, 30, _layerView.frame.size.width-40, 65);
-        self.markLable.font =[UIFont fontWithName:kFontDouble size:25];
+        self.markLable.font =[UIFont fontWithName:kFontDouble size:26];
     }
     if (IsIphone6plus) {
         self.markLable.frame=CGRectMake(20, 20,_layerView.frame.size.width-40, 70);
-        self.markLable.font=[UIFont fontWithName:kFontDouble size:28];
+        self.markLable.font=[UIFont fontWithName:kFontDouble size:29];
     }
     self.markLable.textColor=[UIColor whiteColor];
     self.markLable.lineBreakMode=NSLineBreakByCharWrapping;
@@ -159,10 +161,16 @@
     
     //计算文字的高度从而确定整个shareview的高度
     
-    CGSize  Msize = [self.markLable.text boundingRectWithSize:CGSizeMake(kDeviceWidth-20, MAXFLOAT) options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes:[NSDictionary dictionaryWithObject:self.markLable.font forKey:NSFontAttributeName] context:nil].size;
+    CGSize  Msize = [self.markLable.text boundingRectWithSize:CGSizeMake(kDeviceWidth-40, MAXFLOAT) options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes:[NSDictionary dictionaryWithObject:self.markLable.font forKey:NSFontAttributeName] context:nil].size;
     NSLog(@" msize height === %f",Msize.height);
-    
-    self.ShareView.frame=CGRectMake(self.ShareView.frame.origin.x, self.ShareView.frame.origin.y, self.ShareView.frame.size.width, self.ShareView.frame.size.height+Msize.height-27);
+    float x=34;
+    if (IsIphone6) {
+        x=39;
+    }else if(IsIphone6plus)
+    {
+        x=43;
+    }
+    self.ShareView.frame=CGRectMake(self.ShareView.frame.origin.x, self.ShareView.frame.origin.y, self.ShareView.frame.size.width, self.ShareView.frame.size.height+Msize.height-x);
     BgView.frame=CGRectMake(0, 0, kDeviceWidth, self.ShareView.frame.size.height+20);
     self.markLable.frame=CGRectMake(10, self.ShareView.frame.size.height-Msize.height-5 ,self.ShareView.frame.size.width-20,Msize.height);
     NSLog(@"=======self stageview height ==%f ",self.stageImageView.frame.size.height);
@@ -574,12 +582,15 @@
 -(void)TapViewClick:(id)tagView Withweibo:(weiboInfoModel *)weiboInfo withTagInfo:(TagModel *)tagInfo
 {
     //跳转到标签列表页
-    TagToStageViewController  *vc=[[TagToStageViewController alloc]init];
-    vc.weiboInfo=weiboInfo;
-    vc.tagInfo=tagInfo;
+//    TagToStageViewController  *vc=[[TagToStageViewController alloc]init];
+//    vc.weiboInfo=weiboInfo;
+//    vc.tagInfo=tagInfo;
+    StageListViewController  *staglist =[StageListViewController new];
+    staglist.tagInfo=tagInfo;
+    staglist.pageType=NSStageListpageSoureTypeTagToStage;
     UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
     self.navigationItem.backBarButtonItem=item;
-    [self.navigationController pushViewController:vc animated:YES];
+    [self.navigationController pushViewController:staglist animated:YES];
 
 }
 - (void)didReceiveMemoryWarning {

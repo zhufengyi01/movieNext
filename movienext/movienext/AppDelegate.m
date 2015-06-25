@@ -73,11 +73,10 @@
     
     [[UINavigationBar appearance] setBackgroundImage:[UIImage imageWithColor:[UIColor whiteColor]] forBarMetrics:UIBarMetricsDefault];
     [[UINavigationBar appearance] setShadowImage:[UIImage imageWithColor:[UIColor clearColor]]];
- 
+  
 //    [[UINavigationBar appearance] setShadowImage:[UIImage imageWithColor:[UIColor clearColor] size:CGSizeMake(kDeviceWidth, 1)]];
 
 //    [UINavigationBar appearance].titleTextAttributes = [NSDictionary dictionaryWithObject:[UIColor grayColor] forKey:@"NSForegroundColorAttributeName"];
-    
 //    [UITabBar appearance].barTintColor = [UIColor blueColor];
 //    [UITabBar appearance].tintColor = [UIColor grayColor];
 //    [UITabBar appearance].selectionIndicatorImage = [UIImage imageNamed:@"icon"];
@@ -86,8 +85,6 @@
 
 -(void)createRootViewController:(NSString *) is_App_Check
 {
-    
-    
 #pragma mark  判断是否是审核版
     if ([is_App_Check intValue] ==1) {//是否是审核版 yes表示是非审核版，走正常的路线，审核版的话直接走非启动页
         // 不需要启动图
@@ -123,7 +120,7 @@
 #pragma mark 友盟统计
     //友盟统计
     //channekId 应用的推广渠道  nil或者@""默认为appstore
-    [MobClick setLogEnabled:YES];
+    //[MobClick setLogEnabled:YES];
     [MobClick startWithAppkey:kUmengKey reportPolicy:BATCH channelId:@""];
     //版本标识（version）
     NSString  *version =[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];

@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "weiboInfoModel.h"
 
 //typedef NS_ENUM(NSInteger,NSSmallCellPage)
 //{
@@ -21,12 +22,11 @@
 
 @property(strong,nonatomic)UIImageView *imageView;
 @property(strong,nonatomic)UILabel *titleLab;
-
 @property(strong,nonatomic)UIImageView *ivAvatar;
 @property(strong,nonatomic)UIImageView *ivLike;
 @property(strong,nonatomic)UILabel *lblTime;
 @property(strong,nonatomic)UILabel *lblLikeCount;
-
+@property(strong,nonatomic)weiboInfoModel *weiboInfo;
 @property(strong,nonatomic)UILabel  *platformlbl;
 
 @end
