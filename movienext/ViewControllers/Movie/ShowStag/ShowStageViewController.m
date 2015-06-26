@@ -263,18 +263,14 @@
     [self.stageImageView   sd_setImageWithURL:[NSURL URLWithString:photostring] placeholderImage:nil options:(SDWebImageLowPriority|SDWebImageRetryFailed)];
     [self.ShareView addSubview:self.stageImageView];
     
-    
     self.ShareView.frame=CGRectMake(10, 10, kDeviceWidth-20, self.stageImageView.frame.size.height+0);
     BgView.frame=CGRectMake(0, 0, kDeviceWidth, self.ShareView.frame.size.height+20);
-    
-    
     //创建剧照上的渐变背景文字
     UIView  *_layerView =[[UIView alloc]initWithFrame:CGRectMake(0, self.stageImageView.frame.size.height-60, kDeviceWidth-20, 60)];
     [_layerView setShadow];
     [self.stageImageView addSubview:_layerView];
     markLable=[ZCControl createLabelWithFrame:CGRectMake(10,40,_layerView.frame.size.width-20, 60) Font:20 Text:@"弹幕文字"];
     markLable.font =[UIFont fontWithName:kFontDouble size:23];
-    //markLable.backgroundColor=[[UIColor blackColor] colorWithAlphaComponent:0.4];
     if (IsIphone6) {
         markLable.frame=CGRectMake(20, 30, _layerView.frame.size.width-40, 65);
         markLable.font =[UIFont fontWithName:kFontDouble size:26];
@@ -283,7 +279,6 @@
         markLable.frame=CGRectMake(20, 20,_layerView.frame.size.width-40, 70);
         markLable.font=[UIFont fontWithName:kFontDouble size:29];
     }
-
     markLable.textColor=[UIColor whiteColor];
     weiboInfoModel *weibomodel;
     if (self.stageInfo.weibosArray.count>0) {
@@ -302,13 +297,10 @@
     if (markLable.text == nil) {
         markLable.text=@"";
     }
-    
     markLable.lineBreakMode=NSLineBreakByCharWrapping;
     markLable.contentMode=UIViewContentModeBottom;
     markLable.textAlignment=NSTextAlignmentCenter;
     [self.ShareView addSubview:markLable];
-    
-    
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
     paragraphStyle.lineSpacing = 5;
     NSDictionary *attributes = @{
@@ -316,11 +308,8 @@
                                  NSParagraphStyleAttributeName:paragraphStyle
                                  };
     markLable.attributedText = [[NSAttributedString alloc] initWithString:markLable.text attributes:attributes];
-    
     markLable.textAlignment=NSTextAlignmentCenter;
-    
     //计算文字的高度从而确定整个shareview的高度
-    
     CGSize  Msize = [markLable.text boundingRectWithSize:CGSizeMake(kDeviceWidth-40, MAXFLOAT) options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes:[NSDictionary dictionaryWithObject:markLable.font forKey:NSFontAttributeName] context:nil].size;
     //单行字高
     float x=34;
@@ -330,10 +319,38 @@
     {
         x=43;
     }
+    
+    //iphone 5  s
+     //  1行 34.5  2行  57.5     3行:92    4行 ： 126
+     // iphone 6
+     //1 行  39     2行：65      3行: 104   4 行 ：143
+    
+    //  iphone 6plus
+    //1 行   43.5   2行 72.5     3行:116       4行： 159
+//    int    w =  [UIScreen mainScreen].bounds.size.height;
+//     NSLog(@"======height ======%d ",w );
+    if (IsIphone5) {
+        if (Msize.height>92) {
+            markLable.font =[UIFont fontWithName:kFontDouble size:14];
+        }
+    }else if (IsIphone6)
+    {
+        if (Msize.height>104) {
+            markLable.font =[UIFont fontWithName:kFontDouble size:16];
+        }
+        
+    }else if (IsIphone6plus)
+    {
+        if (Msize.height>116) {
+            markLable.font =[UIFont fontWithName:kFontDouble size:18];
+        }
+    }
+    Msize = [markLable.text boundingRectWithSize:CGSizeMake(kDeviceWidth-40, MAXFLOAT) options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes:[NSDictionary dictionaryWithObject:markLable.font forKey:NSFontAttributeName] context:nil].size;
     self.ShareView.frame=CGRectMake(self.ShareView.frame.origin.x, self.ShareView.frame.origin.y, self.ShareView.frame.size.width, self.ShareView.frame.size.height+Msize.height-x);
     BgView.frame=CGRectMake(0, 0, kDeviceWidth, self.ShareView.frame.size.height+20);
-    
     markLable.frame=CGRectMake(10, self.ShareView.frame.size.height-Msize.height-5 ,self.ShareView.frame.size.width-20,Msize.height);
+   long int marknumber =markLable.numberOfLines;
+    NSLog(@"========%li",marknumber);
     if (Msize.height+self.stageImageView.frame.size.height>kDeviceHeight-100) {
         scrollView.contentSize=CGSizeMake(kDeviceWidth, Msize.height+self.stageImageView.frame.size.height+200);
     }
@@ -496,11 +513,16 @@
     if (_WeiboInfo.tagArray.count>0) {
         for (int i=0; i<_WeiboInfo.tagArray.count; i++) {
             TagView  *tagView= [[TagView alloc]initWithWeiboInfo:_WeiboInfo AndTagInfo:_WeiboInfo.tagArray[i] delegate:self isCanClick:YES backgoundImage:nil isLongTag:NO];
-            [tagView setcornerRadius:4];
-            [tagView setbigTagWithSize:CGSizeMake(6,6)];
+            [tagView setbigTagWithSize:CGSizeMake(10,8)];
+            if (IsIphone6) {
+                [tagView setbigTagWithSize:CGSizeMake(12, 10)];
+            }else if(IsIphone6plus)
+            {
+                [tagView setbigTagWithSize:CGSizeMake(14, 12)];
+            }
+            
             tagView.tag=5000+i;
-            //            tagView.backgroundColor =[UIColor redColor];
-            [self.WeiboTagLable appendView:tagView margin:UIEdgeInsetsMake(5, 10, 0, 0)];
+             [self.WeiboTagLable appendView:tagView margin:UIEdgeInsetsMake(5, 10, 0, 0)];
         }
     }
     CGSize  Tsize =[self.WeiboTagLable sizeThatFits:CGSizeMake(kDeviceWidth-20,CGFLOAT_MAX)];
@@ -620,26 +642,23 @@
     
     if (self.weiboInfo) {//如果 从管理员的最新页进来
         TagView *tagview = [self createTagViewWithweiboInfo:self.weiboInfo andIndex:300];
-        [tagview setbigTagWithSize:CGSizeMake(10, 12)];
+        ///[tagview setbigTagWithSize:CGSizeMake(10, 12)];
         [self.tagLable appendView:tagview margin:UIEdgeInsetsMake(0, 0, 0, 5)];
         self.tagLable.lineSpacing=5;
         self.tagLable.numberOfLines=0;
         if (self.weiboInfo.content.length==0) {
             tagview.frame=CGRectZero;
         }
-        tagview.tagBgImageview.backgroundColor =VLight_GrayColor;
-        tagview.titleLable.textColor=[UIColor whiteColor];
+         tagview.titleLable.textColor=[UIColor whiteColor];
     }
     else {
         for (int i=0; i<self.stageInfo.weibosArray.count; i++) {
             TagView *tagview = [self createTagViewWithweiboInfo:self.stageInfo.weibosArray[i] andIndex:i];
-            [tagview setbigTagWithSize:CGSizeMake(10, 12)];
-            [self.tagLable appendView:tagview margin:UIEdgeInsetsMake(0, 0, 0, 5)];
+             [self.tagLable appendView:tagview margin:UIEdgeInsetsMake(0, 0, 0, 5)];
             self.tagLable.lineSpacing=5;
             self.tagLable.numberOfLines=0;
             if (i==0) {
-                tagview.tagBgImageview.backgroundColor =VLight_GrayColor;
-                tagview.titleLable.textColor=[UIColor whiteColor];
+                 tagview.titleLable.textColor=[UIColor whiteColor];
             }
         }
     }
@@ -714,21 +733,25 @@
         verline.backgroundColor =VLight_GrayColor;
         [shareView addSubview:verline];
     }
-    
 }
-
 -(TagView *) createTagViewWithweiboInfo:(weiboInfoModel *) weiboInfo andIndex:(NSInteger) index
 {
     TagView *tagview =[[TagView alloc]initWithWeiboInfo:weiboInfo AndTagInfo:nil delegate:self isCanClick:YES backgoundImage:nil isLongTag:NO];
-    [tagview setcornerRadius:2];
+    //[tagview setcornerRadius:2];
     if (weiboInfo.content.length==0) {
         tagview.frame=CGRectZero;
     }
-    tagview.tagBgImageview.backgroundColor =VLight_GrayColor_apla;
-    tagview.titleLable.textColor=VGray_color;
+    [tagview setbigTagWithSize:CGSizeMake(10,8)];
+    if (IsIphone6) {
+        [tagview setbigTagWithSize:CGSizeMake(12, 10)];
+    }else if (IsIphone6plus)
+    {
+        [tagview setbigTagWithSize:CGSizeMake(14, 12)];
+    }
+    //tagview.tagBgImageview.backgroundColor =VLight_GrayColor_apla;
+    tagview.titleLable.textColor=[UIColor whiteColor];
     tagview.tag=2000+index;
-    //[tagview setbigTag:YES];
-    return tagview;
+     return tagview;
 }
 
 

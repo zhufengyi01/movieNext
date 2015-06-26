@@ -204,10 +204,13 @@
     _myTextView=[[UITextView alloc]initWithFrame:CGRectMake(10,self.ShareView.frame.size.height-50, kDeviceWidth-40, 40)];
     // [_myTextView addPlaceHolder:@"输入弹幕"];
     _myTextView.textColor=[UIColor whiteColor];
-    _myTextView.font= [UIFont fontWithName:kFontDouble size:22];
-    _myTextView.tintColor=[UIColor whiteColor];
-    if (IsIphone6plus) {
-        _myTextView.font =[UIFont fontWithName:kFontDouble size:24];
+     _myTextView.tintColor=[UIColor whiteColor];
+    _myTextView.font =[UIFont fontWithName:kFontDouble size:23];
+    if (IsIphone6) {
+      _myTextView.font =[UIFont fontWithName:kFontDouble size:26];
+    }
+    else if (IsIphone6plus) {
+        _myTextView.font =[UIFont fontWithName:kFontDouble size:29];
     }
     _myTextView.backgroundColor=[UIColor clearColor];
     // _myTextView.layer.cornerRadius=4;
@@ -231,21 +234,10 @@
 }
 -(void)createAddTagView
 {
-    
-    
     self.TagContentView =[[UIView alloc]initWithFrame:CGRectMake(0,self.ShareView.frame.origin.y+self.ShareView.frame.size.height, kDeviceWidth, 100)];
     self.TagContentView.userInteractionEnabled=YES;
     self.TagContentView.backgroundColor =View_ToolBar;
     [_myScorllerView addSubview:self.TagContentView];
-    
-    //    float height =kDeviceHeight-kHeightNavigation-(kDeviceWidth)*(9.0/16);
-    //    shareView=[[UIView alloc]initWithFrame:CGRectMake(0,kHeightNavigation+(kDeviceWidth)*(9.0/16), kDeviceWidth, height)];
-    //    shareView.userInteractionEnabled=YES;
-    //    shareView.backgroundColor =[UIColor yellowColor];
-    //
-    //    [self.view addSubview:shareView];
-    
-    
     taglable =[[M80AttributedLabel alloc]initWithFrame:CGRectZero];
     taglable.backgroundColor =[UIColor clearColor];
     taglable.lineSpacing=5.0;
@@ -507,9 +499,26 @@
 }
 //有时候我们要控件自适应输入的文本的内容的高度，只要在textViewDidChange的代理方法中加入调整控件大小的代理即可
 -(void)textViewDidChange:(UITextView *)textView{
+    CGSize  Msize =_myTextView.contentSize;
+    if (IsIphone5) {
+        if (Msize.height>121) {
+            _myTextView.font =[UIFont fontWithName:kFontDouble size:14];
+        }
+     }else if (IsIphone6)
+    {
+        if (Msize.height>134) {
+            _myTextView.font =[UIFont fontWithName:kFontDouble size:16];
+        }
+     }else if (IsIphone6plus)
+    {
+        if (Msize.height>147) {
+            _myTextView.font =[UIFont fontWithName:kFontDouble size:18];
+        }
+    }
     CGRect  frame = _myTextView.frame;
     frame.size.height=_myTextView.contentSize.height+0;
     _myTextView.frame=frame;
+    
     self.ShareView.frame=CGRectMake(10,10, kDeviceWidth-20, _myTextView.frame.size.height-50+self.stageImageView.frame.size.height);
     self.TagContentView.frame=CGRectMake(0, self.ShareView.frame.origin.y+self.ShareView.frame.size.height, kDeviceWidth, 100);
     

@@ -101,11 +101,6 @@
 //    [BgView.layer setShadowOffset:CGSizeMake(kDeviceWidth, 20)];
       BgView.backgroundColor=View_ToolBar;
       BgView.userInteractionEnabled=YES;
-//    BgView.layer.shadowColor=VGray_color.CGColor;
-//    BgView.layer.shadowRadius=4;
-//    BgView.layer.shadowOpacity=0.8;
-//    BgView.layer.shadowOffset=CGSizeMake(4, 0);
-//
     [self.stageScrollerView addSubview:BgView];
     
     //最后要分享出去的图
@@ -135,8 +130,7 @@
     [self.stageImageView addSubview:_layerView];
      self.markLable=[ZCControl createLabelWithFrame:CGRectMake(10,40,_layerView.frame.size.width-20, 60) Font:20 Text:@"弹幕文字"];
     self.markLable.font =[UIFont fontWithName:kFontDouble size:23];
-    //markLable.backgroundColor=[[UIColor blackColor] colorWithAlphaComponent:0.4];
-    if (IsIphone6) {
+     if (IsIphone6) {
         self.markLable.frame=CGRectMake(20, 30, _layerView.frame.size.width-40, 65);
         self.markLable.font =[UIFont fontWithName:kFontDouble size:26];
     }
@@ -170,6 +164,23 @@
     {
         x=43;
     }
+    if (IsIphone5) {
+        if (Msize.height>92) {
+            self.markLable.font =[UIFont fontWithName:kFontDouble size:14];
+        }
+    }else if (IsIphone6)
+    {
+        if (Msize.height>104) {
+            self.markLable.font =[UIFont fontWithName:kFontDouble size:16];
+        }
+        
+    }else if (IsIphone6plus)
+    {
+        if (Msize.height>116) {
+            self.markLable.font =[UIFont fontWithName:kFontDouble size:18];
+        }
+    }
+    Msize = [self.markLable.text boundingRectWithSize:CGSizeMake(kDeviceWidth-40, MAXFLOAT) options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes:[NSDictionary dictionaryWithObject:self.markLable.font forKey:NSFontAttributeName] context:nil].size;
     self.ShareView.frame=CGRectMake(self.ShareView.frame.origin.x, self.ShareView.frame.origin.y, self.ShareView.frame.size.width, self.ShareView.frame.size.height+Msize.height-x);
     BgView.frame=CGRectMake(0, 0, kDeviceWidth, self.ShareView.frame.size.height+20);
     self.markLable.frame=CGRectMake(10, self.ShareView.frame.size.height-Msize.height-5 ,self.ShareView.frame.size.width-20,Msize.height);
@@ -314,15 +325,23 @@
     if (self.weiboInfo.tagArray.count>0) {
         for (int i=0; i<self.weiboInfo.tagArray.count; i++) {
             TagView  *tagView= [[TagView alloc]initWithWeiboInfo:self.weiboInfo AndTagInfo:self.weiboInfo.tagArray[i] delegate:self isCanClick:YES backgoundImage:nil isLongTag:NO];
-            [tagView setcornerRadius:4];
-            [tagView setbigTagWithSize:CGSizeMake(6,6)];
+             [tagView setbigTagWithSize:CGSizeMake(10,8)];
+            if (IsIphone6) {
+                [tagView setbigTagWithSize:CGSizeMake(12, 10)];
+            }else if (IsIphone6plus)
+            {
+                [tagView setbigTagWithSize:CGSizeMake(14, 12)];
+            }
+            TagModel *tagmodel =self.weiboInfo.tagArray[i];
+            if (tagmodel.tagDetailInfo.title.length==0) {
+                tagView.frame=CGRectZero;
+            }
             tagView.tag=5000+i;
-            //            tagView.backgroundColor =[UIColor redColor];
-            [self.WeiboTagLable appendView:tagView margin:UIEdgeInsetsMake(5, 10, 0, 0)];
+            [self.WeiboTagLable appendView:tagView margin:UIEdgeInsetsMake(5, 5, 0, 0)];
         }
     }
     CGSize  Tsize =[self.WeiboTagLable sizeThatFits:CGSizeMake(kDeviceWidth-20,CGFLOAT_MAX)];
-    self.WeiboTagLable.frame=CGRectMake(0, 0, kDeviceWidth-20, Tsize.height+0);
+    self.WeiboTagLable.frame=CGRectMake(5, 0, kDeviceWidth-10, Tsize.height+0);
     if (Tsize.height>10) {
         TagContentView.frame=CGRectMake(0, BgView2.frame.origin.y+BgView2.frame.size.height+5, kDeviceWidth,Tsize.height+5);
     }
@@ -582,14 +601,11 @@
 -(void)TapViewClick:(id)tagView Withweibo:(weiboInfoModel *)weiboInfo withTagInfo:(TagModel *)tagInfo
 {
     //跳转到标签列表页
-//    TagToStageViewController  *vc=[[TagToStageViewController alloc]init];
-//    vc.weiboInfo=weiboInfo;
-//    vc.tagInfo=tagInfo;
-    StageListViewController  *staglist =[StageListViewController new];
+     StageListViewController  *staglist =[StageListViewController new];
     staglist.tagInfo=tagInfo;
     staglist.pageType=NSStageListpageSoureTypeTagToStage;
     UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
-    self.navigationItem.backBarButtonItem=item;
+    self.navigationItem.backBarButtonItem =item;
     [self.navigationController pushViewController:staglist animated:YES];
 
 }

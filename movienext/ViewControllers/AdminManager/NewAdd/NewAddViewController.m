@@ -473,7 +473,7 @@ static const CGFloat MJDuration = 0.1;
                 cell.lblTime.adjustsFontSizeToFitWidth=YES;
                 cell.lblTime.textAlignment= NSTextAlignmentCenter;
                 cell.lblTime.clipsToBounds=YES;
-                cell.lblTime.text=[NSString stringWithFormat:@"%ld",indexPath.row+1];
+                cell.lblTime.text=[NSString stringWithFormat:@"%ld",(long)indexPath.row+1];
             }
             if (self.pageType==NSNewAddPageSoureTypeTiming) {
                 //定时出来的,显示具体的时间
@@ -485,8 +485,10 @@ static const CGFloat MJDuration = 0.1;
                 [formatter setTimeStyle:NSDateFormatterShortStyle];
                 [formatter setDateFormat:@"YYYY-MM-dd HH:mm"];
                 NSString *confromTimespStr = [formatter stringFromDate:confromTimesp];
-                cell.lblTime.frame=CGRectMake(10, 10, 160, 20);
+                cell.lblTime.frame=CGRectMake(0, 0, (kDeviceWidth-5)/2-0, 20);
+                cell.lblTime.textAlignment=NSTextAlignmentCenter;
                 cell.lblTime.font =[UIFont fontWithName:kFontRegular size:10];
+                cell.lblTime.backgroundColor =[[UIColor blackColor] colorWithAlphaComponent:0.5];
                 cell.lblTime.text = [NSString stringWithFormat:@"定时时间：%@",confromTimespStr];
             }else if(self.pageType==NSNewAddPageSoureTypeDecorver)
             {

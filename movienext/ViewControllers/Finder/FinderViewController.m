@@ -236,6 +236,15 @@
 -(void)changeStageViewImageAndmarkLable
 {
     
+    markLable.font =[UIFont fontWithName:kFontDouble size:23];
+    if (IsIphone6) {
+        markLable.frame=CGRectMake(20, 30, _layerView.frame.size.width-40, 65);
+        markLable.font =[UIFont fontWithName:kFontDouble size:26];
+    }
+    if (IsIphone6plus) {
+        markLable.frame=CGRectMake(20, 20,_layerView.frame.size.width-40, 70);
+        markLable.font=[UIFont fontWithName:kFontDouble size:29];
+    }
     weiboInfoModel   *weiboInfo =[self.pageContent objectAtIndex:self.pageIndex];
     self.naviTitlLable.text=weiboInfo.stageInfo.movieInfo.name;
     CGRect  frame = [Function getImageFrameWithwidth:[weiboInfo.stageInfo.width intValue] height:[weiboInfo.stageInfo.height intValue] inset:20];
@@ -243,7 +252,31 @@
     self.layerView.frame= CGRectMake(0, self.stageImageView.frame.size.height-60, kDeviceWidth-10, 60);
     markLable.text=weiboInfo.content;
     CGSize  Msize = [markLable.text boundingRectWithSize:CGSizeMake(kDeviceWidth-40, MAXFLOAT) options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes:[NSDictionary dictionaryWithObject:markLable.font forKey:NSFontAttributeName] context:nil].size;
-    self.ShareView.frame=CGRectMake(self.ShareView.frame.origin.x, self.ShareView.frame.origin.y, self.ShareView.frame.size.width, self.stageImageView.frame.size.height+Msize.height-27);
+    float x=34;
+    if (IsIphone6) {
+        x=39;
+    }else if(IsIphone6plus)
+    {
+        x=43;
+    }
+    if (IsIphone5) {
+        if (Msize.height>92) {
+            markLable.font =[UIFont fontWithName:kFontDouble size:14];
+        }
+    }else if (IsIphone6)
+    {
+        if (Msize.height>104) {
+            markLable.font =[UIFont fontWithName:kFontDouble size:16];
+        }
+        
+    }else if (IsIphone6plus)
+    {
+        if (Msize.height>116) {
+            markLable.font =[UIFont fontWithName:kFontDouble size:18];
+        }
+    }
+    Msize = [markLable.text boundingRectWithSize:CGSizeMake(kDeviceWidth-40, MAXFLOAT) options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes:[NSDictionary dictionaryWithObject:markLable.font forKey:NSFontAttributeName] context:nil].size;
+    self.ShareView.frame=CGRectMake(self.ShareView.frame.origin.x, self.ShareView.frame.origin.y, self.ShareView.frame.size.width, self.stageImageView.frame.size.height+Msize.height-x);
     self.bgView.frame=CGRectMake(0, 0, kDeviceWidth, self.ShareView.frame.size.height+20);
     markLable.frame=CGRectMake(10, self.ShareView.frame.size.height-Msize.height-5 ,self.ShareView.frame.size.width-20,Msize.height);
     self.UserView.frame=CGRectMake(0, self.ShareView.frame.origin.y+self.ShareView.frame.size.height+10, kDeviceWidth, USER_TOOL_HEIGHT);
@@ -428,8 +461,7 @@
     [self.stageImageView addSubview:_layerView];
     markLable=[ZCControl createLabelWithFrame:CGRectMake(10,40,_layerView.frame.size.width-20, 60) Font:20 Text:@"弹幕文字"];
     markLable.font =[UIFont fontWithName:kFontDouble size:23];
-    //markLable.backgroundColor=[[UIColor blackColor] colorWithAlphaComponent:0.4];
-    if (IsIphone6) {
+     if (IsIphone6) {
         markLable.frame=CGRectMake(20, 30, _layerView.frame.size.width-40, 65);
         markLable.font =[UIFont fontWithName:kFontDouble size:26];
     }
@@ -437,6 +469,10 @@
         markLable.frame=CGRectMake(20, 20,_layerView.frame.size.width-40, 70);
         markLable.font=[UIFont fontWithName:kFontDouble size:29];
     }
+    
+    
+    
+    
     markLable.textColor=[UIColor whiteColor];
     markLable.text=Weibo.content;
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
@@ -459,6 +495,23 @@
     {
         x=43;
     }
+    if (IsIphone5) {
+        if (Msize.height>92) {
+            markLable.font =[UIFont fontWithName:kFontDouble size:14];
+        }
+    }else if (IsIphone6)
+    {
+        if (Msize.height>104) {
+            markLable.font =[UIFont fontWithName:kFontDouble size:16];
+        }
+        
+    }else if (IsIphone6plus)
+    {
+        if (Msize.height>116) {
+            markLable.font =[UIFont fontWithName:kFontDouble size:18];
+        }
+    }
+    Msize = [markLable.text boundingRectWithSize:CGSizeMake(kDeviceWidth-40, MAXFLOAT) options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes:[NSDictionary dictionaryWithObject:markLable.font forKey:NSFontAttributeName] context:nil].size;
     self.ShareView.frame=CGRectMake(self.ShareView.frame.origin.x, self.ShareView.frame.origin.y, self.ShareView.frame.size.width, self.stageImageView.frame.size.height+Msize.height-x);
     self.bgView.frame=CGRectMake(0, 0, kDeviceWidth, self.ShareView.frame.size.height+10);
     markLable.frame=CGRectMake(10, self.ShareView.frame.size.height-Msize.height-5 ,self.ShareView.frame.size.width-20,Msize.height);

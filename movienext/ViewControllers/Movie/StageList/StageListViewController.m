@@ -195,8 +195,15 @@
     }
     else
     {
-        self.collectionHeadScrollerView.frame=CGRectMake(0, 0, kDeviceWidth, 100);
-        self.myConllectionView.frame=CGRectMake(0, 100, kDeviceWidth, kDeviceHeight-kHeightNavigation-100);
+        int x = 110;
+        if (IsIphone6) {
+            x =135;
+        }else if (IsIphone6plus)
+        {
+            x= 145;
+        }
+        self.collectionHeadScrollerView.frame=CGRectMake(0, 0, kDeviceWidth, x);
+        self.myConllectionView.frame=CGRectMake(0, x, kDeviceWidth, kDeviceHeight-kHeightNavigation-x);
         self.collectionHeadScrollerView.contentSize=CGSizeMake(kDeviceWidth,self.tagLable.frame.size.height+20);
     }
 }
@@ -209,13 +216,21 @@
     }
     TagView *tagview =[[TagView alloc]initWithWeiboInfo:nil AndTagInfo:tagmodel delegate:self isCanClick:YES backgoundImage:nil isLongTag:YES];
     tagview.tagBgImageview.backgroundColor=VLight_GrayColor_apla;
-    [tagview setbigTagWithSize:CGSizeMake(8, 4)];
+    [tagview setbigTagWithSize:CGSizeMake(10, 8)];
+    if (IsIphone6) {
+        [tagview setbigTagWithSize:CGSizeMake(12, 8)];
+    }
+    else if (IsIphone6plus) {
+      [tagview setbigTagWithSize:CGSizeMake(16, 12)];
+    }
      tagview.tag=2000+index;
     tagview.titleLable.textColor=VGray_color;
     if (index==0) {
         tagview.tagBgImageview.backgroundColor =VGray_color;
         tagview.titleLable.textColor=[UIColor whiteColor];
     }
+    //tagview.titleLable.textColor =[UIColor whiteColor];
+
     return tagview;
 }
 - (void)setUprefresh

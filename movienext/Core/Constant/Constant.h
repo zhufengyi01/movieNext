@@ -36,6 +36,7 @@
 #define kDeviceHeight       [UIScreen mainScreen].bounds.size.height
 #define kStageWidth         kDeviceWidth-10
 
+#define IsIphone5                [UIScreen mainScreen].bounds.size.height==568
 #define IsIphone6                [UIScreen mainScreen].bounds.size.height==667
 #define IsIphone6plus            [UIScreen mainScreen].bounds.size.height==736
 
@@ -68,6 +69,8 @@
 #define VLight_GrayColor [UIColor colorWithRed:188.0/255 green:188.0/255 blue:188.0/255 alpha:1]
 //背景的浅灰色
 #define VLight_GrayColor_apla [UIColor colorWithRed:240.0/255 green:240.0/255 blue:240.0/255 alpha:1]
+
+#define VTagViewNormalColor [UIColor colorWithRed:216.0/255 green:216.0/255 blue:216.0/255 alpha:1]
 
 //字体深灰色
 #define VGray_color      [UIColor colorWithRed:127.0/255 green:127.0/255 blue:139.0/255 alpha:1]

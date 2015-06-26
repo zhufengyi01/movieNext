@@ -68,6 +68,7 @@
     
     _lblLikeCount = [[UILabel alloc]initWithFrame:CGRectMake(m_frame.size.width-20,5, 20, 20)];
     _lblLikeCount.text=@"";
+    _lblLikeCount.adjustsFontSizeToFitWidth=YES;
     _lblLikeCount.textAlignment = NSTextAlignmentLeft;
     _lblLikeCount.textColor = [UIColor whiteColor];
     _lblLikeCount.font = [UIFont fontWithName:kFontRegular size:12];

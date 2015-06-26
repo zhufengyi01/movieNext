@@ -625,7 +625,7 @@ static const CGFloat MJDuration = 0.6;
             if (page0==pageCount0) {
                 [self.RecommendCollectionView.footer noticeNoMoreData];
             }
-             NSMutableArray   *array  = [[NSMutableArray alloc]initWithArray:[responseObject objectForKey:@"models"]];
+            NSMutableArray   *array  = [[NSMutableArray alloc]initWithArray:[responseObject objectForKey:@"models"]];
             for ( int i=0 ; i<array.count; i++) {
                 NSDictionary  *newdict  =[array objectAtIndex:i];
                 weiboInfoModel *weibomodel =[[weiboInfoModel alloc]init];
@@ -845,7 +845,6 @@ static const CGFloat MJDuration = 0.6;
     //把第一个对象加入到数组中
     [array0 addObject:weiboobj0];
     [self.recomendDataArray addObject:array0];
-    
     //取出时间
     NSDate  *comfromTimesp =[NSDate dateWithTimeIntervalSince1970:[weiboobj0.updated_at intValue]];
     NSDateFormatter *formatter =[NSDateFormatter  dateFormatterWithFormat:@"YYYY-MM-dd"];
@@ -859,7 +858,6 @@ static const CGFloat MJDuration = 0.6;
         NSDateFormatter *formatter =[NSDateFormatter  dateFormatterWithFormat:@"YYYY-MM-dd"];
         [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"GMT+8000"]];
         NSString  *datestr = [formatter stringFromDate:comfromTimesp];
-       // NSLog(@"!!!!!!!!%@",datestr);
         if ([datestr0 isEqualToString:datestr]) {//如果上一项等于下一项的话，把第二项加入到上面的数组
             [array0 addObject:weibomodel];
         }
@@ -890,14 +888,12 @@ static const CGFloat MJDuration = 0.6;
             NSString  *datestr0 = [formatter stringFromDate:comfromTimesp];
             headerV.timeLable.text= [NSString stringWithFormat:@"%@  %@",datestr0,[comfromTimesp dayFromWeekday]];
             if (indexPath.section==0) {
-                 NSDate *newDate =[NSDate date];
+                NSDate *newDate =[NSDate date];
                 NSString * t =[formatter stringFromDate:newDate];
                 if ([datestr0 isEqualToString:t]) {
                     headerV.timeLable.text=@"今天";
                 }
-                
             }
-
         }
         return reusableView;
     }
@@ -986,7 +982,7 @@ static const CGFloat MJDuration = 0.6;
             NSURL  *url =[NSURL URLWithString:[NSString stringWithFormat:@"%@%@%@",kUrlStage,model.stageInfo.photo ,KIMAGE_SMALL]];
             [cell.imageView sd_setImageWithURL:url placeholderImage:nil options:(SDWebImageRetryFailed|SDWebImageLowPriority)];
             cell.titleLab.text=[NSString stringWithFormat:@"%@",model.content];
-//            NSDate  *comfromTimesp =[NSDate dateWithTimeIntervalSince1970:[model.updated_at intValue]];
+            //            NSDate  *comfromTimesp =[NSDate dateWithTimeIntervalSince1970:[model.updated_at intValue]];
             //NSString  *da = [NSDate timeInfoWithDate:comfromTimesp];
             //dateLable.text=da;
             //            cell.lblTime.text = da;
@@ -1015,6 +1011,17 @@ static const CGFloat MJDuration = 0.6;
     }
     return CGSizeMake(0, 0);
 }
+-(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section
+{
+    if (collectionView==self.RecommendCollectionView) {
+        if (section==0) {
+            return CGSizeZero;
+        }else{
+            return CGSizeMake(kDeviceWidth, 30);
+        }
+    }
+    return CGSizeZero;
+}
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if (collectionView==self.myConllectionView) {
@@ -1037,26 +1044,14 @@ static const CGFloat MJDuration = 0.6;
             }
         }
         [self.navigationController hidesBottomBarWhenPushed];
-//        MovieDetailViewController *vc =  [MovieDetailViewController new];
-//        if (array.count > indexPath.row) {
-//            NSDictionary *dict = [array  objectAtIndex:(long)indexPath.row];
-//            vc.movieId = [dict objectForKey:@"movie_id"];
-//            vc.moviename=[dict objectForKey:@"title"];
-//            vc.pageSourceType=NSMovieSourcePageMovieListController;
-//            vc.movielogo =[dict objectForKey:@"photo"];
-//            UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
-//            self.navigationItem.backBarButtonItem=item;
-//        }
-//        [self.navigationController pushViewController:vc animated:YES];
-        
         StageListViewController *list =[StageListViewController new];
         if (array.count>indexPath.row) {
             NSDictionary *dict = [array  objectAtIndex:(long)indexPath.row];
-                        list.movie_id = [dict objectForKey:@"movie_id"];
-                        list.moviename=[dict objectForKey:@"title"];
-                        list.movielogo =[dict objectForKey:@"photo"];
-                        UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
-                        self.navigationItem.backBarButtonItem=item;
+            list.movie_id = [dict objectForKey:@"movie_id"];
+            list.moviename=[dict objectForKey:@"title"];
+            list.movielogo =[dict objectForKey:@"photo"];
+            UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+            self.navigationItem.backBarButtonItem=item;
         }
         [self.navigationController pushViewController:list animated:YES];
         
@@ -1067,7 +1062,7 @@ static const CGFloat MJDuration = 0.6;
         stageVC.WeiboDataArray = self.dataArray0;
         //计算属于第几个卡片
         stageVC.indexOfItem=indexPath.row;
-       //int a =   [[self.recomendDataArray objectAtIndex:1] count];
+        //int a =   [[self.recomendDataArray objectAtIndex:1] count];
         int  index =  [self getRecommedClickIndexWithSection:(int)indexPath.section Row:(int)indexPath.row];
         NSLog(@"index.section ==%ld index.row===%ld",(long)indexPath.section,(long)indexPath.row);
         stageVC.indexOfItem=index;
@@ -1084,10 +1079,8 @@ static const CGFloat MJDuration = 0.6;
     int num=0;
     for (int i=0; i<section; i++) {
         NSArray *arr =[self.recomendDataArray objectAtIndex:i];
-        int a= [arr count];
-     ///int  a = (int) [[self.recomendDataArray objectAtIndex:i] count];
-    num =num+a;
-        
+        int a= (int)[arr count];
+        num =num+a;
     }
     return num+row;
     
