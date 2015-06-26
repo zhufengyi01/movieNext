@@ -19,6 +19,7 @@
 #import "ModelsModel.h"
 #import "ShowStageViewController.h"
 #import "Function.h"
+#import "SmallImageCollectionViewCell.h"
 static const CGFloat MJDuration = 0.2;
 
 
@@ -76,7 +77,7 @@ static const CGFloat MJDuration = 0.2;
     
     _myConllectionView =[[UICollectionView alloc]initWithFrame:CGRectMake(0, 0,kDeviceWidth, kDeviceHeight-kHeightNavigation) collectionViewLayout:layout];
     _myConllectionView.backgroundColor=[UIColor whiteColor];
-    [_myConllectionView registerClass:[TapStageCollectionViewCell class] forCellWithReuseIdentifier:@"Cell"];
+    [_myConllectionView registerClass:[SmallImageCollectionViewCell class] forCellWithReuseIdentifier:@"Cell"];
     _myConllectionView.delegate=self;
     _myConllectionView.dataSource=self;
     [self.view addSubview:_myConllectionView];
@@ -260,7 +261,7 @@ static const CGFloat MJDuration = 0.2;
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     
-    TapStageCollectionViewCell   *cell=(TapStageCollectionViewCell*)[collectionView dequeueReusableCellWithReuseIdentifier:@"Cell" forIndexPath:indexPath];
+    SmallImageCollectionViewCell   *cell=(SmallImageCollectionViewCell*)[collectionView dequeueReusableCellWithReuseIdentifier:@"Cell" forIndexPath:indexPath];
     cell.backgroundColor=[UIColor blackColor];
     if (self.dataArray.count > indexPath.row) {
         ModelsModel  *model =[self.dataArray objectAtIndex:indexPath.row];

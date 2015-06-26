@@ -885,10 +885,19 @@ static const CGFloat MJDuration = 0.6;
             weiboInfoModel *weibomodel =[[self.recomendDataArray objectAtIndex:indexPath.section] objectAtIndex:0];
             //取出时间
             NSDate  *comfromTimesp =[NSDate dateWithTimeIntervalSince1970:[weibomodel.updated_at intValue]];
-            NSDateFormatter *formatter =[NSDateFormatter  dateFormatterWithFormat:@"YYYY-MM-dd"];
+            NSDateFormatter *formatter =[NSDateFormatter  dateFormatterWithFormat:@"MM月dd日"];
             [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"GMT+8000"]];
             NSString  *datestr0 = [formatter stringFromDate:comfromTimesp];
             headerV.timeLable.text= [NSString stringWithFormat:@"%@  %@",datestr0,[comfromTimesp dayFromWeekday]];
+            if (indexPath.section==0) {
+                 NSDate *newDate =[NSDate date];
+                NSString * t =[formatter stringFromDate:newDate];
+                if ([datestr0 isEqualToString:t]) {
+                    headerV.timeLable.text=@"今天";
+                }
+                
+            }
+
         }
         return reusableView;
     }
