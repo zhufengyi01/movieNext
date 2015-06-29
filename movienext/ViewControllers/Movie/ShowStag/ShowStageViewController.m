@@ -326,21 +326,39 @@
     //1 行   43.5   2行 72.5     3行:116       4行： 159
 //    int    w =  [UIScreen mainScreen].bounds.size.height;
 //     NSLog(@"======height ======%d ",w );
-    if (IsIphone5) {
-        if (Msize.height>92) {
-            markLable.font =[UIFont fontWithName:kFontDouble size:14];
-        }
-    }else if (IsIphone6)
-    {
-        if (Msize.height>104) {
-            markLable.font =[UIFont fontWithName:kFontDouble size:16];
-        }
-        
-    }else if (IsIphone6plus)
-    {
-        if (Msize.height>116) {
+    if (markLable.text.length >36 &&markLable.text.length<=48) {
+        if (IsIphone5) {
             markLable.font =[UIFont fontWithName:kFontDouble size:18];
+            
+        }else if (IsIphone6)
+        {
+            markLable.font =[UIFont fontWithName:kFontDouble size:20];
+            
+            
+        }else if (IsIphone6plus)
+        {
+            markLable.font =[UIFont fontWithName:kFontDouble size:22];
+            
         }
+    }
+    else if(markLable.text.length>48)
+    {
+        if (IsIphone5) {
+            markLable.font =[UIFont fontWithName:kFontDouble size:14];
+            
+        }else if (IsIphone6)
+        {
+            markLable.font =[UIFont fontWithName:kFontDouble size:16];
+            
+            
+        }else if (IsIphone6plus)
+        {
+            markLable.font =[UIFont fontWithName:kFontDouble size:18];
+            
+        }
+    }
+    if (self.WeiboInfo.content.length>12) {
+        markLable.textAlignment=NSTextAlignmentLeft;
     }
     Msize = [markLable.text boundingRectWithSize:CGSizeMake(kDeviceWidth-40, MAXFLOAT) options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes:[NSDictionary dictionaryWithObject:markLable.font forKey:NSFontAttributeName] context:nil].size;
     self.ShareView.frame=CGRectMake(self.ShareView.frame.origin.x, self.ShareView.frame.origin.y, self.ShareView.frame.size.width, self.ShareView.frame.size.height+Msize.height-x);
@@ -714,9 +732,8 @@
             if (weakSelf.weiboInfo) {
                 weakSelf.stageInfo=weakSelf.weiboInfo.stageInfo;
             }
-            
             UMShareView *shareView =[[UMShareView alloc] initwithStageInfo:weakSelf.stageInfo ScreenImage:image delgate:weakSelf andShareHeight:height];
-            shareView.weiboInfo = _WeiboInfo;
+            shareView.weiboInfo = weakSelf.WeiboInfo;
             [shareView setShareLable];
             [shareView show];
         }];
@@ -754,9 +771,9 @@
 
 -(void)TapViewClick:(TagView *)tagView Withweibo:(weiboInfoModel *)weiboInfo withTagInfo:(TagModel *)tagInfo
 {
-    
     if (tagView.tag<5000) {  // 点击的是微博标签
         _WeiboInfo=weiboInfo;
+        markLable.textAlignment=NSTextAlignmentCenter;
         dispatch_async(dispatch_get_main_queue(), ^{
             [self createWeiboTagView];
         });
@@ -767,7 +784,6 @@
         }
         tagView.tagBgImageview.backgroundColor =VLight_GrayColor;
         tagView.titleLable.textColor=[UIColor whiteColor];
-        
         ///重新改变shareview的高度
         markLable.text=weiboInfo.content;
         CGSize  Msize = [weiboInfo.content boundingRectWithSize:CGSizeMake(kDeviceWidth-40, MAXFLOAT) options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes:[NSDictionary dictionaryWithObject:markLable.font forKey:NSFontAttributeName] context:nil].size;
@@ -794,6 +810,9 @@
                 like_btn.selected=NO;
                 starImageView.image=[UIImage imageNamed:@"like_nomoal.png"];
             }
+        }
+        if (self.WeiboInfo.content.length>12) {
+            markLable.textAlignment=NSTextAlignmentLeft;
         }
         
         if ([_WeiboInfo.like_count intValue]==0) {

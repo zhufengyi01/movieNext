@@ -236,7 +236,7 @@
 //在主线程中更新UI
 -(void)changeStageViewImageAndmarkLable
 {
-    
+    markLable.textAlignment =NSTextAlignmentCenter;
     markLable.font =[UIFont fontWithName:kFontDouble size:23];
     if (IsIphone6) {
         markLable.frame=CGRectMake(20, 30, _layerView.frame.size.width-40, 65);
@@ -260,21 +260,46 @@
     {
         x=43;
     }
-    if (IsIphone5) {
-        if (Msize.height>92) {
+//    if (IsIphone5) {
+//        if (Msize.height>92) {
+//            markLable.font =[UIFont fontWithName:kFontDouble size:14];
+//        }
+//    }else if (IsIphone6)
+//    {
+//        if (Msize.height>104) {
+//            markLable.font =[UIFont fontWithName:kFontDouble size:16];
+//        }
+//        
+//    }else if (IsIphone6plus)
+//    {
+//        if (Msize.height>116) {
+//            markLable.font =[UIFont fontWithName:kFontDouble size:18];
+//        }
+//    }
+    if (markLable.text.length >36 &&markLable.text.length<=48) {
+        if (IsIphone5) {
+            markLable.font =[UIFont fontWithName:kFontDouble size:18];
+        }else if (IsIphone6)
+        {
+            markLable.font =[UIFont fontWithName:kFontDouble size:20];
+        }else if (IsIphone6plus)
+        {
+            markLable.font =[UIFont fontWithName:kFontDouble size:22];
+        }
+    } else if(markLable.text.length>48)
+    {
+        if (IsIphone5) {
             markLable.font =[UIFont fontWithName:kFontDouble size:14];
-        }
-    }else if (IsIphone6)
-    {
-        if (Msize.height>104) {
+        }else if (IsIphone6)
+        {
             markLable.font =[UIFont fontWithName:kFontDouble size:16];
-        }
-        
-    }else if (IsIphone6plus)
-    {
-        if (Msize.height>116) {
+        }else if (IsIphone6plus)
+        {
             markLable.font =[UIFont fontWithName:kFontDouble size:18];
         }
+    }
+    if (weiboInfo.content.length>12) {
+        markLable.textAlignment=NSTextAlignmentLeft;
     }
     Msize = [markLable.text boundingRectWithSize:CGSizeMake(kDeviceWidth-40, MAXFLOAT) options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes:[NSDictionary dictionaryWithObject:markLable.font forKey:NSFontAttributeName] context:nil].size;
     self.ShareView.frame=CGRectMake(self.ShareView.frame.origin.x, self.ShareView.frame.origin.y, self.ShareView.frame.size.width, self.stageImageView.frame.size.height+Msize.height-x);
@@ -471,9 +496,6 @@
         markLable.font=[UIFont fontWithName:kFontDouble size:29];
     }
     
-    
-    
-    
     markLable.textColor=[UIColor whiteColor];
     markLable.text=Weibo.content;
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
@@ -496,21 +518,38 @@
     {
         x=43;
     }
-    if (IsIphone5) {
-        if (Msize.height>92) {
+    
+    if (markLable.text.length >36 &&markLable.text.length<=48) {
+        if (IsIphone5) {
+            markLable.font =[UIFont fontWithName:kFontDouble size:18];
+            
+        }else if (IsIphone6)
+        {
+            markLable.font =[UIFont fontWithName:kFontDouble size:20];
+            
+            
+        }else if (IsIphone6plus)
+        {
+            markLable.font =[UIFont fontWithName:kFontDouble size:22];
+            
+        }
+    }    else if(markLable.text.length>48)
+    {
+        if (IsIphone5) {
             markLable.font =[UIFont fontWithName:kFontDouble size:14];
-        }
-    }else if (IsIphone6)
-    {
-        if (Msize.height>104) {
+            
+        }else if (IsIphone6)
+        {
             markLable.font =[UIFont fontWithName:kFontDouble size:16];
-        }
-        
-    }else if (IsIphone6plus)
-    {
-        if (Msize.height>116) {
+            
+            
+        }else if (IsIphone6plus)
+        {
             markLable.font =[UIFont fontWithName:kFontDouble size:18];
         }
+    }
+    if (Weibo.content.length>12) {
+        markLable.textAlignment=NSTextAlignmentLeft;
     }
     Msize = [markLable.text boundingRectWithSize:CGSizeMake(kDeviceWidth-40, MAXFLOAT) options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes:[NSDictionary dictionaryWithObject:markLable.font forKey:NSFontAttributeName] context:nil].size;
     self.ShareView.frame=CGRectMake(self.ShareView.frame.origin.x, self.ShareView.frame.origin.y, self.ShareView.frame.size.width, self.stageImageView.frame.size.height+Msize.height-x);
@@ -519,7 +558,6 @@
     if (Msize.height+self.stageImageView.frame.size.height>kDeviceHeight-100) {
         self.myScrollerView.contentSize=CGSizeMake(kDeviceWidth, Msize.height+self.stageImageView.frame.size.height+200);
     }
-    
     // 中间的视图
     [self createUserView];
     [self createWeiboTagView];

@@ -142,6 +142,7 @@
     self.markLable.lineBreakMode=NSLineBreakByCharWrapping;
     self.markLable.contentMode=UIViewContentModeBottom;
     self.markLable.textAlignment=NSTextAlignmentCenter;
+    //self.markLable.backgroundColor =[UIColor redColor];
     self.markLable.text = self.weiboInfo.content;
     [self.ShareView addSubview:self.markLable];
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
@@ -154,7 +155,6 @@
     self.markLable.textAlignment=NSTextAlignmentCenter;
     
     //计算文字的高度从而确定整个shareview的高度
-    
     CGSize  Msize = [self.markLable.text boundingRectWithSize:CGSizeMake(kDeviceWidth-40, MAXFLOAT) options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes:[NSDictionary dictionaryWithObject:self.markLable.font forKey:NSFontAttributeName] context:nil].size;
     NSLog(@" msize height === %f",Msize.height);
     float x=34;
@@ -164,21 +164,37 @@
     {
         x=43;
     }
-    if (IsIphone5) {
-        if (Msize.height>92) {
-            self.markLable.font =[UIFont fontWithName:kFontDouble size:14];
-        }
-    }else if (IsIphone6)
-    {
-        if (Msize.height>104) {
-            self.markLable.font =[UIFont fontWithName:kFontDouble size:16];
-        }
+    if (self.markLable.text.length >36 &&self.markLable.text.length<=48) {
         
-    }else if (IsIphone6plus)
-    {
-        if (Msize.height>116) {
+        if (IsIphone5) {
             self.markLable.font =[UIFont fontWithName:kFontDouble size:18];
+        }else if (IsIphone6)
+        {
+            self.markLable.font =[UIFont fontWithName:kFontDouble size:20];
+        }else if (IsIphone6plus)
+        {
+            self.markLable.font =[UIFont fontWithName:kFontDouble size:22];
+            
         }
+    }
+    else if(self.markLable.text.length>48)
+    {
+        if (IsIphone5) {
+            self.markLable.font =[UIFont fontWithName:kFontDouble size:14];
+            
+        }else if (IsIphone6)
+        {
+            self.markLable.font =[UIFont fontWithName:kFontDouble size:16];
+            
+            
+        }else if (IsIphone6plus)
+        {
+            self.markLable.font =[UIFont fontWithName:kFontDouble size:18];
+            
+        }
+    }
+    if (self.weiboInfo.content.length>12) {
+        self.markLable.textAlignment=NSTextAlignmentLeft;
     }
     Msize = [self.markLable.text boundingRectWithSize:CGSizeMake(kDeviceWidth-40, MAXFLOAT) options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes:[NSDictionary dictionaryWithObject:self.markLable.font forKey:NSFontAttributeName] context:nil].size;
     self.ShareView.frame=CGRectMake(self.ShareView.frame.origin.x, self.ShareView.frame.origin.y, self.ShareView.frame.size.width, self.ShareView.frame.size.height+Msize.height-x);
@@ -201,8 +217,6 @@
     [self.view bringSubviewToFront:BgView2];
     [BgView addSubview:BgView2];
     BgView.frame=CGRectMake(0, 0, kDeviceWidth, self.ShareView.frame.size.height+45+20);
-    
-    
     leftButtomButton=[UIButton buttonWithType:UIButtonTypeCustom];
     leftButtomButton.frame=CGRectMake(10, 5, 140, 35);
     __weak typeof(self) weakSeaf = self;

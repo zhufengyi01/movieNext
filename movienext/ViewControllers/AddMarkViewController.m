@@ -199,34 +199,35 @@
     [_layerView setShadow];
     [self.stageImageView addSubview:_layerView];
     
-    _myTextView=[[UITextView alloc]initWithFrame:CGRectMake(10,self.ShareView.frame.size.height-50, kDeviceWidth-40, 40)];
+    _myTextView=[[UITextView alloc]initWithFrame:CGRectMake(5,self.ShareView.frame.size.height-50, kDeviceWidth-30, 40)];
     // [_myTextView addPlaceHolder:@"输入弹幕"];
     _myTextView.textColor=[UIColor whiteColor];
-     _myTextView.tintColor=[UIColor whiteColor];
+    _myTextView.tintColor=[UIColor whiteColor];
     _myTextView.font =[UIFont fontWithName:kFontDouble size:23];
     if (IsIphone6) {
-      _myTextView.font =[UIFont fontWithName:kFontDouble size:26];
+        _myTextView.font =[UIFont fontWithName:kFontDouble size:26];
     }
     else if (IsIphone6plus) {
         _myTextView.font =[UIFont fontWithName:kFontDouble size:29];
     }
     NSLog(@"~~~~~~~~textView font ======%@",_myTextView.font);
     _myTextView.backgroundColor=[UIColor clearColor];
-     _myTextView.layer.cornerRadius=4;
-    _myTextView.layer.borderWidth=0.5;
-    _myTextView.layer.allowsEdgeAntialiasing=YES;
-    _myTextView.layer.borderColor=VLight_GrayColor.CGColor;
+    //_myTextView.layer.cornerRadius=4;
+     // _myTextView.layer.borderWidth=0.5;
+    //_myTextView.layer.allowsEdgeAntialiasing=YES;
+    //_myTextView.layer.borderColor=VLight_GrayColor.CGColor;
     //_myTextView.maximumZoomScale=3;
     _myTextView.returnKeyType=UIReturnKeyDone;
-    _myTextView.scrollEnabled=YES;
+    _myTextView.scrollEnabled=NO;
     _myTextView.delegate=self;
     _myTextView.layoutManager.allowsNonContiguousLayout=NO;
     _myTextView.textAlignment=NSTextAlignmentCenter;
     _myTextView.delegate=self;
-     _myTextView.autoresizingMask=UIViewAutoresizingFlexibleHeight;
-    _myTextView.selectedRange = NSMakeRange(0,0);  //默认光标从第一个开始
+    _myTextView.bounces=NO;
+    //_myTextView.autoresizingMask=UIViewAutoresizingFlexibleHeight;
+    //_myTextView.selectedRange = NSMakeRange(0,0);  //默认光标从第一个开始
     [_myTextView becomeFirstResponder];
-    _myTextView.layoutManager.allowsNonContiguousLayout=YES;
+    _myTextView.layoutManager.allowsNonContiguousLayout=NO;
     if (self.weiboInfo) {//编辑
         _myTextView.text =self.weiboInfo.content;
     }
@@ -263,7 +264,6 @@
     tagView.tagBgImageview.backgroundColor =[UIColor whiteColor];
     tagView.layer.borderColor=VBlue_color.CGColor;
     tagView.layer.borderWidth=2;
-    
     [taglable appendView:tagView margin:UIEdgeInsetsMake(0, 0, 0, 0)];
     CGSize  Tsize =[taglable sizeThatFits:CGSizeMake(kDeviceWidth-20, CGFLOAT_MAX)];
     taglable.frame=CGRectMake(10,10, kDeviceWidth-20, Tsize.height);
@@ -468,21 +468,6 @@
 {
     
 }
-#pragma  mark  ---UItextViewDelegate-------------
--(void)textViewDidBeginEditing:(UITextView *)textView
-{
-    
-    // [_myScorllerView setContentOffset:CGPointMake(0, 200) animated:YES];
-    
-}
--(void)textViewDidEndEditing:(UITextView *)textView
-{
-    // [_myTextView resignFirstResponder];
-}
--(void)textViewDidChangeSelection:(UITextView *)textView
-{
-    
-}
 //点击键盘上的return键执行这个方法
 -(BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
@@ -497,29 +482,50 @@
 {
     [_myTextView resignFirstResponder];
 }
+
 //有时候我们要控件自适应输入的文本的内容的高度，只要在textViewDidChange的代理方法中加入调整控件大小的代理即可
 -(void)textViewDidChange:(UITextView *)textView{
-    CGSize  Msize =_myTextView.contentSize;
-    if (IsIphone5) {
-        if (Msize.height>121) {
+   // CGSize  Msize =_myTextView.contentSize;
+    if (textView.text.length<12) {
+        textView.textAlignment=NSTextAlignmentCenter;
+    }
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    paragraphStyle.lineSpacing = 0;// 字体的行间距
+    NSDictionary *attributes = @{
+                                 NSFontAttributeName:textView.font,
+                                 NSForegroundColorAttributeName:[UIColor whiteColor],
+                                 NSParagraphStyleAttributeName:paragraphStyle
+                                 };
+    textView.attributedText = [[NSAttributedString alloc] initWithString:textView.text attributes:attributes];
+    int length =(int)[textView.text length];
+    if (length>36&&length<45) {
+        if (IsIphone5) {
+            _myTextView.font =[UIFont fontWithName:kFontDouble size:18];
+        }else if (IsIphone6)
+        {
+            _myTextView.font =[UIFont fontWithName:kFontDouble size:20];
+        }else if (IsIphone6plus)
+        {
+            _myTextView.font =[UIFont fontWithName:kFontDouble size:22];
+        }
+    }
+    else if(textView.text.length>=45)
+    {
+        if (IsIphone5) {
             _myTextView.font =[UIFont fontWithName:kFontDouble size:14];
-        }
-     }else if (IsIphone6)
-    {
-        if (Msize.height>134) {
+        }else if (IsIphone6)
+        {
             _myTextView.font =[UIFont fontWithName:kFontDouble size:16];
-        }
-     }else if (IsIphone6plus)
-    {
-        if (Msize.height>147) {
+        }else if (IsIphone6plus)
+        {
             _myTextView.font =[UIFont fontWithName:kFontDouble size:18];
         }
     }
-    CGRect  frame = _myTextView.frame;
-    frame.size.height=_myTextView.contentSize.height+0;
-    _myTextView.frame=frame;
-    
-    self.ShareView.frame=CGRectMake(10,10, kDeviceWidth-20, _myTextView.frame.size.height-50+self.stageImageView.frame.size.height);
+    CGSize Msize =[textView.text boundingRectWithSize:CGSizeMake(kDeviceWidth-40, MAXFLOAT) options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes:[NSDictionary dictionaryWithObject:textView.font forKey:NSFontAttributeName] context:nil].size;
+    CGRect  frame = textView.frame;
+    frame.size.height=Msize.height+15;//textView.contentSize.height+0;
+    textView.frame=frame;
+    self.ShareView.frame=CGRectMake(10,10, kDeviceWidth-20, textView.frame.size.height-50+self.stageImageView.frame.size.height);
     self.TagContentView.frame=CGRectMake(0, self.ShareView.frame.origin.y+self.ShareView.frame.size.height, kDeviceWidth, 100);
     
 }
@@ -629,22 +635,20 @@
     tagdetail.title=tagText;
     tagmodel.tagDetailInfo=tagdetail;
     TagView *tagview =[[TagView alloc]initWithWeiboInfo:self.weiboInfo AndTagInfo:tagmodel  delegate:self isCanClick:YES backgoundImage:imagename isLongTag:YES];
-     tagview.tagBgImageview.backgroundColor =[UIColor clearColor];
-     [tagview setbigTagWithSize:CGSizeMake(10,8)];
- 
+    tagview.tagBgImageview.backgroundColor =[UIColor clearColor];
+    [tagview setbigTagWithSize:CGSizeMake(10,8)];
     if (IsIphone6) {
         [tagview setbigTagWithSize:CGSizeMake(12, 10)];
     }else if (IsIphone6plus)
     {
         [tagview setbigTagWithSize:CGSizeMake(14, 12)];
     }
-     tagview.tag=1000+index;
+    tagview.tag=1000+index;
     return tagview;
 }
 //点击标签，删除操作
 -(void)TapViewClick:(TagView *)tagView Withweibo:(weiboInfoModel *)weiboInfo withTagInfo:(TagModel *)tagInfo
 {
-    
     if (tagView.tag==1999) {  //表明点击的是添加标签按钮
         AddTagViewController  *addtag =[[AddTagViewController alloc]init];
         addtag.delegate=self;
@@ -654,7 +658,6 @@
         //[self presentViewController:na animated:YES completion:nil];
         [self.navigationController pushViewController:addtag animated:NO];
     }
-    
     else
     {
         if (TAGArray.count==5) {
@@ -663,7 +666,6 @@
             [al show];
             return;
         }
-        
         if(TAGArray.count>0)
         {
             [TAGArray  removeObjectAtIndex:tagView.tag-1000];
@@ -679,7 +681,6 @@
         if(IsIphone6plus) {
             taglable.font =[UIFont fontWithName:kFontRegular size:MarkTextFont16];
         }
-        
         for (int i=0; i<TAGArray.count; i++) {
             NSDictionary  *dict =[TAGArray objectAtIndex:i];
             TagView   *tagview =[self createTagViewWithtagText:[dict objectForKey:@"TAG"] withIndex:i withBgImage:[UIImage imageNamed:@"tag_backgroud_color.png"]];
@@ -687,22 +688,17 @@
             tagView.tagBgImageview.image =image;
             [taglable appendView:tagview margin:UIEdgeInsetsMake(0, 0, 0, 10)];
         }
-        
-        
         TagView  *tagview =[self createTagViewWithtagText:@"添加标签" withIndex:999 withBgImage:nil];
-        //[tagview setcornerRadius:4];
+        [tagview setcornerRadius:4];
         tagview.titleLable.textColor=VBlue_color;
         tagview.tagBgImageview.backgroundColor =[UIColor whiteColor];
         tagview.layer.borderColor=VBlue_color.CGColor;
         tagview.layer.borderWidth=2;
-        
         [taglable appendView:tagview margin:UIEdgeInsetsMake(0, 0, 0, 0)];
         CGSize Tsize =[taglable sizeThatFits:CGSizeMake(kDeviceWidth-20, CGFLOAT_MAX)];
         //位置和大小
         taglable.frame=CGRectMake(10,10,kDeviceWidth-20, Tsize.height);
         [self.TagContentView addSubview:taglable];
-        
-        
     }
 }
 /*
