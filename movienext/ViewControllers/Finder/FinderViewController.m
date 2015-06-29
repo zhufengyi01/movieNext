@@ -27,7 +27,7 @@
 #import "UIView+Shadow.h"
 #import "UMShareView.h"
 #import "UpweiboModel.h"
-
+#import "UIImage+Color.h"
 #define  USER_TOOL_HEIGHT  45
 
 #define  LIKE_BAR_HEIGHT  50
@@ -114,7 +114,7 @@
     
     __weak typeof(self) weakSealf = self;
     [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color.png"] forBarMetrics:UIBarMetricsDefault];
-    
+    [self.navigationController.navigationBar  setShadowImage:[UIImage imageWithColor:[UIColor clearColor]]];
     self.naviTitlLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:@""];
     self.naviTitlLable.textColor=VGray_color;
     self.naviTitlLable.font=[UIFont fontWithName:kFontDouble size:16];
@@ -611,11 +611,16 @@
     if (weiboInfo.tagArray.count>0) {
         for (int i=0; i<weiboInfo.tagArray.count; i++) {
             TagView  *tagView= [[TagView alloc]initWithWeiboInfo:weiboInfo AndTagInfo:weiboInfo.tagArray[i] delegate:nil isCanClick:YES backgoundImage:nil isLongTag:NO];
-            [tagView setcornerRadius:4];
-            [tagView setbigTagWithSize:CGSizeMake(6,6)];
+           // [tagView setcornerRadius:4];
+            [tagView setbigTagWithSize:CGSizeMake(10,8)];
+            if (IsIphone6) {
+                [tagView setbigTagWithSize:CGSizeMake(12, 10)];
+            }else if(IsIphone6plus)
+            {
+                [tagView setbigTagWithSize:CGSizeMake(14, 12)];
+            }
             tagView.tag=5000+i;
-            //            tagView.backgroundColor =[UIColor redColor];
-            [self.WeiboTagLable appendView:tagView margin:UIEdgeInsetsMake(5, 10, 0, 0)];
+             [self.WeiboTagLable appendView:tagView margin:UIEdgeInsetsMake(5, 10, 0, 0)];
         }
     }
     CGSize  Tsize =[self.WeiboTagLable sizeThatFits:CGSizeMake(kDeviceWidth-20,CGFLOAT_MAX)];

@@ -71,7 +71,7 @@
     [self createNavigation];
     [self initData];
     [self initUI];
-    if (self.pageType == NSStageListpageSoureTypeDefault) {
+     if (self.pageType == NSStageListpageSoureTypeDefault) {
         [self requestTagList];
     }
 }

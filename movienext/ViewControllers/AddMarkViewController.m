@@ -213,20 +213,21 @@
         _myTextView.font =[UIFont fontWithName:kFontDouble size:29];
     }
     _myTextView.backgroundColor=[UIColor clearColor];
-    // _myTextView.layer.cornerRadius=4;
-    //_myTextView.layer.borderWidth=0.5;
+     _myTextView.layer.cornerRadius=4;
+    _myTextView.layer.borderWidth=0.5;
     _myTextView.layer.allowsEdgeAntialiasing=YES;
-    //_myTextView.layer.borderColor=VLight_GrayColor.CGColor;
+    _myTextView.layer.borderColor=VLight_GrayColor.CGColor;
     //_myTextView.maximumZoomScale=3;
     _myTextView.returnKeyType=UIReturnKeyDone;
-    _myTextView.layoutManager.allowsNonContiguousLayout=NO;
     _myTextView.scrollEnabled=YES;
     _myTextView.delegate=self;
+    _myTextView.layoutManager.allowsNonContiguousLayout=NO;
     _myTextView.textAlignment=NSTextAlignmentCenter;
     _myTextView.delegate=self;
-    // _myTextView.autoresizingMask=UIViewAutoresizingFlexibleHeight;
+     _myTextView.autoresizingMask=UIViewAutoresizingFlexibleHeight;
     _myTextView.selectedRange = NSMakeRange(0,0);  //默认光标从第一个开始
     [_myTextView becomeFirstResponder];
+    _myTextView.layoutManager.allowsNonContiguousLayout=YES;
     if (self.weiboInfo) {//编辑
         _myTextView.text =self.weiboInfo.content;
     }
@@ -629,11 +630,15 @@
     tagdetail.title=tagText;
     tagmodel.tagDetailInfo=tagdetail;
     TagView *tagview =[[TagView alloc]initWithWeiboInfo:self.weiboInfo AndTagInfo:tagmodel  delegate:self isCanClick:YES backgoundImage:imagename isLongTag:YES];
-    [tagview setcornerRadius:4];
-    //    if (index==999) {//最后一个是添加按钮
-    //        tagview.tagBgImageview.image=nil;
-    //    }
-    // [tagview setbigTag:YES];
+    //[tagview setcornerRadius:4];
+    [tagview setbigTagWithSize:CGSizeMake(10,8)];
+    if (IsIphone6) {
+        [tagview setbigTagWithSize:CGSizeMake(12, 10)];
+    }else if (IsIphone6plus)
+    {
+        [tagview setbigTagWithSize:CGSizeMake(14, 12)];
+    }
+
     [tagview setbigTagWithSize:CGSizeMake(8, 6)];
     tagview.tag=1000+index;
     return tagview;

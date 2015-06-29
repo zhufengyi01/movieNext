@@ -24,6 +24,7 @@
 #import "ZCControl.h"
 #import "MJRefresh.h"
 #import "userAddmodel.h"
+#import "UIImage+Color.h"
 #import "ShowStageViewController.h"
 static const CGFloat MJDuration = 1.0;
 
@@ -63,6 +64,7 @@ static const CGFloat MJDuration = 1.0;
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color.png"] forBarMetrics:UIBarMetricsDefault];
+     [self.navigationController.navigationBar  setShadowImage:[UIImage imageWithColor:[UIColor clearColor]]];
     
     UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:@"消息"];
     titleLable.textColor=VGray_color;

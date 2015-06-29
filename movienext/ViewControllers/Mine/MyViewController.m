@@ -146,6 +146,7 @@ static const CGFloat MJDuration = 0.2;
 -(void)createNavigation
 {
     [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color.png"] forBarMetrics:UIBarMetricsDefault];
+     [self.navigationController.navigationBar  setShadowImage:[UIImage imageWithColor:[UIColor clearColor]]];
     NSString  *titleString=@"我的";
     if (self.author_id&&![self.author_id isEqualToString:@"0"]) {
         titleString=@"他的主页";

@@ -75,7 +75,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     [self initData];
-    [self createNavigation];
+     [self createNavigation];
     [self createUI];
     [self createToolBar];
 }

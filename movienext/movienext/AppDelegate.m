@@ -50,16 +50,15 @@
     self.window.backgroundColor=[UIColor whiteColor];
     //自动显示和隐藏请求时的状态提示
     [[AFNetworkActivityIndicatorManager sharedManager] setEnabled:YES];
-    for(NSString *fontfamilyname in [UIFont familyNames])
-    {
-        NSLog(@"family:'%@'",fontfamilyname);
-        for(NSString *fontName in [UIFont fontNamesForFamilyName:fontfamilyname])
-        {
-            NSLog(@"\tfont:'%@'",fontName);
-        }
-        NSLog(@"-------------");
-    }
-    
+//    for(NSString *fontfamilyname in [UIFont familyNames])
+//    {
+//        NSLog(@"family:'%@'",fontfamilyname);
+//        for(NSString *fontName in [UIFont fontNamesForFamilyName:fontfamilyname])
+//        {
+//            NSLog(@"\tfont:'%@'",fontName);
+//        }
+//        NSLog(@"-------------");
+//    }
     return YES;
 }
 
@@ -70,7 +69,6 @@
     
     [[UINavigationBar appearance] setBarTintColor:[UIColor grayColor]];
     [[UINavigationBar appearance] setTintColor:[UIColor grayColor]];
-    
     [[UINavigationBar appearance] setBackgroundImage:[UIImage imageWithColor:[UIColor whiteColor]] forBarMetrics:UIBarMetricsDefault];
     [[UINavigationBar appearance] setShadowImage:[UIImage imageWithColor:[UIColor clearColor]]];
   
@@ -94,7 +92,6 @@
     else {
         NSDictionary  *userInfo=[[NSUserDefaults  standardUserDefaults] objectForKey:kUserKey];
         NSString      *firstlogin =[[NSUserDefaults standardUserDefaults] objectForKey:IS_FIRST_LOGIN];
-        
         //firstlogin = @"NO";
         if (![firstlogin isEqualToString:@"YES"]) {//是第一次进入应用
             [[NSUserDefaults standardUserDefaults] setObject:@"YES" forKey:IS_FIRST_LOGIN];

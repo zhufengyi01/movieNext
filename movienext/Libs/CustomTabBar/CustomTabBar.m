@@ -67,7 +67,6 @@
     titleArray=@[@"首页",@"发现",@"添加",@"消息",@"我的"];
     
 }
-
 - (void)createButtons
 {
     for (NSUInteger i = 0; i < BUTTON_COUNT; i++) {
