@@ -26,6 +26,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+ 
     [self createNavigation];
     [self createUI];
 }
@@ -137,6 +138,8 @@
             model.movieInfo=movieInfo;
             [model setValuesForKeysWithDictionary:[responseObject objectForKey:@"model"]];
             vc.stageInfo=model;
+            UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+            self.navigationItem.backBarButtonItem=item;
             [self.navigationController pushViewController:vc animated:NO];
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {

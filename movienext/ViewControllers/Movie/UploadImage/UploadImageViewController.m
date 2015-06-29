@@ -206,6 +206,8 @@
             if (self.pageTpye==NSUploadImageSourceTypeAddCard) {
                 Addmark.pageSoureType=NSAddMarkPageSourceAddCard;
             }
+            UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+            self.navigationItem.backBarButtonItem=item;
             [self.navigationController pushViewController:Addmark animated:NO];
         }
         else

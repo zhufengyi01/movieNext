@@ -27,8 +27,11 @@
     [[UINavigationBar appearance] setShadowImage:[UIImage imageWithColor:tabBar_line size:CGSizeMake(kDeviceWidth, 1)]];
     NSLog(@"beginlogpageview = %@", self.class);
     [MobClick beginLogPageView:[NSString stringWithFormat:@"%@",self.class]];
-    
     self.navigationController.navigationBar.hidden=NO;
+    
+    UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+    self.navigationItem.backBarButtonItem=item;
+
 }
 
 - (void)viewWillDisappear:(BOOL)animated {

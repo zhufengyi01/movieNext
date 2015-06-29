@@ -629,12 +629,14 @@
     tagdetail.title=tagText;
     tagmodel.tagDetailInfo=tagdetail;
     TagView *tagview =[[TagView alloc]initWithWeiboInfo:self.weiboInfo AndTagInfo:tagmodel  delegate:self isCanClick:YES backgoundImage:imagename isLongTag:YES];
-    [tagview setcornerRadius:4];
-    //    if (index==999) {//最后一个是添加按钮
-    //        tagview.tagBgImageview.image=nil;
-    //    }
-    // [tagview setbigTag:YES];
-    [tagview setbigTagWithSize:CGSizeMake(8, 6)];
+    [tagview setbigTagWithSize:CGSizeMake(10,8)];
+    tagview.tagBgImageview.backgroundColor =[UIColor clearColor];
+    if (IsIphone6) {
+        [tagview setbigTagWithSize:CGSizeMake(12, 10)];
+    }else if (IsIphone6plus)
+    {
+        [tagview setbigTagWithSize:CGSizeMake(14, 12)];
+    }
     tagview.tag=1000+index;
     return tagview;
 }
@@ -687,7 +689,7 @@
         
         
         TagView  *tagview =[self createTagViewWithtagText:@"添加标签" withIndex:999 withBgImage:nil];
-        [tagview setcornerRadius:4];
+        //[tagview setcornerRadius:4];
         tagview.titleLable.textColor=VBlue_color;
         tagview.tagBgImageview.backgroundColor =[UIColor whiteColor];
         tagview.layer.borderColor=VBlue_color.CGColor;

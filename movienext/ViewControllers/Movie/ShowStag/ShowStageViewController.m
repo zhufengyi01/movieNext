@@ -659,6 +659,7 @@
             self.tagLable.numberOfLines=0;
             if (i==0) {
                  tagview.titleLable.textColor=[UIColor whiteColor];
+                tagview.tagBgImageview.backgroundColor =VLight_GrayColor;
             }
         }
     }
