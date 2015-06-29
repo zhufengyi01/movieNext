@@ -163,9 +163,6 @@
         [weakself.navigationController pushViewController:md animated:YES];
     }];
       [titleLable addSubview:moviebtn];
-
-    
-    
     UserDataCenter  *usecenter =[UserDataCenter shareInstance];
     UIButton  *admOper =[UIButton buttonWithType:UIButtonTypeCustom];
     admOper.frame=CGRectMake(0, 0, 30, 25);
@@ -722,7 +719,6 @@
             shareView.weiboInfo = _WeiboInfo;
             [shareView setShareLable];
             [shareView show];
-            
         }];
         ShareButton.titleLabel.font =[UIFont fontWithName:kFontDouble size:16];
         [ShareButton setTitleColor:VBlue_color forState:UIControlStateNormal];

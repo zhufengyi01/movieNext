@@ -80,11 +80,9 @@
     
     UIView  *v =[[UIView alloc]init];
     self.navigationItem.leftBarButtonItem =[[UIBarButtonItem alloc]initWithCustomView:v];
-    
     [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color.png"] forBarMetrics:UIBarMetricsDefault];
-    [self.navigationController.navigationBar setShadowImage:[UIImage imageWithColor:[UIColor clearColor]]];
-
-    search=[[UISearchBar alloc]initWithFrame:CGRectMake(30, 10, 0, 28)];
+     [self.navigationController.navigationBar setShadowImage:[UIImage imageWithColor:[UIColor clearColor]]];
+     search=[[UISearchBar alloc]initWithFrame:CGRectMake(30, 10, 0, 28)];
     search.placeholder=@"搜索电影";
     if (self.pageType==NSSearchSourceTypeAddCard) {
         search.placeholder=@"搜索要添加的电影";

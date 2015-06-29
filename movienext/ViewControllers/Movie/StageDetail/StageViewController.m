@@ -78,7 +78,7 @@
     self.navigationItem.backBarButtonItem=item;
 
     [self initData];
-    [self createNavigation];
+     [self createNavigation];
     [self createUI];
     [self createToolBar];
 }

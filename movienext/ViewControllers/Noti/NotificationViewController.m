@@ -48,10 +48,6 @@ static const CGFloat MJDuration = 1.0;
     self.navigationController.navigationBar.hidden=NO;
     self.navigationController.navigationBar.alpha=1;
     self.tabBarController.tabBar.hidden=NO;
-    
-    //    [[NSNotificationCenter defaultCenter]  addObserver:self selector:@selector(changeUser) name:@"initUser" object:nil];
-    
-    
 }
 /*-(void)changeUser
  {
@@ -64,9 +60,8 @@ static const CGFloat MJDuration = 1.0;
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color.png"] forBarMetrics:UIBarMetricsDefault];
-    [self.navigationController.navigationBar setShadowImage:[UIImage imageWithColor:[UIColor clearColor]]];
-    
-    UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:@"消息"];
+     [self.navigationController.navigationBar setShadowImage:[UIImage imageWithColor:[UIColor clearColor]]];
+     UILabel  *titleLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:@"消息"];
     titleLable.textColor=VGray_color;
     titleLable.font=[UIFont fontWithName:kFontDouble size:16];
     titleLable.textAlignment=NSTextAlignmentCenter;

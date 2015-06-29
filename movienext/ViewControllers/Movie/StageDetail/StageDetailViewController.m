@@ -88,7 +88,7 @@
 {
     self.stageScrollerView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight-TOOLBAR_HEIGHT)];
     self.stageScrollerView.backgroundColor =View_BackGround;
-     self.stageScrollerView.contentSize = CGSizeMake(kDeviceWidth, kDeviceHeight);
+    self.stageScrollerView.contentSize = CGSizeMake(kDeviceWidth, kDeviceHeight);
     [self.view addSubview:self.stageScrollerView];
     [self createStageView];
     
@@ -98,9 +98,9 @@
     //分享出来的不是这个view
     BgView =[[UIImageView alloc]initWithFrame:CGRectMake(0,0,kDeviceWidth, (kDeviceWidth-0)*(9.0/16))];
     BgView.clipsToBounds=YES;
-//    [BgView.layer setShadowOffset:CGSizeMake(kDeviceWidth, 20)];
-      BgView.backgroundColor=View_ToolBar;
-      BgView.userInteractionEnabled=YES;
+    //    [BgView.layer setShadowOffset:CGSizeMake(kDeviceWidth, 20)];
+    BgView.backgroundColor=View_ToolBar;
+    BgView.userInteractionEnabled=YES;
     [self.stageScrollerView addSubview:BgView];
     
     //最后要分享出去的图
@@ -128,9 +128,9 @@
         [_layerView setShadow];
     }
     [self.stageImageView addSubview:_layerView];
-     self.markLable=[ZCControl createLabelWithFrame:CGRectMake(10,40,_layerView.frame.size.width-20, 60) Font:20 Text:@"弹幕文字"];
+    self.markLable=[ZCControl createLabelWithFrame:CGRectMake(10,40,_layerView.frame.size.width-20, 60) Font:20 Text:@"弹幕文字"];
     self.markLable.font =[UIFont fontWithName:kFontDouble size:23];
-     if (IsIphone6) {
+    if (IsIphone6) {
         self.markLable.frame=CGRectMake(20, 30, _layerView.frame.size.width-40, 65);
         self.markLable.font =[UIFont fontWithName:kFontDouble size:26];
     }
@@ -209,7 +209,7 @@
     // [leftButtomButton addTarget:self action:@selector(StageMovieButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     [leftButtomButton addActionHandler:^(NSInteger tag) {
         MyViewController  *myVC=[[MyViewController alloc]init];
-         myVC.author_id =[NSString stringWithFormat:@"%@",weakSeaf.weiboInfo.uerInfo.Id];
+        myVC.author_id =[NSString stringWithFormat:@"%@",weakSeaf.weiboInfo.uerInfo.Id];
         UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
         weakSeaf.navigationItem.backBarButtonItem=item;
         [weakSeaf.navigationController pushViewController:myVC animated:YES];
@@ -219,7 +219,7 @@
     
     MovieLogoImageView=[[UIImageView alloc]initWithFrame:CGRectMake(0,0,30, 30)];
     MovieLogoImageView.layer.cornerRadius=15;
-     NSString  *uselogoString =[NSString stringWithFormat:@"%@%@!thumb",kUrlAvatar,self.weiboInfo.uerInfo.logo];
+    NSString  *uselogoString =[NSString stringWithFormat:@"%@%@!thumb",kUrlAvatar,self.weiboInfo.uerInfo.logo];
     if (self.weiboInfo) {
         uselogoString=[NSString stringWithFormat:@"%@%@!thumb",kUrlAvatar,self.weiboInfo.uerInfo.logo];
     }
@@ -313,8 +313,8 @@
         self.WeiboTagLable=nil;
     }
     TagContentView  = [[UIView alloc]initWithFrame:CGRectMake(0, BgView2.frame.origin.y+BgView2.frame.size.height, kDeviceWidth, 40)];
-  
-   // TagContentView.backgroundColor =[UIColor clearColor];
+    
+    // TagContentView.backgroundColor =[UIColor clearColor];
     [BgView addSubview:TagContentView];
     
     self.WeiboTagLable=[[M80AttributedLabel alloc]initWithFrame:CGRectZero];
@@ -325,7 +325,7 @@
     if (self.weiboInfo.tagArray.count>0) {
         for (int i=0; i<self.weiboInfo.tagArray.count; i++) {
             TagView  *tagView= [[TagView alloc]initWithWeiboInfo:self.weiboInfo AndTagInfo:self.weiboInfo.tagArray[i] delegate:self isCanClick:YES backgoundImage:nil isLongTag:NO];
-             [tagView setbigTagWithSize:CGSizeMake(10,8)];
+            [tagView setbigTagWithSize:CGSizeMake(10,8)];
             if (IsIphone6) {
                 [tagView setbigTagWithSize:CGSizeMake(12, 10)];
             }else if (IsIphone6plus)
@@ -358,7 +358,7 @@
     UIView   *ToolView = [[UIView alloc]initWithFrame:CGRectMake(0,kDeviceHeight-TOOLBAR_HEIGHT-kHeightNavigation, kDeviceWidth, TOOLBAR_HEIGHT)];
     ToolView.userInteractionEnabled=YES;
     [self.view addSubview:ToolView];
-  //  ToolView.hidden=YES;
+    //  ToolView.hidden=YES;
     //管理员页面进入
     NSArray *titleArray = [NSArray arrayWithObjects:@"屏蔽", @"最新", @"正常", @"发现", @"定时", nil];
     for (int i=0; i<5; i++) {
@@ -372,7 +372,7 @@
         [btnBlock setBackgroundImage:ligImage forState:UIControlStateHighlighted];
         [btnBlock addTarget:self action:@selector(changeWeiboStatus:) forControlEvents:UIControlEventTouchUpInside];
         [ToolView addSubview:btnBlock];
-   }
+    }
 }
 #pragma mark --- User Action
 #pragma mark ---
@@ -422,7 +422,7 @@
     NSDictionary *parameters=@{@"user_id":userCenter.user_id,@"weibo_id":weiboId,@"status":status,KURLTOKEN:tokenString};
     [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
-             NSString  *titleString ;
+            NSString  *titleString ;
             if ([status intValue]==0) {
                 titleString =[NSString stringWithFormat:@"[%@]\n屏蔽成功",self.weiboInfo.content];
             }else if ([status intValue]==1)
@@ -447,7 +447,7 @@
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
-         al =[[UIAlertView alloc]initWithTitle:nil message:@"操作失败！！！！" delegate:nil cancelButtonTitle:nil otherButtonTitles:nil, nil];
+        al =[[UIAlertView alloc]initWithTitle:nil message:@"操作失败！！！！" delegate:nil cancelButtonTitle:nil otherButtonTitles:nil, nil];
         [al show];
         [self performSelector:@selector(dismisAlertView) withObject:nil afterDelay:Alert_Interval];
         
@@ -455,7 +455,7 @@
 }
 -(void)dismisAlertView
 {
- 
+    
     [al dismissWithClickedButtonIndex:0 animated:YES];
     
     
@@ -471,8 +471,8 @@
     NSDictionary *parameters=@{@"user_id":userCenter.user_id,@"weibo_id":weiboId,@"status":@"3",@"updated_at":timeSp,KURLTOKEN:tokenString};
     [manager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"code"]  intValue]==0) {
-             NSString *titSting  =[NSString stringWithFormat:@"[%@]\n定时到热门成功",self.weiboInfo.content];
-             al =[[UIAlertView alloc]initWithTitle:nil message:titSting delegate:nil cancelButtonTitle:nil otherButtonTitles:nil, nil];
+            NSString *titSting  =[NSString stringWithFormat:@"[%@]\n定时到热门成功",self.weiboInfo.content];
+            al =[[UIAlertView alloc]initWithTitle:nil message:titSting delegate:nil cancelButtonTitle:nil otherButtonTitles:nil, nil];
             [al show];
             [self performSelector:@selector(dismisAlertView) withObject:nil afterDelay:Alert_Interval];
             //请求点赞
@@ -482,10 +482,10 @@
     }];
 }
 
- #pragma mark  selected date time
+#pragma mark  selected date time
 -(void)DatePickerSelectedTime:(NSString *)dateString    {
     //定时到热门，伴随时间戳
-   [self requesttiming:[NSString stringWithFormat:@"%@",self.weiboInfo.Id] AndTimeSp:dateString];
+    [self requesttiming:[NSString stringWithFormat:@"%@",self.weiboInfo.Id] AndTimeSp:dateString];
 }
 
 
@@ -601,13 +601,11 @@
 -(void)TapViewClick:(id)tagView Withweibo:(weiboInfoModel *)weiboInfo withTagInfo:(TagModel *)tagInfo
 {
     //跳转到标签列表页
-     StageListViewController  *staglist =[StageListViewController new];
+    StageListViewController  *staglist =[StageListViewController new];
     staglist.tagInfo=tagInfo;
     staglist.pageType=NSStageListpageSoureTypeTagToStage;
-     UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
-    self.navigationItem.backBarButtonItem=item;
     [self.navigationController pushViewController:staglist animated:YES];
-
+    
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -615,13 +613,13 @@
 }
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end

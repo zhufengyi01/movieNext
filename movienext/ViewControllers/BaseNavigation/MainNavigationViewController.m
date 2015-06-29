@@ -18,15 +18,14 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-
-    UIButton  *back = [UIButton buttonWithType:UIButtonTypeCustom];
-    back.frame=CGRectMake(0, 0, 8, 14);
-    [back setImage:[UIImage imageNamed:@"back_gray_Icon.png"] forState:UIControlStateNormal];
-     [back addActionHandler:^(NSInteger tag) {
-         [self popViewControllerAnimated:YES];
-     }];
-    UIBarButtonItem  *baritem  =[[UIBarButtonItem alloc]initWithCustomView:back];
-    self.navigationItem.leftBarButtonItem=baritem;
+//    UIButton  *back = [UIButton buttonWithType:UIButtonTypeCustom];
+//    back.frame=CGRectMake(0, 0, 8, 14);
+//    [back setImage:[UIImage imageNamed:@"back_gray_Icon.png"] forState:UIControlStateNormal];
+//     [back addActionHandler:^(NSInteger tag) {
+//         [self popViewControllerAnimated:YES];
+//     }];
+//    UIBarButtonItem  *baritem  =[[UIBarButtonItem alloc]initWithCustomView:back];
+//    self.navigationItem.leftBarButtonItem=baritem;
 }
 +(void)initialize
 {
@@ -35,10 +34,11 @@
 }
 -(void)pushViewController:(UIViewController *)viewController animated:(BOOL)animated
 {
-    [super pushViewController:viewController animated:animated];
     if (self.viewControllers.count>0) {
         viewController.hidesBottomBarWhenPushed=YES;
     }
+    [super pushViewController:viewController animated:animated];
+
 }
 
 - (void)didReceiveMemoryWarning {

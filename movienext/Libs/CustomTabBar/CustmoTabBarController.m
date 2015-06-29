@@ -53,7 +53,7 @@
     
     MovieViewController * mvc = [[MovieViewController alloc] init];
     UINavigationController * mvcNav = [[UINavigationController alloc] initWithRootViewController:mvc];
-    mvc.hidesBottomBarWhenPushed=YES;
+    //mvc.hidesBottomBarWhenPushed=YES;
     
     //添加一个发现页
     /*FindBeforeViewController  *fvc =[[FindBeforeViewController alloc]init];
