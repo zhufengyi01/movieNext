@@ -604,8 +604,8 @@
      StageListViewController  *staglist =[StageListViewController new];
     staglist.tagInfo=tagInfo;
     staglist.pageType=NSStageListpageSoureTypeTagToStage;
-    UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
-    self.navigationItem.backBarButtonItem =item;
+     UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+    self.navigationItem.backBarButtonItem=item;
     [self.navigationController pushViewController:staglist animated:YES];
 
 }

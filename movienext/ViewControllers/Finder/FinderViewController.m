@@ -27,7 +27,7 @@
 #import "UIView+Shadow.h"
 #import "UMShareView.h"
 #import "UpweiboModel.h"
-
+#import "UIImage+Color.h"
 #define  USER_TOOL_HEIGHT  45
 
 #define  LIKE_BAR_HEIGHT  50
@@ -114,6 +114,8 @@
     
     __weak typeof(self) weakSealf = self;
     [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color.png"] forBarMetrics:UIBarMetricsDefault];
+    [self.navigationController.navigationBar setShadowImage:[UIImage imageWithColor:[UIColor clearColor]]];
+
     
     self.naviTitlLable=[ZCControl createLabelWithFrame:CGRectMake(0, 0, 100, 20) Font:16 Text:@""];
     self.naviTitlLable.textColor=VGray_color;
