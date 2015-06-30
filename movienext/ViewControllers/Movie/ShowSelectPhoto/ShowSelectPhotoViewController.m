@@ -21,8 +21,6 @@
 #import "LoadingView.h"
 #import "UIButton+Block.h"
 static const CGFloat MJDuration = 0.6;
-
-
 @interface ShowSelectPhotoViewController ()<UICollectionViewDelegateFlowLayout,UICollectionViewDataSource,UICollectionViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,LoadingViewDelegate>
 {
     LoadingView         *loadView;
@@ -31,10 +29,7 @@ static const CGFloat MJDuration = 0.6;
     int  page2;
     UICollectionViewFlowLayout    *layout;
     UIButton * upLoadimageBtn;
-    
     UserDataCenter  *userCenter;
-    
-    
 }
 @property(nonatomic,strong) NSMutableArray  *dataArray1;
 @property(nonatomic,strong) NSMutableArray  *dataArray2;
@@ -60,22 +55,22 @@ static const CGFloat MJDuration = 0.6;
 -(void)creatNavigation
 {
     
-    UIButton  *button=[UIButton buttonWithType:UIButtonTypeCustom];
-    [button setTitle:@"取消" forState:UIControlStateNormal];
-    [button setTitleColor:VBlue_color forState:UIControlStateNormal];
-    button.frame=CGRectMake(10, 10, 40, 30);
-    [button addActionHandler:^(NSInteger tag) {
-        [self.navigationController popViewControllerAnimated:YES];
-    }];
-    button.titleEdgeInsets=UIEdgeInsetsMake(0, -10,0, 10);
-    [button setTitleColor:VGray_color forState:UIControlStateNormal];
-    //button.titleLabel.font =[UIFont fontWithName:kFontDouble size:18];
-    button.titleLabel.font =[UIFont fontWithName:kFontRegular size:16];
-    // [button addTarget:self action:@selector(navigationbtnClick:) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem  *barButton=[[UIBarButtonItem alloc]initWithCustomView:button];
-    button.tag=99;
-    
-    self.navigationItem.leftBarButtonItem=barButton;
+//    UIButton  *button=[UIButton buttonWithType:UIButtonTypeCustom];
+//    [button setTitle:@"取消" forState:UIControlStateNormal];
+//    [button setTitleColor:VBlue_color forState:UIControlStateNormal];
+//    button.frame=CGRectMake(10, 10, 40, 30);
+//    [button addActionHandler:^(NSInteger tag) {
+//        [self.navigationController popViewControllerAnimated:YES];
+//    }];
+//    button.titleEdgeInsets=UIEdgeInsetsMake(0, -10,0, 10);
+//    [button setTitleColor:VGray_color forState:UIControlStateNormal];
+//    //button.titleLabel.font =[UIFont fontWithName:kFontDouble size:18];
+//    button.titleLabel.font =[UIFont fontWithName:kFontRegular size:16];
+//    // [button addTarget:self action:@selector(navigationbtnClick:) forControlEvents:UIControlEventTouchUpInside];
+//    UIBarButtonItem  *barButton=[[UIBarButtonItem alloc]initWithCustomView:button];
+//    button.tag=99;
+//    
+//    self.navigationItem.leftBarButtonItem=barButton;
     
     [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"tabbar_backgroud_color.png"] forBarMetrics:UIBarMetricsDefault];
     NSArray *segmentedArray = [[NSArray alloc] initWithObjects:@"剧照",@"截图", nil];
@@ -94,8 +89,6 @@ static const CGFloat MJDuration = 0.6;
     
     [segment addTarget:self action:@selector(segmentClick:) forControlEvents:UIControlEventValueChanged];
     [self.navigationItem setTitleView:segment];
-    
-    
     
     upLoadimageBtn=[ZCControl createButtonWithFrame:CGRectMake(0,0,40,30) ImageName:nil Target:self Action:nil Title:nil];
     __weak typeof(self) WeakSelf = self;
@@ -227,12 +220,11 @@ static const CGFloat MJDuration = 0.6;
 }
 -(void)creatLoadView
 {
-    loadView =[[LoadingView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight)];
+    loadView =[[LoadingView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight-kHeightNavigation)];
     loadView.delegate=self;
-    [self.view addSubview:loadView];
+    [self.myConllectionView addSubview:loadView];
     
 }
-
 - (void)setUprefresh
 {
     __weak typeof(self) weakSelf = self;
@@ -321,7 +313,6 @@ static const CGFloat MJDuration = 0.6;
     // self.myConllectionView.footer.hidden = YES;
 }
 
-
 -(void)requestData
 {
 #warning 上线的时候需要去去掉return的注视
@@ -332,17 +323,14 @@ static const CGFloat MJDuration = 0.6;
         [loadView showFailLoadData];
         return;
     }
-    
-    [loadView removeFromSuperview];
-    //   UserDataCenter *userCenter =[UserDataCenter shareInstance];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
     NSString *urlstr;
     if (segment.selectedSegmentIndex==0) {
-        urlstr = [NSString stringWithFormat:@"http://movie.douban.com/subject/%@/photos?type=S&start=%ld&sortby=vote&size=a&subtype=o", self.douban_id,self.dataArray1.count];
+        urlstr = [NSString stringWithFormat:@"http://movie.douban.com/subject/%@/photos?type=S&start=%ld&sortby=vote&size=a&subtype=o", self.douban_id,(long)self.dataArray1.count];
     }
     else if (segment.selectedSegmentIndex==1)
     {
-        urlstr = [NSString stringWithFormat:@"http://movie.douban.com/subject/%@/photos?type=S&start=%ld&sortby=vote&size=a&subtype=c", self.douban_id,self.dataArray2.count];
+        urlstr = [NSString stringWithFormat:@"http://movie.douban.com/subject/%@/photos?type=S&start=%ld&sortby=vote&size=a&subtype=c", self.douban_id,(long)self.dataArray2.count];
     }
     [request setURL:[NSURL URLWithString:urlstr]];
     [request setHTTPMethod:@"GET"];
@@ -350,12 +338,11 @@ static const CGFloat MJDuration = 0.6;
     [NSURLConnection sendAsynchronousRequest:request queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
         if (connectionError) {
             //NSLog(@"httpresponse code error %@", connectionError);
-            [loadView showFailLoadData];
-            
+            //[loadView showFailLoadData];
+            [loadView showNullView:@"还没有剧照，快去添加吧"];
         } else {
-            [loadView stopAnimation];
-            [loadView removeFromSuperview];
             NSInteger responseCode = [(NSHTTPURLResponse *)response statusCode];
+            //NSLog(@"~~~~~~~~~~请求了多少次");
             NSString *responseString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
             if (responseCode == 200) {
                 responseString = [Function getNoNewLine:responseString];
@@ -369,10 +356,16 @@ static const CGFloat MJDuration = 0.6;
                     }
                     if (doubanInfos.count>0) {
                         [self.dataArray1 addObjectsFromArray:doubanInfos];
-                        //   NSLog(@"====doubanInfo ===%@",doubanInfos);
-                        if (doubanInfos.count<40) {
-                            [self.myConllectionView.footer noticeNoMoreData];
-                        }  }
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            [loadView stopAnimation];
+                            [loadView removeFromSuperview];
+                        });
+                     }else
+                    {
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            [loadView showNullView:@"还没有剧照,快来添加一张吧"];
+                        });
+                    }
                 }
                 else if (segment.selectedSegmentIndex==1)
                 {
@@ -381,14 +374,21 @@ static const CGFloat MJDuration = 0.6;
                     }
                     if (doubanInfos.count>0) {
                         [self.dataArray2 addObjectsFromArray:doubanInfos];
-                        if (doubanInfos.count<40) {
-                            [self.myConllectionView.footer noticeNoMoreData];
-                        } }
+                        [loadView stopAnimation];
+                        [loadView removeFromSuperview];
+
+                    }else
+                    {
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            [loadView showNullView:@"还没有截图，快来添加一张吧"];
+                        });
+                    }
                 }
-                [self.myConllectionView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
-            } else {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self.myConllectionView reloadData];
+                });
+              } else {
                 NSLog(@"error");
-                
                 [loadView showFailLoadData];
                 
             }

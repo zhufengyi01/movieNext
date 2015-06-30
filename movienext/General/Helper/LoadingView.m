@@ -58,8 +58,6 @@
     self.failBtn.clipsToBounds=YES;
     [failLoadView addSubview:self.failBtn];
     
-    
-    
     //没有数据的时候显示这个笑脸的
     NullDataView =[[UIView alloc]initWithFrame:CGRectMake(0, (kDeviceWidth-100)/2, kDeviceWidth, 100)];
     NullDataView.hidden=YES;

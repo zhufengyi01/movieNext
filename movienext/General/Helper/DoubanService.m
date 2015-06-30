@@ -36,7 +36,7 @@ static DoubanService * manager = nil;
         if (type==NServiceTypeSearch) {
             for (NSTextCheckingResult* b in array)
             {
-                NSLog(@"array = %@", array);
+                //NSLog(@"array = %@", array);
                 NSString *doubanId = [responseString substringWithRange:[b rangeAtIndex:1]];
                 NSString *movieName = [responseString substringWithRange:[b rangeAtIndex:3]];
                 NSString *smallImage = [responseString substringWithRange:[b rangeAtIndex:2]];

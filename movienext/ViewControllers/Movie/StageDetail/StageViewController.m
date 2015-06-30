@@ -34,6 +34,7 @@
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
 #import "ScanMovieInfoViewController.h"
+#import "StageListViewController.h"
 #define ADM_ACTION_TAG     1000   //统一管理管弹出框
 #define CUSTOM_SELF_TAG    1001
 #define CUSTOM_DEFATLT_TAG 1002
@@ -113,12 +114,18 @@
     moviebtn.frame=CGRectMake(0, 0, self.naviTitlLable.frame.size.width, self.naviTitlLable.frame.size.height);    __weak typeof(self)  weakself  =  self;
     [moviebtn addActionHandler:^(NSInteger tag) {
          //跳转到电影页
-        MovieDetailViewController  *md =[[MovieDetailViewController alloc]init];
-        md.movieId=self.weiboInfo.stageInfo.movieInfo.Id;
-        md.moviename=self.weiboInfo.stageInfo.movieInfo.name;
-        md.movielogo=self.weiboInfo.stageInfo.movieInfo.logo;
-        md.pageSourceType=NSMovieSourcePageStageDetailController;
-        [weakself.navigationController pushViewController:md animated:YES];
+//        MovieDetailViewController  *md =[[MovieDetailViewController alloc]init];
+//        md.movieId=self.weiboInfo.stageInfo.movieInfo.Id;
+//        md.moviename=self.weiboInfo.stageInfo.movieInfo.name;
+//        md.movielogo=self.weiboInfo.stageInfo.movieInfo.logo;
+//        md.pageSourceType=NSMovieSourcePageStageDetailController;
+//        [weakself.navigationController pushViewController:md animated:YES];
+        StageListViewController *stagelist =[[StageListViewController alloc]init];
+        stagelist.movie_id = self.weiboInfo.stageInfo.movieInfo.Id;
+        stagelist.movielogo =self.weiboInfo.stageInfo.movieInfo.logo;
+        stagelist.moviename =self.weiboInfo.stageInfo.movieInfo.name;
+        stagelist.pageType =NSStageListpageSoureTypeMovie;
+        [weakself.navigationController pushViewController:stagelist animated:YES];
         
     }];
     [self.naviTitlLable addSubview:moviebtn];

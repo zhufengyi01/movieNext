@@ -33,6 +33,7 @@
 #import "UIImage+ImageWithColor.h"
 #import "MovieDetailViewController.h"
 #import "ShowSelectPhotoViewController.h"
+#import "StageListViewController.h"
 #define HISTORYRECORD  @"historyRecord"  //历史版本纪录
 @interface MovieSearchViewController ()<UISearchBarDelegate,UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate, LoadingViewDelegate>
 {
@@ -59,6 +60,9 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.view.backgroundColor=View_BackGround;
+    UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+    self.navigationItem.backBarButtonItem=item;
+
     [self createNavigation];
     [self initData];
     [self initUI];
@@ -166,33 +170,38 @@
 {
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     NSDictionary *parameters = @{@"douban_id": douban_Id};
-    
     [manager POST:[NSString stringWithFormat:@"%@/movie/create", kApiBaseUrl] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([[responseObject  objectForKey:@"code"] intValue]==0) {
-            
-            NSLog(@"responseobject = %@", responseObject);
             NSDictionary *detail = [responseObject objectForKey:@"model"];
             NSString * movie_id = [detail objectForKey:@"id"];
-            
-            //请求完成后执行跳转页面
-            ShowSelectPhotoViewController  *vc =[[ShowSelectPhotoViewController alloc]init];
-            vc.douban_id=douban_Id;
-            vc.movie_id=movie_id;
-            vc.movie_name=[detail objectForKey:@"name"];
-            UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
             if (self.pageType==NSSearchSourceTypeAddCard) {
-                vc.pageType=NSShowSelectViewSoureTypeAddCard;
+                NSLog(@"responseobject = %@", responseObject);
+                //请求完成后执行跳转页面
+                ShowSelectPhotoViewController  *vc =[[ShowSelectPhotoViewController alloc]init];
+                vc.douban_id=douban_Id;
+                vc.movie_id=movie_id;
+                vc.movie_name=[detail objectForKey:@"name"];
+                if (self.pageType==NSSearchSourceTypeAddCard) {
+                    vc.pageType=NSShowSelectViewSoureTypeAddCard;
+                }
+                [self.navigationController pushViewController:vc  animated:YES];
             }
-            self.navigationItem.backBarButtonItem=item;
-            [self.navigationController pushViewController:vc  animated:YES];
+            else if (self.pageType==NSSearchSourceTypeMovieList)
+            {
+                StageListViewController *stagelist =[[StageListViewController alloc]init];
+                stagelist.movie_id = movie_id;
+                stagelist.movielogo =[detail objectForKey:@"logo"];
+                stagelist.moviename =[detail objectForKey:@"name"];
+                stagelist.pageType =NSStageListpageSoureTypeMovie;
+                [self.navigationController pushViewController:stagelist animated:YES];
+//
+            }
         }
-        
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
         //[loadView showNullView:@"没有数据..."];
         
     }];
-    
 }
 -(void)requestData
 {
@@ -235,8 +244,9 @@
                     //添加一个无内容的笑脸
                     [loadView showFailLoadData];
                 } else {
-                    responseString = [Function getNoNewLine:responseString];
                     
+                    NSLog(@"电影列表请求");
+                    responseString = [Function getNoNewLine:responseString];
                     NSString     * pattern = @"<a class=\"nbg\" href=\"http://movie\\.douban\\.com/subject/(\\d+)/\".*>\n.*<img src=\"(.*)\" alt=\"(.*?)\".*?/>";
                     NSMutableArray *doubanInfos = [[DoubanService shareInstance] getDoubanInfosByResponse:responseString withpattern:pattern type:NServiceTypeSearch];
                     _dataArray = doubanInfos;
@@ -324,21 +334,27 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (tableView==_myTableView) {
         if (_dataArray.count > indexPath.row) {
+            NSDictionary  *dict =[_dataArray objectAtIndex:indexPath.row];
             if (self.pageType==NSSearchSourceTypeMovieList) {
-                MovieDetailViewController  *mvdetail =[[MovieDetailViewController alloc]init];
-                mvdetail.douban_Id=[[_dataArray objectAtIndex:indexPath.row]  objectForKey:@"doubanId"];
-                mvdetail.pageSourceType=NSMovieSourcePageSearchListController; //从电影列表页今日电影详细页面
-                mvdetail.pageSourceType=NSMovieSourcePageSearchListController;
-                mvdetail.movielogo=[[_dataArray objectAtIndex:indexPath.row] objectForKey:@"smallimage"];
-                mvdetail.moviename=[[_dataArray objectAtIndex:indexPath.row] objectForKey:@"title"];
+    
+                //需要根据doubanid请求movie_id
                 
-                UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
-                self.navigationItem.backBarButtonItem=item;
-                [self.navigationController pushViewController:mvdetail animated:YES];
+                
+    
+//                MovieDetailViewController  *mvdetail =[[MovieDetailViewController alloc]init];
+//                mvdetail.douban_Id=[[_dataArray objectAtIndex:indexPath.row]  objectForKey:@"doubanId"];
+//                mvdetail.pageSourceType=NSMovieSourcePageSearchListController; //从电影列表页今日电影详细页面
+//                mvdetail.pageSourceType=NSMovieSourcePageSearchListController;
+//                mvdetail.movielogo=[[_dataArray objectAtIndex:indexPath.row] objectForKey:@"smallimage"];
+//                mvdetail.moviename=[[_dataArray objectAtIndex:indexPath.row] objectForKey:@"title"];
+//                
+//                UIBarButtonItem  *item =[[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+//                self.navigationItem.backBarButtonItem=item;
+//                [self.navigationController pushViewController:mvdetail animated:YES];
+                [self requestMovieIdWithdoubanId: [dict objectForKey:@"doubanId"]];
             }
             else if(self.pageType==NSSearchSourceTypeAddCard) //从添加电影进入  直接进去添加
             {
-                NSDictionary  *dict =[_dataArray objectAtIndex:indexPath.row];
                 //根据豆瓣id 请求电影信息
                 [self requestMovieIdWithdoubanId:[dict objectForKey:@"doubanId"]];
             }

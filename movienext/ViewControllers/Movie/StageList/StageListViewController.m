@@ -71,7 +71,7 @@
     [self createNavigation];
     [self initData];
     [self initUI];
-     if (self.pageType == NSStageListpageSoureTypeDefault) {
+     if (self.pageType == NSStageListpageSoureTypeDefault||self.pageType== NSStageListpageSoureTypeMovie) {
         [self requestTagList];
     }
 }
@@ -96,7 +96,10 @@
     [titleView addSubview:movieNameLable];
     NSString  *logoString;
     logoString =[NSString stringWithFormat:@"%@%@!poster",kUrlFeed,self.movielogo];
-  
+    if(self.pageType ==NSStageListpageSoureTypeMovie)
+    {
+        logoString =[NSString stringWithFormat:@"%@%@!w100h100",kUrlMoviePoster,self.movielogo];
+    }
     NSString  *nameStr=self.moviename;
      nameStr =[Function htmlString:nameStr];
     float nameW=kDeviceWidth*0.6;
@@ -118,7 +121,13 @@
     self.navigationItem.rightBarButtonItem=rigthbar;
     if (self.pageType==NSStageListpageSoureTypeDefault ) {
          movieNameLable.text=[NSString stringWithFormat:@"%@",nameStr];
-          [MovieLogoImageView sd_setImageWithURL:[NSURL URLWithString:logoString] placeholderImage:[UIImage imageNamed:@"Moments.png"]];
+          [MovieLogoImageView sd_setImageWithURL:[NSURL URLWithString:logoString] placeholderImage:[UIImage imageNamed:nil]];
+        
+    }
+    else if (self.pageType==NSStageListpageSoureTypeMovie)
+    {
+        movieNameLable.text=[NSString stringWithFormat:@"%@",nameStr];
+        [MovieLogoImageView sd_setImageWithURL:[NSURL URLWithString:logoString] placeholderImage:[UIImage imageNamed:nil]];
     }
     else if(self.pageType==NSStageListpageSoureTypeTagToStage)
     {
@@ -164,7 +173,7 @@
     //[_myConllectionView registerClass:[MovieHeadView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"headerView"];
     _myConllectionView.delegate=self;
     _myConllectionView.dataSource=self;
-    if (self.pageType==NSStageListpageSoureTypeDefault) {
+    if (self.pageType==NSStageListpageSoureTypeDefault||self.pageType==NSStageListpageSoureTypeMovie) {
         self.myConllectionView.frame=CGRectMake(0, 120, kDeviceWidth,kDeviceHeight-kHeightNavigation-120);
     }
     [self.view addSubview:_myConllectionView];
@@ -362,10 +371,11 @@
 }
 -(void)requestData
 {
+   // return;
     
     NSDictionary *parameters;
     NSString  *urlString;
-    if (self.pageType==NSStageListpageSoureTypeDefault) {
+    if (self.pageType==NSStageListpageSoureTypeDefault||self.pageType==NSStageListpageSoureTypeMovie) {
         if ([self.TagId intValue]==0) {
         urlString =[NSString stringWithFormat:@"%@/weibo/list?per-page=%d&page=%d", kApiBaseUrl,pageSize,page];
         NSString *tokenString =[Function getURLtokenWithURLString:urlString];
@@ -475,7 +485,7 @@
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (self.pageType==NSStageListpageSoureTypeDefault) {
+    if (self.pageType==NSStageListpageSoureTypeDefault||self.pageType==NSStageListpageSoureTypeMovie) {
         SmallImageCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"smallcell" forIndexPath:indexPath];
         //在这里先将内容给清除一下, 然后再加载新的, 添加完内容之后先动画, 在cell消失的时候做清理工作
         if (_dataArray.count>indexPath.row) {
@@ -521,7 +531,7 @@
 
 // 设置每个item的尺寸
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
-    if (self.pageType==NSStageListpageSoureTypeDefault) {
+    if (self.pageType==NSStageListpageSoureTypeDefault||self.pageType==NSStageListpageSoureTypeMovie) {
     double  w = (kDeviceWidth-5)/2;
     double  h= w*(9.0/16);
     return CGSizeMake(w,h);

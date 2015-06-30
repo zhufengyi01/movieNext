@@ -467,7 +467,6 @@
 		00BEA2AB1B297C9F002A273A /* guanliyuan_detail@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 00BEA2A91B297C9F002A273A /* guanliyuan_detail@3x.png */; };
 		00C10EDF1B1443310003DDF2 /* FindBeforeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00C10EDE1B1443310003DDF2 /* FindBeforeViewController.m */; };
 		00C604031AED179D008493D0 /* TagView.m in Sources */ = {isa = PBXBuildFile; fileRef = 00C604021AED179D008493D0 /* TagView.m */; };
-		00CAC3CA1AA31A3F008208E9 /* LoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 00CAC3C91AA31A3F008208E9 /* LoadingView.m */; };
 		00CCEBF21AE136B40072E1B3 /* cell_background_color.png in Resources */ = {isa = PBXBuildFile; fileRef = 00CCEBF11AE136B40072E1B3 /* cell_background_color.png */; };
 		00CCEBFA1AE13CEF0072E1B3 /* btn_add_default.png in Resources */ = {isa = PBXBuildFile; fileRef = 00CCEBF31AE13CEF0072E1B3 /* btn_add_default.png */; };
 		00CCEBFB1AE13CEF0072E1B3 /* btn_add_select.png in Resources */ = {isa = PBXBuildFile; fileRef = 00CCEBF41AE13CEF0072E1B3 /* btn_add_select.png */; };
@@ -501,6 +500,8 @@
 		38B205BE1B317928004FA315 /* back_gray_Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 38B205BC1B317928004FA315 /* back_gray_Icon@2x.png */; };
 		38B205BF1B317928004FA315 /* back_gray_Icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 38B205BD1B317928004FA315 /* back_gray_Icon@3x.png */; };
 		38B205C31B317E5D004FA315 /* MainNavigationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 38B205C21B317E5D004FA315 /* MainNavigationViewController.m */; };
+		38D135041B426A4400869A53 /* LoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 38D135031B426A4400869A53 /* LoadingView.m */; };
+		38D135061B42785400869A53 /* null_data.png in Resources */ = {isa = PBXBuildFile; fileRef = 38D135051B42785400869A53 /* null_data.png */; };
 		38D2C19F1B3A921A0083CA58 /* movie_head@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 38D2C19D1B3A921A0083CA58 /* movie_head@2x.png */; };
 		38D2C1A01B3A921A0083CA58 /* movie_head@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 38D2C19E1B3A921A0083CA58 /* movie_head@3x.png */; };
 		38D2C1A41B3AAB000083CA58 /* StageListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 38D2C1A31B3AAB000083CA58 /* StageListViewController.m */; };
@@ -1210,8 +1211,6 @@
 		00C10EDE1B1443310003DDF2 /* FindBeforeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FindBeforeViewController.m; sourceTree = "<group>"; };
 		00C604011AED179D008493D0 /* TagView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagView.h; sourceTree = "<group>"; };
 		00C604021AED179D008493D0 /* TagView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagView.m; sourceTree = "<group>"; };
-		00CAC3C81AA31A3F008208E9 /* LoadingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LoadingView.h; path = ../LoadingView.h; sourceTree = "<group>"; };
-		00CAC3C91AA31A3F008208E9 /* LoadingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LoadingView.m; path = ../LoadingView.m; sourceTree = "<group>"; };
 		00CCEBF11AE136B40072E1B3 /* cell_background_color.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cell_background_color.png; sourceTree = "<group>"; };
 		00CCEBF31AE13CEF0072E1B3 /* btn_add_default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_add_default.png; sourceTree = "<group>"; };
 		00CCEBF41AE13CEF0072E1B3 /* btn_add_select.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_add_select.png; sourceTree = "<group>"; };
@@ -1260,6 +1259,9 @@
 		38B205BD1B317928004FA315 /* back_gray_Icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "back_gray_Icon@3x.png"; sourceTree = "<group>"; };
 		38B205C11B317E5D004FA315 /* MainNavigationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainNavigationViewController.h; sourceTree = "<group>"; };
 		38B205C21B317E5D004FA315 /* MainNavigationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainNavigationViewController.m; sourceTree = "<group>"; };
+		38D135021B426A4400869A53 /* LoadingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LoadingView.h; path = General/Helper/LoadingView.h; sourceTree = SOURCE_ROOT; };
+		38D135031B426A4400869A53 /* LoadingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LoadingView.m; path = General/Helper/LoadingView.m; sourceTree = SOURCE_ROOT; };
+		38D135051B42785400869A53 /* null_data.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = null_data.png; sourceTree = "<group>"; };
 		38D2C19D1B3A921A0083CA58 /* movie_head@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "movie_head@2x.png"; sourceTree = "<group>"; };
 		38D2C19E1B3A921A0083CA58 /* movie_head@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "movie_head@3x.png"; sourceTree = "<group>"; };
 		38D2C1A21B3AAB000083CA58 /* StageListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StageListViewController.h; sourceTree = "<group>"; };
@@ -1505,6 +1507,7 @@
 		000B08FB1AA2EB8C00B8D13A /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				38D135051B42785400869A53 /* null_data.png */,
 				38D2C19D1B3A921A0083CA58 /* movie_head@2x.png */,
 				38D2C19E1B3A921A0083CA58 /* movie_head@3x.png */,
 				38B205BC1B317928004FA315 /* back_gray_Icon@2x.png */,
@@ -1793,8 +1796,8 @@
 		00218C911AE0E683006B79B4 /* LoadView */ = {
 			isa = PBXGroup;
 			children = (
-				00CAC3C81AA31A3F008208E9 /* LoadingView.h */,
-				00CAC3C91AA31A3F008208E9 /* LoadingView.m */,
+				38D135021B426A4400869A53 /* LoadingView.h */,
+				38D135031B426A4400869A53 /* LoadingView.m */,
 			);
 			name = LoadView;
 			path = ../Helper/LoadView;
@@ -3207,6 +3210,7 @@
 				00705B3A1B27E8FA0019B8FE /* search_icon@2x.png in Resources */,
 				00AA53141AA2C3F4004096F8 /* Images.xcassets in Resources */,
 				000B098D1AA3029800B8D13A /* icon@2x.png in Resources */,
+				38D135061B42785400869A53 /* null_data.png in Resources */,
 				000B09D31AA3029800B8D13A /* slogan.png in Resources */,
 				402DE3771B1EA3260018CBC6 /* weibo_share@2x.png in Resources */,
 				003E74FE1AB1A29F0080F7A8 /* ic_menu_like_default@3x.png in Resources */,
@@ -3326,6 +3330,7 @@
 				00C604031AED179D008493D0 /* TagView.m in Sources */,
 				0086C0F71B1584340013F540 /* Like_HUB.m in Sources */,
 				0008510B1B09CD4800E6009C /* UIImage+Merge.m in Sources */,
+				38D135041B426A4400869A53 /* LoadingView.m in Sources */,
 				00AA541D1AA2C525004096F8 /* CustmoTabBarController.m in Sources */,
 				0059EDA51B05D2A800C2ACA1 /* MJFoundation.m in Sources */,
 				4076AF011AA9B0D2006DC466 /* StageView.m in Sources */,
@@ -3449,7 +3454,6 @@
 				00431FE41ADD156D00416E1F /* Register_1ViewController.m in Sources */,
 				000B08FA1AA2EA1800B8D13A /* MovieViewController.m in Sources */,
 				00AA54291AA2C525004096F8 /* NSData+ImageContentType.m in Sources */,
-				00CAC3CA1AA31A3F008208E9 /* LoadingView.m in Sources */,
 				00354C2F1ABF004100F650AA /* NSData+MD5Digest.m in Sources */,
 				00ABFC7A1AAACDF800980824 /* MovieHeadView.m in Sources */,
 				00354C2D1ABF004100F650AA /* MF_Base64Additions.m in Sources */,

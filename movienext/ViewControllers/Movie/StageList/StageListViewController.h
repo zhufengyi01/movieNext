@@ -12,6 +12,7 @@ typedef NS_ENUM(NSInteger, NSStageListpageSoureType)
 {
     NSStageListpageSoureTypeDefault,
     NSStageListpageSoureTypeTagToStage, // 标签对应的剧照
+    NSStageListpageSoureTypeMovie
     
 };
 

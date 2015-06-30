@@ -129,18 +129,19 @@
     }
     [self.stageImageView addSubview:_layerView];
     self.markLable=[ZCControl createLabelWithFrame:CGRectMake(10,40,_layerView.frame.size.width-20, 60) Font:20 Text:@"弹幕文字"];
-    self.markLable.font =[UIFont fontWithName:kFontDouble size:23];
+    self.markLable.font =[UIFont fontWithName:kFontDouble size:22];
     if (IsIphone6) {
         self.markLable.frame=CGRectMake(20, 30, _layerView.frame.size.width-40, 65);
-        self.markLable.font =[UIFont fontWithName:kFontDouble size:26];
+        self.markLable.font =[UIFont fontWithName:kFontDouble size:27];
     }
     if (IsIphone6plus) {
         self.markLable.frame=CGRectMake(20, 20,_layerView.frame.size.width-40, 70);
-        self.markLable.font=[UIFont fontWithName:kFontDouble size:29];
+        self.markLable.font=[UIFont fontWithName:kFontDouble size:30];
     }
     self.markLable.textColor=[UIColor whiteColor];
     self.markLable.lineBreakMode=NSLineBreakByCharWrapping;
     self.markLable.contentMode=UIViewContentModeBottom;
+    //self.markLable.backgroundColor =[UIColor redColor];
     self.markLable.textAlignment=NSTextAlignmentCenter;
     //self.markLable.backgroundColor =[UIColor redColor];
     self.markLable.text = self.weiboInfo.content;
@@ -164,33 +165,38 @@
     {
         x=43;
     }
-    if (self.markLable.text.length >36 &&self.markLable.text.length<=48) {
-        
+    if (self.markLable.text.length<=36) {
         if (IsIphone5) {
-            self.markLable.font =[UIFont fontWithName:kFontDouble size:18];
+            self.markLable.font =[UIFont fontWithName:kFontDouble size:23];
         }else if (IsIphone6)
         {
-            self.markLable.font =[UIFont fontWithName:kFontDouble size:20];
+            self.markLable.font =[UIFont fontWithName:kFontDouble size:27.5];
         }else if (IsIphone6plus)
         {
-            self.markLable.font =[UIFont fontWithName:kFontDouble size:22];
-            
+            self.markLable.font =[UIFont fontWithName:kFontDouble size:30.5];
+        }
+    }
+    if (self.markLable.text.length >36 &&self.markLable.text.length<=48) {
+        if (IsIphone5) {
+            self.markLable.font =[UIFont fontWithName:kFontDouble size:17.5];
+        }else if (IsIphone6)
+        {
+            self.markLable.font =[UIFont fontWithName:kFontDouble size:20.5];
+        }else if (IsIphone6plus)
+        {
+            self.markLable.font =[UIFont fontWithName:kFontDouble size:23];
         }
     }
     else if(self.markLable.text.length>48)
     {
         if (IsIphone5) {
             self.markLable.font =[UIFont fontWithName:kFontDouble size:14];
-            
         }else if (IsIphone6)
         {
-            self.markLable.font =[UIFont fontWithName:kFontDouble size:16];
-            
-            
+            self.markLable.font =[UIFont fontWithName:kFontDouble size:16.5];
         }else if (IsIphone6plus)
         {
-            self.markLable.font =[UIFont fontWithName:kFontDouble size:18];
-            
+            self.markLable.font =[UIFont fontWithName:kFontDouble size:18.5];
         }
     }
     if (self.weiboInfo.content.length>12) {

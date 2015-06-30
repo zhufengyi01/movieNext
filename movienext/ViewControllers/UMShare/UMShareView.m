@@ -172,8 +172,8 @@
     buttomView.userInteractionEnabled=YES;
     [backView addSubview:buttomView];
 #pragma create four button
-    NSArray  *imageArray=[NSArray arrayWithObjects:@"moment_share.png",@"wechat_share.png",@"weibo_share.png", @"download.png", nil];
-    NSArray *titleArray = [NSArray arrayWithObjects:@"朋友圈", @"微信", @"微博", @"保存", nil];
+    NSArray  *imageArray=[NSArray arrayWithObjects:@"wechat_share.png",@"moment_share.png",@"weibo_share.png", @"download.png", nil];
+    NSArray *titleArray = [NSArray arrayWithObjects:@"微信", @"朋友圈", @"微博", @"保存", nil];
     for (int i=0; i<4; i++) {
         double   x=(buttomView.bounds.size.width/4)*i;
         double   y=10;
